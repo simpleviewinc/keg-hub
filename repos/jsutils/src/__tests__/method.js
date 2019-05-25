@@ -4,6 +4,8 @@ const Method = require('../method')
 
 describe('/method', () => {
 
+  beforeEach(() => jest.resetAllMocks())
+
   describe('debounce', () => {
 
     it('should call the passed method after the correct amount of time', done => {

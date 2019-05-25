@@ -1,24 +1,28 @@
 const Obj = require('../object')
 
 describe('/object', () => {
-  
+
+  beforeEach(() => jest.resetAllMocks())
+
   describe('cloneJson', () => {
     
     it('should clone the passed in object, and its children', () => {
       const obj = { test: 'I am a string', sub: [ 1, 2, 3 ] }
       const clone = Obj.cloneJson(obj)
 
-      expect(clone).toEqual('object')
-      expect(clone).not.toEqual(obj)
-      expect(clone.sub).not.toEqual(obj.sub)
+      expect(typeof clone).toEqual('object')
+      expect(clone === obj).toEqual(false)
+      expect(clone.sub === obj.sub).toEqual(false)
     })
 
     it('should call console.error and not throw on invalid json Object', () => {
       const consoleErr = console.error
       console.error = jest.fn()
-      const obj = { test: 'I am a string', parent: obj }
+      const obj = { test: 'I am a string' }
+      const obj2 = { obj: obj, data: 'some data' }
+      obj.obj2 = obj2
       const clone = Obj.cloneJson(obj)
-
+      
       expect(console.error).toHaveBeenCalled()
       expect(clone).toEqual(null)
       console.error = consoleErr
@@ -32,16 +36,16 @@ describe('/object', () => {
       const obj = { test: 'I am a string', sub: [ 1, 2, 3 ] }
       Obj.clearObj(obj)
 
-      expect(test in obj).toEqual(false)
-      expect(sub in obj).toEqual(false)
+      expect('test' in obj).toEqual(false)
+      expect('sub' in obj).toEqual(false)
     })
 
     it('should not remove filtered props', () => {
       const obj = { test: 'I am a string', sub: [ 1, 2, 3 ] }
-      Obj.clearObj(obj, [ 'data' ])
+      Obj.clearObj(obj, [ 'sub' ])
 
-      expect(test in obj).toEqual(false)
-      expect(sub in obj).toEqual(true)
+      expect('test' in obj).toEqual(false)
+      expect('sub' in obj).toEqual(true)
     })
 
   })
@@ -68,9 +72,9 @@ describe('/object', () => {
 
       expect(obj3).not.toEqual(obj1)
       expect(obj3).not.toEqual(obj2)
-      expect(obj3.text).toEqual('I am a obj 2')
+      expect(obj3.test).toEqual('I am a obj 2')
       expect(obj3.sub.indexOf(1)).toEqual(0)
-      expect(obj3.sub.indexOf(4)).toEqual(5)
+      expect(obj3.sub.indexOf(4)).toEqual(3)
     })
 
     it('should handel non-objects passed in as a param', () => {
@@ -80,9 +84,9 @@ describe('/object', () => {
 
       expect(obj3).not.toEqual(obj1)
       expect(obj3).not.toEqual(obj2)
-      expect(obj3.text).toEqual('I am a obj 2')
+      expect(obj3.test).toEqual('I am a obj 2')
       expect(obj3.sub.indexOf(1)).toEqual(0)
-      expect(obj3.sub.indexOf(4)).toEqual(5)
+      expect(obj3.sub.indexOf(4)).toEqual(3)
     })
 
     it('should handel objects with functions', () => {
@@ -90,8 +94,8 @@ describe('/object', () => {
       const obj2 = { test: 'I am a obj 2', sub: [ 4, 5, 6 ] }
       const obj3 = Obj.deepMerge(obj1, obj2)
 
-      expect(method in obj3).toEqual(true)
-      expect(sub in obj3).toEqual(true)
+      expect('method' in obj3).toEqual(true)
+      expect('sub' in obj3).toEqual(true)
     })
 
   })
@@ -109,19 +113,66 @@ describe('/object', () => {
 
   })
 
-  describe('objMap', () => {
+  describe('mapObj', () => {
 
     it('should call the callback on all object properties', () => {
       const obj = { test: 'I should freeze', sub: [ 1, 2, 3 ], data: { test: 'I should freeze' } }
       const keys = []
       const callBack = jest.fn((key, value) => keys.push(key))
-      Obj.objMap(obj, callBack)
-      
+      Obj.mapObj(obj, callBack)
+
       expect(keys.length).toEqual(3)
-      expect(keys.indexOf(test)).not.toEqual(-1)
-      expect(keys.indexOf(sub)).not.toEqual(-1)
-      expect(keys.indexOf(data)).not.toEqual(-1)
+      expect(keys.indexOf('test')).not.toEqual(-1)
+      expect(keys.indexOf('sub')).not.toEqual(-1)
+      expect(keys.indexOf('data')).not.toEqual(-1)
       expect(callBack).toHaveBeenCalledTimes(3)
+    })
+
+    it('should return array of values retured from the callback', () => {
+      const obj = { test: 'I should freeze', sub: [ 1, 2, 3 ], data: { test: 'I should freeze' } }
+      const callBack = jest.fn((key, value) => key)
+      const keys = Obj.mapObj(obj, callBack)
+
+      expect(keys.length).toEqual(3)
+      expect(keys.indexOf('test')).not.toEqual(-1)
+      expect(keys.indexOf('sub')).not.toEqual(-1)
+      expect(keys.indexOf('data')).not.toEqual(-1)
+      expect(callBack).toHaveBeenCalledTimes(3)
+    })
+
+  })
+  
+  describe('reduceObj', () => {
+
+    it('should call the callback on all object properties', () => {
+      const obj = { test: 'I should freeze', sub: [ 1, 2, 3 ], data: { test: 'I should freeze' } }
+      const keys = []
+      const callBack = jest.fn((key, value, obj) => {
+        keys.push(key)
+        return obj
+      })
+
+      Obj.reduceObj(obj, callBack)
+
+      expect(keys.length).toEqual(3)
+      expect(keys.indexOf('test')).not.toEqual(-1)
+      expect(keys.indexOf('sub')).not.toEqual(-1)
+      expect(keys.indexOf('data')).not.toEqual(-1)
+      expect(callBack).toHaveBeenCalledTimes(3)
+    })
+
+    it('should return object from the last callback', () => {
+      const obj = { test: 'I should freeze', sub: [ 1, 2, 3 ], data: { test: 'I should freeze' } }
+      const callBack = jest.fn((key, value, obj) => {
+        obj.called = obj.called || 0
+        obj.called += 1
+
+        return obj
+      })
+      const reduceObj = Obj.reduceObj(obj, callBack)
+
+      expect(typeof reduceObj).toEqual('object')
+      expect(reduceObj.called).toEqual(3)
     })
 
   })

@@ -14,6 +14,7 @@ const parseJSONString = str => {
     return null
   }
 }
+
 /**
  * Converts first letter of a string to be capitalized
  * @param  { string } string
@@ -22,6 +23,7 @@ const parseJSONString = str => {
 const capitalize = str => (
   isStr(str) && `${str[0].toUpperCase()}${str.slice(1)}` || str
 )
+
 /**
  * Check if data is a string
  * @param  { string } string
@@ -34,6 +36,7 @@ const isStr = str => typeof str === 'string'
  * @return { string } - cleaned string
  */
 const sanitizeString = str => isStr(str) &&  str.replace(/[\u2028-\u2029]/g, '') || str
+
 /**
  * Trims objects string fields
  * @param  { object } object
@@ -47,12 +50,14 @@ const trimObjectStringFields = object => (
       return cleaned
     }, object)
 )
+
 /**
  * Converts a string to train case
  * @param  { object } string to be converted
  * @return { object } - string wit spaces converted to lodash and all lowercase
  */
 const sanitizeCopyObject = object => JSON.parse(sanitizeString(JSON.stringify(object)))
+
 /**
  * Converts a string to train case
  * @param  { string } string to be converted

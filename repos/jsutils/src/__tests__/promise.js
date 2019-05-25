@@ -11,32 +11,32 @@ const _testPromisification = async object => {
 
   const resultA = await object.someFuncAsync(inputA)
   const resultB = await object.someOtherFuncAsync(inputB)
-
+  
   expect(resultA).toEqual(inputA)
   expect(resultB).toEqual(inputB)
 }
+
 const getClsObj = type => {
+
   class MyClass {
-
-    someFunc(input, callback) {
-      callback(null, input)
+    someFunc(input, callback){
+      return callback && callback(null, input) || input
     }
-    someOtherFunc(input, callback) {
-      callback(null, input)
+    someOtherFunc(input, callback){
+      return callback && callback(null, input) || input
     }
-
   }
   const object = {
-    someFunc(input, callback) {
-      callback(null, input)
+    someFunc(input, callback){
+      return callback && callback(null, input) || input
     },
-    someOtherFunc(input, callback) {
-      callback(null, input)
+    someOtherFunc(input, callback){
+      return callback && callback(null, input) || input
     }
   }
 
   return type === 'obj'
-    ? Object.assign({}, object)
+    ? { ...object }
     : type === 'class'
       ? MyClass
       : new MyClass()
@@ -44,6 +44,9 @@ const getClsObj = type => {
 
 describe('/promise', () => {
   describe('promisifyAll', () => {
+    
+    beforeEach(() => jest.resetAllMocks())
+    
     it('should promisify all functions defined on an object', async () => {
       await _testPromisification(getClsObj('obj'))
     })
@@ -72,26 +75,26 @@ describe('/promise', () => {
       expect(result).toEqual(input)
     })
 
-    it('should be able to promisify objects that contain properties with getter functions', async () => {
+    it('should promisify objects getter function properties ', async () => {
       const propertyName = 'someProperty'
       const testObject = {
         someOtherProperty: false,
         someFunc(input, callback) {
-          callback(null, input)
+          return callback && callback(null, input) || input
         }
       }
 
       Object.defineProperty(testObject, propertyName, {
-        get: function() {
-          throw new Error('Should not triggered')
+        get: (input, callback) => {
+          return callback && callback(null, input) || input
         }
       })
 
       promisifyAll(testObject)
       const input = 'input'
-      const result = await testObject.someFuncAsync(input)
-
+      const result = await testObject.somePropertyAsync(input)
       expect(result).toEqual(input)
     })
+
   })
 })

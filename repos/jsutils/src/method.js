@@ -3,7 +3,7 @@
  * @param  { any } test 
  * @return { boolean } is a function
  */
-export const isFunc = func => typeof func === 'function'
+const isFunc = func => typeof func === 'function'
 
 /**
  * Ensures a function is not called to many times
@@ -15,21 +15,18 @@ export const isFunc = func => typeof func === 'function'
 const debounce = (func, wait = 250, immediate = false) => {
   let timeout
   return (...args) => {
-    if (typeof func !== 'function') return null
+    if (!isFunc(func)) return null
 
-    let context = this
-    let later = () => {
+    const context = this
+    const later = () => {
       timeout = null
-      if (!immediate) {
-        func.apply(context, args)
-      }
+      !immediate && func.apply(context, args)
     }
-    let callNow = immediate && !timeout
+    const callNow = immediate && !timeout
     clearTimeout(timeout)
     timeout = setTimeout(later, wait)
-    if (callNow) {
-      return typeof func === 'function' && func.apply(context, args)
-    }
+    if (callNow)
+      return isFunc(func) && func.apply(context, args)
   }
 }
 
@@ -47,7 +44,7 @@ const checkCall = (method, ...params) =>  isFunc(method) && method(...params) ||
  * @param  { number } start of the uuid
  * @return { string } - build uuid
  */
-export const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
+const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
 
 module.exports = {
   checkCall,

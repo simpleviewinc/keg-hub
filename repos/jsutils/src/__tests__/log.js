@@ -1,7 +1,7 @@
 const Log = require('../log')
 
 const overRideConsole = type => {
-  const overRide = jest.fn
+  const overRide = jest.fn()
   const holder = console[type]
   holder.OVR_TYPE = type
   console[type] = overRide
@@ -18,7 +18,7 @@ describe('/log', () => {
 
   describe('setLogs', () => {
     
-    beforeEach(() => jest.resetMocks())
+    beforeEach(() => jest.resetAllMocks())
     
     it('should set SHOW_LOGS to passed boolean', () => {
       expect(Log.getShowLogs()).toEqual(undefined)
@@ -31,17 +31,18 @@ describe('/log', () => {
 
   describe('logData', () => {
     
-    beforeEach(() => jest.resetMocks())
+    beforeEach(() => jest.resetAllMocks())
     
     it('should default log to console.dir', () => {
+      Log.setLogs(true)
       const orgDir = overRideConsole('dir')
       Log.logData('I should log to dir')
-
       expect(console.dir).toHaveBeenCalled()
       resetConsole(orgDir)
     })
 
     it('should default log to console.dir when last param is not a log method', () => {
+      Log.setLogs(true)
       const orgDir = overRideConsole('dir')
       Log.logData('I should log to dir', 'notLogMethod')
 
@@ -50,6 +51,7 @@ describe('/log', () => {
     })
 
     it('should call console method defined in last param', () => {
+      Log.setLogs(true)
       const orgErr = overRideConsole('error')
       Log.logData('I should log to error', 'error')
 
@@ -64,12 +66,12 @@ describe('/log', () => {
     })
 
     it('should add a prefix of log type to first param', () => {
+      Log.setLogs(true)
       const orgErr = overRideConsole('error')
       Log.logData('I should log to error', 'error')
-      expect(console.error).toHaveBeenCalledWith(`[ Error ] I should log to error`)
+      expect(console.error).toHaveBeenCalledWith(`[ ERROR ] I should log to error`)
       resetConsole(orgErr)
     })
-
 
     it('should not log when setLogs is called with false', () => {
       Log.setLogs(false)

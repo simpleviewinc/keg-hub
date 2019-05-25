@@ -1,3 +1,5 @@
+import { logData } from './log'
+import { isFunc } from './method'
 /**
  * Clones an object by converting to JSON string and back
  * @param { object } obj - object to clone
@@ -8,7 +10,7 @@ const cloneJson = obj => {
     return JSON.parse(JSON.stringify(obj))
   }
   catch(e){
-    
+    logData(e.message, 'error')
     return null
   }
 }
@@ -31,15 +33,19 @@ const clearObj = (obj, filter) => {
 
 /**
  * Checks is data is an object and not an array
+ *
  * @param { object } obj - data to check
+ *
  * @returns { boolean }
  */
 const isObj = obj => typeof obj === 'object' && !Array.isArray(obj)
 
 /**
  * Deep merges an array of objects together
+ *
  * @param { array } sources - array of objects to join
- * @returns
+ *
+ * @returns { object | array } - merged object or array
  */
 const deepMerge = (...sources) => (
   sources.reduce(
@@ -59,7 +65,7 @@ const deepMerge = (...sources) => (
                   // Also check if key is in the object
                   // Set to value or deepMerge the object with the current merged object
                   (
-                    typeof value !== 'function' &&
+                    !isFunc(value) &&
                     value instanceof Object &&
                     key in joined &&
                     // This will always return an object
@@ -79,20 +85,40 @@ const deepMerge = (...sources) => (
 )
 
 /**
- * map over and objects props and values
+ * Map over and objects props and values
+ *
  * @param  { object } obj
- * @return { object } - frozen Object
+ *
+ * @return { array } -  returned values from callback
  */
-const objMap = (obj, cb) => (
-  isObj(obj) && typeof cb === 'function' &&
+const mapObj = (obj, cb) => (
+  (isObj(obj) && isFunc(cb) &&
   Object
     .entries(obj)
     .map(([ key, value ]) => cb(key, value))
+  ) || obj
+)
+
+/**
+ * Loop over and objects props and values and reduce to new object
+ *
+ * @param  { object } obj
+ *
+ * @return { object } - updated object
+ */
+const reduceObj = (obj, cb) => (
+  (isObj(obj) && isFunc(cb) &&
+  Object
+    .entries(obj)
+    .reduce((data, [ key, value ]) => cb(key, value, data), {})
+  ) || obj
 )
 
 /**
  * Recursively freezes and object
+ *
  * @param  { object } obj
+ *
  * @return { object } - frozen Object
  */
 const deepFreeze = obj => {
@@ -102,7 +128,7 @@ const deepFreeze = obj => {
     .map(prop => {
       obj.hasOwnProperty(prop)
         && obj[prop] !== null
-        && (typeof obj[prop] === 'object' || typeof obj[prop] === 'function')
+        && (typeof obj[prop] === 'object' || isFunc(obj[prop]))
         && !Object.isFrozen(obj[prop])
         && deepFreeze(obj[prop])
     })
@@ -116,5 +142,6 @@ module.exports = {
   deepFreeze,
   deepMerge,
   isObj,
-  objMap
+  mapObj,
+  reduceObj
 }
