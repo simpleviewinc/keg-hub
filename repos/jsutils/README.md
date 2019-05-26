@@ -1,6 +1,6 @@
 # js-utils
 
-A small (60.8 KiB) utility library for commonly used helper methods
+A small (60.8 KiB) utility library for commonly used helper methods. Check out the [demo](https://lancetipton.github.io/js-utils/)
 
 ## Install
 
