@@ -3,6 +3,11 @@
 import { isObj } from './object'
 import { isFunc } from './method'
 
+/**
+ * Polyfill to promisify a method that uses the standard node.js callback structure
+ * @param  { function } method - method to turn into a promise
+ * @return method as a promise
+ */
 const promisifyFill = method => {
   if(!isFunc(method)) throw `Argument must be a function`
 
@@ -90,7 +95,6 @@ const addAsync = object => {
 /**
  * Converts Objects method properties into promiseAsync
  * allow using promisifyAll
- *
  * @param  { object } object
  *
  * @return { object } - promisified object
@@ -109,7 +113,7 @@ const promisifyAll = object => {
 }
 
 
-module.exports = {
+export {
   promisifyAll,
   promisify
 }

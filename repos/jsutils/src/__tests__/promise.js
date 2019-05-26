@@ -3,6 +3,7 @@
 const { promisifyAll } = require('../promise')
 const inputA = 'testA'
 const inputB = 'testB'
+
 const _testPromisification = async object => {
   promisifyAll(object)
 

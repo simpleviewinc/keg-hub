@@ -176,5 +176,40 @@ describe('/object', () => {
     })
 
   })
-  
+
+  describe('sanitizeCopy', () => {
+
+    it('should strip html from object properties', () => {
+      const dirtyObject = {
+        name: 'Test name',
+        text: '<p>This is the dirty string</p>'
+      }
+      const cleanText = '&lt;p&gt;This is the dirty string&lt;/p&gt;'
+      const cleanObject = Obj.sanitizeCopy(dirtyObject)
+
+      expect(cleanObject).not.toEqual(dirtyObject)
+      expect(cleanObject.name).toEqual(dirtyObject.name)
+      expect(cleanObject.text).toEqual(cleanText)
+    })
+  })
+
+  describe('trimStringFields', () => {
+
+    it('should trim all string fields of an object', () => {
+      const testObj = { test: '   I am A strIng   ', data: [ 1,2,3,4 ] }
+      const trimmedObj = Obj.trimStringFields(testObj)
+
+      expect(trimmedObj.test).toEqual('I am A strIng')
+    })
+
+    it('should not change non-string fields', () => {
+      const testObj = { test: '   I am A strIng   ', data: [ 1,2,3,4 ] }
+      const trimmedObj = Obj.trimStringFields(testObj)
+
+      expect(trimmedObj.data).toEqual(testObj.data)
+    })
+
+  })
+
+
 })

@@ -1,8 +1,9 @@
 {
-  "name": "js-helpers",
+  "name": "js-utils",
   "version": "1.0.0",
-  "description": "couple of helpers",
-  "main": "index.js",
+  "description": "common javascript utils",
+  "main": "build/jsUtils.min.js",
+  "module": "./index.js",
   "repository": "https://github.com/lancetipton/js-helpers.git",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
@@ -12,7 +13,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/plugin-transform-property-literals": "^7.2.0",
@@ -23,8 +23,9 @@
     "copy-webpack-plugin": "^4.6.0",
     "core-js": "^3.1.2",
     "gh-pages": "^2.0.1",
+    "html-webpack-plugin": "^3.2.0",
     "jest": "^24.7.1",
-    "regenerator-runtime": "^0.13.2",
+    "raw-loader": "^2.0.0",
     "remove-comments-loader": "^0.1.2",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"

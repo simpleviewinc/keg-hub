@@ -35,7 +35,7 @@ const logData = (...args) => {
 }
 
 
-module.exports = {
+export {
   logData,
   setLogs
 }

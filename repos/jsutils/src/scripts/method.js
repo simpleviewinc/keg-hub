@@ -46,7 +46,53 @@ const checkCall = (method, ...params) =>  isFunc(method) && method(...params) ||
  */
 const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
 
-module.exports = {
+
+
+/**
+ * Throttle function calls to only execute once over a wait period
+ * usage: throttle(() => console.log('throttled'), 50)()
+ * @param  { any } func - method to call after wait
+ * @param  { number } [wait=100] time to wait between calls
+ * @return { function } throttled function
+ */
+const throttle = (func, wait = 100) => {
+  let waiting = false
+  return (...args) => {
+    if (waiting) return
+    waiting = true
+    func.apply(this, args)
+    return setTimeout(() => {
+      waiting = false
+    }, wait)
+  }
+}
+
+/**
+ * Ensures the last call to the throttled function get called
+ * Will wait the allotted time, before calling the last call to it
+ * The final call will not execute until no more calls are made
+ * Accepts a callback to call each time the throttle called
+ * @param  { function } func - method to call after wait
+ * @param  { function } cb - method to call after throttle function is called
+ * @param  { number } [wait=100] time to wait until executing func param
+ * @return { function } throttled function
+ */
+const throttleLast = (func, cb, wait = 100) => {
+  let throttleTimeout
+  return (...args) => {
+    // If the throttle already exists clear it, and create it again
+    if (throttleTimeout) clearTimeout(throttleTimeout)
+    // Store a reference to the timeout
+    // Will wait the allotted time until calling the final call to it
+    throttleTimeout = setTimeout(() => {
+      func.apply(this, args)
+      clearTimeout(throttleTimeout)
+    }, wait)
+    typeof cb === 'function' && cb()
+  }
+}
+
+export {
   checkCall,
   debounce,
   isFunc,
