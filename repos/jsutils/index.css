@@ -1,0 +1,151 @@
+html, html *, *:focus {
+  outline: 0;
+}
+
+.git-hub-fork {
+  position: fixed;
+  top: 31px;
+  right: 0px;
+}
+
+nav.tipdig-nav {
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  background-color: #242a35;
+  z-index: 100;
+}
+
+nav.tipdig-nav > ul {
+  width: 100%;
+  list-style-type: none;
+  padding: 4px 0px 6px;
+  margin: 0px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+nav.tipdig-nav > ul > li.tipdig-link-wrapper:first-of-type {
+  border-left: none;
+}
+nav.tipdig-nav > ul > li.tipdig-link-wrapper {
+  margin: 0px;
+  padding: 0px 15px;
+  border-left: 1px solid #FFFFFF;
+}
+nav.tipdig-nav > ul > li.tipdig-link-wrapper a.tipdig-link {
+  text-decoration: none;
+  transition: color 0.5s ease;
+  color: #FFFFFF;
+}
+
+nav.tipdig-nav > ul > li.tipdig-link-wrapper a.tipdig-link:hover {
+  color: #03a9f4;
+}
+
+
+.container-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  position: relative;
+}
+.container-wrapper > .container {
+  width: 80vw;
+}
+
+.container-wrapper.header {
+  margin-bottom: 30px;
+}
+
+.container-wrapper.header {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 0px;
+  text-align: center;
+}
+.container-wrapper.header > .container {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cccccc;
+}
+
+.container-wrapper.header > .container > h2 {
+  width: 80vw;
+  text-align: center;
+  border: none;
+  margin: 0px;
+}
+.container-wrapper.header > .container .icon-wrapper {
+  position: relative;
+}
+.container-wrapper.header > .container .r-icon {
+  position: absolute;
+  top: -41.5px;
+  left: 53.8%;
+  font-size: 28px;
+  font-weight: bold;
+  transform: rotate(-10deg);
+  opacity: 0.7;
+}
+
+.container-wrapper.header > .container > p {
+  margin: 0px;
+  padding: 0px;
+}
+
+.container-wrapper > .container > h2 {
+  margin: 0px;
+  padding: 0px;
+}
+
+.container-wrapper > .container > h4 {
+  margin: 0px;
+  text-align: left;
+  width: 100%;
+}
+
+.container-wrapper > .container > h4 > span {
+  font-size: 12px;
+}
+
+
+.container-wrapper > .container > .editor {
+  margin-top: 10px;
+}
+
+.markdown-content-wrapper {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.markdown-content-wrapper .markdown-content{
+  width: 80vw;
+}
+
+.markdown-content-wrapper .markdown-content > h1:first-of-type {
+  display: none;
+}
+.markdown-content-wrapper .markdown-content > p:first-of-type {
+  display: none;
+}
+
+@media screen and (max-width: 930px) {
+  nav.tipdig-nav > ul > li.tipdig-link-wrapper {
+    padding: 0px 10px;
+  }
+  nav.tipdig-nav > ul > li.tipdig-link-wrapper{
+    font-size: 12px;
+  }
+}
+
+
+@media screen and (max-width: 800px) {
+  nav.tipdig-nav > ul > li.tipdig-link-wrapper {
+    padding: 0px 8px;
+  }
+}
