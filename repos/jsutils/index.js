@@ -1,5 +1,0 @@
-export * from './src/scripts/log'
-export * from './src/scripts/method'
-export * from './src/scripts/object'
-export * from './src/scripts/promise'
-export * from './src/scripts/string'
