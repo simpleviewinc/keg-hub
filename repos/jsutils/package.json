@@ -2,7 +2,7 @@
   "name": "js-utils",
   "version": "1.0.0",
   "description": "common javascript utils",
-  "main": "build/jsUtils.min.js",
+  "main": "build/jsUtils.module.min.js",
   "module": "build/jsUtils.module.min.js",
   "repository": "https://github.com/lancetipton/js-helpers.git",
   "author": "lancetipton <lancetipton04@gmail.com>",

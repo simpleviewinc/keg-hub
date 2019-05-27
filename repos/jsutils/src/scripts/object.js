@@ -7,7 +7,7 @@ import { sanitize } from './string'
  * @param { object } obj - object to clone
  * @returns { object } copy of original object
  */
-const cloneJson = obj => {
+export const cloneJson = obj => {
   try {
     return JSON.parse(JSON.stringify(obj))
   }
@@ -24,7 +24,7 @@ const cloneJson = obj => {
  *
  * @returns { null }
  */
-const clearObj = (obj, filter) => {
+export const clearObj = (obj, filter) => {
   obj && Object
     .entries(obj)
     .map(([key, value]) => {
@@ -41,7 +41,7 @@ const clearObj = (obj, filter) => {
  *
  * @returns { boolean }
  */
-const isObj = obj => typeof obj === 'object' && !Array.isArray(obj)
+export const isObj = obj => typeof obj === 'object' && !Array.isArray(obj)
 
 /**
  * Deep merges an array of objects together
@@ -49,7 +49,7 @@ const isObj = obj => typeof obj === 'object' && !Array.isArray(obj)
  *
  * @returns { object | array } - merged object or array
  */
-const deepMerge = (...sources) => (
+export const deepMerge = (...sources) => (
   sources.reduce(
     (merged, source) =>
       source instanceof Array
@@ -92,7 +92,7 @@ const deepMerge = (...sources) => (
  *
  * @return { array } -  returned values from callback
  */
-const mapObj = (obj, cb) => (
+export const mapObj = (obj, cb) => (
   (isObj(obj) && isFunc(cb) &&
   Object
     .entries(obj)
@@ -106,7 +106,7 @@ const mapObj = (obj, cb) => (
  *
  * @return { object } - updated object
  */
-const reduceObj = (obj, cb) => (
+export const reduceObj = (obj, cb) => (
   (isObj(obj) && isFunc(cb) &&
   Object
     .entries(obj)
@@ -120,7 +120,7 @@ const reduceObj = (obj, cb) => (
  *
  * @return { object } - frozen Object
  */
-const deepFreeze = obj => {
+export const deepFreeze = obj => {
   Object.freeze(obj)
   Object
     .getOwnPropertyNames(obj)
@@ -140,7 +140,7 @@ const deepFreeze = obj => {
  * @param  { object } obj to be sanitize
  * @return { object } - obj with strings sanitized
  */
-const sanitizeCopy = obj => JSON.parse(sanitize(JSON.stringify(obj)))
+export const sanitizeCopy = obj => JSON.parse(sanitize(JSON.stringify(obj)))
 
 
 /**
@@ -148,7 +148,7 @@ const sanitizeCopy = obj => JSON.parse(sanitize(JSON.stringify(obj)))
  * @param  { object } object
  * @return { object } - object with string fields trimmed
  */
-const trimStringFields = object => (
+export const trimStringFields = object => (
   Object
     .entries(object)
     .reduce((cleaned, [ key, value ]) => {
@@ -167,7 +167,7 @@ const trimStringFields = object => (
  * @param  { any } finalValue - when ever the final value of the path should be
  * @return the obj param
  */
-const set = (obj = {}, path, finalValue = {}) => {
+export const set = (obj = {}, path, finalValue = {}) => {
   if (!path) return obj
   const isArr = Array.isArray(path)
   if (!isArr && path.indexOf('.') === -1) {
@@ -195,7 +195,7 @@ const set = (obj = {}, path, finalValue = {}) => {
  * @param  { string || array } path - . separated string to search the object
  * @return the final value found from the path
  */
-const get = (obj, path) => {
+export const get = (obj, path) => {
   if (!obj || !path) return obj
 
   const isArr = Array.isArray(path)
@@ -218,7 +218,7 @@ const get = (obj, path) => {
  * @param  { string || array } path - path of attribute to be removed, seperated by string
  * @return the passed in object, with the attribute found at the path removed
  */
-const unset = (obj, path) => {
+export const unset = (obj, path) => {
   if (typeof obj !== 'object' || !obj || !path) return undefined
   const parts = Array.isArray(path) ? path : path.split('.')
 
@@ -243,7 +243,7 @@ const unset = (obj, path) => {
   return current
 }
 
-const reduceTargetKeys = (target, keys, predicate) => (
+export const reduceTargetKeys = (target, keys, predicate) => (
   Object.keys(target).reduce(predicate, {})
 )
 
@@ -253,7 +253,7 @@ const reduceTargetKeys = (target, keys, predicate) => (
  * @param  { array } keys - keys to not add to new object
  * @return { object } new object with only keys not in array
  */
-const omitKeys = (target = {}, keys = []) => (
+export const omitKeys = (target = {}, keys = []) => (
   reduceTargetKeys(target, keys, (acc, key) => (
     keys.some(omitKey => omitKey === key)
       ? acc 
@@ -267,7 +267,7 @@ const omitKeys = (target = {}, keys = []) => (
  * @param  { array } keys - keys to add to new object
  * @return { object } new object with only keys from passed in keys array
  */
-const pickKeys = (target = {}, keys = []) => (
+export const pickKeys = (target = {}, keys = []) => (
   reduceTargetKeys(target, keys, (acc, key) => (
     keys.some(pickKey => pickKey === key)
       ? { ...acc, [key]: target[key] }
@@ -281,29 +281,11 @@ const pickKeys = (target = {}, keys = []) => (
  * @param  { object || array } two - object to compare with param one
  * @return { boolean } status of equality
  */
-const jsonEqual = (one, two) => {
+export const jsonEqual = (one, two) => {
   try {
     return JSON.stringify(one) === JSON.stringify(two)
   }
   catch(e){
     return false
   }
-}
-
-export {
-  clearObj,
-  cloneJson,
-  deepFreeze,
-  deepMerge,
-  get,
-  isObj,
-  jsonEqual,
-  mapObj,
-  omitKeys,
-  pickKeys,
-  reduceObj,
-  sanitizeCopy,
-  set,
-  trimStringFields,
-  unset,
 }

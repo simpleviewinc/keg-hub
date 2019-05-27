@@ -5,7 +5,7 @@
  * @param  { string } string to be converted
  * @return { string } - string in camel case format
  */
-const camelCase = (str, compCase) => {
+export const camelCase = (str, compCase) => {
   return (
     (str &&
       clean(str)
@@ -24,7 +24,7 @@ const camelCase = (str, compCase) => {
  * @param  { string } string to be converted
  * @return { string } - cleaned string
  */
-const clean = str => {
+export const clean = str => {
   if (!str) return str
   return removeDot(str)
     .replace(/_/g, ' ')
@@ -36,7 +36,7 @@ const clean = str => {
  * @param  { string } string
  * @return { string } - Passed in string, but capitalized
  */
-const capitalize = str => (
+export const capitalize = str => (
   isStr(str) && str[0] && `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}` || str
 )
 
@@ -45,7 +45,7 @@ const capitalize = str => (
  * @param  { string } string to check
  * @return { boolean } - if it's a email
  */
-const isEmail = str => {
+export const isEmail = str => {
   if (!str || typeof str !== 'string') return false
   const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
   return Boolean(regex.test(str))
@@ -56,7 +56,7 @@ const isEmail = str => {
  * @param  { string } string to check
  * @return { boolean } - if it's a phone number
  */
-const isPhone = str => {
+export const isPhone = str => {
   if (!str || typeof str !== 'string') return false
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
   return Boolean(regex.test(str)) && str.replace(/\D/g, '').length < 11
@@ -67,14 +67,14 @@ const isPhone = str => {
  * @param  { all } str - param to check if type is a string 
  * @return { boolean } - if it's a string
  */
-const isStr = str => typeof str === 'string'
+export const isStr = str => typeof str === 'string'
 
 /**
  * Check if string is a url
  * @param  { string } string to check
  * @return { boolean } - if it's a url
  */
-const isUrl = str => {
+export const isUrl = str => {
   const regex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/
   return Boolean(regex.test(str))
 }
@@ -84,7 +84,7 @@ const isUrl = str => {
  * @param  { string } string to check
  * @return { boolean } - if it's a uuid
  */
-const isUuid = str => {
+export const isUuid = str => {
   if (!str || typeof str !== 'string') return false
   const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
   return Boolean(regex.test(str))
@@ -96,7 +96,7 @@ const isUuid = str => {
  * @param  { string } string
  * @return { object } - JSON object
  */
-const parseJSON = str => {
+export const parseJSON = str => {
   try {
     return JSON.parse(str)
   }
@@ -111,7 +111,7 @@ const parseJSON = str => {
  * @param  { string } str - string to convert
  * @return { string } string as a plural
  */
-const plural = str => {
+export const plural = str => {
   if (!str || !str.length) return str
   return str[str.length - 1] !== 's' ? str + 's' : str
 }
@@ -121,7 +121,7 @@ const plural = str => {
  * @param  { string } str - string to convert
  * @return { string } - string without the `.`
  */
-const removeDot = string => {
+export const removeDot = string => {
   const noDot = string.indexOf('.') === 0 ? string.slice(1) : string
   return noDot.indexOf('.') === noDot.length - 1 ? noDot.slice(0, -1) : noDot
 }
@@ -131,7 +131,7 @@ const removeDot = string => {
  * @param  { string } string
  * @return { string } - cleaned string
  */
-const sanitize = str => (
+export const sanitize = str => (
   isStr(str) && str
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
@@ -143,7 +143,7 @@ const sanitize = str => (
  * @param  { string } str - string to convert
  * @return { string } string as singular
  */
-const singular = str => {
+export const singular = str => {
   if (!str || !str.length) return str
   return str[str.length - 1] === 's'
     ? str.slice(0, str.length - 1)
@@ -156,7 +156,7 @@ const singular = str => {
  * @param  { string } str - string to be converted
  * @return { string } - string in style case format
  */
-const styleCase = str => {
+export const styleCase = str => {
   str = str.split(/[\s,-]/)
   str = str.map(capitalize)
   str[0] = str[0].toLowerCase()
@@ -168,14 +168,14 @@ const styleCase = str => {
  * @param  { string } string to be converted
  * @return { string } - string in train case format
  */
-const trainCase = str => isStr(str) && str.replace(/ /g, '-').toLowerCase() || str
+export const trainCase = str => isStr(str) && str.replace(/ /g, '-').toLowerCase() || str
 
 /**
  * Converts all words in a string to be capitalized
  * @param  { string } string to be converted
  * @return { string } - string with all words capitalized
  */
-const wordCaps = str => {
+export const wordCaps = str => {
   if (!str) return str
   let cleaned = clean(str)
   return cleaned
@@ -184,23 +184,4 @@ const wordCaps = str => {
       return capitalize(word)
     })
     .join(' ')
-}
-
-export {
-  camelCase,
-  clean,
-  capitalize,
-  isEmail,
-  isPhone,
-  isStr,
-  isUrl,
-  isUuid,
-  plural,
-  parseJSON,
-  removeDot,
-  sanitize,
-  singular,
-  styleCase,
-  trainCase,
-  wordCaps,
 }

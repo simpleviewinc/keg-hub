@@ -14,14 +14,14 @@ const LOG_TYPES = [
  * @param  { boolean } log - log values
  * @return { void }
  */
-const setLogs = log => (SHOW_LOGS = log)
+export const setLogs = log => (SHOW_LOGS = log)
 
 /**
  * Logs a string to the inspector, uses the last argument to determine the log type
  * @param  { array } args - to be passed to the log call
  * @return { void }
  */
-const logData = (...args) => {
+export const logData = (...args) => {
   if(!args.length) return
   
   let type = args.length === 1 ? 'dir' : args.pop()
@@ -32,12 +32,6 @@ const logData = (...args) => {
   LOG_TYPES.indexOf(type) !== -1
     ? console[type](...args)
     : console.dir(...args, type)
-}
-
-
-export {
-  logData,
-  setLogs
 }
 
 isTest && (module.exports.getShowLogs = () => SHOW_LOGS)

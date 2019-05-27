@@ -3,7 +3,7 @@
  * @param  { any } test 
  * @return { boolean } is a function
  */
-const isFunc = func => typeof func === 'function'
+export const isFunc = func => typeof func === 'function'
 
 /**
  * Ensures a function is not called to many times
@@ -12,7 +12,7 @@ const isFunc = func => typeof func === 'function'
  * @param  { boolean } immediate - should call immediately
  * @return { void }
  */
-const debounce = (func, wait = 250, immediate = false) => {
+export const debounce = (func, wait = 250, immediate = false) => {
   let timeout
   return (...args) => {
     if (!isFunc(func)) return null
@@ -36,7 +36,7 @@ const debounce = (func, wait = 250, immediate = false) => {
  * @param  { object } params - params to pass to the method on call
  * @return { any } - whatever the passed in method returns
  */
-const checkCall = (method, ...params) =>  isFunc(method) && method(...params) || undefined
+export const checkCall = (method, ...params) =>  isFunc(method) && method(...params) || undefined
 
 
 /**
@@ -44,7 +44,7 @@ const checkCall = (method, ...params) =>  isFunc(method) && method(...params) ||
  * @param  { number } start of the uuid
  * @return { string } - build uuid
  */
-const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
+export const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
 
 
 
@@ -55,7 +55,7 @@ const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] 
  * @param  { number } [wait=100] time to wait between calls
  * @return { function } throttled function
  */
-const throttle = (func, wait = 100) => {
+export const throttle = (func, wait = 100) => {
   let waiting = false
   return (...args) => {
     if (waiting) return
@@ -77,7 +77,7 @@ const throttle = (func, wait = 100) => {
  * @param  { number } [wait=100] time to wait until executing func param
  * @return { function } throttled function
  */
-const throttleLast = (func, cb, wait = 100) => {
+export const throttleLast = (func, cb, wait = 100) => {
   let throttleTimeout
   return (...args) => {
     // If the throttle already exists clear it, and create it again
@@ -90,11 +90,4 @@ const throttleLast = (func, cb, wait = 100) => {
     }, wait)
     typeof cb === 'function' && cb()
   }
-}
-
-export {
-  checkCall,
-  debounce,
-  isFunc,
-  uuid,
 }

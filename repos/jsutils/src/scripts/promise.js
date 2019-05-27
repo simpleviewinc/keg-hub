@@ -34,7 +34,7 @@ const promisifyFill = method => {
   }
 }
 
-const promisify = typeof window === 'undefined'
+export const promisify = typeof window === 'undefined'
   ? require('util').promisify
   : promisifyFill
 
@@ -99,7 +99,7 @@ const addAsync = object => {
  *
  * @return { object } - promisified object
  */
-const promisifyAll = object => {
+export const promisifyAll = object => {
   if(!isObj(object)) return object
 
   addAsync(object)
@@ -110,10 +110,4 @@ const promisifyAll = object => {
     addAsync(proto)
 
   return object
-}
-
-
-export {
-  promisifyAll,
-  promisify
 }
