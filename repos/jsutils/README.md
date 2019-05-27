@@ -1,16 +1,16 @@
-# js-utils
+# jsUtils
 
-A small (60.8 KiB) utility library for commonly used helper methods. Check out the [demo](https://lancetipton.github.io/js-utils/)
+A small (60.8 KiB) utility library for commonly used helper methods. Check out the [demo](https://lancetipton.github.io/jsUtils/)
 
 ## Install
 
   * Download the repo
     ```js
       // Clone repo
-      git clone https://github.com/lancetipton/js-utils.git
+      git clone https://github.com/lancetipton/jsUtils.git
       // Or Add to package.json
       "dependencies": {
-        "jsUtils": "git+https://github.com/lancetipton/js-utils.git"
+        "jsUtils": "git+https://github.com/lancetipton/jsUtils.git"
         ...
       },
     ```
@@ -26,7 +26,7 @@ A small (60.8 KiB) utility library for commonly used helper methods. Check out t
         const jsUtils = require('jsUtils')
       
       // * Add as html script
-        <script src='/path/to/js-utils/build/jsUtils.min.js'></script>
+        <script src='/path/to/jsUtils/build/jsUtils.min.js'></script>
         // jsUtils will be available on the window 
         <script>
           const jsUtils = window.jsUtils
