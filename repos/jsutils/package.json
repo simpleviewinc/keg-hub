@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "common javascript utils",
   "main": "build/jsUtils.min.js",
-  "module": "./index.js",
+  "module": "build/jsUtils.module.min.js",
   "repository": "https://github.com/lancetipton/js-helpers.git",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
