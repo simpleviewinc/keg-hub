@@ -13,8 +13,7 @@ module.exports = {
   mode: ENV_MODE || 'development',
   devtool: ENV_MODE === 'production' ? 'source-map' : 'inline-source-map',
   entry: {
-    [libraryName]: './index.js',
-    [`${libraryName}.modules`]: './src/scripts/index.js',
+    [libraryName]: './src/scripts/index.js',
     markdown: './src/example/markdown.js'
   },
   output: {
