@@ -44,5 +44,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(paths, {}),
+    new CopyWebpackPlugin([
+      { from: './src/example/index.html' },
+      { from: './src/example/index.css' },
+      { from: './src/example/github.css' },
+    ]),
   ],
 }
