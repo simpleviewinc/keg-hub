@@ -18,7 +18,10 @@ describe('/log', () => {
 
   describe('setLogs', () => {
     
-    beforeEach(() => jest.resetAllMocks())
+    beforeEach(() => {
+      jest.resetAllMocks()
+      Log.reset()
+    })
     
     it('should set SHOW_LOGS to passed boolean', () => {
       expect(Log.getShowLogs()).toEqual(undefined)
@@ -27,11 +30,47 @@ describe('/log', () => {
       expect(Log.getShowLogs()).toEqual(true)
     })
 
+    it('should set the default log method', () => {
+      const orgWarn = overRideConsole('warn')
+      Log.setLogs(true, 'warn')
+      Log.logData('I should log to warn')
+      
+      expect(console.warn).toHaveBeenCalled()
+      
+      Log.setLogs(true, 'dir')
+      resetConsole(orgWarn)
+    })
+
+    it('should set PREFIX to the passed in string', () => {
+      const orgLog = overRideConsole('log')
+      Log.setLogs(true, 'log', '[ TEST ]')
+      Log.logData('I should log to log')
+      expect(console.log.mock.calls[0][0]).toEqual('[ TEST ] I should log to log')
+      Log.setLogs(true, 'dir', 'type')
+      resetConsole(orgLog)
+    })
+
+  })
+
+  describe('reset', () => {
+
+    it('should reset log options', () => {
+      Log.reset()
+      expect(Log.getShowLogs()).toEqual(undefined)
+      Log.setLogs(true)
+      expect(Log.getShowLogs()).toEqual(true)
+      Log.reset()
+      expect(Log.getShowLogs()).toEqual(undefined)
+    })
+
   })
 
   describe('logData', () => {
     
-    beforeEach(() => jest.resetAllMocks())
+    beforeEach(() => {
+      jest.resetAllMocks()
+      Log.reset()
+    })
     
     it('should default log to console.dir', () => {
       Log.setLogs(true)
