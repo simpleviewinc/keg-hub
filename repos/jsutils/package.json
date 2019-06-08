@@ -7,12 +7,19 @@
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "NODE_ENV=test jest --verbose",
     "dev": "ENV=development webpack --watch --progress",
-    "build": "ENV=production webpack --mode production",
-    "deploy": "gh-pages -d build"
+    "build": "yarn build:clean && yarn build:webpack",
+    "build:clean": "rm -rf ./esm && rm -rf ./cjs && rm -rf ./build",
+    "build:esm": "babel --delete-dir-on-start -d esm/ src/scripts/",
+    "build:cjs": "babel --delete-dir-on-start --env-name cjs -d cjs/ src/scripts/",
+    "build:modules": "yarn build:esm && yarn build:cjs",
+    "build:webpack": "rm -rf ./build && ENV=production webpack --mode production",
+    "clean": "rm -rf yarn.lock && rm -rf node_modules && yarn install --force",
+    "deploy": "gh-pages -d build",
+    "test": "NODE_ENV=test jest --verbose"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
     "@babel/plugin-transform-object-assign": "^7.2.0",

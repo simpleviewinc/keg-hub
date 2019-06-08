@@ -14,12 +14,6 @@ const cmdOpts = {
 SHOW_LOGS && setLogs(true)
 const ERROR_PREFIX = 'ERROR'
 
-const cmdOpts = {
-  groupID: process.getgid(),
-  userID: process.getuid(),
-  maxBuffer: Infinity
-}
-
 /**
 * Logs a message to the console
 * @param  {any} message - message to log

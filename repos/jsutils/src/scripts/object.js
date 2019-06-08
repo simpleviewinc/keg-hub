@@ -106,11 +106,11 @@ export const mapObj = (obj, cb) => (
  *
  * @return { object } - updated object
  */
-export const reduceObj = (obj, cb) => (
+export const reduceObj = (obj, cb, start={}) => (
   (isObj(obj) && isFunc(cb) &&
   Object
     .entries(obj)
-    .reduce((data, [ key, value ]) => cb(key, value, data), {})
+    .reduce((data, [ key, value ]) => cb(key, value, data), start)
   ) || obj
 )
 

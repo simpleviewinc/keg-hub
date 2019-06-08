@@ -1,0 +1,301 @@
+"use strict";
+
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.array.filter");
+
+require("core-js/modules/es.array.index-of");
+
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.object.entries");
+
+require("core-js/modules/es.string.split");
+
+require("core-js/modules/es.string.trim");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jsonEqual = exports.pickKeys = exports.omitKeys = exports.reduceTargetKeys = exports.unset = exports.get = exports.set = exports.trimStringFields = exports.sanitizeCopy = exports.deepFreeze = exports.reduceObj = exports.mapObj = exports.deepMerge = exports.isObj = exports.clearObj = exports.cloneJson = void 0;
+
+var _log = require("./log");
+
+var _method = require("./method");
+
+var _string = require("./string");
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/**
+ * Clones an object by converting to JSON string and back
+ * @param { object } obj - object to clone
+ * @returns { object } copy of original object
+ */
+const cloneJson = obj => {
+  try {
+    return JSON.parse(JSON.stringify(obj));
+  } catch (e) {
+    (0, _log.logData)(e.message, 'error');
+    return null;
+  }
+};
+/**
+ * Removes all properties from an object
+ * @param { object } obj - object to remove properties from
+ * @param { array } filter - list of keys to not remove
+ *
+ * @returns { null }
+ */
+
+
+exports.cloneJson = cloneJson;
+
+const clearObj = (obj, filter) => {
+  obj && Object.entries(obj).map(([key, value]) => {
+    if (filter && filter.indexOf(key) !== -1) return;
+    if (typeof value === 'object') clearObj(value);
+    obj[key] = undefined;
+    delete obj[key];
+  });
+};
+/**
+ * Checks is data is an object and not an array
+ * @param { object } obj - data to check
+ *
+ * @returns { boolean }
+ */
+
+
+exports.clearObj = clearObj;
+
+const isObj = obj => typeof obj === 'object' && !Array.isArray(obj);
+/**
+ * Deep merges an array of objects together
+ * @param { array } sources - array of objects to join
+ *
+ * @returns { object | array } - merged object or array
+ */
+
+
+exports.isObj = isObj;
+
+const deepMerge = (...sources) => sources.reduce((merged, source) => source instanceof Array ? // Check if it's array, and join the arrays
+[...(merged instanceof Array && merged || []), ...source] : // Check if it's an object, and loop the properties
+source instanceof Object ? Object.entries(source) // Loop the entries of the object, and add them to the merged object
+.reduce((joined, [key, value]) => _objectSpread({}, joined, {
+  [key]: // Check if the value is not a function and is an object
+  // Also check if key is in the object
+  // Set to value or deepMerge the object with the current merged object
+  !(0, _method.isFunc)(value) && value instanceof Object && key in joined && // This will always return an object
+  // So if it gets called then value is not getting set
+  deepMerge(joined[key], value) || // Otherwise just set the value
+  value
+}), // Pass in merged at the joined object
+merged) : // If it's not an array or object, just return the merge object
+merged, {});
+/**
+ * Map over and objects props and values
+ * @param  { object } obj
+ *
+ * @return { array } -  returned values from callback
+ */
+
+
+exports.deepMerge = deepMerge;
+
+const mapObj = (obj, cb) => isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).map(([key, value]) => cb(key, value)) || obj;
+/**
+ * Loop over and objects props and values and reduce to new object
+ * @param  { object } obj
+ *
+ * @return { object } - updated object
+ */
+
+
+exports.mapObj = mapObj;
+
+const reduceObj = (obj, cb, start = {}) => isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).reduce((data, [key, value]) => cb(key, value, data), start) || obj;
+/**
+ * Recursively freezes and object
+ * @param  { object } obj
+ *
+ * @return { object } - frozen Object
+ */
+
+
+exports.reduceObj = reduceObj;
+
+const deepFreeze = obj => {
+  Object.freeze(obj);
+  Object.getOwnPropertyNames(obj).map(prop => {
+    obj.hasOwnProperty(prop) && obj[prop] !== null && (typeof obj[prop] === 'object' || (0, _method.isFunc)(obj[prop])) && !Object.isFrozen(obj[prop]) && deepFreeze(obj[prop]);
+  });
+  return obj;
+};
+/**
+ * Sanitizes all html strings in an object's properties
+ * @param  { object } obj to be sanitize
+ * @return { object } - obj with strings sanitized
+ */
+
+
+exports.deepFreeze = deepFreeze;
+
+const sanitizeCopy = obj => JSON.parse((0, _string.sanitize)(JSON.stringify(obj)));
+/**
+ * Trims objects string fields
+ * @param  { object } object
+ * @return { object } - object with string fields trimmed
+ */
+
+
+exports.sanitizeCopy = sanitizeCopy;
+
+const trimStringFields = object => Object.entries(object).reduce((cleaned, [key, value]) => {
+  cleaned[key] = typeof value === 'string' ? value.trim() : value;
+  return cleaned;
+}, object);
+/**
+ * Adds a path to an object.
+ * If the path already exists, but not in the correct format it will be replaced
+ * path is built from a . separated string
+ * i.e. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object
+ * @param  { object } obj - object to have the path added to it
+ * @param  { string || array } path - path that should be created on the object, separated by .
+ * @param  { any } finalValue - when ever the final value of the path should be
+ * @return the obj param
+ */
+
+
+exports.trimStringFields = trimStringFields;
+
+const set = (obj = {}, path, finalValue = {}) => {
+  if (!path) return obj;
+  const isArr = Array.isArray(path);
+
+  if (!isArr && path.indexOf('.') === -1) {
+    obj[path] = finalValue;
+    return obj;
+  }
+
+  const parts = isArr && path || path.split('.');
+  return parts.reduce((current, part, index) => {
+    if (index === parts.length - 1) {
+      current[part] = finalValue;
+      return obj;
+    }
+
+    if (typeof current[part] !== 'object') current[part] = {};
+    current = current[part];
+    return current;
+  }, obj);
+};
+/**
+ * Searches an object based on the path param
+ * i.e. path = 'data.foo.bar' => will return obj.data.foo.bar
+ * If bar does not exist, then will return obj.data.foo
+ * @param  { object } obj - will search the object based on the path
+ * @param  { string || array } path - . separated string to search the object
+ * @return the final value found from the path
+ */
+
+
+exports.set = set;
+
+const get = (obj, path) => {
+  if (!obj || !path) return obj;
+  const isArr = Array.isArray(path);
+  if (!isArr && path.indexOf('.') === -1) obj[path];
+  const parts = isArr && path || path.split('.');
+  let hasBreak = false;
+  return parts.reduce((current, part) => {
+    if (!current || !current[part] || hasBreak) {
+      hasBreak = true;
+      return undefined;
+    }
+
+    return current[part];
+  }, obj);
+};
+/**
+ * Removes a path from an object
+ * @param  { object } obj - object to have the attribute removed
+ * @param  { string || array } path - path of attribute to be removed, seperated by string
+ * @return the passed in object, with the attribute found at the path removed
+ */
+
+
+exports.get = get;
+
+const unset = (obj, path) => {
+  if (typeof obj !== 'object' || !obj || !path) return undefined;
+  const parts = Array.isArray(path) ? path : path.split('.');
+  const partsCopy = [...parts];
+  let current = obj;
+  parts.map((part, index) => {
+    if (index === parts.length - 1) {
+      current = reduceObj(current, (clean, key) => {
+        if (key !== part) clean[key] = current[key];
+        return clean;
+      }, {});
+    } else if (typeof current[part] === 'object') {
+      partsCopy.shift();
+      current[part] = removeObjPath(current[part], partsCopy);
+    }
+  });
+  return current;
+};
+
+exports.unset = unset;
+
+const reduceTargetKeys = (target, keys, predicate) => Object.keys(target).reduce(predicate, {});
+/**
+ * Creates a new object from passed in object with keys not defined from array
+ * @param  { object } target - object to pull keys from
+ * @param  { array } keys - keys to not add to new object
+ * @return { object } new object with only keys not in array
+ */
+
+
+exports.reduceTargetKeys = reduceTargetKeys;
+
+const omitKeys = (target = {}, keys = []) => reduceTargetKeys(target, keys, (acc, key) => keys.some(omitKey => omitKey === key) ? acc : _objectSpread({}, acc, {
+  [key]: target[key]
+}));
+/**
+ * Creates a new object from passed in object with keys defined from array
+ * @param  { object } target - object to pull keys from
+ * @param  { array } keys - keys to add to new object
+ * @return { object } new object with only keys from passed in keys array
+ */
+
+
+exports.omitKeys = omitKeys;
+
+const pickKeys = (target = {}, keys = []) => reduceTargetKeys(target, keys, (acc, key) => keys.some(pickKey => pickKey === key) ? _objectSpread({}, acc, {
+  [key]: target[key]
+}) : acc);
+/**
+ * Compares two objects by converting to JSON, and checking string equality
+ * @param  { object || array } one - object to compare with param two
+ * @param  { object || array } two - object to compare with param one
+ * @return { boolean } status of equality
+ */
+
+
+exports.pickKeys = pickKeys;
+
+const jsonEqual = (one, two) => {
+  try {
+    return JSON.stringify(one) === JSON.stringify(two);
+  } catch (e) {
+    return false;
+  }
+};
+
+exports.jsonEqual = jsonEqual;
