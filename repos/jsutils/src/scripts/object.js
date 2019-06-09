@@ -1,6 +1,8 @@
 import { logData } from './log'
 import { isFunc } from './method'
-import { sanitize } from './string'
+import { sanitize, isStr } from './string'
+import { isArr } from './array'
+import { strToType } from './ext'
 
 /**
  * Clones an object by converting to JSON string and back
@@ -21,7 +23,6 @@ export const cloneJson = obj => {
  * Removes all properties from an object
  * @param { object } obj - object to remove properties from
  * @param { array } filter - list of keys to not remove
- *
  * @returns { null }
  */
 export const clearObj = (obj, filter) => {
@@ -36,17 +37,28 @@ export const clearObj = (obj, filter) => {
 }
 
 /**
- * Checks is data is an object and not an array
- * @param { object } obj - data to check
- *
- * @returns { boolean }
+ * Recursively freezes and object
+ * @param  { object } obj
+ * @return { object } - frozen Object
  */
-export const isObj = obj => typeof obj === 'object' && !Array.isArray(obj)
+export const deepFreeze = obj => {
+  Object.freeze(obj)
+  Object
+    .getOwnPropertyNames(obj)
+    .map(prop => {
+      obj.hasOwnProperty(prop)
+        && obj[prop] !== null
+        && (typeof obj[prop] === 'object' || isFunc(obj[prop]))
+        && !Object.isFrozen(obj[prop])
+        && deepFreeze(obj[prop])
+    })
+
+  return obj
+}
 
 /**
  * Deep merges an array of objects together
  * @param { array } sources - array of objects to join
- *
  * @returns { object | array } - merged object or array
  */
 export const deepMerge = (...sources) => (
@@ -87,9 +99,40 @@ export const deepMerge = (...sources) => (
 )
 
 /**
+ * Checks if prop exists on the object
+ * @param { object } obj - data to check
+ * @param { string } prop - prop to check for
+ * @returns { boolean } T/F if the prop exists
+ */
+export const hasOwn = (obj, prop) => (
+  Object.prototype.hasOwnProperty.call(obj, prop)
+)
+
+/**
+ * Checks if data is an object and not an array
+ * @param { object } obj - data to check
+ * @returns { boolean }
+ */
+export const isObj = obj => typeof obj === 'object' && !Array.isArray(obj) && obj !== null
+
+/**
+ * Compares two objects by converting to JSON, and checking string equality
+ * @param  { object || array } one - object to compare with param two
+ * @param  { object || array } two - object to compare with param one
+ * @return { boolean } status of equality
+ */
+export const jsonEqual = (one, two) => {
+  try {
+    return JSON.stringify(one) === JSON.stringify(two)
+  }
+  catch(e){
+    return false
+  }
+}
+
+/**
  * Map over and objects props and values
  * @param  { object } obj
- *
  * @return { array } -  returned values from callback
  */
 export const mapObj = (obj, cb) => (
@@ -98,153 +141,6 @@ export const mapObj = (obj, cb) => (
     .entries(obj)
     .map(([ key, value ]) => cb(key, value))
   ) || obj
-)
-
-/**
- * Loop over and objects props and values and reduce to new object
- * @param  { object } obj
- *
- * @return { object } - updated object
- */
-export const reduceObj = (obj, cb, start={}) => (
-  (isObj(obj) && isFunc(cb) &&
-  Object
-    .entries(obj)
-    .reduce((data, [ key, value ]) => cb(key, value, data), start)
-  ) || obj
-)
-
-/**
- * Recursively freezes and object
- * @param  { object } obj
- *
- * @return { object } - frozen Object
- */
-export const deepFreeze = obj => {
-  Object.freeze(obj)
-  Object
-    .getOwnPropertyNames(obj)
-    .map(prop => {
-      obj.hasOwnProperty(prop)
-        && obj[prop] !== null
-        && (typeof obj[prop] === 'object' || isFunc(obj[prop]))
-        && !Object.isFrozen(obj[prop])
-        && deepFreeze(obj[prop])
-    })
-
-  return obj
-}
-
-/**
- * Sanitizes all html strings in an object's properties
- * @param  { object } obj to be sanitize
- * @return { object } - obj with strings sanitized
- */
-export const sanitizeCopy = obj => JSON.parse(sanitize(JSON.stringify(obj)))
-
-
-/**
- * Trims objects string fields
- * @param  { object } object
- * @return { object } - object with string fields trimmed
- */
-export const trimStringFields = object => (
-  Object
-    .entries(object)
-    .reduce((cleaned, [ key, value ]) => {
-      cleaned[key] = typeof value === 'string' ? value.trim() : value
-      return cleaned
-    }, object)
-)
-
-/**
- * Adds a path to an object.
- * If the path already exists, but not in the correct format it will be replaced
- * path is built from a . separated string
- * i.e. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object
- * @param  { object } obj - object to have the path added to it
- * @param  { string || array } path - path that should be created on the object, separated by .
- * @param  { any } finalValue - when ever the final value of the path should be
- * @return the obj param
- */
-export const set = (obj = {}, path, finalValue = {}) => {
-  if (!path) return obj
-  const isArr = Array.isArray(path)
-  if (!isArr && path.indexOf('.') === -1) {
-    obj[path] = finalValue
-    return obj
-  }
-  const parts = (isArr && path) || path.split('.')
-
-  return parts.reduce((current, part, index) => {
-    if (index === parts.length - 1) {
-      current[part] = finalValue
-      return obj
-    }
-    if (typeof current[part] !== 'object') current[part] = {}
-    current = current[part]
-    return current
-  }, obj)
-}
-
-/**
- * Searches an object based on the path param
- * i.e. path = 'data.foo.bar' => will return obj.data.foo.bar
- * If bar does not exist, then will return obj.data.foo
- * @param  { object } obj - will search the object based on the path
- * @param  { string || array } path - . separated string to search the object
- * @return the final value found from the path
- */
-export const get = (obj, path) => {
-  if (!obj || !path) return obj
-
-  const isArr = Array.isArray(path)
-  if (!isArr && path.indexOf('.') === -1) obj[path]
-  const parts = (isArr && path) || path.split('.')
-
-  let hasBreak = false
-  return parts.reduce((current, part) => {
-    if (!current || !current[part] || hasBreak) {
-      hasBreak = true
-      return undefined
-    }
-    return current[part]
-  }, obj)
-}
-
-/**
- * Removes a path from an object
- * @param  { object } obj - object to have the attribute removed
- * @param  { string || array } path - path of attribute to be removed, seperated by string
- * @return the passed in object, with the attribute found at the path removed
- */
-export const unset = (obj, path) => {
-  if (typeof obj !== 'object' || !obj || !path) return undefined
-  const parts = Array.isArray(path) ? path : path.split('.')
-
-  const partsCopy = [ ...parts ]
-  let current = obj
-  parts.map((part, index) => {
-    if (index === parts.length - 1) {
-      current = reduceObj(
-        current,
-        (clean, key) => {
-          if (key !== part) clean[key] = current[key]
-          return clean
-        },
-        {}
-      )
-    }
-    else if (typeof current[part] === 'object') {
-      partsCopy.shift()
-      current[part] = removeObjPath(current[part], partsCopy)
-    }
-  })
-  return current
-}
-
-export const reduceTargetKeys = (target, keys, predicate) => (
-  Object.keys(target).reduce(predicate, {})
 )
 
 /**
@@ -276,16 +172,65 @@ export const pickKeys = (target = {}, keys = []) => (
 )
 
 /**
- * Compares two objects by converting to JSON, and checking string equality
- * @param  { object || array } one - object to compare with param two
- * @param  { object || array } two - object to compare with param one
- * @return { boolean } status of equality
+ * Loop over and objects props and values and reduce to new object
+ * @param  { object } obj
+ * @return { object } - updated object
  */
-export const jsonEqual = (one, two) => {
-  try {
-    return JSON.stringify(one) === JSON.stringify(two)
-  }
-  catch(e){
-    return false
-  }
+export const reduceObj = (obj, cb, start={}) => (
+  (isObj(obj) && isFunc(cb) &&
+  Object
+    .entries(obj)
+    .reduce((data, [ key, value ]) => cb(key, value, data), start)
+  ) || {}
+)
+
+/**
+ * Sanitizes all html strings in an object's properties
+ * @param  { object } obj to be sanitize
+ * @return { object } - obj with strings sanitized
+ */
+export const sanitizeCopy = obj => JSON.parse(sanitize(JSON.stringify(obj)))
+
+
+/**
+ * Trims objects string fields
+ * @param  { object } object
+ * @return { object } - object with string fields trimmed
+ */
+export const trimStringFields = object => (
+  Object
+    .entries(object)
+    .reduce((cleaned, [ key, value ]) => {
+      cleaned[key] = typeof value === 'string' ? value.trim() : value
+      return cleaned
+    }, object)
+)
+
+/**
+ * Converts an array or string into an object
+ * @param  { object } object
+ * @return { object } - value converted into an object
+ */
+export const toObj = (val, divider, split) => {
+  if(isArr(val))
+    return Object.keys(val)
+      .reduce((obj, key) => {
+        obj[key] = val[key]
+
+        return obj
+      }, {})
+
+  if(!isStr(str)) return {}
+
+  divider = divider || '='
+  split = split || '&'
+  str
+    .split(split)
+    .reduce((obj, item) => {
+      const sep = item.split(divider)
+      obj[sep[0].trim()] = strToType(sep[1].trim())
+
+      return obj
+    }, {})
 }
+ 

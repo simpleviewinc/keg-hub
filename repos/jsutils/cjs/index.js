@@ -4,6 +4,42 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _array = require("./array");
+
+Object.keys(_array).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _array[key];
+    }
+  });
+});
+
+var _boolean = require("./boolean");
+
+Object.keys(_boolean).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _boolean[key];
+    }
+  });
+});
+
+var _collection = require("./collection");
+
+Object.keys(_collection).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _collection[key];
+    }
+  });
+});
+
 var _log = require("./log");
 
 Object.keys(_log).forEach(function (key) {
@@ -24,6 +60,18 @@ Object.keys(_method).forEach(function (key) {
     enumerable: true,
     get: function get() {
       return _method[key];
+    }
+  });
+});
+
+var _number = require("./number");
+
+Object.keys(_number).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _number[key];
     }
   });
 });

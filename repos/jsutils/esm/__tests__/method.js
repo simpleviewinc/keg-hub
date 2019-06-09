@@ -24,6 +24,16 @@ describe('/method', function () {
   beforeEach(function () {
     return jest.resetAllMocks();
   });
+  describe('checkCall', function () {
+    it('should check if a method, and call it with passed in params', function () {
+      var testMethod = jest.fn(function () {});
+      Method.checkCall(testMethod, 1, 2, 3);
+      expect(testMethod).toHaveBeenCalledWith(1, 2, 3);
+    });
+    it('should not try to call a method if its not a function', function () {
+      expect(Method.checkCall(null, 1, 2, 3)).toEqual(undefined);
+    });
+  });
   describe('debounce', function () {
     it('should call the passed method after the correct amount of time', function (done) {
       var testMethod = jest.fn(function () {});
@@ -67,15 +77,8 @@ describe('/method', function () {
       expect(boundMethod()).toEqual(null);
     });
   });
-  describe('checkCall', function () {
-    it('should check if a method, and call it with passed in params', function () {
-      var testMethod = jest.fn(function () {});
-      Method.checkCall(testMethod, 1, 2, 3);
-      expect(testMethod).toHaveBeenCalledWith(1, 2, 3);
-    });
-    it('should not try to call a method if its not a function', function () {
-      expect(Method.checkCall(null, 1, 2, 3)).toEqual(undefined);
-    });
+  describe('doIt', function () {
+    it('should execute the callback n times based on passed in param', function () {});
   });
   describe('isFunc', function () {
     it('should return true when passed in parm is a function', function () {
@@ -84,6 +87,18 @@ describe('/method', function () {
     it('should return false when passed in parm is not a function', function () {
       expect(Method.isFunc(null)).toEqual(false);
     });
+  });
+  describe('memorize', function () {
+    it('should return a function', function () {});
+    it('should return the last response to a method when params are the same', function () {});
+    it('should set the response to the memorize cache', function () {});
+    it('should clear the cache when memorize.destroy is called', function () {});
+  });
+  describe('throttle', function () {
+    it('should only call the passed in method once over a given amount of time', function () {});
+  });
+  describe('throttleLast', function () {
+    it('should only call the last method passed to it', function () {});
   });
   describe('uuid', function () {
     it('should return a valid uuid', function () {

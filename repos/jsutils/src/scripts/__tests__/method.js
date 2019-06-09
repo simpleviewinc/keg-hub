@@ -6,6 +6,20 @@ describe('/method', () => {
 
   beforeEach(() => jest.resetAllMocks())
 
+  describe('checkCall', () => {
+
+    it('should check if a method, and call it with passed in params', () => {
+      const testMethod = jest.fn(() => {})
+      Method.checkCall(testMethod, 1,2,3)
+      expect(testMethod).toHaveBeenCalledWith(1,2,3)
+    })
+
+    it('should not try to call a method if its not a function', () => {
+      expect(Method.checkCall(null, 1,2,3)).toEqual(undefined)
+    })
+
+  })
+
   describe('debounce', () => {
 
     it('should call the passed method after the correct amount of time', done => {
@@ -59,19 +73,15 @@ describe('/method', () => {
 
   })
 
-  describe('checkCall', () => {
+  describe('doIt', () => {
 
-    it('should check if a method, and call it with passed in params', () => {
-      const testMethod = jest.fn(() => {})
-      Method.checkCall(testMethod, 1,2,3)
-      expect(testMethod).toHaveBeenCalledWith(1,2,3)
-    })
-
-    it('should not try to call a method if its not a function', () => {
-      expect(Method.checkCall(null, 1,2,3)).toEqual(undefined)
+    it('should execute the callback n times based on passed in param', () => {
+      
+      
     })
 
   })
+  
 
   describe('isFunc', () => {
 
@@ -81,6 +91,42 @@ describe('/method', () => {
 
     it('should return false when passed in parm is not a function', () => {
       expect(Method.isFunc(null)).toEqual(false)
+    })
+
+  })
+
+  describe('memorize', () => {
+
+    it('should return a function', () => {
+      
+    })
+
+    it('should return the last response to a method when params are the same', () => {
+      
+    })
+
+    it('should set the response to the memorize cache', () => {
+      
+    })
+
+    it('should clear the cache when memorize.destroy is called', () => {
+      
+    })
+
+  })
+
+  describe('throttle', () => {
+
+    it('should only call the passed in method once over a given amount of time', () => {
+      
+    })
+
+  })
+  
+  describe('throttleLast', () => {
+
+    it('should only call the last method passed to it', () => {
+      
     })
 
   })

@@ -2,19 +2,26 @@
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.slice");
+
 require("core-js/modules/es.string.replace");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.throttleLast = exports.throttle = exports.uuid = exports.checkCall = exports.debounce = exports.isFunc = void 0;
+exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.checkCall = void 0;
+
+var _number = require("./number");
+
+var _object = require("./object");
 
 /**
- * Check if the passed in item is a function
- * @param  { any } test 
- * @return { boolean } is a function
+ * Check if the passed in method is a function, and calls it
+ * @param  { function } method - function to call
+ * @param  { object } params - params to pass to the method on call
+ * @return { any } - whatever the passed in method returns
  */
-const isFunc = func => typeof func === 'function';
+const checkCall = (method, ...params) => isFunc(method) && method(...params) || undefined;
 /**
  * Ensures a function is not called to many times
  * @param  { function } func - function to call
@@ -24,7 +31,7 @@ const isFunc = func => typeof func === 'function';
  */
 
 
-exports.isFunc = isFunc;
+exports.checkCall = checkCall;
 
 const debounce = (func, wait = 250, immediate = false) => {
   let timeout;
@@ -44,26 +51,72 @@ const debounce = (func, wait = 250, immediate = false) => {
   };
 };
 /**
- * Check if the passed in method is a function, and calls it
- * @param  { function } method - function to call
- * @param  { object } params - params to pass to the method on call
- * @return { any } - whatever the passed in method returns
+ * Execute a method n times
+ * Callback params - does not include number || callback method
+ * Example doIt(10, window, [], (index, arr)=> { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
+ * @param  { number } args[0] - number of times to call the callback
+ * @param  { parent } args[1] - value to bind the method call to ( this )
+ * @param  { function } args[ args.length -1 ] - method to call
+ * @return { void }
  */
 
 
 exports.debounce = debounce;
 
-const checkCall = (method, ...params) => isFunc(method) && method(...params) || undefined;
+const doIt = (...args) => {
+  const params = args.slice();
+  const num = params.shift();
+  const cb = params.pop();
+  if (!(0, _number.isNum)(num) || !isFunc(cb)) return;
+  let i = -1;
+
+  while (++i < num) if (cb.call(params[0], i, ...params) === false) break;
+};
 /**
- * Creates a uuid, unique up to around 20 million iterations. good enough for us
- * @param  { number } start of the uuid
- * @return { string } - build uuid
+ * Check if the passed in item is a function
+ * @param  { any } test 
+ * @return { boolean } is a function
  */
 
 
-exports.checkCall = checkCall;
+exports.doIt = doIt;
 
-const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
+const isFunc = func => typeof func === 'function';
+/**
+ * Creates a method to memorize passed in methods output
+ * @param { function } func - method to memorize output of
+ * @param { function } getCacheKey - gets the key to save cached output
+ * @return { function } memorized function with cache
+ */
+
+
+exports.isFunc = isFunc;
+
+const memorize = (func, getCacheKey, limit) => {
+  if (!isFunc(func) || getCacheKey && !isFunc(getCacheKey)) throw new TypeError('Expected a function');
+
+  const _memorized = function memorized() {
+    const cache = _memorized.cache;
+    const key = getCacheKey ? getCacheKey.apply(this, arguments) : arguments[0];
+    if ((0, _object.hasOwn)(cache, key)) return cache[key];
+    const result = func.apply(this, arguments);
+    !(0, _number.isNum)(limit) || Object.key(cache).length < limit ? cache[key] = result : _memorized.cache = {
+      [key]: result
+    };
+    return result;
+  };
+
+  _memorized.cache = {};
+
+  _memorized.destroy = () => {
+    getCacheKey = undefined;
+    _memorized.cache = undefined;
+    _memorized.destroy = undefined;
+    _memorized = undefined;
+  };
+
+  return _memorized;
+};
 /**
  * Throttle function calls to only execute once over a wait period
  * usage: throttle(() => console.log('throttled'), 50)()
@@ -73,7 +126,7 @@ const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + 
  */
 
 
-exports.uuid = uuid;
+exports.memorize = memorize;
 
 const throttle = (func, wait = 100) => {
   let waiting = false;
@@ -114,5 +167,15 @@ const throttleLast = (func, cb, wait = 100) => {
     typeof cb === 'function' && cb();
   };
 };
+/**
+ * Creates a uuid, unique up to around 20 million iterations. good enough for us
+ * @param  { number } start of the uuid
+ * @return { string } - build uuid
+ */
+
 
 exports.throttleLast = throttleLast;
+
+const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
+
+exports.uuid = uuid;

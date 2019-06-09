@@ -1,6 +1,6 @@
 'use strict'
-const { logData, setLogs } = require('./log')
-const { promisify } = require('./promise')
+const { logData, setLogs } = require('../log')
+const { promisify } = require('../promise')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const fs = require('fs')

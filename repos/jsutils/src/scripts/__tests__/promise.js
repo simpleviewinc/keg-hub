@@ -62,6 +62,7 @@ describe('/promise', () => {
 
       for (const key in Object.getPrototypeOf(NewClass)) {
         const asyncName = key + 'Async'
+
         expect(propertyNames.indexOf(asyncName)).toEqual(-1)
       }
     })
@@ -94,6 +95,7 @@ describe('/promise', () => {
       promisifyAll(testObject)
       const input = 'input'
       const result = await testObject.somePropertyAsync(input)
+
       expect(result).toEqual(input)
     })
 

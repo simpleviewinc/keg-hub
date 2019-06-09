@@ -1,8 +1,7 @@
 'use strict';
 /**
- * Converts a string to camel case
- * @param  { string } string to be converted
- * @return { string } - string in camel case format
+ * Builds a string path from passed in args ( i.e. path/to/thing )
+ * @return { string } - built path from arguments
  */
 
 require("core-js/modules/es.array.index-of");
@@ -18,10 +17,26 @@ require("core-js/modules/es.string.split");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.wordCaps = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.capitalize = exports.clean = exports.camelCase = void 0;
+exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.buildPath = void 0;
+
+const buildPath = (...args) => {
+  const built = args.reduce((path, arg) => {
+    let str = toStr(arg);
+    return `${path}${str && '/' + str || ''}`;
+  }, '');
+  return built.replace(/([^:\/]|^)\/{2,}/g, '$1/');
+};
+/**
+ * Converts a string to camel case
+ * @param  { string } string to be converted
+ * @return { string } - string in camel case format
+ */
+
+
+exports.buildPath = buildPath;
 
 const camelCase = (str, compCase) => {
-  return str && clean(str).split(' ').map((word, index) => (index > 0 || compCase) && capitalize(word) || word.toLowerCase()).join('') || str;
+  return str && cleanStr(str).split(' ').map((word, index) => (index > 0 || compCase) && capitalize(word) || word.toLowerCase()).join('') || str;
 };
 /**
  * Converts `-` and `_` to white space and removes `.`
@@ -32,7 +47,7 @@ const camelCase = (str, compCase) => {
 
 exports.camelCase = camelCase;
 
-const clean = str => {
+const cleanStr = str => {
   if (!str) return str;
   return removeDot(str).replace(/_/g, ' ').replace(/-/g, ' ');
 };
@@ -43,9 +58,25 @@ const clean = str => {
  */
 
 
-exports.clean = clean;
+exports.cleanStr = cleanStr;
 
 const capitalize = str => isStr(str) && str[0] && `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}` || str;
+/**
+ * Checks if a string contains another string
+ * @param  { string } string - value to be checked
+ * @param  { string } substring - value to search for
+ * 
+ * @return { boolean } - if the substring exists string
+ */
+
+
+exports.capitalize = capitalize;
+
+const containsStr = (str, substring, fromIndex) => {
+  str = !isStr(str) && toStr(str) || str;
+  substring = !isStr(substring) && toStr(substring) || substring;
+  return str.indexOf(substring, fromIndex) !== -1;
+};
 /**
  * Check if string is a email
  * @param  { string } string to check
@@ -53,10 +84,10 @@ const capitalize = str => isStr(str) && str[0] && `${str[0].toUpperCase()}${str.
  */
 
 
-exports.capitalize = capitalize;
+exports.containsStr = containsStr;
 
 const isEmail = str => {
-  if (!str || typeof str !== 'string') return false;
+  if (!str || !isStr(str)) return false;
   const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   return Boolean(regex.test(str));
 };
@@ -70,7 +101,7 @@ const isEmail = str => {
 exports.isEmail = isEmail;
 
 const isPhone = str => {
-  if (!str || typeof str !== 'string') return false;
+  if (!str || !isStr(str)) return false;
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
   return Boolean(regex.test(str)) && str.replace(/\D/g, '').length < 11;
 };
@@ -107,7 +138,7 @@ const isUrl = str => {
 exports.isUrl = isUrl;
 
 const isUuid = str => {
-  if (!str || typeof str !== 'string') return false;
+  if (!str || !isStr(str)) return false;
   const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
   return Boolean(regex.test(str));
 };
@@ -204,17 +235,28 @@ exports.styleCase = styleCase;
 
 const trainCase = str => isStr(str) && str.replace(/ /g, '-').toLowerCase() || str;
 /**
+ * Converts a passed in value to a string
+ * @param  { any } val - value to be converted
+ * 
+ * @return { string } - value converted into a string
+ */
+
+
+exports.trainCase = trainCase;
+
+const toStr = val => val === null || val === undefined ? '' : isStr(val) ? val : JSON.stringify(val);
+/**
  * Converts all words in a string to be capitalized
  * @param  { string } string to be converted
  * @return { string } - string with all words capitalized
  */
 
 
-exports.trainCase = trainCase;
+exports.toStr = toStr;
 
 const wordCaps = str => {
   if (!str) return str;
-  let cleaned = clean(str);
+  let cleaned = cleanStr(str);
   return cleaned.split(' ').map(word => {
     return capitalize(word);
   }).join(' ');

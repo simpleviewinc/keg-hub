@@ -46,11 +46,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var _require = require('./log'),
+var _require = require('../log'),
     logData = _require.logData,
     setLogs = _require.setLogs;
 
-var _require2 = require('./promise'),
+var _require2 = require('../promise'),
     promisify = _require2.promisify;
 
 var _require3 = require('child_process'),

@@ -1,8 +1,7 @@
 'use strict';
 /**
- * Converts a string to camel case
- * @param  { string } string to be converted
- * @return { string } - string in camel case format
+ * Builds a string path from passed in args ( i.e. path/to/thing )
+ * @return { string } - built path from arguments
  */
 
 require("core-js/modules/es.array.concat");
@@ -12,6 +11,8 @@ require("core-js/modules/es.array.index-of");
 require("core-js/modules/es.array.join");
 
 require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.array.reduce");
 
 require("core-js/modules/es.array.slice");
 
@@ -26,10 +27,30 @@ require("core-js/modules/es.string.split");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.wordCaps = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.capitalize = exports.clean = exports.camelCase = void 0;
+exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.buildPath = void 0;
+
+var buildPath = function buildPath() {
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  var built = args.reduce(function (path, arg) {
+    var str = toStr(arg);
+    return "".concat(path).concat(str && '/' + str || '');
+  }, '');
+  return built.replace(/([^:\/]|^)\/{2,}/g, '$1/');
+};
+/**
+ * Converts a string to camel case
+ * @param  { string } string to be converted
+ * @return { string } - string in camel case format
+ */
+
+
+exports.buildPath = buildPath;
 
 var camelCase = function camelCase(str, compCase) {
-  return str && clean(str).split(' ').map(function (word, index) {
+  return str && cleanStr(str).split(' ').map(function (word, index) {
     return (index > 0 || compCase) && capitalize(word) || word.toLowerCase();
   }).join('') || str;
 };
@@ -42,7 +63,7 @@ var camelCase = function camelCase(str, compCase) {
 
 exports.camelCase = camelCase;
 
-var clean = function clean(str) {
+var cleanStr = function cleanStr(str) {
   if (!str) return str;
   return removeDot(str).replace(/_/g, ' ').replace(/-/g, ' ');
 };
@@ -53,10 +74,26 @@ var clean = function clean(str) {
  */
 
 
-exports.clean = clean;
+exports.cleanStr = cleanStr;
 
 var capitalize = function capitalize(str) {
   return isStr(str) && str[0] && "".concat(str[0].toUpperCase()).concat(str.slice(1).toLowerCase()) || str;
+};
+/**
+ * Checks if a string contains another string
+ * @param  { string } string - value to be checked
+ * @param  { string } substring - value to search for
+ * 
+ * @return { boolean } - if the substring exists string
+ */
+
+
+exports.capitalize = capitalize;
+
+var containsStr = function containsStr(str, substring, fromIndex) {
+  str = !isStr(str) && toStr(str) || str;
+  substring = !isStr(substring) && toStr(substring) || substring;
+  return str.indexOf(substring, fromIndex) !== -1;
 };
 /**
  * Check if string is a email
@@ -65,10 +102,10 @@ var capitalize = function capitalize(str) {
  */
 
 
-exports.capitalize = capitalize;
+exports.containsStr = containsStr;
 
 var isEmail = function isEmail(str) {
-  if (!str || typeof str !== 'string') return false;
+  if (!str || !isStr(str)) return false;
   var regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   return Boolean(regex.test(str));
 };
@@ -82,7 +119,7 @@ var isEmail = function isEmail(str) {
 exports.isEmail = isEmail;
 
 var isPhone = function isPhone(str) {
-  if (!str || typeof str !== 'string') return false;
+  if (!str || !isStr(str)) return false;
   var regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
   return Boolean(regex.test(str)) && str.replace(/\D/g, '').length < 11;
 };
@@ -121,7 +158,7 @@ var isUrl = function isUrl(str) {
 exports.isUrl = isUrl;
 
 var isUuid = function isUuid(str) {
-  if (!str || typeof str !== 'string') return false;
+  if (!str || !isStr(str)) return false;
   var regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
   return Boolean(regex.test(str));
 };
@@ -222,17 +259,30 @@ var trainCase = function trainCase(str) {
   return isStr(str) && str.replace(/ /g, '-').toLowerCase() || str;
 };
 /**
+ * Converts a passed in value to a string
+ * @param  { any } val - value to be converted
+ * 
+ * @return { string } - value converted into a string
+ */
+
+
+exports.trainCase = trainCase;
+
+var toStr = function toStr(val) {
+  return val === null || val === undefined ? '' : isStr(val) ? val : JSON.stringify(val);
+};
+/**
  * Converts all words in a string to be capitalized
  * @param  { string } string to be converted
  * @return { string } - string with all words capitalized
  */
 
 
-exports.trainCase = trainCase;
+exports.toStr = toStr;
 
 var wordCaps = function wordCaps(str) {
   if (!str) return str;
-  var cleaned = clean(str);
+  var cleaned = cleanStr(str);
   return cleaned.split(' ').map(function (word) {
     return capitalize(word);
   }).join(' ');

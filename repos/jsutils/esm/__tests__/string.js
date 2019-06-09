@@ -33,7 +33,7 @@ describe('/string', function () {
   });
   describe('clean', function () {
     it('should clean a string by removing _ and -', function () {
-      expect(Str.clean('STRING_CLEAN-DASH')).toEqual('STRING CLEAN DASH');
+      expect(Str.cleanStr('STRING_CLEAN-DASH')).toEqual('STRING CLEAN DASH');
     });
   });
   describe('capitalize', function () {

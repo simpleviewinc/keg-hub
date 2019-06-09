@@ -15,7 +15,7 @@ describe('/string', () => {
 
   describe('clean', () => {
     it('should clean a string by removing _ and -', () => {
-      expect(Str.clean('STRING_CLEAN-DASH')).toEqual('STRING CLEAN DASH')
+      expect(Str.cleanStr('STRING_CLEAN-DASH')).toEqual('STRING CLEAN DASH')
     })
   })
 

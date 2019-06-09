@@ -42,11 +42,11 @@ var _object = require("./object");
 var _method = require("./method");
 
 /**
- * Polyfill to promisify a method that uses the standard node.js callback structure
+ * Converts a standard callback method into Promise
  * @param  { function } method - method to turn into a promise
  * @return method as a promise
  */
-var promisifyFill = function promisifyFill(method) {
+var promisify = function promisify(method) {
   if (!(0, _method.isFunc)(method)) throw "Argument must be a function";
   return function () {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -74,7 +74,6 @@ var promisifyFill = function promisifyFill(method) {
   };
 };
 
-var promisify = typeof window === 'undefined' ? require('util').promisify : promisifyFill;
 exports.promisify = promisify;
 var isTest = process.env.NODE_ENV === 'test';
 /**
