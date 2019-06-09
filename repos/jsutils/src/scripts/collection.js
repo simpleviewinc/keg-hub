@@ -66,18 +66,15 @@ export const isColl = val => (
  * @param  { collection } - collection to loop over
  * @return { array | object } returns the same type of collection passed in
  */
-export const mapColl = (coll, cb) => {
-  const isAnArray = isArr(coll)
-  const mapped = isFunc(cb) && isColl(coll)
+export const mapColl = (coll, cb) => (
+  isFunc(cb) && isColl(coll)
     ? Object
       .keys(coll)
       .map(key => cb(key, coll[key], coll))
     : isAnArray
       ? []
       : {}
-  
-  return isAnArray && mapped || toObj(mapped)
-}
+)
 
 /**
  * Loops over collection and calling reduce

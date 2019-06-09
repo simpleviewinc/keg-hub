@@ -74,11 +74,7 @@ const isColl = val => typeof val === 'object' && val !== null;
 
 exports.isColl = isColl;
 
-const mapColl = (coll, cb) => {
-  const isAnArray = (0, _array.isArr)(coll);
-  const mapped = (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).map(key => cb(key, coll[key], coll)) : isAnArray ? [] : {};
-  return isAnArray && mapped || (0, _object.toObj)(mapped);
-};
+const mapColl = (coll, cb) => (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).map(key => cb(key, coll[key], coll)) : isAnArray ? [] : {};
 /**
  * Loops over collection and calling reduce
  * @param  { object } obj - object loop over

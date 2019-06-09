@@ -63,7 +63,7 @@ describe('/collection', () => {
       expect(Array.isArray(res)).toBe(true)
     })
     
-    it('should return the same type of value as passed in', () => {
+    it('should return as array when an object is passed in', () => {
       let counter = 0
       const res = Coll.mapColl({ 1:1, 2:2, 3:3 }, (key, value, coll) => {
         counter++
@@ -71,7 +71,7 @@ describe('/collection', () => {
       })
       
       expect(counter).toBe(3)
-      expect(Array.isArray(res)).toBe(false)
+      expect(Array.isArray(res)).toBe(true)
       expect(typeof res === 'object').toBe(true)
     })
     

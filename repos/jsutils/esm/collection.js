@@ -105,11 +105,9 @@ var isColl = function isColl(val) {
 exports.isColl = isColl;
 
 var mapColl = function mapColl(coll, cb) {
-  var isAnArray = (0, _array.isArr)(coll);
-  var mapped = (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).map(function (key) {
+  return (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).map(function (key) {
     return cb(key, coll[key], coll);
   }) : isAnArray ? [] : {};
-  return isAnArray && mapped || (0, _object.toObj)(mapped);
 };
 /**
  * Loops over collection and calling reduce

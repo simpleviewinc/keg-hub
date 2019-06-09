@@ -84,7 +84,7 @@ describe('/collection', function () {
       expect(counter).toBe(4);
       expect(Array.isArray(res)).toBe(true);
     });
-    it('should return the same type of value as passed in', function () {
+    it('should return as array when an object is passed in', function () {
       var counter = 0;
       var res = Coll.mapColl({
         1: 1,
@@ -95,7 +95,7 @@ describe('/collection', function () {
         return counter;
       });
       expect(counter).toBe(3);
-      expect(Array.isArray(res)).toBe(false);
+      expect(Array.isArray(res)).toBe(true);
       expect(_typeof(res) === 'object').toBe(true);
     });
   });
