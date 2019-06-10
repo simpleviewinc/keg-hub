@@ -10,6 +10,16 @@ import { hasOwn } from './object'
 export const checkCall = (method, ...params) =>  isFunc(method) && method(...params) || undefined
 
 /**
+ * Returns the first param if correct type of second param
+ * @param { function } func1 - return if is func
+ * @param { function } func2 - use if first is not an object
+ * @returns { function }
+ */
+export const eitherFunc = (func1, func2) => (
+  isFunc(func1) && func1 || func2
+)
+
+/**
  * Ensures a function is not called to many times
  * @param  { function } func - function to call
  * @param  { number } wait - how long to wait between function calls

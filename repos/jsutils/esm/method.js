@@ -37,7 +37,7 @@ require("core-js/modules/web.timers");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.checkCall = void 0;
+exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = void 0;
 
 var _number = require("./number");
 
@@ -71,6 +71,19 @@ var checkCall = function checkCall(method) {
   return isFunc(method) && method.apply(void 0, params) || undefined;
 };
 /**
+ * Returns the first param if correct type of second param
+ * @param { function } func1 - return if is func
+ * @param { function } func2 - use if first is not an object
+ * @returns { function }
+ */
+
+
+exports.checkCall = checkCall;
+
+var eitherFunc = function eitherFunc(func1, func2) {
+  return isFunc(func1) && func1 || func2;
+};
+/**
  * Ensures a function is not called to many times
  * @param  { function } func - function to call
  * @param  { number } wait - how long to wait between function calls
@@ -79,7 +92,7 @@ var checkCall = function checkCall(method) {
  */
 
 
-exports.checkCall = checkCall;
+exports.eitherFunc = eitherFunc;
 
 var debounce = function debounce(func) {
   var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 250;

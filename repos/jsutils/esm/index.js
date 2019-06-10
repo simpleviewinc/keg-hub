@@ -48,6 +48,18 @@ Object.keys(_collection).forEach(function (key) {
   });
 });
 
+var _ext = require("./ext");
+
+Object.keys(_ext).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _ext[key];
+    }
+  });
+});
+
 var _log = require("./log");
 
 Object.keys(_log).forEach(function (key) {

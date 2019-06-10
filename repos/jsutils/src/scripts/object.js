@@ -37,6 +37,16 @@ export const clearObj = (obj, filter) => {
 }
 
 /**
+ * Returns the first param if correct type of second param
+ * @param { object } obj1 - return if is object
+ * @param { object } obj2 - use if first is not an object
+ * @returns { obj }
+ */
+export const eitherObj = (obj1, obj2) => (
+  isObj(obj1) && obj1 || obj2
+)
+
+/**
  * Recursively freezes and object
  * @param  { object } obj
  * @return { object } - frozen Object

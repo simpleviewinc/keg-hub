@@ -71,6 +71,16 @@ export const containsStr = (str, substring, fromIndex) => {
 }
 
 /**
+ * Returns the first param if correct type of second param
+ * @param { string } str1 - return if is string
+ * @param { string } str2 - use if first is not an object
+ * @returns { string }
+ */
+export const eitherStr = (str1, str2) => (
+  isStr(str1) && str1 || str2
+)
+
+/**
  * Check if string is a email
  * @param  { string } string to check
  * @return { boolean } - if it's a email

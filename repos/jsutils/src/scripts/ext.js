@@ -2,7 +2,23 @@ import { isObj } from './object'
 import { isArr } from './array'
 import { isStr } from './string'
 import { isNum } from './number'
+import { softFalsy } from './boolean'
+import { isFunc } from './method'
 import { isStrBool, toBool } from './boolean'
+
+
+/**
+ * Determines the correct data to return
+ * @param { any } func1 - return if passes check method
+ * @param { any } func2 - use if first is not an object
+ * @returns { any }
+ */
+export const either = (data1, data2, check) => (
+  !isFunc(check)
+    ? softFalsy(data1) && data1 || data2
+    : check(data1) && data1 || data2
+)
+
 
 /**
  * Gets the type of the passed in val

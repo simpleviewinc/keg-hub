@@ -17,7 +17,7 @@ require("core-js/modules/es.string.trim");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.strToType = exports.isValidDate = exports.isEmpty = exports.isSame = exports.typeOf = void 0;
+exports.strToType = exports.isValidDate = exports.isEmpty = exports.isSame = exports.typeOf = exports.either = void 0;
 
 var _object = require("./object");
 
@@ -29,11 +29,26 @@ var _number = require("./number");
 
 var _boolean = require("./boolean");
 
+var _method = require("./method");
+
+/**
+ * Determines the correct data to return
+ * @param { any } func1 - return if passes check method
+ * @param { any } func2 - use if first is not an object
+ * @returns { any }
+ */
+var either = function either(data1, data2, check) {
+  return !(0, _method.isFunc)(check) ? (0, _boolean.softFalsy)(data1) && data1 || data2 : check(data1) && data1 || data2;
+};
 /**
  * Gets the type of the passed in val
  * @param  { any } val - value to get type for
  * @return { string } type of the value
  */
+
+
+exports.either = either;
+
 var typeOf = function typeOf(val) {
   return Object.prototype.toString.call(val).slice(8, -1);
 };

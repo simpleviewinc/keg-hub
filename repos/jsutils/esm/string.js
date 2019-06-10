@@ -27,7 +27,7 @@ require("core-js/modules/es.string.split");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.buildPath = void 0;
+exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.eitherStr = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.buildPath = void 0;
 
 var buildPath = function buildPath() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -96,13 +96,26 @@ var containsStr = function containsStr(str, substring, fromIndex) {
   return str.indexOf(substring, fromIndex) !== -1;
 };
 /**
+ * Returns the first param if correct type of second param
+ * @param { string } str1 - return if is string
+ * @param { string } str2 - use if first is not an object
+ * @returns { string }
+ */
+
+
+exports.containsStr = containsStr;
+
+var eitherStr = function eitherStr(str1, str2) {
+  return isStr(str1) && str1 || str2;
+};
+/**
  * Check if string is a email
  * @param  { string } string to check
  * @return { boolean } - if it's a email
  */
 
 
-exports.containsStr = containsStr;
+exports.eitherStr = eitherStr;
 
 var isEmail = function isEmail(str) {
   if (!str || !isStr(str)) return false;

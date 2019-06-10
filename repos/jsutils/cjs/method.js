@@ -9,7 +9,7 @@ require("core-js/modules/es.string.replace");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.checkCall = void 0;
+exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = void 0;
 
 var _number = require("./number");
 
@@ -23,6 +23,17 @@ var _object = require("./object");
  */
 const checkCall = (method, ...params) => isFunc(method) && method(...params) || undefined;
 /**
+ * Returns the first param if correct type of second param
+ * @param { function } func1 - return if is func
+ * @param { function } func2 - use if first is not an object
+ * @returns { function }
+ */
+
+
+exports.checkCall = checkCall;
+
+const eitherFunc = (func1, func2) => isFunc(func1) && func1 || func2;
+/**
  * Ensures a function is not called to many times
  * @param  { function } func - function to call
  * @param  { number } wait - how long to wait between function calls
@@ -31,7 +42,7 @@ const checkCall = (method, ...params) => isFunc(method) && method(...params) || 
  */
 
 
-exports.checkCall = checkCall;
+exports.eitherFunc = eitherFunc;
 
 const debounce = (func, wait = 250, immediate = false) => {
   let timeout;

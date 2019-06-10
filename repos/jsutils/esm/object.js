@@ -61,7 +61,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.clearObj = exports.cloneJson = void 0;
+exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -131,13 +131,26 @@ var clearObj = function clearObj(obj, filter) {
   });
 };
 /**
+ * Returns the first param if correct type of second param
+ * @param { object } obj1 - return if is object
+ * @param { object } obj2 - use if first is not an object
+ * @returns { obj }
+ */
+
+
+exports.clearObj = clearObj;
+
+var eitherObj = function eitherObj(obj1, obj2) {
+  return isObj(obj1) && obj1 || obj2;
+};
+/**
  * Recursively freezes and object
  * @param  { object } obj
  * @return { object } - frozen Object
  */
 
 
-exports.clearObj = clearObj;
+exports.eitherObj = eitherObj;
 
 var deepFreeze = function deepFreeze(obj) {
   Object.freeze(obj);
