@@ -269,7 +269,7 @@ var styleCase = function styleCase(str) {
 exports.styleCase = styleCase;
 
 var trainCase = function trainCase(str) {
-  return isStr(str) && str.replace(/ /g, '-').toLowerCase() || str;
+  return isStr(str) && str.split(/(?=[A-Z\s])/gm).replace(/ /g, '-').toLowerCase() || str;
 };
 /**
  * Converts a passed in value to a string
@@ -296,7 +296,7 @@ exports.toStr = toStr;
 var wordCaps = function wordCaps(str) {
   if (!str) return str;
   var cleaned = cleanStr(str);
-  return cleaned.split(' ').map(function (word) {
+  return cleaned.split(/(?=[A-Z\s])/gm).map(function (word) {
     return capitalize(word);
   }).join(' ');
 };

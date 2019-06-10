@@ -209,7 +209,10 @@ export const styleCase = str => {
  * @return { string } - string in train case format
  */
 export const trainCase = str => (
-  isStr(str) && str.replace(/ /g, '-').toLowerCase() || str
+  isStr(str) && str
+    .split(/(?=[A-Z\s])/gm)
+    .replace(/ /g, '-')
+    .toLowerCase() || str
 )
 
 /**
@@ -235,9 +238,7 @@ export const wordCaps = str => {
   if (!str) return str
   let cleaned = cleanStr(str)
   return cleaned
-    .split(' ')
-    .map(word => {
-      return capitalize(word)
-    })
+    .split(/(?=[A-Z\s])/gm)
+    .map(word => capitalize(word))
     .join(' ')
 }

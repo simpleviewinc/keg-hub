@@ -244,7 +244,7 @@ const styleCase = str => {
 
 exports.styleCase = styleCase;
 
-const trainCase = str => isStr(str) && str.replace(/ /g, '-').toLowerCase() || str;
+const trainCase = str => isStr(str) && str.split(/(?=[A-Z\s])/gm).replace(/ /g, '-').toLowerCase() || str;
 /**
  * Converts a passed in value to a string
  * @param  { any } val - value to be converted
@@ -268,9 +268,7 @@ exports.toStr = toStr;
 const wordCaps = str => {
   if (!str) return str;
   let cleaned = cleanStr(str);
-  return cleaned.split(' ').map(word => {
-    return capitalize(word);
-  }).join(' ');
+  return cleaned.split(/(?=[A-Z\s])/gm).map(word => capitalize(word)).join(' ');
 };
 
 exports.wordCaps = wordCaps;
