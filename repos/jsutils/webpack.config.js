@@ -2,7 +2,7 @@ const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('./node_modules/terser-webpack-plugin/dist/cjs')
-const libraryName = 'jsUtils'
+const libraryName = 'jsutils'
 const NODE_ENV = process.env.NODE_ENV
 const isDev = NODE_ENV === 'development'
 const buildPath = 'build'

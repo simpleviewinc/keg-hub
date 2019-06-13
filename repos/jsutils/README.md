@@ -1,4 +1,4 @@
-# jsUtils
+# jsutils
 
 A small (60.8 KiB) utility library for commonly used helper methods.
 
@@ -7,29 +7,29 @@ A small (60.8 KiB) utility library for commonly used helper methods.
   * Download the repo
     ```js
       // Clone repo
-      git clone https://github.com/lancetipton/jsUtils.git
+      git clone https://github.com/lancetipton/jsutils.git
       // Or Add to package.json
       "dependencies": {
-        "jsUtils": "git+https://github.com/lancetipton/jsUtils.git"
+        "jsutils": "git+https://github.com/lancetipton/jsutils.git"
         ...
       },
     ```
   * Add to your code
     ```js
       // * Import into code
-        import jsUtils from 'jsUtils'
+        import jsutils from 'jsutils'
         // Or only the methods you need
-        import { capitalize } from 'jsUtils/string'
-        import { reduceObj, mapObj } from 'jsUtils/object'
+        import { capitalize } from 'jsutils/string'
+        import { reduceObj, mapObj } from 'jsutils/object'
 
       // * Or require code
-        const jsUtils = require('jsUtils')
+        const jsutils = require('jsutils')
       
       // * Add as html script
-        <script src='/path/to/jsUtils/build/jsUtils.min.js'></script>
-        // jsUtils will be available on the window 
+        <script src='/path/to/jsutils/build/jsutils.min.js'></script>
+        // jsutils will be available on the window 
         <script>
-          const jsUtils = window.jsUtils
+          const jsutils = window.jsutils
           
         </script>
     ```
