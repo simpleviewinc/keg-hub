@@ -9,8 +9,17 @@ const Str = require('../string');
 describe('/string', () => {
   beforeEach(() => jest.resetAllMocks());
   describe('camelCase', () => {
-    it('camel cases string', () => {
+    it('should convert a string to camel case', () => {
       expect(Str.camelCase('CAMEL_CASE')).toEqual('camelCase');
+    });
+    it('should handle spaces', () => {
+      expect(Str.camelCase('CAMEL case')).toEqual('camelCase');
+    });
+    it('should handle dashs', () => {
+      expect(Str.camelCase('CAmEL_case')).toEqual('camelCase');
+    });
+    it('should handle a mix of spaces dashes and low dashes', () => {
+      expect(Str.camelCase('CAm_EL cas-e')).toEqual('camElCasE');
     });
   });
   describe('clean', () => {
@@ -159,15 +168,24 @@ describe('/string', () => {
     });
   });
   describe('styleCase', () => {
-    it('style cases string', () => {
+    it('should convert a string into style case', () => {
       expect(Str.styleCase('background-color')).toEqual('backgroundColor');
+    });
+    it('should handle spaces', () => {
+      expect(Str.styleCase('background color')).toEqual('backgroundColor');
+    });
+    it('should handle low dashes', () => {
+      expect(Str.styleCase('background-color')).toEqual('backgroundColor');
+    });
+    it('should handle mixed spaces dashes and low dashes', () => {
+      expect(Str.styleCase('-background color_')).toEqual('backgroundColor');
     });
   });
   describe('trainCase', () => {
     it('should convert a string into train case', () => {
       const testString = 'I am A strIng';
       const trainCase = Str.trainCase(testString);
-      expect(trainCase).toEqual('i-am-a-string');
+      expect(trainCase).toEqual('i-am-a-str-ing');
     });
     it('should return passed in data when data is not a string', () => {
       const dirty = {};

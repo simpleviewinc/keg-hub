@@ -36,7 +36,11 @@ const buildPath = (...args) => {
 exports.buildPath = buildPath;
 
 const camelCase = (str, compCase) => {
-  return str && cleanStr(str).split(' ').map((word, index) => (index > 0 || compCase) && capitalize(word) || word.toLowerCase()).join('') || str;
+  return str && cleanStr(str).split(/[\s_-]/gm).reduce((cased, word, index) => {
+    if (!word) return cased;
+    cased += (index > 0 || compCase) && capitalize(word) || word.toLowerCase();
+    return cased;
+  }, '') || str;
 };
 /**
  * Converts `-` and `_` to white space and removes `.`
@@ -48,8 +52,7 @@ const camelCase = (str, compCase) => {
 exports.camelCase = camelCase;
 
 const cleanStr = str => {
-  if (!str) return str;
-  return removeDot(str).replace(/_/g, ' ').replace(/-/g, ' ');
+  return str && removeDot(str).replace(/[-_]/gm, ' ') || str;
 };
 /**
  * Converts first letter of a string to be capitalized
@@ -230,10 +233,9 @@ const singular = str => {
 exports.singular = singular;
 
 const styleCase = str => {
-  str = str.split(/[\s,-]/);
-  str = str.map(capitalize);
-  str[0] = str[0].toLowerCase();
-  return str.join('');
+  if (!isStr) return str;
+  const cased = camelCase(str);
+  return `${cased[0].toLowerCase()}${cased.slice(1)}`;
 };
 /**
  * Converts a string to train case
@@ -244,7 +246,7 @@ const styleCase = str => {
 
 exports.styleCase = styleCase;
 
-const trainCase = str => isStr(str) && str.split(/(?=[A-Z\s])/gm).replace(/ /g, '-').toLowerCase() || str;
+const trainCase = str => isStr(str) && str.split(/(?=[A-Z])|[\s_-]/gm).join('-').toLowerCase() || str;
 /**
  * Converts a passed in value to a string
  * @param  { any } val - value to be converted
@@ -268,7 +270,7 @@ exports.toStr = toStr;
 const wordCaps = str => {
   if (!str) return str;
   let cleaned = cleanStr(str);
-  return cleaned.split(/(?=[A-Z\s])/gm).map(word => capitalize(word)).join(' ');
+  return cleaned.split(' ').map(word => word && capitalize(word) || '').join(' ');
 };
 
 exports.wordCaps = wordCaps;

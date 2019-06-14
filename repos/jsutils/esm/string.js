@@ -50,9 +50,11 @@ var buildPath = function buildPath() {
 exports.buildPath = buildPath;
 
 var camelCase = function camelCase(str, compCase) {
-  return str && cleanStr(str).split(' ').map(function (word, index) {
-    return (index > 0 || compCase) && capitalize(word) || word.toLowerCase();
-  }).join('') || str;
+  return str && cleanStr(str).split(/[\s_-]/gm).reduce(function (cased, word, index) {
+    if (!word) return cased;
+    cased += (index > 0 || compCase) && capitalize(word) || word.toLowerCase();
+    return cased;
+  }, '') || str;
 };
 /**
  * Converts `-` and `_` to white space and removes `.`
@@ -64,8 +66,7 @@ var camelCase = function camelCase(str, compCase) {
 exports.camelCase = camelCase;
 
 var cleanStr = function cleanStr(str) {
-  if (!str) return str;
-  return removeDot(str).replace(/_/g, ' ').replace(/-/g, ' ');
+  return str && removeDot(str).replace(/[-_]/gm, ' ') || str;
 };
 /**
  * Converts first letter of a string to be capitalized
@@ -254,10 +255,9 @@ var singular = function singular(str) {
 exports.singular = singular;
 
 var styleCase = function styleCase(str) {
-  str = str.split(/[\s,-]/);
-  str = str.map(capitalize);
-  str[0] = str[0].toLowerCase();
-  return str.join('');
+  if (!isStr) return str;
+  var cased = camelCase(str);
+  return "".concat(cased[0].toLowerCase()).concat(cased.slice(1));
 };
 /**
  * Converts a string to train case
@@ -269,7 +269,7 @@ var styleCase = function styleCase(str) {
 exports.styleCase = styleCase;
 
 var trainCase = function trainCase(str) {
-  return isStr(str) && str.split(/(?=[A-Z\s])/gm).replace(/ /g, '-').toLowerCase() || str;
+  return isStr(str) && str.split(/(?=[A-Z])|[\s_-]/gm).join('-').toLowerCase() || str;
 };
 /**
  * Converts a passed in value to a string
@@ -296,8 +296,8 @@ exports.toStr = toStr;
 var wordCaps = function wordCaps(str) {
   if (!str) return str;
   var cleaned = cleanStr(str);
-  return cleaned.split(/(?=[A-Z\s])/gm).map(function (word) {
-    return capitalize(word);
+  return cleaned.split(' ').map(function (word) {
+    return word && capitalize(word) || '';
   }).join(' ');
 };
 

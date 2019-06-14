@@ -4,22 +4,32 @@ require("core-js/modules/es.array.concat");
 
 require("core-js/modules/es.array.filter");
 
+require("core-js/modules/es.array.from");
+
 require("core-js/modules/es.array.index-of");
 
 require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.map");
 
+require("core-js/modules/es.map");
+
 require("core-js/modules/es.object.entries");
+
+require("core-js/modules/es.regexp.constructor");
+
+require("core-js/modules/es.set");
 
 require("core-js/modules/es.string.split");
 
 require("core-js/modules/es.string.trim");
 
+require("core-js/modules/es.weak-map");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.deepClone = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -34,6 +44,8 @@ var _ext = require("./ext");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Clones an object by converting to JSON string and back
@@ -78,13 +90,33 @@ exports.clearObj = clearObj;
 
 const eitherObj = (obj1, obj2) => isObj(obj1) && obj1 || obj2;
 /**
+ * Recursively clones an object
+ * @param  { object } obj - object to clone
+ * @return { object } - cloned Object
+ */
+
+
+exports.eitherObj = eitherObj;
+
+const deepClone = (obj, hash = new WeakMap()) => {
+  if (Object(obj) !== obj) return obj;
+  if (obj instanceof Set) return new Set(obj);
+  if (hash.has(obj)) return hash.get(obj);
+  const result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
+  hash.set(obj, result);
+  if (obj instanceof Map) return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)));
+  return _extends(result, ...Object.keys(obj).map(key => ({
+    [key]: deepClone(obj[key], hash)
+  })));
+};
+/**
  * Recursively freezes and object
  * @param  { object } obj
  * @return { object } - frozen Object
  */
 
 
-exports.eitherObj = eitherObj;
+exports.deepClone = deepClone;
 
 const deepFreeze = obj => {
   Object.freeze(obj);
@@ -102,20 +134,22 @@ const deepFreeze = obj => {
 
 exports.deepFreeze = deepFreeze;
 
-const deepMerge = (...sources) => sources.reduce((merged, source) => source instanceof Array ? // Check if it's array, and join the arrays
-[...(merged instanceof Array && merged || []), ...source] : // Check if it's an object, and loop the properties
-source instanceof Object ? Object.entries(source) // Loop the entries of the object, and add them to the merged object
-.reduce((joined, [key, value]) => _objectSpread({}, joined, {
-  [key]: // Check if the value is not a function and is an object
-  // Also check if key is in the object
-  // Set to value or deepMerge the object with the current merged object
-  !(0, _method.isFunc)(value) && value instanceof Object && key in joined && // This will always return an object
-  // So if it gets called then value is not getting set
-  deepMerge(joined[key], value) || // Otherwise just set the value
-  value
-}), // Pass in merged at the joined object
-merged) : // If it's not an array or object, just return the merge object
-merged, {});
+const deepMerge = (...sources) => {
+  return sources.reduce((merged, source) => source instanceof Array ? // Check if it's array, and join the arrays
+  [...(merged instanceof Array && merged || []), ...source] : // Check if it's an object, and loop the properties
+  source instanceof Object ? Object.entries(source) // Loop the entries of the object, and add them to the merged object
+  .reduce((joined, [key, value]) => _objectSpread({}, joined, {
+    [key]: // Check if the value is not a function and is an object
+    // Also check if key is in the object
+    // Set to value or deepMerge the object with the current merged object
+    !(0, _method.isFunc)(value) && value instanceof Object && key in joined && // This will always return an object
+    // So if it gets called then value is not getting set
+    deepMerge(joined[key], value) || // Otherwise just set the value
+    value
+  }), // Pass in merged at the joined object
+  merged) : // If it's not an array or object, just return the merge object
+  merged, {});
+};
 /**
  * Checks if prop exists on the object
  * @param { object } obj - data to check
@@ -225,8 +259,9 @@ const trimStringFields = object => Object.entries(object).reduce((cleaned, [key,
 }, object);
 /**
  * Converts an array or string into an object
- * @param  { object } object
- * @return { object } - value converted into an object
+ * @param  { array || string } val - to be converted to object
+ * @param { string } divider - if string, what divides key from value
+ * @param { string } split - if string, what splits each key/value pair
  */
 
 
@@ -240,7 +275,7 @@ const toObj = (val, divider, split) => {
   if (!(0, _string.isStr)(str)) return {};
   divider = divider || '=';
   split = split || '&';
-  str.split(split).reduce((obj, item) => {
+  return str.split(split).reduce((obj, item) => {
     const sep = item.split(divider);
     obj[sep[0].trim()] = (0, _ext.strToType)(sep[1].trim());
     return obj;

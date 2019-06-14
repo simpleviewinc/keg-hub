@@ -28,6 +28,12 @@ require("core-js/modules/es.array.some");
 
 require("core-js/modules/es.date.to-string");
 
+require("core-js/modules/es.map");
+
+require("core-js/modules/es.object.assign");
+
+require("core-js/modules/es.object.create");
+
 require("core-js/modules/es.object.define-property");
 
 require("core-js/modules/es.object.entries");
@@ -44,15 +50,23 @@ require("core-js/modules/es.object.keys");
 
 require("core-js/modules/es.object.to-string");
 
+require("core-js/modules/es.regexp.constructor");
+
 require("core-js/modules/es.regexp.exec");
 
+require("core-js/modules/es.regexp.flags");
+
 require("core-js/modules/es.regexp.to-string");
+
+require("core-js/modules/es.set");
 
 require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/es.string.split");
 
 require("core-js/modules/es.string.trim");
+
+require("core-js/modules/es.weak-map");
 
 require("core-js/modules/web.dom-collections.for-each");
 
@@ -61,7 +75,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.deepClone = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -84,6 +98,8 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -144,13 +160,40 @@ var eitherObj = function eitherObj(obj1, obj2) {
   return isObj(obj1) && obj1 || obj2;
 };
 /**
+ * Recursively clones an object
+ * @param  { object } obj - object to clone
+ * @return { object } - cloned Object
+ */
+
+
+exports.eitherObj = eitherObj;
+
+var deepClone = function deepClone(obj) {
+  var hash = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new WeakMap();
+  if (Object(obj) !== obj) return obj;
+  if (obj instanceof Set) return new Set(obj);
+  if (hash.has(obj)) return hash.get(obj);
+  var result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
+  hash.set(obj, result);
+  if (obj instanceof Map) return Array.from(obj, function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2),
+        key = _ref4[0],
+        val = _ref4[1];
+
+    return result.set(key, deepClone(val, hash));
+  });
+  return _extends.apply(void 0, [result].concat(_toConsumableArray(Object.keys(obj).map(function (key) {
+    return _defineProperty({}, key, deepClone(obj[key], hash));
+  }))));
+};
+/**
  * Recursively freezes and object
  * @param  { object } obj
  * @return { object } - frozen Object
  */
 
 
-exports.eitherObj = eitherObj;
+exports.deepClone = deepClone;
 
 var deepFreeze = function deepFreeze(obj) {
   Object.freeze(obj);
@@ -177,10 +220,10 @@ var deepMerge = function deepMerge() {
     return source instanceof Array ? // Check if it's array, and join the arrays
     [].concat(_toConsumableArray(merged instanceof Array && merged || []), _toConsumableArray(source)) : // Check if it's an object, and loop the properties
     source instanceof Object ? Object.entries(source) // Loop the entries of the object, and add them to the merged object
-    .reduce(function (joined, _ref3) {
-      var _ref4 = _slicedToArray(_ref3, 2),
-          key = _ref4[0],
-          value = _ref4[1];
+    .reduce(function (joined, _ref6) {
+      var _ref7 = _slicedToArray(_ref6, 2),
+          key = _ref7[0],
+          value = _ref7[1];
 
       return _objectSpread({}, joined, _defineProperty({}, key, // Check if the value is not a function and is an object
       // Also check if key is in the object
@@ -246,10 +289,10 @@ var jsonEqual = function jsonEqual(one, two) {
 exports.jsonEqual = jsonEqual;
 
 var mapObj = function mapObj(obj, cb) {
-  return isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).map(function (_ref5) {
-    var _ref6 = _slicedToArray(_ref5, 2),
-        key = _ref6[0],
-        value = _ref6[1];
+  return isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).map(function (_ref8) {
+    var _ref9 = _slicedToArray(_ref8, 2),
+        key = _ref9[0],
+        value = _ref9[1];
 
     return cb(key, value);
   }) || obj;
@@ -303,10 +346,10 @@ exports.pickKeys = pickKeys;
 
 var reduceObj = function reduceObj(obj, cb) {
   var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  return isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).reduce(function (data, _ref7) {
-    var _ref8 = _slicedToArray(_ref7, 2),
-        key = _ref8[0],
-        value = _ref8[1];
+  return isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).reduce(function (data, _ref10) {
+    var _ref11 = _slicedToArray(_ref10, 2),
+        key = _ref11[0],
+        value = _ref11[1];
 
     return cb(key, value, data);
   }, start) || {};
@@ -333,10 +376,10 @@ var sanitizeCopy = function sanitizeCopy(obj) {
 exports.sanitizeCopy = sanitizeCopy;
 
 var trimStringFields = function trimStringFields(object) {
-  return Object.entries(object).reduce(function (cleaned, _ref9) {
-    var _ref10 = _slicedToArray(_ref9, 2),
-        key = _ref10[0],
-        value = _ref10[1];
+  return Object.entries(object).reduce(function (cleaned, _ref12) {
+    var _ref13 = _slicedToArray(_ref12, 2),
+        key = _ref13[0],
+        value = _ref13[1];
 
     cleaned[key] = typeof value === 'string' ? value.trim() : value;
     return cleaned;
@@ -344,8 +387,9 @@ var trimStringFields = function trimStringFields(object) {
 };
 /**
  * Converts an array or string into an object
- * @param  { object } object
- * @return { object } - value converted into an object
+ * @param  { array || string } val - to be converted to object
+ * @param { string } divider - if string, what divides key from value
+ * @param { string } split - if string, what splits each key/value pair
  */
 
 
@@ -359,7 +403,7 @@ var toObj = function toObj(val, divider, split) {
   if (!(0, _string.isStr)(str)) return {};
   divider = divider || '=';
   split = split || '&';
-  str.split(split).reduce(function (obj, item) {
+  return str.split(split).reduce(function (obj, item) {
     var sep = item.split(divider);
     obj[sep[0].trim()] = (0, _ext.strToType)(sep[1].trim());
     return obj;

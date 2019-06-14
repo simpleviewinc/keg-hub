@@ -6,8 +6,6 @@ require("core-js/modules/es.symbol.description");
 
 require("core-js/modules/es.symbol.iterator");
 
-require("core-js/modules/es.array.is-array");
-
 require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.map");
@@ -37,8 +35,6 @@ var _method = require("./method");
 
 var _array = require("./array");
 
-var _object = require("./object");
-
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
@@ -51,7 +47,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 var updateColl = function updateColl(obj, path, type, val) {
   var org = obj;
   if (!isColl(obj) || !obj || !path) return undefined;
-  var parts = Array.isArray(path) ? path : path.split('.');
+  var parts = (0, _array.isArr)(path) ? path : path.split('.');
   var key = parts.pop();
   var prop;
   var breakPath;
@@ -66,7 +62,7 @@ var updateColl = function updateColl(obj, path, type, val) {
   }
 
   return type === 'get' // Get return the value
-  ? obj[key] : type === 'unset' // Unset, return if the key was removed
+  ? key in obj ? obj[key] : val : type === 'unset' // Unset, return if the key was removed
   ? delete obj[key] : // Set, updated object
   (obj[key] = val) && org || org;
 };
@@ -80,8 +76,8 @@ var updateColl = function updateColl(obj, path, type, val) {
  */
 
 
-var get = function get(obj, path) {
-  return updateColl(obj, path, 'get');
+var get = function get(obj, path, fallback) {
+  return updateColl(obj, path, 'get', fallback);
 };
 /**
  * Checks if the value is a collection ( object || array )
@@ -123,7 +119,7 @@ exports.mapColl = mapColl;
 var reduceColl = function reduceColl(coll, cb, reduce) {
   return (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).reduce(function (data, key) {
     return cb(key, coll[key], coll, data);
-  }, reduce) : Array.isArray(coll) ? [] : {};
+  }, reduce) : (0, _array.isArr)(coll) ? [] : {};
 };
 /**
  * Adds a path to an object.

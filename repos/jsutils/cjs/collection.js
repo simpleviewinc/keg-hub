@@ -13,8 +13,6 @@ var _method = require("./method");
 
 var _array = require("./array");
 
-var _object = require("./object");
-
 /**
  * Updates a collection by removing, getting, adding to it
  * @param  { object } obj - object to update
@@ -25,7 +23,7 @@ var _object = require("./object");
 const updateColl = (obj, path, type, val) => {
   const org = obj;
   if (!isColl(obj) || !obj || !path) return undefined;
-  const parts = Array.isArray(path) ? path : path.split('.');
+  const parts = (0, _array.isArr)(path) ? path : path.split('.');
   const key = parts.pop();
   let prop;
   let breakPath;
@@ -40,7 +38,7 @@ const updateColl = (obj, path, type, val) => {
   }
 
   return type === 'get' // Get return the value
-  ? obj[key] : type === 'unset' // Unset, return if the key was removed
+  ? key in obj ? obj[key] : val : type === 'unset' // Unset, return if the key was removed
   ? delete obj[key] : // Set, updated object
   (obj[key] = val) && org || org;
 };
@@ -54,7 +52,7 @@ const updateColl = (obj, path, type, val) => {
  */
 
 
-const get = (obj, path) => updateColl(obj, path, 'get');
+const get = (obj, path, fallback) => updateColl(obj, path, 'get', fallback);
 /**
  * Checks if the value is a collection ( object || array )
  * @param  { any } val - value to check
@@ -86,7 +84,7 @@ const mapColl = (coll, cb) => (0, _method.isFunc)(cb) && isColl(coll) ? Object.k
 
 exports.mapColl = mapColl;
 
-const reduceColl = (coll, cb, reduce) => (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).reduce((data, key) => cb(key, coll[key], coll, data), reduce) : Array.isArray(coll) ? [] : {};
+const reduceColl = (coll, cb, reduce) => (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).reduce((data, key) => cb(key, coll[key], coll, data), reduce) : (0, _array.isArr)(coll) ? [] : {};
 /**
  * Adds a path to an object.
  * If the path already exists, but not in the correct format it will be replaced

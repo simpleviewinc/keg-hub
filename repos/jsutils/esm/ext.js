@@ -54,16 +54,16 @@ var typeOf = function typeOf(val) {
 };
 /**
  * Checks if the passed in values are exactly the same
- * @param  { any } d1 - value to compare
- * @param  { any } d1 - value to compare
+ * @param  { any } val1 - value to compare
+ * @param  { any } val2 - value to compare
  * @return { boolean } is the values are the same
  */
 
 
 exports.typeOf = typeOf;
 
-var isSame = function isSame(d1, d2) {
-  return d1 === d2 ? d1 !== 0 || 1 / d1 === 1 / d2 : d1 !== d1 && d2 !== d2;
+var isSame = function isSame(val1, val2) {
+  return val1 === val2 ? val1 !== 0 || 1 / val1 === 1 / val2 : val1 !== val1 && val2 !== val2;
 };
 /**
  * Checks if the value is empty
@@ -77,6 +77,12 @@ exports.isSame = isSame;
 var isEmpty = function isEmpty(val) {
   return (0, _object.isObj)(val) ? Object.keys(val).length === 0 : (0, _array.isArr)(val) ? val.length === 0 : (0, _string.isStr)(val) ? val.trim().length === 0 : (0, _number.isNum)(val) ? val < 1 : false;
 };
+/**
+ * Checks is passed in date is a valid date
+ * @param  { date || string } date - value to check
+ * @return { boolean } T/F - if passed in date is a valid date
+ */
+
 
 exports.isEmpty = isEmpty;
 

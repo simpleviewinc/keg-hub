@@ -61,6 +61,15 @@ describe('/collection', function () {
       var path = '0.foo';
       expect(Coll.get(getObj, path) === 'duper').toBe(true);
     });
+    it('should return a fallback when get value does not exist', function () {
+      var getObj = {
+        data: [{
+          foo: 'duper'
+        }]
+      };
+      var path = 'data.0.duper';
+      expect(Coll.get(getObj, path, "fallback") === 'fallback').toBe(true);
+    });
   });
   describe('isColl', function () {
     it('should check if the value is a collection', function () {
