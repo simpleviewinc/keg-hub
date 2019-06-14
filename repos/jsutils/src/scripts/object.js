@@ -47,6 +47,36 @@ export const eitherObj = (obj1, obj2) => (
 )
 
 /**
+ * Recursively clones an object
+ * @param  { object } obj - object to clone
+ * @return { object } - cloned Object
+ */
+export const deepClone = (obj, hash = new WeakMap()) => {
+  if (Object(obj) !== obj) return obj
+  if (obj instanceof Set) return new Set(obj)
+  if (hash.has(obj)) return hash.get(obj)
+
+  const result = obj instanceof Date 
+    ? new Date(obj)
+    : obj instanceof RegExp 
+      ? new RegExp(obj.source, obj.flags)
+      : obj.constructor 
+        ? new obj.constructor()
+        : Object.create(null)
+
+  hash.set(obj, result)
+  if (obj instanceof Map)
+    return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)) )
+
+  return Object
+    .assign(
+      result,
+      ...Object.keys(obj)
+        .map(key => ({ [key]: deepClone(obj[key], hash) }))
+    )
+}
+
+/**
  * Recursively freezes and object
  * @param  { object } obj
  * @return { object } - frozen Object
@@ -71,8 +101,8 @@ export const deepFreeze = obj => {
  * @param { array } sources - array of objects to join
  * @returns { object | array } - merged object or array
  */
-export const deepMerge = (...sources) => (
-  sources.reduce(
+export const deepMerge = (...sources) => {
+  return sources.reduce(
     (merged, source) =>
       source instanceof Array
         ? // Check if it's array, and join the arrays
@@ -106,7 +136,7 @@ export const deepMerge = (...sources) => (
           merged,
     {}
   )
-)
+}
 
 /**
  * Checks if prop exists on the object
@@ -218,8 +248,9 @@ export const trimStringFields = object => (
 
 /**
  * Converts an array or string into an object
- * @param  { object } object
- * @return { object } - value converted into an object
+ * @param  { array || string } val - to be converted to object
+ * @param { string } divider - if string, what divides key from value
+ * @param { string } split - if string, what splits each key/value pair
  */
 export const toObj = (val, divider, split) => {
   if(isArr(val))
@@ -234,7 +265,7 @@ export const toObj = (val, divider, split) => {
 
   divider = divider || '='
   split = split || '&'
-  str
+  return str
     .split(split)
     .reduce((obj, item) => {
       const sep = item.split(divider)

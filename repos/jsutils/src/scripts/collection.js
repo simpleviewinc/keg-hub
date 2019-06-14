@@ -1,6 +1,5 @@
 import { isFunc } from './method'
 import { isArr } from './array'
-import { toObj } from './object'
 
 /**
  * Updates a collection by removing, getting, adding to it
@@ -13,7 +12,7 @@ const updateColl = (obj, path, type, val) => {
   const org = obj
   if (!isColl(obj) || !obj || !path) return undefined
   
-  const parts = Array.isArray(path) ? path : path.split('.')
+  const parts = isArr(path) ? path : path.split('.')
   const key = parts.pop()
   let prop
   let breakPath
@@ -32,7 +31,9 @@ const updateColl = (obj, path, type, val) => {
 
   return type === 'get'
     // Get return the value
-    ? obj[key]
+    ? key in obj
+      ? obj[key]
+      : val
     : type === 'unset'
       // Unset, return if the key was removed
       ? ( delete obj[key] )
@@ -48,8 +49,8 @@ const updateColl = (obj, path, type, val) => {
  * @param  { string || array } path - . separated string to search the object
  * @return the final value found from the path
  */
-export const get = (obj, path) => (
-  updateColl(obj, path, 'get')
+export const get = (obj, path, fallback) => (
+  updateColl(obj, path, 'get', fallback)
 )
 
 /**
@@ -88,7 +89,7 @@ export const reduceColl = (coll, cb, reduce) => (
     ? Object
       .keys(coll)
       .reduce((data, key) => cb(key, coll[key], coll, data), reduce)
-    : Array.isArray(coll)
+    : isArr(coll)
       ? []
       : {}
 )

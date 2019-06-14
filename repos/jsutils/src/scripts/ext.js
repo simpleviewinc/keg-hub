@@ -6,7 +6,6 @@ import { softFalsy } from './boolean'
 import { isFunc } from './method'
 import { isStrBool, toBool } from './boolean'
 
-
 /**
  * Determines the correct data to return
  * @param { any } func1 - return if passes check method
@@ -31,14 +30,14 @@ export const typeOf = val => (
 
 /**
  * Checks if the passed in values are exactly the same
- * @param  { any } d1 - value to compare
- * @param  { any } d1 - value to compare
+ * @param  { any } val1 - value to compare
+ * @param  { any } val2 - value to compare
  * @return { boolean } is the values are the same
  */
-export const isSame = (d1, d2) => (
-  d1 === d2
-    ? d1 !== 0 || 1 / d1 === 1 / d2
-    : d1 !== d1 && d2 !== d2
+export const isSame = (val1, val2) => (
+  val1 === val2
+    ? val1 !== 0 || 1 / val1 === 1 / val2
+    : val1 !== val1 && val2 !== val2
 )
 
 /**
@@ -58,6 +57,11 @@ export const isEmpty = val => (
           : false
 )
 
+/**
+ * Checks is passed in date is a valid date
+ * @param  { date || string } date - value to check
+ * @return { boolean } T/F - if passed in date is a valid date
+ */
 export const isValidDate = date => (
   !isNaN( (date instanceof Date && date || new Date(date)).getTime() )
 )

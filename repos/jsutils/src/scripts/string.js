@@ -24,13 +24,13 @@ export const camelCase = (str, compCase) => {
   return (
     (str &&
       cleanStr(str)
-        .split(' ')
-        .map(
-          (word, index) =>
-            ((index > 0 || compCase) && capitalize(word)) || word.toLowerCase()
-        )
-        .join('')) ||
-    str
+        .split(/[\s_-]/gm)
+        .reduce((cased, word, index) => {
+          if(!word) return cased
+          cased += ((index > 0 || compCase) && capitalize(word)) || word.toLowerCase()
+          return cased
+        }, '')
+      ) || str
   )
 }
 
@@ -40,10 +40,8 @@ export const camelCase = (str, compCase) => {
  * @return { string } - cleaned string
  */
 export const cleanStr = str => {
-  if (!str) return str
-  return removeDot(str)
-    .replace(/_/g, ' ')
-    .replace(/-/g, ' ')
+  return str && removeDot(str)
+    .replace(/[-_]/gm, ' ') || str
 }
 
 /**
@@ -197,10 +195,10 @@ export const singular = str => {
  * @return { string } - string in style case format
  */
 export const styleCase = str => {
-  str = str.split(/[\s,-]/)
-  str = str.map(capitalize)
-  str[0] = str[0].toLowerCase()
-  return str.join('')
+  if(!isStr) return str
+
+  const cased = camelCase(str)
+  return `${cased[0].toLowerCase()}${cased.slice(1)}`
 }
 
 /**
@@ -210,8 +208,8 @@ export const styleCase = str => {
  */
 export const trainCase = str => (
   isStr(str) && str
-    .split(/(?=[A-Z\s])/gm)
-    .replace(/ /g, '-')
+    .split(/(?=[A-Z])|[\s_-]/gm)
+    .join('-')
     .toLowerCase() || str
 )
 
@@ -238,7 +236,7 @@ export const wordCaps = str => {
   if (!str) return str
   let cleaned = cleanStr(str)
   return cleaned
-    .split(/(?=[A-Z\s])/gm)
-    .map(word => capitalize(word))
+    .split(' ')
+    .map(word => word && capitalize(word) || '')
     .join(' ')
 }
