@@ -1,11 +1,5 @@
 "use strict";
 
-require("core-js/modules/es.array.iterator");
-
-require("core-js/modules/es.array.slice");
-
-require("core-js/modules/es.string.replace");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });

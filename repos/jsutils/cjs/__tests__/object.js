@@ -1,7 +1,5 @@
 "use strict";
 
-require("core-js/modules/es.array.index-of");
-
 const Obj = require('../object');
 
 describe('/object', () => {

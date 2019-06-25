@@ -4,16 +4,6 @@
  * @return { string } - built path from arguments
  */
 
-require("core-js/modules/es.array.index-of");
-
-require("core-js/modules/es.array.map");
-
-require("core-js/modules/es.array.slice");
-
-require("core-js/modules/es.string.replace");
-
-require("core-js/modules/es.string.split");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });

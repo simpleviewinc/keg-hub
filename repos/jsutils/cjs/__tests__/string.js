@@ -1,7 +1,5 @@
 'use strict';
 
-require("core-js/modules/es.array.index-of");
-
 var _method = require("../method");
 
 const Str = require('../string');

@@ -1,17 +1,5 @@
 'use strict';
 
-require("core-js/modules/es.symbol.description");
-
-require("core-js/modules/es.array.concat");
-
-require("core-js/modules/es.array.from");
-
-require("core-js/modules/es.array.index-of");
-
-require("core-js/modules/es.array.iterator");
-
-require("core-js/modules/es.promise");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });

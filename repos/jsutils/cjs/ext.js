@@ -1,9 +1,5 @@
 "use strict";
 
-require("core-js/modules/es.array.slice");
-
-require("core-js/modules/es.string.trim");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
