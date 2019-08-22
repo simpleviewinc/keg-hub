@@ -5,27 +5,44 @@
 import { isObj } from './object'
 import { isArr } from './array'
 import { isStr } from './string'
-import { isNum } from './number'
+import { isNum, toNum } from './number'
 import { softFalsy } from './boolean'
 import { isFunc } from './method'
 import { isStrBool, toBool } from './boolean'
 
 /**
- * Determines the correct data to return
+ * Determines the correct value to return, by calling the passed in check function.
+ * <br> If no check function, then it uses the softFalsy method.
+ * @example
+ * either(0, 2)
+ * // Returns 0
+ * @example
+ * either(null, 2)
+ * // Returns 2
+ * @example
+ * either(1, 2, (val1, val2) => { return true })
+ * // Returns 1
  * @function
- * @param {*} func1 - return if passes check method
- * @param {*} func2 - use if first is not an object
+ * @param {*} val1 - return if passes in check method return true
+ * @param {*} val2 - return if passed in check method returns false
+ * @param {function} function - called to determine which value to return
  * @returns {*}
  */
-export const either = (data1, data2, check) => (
+export const either = (val1, val2, check) => (
   !isFunc(check)
-    ? softFalsy(data1) && data1 || data2
-    : check(data1) && data1 || data2
+    ? softFalsy(val1) && val1 || val2
+    : check(val1, val2) && val1 || val2
 )
 
 
 /**
- * Gets the type of the passed in val
+ * Gets the type of the passed in val.
+ * @example
+ * typeOf(1)
+ * // Returns Number
+ * @example
+ * typeOf('')
+ * // Returns String
  * @function
  * @param {*} val - value to get type for
  * @return {string} type of the value
@@ -35,7 +52,10 @@ export const typeOf = val => (
 )
 
 /**
- * Checks if the passed in values are exactly the same
+ * Checks if the passed in values are exactly the same.
+ * @example
+ * isSame(1, 1)
+ * // Returns true
  * @function
  * @param {*} val1 - value to compare
  * @param {*} val2 - value to compare
@@ -48,7 +68,16 @@ export const isSame = (val1, val2) => (
 )
 
 /**
- * Checks if the value is empty
+ * Checks if the value is empty.
+ * @example
+ * isEmpty('')
+ * // Returns true
+ * @example
+ * isEmpty({})
+ * // Returns true
+ * @example
+ * isEmpty([ 1 ])
+ * // Returns false
  * @function
  * @param { object | array | number | string } val - value to check
  * @return {boolean} if the value is empty
@@ -66,7 +95,16 @@ export const isEmpty = val => (
 )
 
 /**
- * Checks is passed in date is a valid date
+ * Checks is passed in date is a valid date.
+ * @example
+ * isValidDate(new Date())
+ * // Returns true
+ * @example
+ * isValidDate(new Date().toString())
+ * // Returns true
+ * @example
+ * isValidDate('12345678')
+ * // Returns false
  * @function
  * @param { date | string } date - value to check
  * @return {boolean} T/F - if passed in date is a valid date
@@ -75,9 +113,17 @@ export const isValidDate = date => (
   !isNaN( (date instanceof Date && date || new Date(date)).getTime() )
 )
 
-
 /**
- * Converts a string to its own type if possible
+ * Converts a string to its own type if possible.
+ * @example
+ * strToType('12345678')
+ * // Returns 12345678
+ * @example
+ * strToType('{}')
+ * // Returns {}
+ * @example
+ * strToType('[]')
+ * // Returns []
  * @function
  * @param {*} val - value to convert
  * @return { any | string } converted value || string if can't convert
@@ -87,8 +133,10 @@ export const strToType = val => {
     ? val
     : isStrBool(val)
       ? toBool(val)
-      : (() => {
-          try { return JSON.parse(val) }
-          catch(e){ return val }
-        })()
+      : isNum(val)
+        ? toNum(val)
+        : (() => {
+            try { return JSON.parse(val) }
+            catch(e){ return val }
+          })()
 }

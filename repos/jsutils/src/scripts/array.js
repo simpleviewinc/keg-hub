@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * Randomly selects values from a passed in array
+ * Randomly selects values from a passed in array.
  * @function
  * @example
  * randomArray([1,2,3], 1)
@@ -23,7 +23,7 @@ export const randomArray = (arr, amount) => {
 }
 
 /**
- * Randomly sorts an arrays items
+ * Randomly sorts an arrays items.
  * @function
  * @example
  * randomizeArray([1,2,3])
@@ -36,9 +36,9 @@ export const randomizeArray = arr => (
 )
 
 /**
- * Removes duplicates from an array
+ * Removes duplicates from an array.
  * @function
-* @example
+ * @example
  * uniqArr([1,1,2,3,3])
  * // Returns array with only unique values [ 1, 2, 3 ]
  * @param {array} arr - array to remove duplicates from
@@ -49,7 +49,7 @@ export const uniqArr = arr => (
 )
 
 /**
- * Checks if passed in value is an array
+ * Checks if passed in value is an array.
  * @function
  * @example
  * isArr([1,2,3])
@@ -62,7 +62,8 @@ export const isArr = value => (
 )
 
 /**
- * Creates a copy of the passed in array. Returns empty array, if param is not an array
+ * Creates a copy of the passed in array.
+ * <br> Returns empty array, if param is not an array.
  * @function
  * @example
  * cloneArr([1,2,3])

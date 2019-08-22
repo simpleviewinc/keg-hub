@@ -39,7 +39,7 @@ export const camelCase = (str, compCase) => {
 }
 
 /**
- * Converts `-` and `_` to white space and removes `.`.
+ * Converts `-` and `_` to white space and calls remove removeDot, to remove a period.
  * @function
  * @param {string} string to be converted
  * @return {string} - cleaned string
@@ -75,10 +75,11 @@ export const containsStr = (str, substring, fromIndex) => {
 }
 
 /**
- * Returns the first param if correct type of second param.
+ * Checks if the first param is a string, and returns it.
+ * <br> If it's not a string, the second param is returned
  * @function
  * @param {string} str1 - return if is string
- * @param {string} str2 - use if first is not an object
+ * @param {string} str2 - use if first is not a string
  * @returns {string}
  */
 export const eitherStr = (str1, str2) => (

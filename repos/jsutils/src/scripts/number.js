@@ -5,7 +5,16 @@
 import { toStr } from './string'
 
 /**
- * Checks if a value is NaN
+ * Checks if a value is NaN.
+ * @example
+ * equalsNaN(NaN)
+ * // Returns true
+ * @example
+ * equalsNaN(1)
+ * // Returns false
+ * @example
+ * equalsNaN('')
+ * // Returns false
  * @function
  * @param {number} val - value to check if is NaN
  * @return {boolean} T/F - if value is a number
@@ -15,7 +24,10 @@ export const equalsNaN = val => (
 )
 
 /**
- * Gets numbers and floats (.) from a string
+ * Gets numbers and floats (.) from a string.
+ * @example
+ * getNums('$1.23')
+ * // Returns '1.23'
  * @function
  * @param {*} val - value to pull numbers from
  * @return {string} Numbers found in value
@@ -25,27 +37,48 @@ export const getNums = val => (
 )
 
 /**
- * Checks if a number is a Float
+ * Checks if a number is a Float.
+ * @example
+ * isFloat(1.23)
+ * // Returns true
+ * @example
+ * isFloat('1.2')
+ * // Returns false ( because it's a string )
  * @function
  * @param {number} num - value to check
- * @return {boolean} T/F - value is an Float
+ * @return {boolean} true or false - value is an Float
  */
 export const isFloat = val => (
   isNum(val) && val % 1 !== 0
 )
 
 /**
- * Checks if a number is an Int
+ * Checks if a number is an integer.
+ * @example
+ * isInt(1)
+ * // Returns true
+ * @example
+ * isInt('1')
+ * // Returns false ( because it's a string )
  * @function
  * @param {number} num - value to check
- * @return {boolean} T/F - value is an Int
+ * @return {boolean} true or false - value is an Int
  */
 export const isInt = val => (
   isNum(val) && (val % 1 === 0)
 )
 
 /**
- * Checks is value is a number
+ * Checks is value is a number.
+ * @example
+ * isInt(1)
+ * // Returns true
+ * @example
+ * isInt(NaN)
+ * // Returns false
+ * @example
+ * isInt('1')
+ * // Returns false ( because it's a string )
  * @function
  * @param {number} val - value to check if is a number
  * @return {boolean} T/F - if value is a number
@@ -55,7 +88,16 @@ export const isNum = val => (
 )
 
 /**
- * Finds the number ext base on the passed in numb
+ * Finds the number ext base on the passed in number.
+ * @example
+ * nth(1)
+ * // Returns 'st'
+ * @example
+ * nth(2)
+ * // Returns 'nd'
+ * @example
+ * nth(5)
+ * // Returns 'th'
  * @function
  * @param {number} num - value to check
  * @return {string} ext of the number
@@ -86,10 +128,16 @@ export const nth = num => {
 }
 
 /**
- * Converts passed in value to an Int
+ * Converts passed in value to a float.
+ * @example
+ * toFloat('1.34')
+ * // Returns 1.34
+* @example
+ * toFloat(NaN)
+ * // Returns 0
  * @function
  * @param {*} val - value to convert
- * @return {number} value converted to an Int
+ * @return {number} value converted to an float
  */
 export const toFloat = val => (
   val &&
@@ -99,10 +147,16 @@ export const toFloat = val => (
 )
 
 /**
- * Converts passed in value to a float
+ * Converts passed in value to an integer.
+ * @example
+ * toInt('1')
+ * // Returns 1
+ * @example
+ * toInt(NaN)
+ * // Returns 0
  * @function
  * @param {*} val - value to convert
- * @return {number} value converted to a float
+ * @return {number} value converted to a integer
  */
 export const toInt = val => (
   val &&
@@ -112,7 +166,13 @@ export const toInt = val => (
 )
 
 /**
- * Converts passed in value to a number
+ * Converts passed in value to a number.
+ * @example
+ * toNum("23")
+ * // Returns 23
+ * @example
+ * toNum(NaN)
+ * // Returns 0
  * @function
  * @param {*} val - value to convert
  * @return {number} value converted to a float

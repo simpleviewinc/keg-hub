@@ -7,6 +7,9 @@ import { hasOwn } from './object'
 
 /**
  * Check if the passed in method is a function, and calls it
+ * @example
+ * checkCall((param1) => { return param1 }, 'foo')
+ * // Returns 'foo'
  * @function
  * @param {function} method - function to call
  * @param {Object} params - params to pass to the method on call
@@ -15,7 +18,14 @@ import { hasOwn } from './object'
 export const checkCall = (method, ...params) =>  isFunc(method) && method(...params) || undefined
 
 /**
- * Returns the first param if correct type of second param
+ * Returns the first param if it's a function.
+ * <br> If first param is not a function, returns second param.
+ * @example
+ * eitherFunc(() => {}, 'bar')
+ * // Returns first param because it's a function.
+ * @example
+ * eitherFunc('foo', 'bar')
+ * // Returns 'bar'
  * @function
  * @param {function} func1 - return if is func
  * @param {function} func2 - use if first is not an object
@@ -26,7 +36,16 @@ export const eitherFunc = (func1, func2) => (
 )
 
 /**
- * Ensures a function is not called to many times
+ * Limits the amount of calls to a function over time
+ * @example
+ * debounce(myFunction)
+ * // Calls myFunction after the default 250 ms
+ * @example
+ * debounce(myFunction, 500)
+ * // Calls myFunction after 500 ms
+ * @example
+ * debounce(myFunction, 500, true)
+ * // Calls myFunction immediately
  * @function
  * @param {function} func - function to call
  * @param {number} wait - how long to wait between function calls
@@ -52,14 +71,14 @@ export const debounce = (func, wait = 250, immediate = false) => {
 }
 
 /**
- * Execute a method n times
- * Callback params - does not include number || callback method
+ * Execute a method n times.
+ * <br> Callback params - does not include number || callback method
  * @function
   * @example
- * doIt(10, window, [], (index, arr)=> { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
- * @param {number} args[0] - number of times to call the callback
- * @param {parent} args[1] - value to bind the method call to ( this )
- * @param {function} args[ args.length -1 ] - method to call
+ * doIt(10, window, [], (index, arr) => { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
+ * @param {number} args.0 - number of times to call the callback
+ * @param {parent} args.1 - value to bind the method call to ( this )
+ * @param {function} last arg of args array - method to call
  * @return { void }
  */
 export const doIt = (...args) => {
@@ -74,21 +93,31 @@ export const doIt = (...args) => {
 }
 
 /**
- * Check if the passed in item is a function
+ * Check if the passed in item is a function.
+ * @example
+ * isFunc(() => {})
+ * // Returns true
+ * @example
+ * isFunc('bar')
+ * // Returns false
  * @function
- * @param {*} test 
+ * @param {*} test
  * @return {boolean} is a function
  */
 export const isFunc = func => typeof func === 'function'
 
 /**
  * Creates a method to memorize passed in methods output
+ * @example
+ * memorize(myFunction, cacheKeyFunction)
+  * @example
+ * memorize(myFunction, cacheKeyFunction, 100)
  * @function
  * @param {function} func - method to memorize output of
  * @param {function} getCacheKey - gets the key to save cached output
  * @return {function} memorized function with cache
  */
-export const memorize = (func, getCacheKey, limit) => {
+export const memorize = (func, getCacheKey, limit=1) => {
     if (!isFunc(func) || (getCacheKey && !isFunc(getCacheKey)))
       throw new TypeError('Expected a function')
 
@@ -139,10 +168,13 @@ export const throttle = (func, wait = 100) => {
 }
 
 /**
- * Ensures the last call to the throttled function get called
- * Will wait the allotted time, before calling the last call to it
- * The final call will not execute until no more calls are made
- * Accepts a callback to call each time the throttle called
+ * Ensures the last call to the throttled function get called.
+ * <br> Will wait the allotted time, before calling the last call to it.
+ * <br> The final call will not execute until no more calls are made,
+ * <br> Accepts a callback to call each time the throttle called,
+ * @example
+ * throttleLast(() => {}, () => {})()
+ * // throttle function
  * @function
  * @param {function} func - method to call after wait
  * @param {function} cb - method to call after throttle function is called
@@ -166,7 +198,11 @@ export const throttleLast = (func, cb, wait = 100) => {
 
 
 /**
- * Creates a uuid, unique up to around 20 million iterations. good enough for us
+ * Creates a uuid, unique up to around 20 million iterations.
+ * <br> Good enough for us
+ * @example
+ * uuid()
+ * // New uuid as a string
  * @function
  * @param {number} start of the uuid
  * @return {string} - build uuid

@@ -5,7 +5,7 @@
 import { toStr } from './string'
 
 /**
- * Checks is value is a boolean
+ * Checks is value is a boolean.
  * @function
  * @example
  * isBool([1,2,3])
@@ -21,7 +21,7 @@ export const isBool = val => (
 )
 
 /**
- * Checks is value is a boolean as a string
+ * Checks is value is a boolean as a string.
  * @function
  * @example
  * isStrBool("true")
@@ -37,7 +37,7 @@ export const isStrBool = val => (
 )
 
 /**
- * Converts a value to a boolean as a string
+ * Converts a value to a boolean as a string.
  * @function
  * @example
  * convertToStrBool(true)
@@ -54,7 +54,7 @@ export const convertToStrBool = val => (
 )
 
 /**
- * Checks if a value is falsy, excluding empty string and 0
+ * Checks if a value is falsy, excluding empty string and 0.
  * @function
  * @example
  * softFalsy('')
@@ -73,7 +73,7 @@ export const softFalsy = val => (
 )
 
 /**
- * Converts a value to a boolean
+ * Converts a value to a boolean.
  * @function
  * @example
  * toBool(null)
@@ -85,7 +85,7 @@ export const softFalsy = val => (
  * toBool('true')
  * // Returns true
  * @param {*} val - value to convert
- * @return {boolean} T/F based on passed in value
+ * @return {boolean} true or false based on passed in value.
  */
 export const toBool = val => (
   isStrBool(val)

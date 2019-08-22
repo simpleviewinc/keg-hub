@@ -15,7 +15,11 @@ const LOG_TYPES = [
 const isTest = process.env.NODE_ENV === 'test'
 
 /**
- * Turns logs on || off. Set the default log method. Add a prefix to all log message
+ * Turns logs on || off.
+ * <br> Set the default log method.
+ * <br> Add a prefix to all log message
+ * @example
+ * setLogs(true, 'dir', '[ DEV MODE ]')
  * @function
  * @param {boolean} log - log values
  * @param {string} methDef - default log method
@@ -30,6 +34,9 @@ export const setLogs = (log, methDef, prefix) => {
 
 /**
  * Resets log settings to default
+ * @example
+ * resetLogs()
+ * // Resets settings set from the `setLogs method`
  * @function
  * @return { void }
  */
@@ -41,6 +48,9 @@ export const resetLogs = () => {
 
 /**
  * Logs a string to the inspector, uses the last argument to determine the log type
+ * @example
+ * logData('data to log', 'error')
+ * // Will call console.error('data to log')
  * @function
  * @param {Array} args - to be passed to the log call
  * @return { void }
