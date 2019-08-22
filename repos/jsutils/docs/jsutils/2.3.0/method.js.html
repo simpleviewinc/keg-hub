@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>array.js - Documentation</title>
+    <title>method.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">array.js</h1>
+    <h1 class="page-title">method.js</h1>
     
 
     
@@ -42,81 +42,181 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module array */
+            <pre class="prettyprint source linenums"><code>/** @module functions */
 
 'use strict'
 
-/**
- * Randomly selects values from a passed in array
- * @function
- * @example
- * randomArray([1,2,3], 1)
- * // Returns an array with one of the values in the passed in array
- * @param {array} arr - array to select values from
- * @param {number} amount - number of values to select from the array
- * @return {array} - randomly sorted array
- */
-export const randomArray = (arr, amount) => {
-  amount = amount || 1
-  const randoms = []
-  for (let i = 0; i &lt; amount; i++) {
-    randoms.push(arr[Math.floor(Math.random() * arr.length)])
-  }
+import { isNum } from './number'
+import { hasOwn } from './object'
 
-  return amount === 1 ? randoms[0] : randoms
+/**
+ * Check if the passed in method is a function, and calls it
+ * @function
+ * @param {function} method - function to call
+ * @param {Object} params - params to pass to the method on call
+ * @return {*} - whatever the passed in method returns
+ */
+export const checkCall = (method, ...params) =>  isFunc(method) &amp;&amp; method(...params) || undefined
+
+/**
+ * Returns the first param if correct type of second param
+ * @function
+ * @param {function} func1 - return if is func
+ * @param {function} func2 - use if first is not an object
+ * @returns {function}
+ */
+export const eitherFunc = (func1, func2) => (
+  isFunc(func1) &amp;&amp; func1 || func2
+)
+
+/**
+ * Ensures a function is not called to many times
+ * @function
+ * @param {function} func - function to call
+ * @param {number} wait - how long to wait between function calls
+ * @param {boolean} immediate - should call immediately
+ * @return { void }
+ */
+export const debounce = (func, wait = 250, immediate = false) => {
+  let timeout
+  return (...args) => {
+    if (!isFunc(func)) return null
+
+    const context = this
+    const later = () => {
+      timeout = null
+      !immediate &amp;&amp; func.apply(context, args)
+    }
+    const callNow = immediate &amp;&amp; !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow)
+      return isFunc(func) &amp;&amp; func.apply(context, args)
+  }
 }
 
 /**
- * Randomly sorts an arrays items
+ * Execute a method n times
+ * Callback params - does not include number || callback method
  * @function
- * @example
- * randomizeArray([1,2,3])
- * // Returns an array randomly sorted
- * @param {array} arr - array to randomly sorted
- * @return {array} - randomly sorted array
+  * @example
+ * doIt(10, window, [], (index, arr)=> { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
+ * @param {number} args[0] - number of times to call the callback
+ * @param {parent} args[1] - value to bind the method call to ( this )
+ * @param {function} args[ args.length -1 ] - method to call
+ * @return { void }
  */
-export const randomizeArray = arr => (
-  arr.sort(() => (0.5 - Math.random()))
-)
+export const doIt = (...args) => {
+  const params = args.slice()
+  const num = params.shift()
+  const cb = params.pop()
+  if(!isNum(num) || !isFunc(cb)) return
+
+  let i = -1
+  while (++i &lt; num)
+    if (cb.call(params[0], i, ...params) === false) break
+}
 
 /**
- * Removes duplicates from an array
+ * Check if the passed in item is a function
  * @function
-* @example
- * uniqArr([1,1,2,3,3])
- * // Returns array with only unique values [ 1, 2, 3 ]
- * @param {array} arr - array to remove duplicates from
- * @return {array} - copy of passed in array, with duplicates removed
+ * @param {*} test 
+ * @return {boolean} is a function
  */
-export const uniqArr = arr => (
-  isArr(arr) &amp;&amp; arr.filter((e, i, arr) => arr.indexOf(e) == i) || arr
-)
+export const isFunc = func => typeof func === 'function'
 
 /**
- * Checks if passed in value is an array
+ * Creates a method to memorize passed in methods output
  * @function
- * @example
- * isArr([1,2,3])
- * // Returns true
- * @param {any} value - value to be check if is an array
- * @return {boolean} - T/F value is an array
+ * @param {function} func - method to memorize output of
+ * @param {function} getCacheKey - gets the key to save cached output
+ * @return {function} memorized function with cache
  */
-export const isArr = value => (
-  Array.isArray(value)
-)
+export const memorize = (func, getCacheKey, limit) => {
+    if (!isFunc(func) || (getCacheKey &amp;&amp; !isFunc(getCacheKey)))
+      throw new TypeError('Expected a function')
+
+    const memorized = function() {
+      const cache = memorized.cache
+      const key = getCacheKey ? getCacheKey.apply(this, arguments) : arguments[0]
+
+      if (hasOwn(cache, key)) return cache[key]
+
+      const result = func.apply(this, arguments)
+      !isNum(limit) || Object.key(cache).length &lt; limit
+        ? (cache[key] = result)
+        : (memorized.cache = { [key]: result })
+
+      return result
+    }
+
+    memorized.cache = {}
+    memorized.destroy = () => {
+      getCacheKey = undefined
+      memorized.cache = undefined
+      memorized.destroy = undefined
+      memorized = undefined
+    }
+
+    return memorized
+}
 
 /**
- * Creates a copy of the passed in array. Returns empty array, if param is not an array
- * @function
+ * Throttle function calls to only execute once over a wait period
  * @example
- * cloneArr([1,2,3])
- * // Returns copy of the passed on array
- * @param {array} arr - array to be copied
- * @return {array} - copy of passed in array
+ * throttle(() => console.log('throttled'), 50)()
+ * @function
+ * @param {*} func - method to call after wait
+ * @param {number} [wait=100] time to wait between calls
+ * @return {function} throttled function
  */
-export const cloneArr = arr => (
-  Array.from([ ...(isArr(arr) &amp;&amp; arr || []) ])
-)</code></pre>
+export const throttle = (func, wait = 100) => {
+  let waiting = false
+  return (...args) => {
+    if (waiting) return
+    waiting = true
+    func.apply(this, args)
+    return setTimeout(() => {
+      waiting = false
+    }, wait)
+  }
+}
+
+/**
+ * Ensures the last call to the throttled function get called
+ * Will wait the allotted time, before calling the last call to it
+ * The final call will not execute until no more calls are made
+ * Accepts a callback to call each time the throttle called
+ * @function
+ * @param {function} func - method to call after wait
+ * @param {function} cb - method to call after throttle function is called
+ * @param {number} [wait=100] time to wait until executing func param
+ * @return {function} throttled function
+ */
+export const throttleLast = (func, cb, wait = 100) => {
+  let throttleTimeout
+  return (...args) => {
+    // If the throttle already exists clear it, and create it again
+    if (throttleTimeout) clearTimeout(throttleTimeout)
+    // Store a reference to the timeout
+    // Will wait the allotted time until calling the final call to it
+    throttleTimeout = setTimeout(() => {
+      func.apply(this, args)
+      clearTimeout(throttleTimeout)
+    }, wait)
+    typeof cb === 'function' &amp;&amp; cb()
+  }
+}
+
+
+/**
+ * Creates a uuid, unique up to around 20 million iterations. good enough for us
+ * @function
+ * @param {number} start of the uuid
+ * @return {string} - build uuid
+ */
+export const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
+</code></pre>
         </article>
     </section>
 
@@ -130,7 +230,7 @@ export const cloneArr = arr => (
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

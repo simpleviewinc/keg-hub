@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>promise.js - Documentation</title>
+    <title>log - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,133 +32,518 @@
 
 <div id="main">
     
-    <h1 class="page-title">promise.js</h1>
+    <h1 class="page-title">log</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/** @module promise */
+        
+    
+</header>
 
-'use strict'
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-import { isObj } from './object'
-import { isFunc } from './method'
+            
+        
+        </div>
+    
 
-/**
- * Converts a standard callback method into Promise
- * @param {function} method - method to turn into a promise
- * @return method as a promise
- */
-export const promisify = method => {
-  if(!isFunc(method)) throw `Argument must be a function`
+    
 
-  return (...args) => {
-    return new Promise((res, rej) => {
-      // If the last arg is not a function, just return the resolved method
-      if(!isFunc(args[args.length -1]))
-        return res(method(...args))
+    
 
-      // Remove the callback method
-      args.pop()
-      // Replace it with the promise resolve / reject
-      args.push((...cbData) => {
-        // If the cbData first arg is not falsy, then reject the promise
-        // Otherwise resolve it
-        return cbData &amp;&amp; cbData[0]
-          ? rej(...cbData)
-          : res(...cbData)
-      })
+    
+    
+    
 
-      // Call the method, and return it
-      return method(...args)
-    })
-  }
-}
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".logData"><span class="type-signature">(static) </span>logData<span class="signature">(args)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
 
 
-const isTest = process.env.NODE_ENV === 'test'
 
-/**
- * Creates an array of Object default properties not to convert into promises
- */
-const defObjProps = Array
-  .from([
-    'caller',
-    'callee',
-    'arguments',
-    'apply',
-    'bind',
-    'call',
-    'toString',
-    '__proto__',
-    '__defineGetter__',
-    '__defineSetter__',
-    'hasOwnProperty',
-    '__lookupGetter__',
-    '__lookupSetter__',
-    'isPrototypeOf',
-    'propertyIsEnumerable',
-    'toString',
-    'valueOf',
-    'toLocaleString'
-  ])
-  .concat(Object.getOwnPropertyNames(Object.prototype))
-  .reduce((map, functionName) => {
-    map[functionName] = true
-    return map
-  }, {})
 
-/**
- * Loops an object and looks for any methods that belong to the object, then add an Async version
- * @memberof promise
- * @param {Object} object
- * @return {Object} - object with Async methods added
- */
-const addAsync = object => {
-  if (!object.__IS_PROMISIFIED__) {
-    for (const prop of Object.getOwnPropertyNames(object)) {
-      const isAsync = prop.indexOf('Async') !== -1 || object[`${prop}Async`]
-      if (isAsync || defObjProps[prop]) continue
+<dl class="details">
 
-      if(isFunc(object[prop]))
-        object[`${prop}Async`] = promisify(object[prop])
-      else {
-        const getValue = Object.getOwnPropertyDescriptor(object, prop).get
-        if(isFunc(getValue)) object[`${prop}Async`] = promisify(getValue)
-      }
-    }
-    object.__IS_PROMISIFIED__ = true
-  }
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log.js.html">log.js</a>, <a href="log.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
 
-  return object
-}
+    
 
-/**
- * Converts Objects method properties into promiseAsync. allow using promisifyAll
- * @function
- * @param {Object} object
- * @return {Object} - promisified object
- */
-export const promisifyAll = object => {
-  if(!isObj(object)) return object
+    
 
-  addAsync(object)
-  const proto = Object.getPrototypeOf(object)
+    
 
-  proto &amp;&amp;
-    Object.getPrototypeOf(proto) !== null &amp;&amp;
-    addAsync(proto)
+    
 
-  return object
-}
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Logs a string to the inspector, uses the last argument to determine the log type
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to be passed to the log call</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".resetLogs"><span class="type-signature">(static) </span>resetLogs<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log.js.html">log.js</a>, <a href="log.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resets log settings to default
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".setLogs"><span class="type-signature">(static) </span>setLogs<span class="signature">(log, methDef, prefix)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log.js.html">log.js</a>, <a href="log.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Turns logs on || off. Set the default log method. Add a prefix to all log message
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">log values</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>methDef</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">default log method</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">string to add to all logs</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -170,7 +555,7 @@ export const promisifyAll = object => {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

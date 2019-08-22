@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>number - Documentation</title>
+    <title>array - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">number</h1>
+    <h1 class="page-title">array</h1>
     
 
     
@@ -81,7 +81,7 @@
 
     
 
-    <h4 class="name" id=".equalsNaN"><span class="type-signature">(static) </span>equalsNaN<span class="signature">(val)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".cloneArr"><span class="type-signature">(static) </span>cloneArr<span class="signature">(arr)</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line13">line 13</a>
+        <a href="array.js.html">array.js</a>, <a href="array.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -133,7 +133,7 @@
 
 
 <div class="description">
-    Checks if a value is NaN
+    Creates a copy of the passed in array. Returns empty array, if param is not an array
 </div>
 
 
@@ -142,6 +142,12 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>cloneArr([1,2,3])
+// Returns copy of the passed on array</code></pre>
 
 
 
@@ -171,13 +177,13 @@
 
         <tr>
             
-                <td class="name"><code>val</code></td>
+                <td class="name"><code>arr</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">array</span>
 
 
             
@@ -187,7 +193,7 @@
 
             
 
-            <td class="description last">value to check if is NaN</td>
+            <td class="description last">array to be copied</td>
         </tr>
 
     
@@ -213,7 +219,171 @@
 
         
 <div class="param-desc">
-    T/F - if value is a number
+    - copy of passed in array
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isArr"><span class="type-signature">(static) </span>isArr<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="array.js.html">array.js</a>, <a href="array.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if passed in value is an array
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>isArr([1,2,3])
+// Returns true</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value to be check if is an array</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - T/F value is an array
 </div>
 
 
@@ -239,7 +409,7 @@
 
     
 
-    <h4 class="name" id=".getNums"><span class="type-signature">(static) </span>getNums<span class="signature">(val)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".randomArray"><span class="type-signature">(static) </span>randomArray<span class="signature">(arr, amount)</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
@@ -251,7 +421,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line23">line 23</a>
+        <a href="array.js.html">array.js</a>, <a href="array.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -291,7 +461,7 @@
 
 
 <div class="description">
-    Gets numbers and floats (.) from a string
+    Randomly selects values from a passed in array
 </div>
 
 
@@ -300,6 +470,12 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>randomArray([1,2,3], 1)
+// Returns an array with one of the values in the passed in array</code></pre>
 
 
 
@@ -329,13 +505,13 @@
 
         <tr>
             
-                <td class="name"><code>val</code></td>
+                <td class="name"><code>arr</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">array</span>
 
 
             
@@ -345,149 +521,14 @@
 
             
 
-            <td class="description last">value to pull numbers from</td>
+            <td class="description last">array to select values from</td>
         </tr>
 
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Numbers found in value
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".isFloat"><span class="type-signature">(static) </span>isFloat<span class="signature">(num)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Checks if a number is a Float
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>num</code></td>
+                <td class="name"><code>amount</code></td>
             
 
             <td class="type">
@@ -503,7 +544,7 @@
 
             
 
-            <td class="description last">value to check</td>
+            <td class="description last">number of values to select from the array</td>
         </tr>
 
     
@@ -529,7 +570,7 @@
 
         
 <div class="param-desc">
-    T/F - value is an Float
+    - randomly sorted array
 </div>
 
 
@@ -540,7 +581,7 @@
     </dt>
     <dd>
         
-<span class="param-type">boolean</span>
+<span class="param-type">array</span>
 
 
     </dd>
@@ -555,7 +596,7 @@
 
     
 
-    <h4 class="name" id=".isInt"><span class="type-signature">(static) </span>isInt<span class="signature">(num)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".randomizeArray"><span class="type-signature">(static) </span>randomizeArray<span class="signature">(arr)</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
@@ -567,7 +608,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line43">line 43</a>
+        <a href="array.js.html">array.js</a>, <a href="array.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -607,7 +648,7 @@
 
 
 <div class="description">
-    Checks if a number is an Int
+    Randomly sorts an arrays items
 </div>
 
 
@@ -616,6 +657,12 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>randomizeArray([1,2,3])
+// Returns an array randomly sorted</code></pre>
 
 
 
@@ -645,13 +692,13 @@
 
         <tr>
             
-                <td class="name"><code>num</code></td>
+                <td class="name"><code>arr</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">array</span>
 
 
             
@@ -661,7 +708,7 @@
 
             
 
-            <td class="description last">value to check</td>
+            <td class="description last">array to randomly sorted</td>
         </tr>
 
     
@@ -687,7 +734,7 @@
 
         
 <div class="param-desc">
-    T/F - value is an Int
+    - randomly sorted array
 </div>
 
 
@@ -698,7 +745,7 @@
     </dt>
     <dd>
         
-<span class="param-type">boolean</span>
+<span class="param-type">array</span>
 
 
     </dd>
@@ -713,7 +760,7 @@
 
     
 
-    <h4 class="name" id=".isNum"><span class="type-signature">(static) </span>isNum<span class="signature">(val)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".uniqArr"><span class="type-signature">(static) </span>uniqArr<span class="signature">(arr)</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
@@ -725,7 +772,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line53">line 53</a>
+        <a href="array.js.html">array.js</a>, <a href="array.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -765,7 +812,7 @@
 
 
 <div class="description">
-    Checks is value is a number
+    Removes duplicates from an array
 </div>
 
 
@@ -774,6 +821,12 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>uniqArr([1,1,2,3,3])
+// Returns array with only unique values [ 1, 2, 3 ]</code></pre>
 
 
 
@@ -803,13 +856,13 @@
 
         <tr>
             
-                <td class="name"><code>val</code></td>
+                <td class="name"><code>arr</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">array</span>
 
 
             
@@ -819,7 +872,7 @@
 
             
 
-            <td class="description last">value to check if is a number</td>
+            <td class="description last">array to remove duplicates from</td>
         </tr>
 
     
@@ -845,7 +898,7 @@
 
         
 <div class="param-desc">
-    T/F - if value is a number
+    - copy of passed in array, with duplicates removed
 </div>
 
 
@@ -856,639 +909,7 @@
     </dt>
     <dd>
         
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".nth"><span class="type-signature">(static) </span>nth<span class="signature">(num)</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line63">line 63</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Finds the number ext base on the passed in numb
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>num</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">value to check</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    ext of the number
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".toFloat"><span class="type-signature">(static) </span>toFloat<span class="signature">(val)</span><span class="type-signature"> &rarr; {number}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line94">line 94</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Converts passed in value to an Int
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>val</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">value to convert</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    value converted to an Int
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".toInt"><span class="type-signature">(static) </span>toInt<span class="signature">(val)</span><span class="type-signature"> &rarr; {number}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line107">line 107</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Converts passed in value to a float
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>val</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">value to convert</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    value converted to a float
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".toNum"><span class="type-signature">(static) </span>toNum<span class="signature">(val)</span><span class="type-signature"> &rarr; {number}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="number.js.html">number.js</a>, <a href="number.js.html#line120">line 120</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Converts passed in value to a number
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>val</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">value to convert</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    value converted to a float
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
+<span class="param-type">array</span>
 
 
     </dd>
@@ -1518,7 +939,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

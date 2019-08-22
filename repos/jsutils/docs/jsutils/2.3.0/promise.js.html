@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>method.js - Documentation</title>
+    <title>promise.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">method.js</h1>
+    <h1 class="page-title">promise.js</h1>
     
 
     
@@ -42,180 +42,120 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module functions */
+            <pre class="prettyprint source linenums"><code>/** @module promise */
 
 'use strict'
 
-import { isNum } from './number'
-import { hasOwn } from './object'
+import { isObj } from './object'
+import { isFunc } from './method'
 
 /**
- * Check if the passed in method is a function, and calls it
- * @function
- * @param {function} method - function to call
- * @param {Object} params - params to pass to the method on call
- * @return {*} - whatever the passed in method returns
+ * Converts a standard callback method into Promise
+ * @param {function} method - method to turn into a promise
+ * @return method as a promise
  */
-export const checkCall = (method, ...params) =>  isFunc(method) &amp;&amp; method(...params) || undefined
+export const promisify = method => {
+  if(!isFunc(method)) throw `Argument must be a function`
 
-/**
- * Returns the first param if correct type of second param
- * @function
- * @param {function} func1 - return if is func
- * @param {function} func2 - use if first is not an object
- * @returns {function}
- */
-export const eitherFunc = (func1, func2) => (
-  isFunc(func1) &amp;&amp; func1 || func2
-)
-
-/**
- * Ensures a function is not called to many times
- * @function
- * @param {function} func - function to call
- * @param {number} wait - how long to wait between function calls
- * @param {boolean} immediate - should call immediately
- * @return { void }
- */
-export const debounce = (func, wait = 250, immediate = false) => {
-  let timeout
   return (...args) => {
-    if (!isFunc(func)) return null
+    return new Promise((res, rej) => {
+      // If the last arg is not a function, just return the resolved method
+      if(!isFunc(args[args.length -1]))
+        return res(method(...args))
 
-    const context = this
-    const later = () => {
-      timeout = null
-      !immediate &amp;&amp; func.apply(context, args)
-    }
-    const callNow = immediate &amp;&amp; !timeout
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-    if (callNow)
-      return isFunc(func) &amp;&amp; func.apply(context, args)
-  }
-}
+      // Remove the callback method
+      args.pop()
+      // Replace it with the promise resolve / reject
+      args.push((...cbData) => {
+        // If the cbData first arg is not falsy, then reject the promise
+        // Otherwise resolve it
+        return cbData &amp;&amp; cbData[0]
+          ? rej(...cbData)
+          : res(...cbData)
+      })
 
-/**
- * Execute a method n times
- * Callback params - does not include number || callback method
- * @function
-  * @example
- * doIt(10, window, [], (index, arr)=> { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
- * @param {number} args[0] - number of times to call the callback
- * @param {parent} args[1] - value to bind the method call to ( this )
- * @param {function} args[ args.length -1 ] - method to call
- * @return { void }
- */
-export const doIt = (...args) => {
-  const params = args.slice()
-  const num = params.shift()
-  const cb = params.pop()
-  if(!isNum(num) || !isFunc(cb)) return
-
-  let i = -1
-  while (++i &lt; num)
-    if (cb.call(params[0], i, ...params) === false) break
-}
-
-/**
- * Check if the passed in item is a function
- * @function
- * @param {*} test 
- * @return {boolean} is a function
- */
-export const isFunc = func => typeof func === 'function'
-
-/**
- * Creates a method to memorize passed in methods output
- * @function
- * @param {function} func - method to memorize output of
- * @param {function} getCacheKey - gets the key to save cached output
- * @return {function} memorized function with cache
- */
-export const memorize = (func, getCacheKey, limit) => {
-    if (!isFunc(func) || (getCacheKey &amp;&amp; !isFunc(getCacheKey)))
-      throw new TypeError('Expected a function')
-
-    const memorized = function() {
-      const cache = memorized.cache
-      const key = getCacheKey ? getCacheKey.apply(this, arguments) : arguments[0]
-
-      if (hasOwn(cache, key)) return cache[key]
-
-      const result = func.apply(this, arguments)
-      !isNum(limit) || Object.key(cache).length &lt; limit
-        ? (cache[key] = result)
-        : (memorized.cache = { [key]: result })
-
-      return result
-    }
-
-    memorized.cache = {}
-    memorized.destroy = () => {
-      getCacheKey = undefined
-      memorized.cache = undefined
-      memorized.destroy = undefined
-      memorized = undefined
-    }
-
-    return memorized
-}
-
-/**
- * Throttle function calls to only execute once over a wait period
- * @example
- * throttle(() => console.log('throttled'), 50)()
- * @function
- * @param {*} func - method to call after wait
- * @param {number} [wait=100] time to wait between calls
- * @return {function} throttled function
- */
-export const throttle = (func, wait = 100) => {
-  let waiting = false
-  return (...args) => {
-    if (waiting) return
-    waiting = true
-    func.apply(this, args)
-    return setTimeout(() => {
-      waiting = false
-    }, wait)
-  }
-}
-
-/**
- * Ensures the last call to the throttled function get called
- * Will wait the allotted time, before calling the last call to it
- * The final call will not execute until no more calls are made
- * Accepts a callback to call each time the throttle called
- * @function
- * @param {function} func - method to call after wait
- * @param {function} cb - method to call after throttle function is called
- * @param {number} [wait=100] time to wait until executing func param
- * @return {function} throttled function
- */
-export const throttleLast = (func, cb, wait = 100) => {
-  let throttleTimeout
-  return (...args) => {
-    // If the throttle already exists clear it, and create it again
-    if (throttleTimeout) clearTimeout(throttleTimeout)
-    // Store a reference to the timeout
-    // Will wait the allotted time until calling the final call to it
-    throttleTimeout = setTimeout(() => {
-      func.apply(this, args)
-      clearTimeout(throttleTimeout)
-    }, wait)
-    typeof cb === 'function' &amp;&amp; cb()
+      // Call the method, and return it
+      return method(...args)
+    })
   }
 }
 
 
+const isTest = process.env.NODE_ENV === 'test'
+
 /**
- * Creates a uuid, unique up to around 20 million iterations. good enough for us
- * @function
- * @param {number} start of the uuid
- * @return {string} - build uuid
+ * Creates an array of Object default properties not to convert into promises
  */
-export const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,uuid)
+const defObjProps = Array
+  .from([
+    'caller',
+    'callee',
+    'arguments',
+    'apply',
+    'bind',
+    'call',
+    'toString',
+    '__proto__',
+    '__defineGetter__',
+    '__defineSetter__',
+    'hasOwnProperty',
+    '__lookupGetter__',
+    '__lookupSetter__',
+    'isPrototypeOf',
+    'propertyIsEnumerable',
+    'toString',
+    'valueOf',
+    'toLocaleString'
+  ])
+  .concat(Object.getOwnPropertyNames(Object.prototype))
+  .reduce((map, functionName) => {
+    map[functionName] = true
+    return map
+  }, {})
+
+/**
+ * Loops an object and looks for any methods that belong to the object, then add an Async version
+ * @memberof promise
+ * @param {Object} object
+ * @return {Object} - object with Async methods added
+ */
+const addAsync = object => {
+  if (!object.__IS_PROMISIFIED__) {
+    for (const prop of Object.getOwnPropertyNames(object)) {
+      const isAsync = prop.indexOf('Async') !== -1 || object[`${prop}Async`]
+      if (isAsync || defObjProps[prop]) continue
+
+      if(isFunc(object[prop]))
+        object[`${prop}Async`] = promisify(object[prop])
+      else {
+        const getValue = Object.getOwnPropertyDescriptor(object, prop).get
+        if(isFunc(getValue)) object[`${prop}Async`] = promisify(getValue)
+      }
+    }
+    object.__IS_PROMISIFIED__ = true
+  }
+
+  return object
+}
+
+/**
+ * Converts Objects method properties into promiseAsync. allow using promisifyAll
+ * @function
+ * @param {Object} object
+ * @return {Object} - promisified object
+ */
+export const promisifyAll = object => {
+  if(!isObj(object)) return object
+
+  addAsync(object)
+  const proto = Object.getPrototypeOf(object)
+
+  proto &amp;&amp;
+    Object.getPrototypeOf(proto) !== null &amp;&amp;
+    addAsync(proto)
+
+  return object
+}
 </code></pre>
         </article>
     </section>
@@ -230,7 +170,7 @@ export const uuid = a => a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

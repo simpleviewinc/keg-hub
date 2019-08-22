@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>collection.js - Documentation</title>
+    <title>ext.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">collection.js</h1>
+    <h1 class="page-title">ext.js</h1>
     
 
     
@@ -42,145 +42,100 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module collection */
+            <pre class="prettyprint source linenums"><code>/** @module Helpers */
 
 'use strict'
 
-import { isFunc } from './method'
+import { isObj } from './object'
 import { isArr } from './array'
+import { isStr } from './string'
+import { isNum } from './number'
+import { softFalsy } from './boolean'
+import { isFunc } from './method'
+import { isStrBool, toBool } from './boolean'
+
+/**
+ * Determines the correct data to return
+ * @function
+ * @param {*} func1 - return if passes check method
+ * @param {*} func2 - use if first is not an object
+ * @returns {*}
+ */
+export const either = (data1, data2, check) => (
+  !isFunc(check)
+    ? softFalsy(data1) &amp;&amp; data1 || data2
+    : check(data1) &amp;&amp; data1 || data2
+)
 
 
 /**
- * Updates a collection by removing, getting, adding to it
- * @memberof collection
- * @param {Object} obj - object to update
- * @param {string|array} path - path to the property to update
- * @param {*} type - value to update || type
- * @return {*} based on update method
+ * Gets the type of the passed in val
+ * @function
+ * @param {*} val - value to get type for
+ * @return {string} type of the value
  */
-const updateColl = (obj, path, type, val) => {
-  const org = obj
-  if (!isColl(obj) || !obj || !path) return undefined
-  
-  const parts = isArr(path) ? path : path.split('.')
-  const key = parts.pop()
-  let prop
-  let breakPath
+export const typeOf = val => (
+  Object.prototype.toString.call(val).slice(8, -1)
+)
 
-  while (prop = parts.shift()) {
-    isColl(obj[prop])
-      ? ( obj = obj[prop] )
+/**
+ * Checks if the passed in values are exactly the same
+ * @function
+ * @param {*} val1 - value to compare
+ * @param {*} val2 - value to compare
+ * @return {boolean} is the values are the same
+ */
+export const isSame = (val1, val2) => (
+  val1 === val2
+    ? val1 !== 0 || 1 / val1 === 1 / val2
+    : val1 !== val1 &amp;&amp; val2 !== val2
+)
+
+/**
+ * Checks if the value is empty
+ * @function
+ * @param { object | array | number | string } val - value to check
+ * @return {boolean} if the value is empty
+ */
+export const isEmpty = val => (
+  isObj(val)
+    ? Object.keys(val).length === 0
+    : isArr(val)
+      ? val.length === 0
+      : isStr(val)
+        ? val.trim().length === 0
+        : isNum(val)
+          ? val &lt; 1
+          : false
+)
+
+/**
+ * Checks is passed in date is a valid date
+ * @function
+ * @param { date | string } date - value to check
+ * @return {boolean} T/F - if passed in date is a valid date
+ */
+export const isValidDate = date => (
+  !isNaN( (date instanceof Date &amp;&amp; date || new Date(date)).getTime() )
+)
+
+
+/**
+ * Converts a string to its own type if possible
+ * @function
+ * @param {*} val - value to convert
+ * @return { any | string } converted value || string if can't convert
+ */
+export const strToType = val => {
+  return !val || !isStr(val)
+    ? val
+    : isStrBool(val)
+      ? toBool(val)
       : (() => {
-          if(type !== 'set') breakPath = true
-          obj[prop] = {}
-          obj = obj[prop]
+          try { return JSON.parse(val) }
+          catch(e){ return val }
         })()
-
-    if (breakPath) return
-  }
-
-  return type === 'get'
-    // Get return the value
-    ? key in obj
-      ? obj[key]
-      : val
-    : type === 'unset'
-      // Unset, return if the key was removed
-      ? ( delete obj[key] )
-      // Set, updated object
-      : ( obj[key] = val ) &amp;&amp; org || org
-}
-
-/**
- * Searches an object based on the path param, I.E. path = 'data.foo.bar' => will return obj.data.foo.bar. If bar does not exist, then will return obj.data.foo
- * @function
- * @param {Object} obj - will search the object based on the path
- * @param {string|array} path - . separated string to search the object
- * @return the final value found from the path
- */
-export const get = (obj, path, fallback) => (
-  updateColl(obj, path, 'get', fallback)
-)
-
-/**
- * Checks if the value is a collection ( object || array )
- * @function
- * @param {*} val - value to check
- * @return {boolean} T/F if the value is a collection
- */
-export const isColl = val => (
-  typeof val === 'object' &amp;&amp; val !== null
-)
-
-/**
- * Loops over a collection and calls a passed in function for each one
- * @function
- * @param {Array|Object} - collection to loop over
- * @return {Array|Object} returns the same type of collection passed in
- */
-export const mapColl = (coll, cb) => (
-  isFunc(cb) &amp;&amp; isColl(coll)
-    ? Object
-      .keys(coll)
-      .map(key => cb(key, coll[key], coll))
-    : isAnArray
-      ? []
-      : {}
-)
-
-/**
- * Loops over collection and calls reduce
- * @function
- * @param {Object} obj - object loop over
- * @param {function} path - path that should be created on the object, separated by .
- * @param {*} reduce - starting data passed to reduce method
- * @return {Object} - last returned data from the loop
- */
-export const reduceColl = (coll, cb, reduce) => (
-  isFunc(cb) &amp;&amp; isColl(coll)
-    ? Object
-      .keys(coll)
-      .reduce((data, key) => cb(key, coll[key], coll, data), reduce)
-    : isArr(coll)
-      ? []
-      : {}
-)
-
-/**
- * Adds a path to an object.
- * If the path already exists, but not in the correct format it will be replaced. The path is built from a . separated string, I.E. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object
- * @function
- * @param {Object} obj - object to have the path added to it
- * @param {string|array} path - path that should be created on the object, separated by .
- * @param {*} finalValue - when ever the final value of the path should be
- * @return {Object} the obj param
- */
-export const set = (obj, path, val) => (
-  updateColl(obj, path, 'set', val)
-)
-
-/**
- * Removes a path from an object
- * @function
- * @param {Object} obj - object to have the attribute removed
- * @param {string|array} path - path of attribute to be removed, separated by string
- * @return the passed in object, with the attribute found at the path removed
- */
-export const unset = (obj, path) => updateColl(obj, path, 'unset')
-
-/**
- * Checks if passed in obj is empty
- * @function
- * @param {Object} obj - object to check if empty
- * @return {boolean}  true || false
- */
-export const isEmpty = obj => (
-  isArr(obj)
-    ? obj.length === 0
-    : isColl(obj) &amp;&amp; Object.getOwnPropertyNames(obj).length === 0
-)
-
-</code></pre>
+}</code></pre>
         </article>
     </section>
 
@@ -194,7 +149,7 @@ export const isEmpty = obj => (
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>promise - Documentation</title>
+    <title>log.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,347 +32,85 @@
 
 <div id="main">
     
-    <h1 class="page-title">promise</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".promisify"><span class="type-signature">(static, constant) </span>promisify<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line13">line 13</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Converts a standard callback method into Promise
-</div>
-
-
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="~defObjProps"><span class="type-signature">(inner, constant) </span>defObjProps<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line45">line 45</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Creates an array of Object default properties not to convert into promises
-</div>
-
-
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id=".promisifyAll"><span class="type-signature">(static) </span>promisifyAll<span class="signature">(object)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line103">line 103</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Converts Objects method properties into promiseAsync. allow using promisifyAll
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>object</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - promisified object
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">log.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module log */
+
+'use strict'
+
+let SHOW_LOGS
+let METH_DEF = 'dir'
+let PREFIX = 'type'
+const LOG_TYPES = [
+  'error',
+  'info',
+  'log',
+  'dir',
+  'warn',
+]
+const isTest = process.env.NODE_ENV === 'test'
+
+/**
+ * Turns logs on || off. Set the default log method. Add a prefix to all log message
+ * @function
+ * @param {boolean} log - log values
+ * @param {string} methDef - default log method
+ * @param {string} prefix - string to add to all logs
+ * @return { void }
+ */
+export const setLogs = (log, methDef, prefix) => {
+  SHOW_LOGS = log
+  METH_DEF = methDef || METH_DEF || 'log'
+  PREFIX = prefix || PREFIX || 'type'
+}
+
+/**
+ * Resets log settings to default
+ * @function
+ * @return { void }
+ */
+export const resetLogs = () => {
+  SHOW_LOGS = undefined
+  METH_DEF = 'log'
+  PREFIX = 'type'
+}
+
+/**
+ * Logs a string to the inspector, uses the last argument to determine the log type
+ * @function
+ * @param {Array} args - to be passed to the log call
+ * @return { void }
+ */
+export const logData = (...args) => {
+  if(!args.length) return
+  
+  let type = args.length === 1 ? METH_DEF : args.pop()
+  if(!SHOW_LOGS &amp;&amp; type !== 'error') return
+
+  else if(typeof args[0] === 'string'){
+    if(PREFIX === 'type')
+      args[0] = `[ ${type.toUpperCase()} ] ${args[0]}`
+    else if(PREFIX)
+      args[0] = `${PREFIX} ${args[0]}`
+  }
+
+  LOG_TYPES.indexOf(type) !== -1
+    ? console[type](...args)
+    : console[METH_DEF](...args, type)
+}
+
+isTest &amp;&amp; (module.exports.getShowLogs = () => SHOW_LOGS)
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -384,7 +122,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

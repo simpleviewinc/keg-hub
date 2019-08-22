@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>url.js - Documentation</title>
+    <title>promise - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,105 +32,347 @@
 
 <div id="main">
     
-    <h1 class="page-title">url.js</h1>
+    <h1 class="page-title">promise</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/** @module url */
-
-'use strict'
-
-// import { reduceObj, isObj } from './object'
-
-// export const getUrlParamObj = url => {
-//   const currentParams = {}
-//   const params = urlGetQuery(url)
-//   if(!params) return currentParams
-  
-//   const split = params.split('&amp;')
-//   split.length &amp;&amp;
-//     split.map(item => {
-//       const itemSplit = item.split('=')
-//       if (itemSplit.length === 2) {
-//         currentParams[decodeURIComponent(itemSplit[0])] = decodeURIComponent(itemSplit[1])
-//       }
-//     })
-
-//   return currentParams
-// }
-
-// export const objToUrlParams = obj => {
-//   let firstSet
-//   return reduceObj(obj, (key, value, urlStr) => {
-//     if(!value) return urlStr
-
-//     const useVal = isStr(value) ? value : isObj(value) ? JSON.stringify(value) : null
-//     if(!useVal) return urlStr
-
-//     urlStr = !firstSet
-//       ? `${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
-//       : `${urlStr}&amp;${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
-//     firstSet = true
-
-//     return urlStr
-//   }, '')
-// }
-
-// export const getUrlObj = url => {
-//   const urlRegEx = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
-//   const result = urlRegEx.exec(url || window.location.href)
-
-//   const attrs = ['url', 'scheme', 'slash', 'host', 'port', 'path', 'query', 'hash']
-//   const urlData = attrs.reduce((data, attr) => {
-//     if(typeof result[attr] === "undefined") result[attr] = ""  
-//     if(result[attr] !== "" &amp;&amp; (attrs[attr] === "port" || attrs[attr] === "slash"))
-//         result[attr] = `:${result[attr]}`
+        
     
-//     data[attr] = result[attr]
-//     return data
-//   }, {})
+</header>
 
-//   urlData['path'] = "/" + urlData['path']
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-//   return urlData
-// }
+            
+        
+        </div>
+    
 
-// export const urlUpcertParam = (url, key, value) => {
-//   url = url || ''
-//   const re = new RegExp('(\\?|&amp;)'+ key +'=[^&amp;]*' )
-//   const param = `${key}=${encodeURIComponent(value)}`
+    
 
-//   return re.test(url)
-//     ? url.replace(re, `${$1}${param}`)
-//     : addParam(url, null, null, param)
-// }
+    
 
-// export const urlAddParam = (url, key, value, param) => {
-//   url = url || ''
-//   param = param || `${key}=${encodeURIComponent(value)}`
-//   url.indexOf('?') === -1 &amp;&amp; (url += '?')
-//   url.indexOf('=') !== -1 &amp;&amp; (url += '&amp;')
+    
+    
+    
 
-//   return `${url}${param}`
-// }
+     
 
-// export const urlHasParam(url, paramName) {
-//   const regex = new RegExp('(\\?|&amp;)'+ paramName +'=', 'g')
-//   return regex.test(urlGetQuery(url))
-// }
+    
 
-// export const urlGetQuery = url => {
-//   const queryString = /\?[a-zA-Z0-9\=\&amp;\%\$\-\_\.\+\!\*\'\(\)\,]+/.exec(url)
-//   return queryString ? decodeURIComponent(queryString[0].replace(/\+/g,' ')) : ''
-// }</code></pre>
-        </article>
-    </section>
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".promisify"><span class="type-signature">(static, constant) </span>promisify<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Converts a standard callback method into Promise
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~defObjProps"><span class="type-signature">(inner, constant) </span>defObjProps<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line45">line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Creates an array of Object default properties not to convert into promises
+</div>
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".promisifyAll"><span class="type-signature">(static) </span>promisifyAll<span class="signature">(object)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line103">line 103</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Converts Objects method properties into promiseAsync. allow using promisifyAll
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - promisified object
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -142,7 +384,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

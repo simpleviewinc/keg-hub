@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>number.js - Documentation</title>
+    <title>collection.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">number.js</h1>
+    <h1 class="page-title">collection.js</h1>
     
 
     
@@ -42,133 +42,144 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module number */
+            <pre class="prettyprint source linenums"><code>/** @module collection */
 
 'use strict'
 
-import { toStr } from './string'
+import { isFunc } from './method'
+import { isArr } from './array'
+
 
 /**
- * Checks if a value is NaN
- * @function
- * @param {number} val - value to check if is NaN
- * @return {boolean} T/F - if value is a number
+ * Updates a collection by removing, getting, adding to it
+ * @memberof collection
+ * @param {Object} obj - object to update
+ * @param {string|array} path - path to the property to update
+ * @param {*} type - value to update || type
+ * @return {*} based on update method
  */
-export const equalsNaN = val => (
-  typeof val === 'number' &amp;&amp; val != val
-)
+const updateColl = (obj, path, type, val) => {
+  const org = obj
+  if (!isColl(obj) || !obj || !path) return undefined
+  
+  const parts = isArr(path) ? path : path.split('.')
+  const key = parts.pop()
+  let prop
+  let breakPath
 
-/**
- * Gets numbers and floats (.) from a string
- * @function
- * @param {*} val - value to pull numbers from
- * @return {string} Numbers found in value
- */
-export const getNums = val => (
-  toStr(val).replace(/([^.\d])/gm,'')
-)
+  while (prop = parts.shift()) {
+    isColl(obj[prop])
+      ? ( obj = obj[prop] )
+      : (() => {
+          if(type !== 'set') breakPath = true
+          obj[prop] = {}
+          obj = obj[prop]
+        })()
 
-/**
- * Checks if a number is a Float
- * @function
- * @param {number} num - value to check
- * @return {boolean} T/F - value is an Float
- */
-export const isFloat = val => (
-  isNum(val) &amp;&amp; val % 1 !== 0
-)
-
-/**
- * Checks if a number is an Int
- * @function
- * @param {number} num - value to check
- * @return {boolean} T/F - value is an Int
- */
-export const isInt = val => (
-  isNum(val) &amp;&amp; (val % 1 === 0)
-)
-
-/**
- * Checks is value is a number
- * @function
- * @param {number} val - value to check if is a number
- * @return {boolean} T/F - if value is a number
- */
-export const isNum = val => (
-  typeof val === 'number' &amp;&amp; !equalsNaN(val)
-)
-
-/**
- * Finds the number ext base on the passed in numb
- * @function
- * @param {number} num - value to check
- * @return {string} ext of the number
- */
-export const nth = num => {
-
-  if(!isNum(num)){
-    num = getNums(num)
-    if(!num) return ''
-    num = toNum(num)
-    if(equalsNaN(num)) return ''
+    if (breakPath) return
   }
 
-  const mod = (num % 100)
-  if (mod >= 10 &amp;&amp; mod &lt;= 20)
-    return 'th'
-
-  switch(num % 10) {
-    case 1:
-      return 'st'
-    case 2:
-      return 'nd'
-    case 3:
-      return 'rd'
-    default:
-      return 'th'
-  }
+  return type === 'get'
+    // Get return the value
+    ? key in obj
+      ? obj[key]
+      : val
+    : type === 'unset'
+      // Unset, return if the key was removed
+      ? ( delete obj[key] )
+      // Set, updated object
+      : ( obj[key] = val ) &amp;&amp; org || org
 }
 
 /**
- * Converts passed in value to an Int
+ * Searches an object based on the path param, I.E. path = 'data.foo.bar' => will return obj.data.foo.bar. If bar does not exist, then will return obj.data.foo
  * @function
- * @param {*} val - value to convert
- * @return {number} value converted to an Int
+ * @param {Object} obj - will search the object based on the path
+ * @param {string|array} path - . separated string to search the object
+ * @return the final value found from the path
  */
-export const toFloat = val => (
-  val &amp;&amp;
-    !equalsNaN(val) &amp;&amp;
-    parseFloat( isNum(val) &amp;&amp; val || getNums(val) ) ||
-    0
+export const get = (obj, path, fallback) => (
+  updateColl(obj, path, 'get', fallback)
 )
 
 /**
- * Converts passed in value to a float
+ * Checks if the value is a collection ( object || array )
  * @function
- * @param {*} val - value to convert
- * @return {number} value converted to a float
+ * @param {*} val - value to check
+ * @return {boolean} T/F if the value is a collection
  */
-export const toInt = val => (
-  val &amp;&amp;
-    !equalsNaN(val) &amp;&amp; 
-    parseInt( isNum(val) &amp;&amp; val || getNums(val) ) ||
-    0
+export const isColl = val => (
+  typeof val === 'object' &amp;&amp; val !== null
 )
 
 /**
- * Converts passed in value to a number
+ * Loops over a collection and calls a passed in function for each one
  * @function
- * @param {*} val - value to convert
- * @return {number} value converted to a float
+ * @param {Array|Object} - collection to loop over
+ * @return {Array|Object} returns the same type of collection passed in
  */
-export const toNum = val => (
-  isNum(val)
-    ? val
-    : val &amp;&amp;
-      !equalsNaN(val) &amp;&amp; 
-      Number(getNums(val)) ||
-      0
+export const mapColl = (coll, cb) => (
+  isFunc(cb) &amp;&amp; isColl(coll)
+    ? Object
+      .keys(coll)
+      .map(key => cb(key, coll[key], coll))
+    : isAnArray
+      ? []
+      : {}
 )
+
+/**
+ * Loops over collection and calls reduce
+ * @function
+ * @param {Object} obj - object loop over
+ * @param {function} path - path that should be created on the object, separated by .
+ * @param {*} reduce - starting data passed to reduce method
+ * @return {Object} - last returned data from the loop
+ */
+export const reduceColl = (coll, cb, reduce) => (
+  isFunc(cb) &amp;&amp; isColl(coll)
+    ? Object
+      .keys(coll)
+      .reduce((data, key) => cb(key, coll[key], coll, data), reduce)
+    : isArr(coll)
+      ? []
+      : {}
+)
+
+/**
+ * Adds a path to an object.
+ * If the path already exists, but not in the correct format it will be replaced. The path is built from a . separated string, I.E. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object
+ * @function
+ * @param {Object} obj - object to have the path added to it
+ * @param {string|array} path - path that should be created on the object, separated by .
+ * @param {*} finalValue - when ever the final value of the path should be
+ * @return {Object} the obj param
+ */
+export const set = (obj, path, val) => (
+  updateColl(obj, path, 'set', val)
+)
+
+/**
+ * Removes a path from an object
+ * @function
+ * @param {Object} obj - object to have the attribute removed
+ * @param {string|array} path - path of attribute to be removed, separated by string
+ * @return the passed in object, with the attribute found at the path removed
+ */
+export const unset = (obj, path) => updateColl(obj, path, 'unset')
+
+/**
+ * Checks if passed in obj is empty
+ * @function
+ * @param {Object} obj - object to check if empty
+ * @return {boolean}  true || false
+ */
+export const isEmpty = obj => (
+  isArr(obj)
+    ? obj.length === 0
+    : isColl(obj) &amp;&amp; Object.getOwnPropertyNames(obj).length === 0
+)
+
 </code></pre>
         </article>
     </section>
@@ -183,7 +194,7 @@ export const toNum = val => (
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 02:48:23 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 03:31:42 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
