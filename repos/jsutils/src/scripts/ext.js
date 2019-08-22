@@ -1,3 +1,7 @@
+/** @module Helpers */
+
+'use strict'
+
 import { isObj } from './object'
 import { isArr } from './array'
 import { isStr } from './string'
@@ -8,9 +12,10 @@ import { isStrBool, toBool } from './boolean'
 
 /**
  * Determines the correct data to return
- * @param { any } func1 - return if passes check method
- * @param { any } func2 - use if first is not an object
- * @returns { any }
+ * @function
+ * @param {*} func1 - return if passes check method
+ * @param {*} func2 - use if first is not an object
+ * @returns {*}
  */
 export const either = (data1, data2, check) => (
   !isFunc(check)
@@ -21,8 +26,9 @@ export const either = (data1, data2, check) => (
 
 /**
  * Gets the type of the passed in val
- * @param  { any } val - value to get type for
- * @return { string } type of the value
+ * @function
+ * @param {*} val - value to get type for
+ * @return {string} type of the value
  */
 export const typeOf = val => (
   Object.prototype.toString.call(val).slice(8, -1)
@@ -30,9 +36,10 @@ export const typeOf = val => (
 
 /**
  * Checks if the passed in values are exactly the same
- * @param  { any } val1 - value to compare
- * @param  { any } val2 - value to compare
- * @return { boolean } is the values are the same
+ * @function
+ * @param {*} val1 - value to compare
+ * @param {*} val2 - value to compare
+ * @return {boolean} is the values are the same
  */
 export const isSame = (val1, val2) => (
   val1 === val2
@@ -42,8 +49,9 @@ export const isSame = (val1, val2) => (
 
 /**
  * Checks if the value is empty
- * @param  { object | array | number | string } val - value to check
- * @return { boolean } if the value is empty
+ * @function
+ * @param { object | array | number | string } val - value to check
+ * @return {boolean} if the value is empty
  */
 export const isEmpty = val => (
   isObj(val)
@@ -59,8 +67,9 @@ export const isEmpty = val => (
 
 /**
  * Checks is passed in date is a valid date
- * @param  { date || string } date - value to check
- * @return { boolean } T/F - if passed in date is a valid date
+ * @function
+ * @param { date | string } date - value to check
+ * @return {boolean} T/F - if passed in date is a valid date
  */
 export const isValidDate = date => (
   !isNaN( (date instanceof Date && date || new Date(date)).getTime() )
@@ -69,7 +78,8 @@ export const isValidDate = date => (
 
 /**
  * Converts a string to its own type if possible
- * @param  { any } val - value to convert
+ * @function
+ * @param {*} val - value to convert
  * @return { any | string } converted value || string if can't convert
  */
 export const strToType = val => {

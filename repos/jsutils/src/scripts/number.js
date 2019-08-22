@@ -1,9 +1,14 @@
+/** @module number */
+
+'use strict'
+
 import { toStr } from './string'
 
 /**
  * Checks if a value is NaN
- * @param  { number } val - value to check if is NaN
- * @return { boolean } T/F - if value is a number
+ * @function
+ * @param {number} val - value to check if is NaN
+ * @return {boolean} T/F - if value is a number
  */
 export const equalsNaN = val => (
   typeof val === 'number' && val != val
@@ -11,8 +16,9 @@ export const equalsNaN = val => (
 
 /**
  * Gets numbers and floats (.) from a string
- * @param  { any } val - value to pull numbers from
- * @return { string } Numbers found in value
+ * @function
+ * @param {*} val - value to pull numbers from
+ * @return {string} Numbers found in value
  */
 export const getNums = val => (
   toStr(val).replace(/([^.\d])/gm,'')
@@ -20,8 +26,9 @@ export const getNums = val => (
 
 /**
  * Checks if a number is a Float
- * @param  { number } num - value to check
- * @return { boolean } T/F - value is an Float
+ * @function
+ * @param {number} num - value to check
+ * @return {boolean} T/F - value is an Float
  */
 export const isFloat = val => (
   isNum(val) && val % 1 !== 0
@@ -29,8 +36,9 @@ export const isFloat = val => (
 
 /**
  * Checks if a number is an Int
- * @param  { number } num - value to check
- * @return { boolean } T/F - value is an Int
+ * @function
+ * @param {number} num - value to check
+ * @return {boolean} T/F - value is an Int
  */
 export const isInt = val => (
   isNum(val) && (val % 1 === 0)
@@ -38,8 +46,9 @@ export const isInt = val => (
 
 /**
  * Checks is value is a number
- * @param  { number } val - value to check if is a number
- * @return { boolean } T/F - if value is a number
+ * @function
+ * @param {number} val - value to check if is a number
+ * @return {boolean} T/F - if value is a number
  */
 export const isNum = val => (
   typeof val === 'number' && !equalsNaN(val)
@@ -47,8 +56,9 @@ export const isNum = val => (
 
 /**
  * Finds the number ext base on the passed in numb
- * @param  { number } num - value to check
- * @return { string } ext of the number
+ * @function
+ * @param {number} num - value to check
+ * @return {string} ext of the number
  */
 export const nth = num => {
 
@@ -77,8 +87,9 @@ export const nth = num => {
 
 /**
  * Converts passed in value to an Int
- * @param  { any } val - value to convert
- * @return { number } value converted to an Int
+ * @function
+ * @param {*} val - value to convert
+ * @return {number} value converted to an Int
  */
 export const toFloat = val => (
   val &&
@@ -89,8 +100,9 @@ export const toFloat = val => (
 
 /**
  * Converts passed in value to a float
- * @param  { any } val - value to convert
- * @return { number } value converted to a float
+ * @function
+ * @param {*} val - value to convert
+ * @return {number} value converted to a float
  */
 export const toInt = val => (
   val &&
@@ -101,8 +113,9 @@ export const toInt = val => (
 
 /**
  * Converts passed in value to a number
- * @param  { any } val - value to convert
- * @return { number } value converted to a float
+ * @function
+ * @param {*} val - value to convert
+ * @return {number} value converted to a float
  */
 export const toNum = val => (
   isNum(val)

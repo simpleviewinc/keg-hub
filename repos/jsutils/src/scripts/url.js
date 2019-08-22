@@ -1,3 +1,7 @@
+/** @module url */
+
+'use strict'
+
 // import { reduceObj, isObj } from './object'
 
 // export const getUrlParamObj = url => {

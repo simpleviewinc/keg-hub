@@ -1,12 +1,18 @@
+/** @module collection */
+
+'use strict'
+
 import { isFunc } from './method'
 import { isArr } from './array'
 
+
 /**
  * Updates a collection by removing, getting, adding to it
- * @param  { object } obj - object to update
- * @param  { string | array } path - path to the property to update
- * @param  { any } type - value to update || type
- * @return { any } based on update method
+ * @memberof collection
+ * @param {Object} obj - object to update
+ * @param {string|array} path - path to the property to update
+ * @param {*} type - value to update || type
+ * @return {*} based on update method
  */
 const updateColl = (obj, path, type, val) => {
   const org = obj
@@ -42,11 +48,10 @@ const updateColl = (obj, path, type, val) => {
 }
 
 /**
- * Searches an object based on the path param
- * i.e. path = 'data.foo.bar' => will return obj.data.foo.bar
- * If bar does not exist, then will return obj.data.foo
- * @param  { object } obj - will search the object based on the path
- * @param  { string || array } path - . separated string to search the object
+ * Searches an object based on the path param, I.E. path = 'data.foo.bar' => will return obj.data.foo.bar. If bar does not exist, then will return obj.data.foo
+ * @function
+ * @param {Object} obj - will search the object based on the path
+ * @param {string|array} path - . separated string to search the object
  * @return the final value found from the path
  */
 export const get = (obj, path, fallback) => (
@@ -55,8 +60,9 @@ export const get = (obj, path, fallback) => (
 
 /**
  * Checks if the value is a collection ( object || array )
- * @param  { any } val - value to check
- * @return { boolean } T/F if the value is a collection
+ * @function
+ * @param {*} val - value to check
+ * @return {boolean} T/F if the value is a collection
  */
 export const isColl = val => (
   typeof val === 'object' && val !== null
@@ -64,8 +70,9 @@ export const isColl = val => (
 
 /**
  * Loops over a collection and calls a passed in function for each one
- * @param  { collection } - collection to loop over
- * @return { array | object } returns the same type of collection passed in
+ * @function
+ * @param {Array|Object} - collection to loop over
+ * @return {Array|Object} returns the same type of collection passed in
  */
 export const mapColl = (coll, cb) => (
   isFunc(cb) && isColl(coll)
@@ -78,11 +85,12 @@ export const mapColl = (coll, cb) => (
 )
 
 /**
- * Loops over collection and calling reduce
- * @param  { object } obj - object loop over
- * @param  { function } path - path that should be created on the object, separated by .
- * @param  { any } reduce - starting data passed to reduce method
- * @return {  } - last returned data from the loop
+ * Loops over collection and calls reduce
+ * @function
+ * @param {Object} obj - object loop over
+ * @param {function} path - path that should be created on the object, separated by .
+ * @param {*} reduce - starting data passed to reduce method
+ * @return {Object} - last returned data from the loop
  */
 export const reduceColl = (coll, cb, reduce) => (
   isFunc(cb) && isColl(coll)
@@ -96,25 +104,35 @@ export const reduceColl = (coll, cb, reduce) => (
 
 /**
  * Adds a path to an object.
- * If the path already exists, but not in the correct format it will be replaced
- * path is built from a . separated string
- * i.e. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object
- * @param  { object } obj - object to have the path added to it
- * @param  { string || array } path - path that should be created on the object, separated by .
- * @param  { any } finalValue - when ever the final value of the path should be
- * @return { object } the obj param
+ * If the path already exists, but not in the correct format it will be replaced. The path is built from a . separated string, I.E. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object
+ * @function
+ * @param {Object} obj - object to have the path added to it
+ * @param {string|array} path - path that should be created on the object, separated by .
+ * @param {*} finalValue - when ever the final value of the path should be
+ * @return {Object} the obj param
  */
 export const set = (obj, path, val) => (
   updateColl(obj, path, 'set', val)
 )
-  
 
 /**
  * Removes a path from an object
- * @param  { object } obj - object to have the attribute removed
- * @param  { string || array } path - path of attribute to be removed, separated by string
+ * @function
+ * @param {Object} obj - object to have the attribute removed
+ * @param {string|array} path - path of attribute to be removed, separated by string
  * @return the passed in object, with the attribute found at the path removed
  */
-export const unset = (obj, path) => (
-  updateColl(obj, path, 'unset')
+export const unset = (obj, path) => updateColl(obj, path, 'unset')
+
+/**
+ * Checks if passed in obj is empty
+ * @function
+ * @param {Object} obj - object to check if empty
+ * @return {boolean}  true || false
+ */
+export const isEmpty = obj => (
+  isArr(obj)
+    ? obj.length === 0
+    : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0
 )
+

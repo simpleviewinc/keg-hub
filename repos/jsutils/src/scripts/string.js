@@ -1,8 +1,11 @@
+/** @module string */
+
 'use strict'
 
 /**
- * Builds a string path from passed in args ( i.e. path/to/thing )
- * @return { string } - built path from arguments
+ * Builds a string path from passed in args ( i.e. path/to/thing ).
+ * @function
+ * @return {string} - built path from arguments
  */
 export const buildPath = (...args) => {
   const built = args.reduce((path, arg) => {
@@ -16,9 +19,10 @@ export const buildPath = (...args) => {
 
 
 /**
- * Converts a string to camel case
- * @param  { string } string to be converted
- * @return { string } - string in camel case format
+ * Converts a string to camel case.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string in camel case format
  */
 export const camelCase = (str, compCase) => {
   return (
@@ -35,9 +39,10 @@ export const camelCase = (str, compCase) => {
 }
 
 /**
- * Converts `-` and `_` to white space and removes `.`
- * @param  { string } string to be converted
- * @return { string } - cleaned string
+ * Converts `-` and `_` to white space and removes `.`.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - cleaned string
  */
 export const cleanStr = str => {
   return str && removeDot(str)
@@ -45,9 +50,10 @@ export const cleanStr = str => {
 }
 
 /**
- * Converts first letter of a string to be capitalized
- * @param  { string } string
- * @return { string } - Passed in string, but capitalized
+ * Converts first letter of a string to be capitalized.
+ * @function
+ * @param {string} string
+ * @return {string} - Passed in string, but capitalized
  */
 export const capitalize = str => (
   isStr(str) && str[0] && `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}` || str
@@ -55,11 +61,11 @@ export const capitalize = str => (
 
 
 /**
- * Checks if a string contains another string
- * @param  { string } string - value to be checked
- * @param  { string } substring - value to search for
- * 
- * @return { boolean } - if the substring exists string
+ * Checks if a string contains another string.
+ * @function
+ * @param {string} string - value to be checked
+ * @param {string} substring - value to search for
+ * @return {boolean} - if the substring exists string
  */
 export const containsStr = (str, substring, fromIndex) => {
   str = !isStr(str) && toStr(str) || str
@@ -69,19 +75,21 @@ export const containsStr = (str, substring, fromIndex) => {
 }
 
 /**
- * Returns the first param if correct type of second param
- * @param { string } str1 - return if is string
- * @param { string } str2 - use if first is not an object
- * @returns { string }
+ * Returns the first param if correct type of second param.
+ * @function
+ * @param {string} str1 - return if is string
+ * @param {string} str2 - use if first is not an object
+ * @returns {string}
  */
 export const eitherStr = (str1, str2) => (
   isStr(str1) && str1 || str2
 )
 
 /**
- * Check if string is a email
- * @param  { string } string to check
- * @return { boolean } - if it's a email
+ * Check if string is a email.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a email
  */
 export const isEmail = str => {
   if (!str || !isStr(str)) return false
@@ -90,9 +98,10 @@ export const isEmail = str => {
 }
 
 /**
- * Check if string is a phone number
- * @param  { string } string to check
- * @return { boolean } - if it's a phone number
+ * Check if string is a phone number.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a phone number
  */
 export const isPhone = str => {
   if (!str || !isStr(str)) return false
@@ -101,16 +110,18 @@ export const isPhone = str => {
 }
 
 /**
- * Check if data is a string
- * @param  { all } str - param to check if type is a string 
- * @return { boolean } - if it's a string
+ * Check if passed in value is a string.
+ * @function
+ * @param { all } str - param to check if type is a string 
+ * @return {boolean} - if it's a string
  */
 export const isStr = str => typeof str === 'string'
 
 /**
- * Check if string is a url
- * @param  { string } string to check
- * @return { boolean } - if it's a url
+ * Check if string is a url.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a url
  */
 export const isUrl = str => {
   const regex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/
@@ -118,9 +129,10 @@ export const isUrl = str => {
 }
 
 /**
- * Check if string is a uuid
- * @param  { string } string to check
- * @return { boolean } - if it's a uuid
+ * Check if string is a uuid.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a uuid
  */
 export const isUuid = str => {
   if (!str || !isStr(str)) return false
@@ -130,9 +142,10 @@ export const isUuid = str => {
 
 
 /**
- * Convert JSON string into object, wrapped in a try / catch
- * @param  { string } string
- * @return { object } - JSON object
+ * Convert JSON string into object, wrapped in a try / catch.
+ * @function
+ * @param {string} string
+ * @return {Object} - JSON object
  */
 export const parseJSON = str => {
   try {
@@ -145,9 +158,10 @@ export const parseJSON = str => {
 }
 
 /**
- * Adds an `s` to the end of a string, if one does not exist
- * @param  { string } str - string to convert
- * @return { string } string as a plural
+ * Adds an `s` to the end of a string, if one does not exist.
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} string as a plural
  */
 export const plural = str => {
   if (!str || !str.length) return str
@@ -155,9 +169,10 @@ export const plural = str => {
 }
 
 /**
- * Removes a `.` from the start and end of a string
- * @param  { string } str - string to convert
- * @return { string } - string without the `.`
+ * Removes a `.` from the start and end of a string.
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} - string without the `.`
  */
 export const removeDot = string => {
   const noDot = string.indexOf('.') === 0 ? string.slice(1) : string
@@ -165,9 +180,10 @@ export const removeDot = string => {
 }
 
 /**
- * Sanitize a string of HTML content
- * @param  { string } string
- * @return { string } - cleaned string
+ * Sanitize a string of HTML content.
+ * @function
+ * @param {string} string
+ * @return {string} - cleaned string
  */
 export const sanitize = str => (
   isStr(str) && str
@@ -177,9 +193,10 @@ export const sanitize = str => (
 )
 
 /**
- * Remove an `s` at the end of a string, if the last char is an `s`
- * @param  { string } str - string to convert
- * @return { string } string as singular
+ * Remove an `s` at the end of a string, if the last char is an `s`,
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} string as singular
  */
 export const singular = str => {
   if (!str || !str.length) return str
@@ -189,10 +206,11 @@ export const singular = str => {
 }
 
 /**
- * Converts a string to css in js format
- * Useful for converting css rules into js format, I.E. margin-top => marginTop
- * @param  { string } str - string to be converted
- * @return { string } - string in style case format
+ * Converts a string to css in js format.
+ * Useful for converting css rules into js format, I.E. margin-top => marginTop.
+ * @function
+ * @param {string} str - string to be converted
+ * @return {string} - string in style case format
  */
 export const styleCase = str => {
   if(!isStr) return str
@@ -202,9 +220,10 @@ export const styleCase = str => {
 }
 
 /**
- * Converts a string to train case
- * @param  { string } string to be converted
- * @return { string } - string in train case format
+ * Converts a string to train case, I.E. marginTop => margin-top.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string in train case format
  */
 export const trainCase = str => (
   isStr(str) && str
@@ -214,10 +233,10 @@ export const trainCase = str => (
 )
 
 /**
- * Converts a passed in value to a string
- * @param  { any } val - value to be converted
- * 
- * @return { string } - value converted into a string
+ * Converts a passed in value to a string.
+ * @function
+ * @param {*} val - value to be converted
+ * @return {string} - value converted into a string
  */
 export const toStr = val => (
   val === null || val === undefined
@@ -228,9 +247,10 @@ export const toStr = val => (
 )
 
 /**
- * Converts all words in a string to be capitalized
- * @param  { string } string to be converted
- * @return { string } - string with all words capitalized
+ * Converts all words in a string to be capitalized.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string with all words capitalized
  */
 export const wordCaps = str => {
   if (!str) return str

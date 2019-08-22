@@ -1,3 +1,5 @@
+/** @module promise */
+
 'use strict'
 
 import { isObj } from './object'
@@ -5,7 +7,7 @@ import { isFunc } from './method'
 
 /**
  * Converts a standard callback method into Promise
- * @param  { function } method - method to turn into a promise
+ * @param {function} method - method to turn into a promise
  * @return method as a promise
  */
 export const promisify = method => {
@@ -36,6 +38,7 @@ export const promisify = method => {
 
 
 const isTest = process.env.NODE_ENV === 'test'
+
 /**
  * Creates an array of Object default properties not to convert into promises
  */
@@ -68,9 +71,9 @@ const defObjProps = Array
 
 /**
  * Loops an object and looks for any methods that belong to the object, then add an Async version
- * @param  { object } object
- *
- * @return { object } - object with Async methods added
+ * @memberof promise
+ * @param {Object} object
+ * @return {Object} - object with Async methods added
  */
 const addAsync = object => {
   if (!object.__IS_PROMISIFIED__) {
@@ -92,11 +95,10 @@ const addAsync = object => {
 }
 
 /**
- * Converts Objects method properties into promiseAsync
- * allow using promisifyAll
- * @param  { object } object
- *
- * @return { object } - promisified object
+ * Converts Objects method properties into promiseAsync. allow using promisifyAll
+ * @function
+ * @param {Object} object
+ * @return {Object} - promisified object
  */
 export const promisifyAll = object => {
   if(!isObj(object)) return object

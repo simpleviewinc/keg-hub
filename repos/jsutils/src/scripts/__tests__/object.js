@@ -211,5 +211,78 @@ describe('/object', () => {
 
   })
 
+  describe('omitKeys', () => {
+
+    it('should return object without keys in passed in array', () => {
+      const obj = { test: 'I should exist', sub: [ 1, 2, 3 ], data: 'I should not exist' }
+      const omitted = Obj.omitKeys(obj, [ 'data', 'sub' ])
+
+      expect(omitted.sub).toEqual(undefined)
+      expect(omitted.data).toEqual(undefined)
+      expect(omitted.test).toEqual('I should exist')
+    })
+
+    it('should return empty object if first param is not an object', () => {
+      const emptyObj = Obj.omitKeys('I am not an object', [])
+
+      expect(Obj.isObj(emptyObj)).toBe(true)
+      expect(Object.keys(emptyObj).length).toEqual(0)
+    })
+
+  })
+
+  describe('pickKeys', () => {
+
+    it('should return object with keys in passed in array', () => {
+      const obj = { test: 'I should exist', sub: [ 1, 2, 3 ], data: 'I should not exist' }
+      const picked = Obj.pickKeys(obj, [ 'data', 'sub' ])
+
+      expect(picked.sub).toEqual(obj.sub)
+      expect(picked.data).toEqual(obj.data)
+      expect(picked.test).toEqual(undefined)
+    })
+
+    it('should not add non-existing keys to the return object', () => {
+      const obj = { test: 'I should exist', sub: [ 1, 2, 3 ], data: 'I should not exist' }
+      const picked = Obj.pickKeys(obj, [ 'data', 'sub', 'duper' ])
+
+      expect(picked.sub).toEqual(obj.sub)
+      expect(picked.data).toEqual(obj.data)
+      expect('duper' in picked).toEqual(false)
+    })
+
+    it('should return empty object if first param is not an object', () => {
+      const emptyObj = Obj.pickKeys('I am not an object', [])
+
+      expect(Obj.isObj(emptyObj)).toBe(true)
+      expect(Object.keys(emptyObj).length).toEqual(0)
+    })
+
+  })
+
+  describe('keyMap', () => {
+
+    it('should return object with keys and values equal to values in array', () => {
+      const arr = [ 'test', 'foo', 'bar', 'data', 'sub' ]
+      const mapped = Obj.keyMap(arr)
+
+      Obj.reduceObj(mapped, (key, value) => {
+        expect(key).toEqual(value)
+        expect(arr.indexOf(key)).not.toEqual(-1)
+        expect(arr.indexOf(value)).not.toEqual(-1)
+      })
+    })
+
+    it('should convert key and value to uppercase if second param is true', () => {
+      const arr = [ 'test', 'foo', 'bar', 'data', 'sub' ]
+      const mapped = Obj.keyMap(arr, true)
+
+      arr.map(key => {
+        expect(key.toUpperCase() in mapped).toEqual(true)
+        expect(mapped[key.toUpperCase()]).toEqual(key.toUpperCase())
+      })
+    })
+
+  })
 
 })
