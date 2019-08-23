@@ -18,7 +18,7 @@ describe('/log', function () {
   describe('setLogs', function () {
     beforeEach(function () {
       jest.resetAllMocks();
-      Log.reset();
+      Log.resetLogs();
     });
     it('should set SHOW_LOGS to passed boolean', function () {
       expect(Log.getShowLogs()).toEqual(undefined);
@@ -30,7 +30,7 @@ describe('/log', function () {
       Log.setLogs(true, 'warn');
       Log.logData('I should log to warn');
       expect(console.warn).toHaveBeenCalled();
-      Log.setLogs(true, 'dir');
+      Log.setLogs(true, 'log');
       resetConsole(orgWarn);
     });
     it('should set PREFIX to the passed in string', function () {
@@ -38,38 +38,38 @@ describe('/log', function () {
       Log.setLogs(true, 'log', '[ TEST ]');
       Log.logData('I should log to log');
       expect(console.log.mock.calls[0][0]).toEqual('[ TEST ] I should log to log');
-      Log.setLogs(true, 'dir', 'type');
+      Log.setLogs(true, 'log', 'type');
       resetConsole(orgLog);
     });
   });
-  describe('reset', function () {
-    it('should reset log options', function () {
-      Log.reset();
+  describe('resetLogs', function () {
+    it('should resetLogs log options', function () {
+      Log.resetLogs();
       expect(Log.getShowLogs()).toEqual(undefined);
       Log.setLogs(true);
       expect(Log.getShowLogs()).toEqual(true);
-      Log.reset();
+      Log.resetLogs();
       expect(Log.getShowLogs()).toEqual(undefined);
     });
   });
   describe('logData', function () {
     beforeEach(function () {
       jest.resetAllMocks();
-      Log.reset();
+      Log.resetLogs();
     });
-    it('should default log to console.dir', function () {
+    it('should default log to console.log', function () {
       Log.setLogs(true);
-      var orgDir = overRideConsole('dir');
-      Log.logData('I should log to dir');
-      expect(console.dir).toHaveBeenCalled();
+      var orgDir = overRideConsole('log');
+      Log.logData('I should log');
+      expect(console.log).toHaveBeenCalled();
       resetConsole(orgDir);
     });
-    it('should default log to console.dir when last param is not a log method', function () {
+    it('should default log to console.log when last param is not a log method', function () {
       Log.setLogs(true);
-      var orgDir = overRideConsole('dir');
-      Log.logData('I should log to dir', 'notLogMethod');
-      expect(console.dir).toHaveBeenCalled();
-      resetConsole(orgDir);
+      var orgLog = overRideConsole('log');
+      Log.logData('I should log', 'notLogMethod');
+      expect(console.log).toHaveBeenCalled();
+      resetConsole(orgLog);
     });
     it('should call console method defined in last param', function () {
       Log.setLogs(true);

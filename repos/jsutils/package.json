@@ -9,16 +9,15 @@
   "license": "MIT",
   "scripts": {
     "dev": "ENV=development webpack --watch --progress",
-    "build": "yarn build:clean && yarn build:webpack",
-    "build:clean": "rm -rf ./esm && rm -rf ./cjs && rm -rf ./build",
+    "build": "yarn build:clean && yarn build:webpack && yarn docs",
+    "build:clean": "rimraf ./esm && rimraf ./cjs && rimraf ./build",
     "build:esm": "babel --delete-dir-on-start -d esm/ src/scripts/",
     "build:cjs": "babel --delete-dir-on-start --env-name cjs -d cjs/ src/scripts/",
     "build:modules": "yarn build:esm && yarn build:cjs",
-    "build:webpack": "rm -rf ./build && ENV=production webpack --mode production",
-    "clean": "rm -rf yarn.lock && rm -rf node_modules && yarn install --force",
-    "deploy": "gh-pages -d build",
+    "build:webpack": "rimraf ./build && ENV=production webpack --mode production",
+    "clean": "rimraf yarn.lock && rimraf node_modules && yarn install --force",
     "test": "NODE_ENV=test jest --verbose",
-    "docs": "./node_modules/.bin/jsdoc src/scripts -d ./docs --debug --verbose --package ./package.json -t ./node_modules/docdash -R README.md"
+    "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc src/scripts -d ./docs --debug --verbose --package ./package.json -t ./node_modules/docdash -R README.md"
   },
   "dependencies": {
     "webpack-shell-plugin": "https://github.com/cdeutsch/webpack-shell-plugin.git#bee537d"
@@ -37,13 +36,13 @@
     "copy-webpack-plugin": "^4.6.0",
     "core-js": "^3.1.2",
     "docdash": "^1.1.1",
-    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "ink-docstrap": "^1.3.2",
     "jest": "^24.7.1",
     "jsdoc": "^3.6.3",
     "raw-loader": "^2.0.0",
     "remove-comments-loader": "^0.1.2",
+    "rimraf": "^3.0.0",
     "terser-webpack-plugin": "^1.3.0",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.1.2"

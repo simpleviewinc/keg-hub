@@ -10,9 +10,13 @@ require("core-js/modules/es.array.index-of");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.map");
+
 require("core-js/modules/es.function.name");
 
 require("core-js/modules/es.object.is-frozen");
+
+require("core-js/modules/es.object.keys");
 
 require("core-js/modules/es.object.to-string");
 
@@ -260,6 +264,72 @@ describe('/object', function () {
       };
       var trimmedObj = Obj.trimStringFields(testObj);
       expect(trimmedObj.data).toEqual(testObj.data);
+    });
+  });
+  describe('omitKeys', function () {
+    it('should return object without keys in passed in array', function () {
+      var obj = {
+        test: 'I should exist',
+        sub: [1, 2, 3],
+        data: 'I should not exist'
+      };
+      var omitted = Obj.omitKeys(obj, ['data', 'sub']);
+      expect(omitted.sub).toEqual(undefined);
+      expect(omitted.data).toEqual(undefined);
+      expect(omitted.test).toEqual('I should exist');
+    });
+    it('should return empty object if first param is not an object', function () {
+      var emptyObj = Obj.omitKeys('I am not an object', []);
+      expect(Obj.isObj(emptyObj)).toBe(true);
+      expect(Object.keys(emptyObj).length).toEqual(0);
+    });
+  });
+  describe('pickKeys', function () {
+    it('should return object with keys in passed in array', function () {
+      var obj = {
+        test: 'I should exist',
+        sub: [1, 2, 3],
+        data: 'I should not exist'
+      };
+      var picked = Obj.pickKeys(obj, ['data', 'sub']);
+      expect(picked.sub).toEqual(obj.sub);
+      expect(picked.data).toEqual(obj.data);
+      expect(picked.test).toEqual(undefined);
+    });
+    it('should not add non-existing keys to the return object', function () {
+      var obj = {
+        test: 'I should exist',
+        sub: [1, 2, 3],
+        data: 'I should not exist'
+      };
+      var picked = Obj.pickKeys(obj, ['data', 'sub', 'duper']);
+      expect(picked.sub).toEqual(obj.sub);
+      expect(picked.data).toEqual(obj.data);
+      expect('duper' in picked).toEqual(false);
+    });
+    it('should return empty object if first param is not an object', function () {
+      var emptyObj = Obj.pickKeys('I am not an object', []);
+      expect(Obj.isObj(emptyObj)).toBe(true);
+      expect(Object.keys(emptyObj).length).toEqual(0);
+    });
+  });
+  describe('keyMap', function () {
+    it('should return object with keys and values equal to values in array', function () {
+      var arr = ['test', 'foo', 'bar', 'data', 'sub'];
+      var mapped = Obj.keyMap(arr);
+      Obj.reduceObj(mapped, function (key, value) {
+        expect(key).toEqual(value);
+        expect(arr.indexOf(key)).not.toEqual(-1);
+        expect(arr.indexOf(value)).not.toEqual(-1);
+      });
+    });
+    it('should convert key and value to uppercase if second param is true', function () {
+      var arr = ['test', 'foo', 'bar', 'data', 'sub'];
+      var mapped = Obj.keyMap(arr, true);
+      arr.map(function (key) {
+        expect(key.toUpperCase() in mapped).toEqual(true);
+        expect(mapped[key.toUpperCase()]).toEqual(key.toUpperCase());
+      });
     });
   });
 });

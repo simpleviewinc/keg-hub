@@ -1,3 +1,4 @@
+/** @module promise */
 'use strict';
 
 require("core-js/modules/es.symbol");
@@ -43,7 +44,7 @@ var _method = require("./method");
 
 /**
  * Converts a standard callback method into Promise
- * @param  { function } method - method to turn into a promise
+ * @param {function} method - method to turn into a promise
  * @return method as a promise
  */
 var promisify = function promisify(method) {
@@ -86,9 +87,9 @@ var defObjProps = Array.from(['caller', 'callee', 'arguments', 'apply', 'bind', 
 }, {});
 /**
  * Loops an object and looks for any methods that belong to the object, then add an Async version
- * @param  { object } object
- *
- * @return { object } - object with Async methods added
+ * @memberof promise
+ * @param {Object} object
+ * @return {Object} - object with Async methods added
  */
 
 var addAsync = function addAsync(object) {
@@ -128,11 +129,10 @@ var addAsync = function addAsync(object) {
   return object;
 };
 /**
- * Converts Objects method properties into promiseAsync
- * allow using promisifyAll
- * @param  { object } object
- *
- * @return { object } - promisified object
+ * Converts Objects method properties into promiseAsync. allow using promisifyAll
+ * @function
+ * @param {Object} object
+ * @return {Object} - promisified object
  */
 
 

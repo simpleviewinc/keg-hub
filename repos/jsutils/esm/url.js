@@ -1,4 +1,5 @@
-// import { reduceObj, isObj } from './object'
+/** @module url */
+'use strict'; // import { reduceObj, isObj } from './object'
 // export const getUrlParamObj = url => {
 //   const currentParams = {}
 //   const params = urlGetQuery(url)
@@ -63,4 +64,3 @@
 //   const queryString = /\?[a-zA-Z0-9\=\&\%\$\-\_\.\+\!\*\'\(\)\,]+/.exec(url)
 //   return queryString ? decodeURIComponent(queryString[0].replace(/\+/g,' ')) : ''
 // }
-"use strict";

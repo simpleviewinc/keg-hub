@@ -1,4 +1,5 @@
-"use strict";
+/** @module functions */
+'use strict';
 
 require("core-js/modules/es.symbol");
 
@@ -59,9 +60,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /**
  * Check if the passed in method is a function, and calls it
- * @param  { function } method - function to call
- * @param  { object } params - params to pass to the method on call
- * @return { any } - whatever the passed in method returns
+ * @example
+ * checkCall((param1) => { return param1 }, 'foo')
+ * // Returns 'foo'
+ * @function
+ * @param {function} method - function to call
+ * @param {Object} params - params to pass to the method on call
+ * @return {*} - whatever the passed in method returns
  */
 var checkCall = function checkCall(method) {
   for (var _len = arguments.length, params = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -71,10 +76,18 @@ var checkCall = function checkCall(method) {
   return isFunc(method) && method.apply(void 0, params) || undefined;
 };
 /**
- * Returns the first param if correct type of second param
- * @param { function } func1 - return if is func
- * @param { function } func2 - use if first is not an object
- * @returns { function }
+ * Returns the first param if it's a function.
+ * <br> If first param is not a function, returns second param.
+ * @example
+ * eitherFunc(() => {}, 'bar')
+ * // Returns first param because it's a function.
+ * @example
+ * eitherFunc('foo', 'bar')
+ * // Returns 'bar'
+ * @function
+ * @param {function} func1 - return if is func
+ * @param {function} func2 - use if first is not an object
+ * @returns {function}
  */
 
 
@@ -84,10 +97,20 @@ var eitherFunc = function eitherFunc(func1, func2) {
   return isFunc(func1) && func1 || func2;
 };
 /**
- * Ensures a function is not called to many times
- * @param  { function } func - function to call
- * @param  { number } wait - how long to wait between function calls
- * @param  { boolean } immediate - should call immediately
+ * Limits the amount of calls to a function over time
+ * @example
+ * debounce(myFunction)
+ * // Calls myFunction after the default 250 ms
+ * @example
+ * debounce(myFunction, 500)
+ * // Calls myFunction after 500 ms
+ * @example
+ * debounce(myFunction, 500, true)
+ * // Calls myFunction immediately
+ * @function
+ * @param {function} func - function to call
+ * @param {number} wait - how long to wait between function calls
+ * @param {boolean} immediate - should call immediately
  * @return { void }
  */
 
@@ -118,12 +141,14 @@ var debounce = function debounce(func) {
   };
 };
 /**
- * Execute a method n times
- * Callback params - does not include number || callback method
- * Example doIt(10, window, [], (index, arr)=> { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
- * @param  { number } args[0] - number of times to call the callback
- * @param  { parent } args[1] - value to bind the method call to ( this )
- * @param  { function } args[ args.length -1 ] - method to call
+ * Execute a method n times.
+ * <br> Callback params - does not include number || callback method
+ * @function
+  * @example
+ * doIt(10, window, [], (index, arr) => { arr.push(index) }) === [ 0,1,2 ... 8,9 ]
+ * @param {number} args.0 - number of times to call the callback
+ * @param {parent} args.1 - value to bind the method call to ( this )
+ * @param {function} last arg of args array - method to call
  * @return { void }
  */
 
@@ -146,9 +171,16 @@ var doIt = function doIt() {
   }
 };
 /**
- * Check if the passed in item is a function
- * @param  { any } test 
- * @return { boolean } is a function
+ * Check if the passed in item is a function.
+ * @example
+ * isFunc(() => {})
+ * // Returns true
+ * @example
+ * isFunc('bar')
+ * // Returns false
+ * @function
+ * @param {*} test
+ * @return {boolean} is a function
  */
 
 
@@ -159,15 +191,21 @@ var isFunc = function isFunc(func) {
 };
 /**
  * Creates a method to memorize passed in methods output
- * @param { function } func - method to memorize output of
- * @param { function } getCacheKey - gets the key to save cached output
- * @return { function } memorized function with cache
+ * @example
+ * memorize(myFunction, cacheKeyFunction)
+  * @example
+ * memorize(myFunction, cacheKeyFunction, 100)
+ * @function
+ * @param {function} func - method to memorize output of
+ * @param {function} getCacheKey - gets the key to save cached output
+ * @return {function} memorized function with cache
  */
 
 
 exports.isFunc = isFunc;
 
-var memorize = function memorize(func, getCacheKey, limit) {
+var memorize = function memorize(func, getCacheKey) {
+  var limit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
   if (!isFunc(func) || getCacheKey && !isFunc(getCacheKey)) throw new TypeError('Expected a function');
 
   var _memorized = function memorized() {
@@ -192,10 +230,12 @@ var memorize = function memorize(func, getCacheKey, limit) {
 };
 /**
  * Throttle function calls to only execute once over a wait period
- * usage: throttle(() => console.log('throttled'), 50)()
- * @param  { any } func - method to call after wait
- * @param  { number } [wait=100] time to wait between calls
- * @return { function } throttled function
+ * @example
+ * throttle(() => console.log('throttled'), 50)()
+ * @function
+ * @param {*} func - method to call after wait
+ * @param {number} [wait=100] time to wait between calls
+ * @return {function} throttled function
  */
 
 
@@ -219,14 +259,18 @@ var throttle = function throttle(func) {
   };
 };
 /**
- * Ensures the last call to the throttled function get called
- * Will wait the allotted time, before calling the last call to it
- * The final call will not execute until no more calls are made
- * Accepts a callback to call each time the throttle called
- * @param  { function } func - method to call after wait
- * @param  { function } cb - method to call after throttle function is called
- * @param  { number } [wait=100] time to wait until executing func param
- * @return { function } throttled function
+ * Ensures the last call to the throttled function get called.
+ * <br> Will wait the allotted time, before calling the last call to it.
+ * <br> The final call will not execute until no more calls are made,
+ * <br> Accepts a callback to call each time the throttle called,
+ * @example
+ * throttleLast(() => {}, () => {})()
+ * // throttle function
+ * @function
+ * @param {function} func - method to call after wait
+ * @param {function} cb - method to call after throttle function is called
+ * @param {number} [wait=100] time to wait until executing func param
+ * @return {function} throttled function
  */
 
 
@@ -252,9 +296,14 @@ var throttleLast = function throttleLast(func, cb) {
   };
 };
 /**
- * Creates a uuid, unique up to around 20 million iterations. good enough for us
- * @param  { number } start of the uuid
- * @return { string } - build uuid
+ * Creates a uuid, unique up to around 20 million iterations.
+ * <br> Good enough for us
+ * @example
+ * uuid()
+ * // New uuid as a string
+ * @function
+ * @param {number} start of the uuid
+ * @return {string} - build uuid
  */
 
 

@@ -1,4 +1,5 @@
-"use strict";
+/** @module object */
+'use strict';
 
 require("core-js/modules/es.symbol");
 
@@ -23,8 +24,6 @@ require("core-js/modules/es.array.iterator");
 require("core-js/modules/es.array.map");
 
 require("core-js/modules/es.array.reduce");
-
-require("core-js/modules/es.array.some");
 
 require("core-js/modules/es.date.to-string");
 
@@ -75,7 +74,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.deepClone = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.deepClone = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -112,9 +111,10 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Clones an object by converting to JSON string and back
- * @param { object } obj - object to clone
- * @returns { object } copy of original object
+ * Clones an object by converting to JSON string and back.
+ * @function
+ * @param {Object} obj - object to clone
+ * @returns {Object} copy of original object
  */
 var cloneJson = function cloneJson(obj) {
   try {
@@ -125,9 +125,10 @@ var cloneJson = function cloneJson(obj) {
   }
 };
 /**
- * Removes all properties from an object
- * @param { object } obj - object to remove properties from
- * @param { array } filter - list of keys to not remove
+ * Removes all properties from an object.
+ * @function
+ * @param {Object} obj - object to remove properties from
+ * @param {Array} filter - list of keys to not remove
  * @returns { null }
  */
 
@@ -147,10 +148,11 @@ var clearObj = function clearObj(obj, filter) {
   });
 };
 /**
- * Returns the first param if correct type of second param
- * @param { object } obj1 - return if is object
- * @param { object } obj2 - use if first is not an object
- * @returns { obj }
+ * Returns the first param if correct type of second param.
+ * @function
+ * @param {Object} obj1 - return if is object
+ * @param {Object} obj2 - use if first is not an object
+ * @returns {Object}
  */
 
 
@@ -160,9 +162,10 @@ var eitherObj = function eitherObj(obj1, obj2) {
   return isObj(obj1) && obj1 || obj2;
 };
 /**
- * Recursively clones an object
- * @param  { object } obj - object to clone
- * @return { object } - cloned Object
+ * Recursively clones an object.
+ * @function
+ * @param {Object} obj - object to clone
+ * @return {Object} - cloned Object
  */
 
 
@@ -187,9 +190,10 @@ var deepClone = function deepClone(obj) {
   }))));
 };
 /**
- * Recursively freezes and object
- * @param  { object } obj
- * @return { object } - frozen Object
+ * Recursively freezes and object.
+ * @function
+ * @param {Object} obj
+ * @return {Object} - frozen Object
  */
 
 
@@ -203,9 +207,10 @@ var deepFreeze = function deepFreeze(obj) {
   return obj;
 };
 /**
- * Deep merges an array of objects together
- * @param { array } sources - array of objects to join
- * @returns { object | array } - merged object or array
+ * Deep merges an array of objects together.
+ * @function
+ * @param {Array} sources - array of objects to join
+ * @returns {Object|Array} - merged object or array
  */
 
 
@@ -238,10 +243,11 @@ var deepMerge = function deepMerge() {
   }, {});
 };
 /**
- * Checks if prop exists on the object
- * @param { object } obj - data to check
- * @param { string } prop - prop to check for
- * @returns { boolean } T/F if the prop exists
+ * Checks if prop exists on the object.
+ * @function
+ * @param {Object} obj - data to check
+ * @param {string} prop - prop to check for
+ * @returns {boolean} T/F if the prop exists
  */
 
 
@@ -251,9 +257,10 @@ var hasOwn = function hasOwn(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 /**
- * Checks if data is an object and not an array
- * @param { object } obj - data to check
- * @returns { boolean }
+ * Checks if data is an object and not an array.
+ * @function
+ * @param {Object} obj - data to check
+ * @returns {boolean}
  */
 
 
@@ -263,10 +270,11 @@ var isObj = function isObj(obj) {
   return _typeof(obj) === 'object' && !Array.isArray(obj) && obj !== null;
 };
 /**
- * Compares two objects by converting to JSON, and checking string equality
- * @param  { object || array } one - object to compare with param two
- * @param  { object || array } two - object to compare with param one
- * @return { boolean } status of equality
+ * Compares two objects by converting to JSON, and checking string equality.
+ * @function
+ * @param { object | array } one - object to compare with param two
+ * @param { object | array } two - object to compare with param one
+ * @return {boolean} status of equality
  */
 
 
@@ -280,9 +288,10 @@ var jsonEqual = function jsonEqual(one, two) {
   }
 };
 /**
- * Map over and objects props and values
- * @param  { object } obj
- * @return { array } -  returned values from callback
+ * Map over and objects props and values.
+ * @function
+ * @param {Object} obj
+ * @return {Array} -  returned values from callback
  */
 
 
@@ -298,47 +307,48 @@ var mapObj = function mapObj(obj, cb) {
   }) || obj;
 };
 /**
- * Creates a new object from passed in object with keys not defined from array
- * @param  { object } target - object to pull keys from
- * @param  { array } keys - keys to not add to new object
- * @return { object } new object with only keys not in array
+ * Creates a new object from passed in object with keys not defined from array.
+ * @function
+ * @param {Object} target - object to pull keys from
+ * @param {Array} keys - keys to not add to new object
+ * @return {Object} new object with only keys not in array
  */
 
 
 exports.mapObj = mapObj;
 
 var omitKeys = function omitKeys() {
-  var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  return reduceTargetKeys(target, keys, function (acc, key) {
-    return keys.some(function (omitKey) {
-      return omitKey === key;
-    }) ? acc : _objectSpread({}, acc, _defineProperty({}, key, target[key]));
-  });
+  return isObj(obj) && reduceObj(obj, function (key, _, updated) {
+    keys.indexOf(key) === -1 && (updated[key] = obj[key]);
+    return updated;
+  }, {}) || {};
 };
 /**
- * Creates a new object from passed in object with keys defined from array
- * @param  { object } target - object to pull keys from
- * @param  { array } keys - keys to add to new object
- * @return { object } new object with only keys from passed in keys array
+ * Creates a new object from passed in object with keys defined from array.
+ * @function
+ * @param {Object} target - object to pull keys from
+ * @param {Array} keys - keys to add to new object
+ * @return {Object} new object with only keys from passed in keys array
  */
 
 
 exports.omitKeys = omitKeys;
 
 var pickKeys = function pickKeys() {
-  var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  return reduceTargetKeys(target, keys, function (acc, key) {
-    return keys.some(function (pickKey) {
-      return pickKey === key;
-    }) ? _objectSpread({}, acc, _defineProperty({}, key, target[key])) : acc;
-  });
+  return isObj(obj) && keys.reduce(function (updated, key) {
+    key in obj && (updated[key] = obj[key]);
+    return updated;
+  }, {}) || {};
 };
 /**
- * Loop over and objects props and values and reduce to new object
- * @param  { object } obj
- * @return { object } - updated object
+ * Loop over and objects props and values and reduce to new object.
+ * @function
+ * @param {Object} obj
+ * @return {Object} - updated object
  */
 
 
@@ -352,12 +362,13 @@ var reduceObj = function reduceObj(obj, cb) {
         value = _ref11[1];
 
     return cb(key, value, data);
-  }, start) || {};
+  }, start) || start;
 };
 /**
- * Sanitizes all html strings in an object's properties
- * @param  { object } obj to be sanitize
- * @return { object } - obj with strings sanitized
+ * Sanitizes all html strings in an object's properties.
+ * @function
+ * @param {Object} obj to be sanitize
+ * @return {Object} - obj with strings sanitized
  */
 
 
@@ -367,9 +378,10 @@ var sanitizeCopy = function sanitizeCopy(obj) {
   return JSON.parse((0, _string.sanitize)(JSON.stringify(obj)));
 };
 /**
- * Trims objects string fields
- * @param  { object } object
- * @return { object } - object with string fields trimmed
+ * Trims objects string fields.
+ * @function
+ * @param {Object} object
+ * @return {Object} - object with string fields trimmed
  */
 
 
@@ -386,10 +398,12 @@ var trimStringFields = function trimStringFields(object) {
   }, object);
 };
 /**
- * Converts an array or string into an object
- * @param  { array || string } val - to be converted to object
- * @param { string } divider - if string, what divides key from value
- * @param { string } split - if string, what splits each key/value pair
+ * Converts an array or string into an object.
+ * @function
+ * @param { array | string } val - to be converted to object
+ * @param {string} divider - if string, what divides key from value
+ * @param {string} split - if string, what splits each key/value pair
+ * @return {Object} - converted object 
  */
 
 
@@ -409,5 +423,24 @@ var toObj = function toObj(val, divider, split) {
     return obj;
   }, {});
 };
+/**
+ * Converts an array of strings to a matching key/value pair object.
+ * @function
+ * @param {Array} arr - to be converted to object
+ * @param {string} toUpperCase - converts the key and value to uppercase
+ * @return {Object} built object
+ */
+
 
 exports.toObj = toObj;
+
+var keyMap = function keyMap(arr, toUpperCase) {
+  return (0, _array.isArr)(arr) && arr.reduce(function (obj, key) {
+    if (!(0, _string.isStr)(key)) return obj;
+    var use = toUpperCase && key.toUpperCase() || key;
+    obj[use] = use;
+    return obj;
+  }, {}) || {};
+};
+
+exports.keyMap = keyMap;

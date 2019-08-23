@@ -72,9 +72,9 @@ SHOW_LOGS && setLogs(true);
 var ERROR_PREFIX = 'ERROR';
 /**
 * Logs a message to the console
-* @param  {any} message - message to log
-* @param  { object } error - thrown during service account process
-* @param  {string} [type='error'] - type of message to log
+* @param {any} message - message to log
+* @param {Object} error - thrown during service account process
+* @param {string} [type='error'] - type of message to log
 * @return { void }
 */
 
@@ -86,8 +86,8 @@ var errorHelper = function errorHelper(message, error) {
 };
 /**
 * Logs a message to the condole
-* @param  { string } message - message to be logged
-* @param  { string } type - method that shoudl be called  ( log || error || warn )
+* @param {string} message - message to be logged
+* @param {string} type - method that shoudl be called  ( log || error || warn )
 * @return { void }
 */
 
@@ -101,7 +101,7 @@ var logMessage = function logMessage(message) {
 };
 /**
 * Stops execution for a given amount of time
-* @param  { number } time
+* @param {number} time
 * @return { void }
 */
 
@@ -115,7 +115,7 @@ var wait = function wait(time) {
 };
 /**
 * Gets arguments from the cmd line
-* @return { object } - converted CMD Line arguments as key / value pair
+* @return {Object} - converted CMD Line arguments as key / value pair
 */
 
 
@@ -136,8 +136,8 @@ var getArgs = function getArgs() {
 };
 /**
 * Ensures all required arguments exist
-* @param  { object } args - passed in arguments
-* @param  { object } errors - error message for required arguments
+* @param {Object} args - passed in arguments
+* @param {Object} errors - error message for required arguments
 * @return { void }
 */
 
@@ -156,7 +156,7 @@ var validateArgs = function validateArgs(args, errors) {
 };
 /**
 * Makes calls to the cmd line shell
-* @param  { string } line - command to be run in the shell
+* @param {string} line - command to be run in the shell
 * @return response from the shell
 */
 
@@ -204,8 +204,8 @@ function () {
 }();
 /**
 * Copies files to a new location
-* @param  { string } file - file to be copied
-* @param  { string } loc - location to put the copied file
+* @param {string} file - file to be copied
+* @param {string} loc - location to put the copied file
 * @return { void }
 */
 
@@ -240,8 +240,8 @@ function () {
 }();
 /**
 * Ensures a file path exists, if it does not, then it creates it
-* @param  { string } checkPath - path to check
-* @return { boolean } - if the path exists
+* @param {string} checkPath - path to check
+* @return {boolean} - if the path exists
 */
 
 
@@ -292,8 +292,8 @@ function () {
 }();
 /**
 * Writes a file to the local system
-* @param  { string } path - location to save the file
-* @param  { string } data - data to save in the file
+* @param {string} path - location to save the file
+* @param {string} data - data to save in the file
 * @return { promies || boolean } - if the file was saved
 */
 

@@ -1,7 +1,9 @@
+/** @module string */
 'use strict';
 /**
- * Builds a string path from passed in args ( i.e. path/to/thing )
- * @return { string } - built path from arguments
+ * Builds a string path from passed in args ( i.e. path/to/thing ).
+ * @function
+ * @return {string} - built path from arguments
  */
 
 require("core-js/modules/es.array.concat");
@@ -41,9 +43,10 @@ var buildPath = function buildPath() {
   return built.replace(/([^:\/]|^)\/{2,}/g, '$1/');
 };
 /**
- * Converts a string to camel case
- * @param  { string } string to be converted
- * @return { string } - string in camel case format
+ * Converts a string to camel case.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string in camel case format
  */
 
 
@@ -57,9 +60,10 @@ var camelCase = function camelCase(str, compCase) {
   }, '') || str;
 };
 /**
- * Converts `-` and `_` to white space and removes `.`
- * @param  { string } string to be converted
- * @return { string } - cleaned string
+ * Converts `-` and `_` to white space and calls remove removeDot, to remove a period.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - cleaned string
  */
 
 
@@ -69,9 +73,10 @@ var cleanStr = function cleanStr(str) {
   return str && removeDot(str).replace(/[-_]/gm, ' ') || str;
 };
 /**
- * Converts first letter of a string to be capitalized
- * @param  { string } string
- * @return { string } - Passed in string, but capitalized
+ * Converts first letter of a string to be capitalized.
+ * @function
+ * @param {string} string
+ * @return {string} - Passed in string, but capitalized
  */
 
 
@@ -81,11 +86,11 @@ var capitalize = function capitalize(str) {
   return isStr(str) && str[0] && "".concat(str[0].toUpperCase()).concat(str.slice(1).toLowerCase()) || str;
 };
 /**
- * Checks if a string contains another string
- * @param  { string } string - value to be checked
- * @param  { string } substring - value to search for
- * 
- * @return { boolean } - if the substring exists string
+ * Checks if a string contains another string.
+ * @function
+ * @param {string} string - value to be checked
+ * @param {string} substring - value to search for
+ * @return {boolean} - if the substring exists string
  */
 
 
@@ -97,10 +102,12 @@ var containsStr = function containsStr(str, substring, fromIndex) {
   return str.indexOf(substring, fromIndex) !== -1;
 };
 /**
- * Returns the first param if correct type of second param
- * @param { string } str1 - return if is string
- * @param { string } str2 - use if first is not an object
- * @returns { string }
+ * Checks if the first param is a string, and returns it.
+ * <br> If it's not a string, the second param is returned
+ * @function
+ * @param {string} str1 - return if is string
+ * @param {string} str2 - use if first is not a string
+ * @returns {string}
  */
 
 
@@ -110,9 +117,10 @@ var eitherStr = function eitherStr(str1, str2) {
   return isStr(str1) && str1 || str2;
 };
 /**
- * Check if string is a email
- * @param  { string } string to check
- * @return { boolean } - if it's a email
+ * Check if string is a email.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a email
  */
 
 
@@ -124,9 +132,10 @@ var isEmail = function isEmail(str) {
   return Boolean(regex.test(str));
 };
 /**
- * Check if string is a phone number
- * @param  { string } string to check
- * @return { boolean } - if it's a phone number
+ * Check if string is a phone number.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a phone number
  */
 
 
@@ -138,9 +147,10 @@ var isPhone = function isPhone(str) {
   return Boolean(regex.test(str)) && str.replace(/\D/g, '').length < 11;
 };
 /**
- * Check if data is a string
- * @param  { all } str - param to check if type is a string 
- * @return { boolean } - if it's a string
+ * Check if passed in value is a string.
+ * @function
+ * @param { all } str - param to check if type is a string 
+ * @return {boolean} - if it's a string
  */
 
 
@@ -150,9 +160,10 @@ var isStr = function isStr(str) {
   return typeof str === 'string';
 };
 /**
- * Check if string is a url
- * @param  { string } string to check
- * @return { boolean } - if it's a url
+ * Check if string is a url.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a url
  */
 
 
@@ -163,9 +174,10 @@ var isUrl = function isUrl(str) {
   return Boolean(regex.test(str));
 };
 /**
- * Check if string is a uuid
- * @param  { string } string to check
- * @return { boolean } - if it's a uuid
+ * Check if string is a uuid.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a uuid
  */
 
 
@@ -177,9 +189,10 @@ var isUuid = function isUuid(str) {
   return Boolean(regex.test(str));
 };
 /**
- * Convert JSON string into object, wrapped in a try / catch
- * @param  { string } string
- * @return { object } - JSON object
+ * Convert JSON string into object, wrapped in a try / catch.
+ * @function
+ * @param {string} string
+ * @return {Object} - JSON object
  */
 
 
@@ -194,9 +207,10 @@ var parseJSON = function parseJSON(str) {
   }
 };
 /**
- * Adds an `s` to the end of a string, if one does not exist
- * @param  { string } str - string to convert
- * @return { string } string as a plural
+ * Adds an `s` to the end of a string, if one does not exist.
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} string as a plural
  */
 
 
@@ -207,9 +221,10 @@ var plural = function plural(str) {
   return str[str.length - 1] !== 's' ? str + 's' : str;
 };
 /**
- * Removes a `.` from the start and end of a string
- * @param  { string } str - string to convert
- * @return { string } - string without the `.`
+ * Removes a `.` from the start and end of a string.
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} - string without the `.`
  */
 
 
@@ -220,9 +235,10 @@ var removeDot = function removeDot(string) {
   return noDot.indexOf('.') === noDot.length - 1 ? noDot.slice(0, -1) : noDot;
 };
 /**
- * Sanitize a string of HTML content
- * @param  { string } string
- * @return { string } - cleaned string
+ * Sanitize a string of HTML content.
+ * @function
+ * @param {string} string
+ * @return {string} - cleaned string
  */
 
 
@@ -232,9 +248,10 @@ var sanitize = function sanitize(str) {
   return isStr(str) && str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') || str;
 };
 /**
- * Remove an `s` at the end of a string, if the last char is an `s`
- * @param  { string } str - string to convert
- * @return { string } string as singular
+ * Remove an `s` at the end of a string, if the last char is an `s`,
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} string as singular
  */
 
 
@@ -245,10 +262,11 @@ var singular = function singular(str) {
   return str[str.length - 1] === 's' ? str.slice(0, str.length - 1) : str;
 };
 /**
- * Converts a string to css in js format
- * Useful for converting css rules into js format, I.E. margin-top => marginTop
- * @param  { string } str - string to be converted
- * @return { string } - string in style case format
+ * Converts a string to css in js format.
+ * Useful for converting css rules into js format, I.E. margin-top => marginTop.
+ * @function
+ * @param {string} str - string to be converted
+ * @return {string} - string in style case format
  */
 
 
@@ -260,9 +278,10 @@ var styleCase = function styleCase(str) {
   return "".concat(cased[0].toLowerCase()).concat(cased.slice(1));
 };
 /**
- * Converts a string to train case
- * @param  { string } string to be converted
- * @return { string } - string in train case format
+ * Converts a string to train case, I.E. marginTop => margin-top.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string in train case format
  */
 
 
@@ -272,10 +291,10 @@ var trainCase = function trainCase(str) {
   return isStr(str) && str.split(/(?=[A-Z])|[\s_-]/gm).join('-').toLowerCase() || str;
 };
 /**
- * Converts a passed in value to a string
- * @param  { any } val - value to be converted
- * 
- * @return { string } - value converted into a string
+ * Converts a passed in value to a string.
+ * @function
+ * @param {*} val - value to be converted
+ * @return {string} - value converted into a string
  */
 
 
@@ -285,9 +304,10 @@ var toStr = function toStr(val) {
   return val === null || val === undefined ? '' : isStr(val) ? val : JSON.stringify(val);
 };
 /**
- * Converts all words in a string to be capitalized
- * @param  { string } string to be converted
- * @return { string } - string with all words capitalized
+ * Converts all words in a string to be capitalized.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string with all words capitalized
  */
 
 

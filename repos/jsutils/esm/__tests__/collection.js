@@ -194,4 +194,22 @@ describe('/collection', function () {
       expect(res).toBe(true);
     });
   });
+  describe('isEmpty', function () {
+    it('should check if an object is empty', function () {
+      var notEmpty = {
+        data: [{
+          foo: 'duper'
+        }]
+      };
+      var empty = {};
+      expect(Coll.isEmpty(notEmpty)).toBe(false);
+      expect(Coll.isEmpty(empty)).toBe(true);
+    });
+    it('should handle arrays, and not throw an error', function () {
+      var notEmpty = [1, 2, 3];
+      var empty = [];
+      expect(Coll.isEmpty(notEmpty)).toBe(false);
+      expect(Coll.isEmpty(empty)).toBe(true);
+    });
+  });
 });
