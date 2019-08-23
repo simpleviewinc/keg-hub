@@ -166,22 +166,22 @@ describe('/collection', () => {
     
   })
 
-  describe('isEmpty', () => {
+  describe('isEmptyCollection', () => {
 
     it('should check if an object is empty', () => {
       const notEmpty = { data: [ { foo: 'duper' } ] }
       const empty = {}
 
-      expect(Coll.isEmpty(notEmpty)).toBe(false)
-      expect(Coll.isEmpty(empty)).toBe(true)
+      expect(Coll.isEmptyCollection(notEmpty)).toBe(false)
+      expect(Coll.isEmptyCollection(empty)).toBe(true)
     })
 
     it('should handle arrays, and not throw an error', () => {
       const notEmpty = [ 1, 2, 3 ]
       const empty = []
 
-      expect(Coll.isEmpty(notEmpty)).toBe(false)
-      expect(Coll.isEmpty(empty)).toBe(true)
+      expect(Coll.isEmptyCollection(notEmpty)).toBe(false)
+      expect(Coll.isEmptyCollection(empty)).toBe(true)
     })
 
   })

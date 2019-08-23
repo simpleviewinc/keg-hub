@@ -161,16 +161,16 @@ export const unset = (obj, path) => updateColl(obj, path, 'unset')
 /**
  * Checks if passed in obj is empty.
  * @example
- * isEmpty({})
+ * isEmptyCollection({})
  * // Returns true
  * @example
- * isEmpty({ foo: 'bar' })
+ * isEmptyCollection({ foo: 'bar' })
  * // Returns false
  * @function
  * @param {Object} obj - object to check if empty
  * @return {boolean}  true || false
  */
-export const isEmpty = obj => (
+export const isEmptyCollection = obj => (
   isArr(obj)
     ? obj.length === 0
     : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0
