@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>log.js - Documentation</title>
+    <title>string.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">log.js</h1>
+    <h1 class="page-title">string.js</h1>
     
 
     
@@ -42,82 +42,269 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module log */
+            <pre class="prettyprint source linenums"><code>/** @module string */
 
 'use strict'
 
-let SHOW_LOGS
-let METH_DEF = 'dir'
-let PREFIX = 'type'
-const LOG_TYPES = [
-  'error',
-  'info',
-  'log',
-  'dir',
-  'warn',
-]
-const isTest = process.env.NODE_ENV === 'test'
-
 /**
- * Turns logs on || off.
- * &lt;br> Set the default log method.
- * &lt;br> Add a prefix to all log message
- * @example
- * setLogs(true, 'dir', '[ DEV MODE ]')
+ * Builds a string path from passed in args ( i.e. path/to/thing ).
  * @function
- * @param {boolean} log - log values
- * @param {string} methDef - default log method
- * @param {string} prefix - string to add to all logs
- * @return { void }
+ * @return {string} - built path from arguments
  */
-export const setLogs = (log, methDef, prefix) => {
-  SHOW_LOGS = log
-  METH_DEF = methDef || METH_DEF || 'log'
-  PREFIX = prefix || PREFIX || 'type'
-}
+export const buildPath = (...args) => {
+  const built = args.reduce((path, arg) => {
+    let str = toStr(arg)
 
-/**
- * Resets log settings to default
- * @example
- * resetLogs()
- * // Resets settings set from the `setLogs method`
- * @function
- * @return { void }
- */
-export const resetLogs = () => {
-  SHOW_LOGS = undefined
-  METH_DEF = 'log'
-  PREFIX = 'type'
-}
-
-/**
- * Logs a string to the inspector, uses the last argument to determine the log type
- * @example
- * logData('data to log', 'error')
- * // Will call console.error('data to log')
- * @function
- * @param {Array} args - to be passed to the log call
- * @return { void }
- */
-export const logData = (...args) => {
-  if(!args.length) return
+    return `${path}${ str &amp;&amp; '/' + str || '' }`
+  }, '')
   
-  let type = args.length === 1 ? METH_DEF : args.pop()
-  if(!SHOW_LOGS &amp;&amp; type !== 'error') return
-
-  else if(typeof args[0] === 'string'){
-    if(PREFIX === 'type')
-      args[0] = `[ ${type.toUpperCase()} ] ${args[0]}`
-    else if(PREFIX)
-      args[0] = `${PREFIX} ${args[0]}`
-  }
-
-  LOG_TYPES.indexOf(type) !== -1
-    ? console[type](...args)
-    : console[METH_DEF](...args, type)
+  return built.replace(/([^:\/]|^)\/{2,}/g, '$1/')
 }
 
-isTest &amp;&amp; (module.exports.getShowLogs = () => SHOW_LOGS)
+
+/**
+ * Converts a string to camel case.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string in camel case format
+ */
+export const camelCase = (str, compCase) => {
+  return (
+    (str &amp;&amp;
+      cleanStr(str)
+        .split(/[\s_-]/gm)
+        .reduce((cased, word, index) => {
+          if(!word) return cased
+          cased += ((index > 0 || compCase) &amp;&amp; capitalize(word)) || word.toLowerCase()
+          return cased
+        }, '')
+      ) || str
+  )
+}
+
+/**
+ * Converts `-` and `_` to white space and calls remove removeDot, to remove a period.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - cleaned string
+ */
+export const cleanStr = str => {
+  return str &amp;&amp; removeDot(str)
+    .replace(/[-_]/gm, ' ') || str
+}
+
+/**
+ * Converts first letter of a string to be capitalized.
+ * @function
+ * @param {string} string
+ * @return {string} - Passed in string, but capitalized
+ */
+export const capitalize = str => (
+  isStr(str) &amp;&amp; str[0] &amp;&amp; `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}` || str
+)
+
+
+/**
+ * Checks if a string contains another string.
+ * @function
+ * @param {string} string - value to be checked
+ * @param {string} substring - value to search for
+ * @return {boolean} - if the substring exists string
+ */
+export const containsStr = (str, substring, fromIndex) => {
+  str = !isStr(str) &amp;&amp; toStr(str) || str
+  substring = !isStr(substring) &amp;&amp; toStr(substring) || substring
+
+  return str.indexOf(substring, fromIndex) !== -1;
+}
+
+/**
+ * Checks if the first param is a string, and returns it.
+ * &lt;br> If it's not a string, the second param is returned
+ * @function
+ * @param {string} str1 - return if is string
+ * @param {string} str2 - use if first is not a string
+ * @returns {string}
+ */
+export const eitherStr = (str1, str2) => (
+  isStr(str1) &amp;&amp; str1 || str2
+)
+
+/**
+ * Check if string is a email.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a email
+ */
+export const isEmail = str => {
+  if (!str || !isStr(str)) return false
+  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+  return Boolean(regex.test(str))
+}
+
+/**
+ * Check if string is a phone number.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a phone number
+ */
+export const isPhone = str => {
+  if (!str || !isStr(str)) return false
+  const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+  return Boolean(regex.test(str)) &amp;&amp; str.replace(/\D/g, '').length &lt; 11
+}
+
+/**
+ * Check if passed in value is a string.
+ * @function
+ * @param { all } str - param to check if type is a string 
+ * @return {boolean} - if it's a string
+ */
+export const isStr = str => typeof str === 'string'
+
+/**
+ * Check if string is a url.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a url
+ */
+export const isUrl = str => {
+  const regex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/
+  return Boolean(regex.test(str))
+}
+
+/**
+ * Check if string is a uuid.
+ * @function
+ * @param {string} string to check
+ * @return {boolean} - if it's a uuid
+ */
+export const isUuid = str => {
+  if (!str || !isStr(str)) return false
+  const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+  return Boolean(regex.test(str))
+}
+
+
+/**
+ * Convert JSON string into object, wrapped in a try / catch.
+ * @function
+ * @param {string} string
+ * @return {Object} - JSON object
+ */
+export const parseJSON = str => {
+  try {
+    return JSON.parse(str)
+  }
+  catch (e){
+    console.error(e.message)
+    return null
+  }
+}
+
+/**
+ * Adds an `s` to the end of a string, if one does not exist.
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} string as a plural
+ */
+export const plural = str => {
+  if (!str || !str.length) return str
+  return str[str.length - 1] !== 's' ? str + 's' : str
+}
+
+/**
+ * Removes a `.` from the start and end of a string.
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} - string without the `.`
+ */
+export const removeDot = string => {
+  const noDot = string.indexOf('.') === 0 ? string.slice(1) : string
+  return noDot.indexOf('.') === noDot.length - 1 ? noDot.slice(0, -1) : noDot
+}
+
+/**
+ * Sanitize a string of HTML content.
+ * @function
+ * @param {string} string
+ * @return {string} - cleaned string
+ */
+export const sanitize = str => (
+  isStr(str) &amp;&amp; str
+    .replace(/&amp;/g,'&amp;amp;')
+    .replace(/&lt;/g,'&amp;lt;')
+    .replace(/>/g,'&amp;gt;') || str
+)
+
+/**
+ * Remove an `s` at the end of a string, if the last char is an `s`,
+ * @function
+ * @param {string} str - string to convert
+ * @return {string} string as singular
+ */
+export const singular = str => {
+  if (!str || !str.length) return str
+  return str[str.length - 1] === 's'
+    ? str.slice(0, str.length - 1)
+    : str
+}
+
+/**
+ * Converts a string to css in js format.
+ * Useful for converting css rules into js format, I.E. margin-top => marginTop.
+ * @function
+ * @param {string} str - string to be converted
+ * @return {string} - string in style case format
+ */
+export const styleCase = str => {
+  if(!isStr) return str
+
+  const cased = camelCase(str)
+  return `${cased[0].toLowerCase()}${cased.slice(1)}`
+}
+
+/**
+ * Converts a string to train case, I.E. marginTop => margin-top.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string in train case format
+ */
+export const trainCase = str => (
+  isStr(str) &amp;&amp; str
+    .split(/(?=[A-Z])|[\s_-]/gm)
+    .join('-')
+    .toLowerCase() || str
+)
+
+/**
+ * Converts a passed in value to a string.
+ * @function
+ * @param {*} val - value to be converted
+ * @return {string} - value converted into a string
+ */
+export const toStr = val => (
+  val === null || val === undefined
+    ? ''
+    : isStr(val)
+      ? val
+      : JSON.stringify(val)
+)
+
+/**
+ * Converts all words in a string to be capitalized.
+ * @function
+ * @param {string} string to be converted
+ * @return {string} - string with all words capitalized
+ */
+export const wordCaps = str => {
+  if (!str) return str
+  let cleaned = cleanStr(str)
+  return cleaned
+    .split(' ')
+    .map(word => word &amp;&amp; capitalize(word) || '')
+    .join(' ')
+}
 </code></pre>
         </article>
     </section>
@@ -132,7 +319,7 @@ isTest &amp;&amp; (module.exports.getShowLogs = () => SHOW_LOGS)
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 22:37:40 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 23:13:58 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>url.js - Documentation</title>
+    <title>log - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,105 +32,537 @@
 
 <div id="main">
     
-    <h1 class="page-title">url.js</h1>
+    <h1 class="page-title">log</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/** @module url */
-
-'use strict'
-
-// import { reduceObj, isObj } from './object'
-
-// export const getUrlParamObj = url => {
-//   const currentParams = {}
-//   const params = urlGetQuery(url)
-//   if(!params) return currentParams
-  
-//   const split = params.split('&amp;')
-//   split.length &amp;&amp;
-//     split.map(item => {
-//       const itemSplit = item.split('=')
-//       if (itemSplit.length === 2) {
-//         currentParams[decodeURIComponent(itemSplit[0])] = decodeURIComponent(itemSplit[1])
-//       }
-//     })
-
-//   return currentParams
-// }
-
-// export const objToUrlParams = obj => {
-//   let firstSet
-//   return reduceObj(obj, (key, value, urlStr) => {
-//     if(!value) return urlStr
-
-//     const useVal = isStr(value) ? value : isObj(value) ? JSON.stringify(value) : null
-//     if(!useVal) return urlStr
-
-//     urlStr = !firstSet
-//       ? `${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
-//       : `${urlStr}&amp;${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
-//     firstSet = true
-
-//     return urlStr
-//   }, '')
-// }
-
-// export const getUrlObj = url => {
-//   const urlRegEx = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
-//   const result = urlRegEx.exec(url || window.location.href)
-
-//   const attrs = ['url', 'scheme', 'slash', 'host', 'port', 'path', 'query', 'hash']
-//   const urlData = attrs.reduce((data, attr) => {
-//     if(typeof result[attr] === "undefined") result[attr] = ""  
-//     if(result[attr] !== "" &amp;&amp; (attrs[attr] === "port" || attrs[attr] === "slash"))
-//         result[attr] = `:${result[attr]}`
+        
     
-//     data[attr] = result[attr]
-//     return data
-//   }, {})
+</header>
 
-//   urlData['path'] = "/" + urlData['path']
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-//   return urlData
-// }
+            
+        
+        </div>
+    
 
-// export const urlUpcertParam = (url, key, value) => {
-//   url = url || ''
-//   const re = new RegExp('(\\?|&amp;)'+ key +'=[^&amp;]*' )
-//   const param = `${key}=${encodeURIComponent(value)}`
+    
 
-//   return re.test(url)
-//     ? url.replace(re, `${$1}${param}`)
-//     : addParam(url, null, null, param)
-// }
+    
 
-// export const urlAddParam = (url, key, value, param) => {
-//   url = url || ''
-//   param = param || `${key}=${encodeURIComponent(value)}`
-//   url.indexOf('?') === -1 &amp;&amp; (url += '?')
-//   url.indexOf('=') !== -1 &amp;&amp; (url += '&amp;')
+    
+    
+    
 
-//   return `${url}${param}`
-// }
+     
 
-// export const urlHasParam(url, paramName) {
-//   const regex = new RegExp('(\\?|&amp;)'+ paramName +'=', 'g')
-//   return regex.test(urlGetQuery(url))
-// }
+    
 
-// export const urlGetQuery = url => {
-//   const queryString = /\?[a-zA-Z0-9\=\&amp;\%\$\-\_\.\+\!\*\'\(\)\,]+/.exec(url)
-//   return queryString ? decodeURIComponent(queryString[0].replace(/\+/g,' ')) : ''
-// }</code></pre>
-        </article>
-    </section>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".logData"><span class="type-signature">(static) </span>logData<span class="signature">(args)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log.js.html">log.js</a>, <a href="log.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Logs a string to the inspector, uses the last argument to determine the log type
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>logData('data to log', 'error')
+// Will call console.error('data to log')</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">to be passed to the log call</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".resetLogs"><span class="type-signature">(static) </span>resetLogs<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log.js.html">log.js</a>, <a href="log.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resets log settings to default
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>resetLogs()
+// Resets settings set from the `setLogs method`</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".setLogs"><span class="type-signature">(static) </span>setLogs<span class="signature">(log, methDef, prefix)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log.js.html">log.js</a>, <a href="log.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Turns logs on || off.
+<br> Set the default log method.
+<br> Add a prefix to all log message
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>setLogs(true, 'dir', '[ DEV MODE ]')</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">log values</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>methDef</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">default log method</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">string to add to all logs</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -142,7 +574,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 22:37:40 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 23:13:58 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

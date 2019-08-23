@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>functions - Documentation</title>
+    <title>Helpers - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">functions</h1>
+    <h1 class="page-title">Helpers</h1>
     
 
     
@@ -81,7 +81,7 @@
 
     
 
-    <h4 class="name" id=".checkCall"><span class="type-signature">(static) </span>checkCall<span class="signature">(method, params)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id=".either"><span class="type-signature">(static) </span>either<span class="signature">(val1, val2, function)</span><span class="type-signature"> &rarr; {*}</span></h4>
 
     
 
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line18">line 18</a>
+        <a href="ext.js.html">ext.js</a>, <a href="ext.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -133,7 +133,8 @@
 
 
 <div class="description">
-    Check if the passed in method is a function, and calls it
+    Determines the correct value to return, by calling the passed in check function.
+<br> If no check function, then it uses the softFalsy method.
 </div>
 
 
@@ -144,10 +145,16 @@
 
 
 
-    <h5>Example</h5>
+    <h5>Examples</h5>
     
-    <pre class="prettyprint"><code>checkCall((param1) => { return param1 }, 'foo')
-// Returns 'foo'</code></pre>
+    <pre class="prettyprint"><code>either(0, 2)
+// Returns 0</code></pre>
+
+    <pre class="prettyprint"><code>either(null, 2)
+// Returns 2</code></pre>
+
+    <pre class="prettyprint"><code>either(1, 2, (val1, val2) => { return true })
+// Returns 1</code></pre>
 
 
 
@@ -177,7 +184,53 @@
 
         <tr>
             
-                <td class="name"><code>method</code></td>
+                <td class="name"><code>val1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">return if passes in check method return true</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>val2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">return if passed in check method returns false</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>function</code></td>
             
 
             <td class="type">
@@ -193,30 +246,7 @@
 
             
 
-            <td class="description last">function to call</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>params</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">params to pass to the method on call</td>
+            <td class="description last">called to determine which value to return</td>
         </tr>
 
     
@@ -241,10 +271,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    - whatever the passed in method returns
-</div>
-
 
 
 <dl class="param-type">
@@ -268,7 +294,7 @@
 
     
 
-    <h4 class="name" id=".debounce"><span class="type-signature">(static) </span>debounce<span class="signature">(func, wait, immediate)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id=".isEmpty"><span class="type-signature">(static) </span>isEmpty<span class="signature">(val)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -280,7 +306,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line55">line 55</a>
+        <a href="ext.js.html">ext.js</a>, <a href="ext.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -320,7 +346,7 @@
 
 
 <div class="description">
-    Limits the amount of calls to a function over time
+    Checks if the value is empty.
 </div>
 
 
@@ -333,615 +359,13 @@
 
     <h5>Examples</h5>
     
-    <pre class="prettyprint"><code>debounce(myFunction)
-// Calls myFunction after the default 250 ms</code></pre>
-
-    <pre class="prettyprint"><code>debounce(myFunction, 500)
-// Calls myFunction after 500 ms</code></pre>
-
-    <pre class="prettyprint"><code>debounce(myFunction, 500, true)
-// Calls myFunction immediately</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>func</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">function to call</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>wait</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">how long to wait between function calls</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>immediate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">should call immediately</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".doIt"><span class="type-signature">(static) </span>doIt<span class="signature">(last)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line84">line 84</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Execute a method n times.
-<br> Callback params - does not include number || callback method
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>doIt(10, window, [], (index, arr) => { arr.push(index) }) === [ 0,1,2 ... 8,9 ]</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>args.0</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">number of times to call the callback</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>args.1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">parent</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">value to bind the method call to ( this )</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>last</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">arg of args array - method to call</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".eitherFunc"><span class="type-signature">(static) </span>eitherFunc<span class="signature">(func1, func2)</span><span class="type-signature"> &rarr; {function}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line34">line 34</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Returns the first param if it's a function.
-<br> If first param is not a function, returns second param.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>eitherFunc(() => {}, 'bar')
-// Returns first param because it's a function.</code></pre>
-
-    <pre class="prettyprint"><code>eitherFunc('foo', 'bar')
-// Returns 'bar'</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>func1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">return if is func</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>func2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">use if first is not an object</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".isFunc"><span class="type-signature">(static) </span>isFunc<span class="signature">(test)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line107">line 107</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Check if the passed in item is a function.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>isFunc(() => {})
+    <pre class="prettyprint"><code>isEmpty('')
 // Returns true</code></pre>
 
-    <pre class="prettyprint"><code>isFunc('bar')
+    <pre class="prettyprint"><code>isEmpty({})
+// Returns true</code></pre>
+
+    <pre class="prettyprint"><code>isEmpty([ 1 ])
 // Returns false</code></pre>
 
 
@@ -972,13 +396,22 @@
 
         <tr>
             
-                <td class="name"><code>test</code></td>
+                <td class="name"><code>val</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">object</span>
+|
+
+<span class="param-type">array</span>
+|
+
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
 
 
             
@@ -988,7 +421,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">value to check</td>
         </tr>
 
     
@@ -1014,7 +447,7 @@
 
         
 <div class="param-desc">
-    is a function
+    if the value is empty
 </div>
 
 
@@ -1040,7 +473,7 @@
 
     
 
-    <h4 class="name" id=".memorize"><span class="type-signature">(static) </span>memorize<span class="signature">(func, getCacheKey)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".isSame"><span class="type-signature">(static) </span>isSame<span class="signature">(val1, val2)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -1052,7 +485,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line120">line 120</a>
+        <a href="ext.js.html">ext.js</a>, <a href="ext.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1092,195 +525,7 @@
 
 
 <div class="description">
-    Creates a method to memorize passed in methods output
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>memorize(myFunction, cacheKeyFunction)</code></pre>
-
-    <pre class="prettyprint"><code>memorize(myFunction, cacheKeyFunction, 100)</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>func</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">method to memorize output of</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>getCacheKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">gets the key to save cached output</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    memorized function with cache
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".throttle"><span class="type-signature">(static) </span>throttle<span class="signature">(func, wait<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line158">line 158</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Throttle function calls to only execute once over a wait period
+    Checks if the passed in values are exactly the same.
 </div>
 
 
@@ -1293,7 +538,8 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>throttle(() => console.log('throttled'), 50)()</code></pre>
+    <pre class="prettyprint"><code>isSame(1, 1)
+// Returns true</code></pre>
 
 
 
@@ -1311,11 +557,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1327,7 +569,7 @@
 
         <tr>
             
-                <td class="name"><code>func</code></td>
+                <td class="name"><code>val1</code></td>
             
 
             <td class="type">
@@ -1340,61 +582,33 @@
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">method to call after wait</td>
+            <td class="description last">value to compare</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>wait</code></td>
+                <td class="name"><code>val2</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">*</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    <code>100</code>
-                
-                </td>
-            
 
-            <td class="description last">time to wait between calls</td>
+            <td class="description last">value to compare</td>
         </tr>
 
     
@@ -1420,7 +634,7 @@
 
         
 <div class="param-desc">
-    throttled function
+    is the values are the same
 </div>
 
 
@@ -1431,7 +645,7 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -1446,7 +660,7 @@
 
     
 
-    <h4 class="name" id=".throttleLast"><span class="type-signature">(static) </span>throttleLast<span class="signature">(func, cb, wait<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".isValidDate"><span class="type-signature">(static) </span>isValidDate<span class="signature">(date)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -1458,7 +672,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line184">line 184</a>
+        <a href="ext.js.html">ext.js</a>, <a href="ext.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -1498,10 +712,7 @@
 
 
 <div class="description">
-    Ensures the last call to the throttled function get called.
-<br> Will wait the allotted time, before calling the last call to it.
-<br> The final call will not execute until no more calls are made,
-<br> Accepts a callback to call each time the throttle called,
+    Checks is passed in date is a valid date.
 </div>
 
 
@@ -1512,10 +723,16 @@
 
 
 
-    <h5>Example</h5>
+    <h5>Examples</h5>
     
-    <pre class="prettyprint"><code>throttleLast(() => {}, () => {})()
-// throttle function</code></pre>
+    <pre class="prettyprint"><code>isValidDate(new Date())
+// Returns true</code></pre>
+
+    <pre class="prettyprint"><code>isValidDate(new Date().toString())
+// Returns true</code></pre>
+
+    <pre class="prettyprint"><code>isValidDate('12345678')
+// Returns false</code></pre>
 
 
 
@@ -1533,11 +750,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1549,109 +762,26 @@
 
         <tr>
             
-                <td class="name"><code>func</code></td>
+                <td class="name"><code>date</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">date</span>
+|
+
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">method to call after wait</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">method to call after throttle function is called</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>wait</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>100</code>
-                
-                </td>
-            
-
-            <td class="description last">time to wait until executing func param</td>
+            <td class="description last">value to check</td>
         </tr>
 
     
@@ -1677,7 +807,7 @@
 
         
 <div class="param-desc">
-    throttled function
+    T/F - if passed in date is a valid date
 </div>
 
 
@@ -1688,7 +818,7 @@
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -1703,7 +833,7 @@
 
     
 
-    <h4 class="name" id=".uuid"><span class="type-signature">(static) </span>uuid<span class="signature">(start)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".strToType"><span class="type-signature">(static) </span>strToType<span class="signature">(val)</span><span class="type-signature"> &rarr; {any|string}</span></h4>
 
     
 
@@ -1715,7 +845,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line210">line 210</a>
+        <a href="ext.js.html">ext.js</a>, <a href="ext.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -1755,8 +885,7 @@
 
 
 <div class="description">
-    Creates a uuid, unique up to around 20 million iterations.
-<br> Good enough for us
+    Converts a string to its own type if possible.
 </div>
 
 
@@ -1767,10 +896,16 @@
 
 
 
-    <h5>Example</h5>
+    <h5>Examples</h5>
     
-    <pre class="prettyprint"><code>uuid()
-// New uuid as a string</code></pre>
+    <pre class="prettyprint"><code>strToType('12345678')
+// Returns 12345678</code></pre>
+
+    <pre class="prettyprint"><code>strToType('{}')
+// Returns {}</code></pre>
+
+    <pre class="prettyprint"><code>strToType('[]')
+// Returns []</code></pre>
 
 
 
@@ -1800,13 +935,13 @@
 
         <tr>
             
-                <td class="name"><code>start</code></td>
+                <td class="name"><code>val</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">*</span>
 
 
             
@@ -1816,7 +951,7 @@
 
             
 
-            <td class="description last">of the uuid</td>
+            <td class="description last">value to convert</td>
         </tr>
 
     
@@ -1842,7 +977,177 @@
 
         
 <div class="param-desc">
-    - build uuid
+    converted value || string if can't convert
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
+|
+
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".typeOf"><span class="type-signature">(static) </span>typeOf<span class="signature">(val)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ext.js.html">ext.js</a>, <a href="ext.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Gets the type of the passed in val.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>typeOf(1)
+// Returns Number</code></pre>
+
+    <pre class="prettyprint"><code>typeOf('')
+// Returns String</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>val</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value to get type for</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    type of the value
 </div>
 
 
@@ -1883,7 +1188,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 22:37:40 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 23:13:58 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

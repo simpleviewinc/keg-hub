@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>number.js - Documentation</title>
+    <title>promise.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">number.js</h1>
+    <h1 class="page-title">promise.js</h1>
     
 
     
@@ -42,193 +42,120 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module number */
+            <pre class="prettyprint source linenums"><code>/** @module promise */
 
 'use strict'
 
-import { toStr } from './string'
+import { isObj } from './object'
+import { isFunc } from './method'
 
 /**
- * Checks if a value is NaN.
- * @example
- * equalsNaN(NaN)
- * // Returns true
- * @example
- * equalsNaN(1)
- * // Returns false
- * @example
- * equalsNaN('')
- * // Returns false
- * @function
- * @param {number} val - value to check if is NaN
- * @return {boolean} T/F - if value is a number
+ * Converts a standard callback method into Promise
+ * @param {function} method - method to turn into a promise
+ * @return method as a promise
  */
-export const equalsNaN = val => (
-  typeof val === 'number' &amp;&amp; val != val
-)
+export const promisify = method => {
+  if(!isFunc(method)) throw `Argument must be a function`
 
-/**
- * Gets numbers and floats (.) from a string.
- * @example
- * getNums('$1.23')
- * // Returns '1.23'
- * @function
- * @param {*} val - value to pull numbers from
- * @return {string} Numbers found in value
- */
-export const getNums = val => (
-  toStr(val).replace(/([^.\d])/gm,'')
-)
+  return (...args) => {
+    return new Promise((res, rej) => {
+      // If the last arg is not a function, just return the resolved method
+      if(!isFunc(args[args.length -1]))
+        return res(method(...args))
 
-/**
- * Checks if a number is a Float.
- * @example
- * isFloat(1.23)
- * // Returns true
- * @example
- * isFloat('1.2')
- * // Returns false ( because it's a string )
- * @function
- * @param {number} num - value to check
- * @return {boolean} true or false - value is an Float
- */
-export const isFloat = val => (
-  isNum(val) &amp;&amp; val % 1 !== 0
-)
+      // Remove the callback method
+      args.pop()
+      // Replace it with the promise resolve / reject
+      args.push((...cbData) => {
+        // If the cbData first arg is not falsy, then reject the promise
+        // Otherwise resolve it
+        return cbData &amp;&amp; cbData[0]
+          ? rej(...cbData)
+          : res(...cbData)
+      })
 
-/**
- * Checks if a number is an integer.
- * @example
- * isInt(1)
- * // Returns true
- * @example
- * isInt('1')
- * // Returns false ( because it's a string )
- * @function
- * @param {number} num - value to check
- * @return {boolean} true or false - value is an Int
- */
-export const isInt = val => (
-  isNum(val) &amp;&amp; (val % 1 === 0)
-)
-
-/**
- * Checks is value is a number.
- * @example
- * isInt(1)
- * // Returns true
- * @example
- * isInt(NaN)
- * // Returns false
- * @example
- * isInt('1')
- * // Returns false ( because it's a string )
- * @function
- * @param {number} val - value to check if is a number
- * @return {boolean} T/F - if value is a number
- */
-export const isNum = val => (
-  typeof val === 'number' &amp;&amp; !equalsNaN(val)
-)
-
-/**
- * Finds the number ext base on the passed in number.
- * @example
- * nth(1)
- * // Returns 'st'
- * @example
- * nth(2)
- * // Returns 'nd'
- * @example
- * nth(5)
- * // Returns 'th'
- * @function
- * @param {number} num - value to check
- * @return {string} ext of the number
- */
-export const nth = num => {
-
-  if(!isNum(num)){
-    num = getNums(num)
-    if(!num) return ''
-    num = toNum(num)
-    if(equalsNaN(num)) return ''
-  }
-
-  const mod = (num % 100)
-  if (mod >= 10 &amp;&amp; mod &lt;= 20)
-    return 'th'
-
-  switch(num % 10) {
-    case 1:
-      return 'st'
-    case 2:
-      return 'nd'
-    case 3:
-      return 'rd'
-    default:
-      return 'th'
+      // Call the method, and return it
+      return method(...args)
+    })
   }
 }
 
-/**
- * Converts passed in value to a float.
- * @example
- * toFloat('1.34')
- * // Returns 1.34
-* @example
- * toFloat(NaN)
- * // Returns 0
- * @function
- * @param {*} val - value to convert
- * @return {number} value converted to an float
- */
-export const toFloat = val => (
-  val &amp;&amp;
-    !equalsNaN(val) &amp;&amp;
-    parseFloat( isNum(val) &amp;&amp; val || getNums(val) ) ||
-    0
-)
+
+const isTest = process.env.NODE_ENV === 'test'
 
 /**
- * Converts passed in value to an integer.
- * @example
- * toInt('1')
- * // Returns 1
- * @example
- * toInt(NaN)
- * // Returns 0
- * @function
- * @param {*} val - value to convert
- * @return {number} value converted to a integer
+ * Creates an array of Object default properties not to convert into promises
  */
-export const toInt = val => (
-  val &amp;&amp;
-    !equalsNaN(val) &amp;&amp; 
-    parseInt( isNum(val) &amp;&amp; val || getNums(val) ) ||
-    0
-)
+const defObjProps = Array
+  .from([
+    'caller',
+    'callee',
+    'arguments',
+    'apply',
+    'bind',
+    'call',
+    'toString',
+    '__proto__',
+    '__defineGetter__',
+    '__defineSetter__',
+    'hasOwnProperty',
+    '__lookupGetter__',
+    '__lookupSetter__',
+    'isPrototypeOf',
+    'propertyIsEnumerable',
+    'toString',
+    'valueOf',
+    'toLocaleString'
+  ])
+  .concat(Object.getOwnPropertyNames(Object.prototype))
+  .reduce((map, functionName) => {
+    map[functionName] = true
+    return map
+  }, {})
 
 /**
- * Converts passed in value to a number.
- * @example
- * toNum("23")
- * // Returns 23
- * @example
- * toNum(NaN)
- * // Returns 0
- * @function
- * @param {*} val - value to convert
- * @return {number} value converted to a float
+ * Loops an object and looks for any methods that belong to the object, then add an Async version
+ * @memberof promise
+ * @param {Object} object
+ * @return {Object} - object with Async methods added
  */
-export const toNum = val => (
-  isNum(val)
-    ? val
-    : val &amp;&amp;
-      !equalsNaN(val) &amp;&amp; 
-      Number(getNums(val)) ||
-      0
-)
+const addAsync = object => {
+  if (!object.__IS_PROMISIFIED__) {
+    for (const prop of Object.getOwnPropertyNames(object)) {
+      const isAsync = prop.indexOf('Async') !== -1 || object[`${prop}Async`]
+      if (isAsync || defObjProps[prop]) continue
+
+      if(isFunc(object[prop]))
+        object[`${prop}Async`] = promisify(object[prop])
+      else {
+        const getValue = Object.getOwnPropertyDescriptor(object, prop).get
+        if(isFunc(getValue)) object[`${prop}Async`] = promisify(getValue)
+      }
+    }
+    object.__IS_PROMISIFIED__ = true
+  }
+
+  return object
+}
+
+/**
+ * Converts Objects method properties into promiseAsync. allow using promisifyAll
+ * @function
+ * @param {Object} object
+ * @return {Object} - promisified object
+ */
+export const promisifyAll = object => {
+  if(!isObj(object)) return object
+
+  addAsync(object)
+  const proto = Object.getPrototypeOf(object)
+
+  proto &amp;&amp;
+    Object.getPrototypeOf(proto) !== null &amp;&amp;
+    addAsync(proto)
+
+  return object
+}
 </code></pre>
         </article>
     </section>
@@ -243,7 +170,7 @@ export const toNum = val => (
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 22:37:40 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 22 2019 23:13:58 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
