@@ -2,6 +2,8 @@
 
 A small utility library for commonly used helper methods. Similar to lodash, underscore, etc...
 
+See docs [here](https://lancetipton.github.io/jsutils)
+
 ## Install
 
   * Download the repo
