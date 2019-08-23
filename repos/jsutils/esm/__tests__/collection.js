@@ -194,7 +194,7 @@ describe('/collection', function () {
       expect(res).toBe(true);
     });
   });
-  describe('isEmpty', function () {
+  describe('isEmptyCollection', function () {
     it('should check if an object is empty', function () {
       var notEmpty = {
         data: [{
@@ -202,14 +202,14 @@ describe('/collection', function () {
         }]
       };
       var empty = {};
-      expect(Coll.isEmpty(notEmpty)).toBe(false);
-      expect(Coll.isEmpty(empty)).toBe(true);
+      expect(Coll.isEmptyCollection(notEmpty)).toBe(false);
+      expect(Coll.isEmptyCollection(empty)).toBe(true);
     });
     it('should handle arrays, and not throw an error', function () {
       var notEmpty = [1, 2, 3];
       var empty = [];
-      expect(Coll.isEmpty(notEmpty)).toBe(false);
-      expect(Coll.isEmpty(empty)).toBe(true);
+      expect(Coll.isEmptyCollection(notEmpty)).toBe(false);
+      expect(Coll.isEmptyCollection(empty)).toBe(true);
     });
   });
 });

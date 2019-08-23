@@ -32,7 +32,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isEmpty = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isColl = exports.get = void 0;
+exports.isEmptyCollection = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isColl = exports.get = void 0;
 
 var _method = require("./method");
 
@@ -194,10 +194,10 @@ var unset = function unset(obj, path) {
 /**
  * Checks if passed in obj is empty.
  * @example
- * isEmpty({})
+ * isEmptyCollection({})
  * // Returns true
  * @example
- * isEmpty({ foo: 'bar' })
+ * isEmptyCollection({ foo: 'bar' })
  * // Returns false
  * @function
  * @param {Object} obj - object to check if empty
@@ -207,8 +207,8 @@ var unset = function unset(obj, path) {
 
 exports.unset = unset;
 
-var isEmpty = function isEmpty(obj) {
+var isEmptyCollection = function isEmptyCollection(obj) {
   return (0, _array.isArr)(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
 };
 
-exports.isEmpty = isEmpty;
+exports.isEmptyCollection = isEmptyCollection;
