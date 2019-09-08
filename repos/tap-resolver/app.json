@@ -1,0 +1,32 @@
+{
+  "name": "clientResolver",
+  "displayName": "Client Resolver",
+  "clientResolver": {
+    "paths": {
+      "externalClients": "",
+      "localClients": "",
+      "baseClient": "",
+      "clientList": "",
+      "clientListFile": ""
+    },
+    "extensions": [],
+    "aliases": {
+      "nameSpace": "",
+      "root": {},
+      "base": {},
+      "dynamic": {},
+      "web": {},
+      "native": {}
+    },
+    "babel": {
+      "web": {
+        "presets": [],
+        "plugins": []
+      },
+      "native": {
+        "presets": [],
+        "plugins": []
+      }
+    } 
+  }
+}
