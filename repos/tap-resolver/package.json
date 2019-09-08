@@ -1,7 +1,7 @@
 {
   "name": "client-resolver",
   "version": "1.0.0",
-  "description": "Allows switch react-native clients quickly",
+  "description": "Allows switching react-native clients quickly",
   "main": "babel.config.js",
   "author": "Lance Tipton",
   "license": "MIT",
