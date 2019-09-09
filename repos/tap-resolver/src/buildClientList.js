@@ -106,7 +106,7 @@ module.exports =  async (appRoot, appConfig) => {
     }, '')
 
   // Add the found clients to the list of clients
-  const clientListData = `const clientPaths = {\n${clientsStr}\n}\nexport default clientPaths`
+  const clientListData = `const clientPaths = {\n${clientsStr}\n}\n\nexport default clientPaths`
 
   // Build the clientList path
   const clientListPath = path.join(appRoot, clientList, clientListFile || 'clientList.js')

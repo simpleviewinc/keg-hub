@@ -58,6 +58,6 @@ const babelSetup = () => {
   
 }
 
-module.exports = NODE_ENV === 'test'
+module.exports = NODE_ENV === 'resolver-test'
   ? {}
   : babelSetup()

@@ -6,7 +6,7 @@
   "author": "Lance Tipton",
   "license": "MIT",
   "scripts": {
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=resolver-test jest",
     "postinstall": "node ./post_install.js"
   },
   "dependencies": {

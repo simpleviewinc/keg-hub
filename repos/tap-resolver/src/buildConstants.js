@@ -1,13 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 const { deepMerge, cloneArr, get, isObj, reduceObj, logData } = require('jsutils')
+const buildAssets = require('./buildAssets')
 const setupClient = require('./setupClient')
 const { validateApp } = require('./helpers')
 
 const freezeObj = Object.freeze
-
-// const buildAssets = require('./build_assets')
-// const { CLIENT_ASSETS_PATH } = buildAssets(BASE_PATH, CLIENT_NAME, CLIENT_PATH)
 
 /**
  * Adds the Namespace to all keys of the passed in object
@@ -98,6 +96,7 @@ const buildDynamicContent = (appConfig={}) => {
   return freezeObj(
     addNameSpace(appConfig, {
       AppRoot: appRoot,
+      Assets: paths.assets,
       Base: paths.base,
       Client: paths.client,
       Config: paths.config,
@@ -133,9 +132,13 @@ module.exports = (appRoot, appConfig, clientName) => {
     CLIENT_PATH,
     HAS_CLIENT,
   } = setupClient(appRoot, appConfig, clientName)
-  
+
+  // Build the assets for the client
+  const ASSETS_PATH = buildAssets(appConfig, BASE_PATH, CLIENT_NAME, CLIENT_PATH)
+
   // Build the aliasPaths object from the built client data
   const aliasPaths = {
+    assets: ASSETS_PATH,
     base: BASE_PATH,
     client: CLIENT_PATH,
     config: APP_CONFIG_PATH,
@@ -146,6 +149,7 @@ module.exports = (appRoot, appConfig, clientName) => {
   return freezeObj({
     APP_CONFIG_PATH,
     BASE_PATH,
+    ASSETS_PATH,
     CLIENT_NAME,
     CLIENT_PATH,
     HAS_CLIENT,

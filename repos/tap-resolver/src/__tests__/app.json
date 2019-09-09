@@ -3,16 +3,16 @@
   "displayName": "Client Resolver",
   "clientResolver": {
     "paths": {
-      "baseClient": "",
-      "clientAssets": "",
-      "clientList": "",
-      "clientListFile": "",
-      "externalClients": "",
-      "localClients": ""
+      "baseClient": "base",
+      "clientAssets": "assets",
+      "clientList": "./",
+      "clientListFile": "clientList.js",
+      "externalClients": "node_modules/test-external-clients",
+      "localClients": "clients"
     },
     "extensions": [],
     "aliases": {
-      "nameSpace": "",
+      "nameSpace": "Test",
       "root": {},
       "base": {},
       "dynamic": {},
