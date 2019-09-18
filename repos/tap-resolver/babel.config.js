@@ -35,12 +35,17 @@ const getResolverFile = (appConfig, type) => {
   try {
     const resolverPath = get(appConfig, ['clientResolver', 'paths', type ])
     const resolver = resolverPath && path.join(appRoot, resolverPath)
+    if(resolver) console.log(`Using custom resolver for ${type}`)
 
     return resolver
       ? require(resolver)
       : require(`./src/${type}`)
   }
   catch(e){
+    console.log(`Error loading custom resolver for ${type}`)
+    console.error(e.message)
+    console.error(e.stack)
+
     return require(`./src/${type}`)
   }
 }

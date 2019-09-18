@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const { isFunc } = require('jsutils')
+const { isFunc, isStr } = require('jsutils')
+const rootDir = require('app-root-path').path
 
 /**
  * Checks all passed in extentions with the file path
@@ -39,6 +40,15 @@ const findAliasPath = (fullPath, extensions=[]) => {
  * @returns {string} - path to file ( from clients directory || core/base directory )
  */
 module.exports = (sourcePath, currentFile, opts) => {
+
+  // Check if the sourcePath is an alias
+  // If it is, check if it already has the rootDir, if not add it and return
+  // Otherwise just return
+  if(isStr(opts.alias[sourcePath]))
+    return opts.alias[sourcePath].indexOf(rootDir) === -1
+      ? path.join(rootDir, opts.alias[sourcePath])
+      : opts.alias[sourcePath]
+
   // Split the path to get the alias
   // Aliases should always be 'alias/path/to/sub/file'
   // So the first item in the split should be the Alias
