@@ -1,11 +1,20 @@
 const path = require('path')
 const appRoot = require('app-root-path').path
 const runSetup = require('./src/setup.js')
+const resolvePath = require('./src/resolvePath.js')
 const buildClientList = require('./src/buildClientList.js')
 const getAppConfig = require('./src/getAppConfig')
 const { get, isObj } = require('jsutils')
 const { PLATFORM, NODE_ENV } = process.env
 
+/**
+ * Gets the platform data based on the PLATFORM ENV
+ * If isWeb, tries to pull from conf.web; else pulls from conf.native else returns conf
+ *
+ * @param {Object} conf - object to pull config data from
+ * @param {boolean} isWeb - if the PLATFORM ENV equals web
+ * @returns
+ */
 const getPlatformData = (conf, isWeb) => {
   return !isObj(conf)
     ? {}
@@ -16,6 +25,11 @@ const getPlatformData = (conf, isWeb) => {
         : conf
 }
 
+/**
+ * Sets up the babel config based on the PLATFORM ENV and the app config in app.json
+ *
+ * @returns {Object} - built babel config
+ */
 const babelSetup = () => {
 
   const isWeb = PLATFORM === 'web'
@@ -31,18 +45,19 @@ const babelSetup = () => {
   // Set the presets and plugins based on the platform type
   const presets = [ ...babelConf.presets ]
   const plugins = [ ...babelConf.plugins ]
-  
+
   // Build the module-resolver, and add the alias based on platform type
   plugins.push([
-    'module-resolver',
-    {
+    'module-resolver', {
       root: [ appRoot ],
       cwd: appRoot,
       extensions: EXTENSIONS,
+      // Aliases work differently in webpack, so add the resolvePath method helper for alias mapping
+      resolvePath: isWeb && resolvePath || undefined,
       alias: {
         ...buildAliases(),
         ...aliases,
-    }
+      }
   }])
 
   return {

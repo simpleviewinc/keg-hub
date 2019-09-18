@@ -3,7 +3,6 @@ const path = require('path')
 const { get } = require('jsutils')
 const { isDirectory, pathExists, validateApp } = require('./helpers')
 
-
 /**
  * Adds a folder's sub-folders to an object as key = sub-folder name, value = sub-folder path.
  * @param {string} clientsList - path to parent folder to search for sub-folders

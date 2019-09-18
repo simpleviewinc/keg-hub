@@ -42,6 +42,24 @@ const pathExists = check => {
 }
 
 /**
+ * Checks if a path exists.
+ * @param {string} check - path to check if it exists
+ *
+ * @return {boolean} - if passed in string exists on the file system
+ */
+const pathExistsSync = check => {
+  try {
+    const stats = fs.statSync(check);
+    return true
+  }
+  catch(err) {
+    return false
+  }
+}
+
+
+
+/**
  * Wraps require in a try catch to app doesn't throw when require is called inline
  * @param {string} folder - The path to the file to require
  * @param {string} file - The file to require
@@ -79,6 +97,7 @@ const validateApp = (appRoot, appConfig) => {
 module.exports = {
   isDirectory,
   pathExists,
+  pathExistsSync,
   requireFile,
   validateApp
 }

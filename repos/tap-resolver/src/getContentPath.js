@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { logData, get } = require('jsutils')
 const { validateApp, isDirectory } = require('./helpers')
+const { LOG } = process.env
 
 // File path cache, holds the path to a found file, so it doesn't have to look it up again
 const FULL_PATH_CACHE = {}
@@ -52,8 +53,6 @@ module.exports = (appConfig, aliasMap, content, type) => {
       path.join(aliasMap[ `${nameSpace}Client` ], type, match[1])
     )
 
-    logData(`Loading file from ${fullPath}`)
-
     // Check if the file has been loaded already
     // If it has, just return the cached path
     if (FULL_PATH_CACHE[fullPath]) return FULL_PATH_CACHE[fullPath]
@@ -77,6 +76,8 @@ module.exports = (appConfig, aliasMap, content, type) => {
     FULL_PATH_CACHE[fullPath] = validPath
       ? fullPath
       : path.join(content.basePath, type, match[1])
+
+    LOG && logData(`Loading file from ${FULL_PATH_CACHE[fullPath]}`)
 
     return FULL_PATH_CACHE[fullPath]
   }

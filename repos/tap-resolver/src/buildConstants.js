@@ -34,16 +34,19 @@ const addNameSpace = (appConfig, addTo) => {
  */
  const buildExtensions = (appConfig={}) => {
   return freezeObj(
-    cloneArr([
-      '.ios.js',
-      '.android.js',
-      'web.js',
-      '.js',
-      '.json',
-      '.sqlite',
-      '.ttf',
-      ...get(appConfig, [ 'clientResolver', 'extensions'], [])
-    ])
+    cloneArr(
+      get(appConfig, [ 'clientResolver', 'extensions'],
+      // Set default extentions, if nothing is set in the appConfig
+      [
+        '.ios.js',
+        '.android.js',
+        'web.js',
+        '.js',
+        '.json',
+        '.sqlite',
+        '.ttf',
+      ]
+    ))
   )
  }
 
