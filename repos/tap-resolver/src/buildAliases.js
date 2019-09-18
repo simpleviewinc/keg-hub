@@ -1,5 +1,4 @@
 const path = require('path')
-const getContentPath = require('./getContentPath')
 const { validateApp } = require('./helpers')
 
 /**
@@ -14,14 +13,14 @@ const { validateApp } = require('./helpers')
  *
  * @return {Object} - Alias map to load files
  */
-const buildDynamicAliases = (appConfig, aliasMap, content) => {
+const buildDynamicAliases = (appConfig, contentResolver, aliasMap, content) => {
   // Add dynamic content
   return Object.keys(content.dynamic)
     .reduce((updatedMap, key, value) => {
-      // If we have a client, use the getContentPath method to resolve the path
+      // If we have a client, use the contentResolver method to resolve the path
       // Otherwise set the path to the basePath
       updatedMap[key] = content.client
-        ? getContentPath(appConfig, updatedMap, content, content.dynamic[key])
+        ? contentResolver(appConfig, updatedMap, content, content.dynamic[key])
         : path.join(content.basePath, content.dynamic[key])
 
       // return the update map
@@ -33,6 +32,7 @@ const buildDynamicAliases = (appConfig, aliasMap, content) => {
  * Builds the path to clients custom content
  * Example - SVComponents | loads files from clients folder or base folder
  * @param {Object} appConfig - app.json config file
+ * @param {function} contentResolver - Function to help resolve file paths
  * @param {Object} aliasMap - object that holds all path alias
  * @param {Object} content - object that holds the content paths
  * @param {Object} content.base - base paths that can not be overwritten
@@ -43,14 +43,14 @@ const buildDynamicAliases = (appConfig, aliasMap, content) => {
  *
  * @return {Object} - Alias map to load files
  */
-module.exports = (appConfig, aliasMap, content) => {
+module.exports = (appConfig, contentResolver, aliasMap, content) => {
   // Ensure the required app data exists
   validateApp('_', appConfig)
   
   // Wrap the exposed function with a function to get access to the original passed in args
   return () => {
     // Build dynamic content folder paths
-    aliasMap = buildDynamicAliases(appConfig, aliasMap, content)
+    aliasMap = buildDynamicAliases(appConfig, contentResolver, aliasMap, content)
 
     // Map the base content to the path from the base
     // This ensures the paths can not be overwritten

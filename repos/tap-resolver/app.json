@@ -8,7 +8,9 @@
       "clientList": "",
       "clientListFile": "",
       "externalClients": "",
-      "localClients": ""
+      "localClients": "",
+      "contentResolver": "",
+      "webResolver": ""
     },
     "extensions": [],
     "aliases": {

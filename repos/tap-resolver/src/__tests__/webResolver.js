@@ -1,6 +1,6 @@
-const getContentPath = require('../getContentPath')
+const webResolver = require('../webResolver')
 
-describe('Get content path', () => {
+describe('Get web content path', () => {
   
   beforeEach(() => {
     

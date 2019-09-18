@@ -5,18 +5,19 @@ const { logData, setLogs, get } = require('jsutils')
 const buildAliases = require('./buildAliases')
 const buildConstants = require('./buildConstants')
 const getAppConfig = require('./getAppConfig')
-const getContentPath = require('./getContentPath')
+const contentResolver = require('./contentResolver')
 
 setLogs(process.env.LOG, `log`, `[ Client Resolver ]`)
 
 /**
  * Setups up the project to load the client
- * @param {string} appRoot - path to the root of the project
+ * @param {string} appRoot - Path to the root of the project
  * @param {Object} appConfig - app.json config file
+ * @param {function} contentResolver - Function to help resolve file paths
  *
  * @return {Object} - Alias map to load files
  */
-module.exports = (appRoot, appConfig, clientName) => {
+module.exports = (appRoot, appConfig, contentResolver) => {
   appRoot = appRoot || APP_ROOT
   appConfig = appConfig || getAppConfig(appRoot)
   
@@ -32,6 +33,7 @@ module.exports = (appRoot, appConfig, clientName) => {
 
   const aliasesBuilder = buildAliases(
     appConfig,
+    contentResolver,
     { ...ALIASES },
     {
       base: BASE_CONTENT,
