@@ -17,7 +17,7 @@ setLogs(process.env.LOG, `log`, `[ Client Resolver ]`)
  *
  * @return {Object} - Alias map to load files
  */
-module.exports = (appRoot, appConfig, contentResolver) => {
+module.exports = (appRoot, appConfig, contentResolver, clientName) => {
   appRoot = appRoot || APP_ROOT
   appConfig = appConfig || getAppConfig(appRoot)
   
