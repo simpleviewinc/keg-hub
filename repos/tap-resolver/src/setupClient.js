@@ -4,7 +4,6 @@ const rimraf = require('rimraf')
 const { deepMerge, logData, setLogs, isStr, isObj, get } = require('jsutils')
 const { validateApp } = require('./helpers')
 
-const { CLIENT } = process.env
 const APP_CONFIG_NAME = 'app.json'
 /**
  * Gets the path to the app.json client folder
@@ -28,6 +27,7 @@ const getBaseClientPath = (appRoot, appConfig) => {
  * @returns {string} - name of the active client
  */
 const getActiveClientName = (appConfig, clientName) => {
+  const { CLIENT } = process.env
   return clientName || CLIENT || appConfig.name
 }
 
