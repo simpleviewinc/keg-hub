@@ -39,7 +39,7 @@ const getActiveClientName = (appConfig, clientName) => {
  * @param {Object} appConfig - Root app.json config
  * @param {string} CLIENT_NAME - Name of the active client
  *
- * @returns {string} - Path to the active client folder
+ * @returns {string} - Path to the active client folder, or null if no path exists on disk. 
  */
 const getClientPath = (appRoot, appConfig, clientName) => {
   const { externalClients, localClients } = get(appConfig, [ 'clientResolver', 'paths' ], {})
@@ -50,12 +50,12 @@ const getClientPath = (appRoot, appConfig, clientName) => {
   // Get Local client path
   const localClient = path.join(appRoot, localClients, clientName)
 
-  // If external client exists, load that
-  return fs.existsSync(externalClient)
-    ? externalClient
-    // Else check for local client
-    : fs.existsSync(localClient)
-      ? localClient
+  // returns local client if it exists
+  return fs.existsSync(localClient)
+    ? localClient
+    // Else check for external client
+    : fs.existsSync(externalClient)
+      ? externalClient
       : null
 }
 
