@@ -1,22 +1,22 @@
 const buildAliases = require('./buildAliases')
 const buildAssets = require('./buildAssets')
-const buildClientList = require('./buildClientList')
+const buildTapList = require('./buildTapList')
 const buildConstants = require('./buildConstants')
 const getAppConfig = require('./getAppConfig')
 const contentResolver = require('./contentResolver')
 const cacheInvalidator = require('./cacheInvalidator')
 const setup = require('./setup')
-const setupClient = require('./setupClient')
+const setupTap = require('./setupTap')
 const webResolver = require('./webResolver')
 
 exports = {
   buildAliases,
   buildAssets,
-  buildClientList,
+  buildTapList,
   buildConstants,
   getAppConfig,
   contentResolver,
   setup,
-  setupClient,
+  setupTap,
   webResolver,
 }

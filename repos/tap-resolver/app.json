@@ -1,17 +1,19 @@
 {
-  "name": "clientResolver",
-  "displayName": "Client Resolver",
-  "clientResolver": {
+  "name": "tapResolver",
+  "displayName": "Tap Resolver",
+  "tapResolver": {
     "paths": {
-      "baseClient": "",
-      "clientAssets": "",
-      "clientList": "",
-      "clientListFile": "",
-      "externalClients": "",
-      "localClients": "",
+      "temp": "./temp",
+      "baseTap": "",
+      "tapAssets": "",
+      "tapList": "",
+      "tapListFile": "",
+      "externalTaps": "",
+      "localTaps": "",
       "contentResolver": "",
       "webResolver": ""
     },
+    "tapInheritance": [],
     "extensions": [],
     "aliases": {
       "nameSpace": "",

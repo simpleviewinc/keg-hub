@@ -8,7 +8,7 @@ const { LOG } = process.env
 const FULL_PATH_CACHE = {}
 
 /**
- * Clears out the path cache when switching to a new client
+ * Clears out the path cache when switching to a new tap
  */
 const resetFullPathCache = () => {
   Object.keys(FULL_PATH_CACHE)
@@ -30,8 +30,8 @@ const checkAddIndex = (fullPath) => {
 }
 
 /**
- * Dynamically load client files from the clients folder
- * If no file exists, then load from the base client
+ * Dynamically load tap files from the taps folder
+ * If no file exists, then load from the base tap
  * @param  { string } type - folder to search for file i.e. components/assets
  *
  * @return { string } - path to file
@@ -40,17 +40,17 @@ module.exports = (appConfig, aliasMap, content, type) => {
   // Ensure the required app data exists
   validateApp('_', appConfig)
   
-  const nameSpace = get(appConfig, [ 'clientResolver', 'aliases', 'nameSpace' ], '')
+  const nameSpace = get(appConfig, [ 'tapResolver', 'aliases', 'nameSpace' ], '')
   
   return match => {
 
     // Check if 'index' should be added to the file path
     // This allows loading the index.js of a folder
     const fullPath = checkAddIndex(
-      // Build the patth based on the client alias
-      // Example: root_dir/clients/:client_name/:type/:file_name
+      // Build the path based on the tap alias
+      // Example: root_dir/taps/:tap_name/:type/:file_name
       // - w/o extension
-      path.join(aliasMap[ `${nameSpace}Client` ], type, match[1])
+      path.join(aliasMap[ `${nameSpace}Tap` ], type, match[1])
     )
 
     // Check if the file has been loaded already
@@ -58,14 +58,14 @@ module.exports = (appConfig, aliasMap, content, type) => {
     if (FULL_PATH_CACHE[fullPath]) return FULL_PATH_CACHE[fullPath]
 
     // Check if the file exists without any added extensions
-    //  Example: root_dir/clients/:client_name/assets/platform.sqlite
+    //  Example: root_dir/taps/:tap_name/assets/platform.sqlite
     let validPath = fs.existsSync(fullPath)
 
-    // Loop the allowed extensions and check if any of the paths + extensions exist at the client path
+    // Loop the allowed extensions and check if any of the paths + extensions exist at the tap path
     validPath = validPath ||
       content.extensions
         .reduce((hasExt, ext) => {
-          // Example: root_dir/clients/:client_name/:type/:file_name.js
+          // Example: root_dir/taps/:tap_name/:type/:file_name.js
           // - with extension
           return !hasExt && fs.existsSync(`${fullPath}${ext}`) ? true : hasExt
         }, false)

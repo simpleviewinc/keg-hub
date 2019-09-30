@@ -1,19 +1,8 @@
 const path = require('path')
-
-const allFiles = [
-  './buildAliases',
-  './buildAssets',
-  './buildClientList',
-  './buildConstants',
-  './getAppConfig',
-  './contentResolver',
-  './setup',
-  './setupClient',
-  './webResolver',
-]
+const tapConstants = require('./tapConstants')
 
 module.exports = () => {
-  allFiles.map(file => {
+  tapConstants.cacheFiles.map(file => {
     delete require.cache[require.resolve(path.join(__dirname, file))]
   })
 }

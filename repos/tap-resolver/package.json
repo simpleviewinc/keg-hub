@@ -1,7 +1,7 @@
 {
-  "name": "client-resolver",
-  "version": "1.0.0",
-  "description": "Allows switching react-native clients quickly",
+  "name": "tap-resolver",
+  "version": "2.0.0",
+  "description": "Allows switching react-native taps quickly",
   "main": "babel.config.js",
   "author": "Lance Tipton",
   "license": "MIT",

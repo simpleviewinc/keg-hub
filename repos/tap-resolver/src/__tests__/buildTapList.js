@@ -1,9 +1,9 @@
 const { FS } = require('../../mocks')
 jest.setMock('fs', FS)
 
-const buildClientList = require('../buildClientList')
+const buildTapList = require('../buildTapList')
 
-describe('Build Client List', () => {
+describe('Build Tap List', () => {
   
   beforeEach(() => {
     global.testMocks.fs = { stat: true }

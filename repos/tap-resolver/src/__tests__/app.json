@@ -1,14 +1,14 @@
 {
-  "name": "clientResolver",
-  "displayName": "Client Resolver",
-  "clientResolver": {
+  "name": "tapResolver",
+  "displayName": "Tap Resolver",
+  "tapResolver": {
     "paths": {
-      "baseClient": "base",
-      "clientAssets": "assets",
-      "clientList": "./",
-      "clientListFile": "clientList.js",
-      "externalClients": "node_modules/test-external-clients",
-      "localClients": "clients"
+      "baseTap": "base",
+      "tapAssets": "assets",
+      "tapList": "./",
+      "tapListFile": "tapList.js",
+      "externalTaps": "node_modules/test-external-taps",
+      "localTaps": "taps"
     },
     "extensions": [],
     "aliases": {

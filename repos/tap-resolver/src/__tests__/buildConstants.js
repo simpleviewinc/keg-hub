@@ -2,7 +2,7 @@ const { FS } = require('../../mocks')
 
 jest.setMock('fs', FS)
 
-const testClientName = "testClient"
+const testTapName = "test"
 const testAppRoot = ""
 const buildConstants = require('../buildConstants')
 
@@ -13,12 +13,12 @@ describe('Build Constants', () => {
   })
   
   it('should fail if appRoot is null', () => {
-    expect(() => setupClient(null, {}, testClientName))
+    expect(() => setupTap(null, {}, testTapName))
       .toThrow(Error)
   })
 
   it('should fail if appConfig is null', () => {
-    expect(() => setupClient(" ", null, testClientName))
+    expect(() => setupTap(" ", null, testTapName))
       .toThrow(Error)
   })
 })

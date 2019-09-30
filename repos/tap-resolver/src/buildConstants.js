@@ -2,8 +2,9 @@ const path = require('path')
 const fs = require('fs')
 const { deepMerge, cloneArr, get, isObj, reduceObj, logData } = require('jsutils')
 const buildAssets = require('./buildAssets')
-const setupClient = require('./setupClient')
+const setupTap = require('./setupTap')
 const { validateApp } = require('./helpers')
+const tapConstants = require('./tapConstants')
 
 const freezeObj = Object.freeze
 
@@ -15,7 +16,7 @@ const freezeObj = Object.freeze
  * @returns {Object} - new addTo object with it's keys updated
  */
 const addNameSpace = (appConfig, addTo) => {
-  const nameSpace = get(appConfig, [ 'clientResolver', 'aliases', 'nameSpace' ], '')
+  const nameSpace = get(appConfig, [ 'tapResolver', 'aliases', 'nameSpace' ], '')
   if(!nameSpace || !isObj(addTo)) return addTo
   
   return reduceObj(addTo, (key, value, updated) => {
@@ -26,8 +27,8 @@ const addNameSpace = (appConfig, addTo) => {
 }
 
 /**
- * File extensions to search for when looking for client override
- *  Only files found in the clients folder with these extensions can override the base file path
+ * File extensions to search for when looking for tap override
+ *  Only files found in the taps folder with these extensions can override the base file path
  * @param {Object} [appConfig={}] - app.json config file
  *
  * @returns {Object} - Allowed file extensions
@@ -35,17 +36,10 @@ const addNameSpace = (appConfig, addTo) => {
  const buildExtensions = (appConfig={}) => {
   return freezeObj(
     cloneArr(
-      get(appConfig, [ 'clientResolver', 'extensions'],
-      // Set default extentions, if nothing is set in the appConfig
-      [
-        '.ios.js',
-        '.android.js',
-        'web.js',
-        '.js',
-        '.json',
-        '.sqlite',
-        '.ttf',
-      ]
+      // Try to pull the extensions from the config
+      get(appConfig, [ 'tapResolver', 'extensions', 'resolve' ],
+      // Otherwise set the default extensions
+      get(tapConstants, [ 'extensions', 'resolve' ], [])
     ))
   )
  }
@@ -61,24 +55,24 @@ const addNameSpace = (appConfig, addTo) => {
  const buildBaseContent = (appConfig={}) => {
   return freezeObj(
     addNameSpace(appConfig, {
-      ...get(appConfig, [ 'clientResolver', 'aliases', 'base'], {})
+      ...get(appConfig, [ 'tapResolver', 'aliases', 'base'], {})
     })
   )
  }
 
 /**
  * Builds the default folders used to build an alias
- * Pull from clients and base folder
- * Can be over-written by clients folder
+ * Pull from taps and base folder
+ * Can be over-written by taps folder
  * @param {Object} [appConfig={}] - app.json config file
  *
  * @returns {Object} - all dynamically mapped paths
  */
 const buildDynamicContent = (appConfig={}) => {
-
+  // Build the dynamic alias paths
   return freezeObj(
     addNameSpace(appConfig, {
-      ...get(appConfig, [ 'clientResolver', 'aliases', 'dynamic'], {})
+      ...get(appConfig, [ 'tapResolver', 'aliases', 'dynamic'], {}),
     })
   )
 }
@@ -101,10 +95,10 @@ const buildDynamicContent = (appConfig={}) => {
       AppRoot: appRoot,
       Assets: paths.assets,
       Base: paths.base,
-      Client: paths.client,
+      Tap: paths.tap,
       Config: paths.config,
       ...reduceObj(
-        get(appConfig, [ 'clientResolver', 'aliases', 'root'], {}),
+        get(appConfig, [ 'tapResolver', 'aliases', 'root'], {}),
         (key, value, addAliases) => {
           addAliases[key] = path.join(appRoot, value)
           return addAliases
@@ -115,51 +109,52 @@ const buildDynamicContent = (appConfig={}) => {
 
 
 /**
- * Builds the constants which contains paths to the clients folder
+ * Builds the constants which contains paths to the taps folder
  * @param {string} appRoot - Path to the root of the project
  * @param {Object} appConfig - app.json config file
- * @param {string} clientName - Name of the client to build for
+ * @param {string} tapName - Name of the tap to build for
  *
  * @return {Object} - Alias map to load files
  */
-module.exports = (appRoot, appConfig, clientName) => {
+module.exports = (appRoot, appConfig, tapName) => {
   
   // Ensure the required app data exists
   validateApp(appRoot, appConfig)
 
-  // Setup the client, to get the correct path data
+  // Setup the tap, to get the correct path data
   const {
+    APP_CONFIG,
     APP_CONFIG_PATH,
     BASE_PATH,
-    CLIENT_NAME,
-    CLIENT_PATH,
-    HAS_CLIENT,
-  } = setupClient(appRoot, appConfig, clientName)
+    TAP_NAME,
+    TAP_PATH,
+    HAS_TAP,
+  } = setupTap(appRoot, appConfig, tapName)
 
-  // Build the assets for the client
-  const ASSETS_PATH = buildAssets(appConfig, BASE_PATH, CLIENT_NAME, CLIENT_PATH)
+  // Build the assets for the tap
+  const ASSETS_PATH = buildAssets(APP_CONFIG, BASE_PATH, TAP_PATH)
 
-  // Build the aliasPaths object from the built client data
+  // Build the aliasPaths object from the built tap data
   const aliasPaths = {
     assets: ASSETS_PATH,
     base: BASE_PATH,
-    client: CLIENT_PATH,
-    config: APP_CONFIG_PATH,
-    core: path.join(appRoot, './core')
+    tap: TAP_PATH,
+    config: APP_CONFIG_PATH
   }
 
-  // Return the constants set from the client data
+  // Return the constants set from the tap data
   return freezeObj({
+    APP_CONFIG,
     APP_CONFIG_PATH,
     BASE_PATH,
     ASSETS_PATH,
-    CLIENT_NAME,
-    CLIENT_PATH,
-    HAS_CLIENT,
-    ALIASES: buildAliases(appRoot, appConfig, aliasPaths),
-    BASE_CONTENT: buildBaseContent(appConfig),
-    DYNAMIC_CONTENT: buildDynamicContent(appConfig),
-    EXTENSIONS: buildExtensions(appConfig),
+    TAP_NAME,
+    TAP_PATH,
+    HAS_TAP,
+    ALIASES: buildAliases(appRoot, APP_CONFIG, aliasPaths),
+    BASE_CONTENT: buildBaseContent(APP_CONFIG),
+    DYNAMIC_CONTENT: buildDynamicContent(APP_CONFIG),
+    EXTENSIONS: buildExtensions(APP_CONFIG),
   })
   
 }

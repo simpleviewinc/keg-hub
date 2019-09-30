@@ -1,25 +1,30 @@
 const path = require('path')
+const { isFunc } = require('jsutils')
 const { validateApp } = require('./helpers')
 
 /**
- * Adds dynamic content to the aliasMap of base content if a client is set
+ * Adds dynamic content to the aliasMap of base content if a tap is set
  * @param {Object} aliasMap - object that holds all path alias
  * @param {Object} content - object that holds the content paths
  * @param {Object} content.base - base paths that can not be overwritten
  * @param {string} content.basePath - path the to the base content
- * @param {Object} content.dynamic - paths that can be overwritten by the client
+ * @param {Object} content.dynamic - paths that can be overwritten by the tap
  * @param {boolean} content.extensions - allowed file extensions
- * @param {boolean} content.client - flag for it the client's name is set
+ * @param {boolean} content.tap - flag for it the tap's name is set
  *
  * @return {Object} - Alias map to load files
  */
 const buildDynamicAliases = (appConfig, contentResolver, aliasMap, content) => {
+  
+  // Ensure there a tap exists and the contentResolver is a function
+  const useResolver = content.tap && isFunc(contentResolver)
+  
   // Add dynamic content
   return Object.keys(content.dynamic)
     .reduce((updatedMap, key, value) => {
-      // If we have a client, use the contentResolver method to resolve the path
+      // If we have a tap, use the contentResolver method to resolve the path
       // Otherwise set the path to the basePath
-      updatedMap[key] = content.client
+      updatedMap[key] = useResolver
         ? contentResolver(appConfig, updatedMap, content, content.dynamic[key])
         : path.join(content.basePath, content.dynamic[key])
 
@@ -29,17 +34,17 @@ const buildDynamicAliases = (appConfig, contentResolver, aliasMap, content) => {
 }
 
 /**
- * Builds the path to clients custom content
- * Example - SVComponents | loads files from clients folder or base folder
+ * Builds the path to taps custom content
+ * Example - SVComponents | loads files from taps folder or base folder
  * @param {Object} appConfig - app.json config file
  * @param {function} contentResolver - Function to help resolve file paths
  * @param {Object} aliasMap - object that holds all path alias
  * @param {Object} content - object that holds the content paths
  * @param {Object} content.base - base paths that can not be overwritten
  * @param {string} content.basePath - path the to the base content
- * @param {Object} content.dynamic - paths that can be overwritten by the client
+ * @param {Object} content.dynamic - paths that can be overwritten by the tap
  * @param {boolean} content.extensions - allowed file extensions
- * @param {boolean} content.client - flag for it the client's name is set
+ * @param {boolean} content.tap - flag for it the tap's name is set
  *
  * @return {Object} - Alias map to load files
  */

@@ -35,7 +35,7 @@ const findAliasPath = (fullPath, extensions = []) => {
  * @param {string} currentFile - file that's trying to import
  * @param {Object} opts - original options passed to the babel module-resolver plugin
  *
- * @returns {string} - path to file ( from clients directory || core/base directory )
+ * @returns {string} - path to file ( from taps directory || core/base directory )
  */
 module.exports = (sourcePath, currentFile, opts) => {
 

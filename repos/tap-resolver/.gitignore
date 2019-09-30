@@ -2,7 +2,8 @@
 *.sqlite
 ios/platform.sqlite
 
-**/clients/**/temp
+**/taps/**/temp
+/temp
 
 /temp_assets
 /builds
@@ -105,4 +106,4 @@ buck-out/
 yarn.lock
 package-lock.json
 .next
-*/clientList.js
+*/tapList.js

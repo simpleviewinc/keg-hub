@@ -1,7 +1,7 @@
 const path = require('path')
 const appRoot = require('app-root-path').path
 const runSetup = require('./src/setup')
-const buildClientList = require('./src/buildClientList')
+const buildTapList = require('./src/buildTapList')
 const getAppConfig = require('./src/getAppConfig')
 const { get, isObj } = require('jsutils')
 const { PLATFORM, NODE_ENV } = process.env
@@ -33,7 +33,7 @@ const getPlatformData = (conf, isWeb) => {
  */
 const getResolverFile = (appConfig, type) => {
   try {
-    const resolverPath = get(appConfig, ['clientResolver', 'paths', type ])
+    const resolverPath = get(appConfig, ['tapResolver', 'paths', type ])
     const resolver = resolverPath && path.join(appRoot, resolverPath)
     if(resolver) console.log(`Using custom resolver for ${type}`)
 
@@ -59,15 +59,15 @@ const babelSetup = () => {
 
   const isWeb = PLATFORM === 'web'
   const appConfig = getAppConfig(appRoot)
-  const aliases = getPlatformData(get(appConfig, ['clientResolver', 'aliases']), isWeb)
-  const babelConf = getPlatformData(get(appConfig, ['clientResolver', 'babel']), isWeb)
+  const aliases = getPlatformData(get(appConfig, ['tapResolver', 'aliases']), isWeb)
+  const babelConf = getPlatformData(get(appConfig, ['tapResolver', 'babel']), isWeb)
 
   const contentResolver = getResolverFile(appConfig, 'contentResolver')
   const webResolver = getResolverFile(appConfig, 'webResolver')
   
-  // Build list of local clients from root_dir/clients AND root_dir/node_module/zr-rn-clients
-  buildClientList(appRoot, appConfig)
-  // Run the setup to get client extensions, and alias helper
+  // Build list of local taps from root_dir/taps AND root_dir/node_module/zr-rn-taps
+  buildTapList(appRoot, appConfig)
+  // Run the setup to get tap extensions, and alias helper
   const { buildAliases, EXTENSIONS } = runSetup(appRoot, appConfig, contentResolver)
 
   // Set the presets and plugins based on the platform type
@@ -82,10 +82,7 @@ const babelSetup = () => {
       extensions: EXTENSIONS,
       // Aliases work differently in webpack, so add the webResolver method helper for alias mapping
       resolvePath: isWeb && webResolver || undefined,
-      alias: {
-        ...buildAliases(),
-        ...aliases,
-      }
+      alias: buildAliases()
   }])
 
   return {

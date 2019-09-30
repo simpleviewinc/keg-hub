@@ -1,9 +1,0 @@
-{
-  "name": "testClient",
-  "displayName": "Test Client",
-  "clientResolver": {
-    "aliases": {
-      "nameSpace": "MyTestClient"
-    }
-  }
-}
