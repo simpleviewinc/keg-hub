@@ -5,7 +5,6 @@ const buildTapList = require('./src/buildTapList')
 const getAppConfig = require('./src/getAppConfig')
 const { get, isObj } = require('jsutils')
 const { PLATFORM, NODE_ENV } = process.env
-
 /**
  * Gets the platform data based on the PLATFORM ENV
  * If isWeb, tries to pull from conf.web; else pulls from conf.native else returns conf
@@ -23,7 +22,6 @@ const getPlatformData = (conf, isWeb) => {
         ? conf.native
         : conf
 }
-
 /**
  * Loads a resolver file from the app config if defined, or uses the default
  * @param {Object} appConfig - default app.json config
@@ -33,15 +31,15 @@ const getPlatformData = (conf, isWeb) => {
  */
 const getResolverFile = (appConfig, type) => {
   try {
-    const resolverPath = get(appConfig, ['tapResolver', 'paths', type ])
+    const resolverPath = get(appConfig, [ 'tapResolver', 'paths', type ])
     const resolver = resolverPath && path.join(appRoot, resolverPath)
-    if(resolver) console.log(`Using custom resolver for ${type}`)
+    if (resolver) console.log(`Using custom resolver for ${type}`)
 
     return resolver
       ? require(resolver)
       : require(`./src/${type}`)
   }
-  catch(e){
+  catch (e){
     console.log(`Error loading custom resolver for ${type}`)
     console.error(e.message)
     console.error(e.stack)
@@ -49,7 +47,6 @@ const getResolverFile = (appConfig, type) => {
     return require(`./src/${type}`)
   }
 }
-
 /**
  * Sets up the babel config based on the PLATFORM ENV and the app config in app.json
  *
@@ -59,17 +56,15 @@ const babelSetup = () => {
 
   const isWeb = PLATFORM === 'web'
   const appConfig = getAppConfig(appRoot)
-  const aliases = getPlatformData(get(appConfig, ['tapResolver', 'aliases']), isWeb)
-  const babelConf = getPlatformData(get(appConfig, ['tapResolver', 'babel']), isWeb)
-
+  const platformConfAliases = getPlatformData(get(appConfig, [ 'tapResolver', 'aliases' ]), isWeb)
+  const babelConf = getPlatformData(get(appConfig, [ 'tapResolver', 'babel' ]), isWeb)
   const contentResolver = getResolverFile(appConfig, 'contentResolver')
   const webResolver = getResolverFile(appConfig, 'webResolver')
-  
+
   // Build list of local taps from root_dir/taps AND root_dir/node_module/zr-rn-taps
   buildTapList(appRoot, appConfig)
   // Run the setup to get tap extensions, and alias helper
   const { buildAliases, EXTENSIONS } = runSetup(appRoot, appConfig, contentResolver)
-
   // Set the presets and plugins based on the platform type
   const presets = [ ...babelConf.presets ]
   const plugins = [ ...babelConf.plugins ]
@@ -82,8 +77,11 @@ const babelSetup = () => {
       extensions: EXTENSIONS,
       // Aliases work differently in webpack, so add the webResolver method helper for alias mapping
       resolvePath: isWeb && webResolver || undefined,
-      alias: buildAliases()
-  }])
+      alias: {
+        ...buildAliases(),
+        ...platformConfAliases
+      }
+    } ])
 
   return {
     presets,
@@ -91,11 +89,11 @@ const babelSetup = () => {
     env: {
       test: {
         presets,
-        plugins,
+        plugins
       }
     }
   }
-  
+
 }
 
 module.exports = NODE_ENV === 'resolver-test'
