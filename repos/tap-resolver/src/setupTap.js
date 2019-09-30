@@ -1,11 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 const rimraf = require('rimraf')
-const { deepMerge, logData, setLogs, isStr, isObj, get } = require('jsutils')
+const { deepMerge, logData, get } = require('jsutils')
 const getAppConfig = require('./getAppConfig')
 const { validateApp, ensureDirSync, isDirectory } = require('./helpers')
 const tapConstants = require('./tapConstants')
-const { configNames, configKeys }  = tapConstants
+const { configKeys }  = tapConstants
 
 // Default location to store files
 const TEMP_DEF_FOLDER = path.join(__dirname, '..', './temp')
@@ -69,12 +69,17 @@ const getTapPath = (appRoot, appConfig, tapName) => {
   const localTap = path.join(appRoot, localTaps, tapName)
 
   // returns local tap if it exists
-  return fs.existsSync(localTap)
+  const tapPath = fs.existsSync(localTap)
     ? localTap
     // Else check for external tap
     : fs.existsSync(externalTap)
       ? externalTap
       : null
+  
+  if(tapPath) return tapPath
+
+  throw new Error(`Tap path could not be found! Please ensure the config with 'tapResolver.paths' contains a 'localTaps' and 'externalTaps' key, and that their value is a valid path to your tap folder!\n\n`)
+  
 }
 
 /**
