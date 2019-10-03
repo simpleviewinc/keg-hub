@@ -4,6 +4,7 @@
 
 import { logData } from './log'
 import { isFunc } from './method'
+import { deepClone } from './collection'
 import { sanitize, isStr } from './string'
 import { isArr } from './array'
 import { strToType } from './ext'
@@ -52,37 +53,6 @@ export const clearObj = (obj, filter) => {
 export const eitherObj = (obj1, obj2) => (
   isObj(obj1) && obj1 || obj2
 )
-
-/**
- * Recursively clones an object.
- * @function
- * @param {Object} obj - object to clone
- * @return {Object} - cloned Object
- */
-export const deepClone = (obj, hash = new WeakMap()) => {
-  if (Object(obj) !== obj) return obj
-  if (obj instanceof Set) return new Set(obj)
-  if (hash.has(obj)) return hash.get(obj)
-
-  const result = obj instanceof Date 
-    ? new Date(obj)
-    : obj instanceof RegExp 
-      ? new RegExp(obj.source, obj.flags)
-      : obj.constructor 
-        ? new obj.constructor()
-        : Object.create(null)
-
-  hash.set(obj, result)
-  if (obj instanceof Map)
-    return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)) )
-
-  return Object
-    .assign(
-      result,
-      ...Object.keys(obj)
-        .map(key => ({ [key]: deepClone(obj[key], hash) }))
-    )
-}
 
 /**
  * Recursively freezes and object.
