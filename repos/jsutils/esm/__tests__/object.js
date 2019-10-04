@@ -14,6 +14,8 @@ require("core-js/modules/es.array.map");
 
 require("core-js/modules/es.function.name");
 
+require("core-js/modules/es.object.freeze");
+
 require("core-js/modules/es.object.is-frozen");
 
 require("core-js/modules/es.object.keys");
@@ -330,6 +332,57 @@ describe('/object', function () {
         expect(key.toUpperCase() in mapped).toEqual(true);
         expect(mapped[key.toUpperCase()]).toEqual(key.toUpperCase());
       });
+    });
+  });
+  describe('applyToCloneOf', function () {
+    it('should return a clone with the changes, leaving the original object unchanged', function () {
+      var orig = Object.freeze({
+        a: 1,
+        b: 2
+      });
+      var result = Obj.applyToCloneOf(orig, function (clone) {
+        clone.a = 42;
+      });
+      expect(orig.a).toEqual(1);
+      expect(result.a).toEqual(42);
+      expect(result.b).toEqual(2);
+    });
+    it('should call console.warn on bad input', function () {
+      var orgWarn = console.warn;
+      console.warn = jest.fn();
+      Obj.applyToCloneOf(null, function () {});
+      expect(console.warn).toHaveBeenCalled();
+      console.warn.mockClear();
+      Obj.applyToCloneOf(1, function () {});
+      expect(console.warn).toHaveBeenCalled();
+      console.warn.mockClear();
+      Obj.applyToCloneOf({}, null);
+      expect(console.warn).toHaveBeenCalled();
+      console.warn.mockClear();
+      Obj.applyToCloneOf({}, "I am not a function");
+      expect(console.warn).toHaveBeenCalled();
+      console.warn.mockClear();
+      console.warn = orgWarn;
+    });
+    it('should return the original object when on bad input', function () {
+      var orgWarn = console.warn;
+      console.warn = jest.fn();
+      var original = {};
+      var notClone = Obj.applyToCloneOf(original, null);
+      expect(console.warn).toHaveBeenCalled();
+      expect(notClone === original).toEqual(true);
+      console.warn = orgWarn;
+    });
+    it('should work with delete', function () {
+      var orig = Object.freeze({
+        a: 1,
+        b: 2
+      });
+      var updated = Obj.applyToCloneOf(orig, function (clone) {
+        delete clone['a'];
+      });
+      expect(updated.a).toEqual(undefined);
+      expect(orig.a).toEqual(1);
     });
   });
 });

@@ -4,11 +4,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.deepMerge = exports.deepFreeze = exports.deepClone = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
 var _method = require("./method");
+
+var _collection = require("./collection");
 
 var _string = require("./string");
 
@@ -19,8 +21,6 @@ var _ext = require("./ext");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Clones an object by converting to JSON string and back.
@@ -68,27 +68,6 @@ exports.clearObj = clearObj;
 
 const eitherObj = (obj1, obj2) => isObj(obj1) && obj1 || obj2;
 /**
- * Recursively clones an object.
- * @function
- * @param {Object} obj - object to clone
- * @return {Object} - cloned Object
- */
-
-
-exports.eitherObj = eitherObj;
-
-const deepClone = (obj, hash = new WeakMap()) => {
-  if (Object(obj) !== obj) return obj;
-  if (obj instanceof Set) return new Set(obj);
-  if (hash.has(obj)) return hash.get(obj);
-  const result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
-  hash.set(obj, result);
-  if (obj instanceof Map) return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)));
-  return _extends(result, ...Object.keys(obj).map(key => ({
-    [key]: deepClone(obj[key], hash)
-  })));
-};
-/**
  * Recursively freezes and object.
  * @function
  * @param {Object} obj
@@ -96,7 +75,7 @@ const deepClone = (obj, hash = new WeakMap()) => {
  */
 
 
-exports.deepClone = deepClone;
+exports.eitherObj = eitherObj;
 
 const deepFreeze = obj => {
   Object.freeze(obj);
@@ -132,6 +111,33 @@ const deepMerge = (...sources) => {
   merged, {});
 };
 /**
+ * Deep clones Object obj, then returns the result of calling function mutatorCb with the clone as its argument
+ * @example
+ * const obj = {}
+ * const clone = applyToCloneOf(obj, (clone) => { clone.test = 'foo'; return clone })
+ * console.log(obj === clone) // prints false
+ * console.log(clone.test === 'data') // prints true
+ * @function
+ * @param {Object} obj - object
+ * @param {Function} mutatorCb - a callback that accepts one argument, the cloned obj, and mutates it in some way
+ * @returns the mutated clone
+ */
+
+
+exports.deepMerge = deepMerge;
+
+const applyToCloneOf = (obj, mutatorCb) => {
+  let error;
+  if (!obj) error = 'object (Argument 1) in applyToCloneOf, must be defined!';
+  if (!isObj(obj)) error = 'object (Argument 1) in applyToCloneOf, must be an object!';
+  if (!mutatorCb) error = 'mutator (Argument 2) in applyToCloneOf, must be defined!';
+  if (!(0, _method.isFunc)(mutatorCb)) error = 'mutator (Argument 2) arg in applyToCloneOf, must be a function!';
+  if (error) return console.warn(error) || obj;
+  const clone = (0, _collection.deepClone)(obj);
+  mutatorCb(clone);
+  return clone;
+};
+/**
  * Checks if prop exists on the object.
  * @function
  * @param {Object} obj - data to check
@@ -140,7 +146,7 @@ const deepMerge = (...sources) => {
  */
 
 
-exports.deepMerge = deepMerge;
+exports.applyToCloneOf = applyToCloneOf;
 
 const hasOwn = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
 /**

@@ -4,11 +4,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isEmptyCollection = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isColl = exports.get = void 0;
+exports.deepClone = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isEmptyColl = exports.isColl = exports.get = void 0;
 
 var _method = require("./method");
 
 var _array = require("./array");
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Updates a collection by removing, getting, adding to it.
@@ -79,6 +81,26 @@ exports.get = get;
 
 const isColl = val => typeof val === 'object' && val !== null;
 /**
+ * Checks if passed in obj || array is empty.
+ * @example
+ * isEmptyColl({})
+ * // Returns true
+ * @example
+ * isEmptyColl({ foo: 'bar' })
+ * // Returns false
+ * @example
+ * isEmptyColl([])
+ * // Returns true
+ * @function
+ * @param {Object} obj - object to check if empty
+ * @return {boolean}  true || false
+ */
+
+
+exports.isColl = isColl;
+
+const isEmptyColl = obj => (0, _array.isArr)(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
+/**
  * Loops over a collection and calls a passed in function for each one.
  * @example
  * mapColl([1, 2, 3], (key, val, coll) => { console.log(key) })
@@ -89,7 +111,7 @@ const isColl = val => typeof val === 'object' && val !== null;
  */
 
 
-exports.isColl = isColl;
+exports.isEmptyColl = isEmptyColl;
 
 const mapColl = (coll, cb) => (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).map(key => cb(key, coll[key], coll)) : (0, _array.isArr)(coll) ? [] : {};
 /**
@@ -146,21 +168,33 @@ exports.set = set;
 
 const unset = (obj, path) => updateColl(obj, path, 'unset');
 /**
- * Checks if passed in obj is empty.
+ * Recursively clones am object or array.
+  * @example
+ * const test = { foo: [ { bar: 'baz' } ] }
+ * const clone = deepClone(test)
+ * console.log(test === clone)) // prints false
+ * console.log(test.foo === clone.foo) // prints false
  * @example
- * isEmptyCollection({})
- * // Returns true
- * @example
- * isEmptyCollection({ foo: 'bar' })
- * // Returns false
- * @function
- * @param {Object} obj - object to check if empty
- * @return {boolean}  true || false
+ * // Works with array too
+ * deepClone([ [ [ 0 ] ] ])
+ * // Returns copy of the passed in collection item
+ * @param {Object} obj - object to clone
+ * @return {Object} - cloned Object
  */
 
 
 exports.unset = unset;
 
-const isEmptyCollection = obj => (0, _array.isArr)(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
+const deepClone = (obj, hash = new WeakMap()) => {
+  if (Object(obj) !== obj) return obj;
+  if (obj instanceof Set) return new Set(obj);
+  if (hash.has(obj)) return hash.get(obj);
+  const result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
+  hash.set(obj, result);
+  if (obj instanceof Map) return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)));
+  return _extends(result, ...Object.keys(obj).map(key => ({
+    [key]: deepClone(obj[key], hash)
+  })));
+};
 
-exports.isEmptyCollection = isEmptyCollection;
+exports.deepClone = deepClone;

@@ -7,11 +7,25 @@ require("core-js/modules/es.symbol.description");
 
 require("core-js/modules/es.symbol.iterator");
 
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.array.from");
+
+require("core-js/modules/es.array.is-array");
+
 require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.map");
 
 require("core-js/modules/es.array.reduce");
+
+require("core-js/modules/es.date.to-string");
+
+require("core-js/modules/es.map");
+
+require("core-js/modules/es.object.assign");
+
+require("core-js/modules/es.object.create");
 
 require("core-js/modules/es.object.define-property");
 
@@ -21,22 +35,52 @@ require("core-js/modules/es.object.keys");
 
 require("core-js/modules/es.object.to-string");
 
+require("core-js/modules/es.regexp.constructor");
+
 require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.regexp.flags");
+
+require("core-js/modules/es.regexp.to-string");
+
+require("core-js/modules/es.set");
 
 require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/es.string.split");
+
+require("core-js/modules/es.weak-map");
 
 require("core-js/modules/web.dom-collections.iterator");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isEmptyCollection = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isColl = exports.get = void 0;
+exports.deepClone = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isEmptyColl = exports.isColl = exports.get = void 0;
 
 var _method = require("./method");
 
 var _array = require("./array");
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -113,6 +157,28 @@ var isColl = function isColl(val) {
   return _typeof(val) === 'object' && val !== null;
 };
 /**
+ * Checks if passed in obj || array is empty.
+ * @example
+ * isEmptyColl({})
+ * // Returns true
+ * @example
+ * isEmptyColl({ foo: 'bar' })
+ * // Returns false
+ * @example
+ * isEmptyColl([])
+ * // Returns true
+ * @function
+ * @param {Object} obj - object to check if empty
+ * @return {boolean}  true || false
+ */
+
+
+exports.isColl = isColl;
+
+var isEmptyColl = function isEmptyColl(obj) {
+  return (0, _array.isArr)(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
+};
+/**
  * Loops over a collection and calls a passed in function for each one.
  * @example
  * mapColl([1, 2, 3], (key, val, coll) => { console.log(key) })
@@ -123,7 +189,7 @@ var isColl = function isColl(val) {
  */
 
 
-exports.isColl = isColl;
+exports.isEmptyColl = isEmptyColl;
 
 var mapColl = function mapColl(coll, cb) {
   return (0, _method.isFunc)(cb) && isColl(coll) ? Object.keys(coll).map(function (key) {
@@ -192,23 +258,40 @@ var unset = function unset(obj, path) {
   return updateColl(obj, path, 'unset');
 };
 /**
- * Checks if passed in obj is empty.
+ * Recursively clones am object or array.
+  * @example
+ * const test = { foo: [ { bar: 'baz' } ] }
+ * const clone = deepClone(test)
+ * console.log(test === clone)) // prints false
+ * console.log(test.foo === clone.foo) // prints false
  * @example
- * isEmptyCollection({})
- * // Returns true
- * @example
- * isEmptyCollection({ foo: 'bar' })
- * // Returns false
- * @function
- * @param {Object} obj - object to check if empty
- * @return {boolean}  true || false
+ * // Works with array too
+ * deepClone([ [ [ 0 ] ] ])
+ * // Returns copy of the passed in collection item
+ * @param {Object} obj - object to clone
+ * @return {Object} - cloned Object
  */
 
 
 exports.unset = unset;
 
-var isEmptyCollection = function isEmptyCollection(obj) {
-  return (0, _array.isArr)(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
+var deepClone = function deepClone(obj) {
+  var hash = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new WeakMap();
+  if (Object(obj) !== obj) return obj;
+  if (obj instanceof Set) return new Set(obj);
+  if (hash.has(obj)) return hash.get(obj);
+  var result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
+  hash.set(obj, result);
+  if (obj instanceof Map) return Array.from(obj, function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        key = _ref2[0],
+        val = _ref2[1];
+
+    return result.set(key, deepClone(val, hash));
+  });
+  return _extends.apply(void 0, [result].concat(_toConsumableArray(Object.keys(obj).map(function (key) {
+    return _defineProperty({}, key, deepClone(obj[key], hash));
+  }))));
 };
 
-exports.isEmptyCollection = isEmptyCollection;
+exports.deepClone = deepClone;

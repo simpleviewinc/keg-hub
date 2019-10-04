@@ -61,6 +61,24 @@ describe('/collection', () => {
       expect(Coll.isColl(NaN)).toBe(false);
     });
   });
+  describe('isEmptyColl', () => {
+    it('should check if an object is empty', () => {
+      const notEmpty = {
+        data: [{
+          foo: 'duper'
+        }]
+      };
+      const empty = {};
+      expect(Coll.isEmptyColl(notEmpty)).toBe(false);
+      expect(Coll.isEmptyColl(empty)).toBe(true);
+    });
+    it('should handle arrays, and not throw an error', () => {
+      const notEmpty = [1, 2, 3];
+      const empty = [];
+      expect(Coll.isEmptyColl(notEmpty)).toBe(false);
+      expect(Coll.isEmptyColl(empty)).toBe(true);
+    });
+  });
   describe('mapColl', () => {
     it('should loop over a collection of items', () => {
       let counter = 0;
@@ -172,22 +190,56 @@ describe('/collection', () => {
       expect(res).toBe(true);
     });
   });
-  describe('isEmptyCollection', () => {
-    it('should check if an object is empty', () => {
-      const notEmpty = {
-        data: [{
-          foo: 'duper'
+  describe('deepClone', () => {
+    it('should create a copy of the passed in object collection', () => {
+      const org = {
+        foo: 'bar'
+      };
+      const clone = Coll.deepClone(org);
+      expect(clone === org).toEqual(false);
+      expect(Object.keys(clone).length).toEqual(1);
+      expect(clone.foo).toEqual('bar');
+    });
+    it('should create a copy of the passed in array collection', () => {
+      const org = ['foo', 'bar'];
+      const clone = Coll.deepClone(org);
+      expect(clone === org).toEqual(false);
+      expect(clone.length).toEqual(2);
+      expect(clone[0]).toEqual('foo');
+      expect(clone[1]).toEqual('bar');
+    });
+    it('should create a deep copy of the passed in object collection', () => {
+      const org = {
+        foo: {
+          bar: 'baz'
+        }
+      };
+      const clone = Coll.deepClone(org);
+      expect(clone === org).toEqual(false);
+      expect(clone.foo === org.foo).toEqual(false);
+      expect(clone.foo.bar).toEqual('baz');
+    });
+    it('should create a deep copy of the passed in array collection', () => {
+      const org = [['foo', 'baz'], ['bar']];
+      const clone = Coll.deepClone(org);
+      expect(clone[0] === org[0]).toEqual(false);
+      expect(clone[1] === org[1]).toEqual(false);
+      expect(clone.length).toEqual(2);
+      expect(clone[0][0]).toEqual('foo');
+      expect(clone[1][0]).toEqual('bar');
+    });
+    it('should create a deep copy of the passed in object with arrays with objects', () => {
+      const org = {
+        das: [{
+          bar: ['foo', 'baz']
         }]
       };
-      const empty = {};
-      expect(Coll.isEmptyCollection(notEmpty)).toBe(false);
-      expect(Coll.isEmptyCollection(empty)).toBe(true);
-    });
-    it('should handle arrays, and not throw an error', () => {
-      const notEmpty = [1, 2, 3];
-      const empty = [];
-      expect(Coll.isEmptyCollection(notEmpty)).toBe(false);
-      expect(Coll.isEmptyCollection(empty)).toBe(true);
+      const clone = Coll.deepClone(org);
+      expect(clone.das === org.das).toEqual(false);
+      expect(clone.das[0] === org.das[0]).toEqual(false);
+      expect(clone.das[0].bar === org.das[0].bar).toEqual(false);
+      expect(clone.das[0].bar[0]).toEqual('foo');
+      expect(clone.das[0].bar[1]).toEqual('baz');
     });
   });
 });
