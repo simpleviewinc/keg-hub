@@ -50,3 +50,4 @@ app/git
 notes.sh
 *.env
 repos/
+yarn.lock
