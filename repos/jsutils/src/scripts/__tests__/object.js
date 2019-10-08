@@ -288,10 +288,10 @@ describe('/object', () => {
   describe('applyToCloneOf', () => {
 
     it('should return a clone with the changes, leaving the original object unchanged', () => {
-      const orig = Object.freeze({
+      const orig = {
         a: 1,
         b: 2
-      })
+      }
 
       const result = Obj.applyToCloneOf(orig, (clone) => {
         clone.a = 42
@@ -339,10 +339,10 @@ describe('/object', () => {
     })
 
     it('should work with delete', () => {
-      const orig = Object.freeze({
+      const orig = {
         a: 1,
         b: 2
-      })
+      }
 
       const updated = Obj.applyToCloneOf(orig, clone => {
         delete clone['a']

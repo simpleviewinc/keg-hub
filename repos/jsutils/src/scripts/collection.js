@@ -5,7 +5,6 @@
 import { isFunc } from './method'
 import { isArr } from './array'
 
-
 /**
  * Updates a collection by removing, getting, adding to it.
  * @memberof collection
@@ -202,9 +201,12 @@ export const deepClone = (obj, hash = new WeakMap()) => {
     ? new Date(obj)
     : obj instanceof RegExp 
       ? new RegExp(obj.source, obj.flags)
-      : obj.constructor 
-        ? new obj.constructor()
-        : Object.create(null)
+      : (!obj.constructor)
+        ? Object.create(null)
+        : null
+  
+  // if result is null, object has a constructor and wasn't an instance of Date nor RegExp
+  if (result === null) return cloneObjWithPrototypeAndProperties(obj)
 
   hash.set(obj, result)
 
@@ -217,4 +219,27 @@ export const deepClone = (obj, hash = new WeakMap()) => {
       ...Object.keys(obj)
         .map(key => ({ [key]: deepClone(obj[key], hash) }))
     )
+}
+
+/**
+ * Helper for deepClone. Deeply clones the object, including its properties, and preserves the prototype and isFrozen and isSealed state
+ * @param {Object} objectWithPrototype - any object that has a prototype
+ * @returns {Object} the cloned object 
+ */
+const cloneObjWithPrototypeAndProperties = (objectWithPrototype) => {
+  if (!objectWithPrototype) return objectWithPrototype
+
+  const prototype = Object.getPrototypeOf(objectWithPrototype)
+  
+  const sourceDescriptors = Object.getOwnPropertyDescriptors(objectWithPrototype)
+
+  for (const [key, descriptor] of Object.entries(sourceDescriptors)) {
+    sourceDescriptors[key].value = deepClone(descriptor.value)
+  }
+
+  const clone = Object.create(prototype, sourceDescriptors)
+
+  if (Object.isFrozen(objectWithPrototype)) Object.freeze(clone)
+  if (Object.isSealed(objectWithPrototype)) Object.seal(clone)
+  return clone 
 }

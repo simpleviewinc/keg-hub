@@ -10,6 +10,14 @@ var _method = require("./method");
 
 var _array = require("./array");
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
@@ -189,12 +197,40 @@ const deepClone = (obj, hash = new WeakMap()) => {
   if (Object(obj) !== obj) return obj;
   if (obj instanceof Set) return new Set(obj);
   if (hash.has(obj)) return hash.get(obj);
-  const result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
+  const result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : !obj.constructor ? Object.create(null) : null; // if result is null, object has a constructor and wasn't an instance of Date nor RegExp
+
+  if (result === null) {
+    return cloneObjWithPrototypeAndProperties(obj);
+  }
+
   hash.set(obj, result);
   if (obj instanceof Map) return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)));
   return _extends(result, ...Object.keys(obj).map(key => ({
     [key]: deepClone(obj[key], hash)
   })));
 };
+/**
+ * Helper for deepClone. Deeply clones the object, including its properties, and preserves the prototype and isFrozen state
+ * @param {Object} objectWithPrototype - any object that has a prototype
+ * @returns {Object} the cloned object 
+ */
+
 
 exports.deepClone = deepClone;
+
+const cloneObjWithPrototypeAndProperties = objectWithPrototype => {
+  if (!objectWithPrototype) return objectWithPrototype;
+  const prototype = Object.getPrototypeOf(objectWithPrototype);
+  const sourceDescriptors = Object.getOwnPropertyDescriptors(objectWithPrototype);
+
+  for (var _i = 0, _Object$entries = Object.entries(sourceDescriptors); _i < _Object$entries.length; _i++) {
+    const _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+          key = _Object$entries$_i[0],
+          descriptor = _Object$entries$_i[1];
+
+    sourceDescriptors[key].value = deepClone(descriptor.value);
+  }
+
+  const clone = Object.create(prototype, sourceDescriptors);
+  return Object.isFrozen(objectWithPrototype) ? Object.freeze(clone) : clone;
+};

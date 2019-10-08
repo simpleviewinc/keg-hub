@@ -14,8 +14,6 @@ require("core-js/modules/es.array.map");
 
 require("core-js/modules/es.function.name");
 
-require("core-js/modules/es.object.freeze");
-
 require("core-js/modules/es.object.is-frozen");
 
 require("core-js/modules/es.object.keys");
@@ -336,10 +334,10 @@ describe('/object', function () {
   });
   describe('applyToCloneOf', function () {
     it('should return a clone with the changes, leaving the original object unchanged', function () {
-      var orig = Object.freeze({
+      var orig = {
         a: 1,
         b: 2
-      });
+      };
       var result = Obj.applyToCloneOf(orig, function (clone) {
         clone.a = 42;
       });
@@ -374,10 +372,10 @@ describe('/object', function () {
       console.warn = orgWarn;
     });
     it('should work with delete', function () {
-      var orig = Object.freeze({
+      var orig = {
         a: 1,
         b: 2
-      });
+      };
       var updated = Obj.applyToCloneOf(orig, function (clone) {
         delete clone['a'];
       });

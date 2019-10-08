@@ -241,5 +241,33 @@ describe('/collection', () => {
       expect(clone.das[0].bar[0]).toEqual('foo');
       expect(clone.das[0].bar[1]).toEqual('baz');
     });
+    it('should make a frozen clone if the source is frozen', () => {
+      const source = Object.freeze({
+        a: 1
+      });
+      const clone = Coll.deepClone(source);
+      expect(Object.isFrozen(clone)).toBe(true);
+    });
+    it('should preserve all properties from an object created using a constructor', () => {
+      class TestObject {
+        constructor(a) {
+          this.a = a;
+        }
+
+      }
+
+      const source = new TestObject(1);
+      const clone = Coll.deepClone(source);
+      expect(clone.a).toEqual(source.a);
+    });
+    it('should preserve the prototype', () => {
+      class Foo {}
+
+      class Bar extends Foo {}
+
+      const source = new Bar();
+      const clone = Coll.deepClone(source);
+      expect(Object.getPrototypeOf(clone)).toEqual(Object.getPrototypeOf(source));
+    });
   });
 });

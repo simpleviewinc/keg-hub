@@ -29,7 +29,17 @@ require("core-js/modules/es.object.create");
 
 require("core-js/modules/es.object.define-property");
 
+require("core-js/modules/es.object.entries");
+
+require("core-js/modules/es.object.freeze");
+
+require("core-js/modules/es.object.get-own-property-descriptors");
+
 require("core-js/modules/es.object.get-own-property-names");
+
+require("core-js/modules/es.object.get-prototype-of");
+
+require("core-js/modules/es.object.is-frozen");
 
 require("core-js/modules/es.object.keys");
 
@@ -280,7 +290,12 @@ var deepClone = function deepClone(obj) {
   if (Object(obj) !== obj) return obj;
   if (obj instanceof Set) return new Set(obj);
   if (hash.has(obj)) return hash.get(obj);
-  var result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : obj.constructor ? new obj.constructor() : Object.create(null);
+  var result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : !obj.constructor ? Object.create(null) : null; // if result is null, object has a constructor and wasn't an instance of Date nor RegExp
+
+  if (result === null) {
+    return cloneObjWithPrototypeAndProperties(obj);
+  }
+
   hash.set(obj, result);
   if (obj instanceof Map) return Array.from(obj, function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),
@@ -293,5 +308,28 @@ var deepClone = function deepClone(obj) {
     return _defineProperty({}, key, deepClone(obj[key], hash));
   }))));
 };
+/**
+ * Helper for deepClone. Deeply clones the object, including its properties, and preserves the prototype and isFrozen state
+ * @param {Object} objectWithPrototype - any object that has a prototype
+ * @returns {Object} the cloned object 
+ */
+
 
 exports.deepClone = deepClone;
+
+var cloneObjWithPrototypeAndProperties = function cloneObjWithPrototypeAndProperties(objectWithPrototype) {
+  if (!objectWithPrototype) return objectWithPrototype;
+  var prototype = Object.getPrototypeOf(objectWithPrototype);
+  var sourceDescriptors = Object.getOwnPropertyDescriptors(objectWithPrototype);
+
+  for (var _i2 = 0, _Object$entries = Object.entries(sourceDescriptors); _i2 < _Object$entries.length; _i2++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
+        key = _Object$entries$_i[0],
+        descriptor = _Object$entries$_i[1];
+
+    sourceDescriptors[key].value = deepClone(descriptor.value);
+  }
+
+  var clone = Object.create(prototype, sourceDescriptors);
+  return Object.isFrozen(objectWithPrototype) ? Object.freeze(clone) : clone;
+};

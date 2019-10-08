@@ -10,13 +10,35 @@ require("core-js/modules/es.array.is-array");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.object.create");
+
+require("core-js/modules/es.object.freeze");
+
+require("core-js/modules/es.object.get-prototype-of");
+
+require("core-js/modules/es.object.is-frozen");
+
 require("core-js/modules/es.object.keys");
+
+require("core-js/modules/es.object.set-prototype-of");
 
 require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/web.dom-collections.iterator");
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -262,6 +284,47 @@ describe('/collection', function () {
       expect(clone.das[0].bar === org.das[0].bar).toEqual(false);
       expect(clone.das[0].bar[0]).toEqual('foo');
       expect(clone.das[0].bar[1]).toEqual('baz');
+    });
+    it('should make a frozen clone if the source is frozen', function () {
+      var source = Object.freeze({
+        a: 1
+      });
+      var clone = Coll.deepClone(source);
+      expect(Object.isFrozen(clone)).toBe(true);
+    });
+    it('should preserve all properties from an object created using a constructor', function () {
+      var TestObject = function TestObject(a) {
+        _classCallCheck(this, TestObject);
+
+        this.a = a;
+      };
+
+      var source = new TestObject(1);
+      var clone = Coll.deepClone(source);
+      expect(clone.a).toEqual(source.a);
+    });
+    it('should preserve the prototype', function () {
+      var Foo = function Foo() {
+        _classCallCheck(this, Foo);
+      };
+
+      var Bar =
+      /*#__PURE__*/
+      function (_Foo) {
+        _inherits(Bar, _Foo);
+
+        function Bar() {
+          _classCallCheck(this, Bar);
+
+          return _possibleConstructorReturn(this, _getPrototypeOf(Bar).apply(this, arguments));
+        }
+
+        return Bar;
+      }(Foo);
+
+      var source = new Bar();
+      var clone = Coll.deepClone(source);
+      expect(Object.getPrototypeOf(clone)).toEqual(Object.getPrototypeOf(source));
     });
   });
 });
