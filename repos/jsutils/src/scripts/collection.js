@@ -179,7 +179,7 @@ export const set = (obj, path, val) => (
 export const unset = (obj, path) => updateColl(obj, path, 'unset')
 
 /**
- * Recursively clones am object or array.
+ * Recursively clones an object or array.
   * @example
  * const test = { foo: [ { bar: 'baz' } ] }
  * const clone = deepClone(test)
@@ -196,6 +196,7 @@ export const deepClone = (obj, hash = new WeakMap()) => {
   if (Object(obj) !== obj) return obj
   if (obj instanceof Set) return new Set(obj)
   if (hash.has(obj)) return hash.get(obj)
+  if (isArr(obj)) return obj.map(x => deepClone(x))
 
   const result = obj instanceof Date 
     ? new Date(obj)

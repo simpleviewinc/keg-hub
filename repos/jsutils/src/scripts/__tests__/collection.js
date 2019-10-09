@@ -1,4 +1,6 @@
 const Coll = require('../collection')
+const { isArr } = require('../array')
+const { isObj } = require('../object')
 
 describe('/collection', () => {
 
@@ -207,6 +209,25 @@ describe('/collection', () => {
       expect(clone[0]).toEqual('foo')
       expect(clone[1]).toEqual('bar')
       
+    })
+
+    describe('preserving the source types when cloning', () => {
+      class Foo {}
+      const testCases = [
+        [[], isArr], 
+        [{}, isObj],
+        [1, Number.isInteger ],
+        [new Foo(), x => (x instanceof Foo)],
+        [new Date(), x => (x instanceof Date)],
+        ["hi", x => (typeof x === 'string')],
+      ]
+
+      testCases.map(([source, predicate], idx) => {
+        it(`should preserve the source type for test case ${idx}`, () => {
+          const clone = Coll.deepClone(source)
+          expect(predicate(clone)).toBe(true)
+        })
+      })
     })
 
     it('should create a deep copy of the passed in object collection', () => {
