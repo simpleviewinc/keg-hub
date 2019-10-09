@@ -10,6 +10,14 @@ require("core-js/modules/es.array.is-array");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.date.to-string");
+
+require("core-js/modules/es.number.constructor");
+
+require("core-js/modules/es.number.is-integer");
+
 require("core-js/modules/es.object.create");
 
 require("core-js/modules/es.object.freeze");
@@ -18,7 +26,11 @@ require("core-js/modules/es.object.get-prototype-of");
 
 require("core-js/modules/es.object.is-frozen");
 
+require("core-js/modules/es.object.is-sealed");
+
 require("core-js/modules/es.object.keys");
+
+require("core-js/modules/es.object.seal");
 
 require("core-js/modules/es.object.set-prototype-of");
 
@@ -38,11 +50,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var Coll = require('../collection');
+
+var _require = require('../array'),
+    isArr = _require.isArr;
+
+var _require2 = require('../object'),
+    isObj = _require2.isObj;
 
 describe('/collection', function () {
   beforeEach(function () {
@@ -252,6 +278,29 @@ describe('/collection', function () {
       expect(clone[0]).toEqual('foo');
       expect(clone[1]).toEqual('bar');
     });
+    describe('preserving the source types when cloning', function () {
+      var Foo = function Foo() {
+        _classCallCheck(this, Foo);
+      };
+
+      var testCases = [[[], isArr], [{}, isObj], [1, Number.isInteger], [new Foo(), function (x) {
+        return x instanceof Foo;
+      }], [new Date(), function (x) {
+        return x instanceof Date;
+      }], ["hi", function (x) {
+        return typeof x === 'string';
+      }]];
+      testCases.map(function (_ref, idx) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            source = _ref2[0],
+            predicate = _ref2[1];
+
+        it("should preserve the source type for test case ".concat(idx), function () {
+          var clone = Coll.deepClone(source);
+          expect(predicate(clone)).toBe(true);
+        });
+      });
+    });
     it('should create a deep copy of the passed in object collection', function () {
       var org = {
         foo: {
@@ -325,6 +374,12 @@ describe('/collection', function () {
       var source = new Bar();
       var clone = Coll.deepClone(source);
       expect(Object.getPrototypeOf(clone)).toEqual(Object.getPrototypeOf(source));
+    }), it('should make a sealed clone if the source is sealed', function () {
+      var source = Object.seal({
+        a: 1
+      });
+      var clone = Coll.deepClone(source);
+      expect(Object.isSealed(clone)).toBe(true);
     });
   });
 });

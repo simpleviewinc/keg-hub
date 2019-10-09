@@ -2,6 +2,12 @@
 
 const Coll = require('../collection');
 
+const _require = require('../array'),
+      isArr = _require.isArr;
+
+const _require2 = require('../object'),
+      isObj = _require2.isObj;
+
 describe('/collection', () => {
   beforeEach(() => jest.resetAllMocks());
   describe('get', () => {
@@ -208,6 +214,17 @@ describe('/collection', () => {
       expect(clone[0]).toEqual('foo');
       expect(clone[1]).toEqual('bar');
     });
+    describe('preserving the source types when cloning', () => {
+      class Foo {}
+
+      const testCases = [[[], isArr], [{}, isObj], [1, Number.isInteger], [new Foo(), x => x instanceof Foo], [new Date(), x => x instanceof Date], ["hi", x => typeof x === 'string']];
+      testCases.map(([source, predicate], idx) => {
+        it(`should preserve the source type for test case ${idx}`, () => {
+          const clone = Coll.deepClone(source);
+          expect(predicate(clone)).toBe(true);
+        });
+      });
+    });
     it('should create a deep copy of the passed in object collection', () => {
       const org = {
         foo: {
@@ -268,6 +285,12 @@ describe('/collection', () => {
       const source = new Bar();
       const clone = Coll.deepClone(source);
       expect(Object.getPrototypeOf(clone)).toEqual(Object.getPrototypeOf(source));
+    }), it('should make a sealed clone if the source is sealed', () => {
+      const source = Object.seal({
+        a: 1
+      });
+      const clone = Coll.deepClone(source);
+      expect(Object.isSealed(clone)).toBe(true);
     });
   });
 });
