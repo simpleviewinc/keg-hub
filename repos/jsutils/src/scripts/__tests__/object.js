@@ -354,4 +354,79 @@ describe('/object', () => {
 
   })
 
+  describe('everyEntry', () => {
+    it('should work across an object\'s entries', () => {
+
+      const foo = { a: 1, b: 2, c: 3}
+
+      let result = Obj.everyEntry(foo, (k,v) => (v > 2))
+      expect(result).toBe(false)
+
+      result = Obj.everyEntry(foo, (k,v) => (v > 0))
+      expect(result).toBe(true)
+    })
+
+    it('should log errors and return false if invalid input was passed', () => {
+      const orgError = console.error
+      const outputArr = []
+      console.error = (output) => outputArr.push(output)
+
+      const aString = "neither a function nor object"
+      expect(Obj.everyEntry(null, () => {})).toEqual(false)
+      expect(Obj.everyEntry({}, aString)).toEqual(false)
+      expect(Obj.everyEntry(aString, () => {})).toEqual(false) 
+      expect(outputArr.length).toEqual(3)
+
+      console.error = orgError
+    })
+  })
+
+  describe('someEntry', () => {
+    it('should work across an object\'s entries', () => {
+      const foo = { a: 1, b: 2, c: 3}
+
+      let result = Obj.someEntry(foo, (k,v) => (v > 2))
+      expect(result).toBe(true)
+
+      result = Obj.someEntry(foo, (k,v) => (v > 4))
+      expect(result).toBe(false)
+    })
+
+    it('should log errors and return false if invalid input was passed', () => {
+      const orgError = console.error
+      const outputArr = []
+      console.error = (output) => outputArr.push(output)
+
+      const aString = "neither a function nor object"
+      expect(Obj.someEntry(null, () => {})).toEqual(false)
+      expect(Obj.someEntry({}, aString)).toEqual(false)
+      expect(Obj.someEntry(aString, () => {})).toEqual(false)
+      expect(outputArr.length).toEqual(3)
+
+      console.error = orgError
+    })
+  })
+
+  describe('filterObj', () => {
+    it('should work across an object\'s entries', () => {
+      const foo = { a: 1, b: 2, c: 3 }
+
+      let result = Obj.filterObj(foo, (k, v) => v > 2)
+      expect(result.a).toBe(undefined)
+      expect(result.b).toBe(undefined)
+      expect(result.c).toBe(foo.c)
+    })
+
+    it('should log errors and return the obj argument if invalid input was passed', () => {
+      const orgError = console.error
+      const outputArr = []
+      console.error = (output) => outputArr.push(output)
+
+      const aString = "not an object"
+      expect(Obj.filterObj(aString, () => {})).toEqual(aString)
+      expect(Obj.filterObj({}, null)).toEqual({})
+      expect(outputArr.length).toEqual(2)
+      console.error = orgError
+    })
+  })
 })
