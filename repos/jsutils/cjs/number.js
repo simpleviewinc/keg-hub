@@ -8,21 +8,6 @@ exports.toNum = exports.toInt = exports.toFloat = exports.nth = exports.isNum = 
 
 var _string = require("./string");
 
-/**
- * Checks if a value is NaN.
- * @example
- * equalsNaN(NaN)
- * // Returns true
- * @example
- * equalsNaN(1)
- * // Returns false
- * @example
- * equalsNaN('')
- * // Returns false
- * @function
- * @param {number} val - value to check if is NaN
- * @return {boolean} T/F - if value is a number
- */
 const equalsNaN = val => typeof val === 'number' && val != val;
 /**
  * Gets numbers and floats (.) from a string.

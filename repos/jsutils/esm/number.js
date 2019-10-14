@@ -20,21 +20,6 @@ exports.toNum = exports.toInt = exports.toFloat = exports.nth = exports.isNum = 
 
 var _string = require("./string");
 
-/**
- * Checks if a value is NaN.
- * @example
- * equalsNaN(NaN)
- * // Returns true
- * @example
- * equalsNaN(1)
- * // Returns false
- * @example
- * equalsNaN('')
- * // Returns false
- * @function
- * @param {number} val - value to check if is NaN
- * @return {boolean} T/F - if value is a number
- */
 var equalsNaN = function equalsNaN(val) {
   return typeof val === 'number' && val != val;
 };

@@ -98,16 +98,10 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
 
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Clones an object by converting to JSON string and back.
- * @function
- * @param {Object} obj - object to clone
- * @returns {Object} copy of original object
- */
 var cloneJson = function cloneJson(obj) {
   try {
     return JSON.parse(JSON.stringify(obj));
@@ -434,7 +428,8 @@ var keyMap = function keyMap(arr, toUpperCase) {
   }, {}) || {};
 };
 /**
- * Like "every" for arrays, but operates across each entry in obj 
+ * Like "every" for arrays, but operates across each entry in obj
+ * @function
  * @param {Object} obj 
  * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
  * @returns boolean indicating that every entry satisfied the predicate or not
@@ -470,7 +465,8 @@ var everyEntry = function everyEntry(obj, predicate) {
   });
 };
 /**
- * Like "some" for arrays, but operates across each entry in obj 
+ * Like "some" for arrays, but operates across each entry in obj
+ * @function
  * @param {Object} obj 
  * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
  * @returns boolean indicating that at least one entry satisfied the predicate or not
@@ -507,6 +503,7 @@ var someEntry = function someEntry(obj, predicate) {
 };
 /**
  * Returns a new object, consisting of every key-value pair from obj that, when passed into the predicate, returned true
+ * @function
  * @param {*} obj - regular object
  * @param {*} predicate  - function of form: (key, value) => Boolean
  * @returns object consisting of a subset of the entries from obj

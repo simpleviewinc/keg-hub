@@ -10,18 +10,6 @@ exports.toBool = exports.softFalsy = exports.convertToStrBool = exports.isStrBoo
 
 var _string = require("./string");
 
-/**
- * Checks is value is a boolean.
- * @function
- * @example
- * isBool([1,2,3])
- * // Returns false
- * @example
- * isBool(true)
- * // Returns true
- * @param {*} val - value to check if is a number
- * @return {boolean} T/F - if value is a boolean
- */
 var isBool = function isBool(val) {
   return typeof val === 'boolean';
 };

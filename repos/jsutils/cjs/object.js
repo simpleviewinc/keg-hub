@@ -22,12 +22,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/**
- * Clones an object by converting to JSON string and back.
- * @function
- * @param {Object} obj - object to clone
- * @returns {Object} copy of original object
- */
 const cloneJson = obj => {
   try {
     return JSON.parse(JSON.stringify(obj));
@@ -299,7 +293,8 @@ const keyMap = (arr, toUpperCase) => (0, _array.isArr)(arr) && arr.reduce((obj, 
   return obj;
 }, {}) || {};
 /**
- * Like "every" for arrays, but operates across each entry in obj 
+ * Like "every" for arrays, but operates across each entry in obj
+ * @function
  * @param {Object} obj 
  * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
  * @returns boolean indicating that every entry satisfied the predicate or not
@@ -327,7 +322,8 @@ const everyEntry = (obj, predicate) => {
   return (0, _method.pipeline)(obj, Object.entries, entries => entries.every(([key, value]) => predicate(key, value)));
 };
 /**
- * Like "some" for arrays, but operates across each entry in obj 
+ * Like "some" for arrays, but operates across each entry in obj
+ * @function
  * @param {Object} obj 
  * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
  * @returns boolean indicating that at least one entry satisfied the predicate or not
@@ -356,6 +352,7 @@ const someEntry = (obj, predicate) => {
 };
 /**
  * Returns a new object, consisting of every key-value pair from obj that, when passed into the predicate, returned true
+ * @function
  * @param {*} obj - regular object
  * @param {*} predicate  - function of form: (key, value) => Boolean
  * @returns object consisting of a subset of the entries from obj

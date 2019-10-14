@@ -96,20 +96,12 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
 
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-/**
- * Updates a collection by removing, getting, adding to it.
- * @memberof collection
- * @param {Object} obj - object to update
- * @param {string|array} path - path to the property to update
- * @param {*} type - value to update || type
- * @return {*} based on update method
- */
 var updateColl = function updateColl(obj, path, type, val) {
   var org = obj;
   if (!isColl(obj) || !obj || !path) return undefined;
@@ -286,6 +278,7 @@ var unset = function unset(obj, path) {
  * // Works with array too
  * deepClone([ [ [ 0 ] ] ])
  * // Returns copy of the passed in collection item
+ * @function
  * @param {Object} obj - object to clone
  * @return {Object} - cloned Object
  */
@@ -318,6 +311,7 @@ var deepClone = function deepClone(obj) {
 };
 /**
  * Helper for deepClone. Deeply clones the object, including its properties, and preserves the prototype and isFrozen and isSealed state
+ * @function
  * @param {Object} objectWithPrototype - any object that has a prototype
  * @returns {Object} the cloned object 
  */
@@ -345,9 +339,10 @@ var cloneObjWithPrototypeAndProperties = function cloneObjWithPrototypeAndProper
 };
 /**
  * Returns an array composed of element repeated "times" times. If element is a function, it will be called.
- * Note: if you simply want to run a function some number of times, without returning an array of its results, @see Method.doIt
+ * <br> Note: if you simply want to run a function some number of times, without returning an array of its results, @see Method.doIt
  * @param {*} element - a value or a function. If it is a function, repeat will call it each repeated time
  * @param {number} times - number of times that element should be included/called for the resulting array. Anything less than or equal to 0, or not a number, will return an empty array.
+ * @function
  * @param {boolean} cloneDeep - if true, it will deeply clone the element for every instance in the resulting array 
  * @returns an array of repeated elements or results from the function call
  * @example repeat(1, 3) // returns [1, 1, 1]
