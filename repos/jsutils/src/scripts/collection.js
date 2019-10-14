@@ -190,6 +190,7 @@ export const unset = (obj, path) => updateColl(obj, path, 'unset')
  * // Works with array too
  * deepClone([ [ [ 0 ] ] ])
  * // Returns copy of the passed in collection item
+ * @function
  * @param {Object} obj - object to clone
  * @return {Object} - cloned Object
  */
@@ -225,6 +226,7 @@ export const deepClone = (obj, hash = new WeakMap()) => {
 
 /**
  * Helper for deepClone. Deeply clones the object, including its properties, and preserves the prototype and isFrozen and isSealed state
+ * @function
  * @param {Object} objectWithPrototype - any object that has a prototype
  * @returns {Object} the cloned object 
  */
@@ -248,9 +250,10 @@ const cloneObjWithPrototypeAndProperties = (objectWithPrototype) => {
 
 /**
  * Returns an array composed of element repeated "times" times. If element is a function, it will be called.
- * Note: if you simply want to run a function some number of times, without returning an array of its results, @see Method.doIt
+ * <br> Note: if you simply want to run a function some number of times, without returning an array of its results, @see Method.doIt
  * @param {*} element - a value or a function. If it is a function, repeat will call it each repeated time
  * @param {number} times - number of times that element should be included/called for the resulting array. Anything less than or equal to 0, or not a number, will return an empty array.
+ * @function
  * @param {boolean} cloneDeep - if true, it will deeply clone the element for every instance in the resulting array 
  * @returns an array of repeated elements or results from the function call
  * @example repeat(1, 3) // returns [1, 1, 1]

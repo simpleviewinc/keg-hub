@@ -315,7 +315,8 @@ export const keyMap = (arr, toUpperCase) => (
 )
 
 /**
- * Like "every" for arrays, but operates across each entry in obj 
+ * Like "every" for arrays, but operates across each entry in obj
+ * @function
  * @param {Object} obj 
  * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
  * @returns boolean indicating that every entry satisfied the predicate or not
@@ -343,7 +344,8 @@ export const everyEntry = (obj, predicate) => {
   )
 }
 /**
- * Like "some" for arrays, but operates across each entry in obj 
+ * Like "some" for arrays, but operates across each entry in obj
+ * @function
  * @param {Object} obj 
  * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
  * @returns boolean indicating that at least one entry satisfied the predicate or not
@@ -373,6 +375,7 @@ export const someEntry = (obj, predicate) => {
 
 /**
  * Returns a new object, consisting of every key-value pair from obj that, when passed into the predicate, returned true
+ * @function
  * @param {*} obj - regular object
  * @param {*} predicate  - function of form: (key, value) => Boolean
  * @returns object consisting of a subset of the entries from obj
