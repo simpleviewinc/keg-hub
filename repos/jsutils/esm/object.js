@@ -9,6 +9,8 @@ require("core-js/modules/es.symbol.iterator");
 
 require("core-js/modules/es.array.concat");
 
+require("core-js/modules/es.array.every");
+
 require("core-js/modules/es.array.filter");
 
 require("core-js/modules/es.array.for-each");
@@ -25,6 +27,8 @@ require("core-js/modules/es.array.map");
 
 require("core-js/modules/es.array.reduce");
 
+require("core-js/modules/es.array.some");
+
 require("core-js/modules/es.date.to-string");
 
 require("core-js/modules/es.object.define-property");
@@ -32,6 +36,8 @@ require("core-js/modules/es.object.define-property");
 require("core-js/modules/es.object.entries");
 
 require("core-js/modules/es.object.freeze");
+
+require("core-js/modules/es.object.from-entries");
 
 require("core-js/modules/es.object.get-own-property-descriptor");
 
@@ -60,7 +66,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -206,7 +212,7 @@ var deepMerge = function deepMerge() {
  * const obj = {}
  * const clone = applyToCloneOf(obj, (clone) => { clone.test = 'foo'; return clone })
  * console.log(obj === clone) // prints false
- * console.log(clone.test === 'data') // prints true
+ * console.log(clone.test === 'foo') // prints true
  * @function
  * @param {Object} obj - object
  * @param {Function} mutatorCb - a callback that accepts one argument, the cloned obj, and mutates it in some way
@@ -427,5 +433,111 @@ var keyMap = function keyMap(arr, toUpperCase) {
     return obj;
   }, {}) || {};
 };
+/**
+ * Like "every" for arrays, but operates across each entry in obj 
+ * @param {Object} obj 
+ * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
+ * @returns boolean indicating that every entry satisfied the predicate or not
+ */
+
 
 exports.keyMap = keyMap;
+
+var everyEntry = function everyEntry(obj, predicate) {
+  if (!obj) {
+    console.error("everyEntry expects argument obj [".concat(obj, "] to be defined."));
+    return false;
+  }
+
+  if (!isObj(obj)) {
+    console.error("Argument obj ".concat(obj, " must be an object."));
+    return false;
+  }
+
+  if (!(0, _method.isFunc)(predicate)) {
+    console.error("Argument 'predicate' passed into everyEntry must a function. Found: ".concat(predicate));
+    return false;
+  }
+
+  return (0, _method.pipeline)(obj, Object.entries, function (entries) {
+    return entries.every(function (_ref11) {
+      var _ref12 = _slicedToArray(_ref11, 2),
+          key = _ref12[0],
+          value = _ref12[1];
+
+      return predicate(key, value);
+    });
+  });
+};
+/**
+ * Like "some" for arrays, but operates across each entry in obj 
+ * @param {Object} obj 
+ * @param {Function} predicate of form (key, value) => boolean. Returns true or false for the entry
+ * @returns boolean indicating that at least one entry satisfied the predicate or not
+ */
+
+
+exports.everyEntry = everyEntry;
+
+var someEntry = function someEntry(obj, predicate) {
+  if (!obj) {
+    console.error("someEntry expects argument obj [".concat(obj, "] to be defined."));
+    return false;
+  }
+
+  if (!isObj(obj)) {
+    console.error("Argument obj ".concat(obj, " must be an object."));
+    return false;
+  }
+
+  if (!(0, _method.isFunc)(predicate)) {
+    console.error("Argument 'predicate' passed into someEntry must a function. Found: ".concat(predicate));
+    return false;
+  }
+
+  return (0, _method.pipeline)(obj, Object.entries, function (entries) {
+    return entries.some(function (_ref13) {
+      var _ref14 = _slicedToArray(_ref13, 2),
+          key = _ref14[0],
+          value = _ref14[1];
+
+      return predicate(key, value);
+    });
+  });
+};
+/**
+ * Returns a new object, consisting of every key-value pair from obj that, when passed into the predicate, returned true
+ * @param {*} obj - regular object
+ * @param {*} predicate  - function of form: (key, value) => Boolean
+ * @returns object consisting of a subset of the entries from obj
+ * @example: filterObj({a: 2, b: 3}, (k, v) => (v > 2)) returns: {b: 3}
+ */
+
+
+exports.someEntry = someEntry;
+
+var filterObj = function filterObj(obj, predicate) {
+  if (!obj) return obj;
+
+  if (!isObj(obj)) {
+    console.error("Object ".concat(obj, " was not an object. It must be for filterObject"));
+    return obj;
+  }
+
+  if (!(0, _method.isFunc)(predicate)) {
+    console.error("Argument 'predicate' passed into filterObject must a function. Found: ".concat(predicate));
+    return obj;
+  }
+
+  return (0, _method.pipeline)(obj, Object.entries, function (entries) {
+    return entries.filter(function (_ref15) {
+      var _ref16 = _slicedToArray(_ref15, 2),
+          key = _ref16[0],
+          value = _ref16[1];
+
+      return predicate(key, value);
+    });
+  }, Object.fromEntries);
+};
+
+exports.filterObj = filterObj;

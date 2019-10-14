@@ -72,6 +72,140 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".applyToFunc"><span class="type-signature">(static, constant) </span>applyToFunc<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Helper for pipeline. Passes 'item' into 'expression' as its first argument.
+Expression may be a function or an array of form: [function, ...remainingArguments].
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".pipeline"><span class="type-signature">(static, constant) </span>pipeline<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Function for making repeated nested function calls (the 'pipeline') succinct. Passes "item" into
+the first function (as its first argument), takes its result and passes that into the next function, and repeats.
+Continues until no functions remain, at which point it returns the value returned by the last function.
+ - you can also pass in an array in place of a function to specify a function to be called with some arguments. E.g.: [foo, 2, 3] would return foo(item, 2, 3)
+</div>
+
+
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -93,7 +227,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line18">line 18</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -280,7 +414,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line55">line 55</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -492,7 +626,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line84">line 84</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -698,7 +832,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line34">line 34</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -885,7 +1019,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line107">line 107</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line148">line 148</a>
     </li></ul></dd>
     
 
@@ -1052,7 +1186,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line120">line 120</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -1240,7 +1374,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line158">line 158</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line199">line 199</a>
     </li></ul></dd>
     
 
@@ -1458,7 +1592,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line184">line 184</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line225">line 225</a>
     </li></ul></dd>
     
 
@@ -1715,7 +1849,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="method.js.html">method.js</a>, <a href="method.js.html#line210">line 210</a>
+        <a href="method.js.html">method.js</a>, <a href="method.js.html#line251">line 251</a>
     </li></ul></dd>
     
 
@@ -1883,7 +2017,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Oct 09 2019 05:32:31 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Oct 13 2019 17:34:37 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

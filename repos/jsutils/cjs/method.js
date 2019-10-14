@@ -4,12 +4,60 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = void 0;
+exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = exports.applyToFunc = exports.pipeline = void 0;
+
+var _array = require("./array");
 
 var _number = require("./number");
 
 var _object = require("./object");
 
+function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/**
+ * Function for making repeated nested function calls (the 'pipeline') succinct. Passes "item" into
+ * the first function (as its first argument), takes its result and passes that into the next function, and repeats.
+ * Continues until no functions remain, at which point it returns the value returned by the last function.
+ *  - you can also pass in an array in place of a function to specify a function to be called with some arguments. E.g.: [foo, 2, 3] would return foo(item, 2, 3)
+ * @example: pipeline(1, addFour, subtract3, (x) => x * x) // would return 4
+ * @param {* | Function} item - the starting input. If it is a function, it will be executed immediately and the result will be piped into the remaining functions.
+ * @param {...Function} functions 
+ * @returns the final result of calling the pipeline of functions , starting with item as input
+ */
+const pipeline = (item, ...functions) => {
+  const startingInput = isFunc(item) ? item() : item;
+  return functions.reduce((result, fn) => applyToFunc(result, fn), startingInput);
+};
+/**
+ * Helper for pipeline. Passes 'item' into 'expression' as its first argument.
+ * Expression may be a function or an array of form: [function, ...remainingArguments]. 
+ * @param {*} item 
+ * @param {*} expression 
+ */
+
+
+exports.pipeline = pipeline;
+
+const applyToFunc = (item, expression) => {
+  if ((0, _array.isArr)(expression)) {
+    const _expression = _toArray(expression),
+          func = _expression[0],
+          args = _expression.slice(1);
+
+    return func(item, ...args);
+  } else if (isFunc(expression)) {
+    return expression(item);
+  } else {
+    console.error(`Pipeline expected either a function or an array (for function expressions). Found ${typeof expression}`);
+    return item;
+  }
+};
 /**
  * Check if the passed in method is a function, and calls it
  * @example
@@ -20,6 +68,10 @@ var _object = require("./object");
  * @param {Object} params - params to pass to the method on call
  * @return {*} - whatever the passed in method returns
  */
+
+
+exports.applyToFunc = applyToFunc;
+
 const checkCall = (method, ...params) => isFunc(method) && method(...params) || undefined;
 /**
  * Returns the first param if it's a function.

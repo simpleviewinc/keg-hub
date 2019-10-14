@@ -15,6 +15,8 @@ require("core-js/modules/es.array.is-array");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.reduce");
+
 require("core-js/modules/es.array.slice");
 
 require("core-js/modules/es.date.to-string");
@@ -38,7 +40,9 @@ require("core-js/modules/web.timers");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = void 0;
+exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = exports.applyToFunc = exports.pipeline = void 0;
+
+var _array = require("./array");
 
 var _number = require("./number");
 
@@ -50,14 +54,67 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
+function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/**
+ * Function for making repeated nested function calls (the 'pipeline') succinct. Passes "item" into
+ * the first function (as its first argument), takes its result and passes that into the next function, and repeats.
+ * Continues until no functions remain, at which point it returns the value returned by the last function.
+ *  - you can also pass in an array in place of a function to specify a function to be called with some arguments. E.g.: [foo, 2, 3] would return foo(item, 2, 3)
+ * @example: pipeline(1, addFour, subtract3, (x) => x * x) // would return 4
+ * @param {* | Function} item - the starting input. If it is a function, it will be executed immediately and the result will be piped into the remaining functions.
+ * @param {...Function} functions 
+ * @returns the final result of calling the pipeline of functions , starting with item as input
+ */
+var pipeline = function pipeline(item) {
+  var startingInput = isFunc(item) ? item() : item;
+
+  for (var _len = arguments.length, functions = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    functions[_key - 1] = arguments[_key];
+  }
+
+  return functions.reduce(function (result, fn) {
+    return applyToFunc(result, fn);
+  }, startingInput);
+};
+/**
+ * Helper for pipeline. Passes 'item' into 'expression' as its first argument.
+ * Expression may be a function or an array of form: [function, ...remainingArguments]. 
+ * @param {*} item 
+ * @param {*} expression 
+ */
+
+
+exports.pipeline = pipeline;
+
+var applyToFunc = function applyToFunc(item, expression) {
+  if ((0, _array.isArr)(expression)) {
+    var _expression = _toArray(expression),
+        func = _expression[0],
+        args = _expression.slice(1);
+
+    return func.apply(void 0, [item].concat(_toConsumableArray(args)));
+  } else if (isFunc(expression)) {
+    return expression(item);
+  } else {
+    console.error("Pipeline expected either a function or an array (for function expressions). Found ".concat(_typeof(expression)));
+    return item;
+  }
+};
 /**
  * Check if the passed in method is a function, and calls it
  * @example
@@ -68,9 +125,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * @param {Object} params - params to pass to the method on call
  * @return {*} - whatever the passed in method returns
  */
+
+
+exports.applyToFunc = applyToFunc;
+
 var checkCall = function checkCall(method) {
-  for (var _len = arguments.length, params = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    params[_key - 1] = arguments[_key];
+  for (var _len2 = arguments.length, params = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    params[_key2 - 1] = arguments[_key2];
   }
 
   return isFunc(method) && method.apply(void 0, params) || undefined;
@@ -122,8 +183,8 @@ var debounce = function debounce(func) {
   var immediate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var timeout;
   return function () {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
     }
 
     if (!isFunc(func)) return null;
@@ -156,8 +217,8 @@ var debounce = function debounce(func) {
 exports.debounce = debounce;
 
 var doIt = function doIt() {
-  for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    args[_key3] = arguments[_key3];
+  for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+    args[_key4] = arguments[_key4];
   }
 
   var params = args.slice();
@@ -248,8 +309,8 @@ var throttle = function throttle(func) {
     if (waiting) return;
     waiting = true;
 
-    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-      args[_key4] = arguments[_key4];
+    for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+      args[_key5] = arguments[_key5];
     }
 
     func.apply(_this, args);
@@ -280,8 +341,8 @@ var throttleLast = function throttleLast(func, cb) {
   var wait = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
   var throttleTimeout;
   return function () {
-    for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-      args[_key5] = arguments[_key5];
+    for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+      args[_key6] = arguments[_key6];
     }
 
     // If the throttle already exists clear it, and create it again

@@ -383,4 +383,97 @@ describe('/object', function () {
       expect(orig.a).toEqual(1);
     });
   });
+  describe('everyEntry', function () {
+    it('should work across an object\'s entries', function () {
+      var foo = {
+        a: 1,
+        b: 2,
+        c: 3
+      };
+      var result = Obj.everyEntry(foo, function (k, v) {
+        return v > 2;
+      });
+      expect(result).toBe(false);
+      result = Obj.everyEntry(foo, function (k, v) {
+        return v > 0;
+      });
+      expect(result).toBe(true);
+    });
+    it('should log errors and return false if invalid input was passed', function () {
+      var orgError = console.error;
+      var outputArr = [];
+
+      console.error = function (output) {
+        return outputArr.push(output);
+      };
+
+      var aString = "neither a function nor object";
+      expect(Obj.everyEntry(null, function () {})).toEqual(false);
+      expect(Obj.everyEntry({}, aString)).toEqual(false);
+      expect(Obj.everyEntry(aString, function () {})).toEqual(false);
+      expect(outputArr.length).toEqual(3);
+      console.error = orgError;
+    });
+  });
+  describe('someEntry', function () {
+    it('should work across an object\'s entries', function () {
+      var foo = {
+        a: 1,
+        b: 2,
+        c: 3
+      };
+      var result = Obj.someEntry(foo, function (k, v) {
+        return v > 2;
+      });
+      expect(result).toBe(true);
+      result = Obj.someEntry(foo, function (k, v) {
+        return v > 4;
+      });
+      expect(result).toBe(false);
+    });
+    it('should log errors and return false if invalid input was passed', function () {
+      var orgError = console.error;
+      var outputArr = [];
+
+      console.error = function (output) {
+        return outputArr.push(output);
+      };
+
+      var aString = "neither a function nor object";
+      expect(Obj.someEntry(null, function () {})).toEqual(false);
+      expect(Obj.someEntry({}, aString)).toEqual(false);
+      expect(Obj.someEntry(aString, function () {})).toEqual(false);
+      expect(outputArr.length).toEqual(3);
+      console.error = orgError;
+    });
+  });
+  describe('filterObj', function () {
+    it('should work across an object\'s entries', function () {
+      var foo = {
+        a: 1,
+        b: 2,
+        c: 3
+      };
+      var result = Obj.filterObj(foo, function (k, v) {
+        return v > 2;
+      });
+      expect(result.a).toBe(undefined);
+      expect(result.b).toBe(undefined);
+      expect(result.c).toBe(foo.c);
+    });
+    it('should log errors and return the obj argument if invalid input was passed', function () {
+      var orgError = console.error;
+      var outputArr = [];
+
+      console.error = function (output) {
+        return outputArr.push(output);
+      };
+
+      var aString = "not an object";
+      expect(Obj.filterObj(aString, function () {})).toEqual(aString);
+      expect(Obj.filterObj({}, null)).toEqual({});
+      expect(outputArr.length).toEqual(2);
+      console.error = orgError;
+    });
+  });
 });

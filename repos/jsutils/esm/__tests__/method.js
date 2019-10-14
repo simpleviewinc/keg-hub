@@ -126,4 +126,46 @@ describe('/method', function () {
       expect(Method.uuid()).not.toEqual(Method.uuid());
     });
   });
+  describe('pipeline', function () {
+    var square = function square(x) {
+      return x * x;
+    };
+
+    var subtractBy = function subtractBy(x, y) {
+      return x - y;
+    };
+
+    var startingValue = 2;
+    it('should return the value run through the pipeline', function () {
+      var result = Method.pipeline(startingValue, function (num) {
+        return num + 1;
+      }, square);
+      expect(result).toEqual(9);
+    });
+    it('should work with array expressions', function () {
+      var result = Method.pipeline(2, square, [subtractBy, 5] // take the square of 2 and subtract 5 from it
+      );
+      expect(result).toEqual(-1);
+    });
+    it('should call its first argument, if it is a function', function () {
+      var result = Method.pipeline(function () {
+        return 2;
+      }, function (x) {
+        return x * 10;
+      });
+      expect(result).toEqual(20);
+    });
+    it('should return the element if no functions are specified', function () {
+      var element = "foo";
+      var result = Method.pipeline(element);
+      expect(result).toEqual(element);
+    });
+    it('should log errors if it encountered an invalid expression', function () {
+      var orgError = console.error;
+      console.error = jest.fn();
+      expect(Method.pipeline(1, square, "invalid expression")).toEqual(1);
+      expect(console.error).toHaveBeenCalled();
+      console.error = orgError;
+    });
+  });
 });
