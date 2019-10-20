@@ -1,0 +1,1 @@
+export const getOrientation = ({ width, height }) => (width > height ? "landscape" : "portrait")
