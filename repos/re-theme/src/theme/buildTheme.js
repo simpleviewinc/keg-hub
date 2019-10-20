@@ -6,8 +6,15 @@ import { Constants } from '../constants'
 import { getSizeMap, getMergeSizes, getSize } from '../dimensions'
 import { isObj, deepMerge } from 'jsutils'
 
+/**
+ * Checks if the theme is the same as the default theme. If not then merges the two together
+ * @param {*} theme - Passed in user there
+ * @param {*} defaultTheme - Cached default theme
+ *
+ * @returns {Object} - Theme object
+ */
 const mergeWithDefault = (theme, defaultTheme) => {
-  return defaultTheme
+  return defaultTheme && theme !== defaultTheme 
     ? deepMerge(defaultTheme, theme)
     : theme
 }
@@ -69,6 +76,12 @@ export const buildTheme = (theme, width, defaultTheme) => {
     : extraTheme
 
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme)
-
+  
+  builtTheme.ReThemeMeta = builtTheme.ReThemeMeta || {}
+  builtTheme.ReThemeMeta.breakpoint = {
+    key: name,
+    size: size
+  }
+  
   return builtTheme
 }

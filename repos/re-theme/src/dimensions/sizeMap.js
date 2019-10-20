@@ -5,16 +5,20 @@ import { mapObj, isObj, toNum, isNum } from 'jsutils'
 
 /**
  * Default sizes for a screen width
- * <br/>Number for each entry defines the breakpoint
- * <br/>The Breakpoint is when the size will take effect
+ * <br/> Can be overwritten with setSizes helper
  */
 const sizeMap = {
+  /**
+  * Name of the breakpoint
+  * Number for each entry defines the breakpoint
+  *  > The Breakpoint is the screen size where the entries becomes active
+  */
   entries: [
-    [ 'xsmall', 320 ],
-    [ 'small', 768 ],
-    [ 'medium', 1024 ],
-    [ 'large', 1366 ],
-    [ 'xlarge', 1920 ]
+    [ 'xsmall', 1 ],
+    [ 'small', 320 ],
+    [ 'medium', 768 ],
+    [ 'large', 1024 ],
+    [ 'xlarge', 1366 ]
   ],
   hash: {},
   indexes: {},
@@ -99,10 +103,10 @@ export const getSize = width => {
 
   const name = sizeMap.entries
     .reduce((updateSize, [ key, value ]) => {
-
+      
       // If the checkWidth if more then or equal, just return the updates size
       if(checkWidth <= value) return updateSize
-      
+
       // Check if the value is less then the checkWidth
       value <= checkWidth
         // If it is check if there is an updateSize already sent
@@ -120,10 +124,9 @@ export const getSize = width => {
 
       return updateSize
 
-    // Default to small size
-    }, 'small')
-    
-  
+    // Default to xsmall size
+    }, 'xsmall')
+
   return [ name, sizeMap.hash[name] ]
 }
 
