@@ -130,7 +130,6 @@ export const getSize = width => {
   return [ name, sizeMap.hash[name] ]
 }
 
-
 /**
  * Get an array of all sizes to be merged together
  * @param {string} key - Name of the size

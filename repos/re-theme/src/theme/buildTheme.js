@@ -58,8 +58,8 @@ export const buildTheme = (theme, width, defaultTheme) => {
   // If theres no theme, or not valid curSize, just return the passed in theme
   if(!isObj(theme)) return theme
 
-  // Pull out the name and the size that matches the width
-  const [ name, size ] = getSize(width)
+  // Pull out the key and the size that matches the width
+  const [ key, size ] = getSize(width)
 
   // Extract the sizes from the theme
   const {
@@ -72,16 +72,12 @@ export const buildTheme = (theme, width, defaultTheme) => {
   } = mergeWithDefault(theme, defaultTheme)
 
   const builtTheme = size
-    ? joinThemeSizes(theme, name, extraTheme)
+    ? joinThemeSizes(theme, key, extraTheme)
     : extraTheme
 
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme)
   
-  builtTheme.ReThemeMeta = builtTheme.ReThemeMeta || {}
-  builtTheme.ReThemeMeta.breakpoint = {
-    key: name,
-    size: size
-  }
+  builtTheme.RTMeta = { key, size, width }
   
   return builtTheme
 }
