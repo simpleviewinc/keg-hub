@@ -4,7 +4,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.isEntry = exports.mapEntries = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -13,6 +13,8 @@ var _method = require("./method");
 var _collection = require("./collection");
 
 var _string = require("./string");
+
+var _number = require("./number");
 
 var _array = require("./array");
 
@@ -184,6 +186,59 @@ exports.jsonEqual = jsonEqual;
 
 const mapObj = (obj, cb) => isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).map(([key, value]) => cb(key, value)) || obj;
 /**
+ * Returns a new object, each entry of which is the result of applying the cb function to input's corresponding entry 
+ * @param {Object | Array} obj - regular object or array
+ * @param {Function} cb  - function of form: (key, value) => [nextKey, nextValue]
+ *  - the return type here is an array of two elements, key and value, where `key` must be either a string or a number
+ *  - if a cb does not return an entry, then the original [key, value] pair that was passed into cb will be used instead
+ * @returns new object with mapping applied, or the original obj if input was invalid
+ * @example mapObj({a: 2, b: 3}, (k, v) => [k, v * v]) returns: {a: 4, b: 9}
+ * @example mapObj({a: 1}, (k, v) => ['b', v]) returns: {b: 1}
+ */
+
+
+exports.mapObj = mapObj;
+
+const mapEntries = (obj, cb) => {
+  if (!(0, _array.isArr)(obj) && !isObj(obj)) {
+    console.error(obj, `Expected array or object for obj. Found ${typeof obj}`);
+    return obj;
+  }
+
+  if (!(0, _method.isFunc)(cb)) {
+    console.error(`Expected function for cb. Found ${typeof cb}`);
+    return obj;
+  }
+
+  const entries = Object.entries(obj);
+  const initialValue = (0, _array.isArr)(obj) ? [] : {};
+  return entries.reduce((obj, [key, value]) => {
+    const result = cb(key, value);
+
+    if (!isEntry(result)) {
+      console.error(`Callback function must return entry. Found: ${result}. Using current entry instead.`);
+      return (0, _collection.set)(obj, key, value);
+    }
+
+    return (0, _collection.set)(obj, result[0], result[1]);
+  }, initialValue);
+};
+/**
+ * Checks if the input is a valid entry - a 2-element array, like what Object.entries produces.
+ * Expects the first element in the entry to be either a string or a number.
+ * @param {*} maybeEntry 
+ * @returns true if it is an entry, false otherwise
+ * @example isEntry([1, 2]) // true
+ * @example isEntry(["id", 87]) // true
+ * @example isEntry([new Date(), 2]) // false, first element not string or number
+ * @example isEntry([1, 2, 3]) // false, too many elements
+ */
+
+
+exports.mapEntries = mapEntries;
+
+const isEntry = maybeEntry => (0, _array.isArr)(maybeEntry) && maybeEntry.length === 2 && ((0, _number.isNum)(maybeEntry[0]) || (0, _string.isStr)(maybeEntry[0]));
+/**
  * Creates a new object from passed in object with keys not defined from array.
  * @function
  * @param {Object} target - object to pull keys from
@@ -192,7 +247,7 @@ const mapObj = (obj, cb) => isObj(obj) && (0, _method.isFunc)(cb) && Object.entr
  */
 
 
-exports.mapObj = mapObj;
+exports.isEntry = isEntry;
 
 const omitKeys = (obj = {}, keys = []) => isObj(obj) && reduceObj(obj, (key, _, updated) => {
   keys.indexOf(key) === -1 && (updated[key] = obj[key]);
@@ -375,7 +430,10 @@ const filterObj = (obj, predicate) => {
     return obj;
   }
 
-  return (0, _method.pipeline)(obj, Object.entries, entries => entries.filter(([key, value]) => predicate(key, value)), Object.fromEntries);
+  return reduceObj(obj, (key, value, data) => {
+    if (predicate(key, value)) data[key] = value;
+    return data;
+  }, {});
 };
 
 exports.filterObj = filterObj;

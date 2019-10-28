@@ -72,6 +72,155 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".isEntry"><span class="type-signature">(static, constant) </span>isEntry<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line249">line 249</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if the input is a valid entry - a 2-element array, like what Object.entries produces.
+Expects the first element in the entry to be either a string or a number.
+</div>
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>isEntry([1, 2]) // true</code></pre>
+
+    <pre class="prettyprint"><code>isEntry(["id", 87]) // true</code></pre>
+
+    <pre class="prettyprint"><code>isEntry([new Date(), 2]) // false, first element not string or number</code></pre>
+
+    <pre class="prettyprint"><code>isEntry([1, 2, 3]) // false, too many elements</code></pre>
+
+
+
+        
+            
+<h4 class="name" id=".mapEntries"><span class="type-signature">(static, constant) </span>mapEntries<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line211">line 211</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Returns a new object, each entry of which is the result of applying the cb function to input's corresponding entry
+</div>
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>mapObj({a: 2, b: 3}, (k, v) => [k, v * v]) returns: {a: 4, b: 9}</code></pre>
+
+    <pre class="prettyprint"><code>mapObj({a: 1}, (k, v) => ['b', v]) returns: {b: 1}</code></pre>
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -93,7 +242,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line133">line 133</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -270,7 +419,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line35">line 35</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -447,7 +596,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line63">line 63</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -605,7 +754,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line84">line 84</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -766,7 +915,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line53">line 53</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -943,7 +1092,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line324">line 324</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line378">line 378</a>
     </li></ul></dd>
     
 
@@ -1112,7 +1261,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line384">line 384</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line438">line 438</a>
     </li></ul></dd>
     
 
@@ -1281,7 +1430,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line158">line 158</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -1462,7 +1611,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line168">line 168</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -1616,7 +1765,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line177">line 177</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line178">line 178</a>
     </li></ul></dd>
     
 
@@ -1803,7 +1952,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line306">line 306</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line360">line 360</a>
     </li></ul></dd>
     
 
@@ -1984,7 +2133,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line192">line 192</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -2142,7 +2291,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line207">line 207</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line261">line 261</a>
     </li></ul></dd>
     
 
@@ -2323,7 +2472,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line222">line 222</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line276">line 276</a>
     </li></ul></dd>
     
 
@@ -2504,7 +2653,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line236">line 236</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line290">line 290</a>
     </li></ul></dd>
     
 
@@ -2662,7 +2811,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line250">line 250</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line304">line 304</a>
     </li></ul></dd>
     
 
@@ -2820,7 +2969,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line353">line 353</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line407">line 407</a>
     </li></ul></dd>
     
 
@@ -2989,7 +3138,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line276">line 276</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line330">line 330</a>
     </li></ul></dd>
     
 
@@ -3196,7 +3345,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="object.js.html">object.js</a>, <a href="object.js.html#line259">line 259</a>
+        <a href="object.js.html">object.js</a>, <a href="object.js.html#line313">line 313</a>
     </li></ul></dd>
     
 
@@ -3357,7 +3506,7 @@ console.log(clone.test === 'foo') // prints true</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Oct 13 2019 18:27:46 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Oct 28 2019 14:46:14 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

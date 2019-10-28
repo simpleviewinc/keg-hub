@@ -1,5 +1,13 @@
 /** @module array */
 'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArray = exports.randomArray = void 0;
+
+const _require = require('./number'),
+      isNum = _require.isNum;
 /**
  * Randomly selects values from a passed in array.
  * @function
@@ -11,10 +19,6 @@
  * @return {array} - randomly sorted array
  */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArray = exports.randomArray = void 0;
 
 const randomArray = (arr, amount) => {
   amount = amount || 1;
@@ -83,5 +87,35 @@ const isArr = value => Array.isArray(value);
 exports.isArr = isArr;
 
 const cloneArr = arr => Array.from([...(isArr(arr) && arr || [])]);
+/**
+ * Returns a new array with the same elements as arr, excluding `count` elements beginning at index `startIndex`
+ * @param {Array} arr 
+ * @param {Number} startIndex 
+ * @param {Number} count 
+ */
+
 
 exports.cloneArr = cloneArr;
+
+const omitRange = (arr, startIndex, count) => {
+  if (!isArr(arr)) {
+    console.error(`omitRange expected Array. Found ${typeof arr}`);
+    return arr;
+  }
+
+  if (!isNum(startIndex) || startIndex < 0) {
+    console.error(`omitRange expected non-negative startIndex. Found ${startIndex}`);
+    return arr;
+  }
+
+  if (!isNum(count) || count < 0) {
+    console.error(`omitRange expected non-negative count. Found ${count}`);
+    return arr;
+  }
+
+  const nextArr = [...arr];
+  nextArr.splice(startIndex, count);
+  return nextArr;
+};
+
+exports.omitRange = omitRange;

@@ -1,6 +1,6 @@
 {
   "name": "jsutils",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "common javascript utils",
   "main": "cjs/",
   "module": "esm/",

@@ -8,9 +8,13 @@ require("core-js/modules/es.symbol.iterator");
 
 require("core-js/modules/es.array.index-of");
 
+require("core-js/modules/es.array.is-array");
+
 require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.date.to-string");
 
 require("core-js/modules/es.function.name");
 
@@ -20,15 +24,28 @@ require("core-js/modules/es.object.keys");
 
 require("core-js/modules/es.object.to-string");
 
+require("core-js/modules/es.regexp.to-string");
+
 require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/es.string.sub");
 
 require("core-js/modules/web.dom-collections.iterator");
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var Obj = require('../object');
+
+var _require = require('../array'),
+    isArr = _require.isArr;
 
 describe('/object', function () {
   beforeEach(function () {
@@ -474,6 +491,94 @@ describe('/object', function () {
       expect(Obj.filterObj({}, null)).toEqual({});
       expect(outputArr.length).toEqual(2);
       console.error = orgError;
+    });
+  });
+  describe('mapEntries', function () {
+    it('should work with objects and return an object', function () {
+      var obj = {
+        a: 1,
+        b: 2,
+        c: 3
+      };
+      var expected = {
+        a: 1,
+        b: 4,
+        c: 9
+      };
+      var result = Obj.mapEntries(obj, function (key, val) {
+        return [key, val * val];
+      });
+      expect(Obj.isObj(result)).toBe(true);
+      expect(result).toEqual(expected);
+    });
+    it('should work with arrays and return an array', function () {
+      var obj = [1, 2, 3];
+      var expected = [1, 4, 9];
+      var result = Obj.mapEntries(obj, function (key, val) {
+        return [key, val * val];
+      });
+      expect(isArr(result)).toBe(true);
+      expect(result).toEqual(expected);
+    });
+    it("should log an error when the cb function does not return an entry", function () {
+      var orgError = console.error;
+      console.error = jest.fn();
+      var result = Obj.mapEntries({
+        a: 1
+      }, function (key, value) {
+        return value * 2;
+      });
+      expect(console.error).toHaveBeenCalled(); // it ignores any entries that don't return an entry when passed into the cb
+
+      expect(result).toEqual({
+        a: 1
+      });
+      console.error = orgError;
+    });
+    it("can change keys", function () {
+      var result = Obj.mapEntries({
+        a: 1
+      }, function (key, value) {
+        return ['b', value];
+      });
+      expect(result.b).toEqual(1);
+      expect(result.a).toEqual(undefined);
+    });
+    it("should log an error and return the input if the input is invalid", function () {
+      var orgError = console.error;
+      console.error = jest.fn();
+      var result = Obj.mapEntries(1, function () {});
+      expect(console.error).toHaveBeenCalled();
+      expect(result).toEqual(1);
+      console.error = jest.fn();
+      var nextResult = Obj.mapEntries({});
+      expect(console.error).toHaveBeenCalled();
+      console.error = orgError;
+      expect(nextResult).toEqual({});
+    });
+  });
+  describe("isEntry", function () {
+    it("should return true if the input is an entry, false otherwise", function () {
+      var cases = [[[1, 2], true], [[1, 2, 3], false], [[1], false], [{}, false], [null, false], [[], false]];
+      cases.map(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            entry = _ref2[0],
+            expectedResult = _ref2[1];
+
+        var result = Obj.isEntry(entry);
+        expect(result).toBe(expectedResult);
+      });
+    });
+    it("should check that the first element is number or string", function () {
+      var cases = [[["id", 1], true], [[0, "value"], true], [[new Date(), "value"], false], [[true, "value"], false]];
+      cases.map(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            entry = _ref4[0],
+            expectedResult = _ref4[1];
+
+        var result = Obj.isEntry(entry);
+        expect(result).toBe(expectedResult);
+      });
     });
   });
 });

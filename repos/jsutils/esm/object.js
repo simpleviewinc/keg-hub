@@ -37,8 +37,6 @@ require("core-js/modules/es.object.entries");
 
 require("core-js/modules/es.object.freeze");
 
-require("core-js/modules/es.object.from-entries");
-
 require("core-js/modules/es.object.get-own-property-descriptor");
 
 require("core-js/modules/es.object.get-own-property-names");
@@ -66,7 +64,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.isEntry = exports.mapEntries = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -75,6 +73,8 @@ var _method = require("./method");
 var _collection = require("./collection");
 
 var _string = require("./string");
+
+var _number = require("./number");
 
 var _array = require("./array");
 
@@ -292,6 +292,65 @@ var mapObj = function mapObj(obj, cb) {
   }) || obj;
 };
 /**
+ * Returns a new object, each entry of which is the result of applying the cb function to input's corresponding entry 
+ * @param {Object | Array} obj - regular object or array
+ * @param {Function} cb  - function of form: (key, value) => [nextKey, nextValue]
+ *  - the return type here is an array of two elements, key and value, where `key` must be either a string or a number
+ *  - if a cb does not return an entry, then the original [key, value] pair that was passed into cb will be used instead
+ * @returns new object with mapping applied, or the original obj if input was invalid
+ * @example mapObj({a: 2, b: 3}, (k, v) => [k, v * v]) returns: {a: 4, b: 9}
+ * @example mapObj({a: 1}, (k, v) => ['b', v]) returns: {b: 1}
+ */
+
+
+exports.mapObj = mapObj;
+
+var mapEntries = function mapEntries(obj, cb) {
+  if (!(0, _array.isArr)(obj) && !isObj(obj)) {
+    console.error(obj, "Expected array or object for obj. Found ".concat(_typeof(obj)));
+    return obj;
+  }
+
+  if (!(0, _method.isFunc)(cb)) {
+    console.error("Expected function for cb. Found ".concat(_typeof(cb)));
+    return obj;
+  }
+
+  var entries = Object.entries(obj);
+  var initialValue = (0, _array.isArr)(obj) ? [] : {};
+  return entries.reduce(function (obj, _ref7) {
+    var _ref8 = _slicedToArray(_ref7, 2),
+        key = _ref8[0],
+        value = _ref8[1];
+
+    var result = cb(key, value);
+
+    if (!isEntry(result)) {
+      console.error("Callback function must return entry. Found: ".concat(result, ". Using current entry instead."));
+      return (0, _collection.set)(obj, key, value);
+    }
+
+    return (0, _collection.set)(obj, result[0], result[1]);
+  }, initialValue);
+};
+/**
+ * Checks if the input is a valid entry - a 2-element array, like what Object.entries produces.
+ * Expects the first element in the entry to be either a string or a number.
+ * @param {*} maybeEntry 
+ * @returns true if it is an entry, false otherwise
+ * @example isEntry([1, 2]) // true
+ * @example isEntry(["id", 87]) // true
+ * @example isEntry([new Date(), 2]) // false, first element not string or number
+ * @example isEntry([1, 2, 3]) // false, too many elements
+ */
+
+
+exports.mapEntries = mapEntries;
+
+var isEntry = function isEntry(maybeEntry) {
+  return (0, _array.isArr)(maybeEntry) && maybeEntry.length === 2 && ((0, _number.isNum)(maybeEntry[0]) || (0, _string.isStr)(maybeEntry[0]));
+};
+/**
  * Creates a new object from passed in object with keys not defined from array.
  * @function
  * @param {Object} target - object to pull keys from
@@ -300,7 +359,7 @@ var mapObj = function mapObj(obj, cb) {
  */
 
 
-exports.mapObj = mapObj;
+exports.isEntry = isEntry;
 
 var omitKeys = function omitKeys() {
   var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -341,10 +400,10 @@ exports.pickKeys = pickKeys;
 
 var reduceObj = function reduceObj(obj, cb) {
   var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  return isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).reduce(function (data, _ref7) {
-    var _ref8 = _slicedToArray(_ref7, 2),
-        key = _ref8[0],
-        value = _ref8[1];
+  return isObj(obj) && (0, _method.isFunc)(cb) && Object.entries(obj).reduce(function (data, _ref9) {
+    var _ref10 = _slicedToArray(_ref9, 2),
+        key = _ref10[0],
+        value = _ref10[1];
 
     return cb(key, value, data);
   }, start) || start;
@@ -373,10 +432,10 @@ var sanitizeCopy = function sanitizeCopy(obj) {
 exports.sanitizeCopy = sanitizeCopy;
 
 var trimStringFields = function trimStringFields(object) {
-  return Object.entries(object).reduce(function (cleaned, _ref9) {
-    var _ref10 = _slicedToArray(_ref9, 2),
-        key = _ref10[0],
-        value = _ref10[1];
+  return Object.entries(object).reduce(function (cleaned, _ref11) {
+    var _ref12 = _slicedToArray(_ref11, 2),
+        key = _ref12[0],
+        value = _ref12[1];
 
     cleaned[key] = typeof value === 'string' ? value.trim() : value;
     return cleaned;
@@ -455,10 +514,10 @@ var everyEntry = function everyEntry(obj, predicate) {
   }
 
   return (0, _method.pipeline)(obj, Object.entries, function (entries) {
-    return entries.every(function (_ref11) {
-      var _ref12 = _slicedToArray(_ref11, 2),
-          key = _ref12[0],
-          value = _ref12[1];
+    return entries.every(function (_ref13) {
+      var _ref14 = _slicedToArray(_ref13, 2),
+          key = _ref14[0],
+          value = _ref14[1];
 
       return predicate(key, value);
     });
@@ -492,10 +551,10 @@ var someEntry = function someEntry(obj, predicate) {
   }
 
   return (0, _method.pipeline)(obj, Object.entries, function (entries) {
-    return entries.some(function (_ref13) {
-      var _ref14 = _slicedToArray(_ref13, 2),
-          key = _ref14[0],
-          value = _ref14[1];
+    return entries.some(function (_ref15) {
+      var _ref16 = _slicedToArray(_ref15, 2),
+          key = _ref16[0],
+          value = _ref16[1];
 
       return predicate(key, value);
     });
@@ -526,15 +585,10 @@ var filterObj = function filterObj(obj, predicate) {
     return obj;
   }
 
-  return (0, _method.pipeline)(obj, Object.entries, function (entries) {
-    return entries.filter(function (_ref15) {
-      var _ref16 = _slicedToArray(_ref15, 2),
-          key = _ref16[0],
-          value = _ref16[1];
-
-      return predicate(key, value);
-    });
-  }, Object.fromEntries);
+  return reduceObj(obj, function (key, value, data) {
+    if (predicate(key, value)) data[key] = value;
+    return data;
+  }, {});
 };
 
 exports.filterObj = filterObj;
