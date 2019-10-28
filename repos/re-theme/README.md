@@ -5,7 +5,7 @@ Simple React ant React Native Theme builder / switcher
 # Setup
   * Add to your package.json
 ```js
-  "re-theme": "git+https://github.com/lancetipton/ReTheme.git"
+  "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme"
 ```
 
 ## ReThemeProvider
