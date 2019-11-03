@@ -185,8 +185,8 @@ describe('/method', () => {
       expect(result).toEqual(-1)
     })
 
-    it('should call its first argument, if it is a function', () => {
-      const result = Method.pipeline(() => 2, (x) => x * 10)
+    it('should NOT call its first argument, if it is a function', () => {
+      const result = Method.pipeline(() => 2, (x) => x() * 10)
       expect(result).toEqual(20)
     })
 

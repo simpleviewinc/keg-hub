@@ -18,12 +18,9 @@ import { hasOwn } from './object'
  * @returns the final result of calling the pipeline of functions , starting with item as input
  */
 export const pipeline = (item, ...functions) => {
-  const startingInput = isFunc(item) 
-    ? item()
-    : item
   return functions.reduce(
     (result, fn) => applyToFunc(result, fn),
-    startingInput
+    item
   )
 }
 
