@@ -124,12 +124,19 @@ export const debounce = (func, wait = 250, immediate = false) => {
 export const doIt = (...args) => {
   const params = args.slice()
   const num = params.shift()
+  const bindTo = params.shift()
   const cb = params.pop()
-  if(!isNum(num) || !isFunc(cb)) return
+  if(!isNum(num) || !isFunc(cb)) return []
+  
+  const doItAmount = new Array(num)
+  const responses = []
+  for(let i = 0; i < doItAmount.length; i++){
+    const data = cb.call(bindTo, i, ...params)
+    if (data === false) break
+    responses.push(data)
+  }
 
-  let i = -1
-  while (++i < num)
-    if (cb.call(params[0], i, ...params) === false) break
+  return responses
 }
 
 /**
@@ -236,10 +243,28 @@ export const throttleLast = (func, cb, wait = 100) => {
   }
 }
 
+/**
+ * Adds catch to a promise for better error handling of await functions
+ * <br> Removes the need for wrapping await in a try / catch
+ * @example
+ * const [ err, data ] = await limbo(promiseFunction())
+ * // returns an array
+ * // * err will be undefined if no error was thrown
+ * // * data will be the response from the promiseFunction
+ * @function
+ * @param {Promise} promise - Promise to be resolved
+ * @return {Array} - Slot 1 => error, Slot 2 => response from promise
+ */
+export const limbo = promise => {
+  return !promise || !isFunc(promise.then)
+    ? [ new Error(`A promise or thenable is required as the first argument!`), null]
+    : promise
+      .then(data => [null, data])
+      .catch(err => [err, undefined])
+}
 
 /**
  * Creates a uuid, unique up to around 20 million iterations.
- * <br> Good enough for us
  * @example
  * uuid()
  * // New uuid as a string

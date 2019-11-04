@@ -1,6 +1,10 @@
+/** @module command */
+
 'use strict'
+
 const { logData, setLogs } = require('../log')
-const { promisify } = require('../promise')
+const { promisify, wait } = require('../promise')
+const { wait } = require('../method')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const fs = require('fs')
@@ -16,6 +20,7 @@ const ERROR_PREFIX = 'ERROR'
 
 /**
 * Logs a message to the console
+* @function
 * @param {any} message - message to log
 * @param {Object} error - thrown during service account process
 * @param {string} [type='error'] - type of message to log
@@ -28,7 +33,8 @@ const errorHelper = (message, error, type = 'error') => {
 }
 
 /**
-* Logs a message to the condole
+* Logs a message to the console
+* @function
 * @param {string} message - message to be logged
 * @param {string} type - method that shoudl be called  ( log || error || warn )
 * @return { void }
@@ -41,16 +47,11 @@ const logMessage = (message, type = 'log', force) => {
 }
 
 /**
-* Stops execution for a given amount of time
-* @param {number} time
-* @return { void }
-*/
-const wait = time => (new Promise((res, rej) => setTimeout(() => res(true), time)))
-
-/**
-* Gets arguments from the cmd line
-* @return {Object} - converted CMD Line arguments as key / value pair
-*/
+ * Gets arguments from the cmd line
+ * @function
+ *
+ * @return {Object} - converted CMD Line arguments as key / value pair
+ */
 const getArgs = () => {
   return process.argv
     .slice(2)
@@ -76,7 +77,8 @@ const getArgs = () => {
 }
 
 /**
-* Ensures all required arguments exist
+* Ensures all required arguments exist based on passed in error object
+* @function
 * @param {Object} args - passed in arguments
 * @param {Object} errors - error message for required arguments
 * @return { void }
@@ -97,6 +99,7 @@ const validateArgs = (args, errors) => (
 
 /**
 * Makes calls to the cmd line shell
+* @function
 * @param {string} line - command to be run in the shell
 * @return response from the shell
 */
@@ -112,7 +115,8 @@ const cmd = async line => {
 }
 
 /**
-* Copies files to a new location
+* Copies file from one location to another
+* @function
 * @param {string} file - file to be copied
 * @param {string} loc - location to put the copied file
 * @return { void }
@@ -122,11 +126,12 @@ const copyFile = async (file, loc) => await cmd(
 )
 
 /**
-* Ensures a file path exists, if it does not, then it creates it
+* Ensures a folder path exists, if it does not, then it creates it
+* @function
 * @param {string} checkPath - path to check
 * @return {boolean} - if the path exists
 */
-const ensurePath = async checkPath => {
+const ensureFolderPath = async checkPath => {
   try {
     // Check if the path exists, if not, then create it
     const pathExists = fs.existsSync(checkPath)
@@ -139,9 +144,10 @@ const ensurePath = async checkPath => {
 
 /**
 * Writes a file to the local system
+* @function
 * @param {string} path - location to save the file
 * @param {string} data - data to save in the file
-* @return { promies || boolean } - if the file was saved
+* @return { promise || boolean } - if the file was saved
 */
 const writeFile = (filePath, data) => (
   new Promise((req, rej) => fs.writeFile(filePath, data, err => err ? rej(err) : req(true)))
@@ -150,11 +156,10 @@ const writeFile = (filePath, data) => (
 module.exports = {
   cmd,
   copyFile,
-  ensurePath,
+  ensureFolderPath,
   errorHelper,
   getArgs,
   logMessage,
-  wait,
   writeFile,
   validateArgs
 }

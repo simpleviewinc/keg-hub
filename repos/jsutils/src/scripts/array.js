@@ -3,38 +3,41 @@
 'use strict'
 
 const { isNum } = require('./number')
+const { isObj } = require('./object')
 
 /**
  * Randomly selects values from a passed in array.
  * @function
  * @example
- * randomArray([1,2,3], 1)
+ * randomArr([1,2,3], 1)
  * // Returns an array with one of the values in the passed in array
  * @param {array} arr - array to select values from
  * @param {number} amount - number of values to select from the array
  * @return {array} - randomly sorted array
  */
-export const randomArray = (arr, amount) => {
-  amount = amount || 1
+export const randomArr = (arr, amount) => {
+  if(!isArr(arr)) return arr
+
+  const useAmount = amount || 1
   const randoms = []
-  for (let i = 0; i < amount; i++) {
+  for (let i = 0; i < useAmount; i++) {
     randoms.push(arr[Math.floor(Math.random() * arr.length)])
   }
 
-  return amount === 1 ? randoms[0] : randoms
+  return !amount ? randoms[0] : randoms
 }
 
 /**
  * Randomly sorts an arrays items.
  * @function
  * @example
- * randomizeArray([1,2,3])
+ * randomizeArr([1,2,3])
  * // Returns an array randomly sorted
  * @param {array} arr - array to randomly sorted
  * @return {array} - randomly sorted array
  */
-export const randomizeArray = arr => (
-  arr.sort(() => (0.5 - Math.random()))
+export const randomizeArr = arr => (
+  !isArr(arr) && arr || arr.sort(() => (0.5 - Math.random()))
 )
 
 /**
@@ -47,7 +50,7 @@ export const randomizeArray = arr => (
  * @return {array} - copy of passed in array, with duplicates removed
  */
 export const uniqArr = arr => (
-  isArr(arr) && arr.filter((e, i, arr) => arr.indexOf(e) == i) || arr
+  !isArr(arr) && arr || arr.filter((e, i, arr) => arr.indexOf(e) == i)
 )
 
 /**
@@ -74,7 +77,10 @@ export const isArr = value => (
  * @return {array} - copy of passed in array
  */
 export const cloneArr = arr => (
-  Array.from([ ...(isArr(arr) && arr || []) ])
+  Array.from([
+    // If arr is not an array or object, just use empty array, so we don't throw!
+    ...(isArr(arr) && arr || isObj(arr) && Object.entries(arr) || [])
+  ])
 )
 
 /**
