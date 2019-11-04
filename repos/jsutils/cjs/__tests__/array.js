@@ -5,7 +5,31 @@ const Arr = require('../array');
 describe('/array', () => {
   beforeEach(() => jest.resetAllMocks());
   describe('cloneArr', () => {
-    it('should ', () => {});
+    it('should create a copy of the passed in array', () => {
+      const arr = [1, 2, 3];
+      const cloned = Arr.cloneArr(arr);
+      expect(Array.isArray(cloned)).toBe(true);
+      expect(cloned === arr).toBe(false);
+      arr.map((item, index) => expect(cloned[index] === item));
+    });
+    it('should handle non array / object arguments by returning an empty array and not throw', () => {
+      const arr = "I am not an array";
+      const cloned = Arr.cloneArr(arr);
+      expect(Array.isArray(cloned)).toBe(true);
+      expect(cloned === arr).toBe(false);
+      expect(cloned.length).toBe(0);
+    });
+    it('should handle object arguments by return an array of entries', () => {
+      const arr = {
+        1: 1,
+        2: 2,
+        3: 3
+      };
+      const cloned = Arr.cloneArr(arr);
+      expect(Array.isArray(cloned)).toBe(true);
+      expect(cloned === arr).toBe(false);
+      cloned.map(([key, value], index) => expect(arr[key] === value));
+    });
   });
   describe('isArr', () => {
     it('should check for arrays', () => {
@@ -18,14 +42,79 @@ describe('/array', () => {
       expect(Arr.isArr(new Set())).toBe(false);
     });
   });
-  describe('randomArray', () => {
-    it('should ', () => {});
+  describe('randomArr', () => {
+    it('should randomly select values from a passed in array', () => {
+      const arr = [1, 4, 5, 3, 7, 'test'];
+      const random = Arr.randomArr(arr, 3);
+      random.map(item => expect(arr.indexOf(item) !== -1).toBe(true));
+    });
+    it('should arrays with a length equal to the second argument', () => {
+      const arr = [1, 4, 5, 3, 7, 'test'];
+      const random = Arr.randomArr(arr, 3);
+      const random2 = Arr.randomArr(arr, 8);
+      const random3 = Arr.randomArr(arr, 1);
+      expect(random.length).toBe(3);
+      expect(random2.length).toBe(8);
+      expect(random3.length).toBe(1);
+    });
+    it('should return a random array item if no amount is passed in', () => {
+      const arr = [1, 4, 5, 3, 7, 'test'];
+      const random1 = Arr.randomArr(arr);
+      const random2 = Arr.randomArr(arr);
+      const random3 = Arr.randomArr(arr);
+      expect(arr.indexOf(random1) !== -1).toBe(true);
+      expect(arr.indexOf(random2) !== -1).toBe(true);
+      expect(arr.indexOf(random3) !== -1).toBe(true);
+    });
+    it('should return the first argument if its not an array', () => {
+      const arr = {
+        "test": "object"
+      };
+      const random = Arr.randomArr(arr);
+      expect(arr === random).toBe(true);
+    });
   });
-  describe('randomizeArray', () => {
-    it('should ', () => {});
+  describe('randomizeArr', () => {
+    it('should randomly sort the passed in array', () => {
+      const arr = [1, 4, 5, 3, 7, 'test'];
+      const random1 = Arr.randomizeArr(Array.from(arr));
+      const random1Indexes = random1.map((value, index) => index);
+      random1.map((item, index) => expect(arr.indexOf(item) !== -1).toBe(true)); // It's possible that it randomly set the array to be exactly the same
+      // But the odds are very low that would happen
+
+      let isDiff;
+      random1.map((value, index) => {
+        if (isDiff) return;
+        if (value !== arr[index]) isDiff = true;
+      });
+      expect(isDiff).toBe(true);
+    });
+    it('should return the first argument if its not an array', () => {
+      const arr = {
+        "test": "object"
+      };
+      const random = Arr.randomizeArr(arr);
+      expect(arr === random).toBe(true);
+    });
   });
   describe('uniqArr', () => {
-    it('should ', () => {});
+    it('should remove duplicates from the passed in array', () => {
+      const arr = [1, 4, 'test', 1, 7, 'test'];
+      const uniq = Arr.uniqArr(arr);
+      expect(uniq.length == arr.length - 2).toBe(true);
+      const checkArr = [];
+      uniq.map((value, index) => {
+        expect(checkArr.indexOf(value) === -1);
+        checkArr.push(value);
+      });
+    });
+    it('should return the first argument if its not an array', () => {
+      const arr = {
+        "test": "object"
+      };
+      const uniq = Arr.uniqArr(arr);
+      expect(arr === uniq).toBe(true);
+    });
   });
   describe('omitRange', () => {
     let originalConsole;

@@ -4,7 +4,6 @@
 
 const { logData, setLogs } = require('../log')
 const { promisify, wait } = require('../promise')
-const { wait } = require('../method')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const fs = require('fs')

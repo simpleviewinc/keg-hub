@@ -1,3 +1,4 @@
+/** @module command */
 'use strict';
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -9,7 +10,8 @@ const _require = require('../log'),
       setLogs = _require.setLogs;
 
 const _require2 = require('../promise'),
-      promisify = _require2.promisify;
+      promisify = _require2.promisify,
+      wait = _require2.wait;
 
 const _require3 = require('child_process'),
       exec = _require3.exec;
@@ -30,6 +32,7 @@ SHOW_LOGS && setLogs(true);
 const ERROR_PREFIX = 'ERROR';
 /**
 * Logs a message to the console
+* @function
 * @param {any} message - message to log
 * @param {Object} error - thrown during service account process
 * @param {string} [type='error'] - type of message to log
@@ -42,7 +45,8 @@ const errorHelper = (message, error, type = 'error') => {
   if (!SHOW_LOGS) setLogs(false);
 };
 /**
-* Logs a message to the condole
+* Logs a message to the console
+* @function
 * @param {string} message - message to be logged
 * @param {string} type - method that shoudl be called  ( log || error || warn )
 * @return { void }
@@ -55,17 +59,11 @@ const logMessage = (message, type = 'log', force) => {
   if (force && !SHOW_LOGS) setLogs(false);
 };
 /**
-* Stops execution for a given amount of time
-* @param {number} time
-* @return { void }
-*/
-
-
-const wait = time => new Promise((res, rej) => setTimeout(() => res(true), time));
-/**
-* Gets arguments from the cmd line
-* @return {Object} - converted CMD Line arguments as key / value pair
-*/
+ * Gets arguments from the cmd line
+ * @function
+ *
+ * @return {Object} - converted CMD Line arguments as key / value pair
+ */
 
 
 const getArgs = () => {
@@ -82,7 +80,8 @@ const getArgs = () => {
   }, {});
 };
 /**
-* Ensures all required arguments exist
+* Ensures all required arguments exist based on passed in error object
+* @function
 * @param {Object} args - passed in arguments
 * @param {Object} errors - error message for required arguments
 * @return { void }
@@ -101,6 +100,7 @@ const validateArgs = (args, errors) => Object.keys(errors).map(key => {
 });
 /**
 * Makes calls to the cmd line shell
+* @function
 * @param {string} line - command to be run in the shell
 * @return response from the shell
 */
@@ -123,7 +123,8 @@ function () {
   };
 }();
 /**
-* Copies files to a new location
+* Copies file from one location to another
+* @function
 * @param {string} file - file to be copied
 * @param {string} loc - location to put the copied file
 * @return { void }
@@ -142,13 +143,14 @@ function () {
   };
 }();
 /**
-* Ensures a file path exists, if it does not, then it creates it
+* Ensures a folder path exists, if it does not, then it creates it
+* @function
 * @param {string} checkPath - path to check
 * @return {boolean} - if the path exists
 */
 
 
-const ensurePath =
+const ensureFolderPath =
 /*#__PURE__*/
 function () {
   var _ref3 = _asyncToGenerator(function* (checkPath) {
@@ -161,15 +163,16 @@ function () {
     }
   });
 
-  return function ensurePath(_x4) {
+  return function ensureFolderPath(_x4) {
     return _ref3.apply(this, arguments);
   };
 }();
 /**
 * Writes a file to the local system
+* @function
 * @param {string} path - location to save the file
 * @param {string} data - data to save in the file
-* @return { promies || boolean } - if the file was saved
+* @return { promise || boolean } - if the file was saved
 */
 
 
@@ -178,11 +181,10 @@ const writeFile = (filePath, data) => new Promise((req, rej) => fs.writeFile(fil
 module.exports = {
   cmd,
   copyFile,
-  ensurePath,
+  ensureFolderPath,
   errorHelper,
   getArgs,
   logMessage,
-  wait,
   writeFile,
   validateArgs
 };

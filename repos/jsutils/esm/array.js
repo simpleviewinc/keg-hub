@@ -25,6 +25,8 @@ require("core-js/modules/es.date.to-string");
 
 require("core-js/modules/es.object.define-property");
 
+require("core-js/modules/es.object.entries");
+
 require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.regexp.to-string");
@@ -36,7 +38,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArray = exports.randomArray = void 0;
+exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArr = exports.randomArr = void 0;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -50,11 +52,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var _require = require('./number'),
     isNum = _require.isNum;
+
+var _require2 = require('./object'),
+    isObj = _require2.isObj;
 /**
  * Randomly selects values from a passed in array.
  * @function
  * @example
- * randomArray([1,2,3], 1)
+ * randomArr([1,2,3], 1)
  * // Returns an array with one of the values in the passed in array
  * @param {array} arr - array to select values from
  * @param {number} amount - number of values to select from the array
@@ -62,31 +67,32 @@ var _require = require('./number'),
  */
 
 
-var randomArray = function randomArray(arr, amount) {
-  amount = amount || 1;
+var randomArr = function randomArr(arr, amount) {
+  if (!isArr(arr)) return arr;
+  var useAmount = amount || 1;
   var randoms = [];
 
-  for (var i = 0; i < amount; i++) {
+  for (var i = 0; i < useAmount; i++) {
     randoms.push(arr[Math.floor(Math.random() * arr.length)]);
   }
 
-  return amount === 1 ? randoms[0] : randoms;
+  return !amount ? randoms[0] : randoms;
 };
 /**
  * Randomly sorts an arrays items.
  * @function
  * @example
- * randomizeArray([1,2,3])
+ * randomizeArr([1,2,3])
  * // Returns an array randomly sorted
  * @param {array} arr - array to randomly sorted
  * @return {array} - randomly sorted array
  */
 
 
-exports.randomArray = randomArray;
+exports.randomArr = randomArr;
 
-var randomizeArray = function randomizeArray(arr) {
-  return arr.sort(function () {
+var randomizeArr = function randomizeArr(arr) {
+  return !isArr(arr) && arr || arr.sort(function () {
     return 0.5 - Math.random();
   });
 };
@@ -101,12 +107,12 @@ var randomizeArray = function randomizeArray(arr) {
  */
 
 
-exports.randomizeArray = randomizeArray;
+exports.randomizeArr = randomizeArr;
 
 var uniqArr = function uniqArr(arr) {
-  return isArr(arr) && arr.filter(function (e, i, arr) {
+  return !isArr(arr) && arr || arr.filter(function (e, i, arr) {
     return arr.indexOf(e) == i;
-  }) || arr;
+  });
 };
 /**
  * Checks if passed in value is an array.
@@ -139,7 +145,7 @@ var isArr = function isArr(value) {
 exports.isArr = isArr;
 
 var cloneArr = function cloneArr(arr) {
-  return Array.from(_toConsumableArray(isArr(arr) && arr || []));
+  return Array.from(_toConsumableArray(isArr(arr) && arr || isObj(arr) && Object.entries(arr) || []));
 };
 /**
  * Returns a new array with the same elements as arr, excluding `count` elements beginning at index `startIndex`

@@ -40,7 +40,7 @@ require("core-js/modules/web.timers");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uuid = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = exports.applyToFunc = exports.pipeline = void 0;
+exports.uuid = exports.limbo = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = exports.applyToFunc = exports.pipeline = void 0;
 
 var _array = require("./array");
 
@@ -71,15 +71,13 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var pipeline = function pipeline(item) {
-  var startingInput = isFunc(item) ? item() : item;
-
   for (var _len = arguments.length, functions = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     functions[_key - 1] = arguments[_key];
   }
 
   return functions.reduce(function (result, fn) {
     return applyToFunc(result, fn);
-  }, startingInput);
+  }, item);
 };
 /**
  * Helper for pipeline. Passes 'item' into 'expression' as its first argument.
@@ -214,13 +212,19 @@ var doIt = function doIt() {
 
   var params = args.slice();
   var num = params.shift();
+  var bindTo = params.shift();
   var cb = params.pop();
-  if (!(0, _number.isNum)(num) || !isFunc(cb)) return;
-  var i = -1;
+  if (!(0, _number.isNum)(num) || !isFunc(cb)) return [];
+  var doItAmount = new Array(num);
+  var responses = [];
 
-  while (++i < num) {
-    if (cb.call.apply(cb, [params[0], i].concat(_toConsumableArray(params))) === false) break;
+  for (var i = 0; i < doItAmount.length; i++) {
+    var data = cb.call.apply(cb, [bindTo, i].concat(_toConsumableArray(params)));
+    if (data === false) break;
+    responses.push(data);
   }
+
+  return responses;
 };
 /**
  * Check if the passed in item is a function.
@@ -348,8 +352,30 @@ var throttleLast = function throttleLast(func, cb) {
   };
 };
 /**
+ * Adds catch to a promise for better error handling of await functions
+ * <br> Removes the need for wrapping await in a try / catch
+ * @example
+ * const [ err, data ] = await limbo(promiseFunction())
+ * // returns an array
+ * // * err will be undefined if no error was thrown
+ * // * data will be the response from the promiseFunction
+ * @function
+ * @param {Promise} promise - Promise to be resolved
+ * @return {Array} - Slot 1 => error, Slot 2 => response from promise
+ */
+
+
+exports.throttleLast = throttleLast;
+
+var limbo = function limbo(promise) {
+  return !promise || !isFunc(promise.then) ? [new Error("A promise or thenable is required as the first argument!"), null] : promise.then(function (data) {
+    return [null, data];
+  })["catch"](function (err) {
+    return [err, undefined];
+  });
+};
+/**
  * Creates a uuid, unique up to around 20 million iterations.
- * <br> Good enough for us
  * @example
  * uuid()
  * // New uuid as a string
@@ -359,7 +385,7 @@ var throttleLast = function throttleLast(func, cb) {
  */
 
 
-exports.throttleLast = throttleLast;
+exports.limbo = limbo;
 
 var uuid = function uuid(a) {
   return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);

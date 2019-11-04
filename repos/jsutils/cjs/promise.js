@@ -4,7 +4,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.promisifyAll = exports.promisify = void 0;
+exports.wait = exports.promisifyAll = exports.promisify = void 0;
 
 var _object = require("./object");
 
@@ -98,5 +98,16 @@ const promisifyAll = object => {
   proto && Object.getPrototypeOf(proto) !== null && addAsync(proto);
   return object;
 };
+/**
+ * Stops execution for a given amount of time
+ * @function
+ * @param {number} time - Amount of time to wait
+ * @return { void }
+ */
+
 
 exports.promisifyAll = promisifyAll;
+
+const wait = time => new Promise((res, rej) => setTimeout(() => res(true), time));
+
+exports.wait = wait;

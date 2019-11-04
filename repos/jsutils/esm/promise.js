@@ -33,10 +33,12 @@ require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/web.dom-collections.iterator");
 
+require("core-js/modules/web.timers");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.promisifyAll = exports.promisify = void 0;
+exports.wait = exports.promisifyAll = exports.promisify = void 0;
 
 var _object = require("./object");
 
@@ -138,5 +140,22 @@ var promisifyAll = function promisifyAll(object) {
   proto && Object.getPrototypeOf(proto) !== null && addAsync(proto);
   return object;
 };
+/**
+ * Stops execution for a given amount of time
+ * @function
+ * @param {number} time - Amount of time to wait
+ * @return { void }
+ */
+
 
 exports.promisifyAll = promisifyAll;
+
+var wait = function wait(time) {
+  return new Promise(function (res, rej) {
+    return setTimeout(function () {
+      return res(true);
+    }, time);
+  });
+};
+
+exports.wait = wait;

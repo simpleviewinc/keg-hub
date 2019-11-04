@@ -8,9 +8,15 @@ require("core-js/modules/es.symbol.iterator");
 
 require("core-js/modules/es.array.for-each");
 
+require("core-js/modules/es.array.from");
+
+require("core-js/modules/es.array.index-of");
+
 require("core-js/modules/es.array.is-array");
 
 require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.array.map");
 
 require("core-js/modules/es.date.to-string");
 
@@ -41,7 +47,39 @@ describe('/array', function () {
     return jest.resetAllMocks();
   });
   describe('cloneArr', function () {
-    it('should ', function () {});
+    it('should create a copy of the passed in array', function () {
+      var arr = [1, 2, 3];
+      var cloned = Arr.cloneArr(arr);
+      expect(Array.isArray(cloned)).toBe(true);
+      expect(cloned === arr).toBe(false);
+      arr.map(function (item, index) {
+        return expect(cloned[index] === item);
+      });
+    });
+    it('should handle non array / object arguments by returning an empty array and not throw', function () {
+      var arr = "I am not an array";
+      var cloned = Arr.cloneArr(arr);
+      expect(Array.isArray(cloned)).toBe(true);
+      expect(cloned === arr).toBe(false);
+      expect(cloned.length).toBe(0);
+    });
+    it('should handle object arguments by return an array of entries', function () {
+      var arr = {
+        1: 1,
+        2: 2,
+        3: 3
+      };
+      var cloned = Arr.cloneArr(arr);
+      expect(Array.isArray(cloned)).toBe(true);
+      expect(cloned === arr).toBe(false);
+      cloned.map(function (_ref, index) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            value = _ref2[1];
+
+        return expect(arr[key] === value);
+      });
+    });
   });
   describe('isArr', function () {
     it('should check for arrays', function () {
@@ -54,14 +92,85 @@ describe('/array', function () {
       expect(Arr.isArr(new Set())).toBe(false);
     });
   });
-  describe('randomArray', function () {
-    it('should ', function () {});
+  describe('randomArr', function () {
+    it('should randomly select values from a passed in array', function () {
+      var arr = [1, 4, 5, 3, 7, 'test'];
+      var random = Arr.randomArr(arr, 3);
+      random.map(function (item) {
+        return expect(arr.indexOf(item) !== -1).toBe(true);
+      });
+    });
+    it('should arrays with a length equal to the second argument', function () {
+      var arr = [1, 4, 5, 3, 7, 'test'];
+      var random = Arr.randomArr(arr, 3);
+      var random2 = Arr.randomArr(arr, 8);
+      var random3 = Arr.randomArr(arr, 1);
+      expect(random.length).toBe(3);
+      expect(random2.length).toBe(8);
+      expect(random3.length).toBe(1);
+    });
+    it('should return a random array item if no amount is passed in', function () {
+      var arr = [1, 4, 5, 3, 7, 'test'];
+      var random1 = Arr.randomArr(arr);
+      var random2 = Arr.randomArr(arr);
+      var random3 = Arr.randomArr(arr);
+      expect(arr.indexOf(random1) !== -1).toBe(true);
+      expect(arr.indexOf(random2) !== -1).toBe(true);
+      expect(arr.indexOf(random3) !== -1).toBe(true);
+    });
+    it('should return the first argument if its not an array', function () {
+      var arr = {
+        "test": "object"
+      };
+      var random = Arr.randomArr(arr);
+      expect(arr === random).toBe(true);
+    });
   });
-  describe('randomizeArray', function () {
-    it('should ', function () {});
+  describe('randomizeArr', function () {
+    it('should randomly sort the passed in array', function () {
+      var arr = [1, 4, 5, 3, 7, 'test'];
+      var random1 = Arr.randomizeArr(Array.from(arr));
+      var random1Indexes = random1.map(function (value, index) {
+        return index;
+      });
+      random1.map(function (item, index) {
+        return expect(arr.indexOf(item) !== -1).toBe(true);
+      }); // It's possible that it randomly set the array to be exactly the same
+      // But the odds are very low that would happen
+
+      var isDiff;
+      random1.map(function (value, index) {
+        if (isDiff) return;
+        if (value !== arr[index]) isDiff = true;
+      });
+      expect(isDiff).toBe(true);
+    });
+    it('should return the first argument if its not an array', function () {
+      var arr = {
+        "test": "object"
+      };
+      var random = Arr.randomizeArr(arr);
+      expect(arr === random).toBe(true);
+    });
   });
   describe('uniqArr', function () {
-    it('should ', function () {});
+    it('should remove duplicates from the passed in array', function () {
+      var arr = [1, 4, 'test', 1, 7, 'test'];
+      var uniq = Arr.uniqArr(arr);
+      expect(uniq.length == arr.length - 2).toBe(true);
+      var checkArr = [];
+      uniq.map(function (value, index) {
+        expect(checkArr.indexOf(value) === -1);
+        checkArr.push(value);
+      });
+    });
+    it('should return the first argument if its not an array', function () {
+      var arr = {
+        "test": "object"
+      };
+      var uniq = Arr.uniqArr(arr);
+      expect(arr === uniq).toBe(true);
+    });
   });
   describe('omitRange', function () {
     var originalConsole;
@@ -92,11 +201,11 @@ describe('/array', function () {
     });
     it("should console error with invalid range input", function () {
       var cases = [[['x'], -1, 1], [['x'], 1, -1], [['x'], null, 1], [['x'], 1, null]];
-      cases.forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 3),
-            arr = _ref2[0],
-            start = _ref2[1],
-            count = _ref2[2];
+      cases.forEach(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 3),
+            arr = _ref4[0],
+            start = _ref4[1],
+            count = _ref4[2];
 
         console.error = jest.fn();
         var result = Arr.omitRange(arr, start, count);

@@ -4,15 +4,18 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArray = exports.randomArray = void 0;
+exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArr = exports.randomArr = void 0;
 
 const _require = require('./number'),
       isNum = _require.isNum;
+
+const _require2 = require('./object'),
+      isObj = _require2.isObj;
 /**
  * Randomly selects values from a passed in array.
  * @function
  * @example
- * randomArray([1,2,3], 1)
+ * randomArr([1,2,3], 1)
  * // Returns an array with one of the values in the passed in array
  * @param {array} arr - array to select values from
  * @param {number} amount - number of values to select from the array
@@ -20,30 +23,31 @@ const _require = require('./number'),
  */
 
 
-const randomArray = (arr, amount) => {
-  amount = amount || 1;
+const randomArr = (arr, amount) => {
+  if (!isArr(arr)) return arr;
+  const useAmount = amount || 1;
   const randoms = [];
 
-  for (let i = 0; i < amount; i++) {
+  for (let i = 0; i < useAmount; i++) {
     randoms.push(arr[Math.floor(Math.random() * arr.length)]);
   }
 
-  return amount === 1 ? randoms[0] : randoms;
+  return !amount ? randoms[0] : randoms;
 };
 /**
  * Randomly sorts an arrays items.
  * @function
  * @example
- * randomizeArray([1,2,3])
+ * randomizeArr([1,2,3])
  * // Returns an array randomly sorted
  * @param {array} arr - array to randomly sorted
  * @return {array} - randomly sorted array
  */
 
 
-exports.randomArray = randomArray;
+exports.randomArr = randomArr;
 
-const randomizeArray = arr => arr.sort(() => 0.5 - Math.random());
+const randomizeArr = arr => !isArr(arr) && arr || arr.sort(() => 0.5 - Math.random());
 /**
  * Removes duplicates from an array.
  * @function
@@ -55,9 +59,9 @@ const randomizeArray = arr => arr.sort(() => 0.5 - Math.random());
  */
 
 
-exports.randomizeArray = randomizeArray;
+exports.randomizeArr = randomizeArr;
 
-const uniqArr = arr => isArr(arr) && arr.filter((e, i, arr) => arr.indexOf(e) == i) || arr;
+const uniqArr = arr => !isArr(arr) && arr || arr.filter((e, i, arr) => arr.indexOf(e) == i);
 /**
  * Checks if passed in value is an array.
  * @function
@@ -86,7 +90,8 @@ const isArr = value => Array.isArray(value);
 
 exports.isArr = isArr;
 
-const cloneArr = arr => Array.from([...(isArr(arr) && arr || [])]);
+const cloneArr = arr => Array.from([// If arr is not an array or object, just use empty array, so we don't throw!
+...(isArr(arr) && arr || isObj(arr) && Object.entries(arr) || [])]);
 /**
  * Returns a new array with the same elements as arr, excluding `count` elements beginning at index `startIndex`
  * @param {Array} arr 
