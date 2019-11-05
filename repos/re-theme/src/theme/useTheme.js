@@ -22,7 +22,7 @@ export const useTheme = () => {
   const onChange = ({ window: win }) => {
 
     // Rebuilt the theme on change
-    buildTheme(theme, win.width)
+    buildTheme(theme, win.width, win.height)
 
     // Update the state with the updated theme data
     setTheme(theme)

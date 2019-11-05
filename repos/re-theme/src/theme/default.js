@@ -22,7 +22,7 @@ const dims = Dimensions.get("window");
  *
  * @returns {void}
  */
-export const setDefaultTheme = (theme, merge) => {
+export const setDefaultTheme = (theme, merge=false) => {
 
   // Ensure the passed in theme is an object
   if(!isObj(theme))
@@ -37,7 +37,7 @@ export const setDefaultTheme = (theme, merge) => {
     : theme
 
   // Get subset theme that matches current dimensions is useDimensions is true
-  const useTheme = buildTheme(defaultTheme, dims.width)
+  const useTheme = buildTheme(defaultTheme, dims.width, dims.height)
 
   // Return the newly set default theme
   return useTheme

@@ -3,7 +3,7 @@
 
 import { fireThemeEvent } from './themeEvent'
 import { Constants } from '../constants'
-import { getSizeMap, getMergeSizes, getSize } from '../dimensions'
+import { getMergeSizes, getSize } from '../dimensions'
 import { isObj, deepMerge } from 'jsutils'
 
 /**
@@ -49,17 +49,18 @@ const joinThemeSizes = (theme, sizeKey, extraTheme={}) => {
  * Gets the dimensions of the current screen, and pull the theme if it exists
  * @param {Object} theme - Current active theme
  * @param {number} width - Current screen width
+ * @param {number} height - Current screen height
  * @param {Object} defaultTheme - Initial theme
  *
  * @returns {Object} Subsection of the theme based on current dimensions if it exists
  */
-export const buildTheme = (theme, width, defaultTheme) => {
+export const buildTheme = (theme, width, height, defaultTheme) => {
 
   // If theres no theme, or not valid curSize, just return the passed in theme
   if(!isObj(theme)) return theme
 
   // Pull out the key and the size that matches the width
-  const [ key, size ] = getSize(width)
+  const [ key,size ] = getSize(width)
 
   // Extract the sizes from the theme
   const {
@@ -74,10 +75,10 @@ export const buildTheme = (theme, width, defaultTheme) => {
   const builtTheme = size
     ? joinThemeSizes(theme, key, extraTheme)
     : extraTheme
-
+  
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme)
   
-  builtTheme.RTMeta = { key, size, width }
+  builtTheme.RTMeta = { key, size, width, height }
   
   return builtTheme
 }
