@@ -1,5 +1,6 @@
 const Obj = require('../object')
 const { isArr } = require('../array')
+const { snakeCase } = require('../string')
 
 describe('/object', () => {
 
@@ -508,6 +509,21 @@ describe('/object', () => {
           const result = Obj.isEntry(entry)
           expect(result).toBe(expectedResult)
         })
+    })
+  })
+
+  describe('mapKeys', () => {
+    it('should map all the keys of an object', () => {
+      const obj = {
+        'fooBar': 'wow',
+        'PascalCase': 'whoa',
+        'css-crap': 'hyphenated'
+      }
+
+      const result = Obj.mapKeys(obj, snakeCase)
+      expect(result.foo_bar).toEqual(obj.fooBar)
+      expect(result.pascal_case).toEqual(obj.PascalCase)
+      expect(result.css_crap).toEqual(obj['css-crap'])
     })
   })
 })

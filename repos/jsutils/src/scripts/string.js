@@ -1,4 +1,7 @@
+import { isFunc } from './method'
+
 /** @module string */
+const { mapEntries, isObj } = require('./object')
 
 'use strict'
 
@@ -17,6 +20,65 @@ export const buildPath = (...args) => {
   return built.replace(/([^:\/]|^)\/{2,}/g, '$1/')
 }
 
+/**
+ * Converts a string to snake_case.
+ * @function
+ * @param {string} str to be converted
+ * @example
+ *  snakeCase('fooBar') // returns 'foo_bar'
+ * @returns the string in snake_case, or the input if it is not a string
+ */
+export const snakeCase = (str) => {
+  const underscored = delimitString(str, '_')
+  return underscored.toLowerCase()
+}
+
+/**
+ * @function
+ * @returns a new string with the specified delimiter delimiting each word
+ * @param {String} str - string of any casing
+ * @param {String} delimiter - e.g. '_'
+ * @param {Array} delimiters - optional. An array of delimiter characters on which this function searches and breaks. Defaults to checking -, _, and space
+ * @example delimitString('fooBar', '_') // 'foo_Bar'
+ */
+export const delimitString = (str, delimiter, delimiters=['-', '_', ' ']) => {
+  if (!isStr(str)) return str
+  const isDelimiter = c => delimiters.some(del => del === c)
+  let prevChar = '_'
+  return mapString(str, char => {
+    if (isDelimiter(char)) {
+      prevChar = delimiter 
+      return delimiter 
+    }
+
+    if (isUpperCase(char) && isLowerCase(prevChar) && !isDelimiter(prevChar)) {
+      prevChar = char
+      return delimiter + char
+    }
+
+    prevChar = char
+    return char
+  })
+}
+
+/**
+ * Maps a string by applying function `charMapper` to each character.
+ * @function
+ * @param {string} str to be mapped
+ * @param {Function} charMapper - function of form (character) => <some character or string>
+ * @returns a new string, with each character mapped by charMap. If str is not a string or charMapper not a function, just returns str
+ * @example
+ *  mapString("hello", c => c === 'h' ? 'x' : c) // returns 'xello'
+ */
+export const mapString = (str, charMapper) => {
+  if (!isStr(str)) return str
+  if (!isFunc(charMapper)) return str
+  let result = ""
+  for (const char of str) {
+    result += charMapper(char)
+  }
+  return result
+}
 
 /**
  * Converts a string to camel case.
@@ -261,3 +323,17 @@ export const wordCaps = str => {
     .map(word => word && capitalize(word) || '')
     .join(' ')
 }
+
+/**
+ * @function
+ * @returns true if str is upper case
+ * @param {String} str 
+ */
+export const isUpperCase = str => (str === str.toUpperCase())
+
+/**
+ * @function
+ * @returns true if str is upper case
+ * @param {String} str 
+ */
+export const isLowerCase = str => (str === str.toLowerCase())
