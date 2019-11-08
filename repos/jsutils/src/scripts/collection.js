@@ -16,7 +16,8 @@ import { isNum } from './number'
  */
 const updateColl = (obj, path, type, val) => {
   const org = obj
-  if (!isColl(obj) || !obj || !path) return undefined
+  if (!isColl(obj) || !obj || !path)
+    return type !== 'set' && val || undefined
   
   const parts = isArr(path) ? path : path.split('.')
   const key = parts.pop()
@@ -32,7 +33,7 @@ const updateColl = (obj, path, type, val) => {
           obj = obj[prop]
         })()
 
-    if (breakPath) return
+    if (breakPath) return val
   }
 
   return type === 'get'

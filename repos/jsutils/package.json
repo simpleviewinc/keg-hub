@@ -16,7 +16,7 @@
     "build:modules": "yarn build:esm && yarn build:cjs",
     "build:webpack": "rimraf ./build && ENV=production webpack --mode production",
     "clean": "rimraf yarn.lock && rimraf node_modules && yarn install --force",
-    "test": "NODE_ENV=test jest --verbose",
+    "test": "NODE_ENV=test jest --no-cache --verbose",
     "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc src/scripts -d ./docs --debug --verbose --package ./package.json -t ./node_modules/docdash -R README.md && yarn docs:move",
     "docs:move": "node ./move_docs.js",
     "deploy": "yarn build && gh-pages -d docs"
