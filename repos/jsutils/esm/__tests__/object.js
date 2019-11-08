@@ -47,6 +47,9 @@ var Obj = require('../object');
 var _require = require('../array'),
     isArr = _require.isArr;
 
+var _require2 = require('../string'),
+    snakeCase = _require2.snakeCase;
+
 describe('/object', function () {
   beforeEach(function () {
     return jest.resetAllMocks();
@@ -579,6 +582,19 @@ describe('/object', function () {
         var result = Obj.isEntry(entry);
         expect(result).toBe(expectedResult);
       });
+    });
+  });
+  describe('mapKeys', function () {
+    it('should map all the keys of an object', function () {
+      var obj = {
+        'fooBar': 'wow',
+        'PascalCase': 'whoa',
+        'css-crap': 'hyphenated'
+      };
+      var result = Obj.mapKeys(obj, snakeCase);
+      expect(result.foo_bar).toEqual(obj.fooBar);
+      expect(result.pascal_case).toEqual(obj.PascalCase);
+      expect(result.css_crap).toEqual(obj['css-crap']);
     });
   });
 });

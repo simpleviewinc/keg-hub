@@ -4,7 +4,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.isEntry = exports.mapEntries = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.isEntry = exports.mapEntries = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.mapKeys = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -33,6 +33,21 @@ const cloneJson = obj => {
   }
 };
 /**
+ * Shortcut helper for mapping just the keys of an object.
+ * @function
+ * @param {Object} obj 
+ * @param {Function} keyMapper: (key) => nextKey
+ * @returns the new object with each key mapped
+ */
+
+
+exports.cloneJson = cloneJson;
+
+const mapKeys = (obj, keyMapper) => {
+  if (!isObj(obj) || !(0, _method.isFunc)(keyMapper)) return obj;
+  return mapEntries(obj, (key, value) => [keyMapper(key), value]);
+};
+/**
  * Removes all properties from an object.
  * @function
  * @param {Object} obj - object to remove properties from
@@ -41,7 +56,7 @@ const cloneJson = obj => {
  */
 
 
-exports.cloneJson = cloneJson;
+exports.mapKeys = mapKeys;
 
 const clearObj = (obj, filter) => {
   obj && Object.entries(obj).map(([key, value]) => {

@@ -1,14 +1,16 @@
-/** @module string */
-'use strict';
-/**
- * Builds a string path from passed in args ( i.e. path/to/thing ).
- * @function
- * @return {string} - built path from arguments
- */
+"use strict";
+
+require("core-js/modules/es.symbol");
+
+require("core-js/modules/es.symbol.description");
+
+require("core-js/modules/es.symbol.iterator");
 
 require("core-js/modules/es.array.concat");
 
 require("core-js/modules/es.array.index-of");
+
+require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.join");
 
@@ -18,18 +20,40 @@ require("core-js/modules/es.array.reduce");
 
 require("core-js/modules/es.array.slice");
 
+require("core-js/modules/es.array.some");
+
 require("core-js/modules/es.object.define-property");
 
+require("core-js/modules/es.object.to-string");
+
 require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/es.string.replace");
 
 require("core-js/modules/es.string.split");
 
+require("core-js/modules/web.dom-collections.iterator");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.eitherStr = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.buildPath = void 0;
+exports.isLowerCase = exports.isUpperCase = exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.eitherStr = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.mapString = exports.delimitString = exports.snakeCase = exports.buildPath = void 0;
+
+var _method = require("./method");
+
+var _require = require('./object'),
+    mapEntries = _require.mapEntries,
+    isObj = _require.isObj;
+
+'use strict';
+/**
+ * Builds a string path from passed in args ( i.e. path/to/thing ).
+ * @function
+ * @return {string} - built path from arguments
+ */
+
 
 var buildPath = function buildPath() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -43,6 +67,103 @@ var buildPath = function buildPath() {
   return built.replace(/([^:\/]|^)\/{2,}/g, '$1/');
 };
 /**
+ * Converts a string to snake_case.
+ * @function
+ * @param {string} str to be converted
+ * @example
+ *  snakeCase('fooBar') // returns 'foo_bar'
+ * @returns the string in snake_case, or the input if it is not a string
+ */
+
+
+exports.buildPath = buildPath;
+
+var snakeCase = function snakeCase(str) {
+  var underscored = delimitString(str, '_');
+  return underscored.toLowerCase();
+};
+/**
+ * @function
+ * @returns a new string with the specified delimiter delimiting each word
+ * @param {String} str - string of any casing
+ * @param {String} delimiter - e.g. '_'
+ * @param {Array} delimiters - optional. An array of delimiter characters on which this function searches and breaks. Defaults to checking -, _, and space
+ * @example delimitString('fooBar', '_') // 'foo_Bar'
+ */
+
+
+exports.snakeCase = snakeCase;
+
+var delimitString = function delimitString(str, delimiter) {
+  var delimiters = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['-', '_', ' '];
+  if (!isStr(str)) return str;
+
+  var isDelimiter = function isDelimiter(c) {
+    return delimiters.some(function (del) {
+      return del === c;
+    });
+  };
+
+  var prevChar = '_';
+  return mapString(str, function (_char) {
+    if (isDelimiter(_char)) {
+      prevChar = delimiter;
+      return delimiter;
+    }
+
+    if (isUpperCase(_char) && isLowerCase(prevChar) && !isDelimiter(prevChar)) {
+      prevChar = _char;
+      return delimiter + _char;
+    }
+
+    prevChar = _char;
+    return _char;
+  });
+};
+/**
+ * Maps a string by applying function `charMapper` to each character.
+ * @function
+ * @param {string} str to be mapped
+ * @param {Function} charMapper - function of form (character) => <some character or string>
+ * @returns a new string, with each character mapped by charMap. If str is not a string or charMapper not a function, just returns str
+ * @example
+ *  mapString("hello", c => c === 'h' ? 'x' : c) // returns 'xello'
+ */
+
+
+exports.delimitString = delimitString;
+
+var mapString = function mapString(str, charMapper) {
+  if (!isStr(str)) return str;
+  if (!(0, _method.isFunc)(charMapper)) return str;
+  var result = "";
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var _char2 = _step.value;
+      result += charMapper(_char2);
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return result;
+};
+/**
  * Converts a string to camel case.
  * @function
  * @param {string} string to be converted
@@ -50,7 +171,7 @@ var buildPath = function buildPath() {
  */
 
 
-exports.buildPath = buildPath;
+exports.mapString = mapString;
 
 var camelCase = function camelCase(str, compCase) {
   return str && cleanStr(str).split(/[\s_-]/gm).reduce(function (cased, word, index) {
@@ -320,5 +441,29 @@ var wordCaps = function wordCaps(str) {
     return word && capitalize(word) || '';
   }).join(' ');
 };
+/**
+ * @function
+ * @returns true if str is upper case
+ * @param {String} str 
+ */
+
 
 exports.wordCaps = wordCaps;
+
+var isUpperCase = function isUpperCase(str) {
+  return str === str.toUpperCase();
+};
+/**
+ * @function
+ * @returns true if str is upper case
+ * @param {String} str 
+ */
+
+
+exports.isUpperCase = isUpperCase;
+
+var isLowerCase = function isLowerCase(str) {
+  return str === str.toLowerCase();
+};
+
+exports.isLowerCase = isLowerCase;

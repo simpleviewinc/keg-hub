@@ -1,4 +1,16 @@
-/** @module string */
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isLowerCase = exports.isUpperCase = exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.eitherStr = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.mapString = exports.delimitString = exports.snakeCase = exports.buildPath = void 0;
+
+var _method = require("./method");
+
+const _require = require('./object'),
+      mapEntries = _require.mapEntries,
+      isObj = _require.isObj;
+
 'use strict';
 /**
  * Builds a string path from passed in args ( i.e. path/to/thing ).
@@ -6,10 +18,6 @@
  * @return {string} - built path from arguments
  */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.wordCaps = exports.toStr = exports.trainCase = exports.styleCase = exports.singular = exports.sanitize = exports.removeDot = exports.plural = exports.parseJSON = exports.isUuid = exports.isUrl = exports.isStr = exports.isPhone = exports.isEmail = exports.eitherStr = exports.containsStr = exports.capitalize = exports.cleanStr = exports.camelCase = exports.buildPath = void 0;
 
 const buildPath = (...args) => {
   const built = args.reduce((path, arg) => {
@@ -19,6 +27,98 @@ const buildPath = (...args) => {
   return built.replace(/([^:\/]|^)\/{2,}/g, '$1/');
 };
 /**
+ * Converts a string to snake_case.
+ * @function
+ * @param {string} str to be converted
+ * @example
+ *  snakeCase('fooBar') // returns 'foo_bar'
+ * @returns the string in snake_case, or the input if it is not a string
+ */
+
+
+exports.buildPath = buildPath;
+
+const snakeCase = str => {
+  const underscored = delimitString(str, '_');
+  return underscored.toLowerCase();
+};
+/**
+ * @function
+ * @returns a new string with the specified delimiter delimiting each word
+ * @param {String} str - string of any casing
+ * @param {String} delimiter - e.g. '_'
+ * @param {Array} delimiters - optional. An array of delimiter characters on which this function searches and breaks. Defaults to checking -, _, and space
+ * @example delimitString('fooBar', '_') // 'foo_Bar'
+ */
+
+
+exports.snakeCase = snakeCase;
+
+const delimitString = (str, delimiter, delimiters = ['-', '_', ' ']) => {
+  if (!isStr(str)) return str;
+
+  const isDelimiter = c => delimiters.some(del => del === c);
+
+  let prevChar = '_';
+  return mapString(str, char => {
+    if (isDelimiter(char)) {
+      prevChar = delimiter;
+      return delimiter;
+    }
+
+    if (isUpperCase(char) && isLowerCase(prevChar) && !isDelimiter(prevChar)) {
+      prevChar = char;
+      return delimiter + char;
+    }
+
+    prevChar = char;
+    return char;
+  });
+};
+/**
+ * Maps a string by applying function `charMapper` to each character.
+ * @function
+ * @param {string} str to be mapped
+ * @param {Function} charMapper - function of form (character) => <some character or string>
+ * @returns a new string, with each character mapped by charMap. If str is not a string or charMapper not a function, just returns str
+ * @example
+ *  mapString("hello", c => c === 'h' ? 'x' : c) // returns 'xello'
+ */
+
+
+exports.delimitString = delimitString;
+
+const mapString = (str, charMapper) => {
+  if (!isStr(str)) return str;
+  if (!(0, _method.isFunc)(charMapper)) return str;
+  let result = "";
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      const char = _step.value;
+      result += charMapper(char);
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return result;
+};
+/**
  * Converts a string to camel case.
  * @function
  * @param {string} string to be converted
@@ -26,7 +126,7 @@ const buildPath = (...args) => {
  */
 
 
-exports.buildPath = buildPath;
+exports.mapString = mapString;
 
 const camelCase = (str, compCase) => {
   return str && cleanStr(str).split(/[\s_-]/gm).reduce((cased, word, index) => {
@@ -282,5 +382,25 @@ const wordCaps = str => {
   let cleaned = cleanStr(str);
   return cleaned.split(' ').map(word => word && capitalize(word) || '').join(' ');
 };
+/**
+ * @function
+ * @returns true if str is upper case
+ * @param {String} str 
+ */
+
 
 exports.wordCaps = wordCaps;
+
+const isUpperCase = str => str === str.toUpperCase();
+/**
+ * @function
+ * @returns true if str is upper case
+ * @param {String} str 
+ */
+
+
+exports.isUpperCase = isUpperCase;
+
+const isLowerCase = str => str === str.toLowerCase();
+
+exports.isLowerCase = isLowerCase;

@@ -104,7 +104,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 var updateColl = function updateColl(obj, path, type, val) {
   var org = obj;
-  if (!isColl(obj) || !obj || !path) return undefined;
+  if (!isColl(obj) || !obj || !path) return type !== 'set' && val || undefined;
   var parts = (0, _array.isArr)(path) ? path : path.split('.');
   var key = parts.pop();
   var prop;
@@ -116,7 +116,7 @@ var updateColl = function updateColl(obj, path, type, val) {
       obj[prop] = {};
       obj = obj[prop];
     }();
-    if (breakPath) return;
+    if (breakPath) return val;
   }
 
   return type === 'get' // Get return the value

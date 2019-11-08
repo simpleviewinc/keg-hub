@@ -126,7 +126,16 @@ describe('/collection', function () {
         }]
       };
       var path = 'data.0.duper';
-      expect(Coll.get(getObj, path, "fallback") === 'fallback').toBe(true);
+      expect(Coll.get(getObj, path, "deep_fallback") === 'deep_fallback').toBe(true);
+    });
+    it('should return a fallback when a value in the path does not exist', function () {
+      var getObj = {
+        data: [{
+          exists: 'I Exist!'
+        }]
+      };
+      var path = 'data.1.test';
+      expect(Coll.get(getObj, path, "shallow_fallback") === 'shallow_fallback').toBe(true);
     });
   });
   describe('isColl', function () {

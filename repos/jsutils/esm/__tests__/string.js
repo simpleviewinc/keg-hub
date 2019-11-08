@@ -10,6 +10,8 @@ require("core-js/modules/es.array.index-of");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.map");
+
 require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.string.iterator");
@@ -217,6 +219,27 @@ describe('/string', function () {
     });
     it('should make all chars lowercase except the first', function () {
       expect(Str.wordCaps('i shOuld bE caPitalized')).toEqual('I Should Be Capitalized');
+    });
+  });
+  describe('snakeCase', function () {
+    var cases = ['fooBar', 'foo_bar', 'FOO_BAR', 'FooBar', 'FooBAR', 'foo-bar', 'foo-BAR', 'Foo-Bar', 'FOO-BAR', 'Foo Bar', 'foo bar'];
+    cases.map(function (str) {
+      it("should convert ".concat(str, " to snake case"), function () {
+        var result = Str.snakeCase(str);
+        expect(result).toEqual('foo_bar');
+      });
+    });
+    it('should leave a single word unchanged', function () {
+      var word = 'foo';
+      expect(Str.snakeCase(word)).toEqual('foo');
+    });
+  });
+  describe('mapString', function () {
+    it('should map each character', function () {
+      var result = Str.mapString('test', function (c) {
+        return c === 's' ? 'x' : c;
+      });
+      expect(result).toEqual('text');
     });
   });
 });

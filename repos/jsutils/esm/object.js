@@ -64,7 +64,7 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.isEntry = exports.mapEntries = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.cloneJson = void 0;
+exports.filterObj = exports.someEntry = exports.everyEntry = exports.keyMap = exports.toObj = exports.trimStringFields = exports.sanitizeCopy = exports.reduceObj = exports.pickKeys = exports.omitKeys = exports.isEntry = exports.mapEntries = exports.mapObj = exports.jsonEqual = exports.isObj = exports.hasOwn = exports.applyToCloneOf = exports.deepMerge = exports.deepFreeze = exports.eitherObj = exports.clearObj = exports.mapKeys = exports.cloneJson = void 0;
 
 var _log = require("./log");
 
@@ -111,6 +111,23 @@ var cloneJson = function cloneJson(obj) {
   }
 };
 /**
+ * Shortcut helper for mapping just the keys of an object.
+ * @function
+ * @param {Object} obj 
+ * @param {Function} keyMapper: (key) => nextKey
+ * @returns the new object with each key mapped
+ */
+
+
+exports.cloneJson = cloneJson;
+
+var mapKeys = function mapKeys(obj, keyMapper) {
+  if (!isObj(obj) || !(0, _method.isFunc)(keyMapper)) return obj;
+  return mapEntries(obj, function (key, value) {
+    return [keyMapper(key), value];
+  });
+};
+/**
  * Removes all properties from an object.
  * @function
  * @param {Object} obj - object to remove properties from
@@ -119,7 +136,7 @@ var cloneJson = function cloneJson(obj) {
  */
 
 
-exports.cloneJson = cloneJson;
+exports.mapKeys = mapKeys;
 
 var clearObj = function clearObj(obj, filter) {
   obj && Object.entries(obj).map(function (_ref) {

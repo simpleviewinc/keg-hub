@@ -24,7 +24,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 const updateColl = (obj, path, type, val) => {
   const org = obj;
-  if (!isColl(obj) || !obj || !path) return undefined;
+  if (!isColl(obj) || !obj || !path) return type !== 'set' && val || undefined;
   const parts = (0, _array.isArr)(path) ? path : path.split('.');
   const key = parts.pop();
   let prop;
@@ -36,7 +36,7 @@ const updateColl = (obj, path, type, val) => {
       obj[prop] = {};
       obj = obj[prop];
     })();
-    if (breakPath) return;
+    if (breakPath) return val;
   }
 
   return type === 'get' // Get return the value

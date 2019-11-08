@@ -5,6 +5,9 @@ const Obj = require('../object');
 const _require = require('../array'),
       isArr = _require.isArr;
 
+const _require2 = require('../string'),
+      snakeCase = _require2.snakeCase;
+
 describe('/object', () => {
   beforeEach(() => jest.resetAllMocks());
   describe('cloneJson', () => {
@@ -499,6 +502,19 @@ describe('/object', () => {
         const result = Obj.isEntry(entry);
         expect(result).toBe(expectedResult);
       });
+    });
+  });
+  describe('mapKeys', () => {
+    it('should map all the keys of an object', () => {
+      const obj = {
+        'fooBar': 'wow',
+        'PascalCase': 'whoa',
+        'css-crap': 'hyphenated'
+      };
+      const result = Obj.mapKeys(obj, snakeCase);
+      expect(result.foo_bar).toEqual(obj.fooBar);
+      expect(result.pascal_case).toEqual(obj.PascalCase);
+      expect(result.css_crap).toEqual(obj['css-crap']);
     });
   });
 });
