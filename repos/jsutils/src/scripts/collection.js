@@ -20,7 +20,8 @@ const updateColl = (obj, path, type, val) => {
   if (!isColl(obj) || !obj || !path)
     return type !== 'set' && val || undefined
   
-  const parts = isArr(path) ? path : path.split('.')
+  // cloneDeep so we don't modify the reference
+  const parts = isArr(path) ? Array.from(path) : path.split('.')
   const key = parts.pop()
   let prop
   let breakPath
@@ -29,8 +30,8 @@ const updateColl = (obj, path, type, val) => {
     isColl(obj[prop])
       ? ( obj = obj[prop] )
       : (() => {
-          if(type !== 'set') breakPath = true
-          obj[prop] = {}
+          if(type === 'set') obj[prop] = {}
+          else breakPath = true
           obj = obj[prop]
         })()
 
