@@ -27,12 +27,14 @@ const updateColl = (obj, path, type, val) => {
   let breakPath
 
   while (prop = parts.shift()) {
-    isColl(obj[prop])
-      ? ( obj = obj[prop] )
+    const next = obj[prop]
+
+    isColl(next) || isFunc(next)
+      ? ( obj = next )
       : (() => {
           if(type === 'set') obj[prop] = {}
           else breakPath = true
-          obj = obj[prop]
+          obj = next
         })()
 
     if (breakPath) return val

@@ -62,7 +62,16 @@ describe('/collection', () => {
 
       expect(Coll.get(getObj, path) === 'duper').toBe(true)
     })
-    
+
+    it('should handle functions in the object path', () => {
+      const foo = () => {}
+      foo.boo = 'duper'
+      const getObj = [ { foo } ]
+      const path = '0.foo.boo'
+
+      expect(Coll.get(getObj, path) === 'duper').toBe(true)
+    })
+
     it('should return a fallback when get value does not exist', () => {
       const getObj = { data: [ { foo: 'duper' } ] }
       const path = 'data.0.duper'
