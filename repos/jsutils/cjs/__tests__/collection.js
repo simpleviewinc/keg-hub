@@ -11,6 +11,29 @@ const _require2 = require('../object'),
 describe('/collection', () => {
   beforeEach(() => jest.resetAllMocks());
   describe('get', () => {
+    it('should NOT modify the traversed path upon failure', () => {
+      const obj = {
+        foo: 123,
+        data: 'Hello'
+      };
+      const path = ['data', 'path2']; // path2 doesn't exist, should return fallback value
+
+      expect(Coll.get(obj, path, 0) === 0).toBe(true); // traversed path should keep its value
+
+      expect(obj.foo).toEqual(123);
+      expect(obj.data).toEqual('Hello');
+      const obj2 = {
+        foo: 123,
+        data: {
+          count: 100
+        }
+      };
+      const path2 = ['data', 'count', 'toes'];
+      expect(Coll.get(obj2, path2, 0) === 0).toBe(true); // traversed path should keep its value
+
+      expect(obj2.foo).toEqual(123);
+      expect(obj2.data.count).toEqual(100);
+    });
     it('should get a value on an object', () => {
       const getObj = {
         data: [{
@@ -43,6 +66,16 @@ describe('/collection', () => {
         foo: 'duper'
       }];
       const path = '0.foo';
+      expect(Coll.get(getObj, path) === 'duper').toBe(true);
+    });
+    it('should handle functions in the object path', () => {
+      const foo = () => {};
+
+      foo.boo = 'duper';
+      const getObj = [{
+        foo
+      }];
+      const path = '0.foo.boo';
       expect(Coll.get(getObj, path) === 'duper').toBe(true);
     });
     it('should return a fallback when get value does not exist', () => {
@@ -342,6 +375,98 @@ describe('/collection', () => {
       expect(repeatedEl.a.b).toEqual(element.a.b);
       expect(Object.is(repeatedEl, element)).toBe(false);
       expect(Object.is(repeatedEl.a, element.a)).toBe(false);
+    });
+  });
+  describe('shallowEqual', () => {
+    it('should return true when the collections key values are the same', () => {
+      const col1 = {
+        foo: 'bar',
+        baz: 1
+      };
+      const col2 = {
+        foo: 'bar',
+        baz: 1
+      };
+      expect(col1 === col2).toEqual(false);
+      expect(Coll.shallowEqual(col1, col2)).toEqual(true);
+    });
+    it('should return true when the collections are the same', () => {
+      const col1 = {
+        foo: 'bar',
+        baz: 1
+      };
+      const col2 = col1;
+      expect(col1 === col2).toEqual(true);
+      expect(Coll.shallowEqual(col1, col2)).toEqual(true);
+    });
+    it('should return true when the objects have the same keys but are not the same', () => {
+      const col1 = {
+        0: 'foo',
+        1: 'bar'
+      };
+      const col2 = ['foo', 'bar'];
+      expect(col1 === col2).toEqual(false);
+      expect(Coll.shallowEqual(col1, col2)).toEqual(true);
+    });
+    it('should return false when the collections key values are NOT the same', () => {
+      const col1 = {
+        foo: 'bar',
+        baz: []
+      };
+      const col2 = {
+        foo: 'bar'
+      };
+      const col3 = {
+        foo: 'bar',
+        baz: []
+      };
+      const col4 = {
+        foo: 'bar',
+        baz: []
+      };
+      expect(col1 === col2).toEqual(false);
+      expect(Coll.shallowEqual(col1, col2)).toEqual(false);
+      expect(col3 === col4).toEqual(false);
+      expect(Coll.shallowEqual(col3, col4)).toEqual(false);
+    });
+    it('should return false when either of the arguments is not a collection', () => {
+      const col1 = {
+        foo: 'bar',
+        baz: 1
+      };
+      const col2 = 'FAIL';
+      expect(Coll.shallowEqual(col1, col2)).toEqual(false);
+      expect(Coll.shallowEqual(col2, col1)).toEqual(false);
+    });
+    it('should return false when either of the arguments dont exist', () => {
+      const col1 = {
+        foo: 'bar',
+        baz: 1
+      };
+      const col2 = undefined;
+      expect(Coll.shallowEqual(col1, col2)).toEqual(false);
+      expect(Coll.shallowEqual(col2, col1)).toEqual(false);
+    });
+    it('should compare sub-keys when a path is passed as third argument', () => {
+      const col1 = {
+        foo: {
+          bar: {
+            baz: 'biz'
+          }
+        }
+      };
+      const col2 = {
+        foo: {
+          bar: {
+            baz: 'biz'
+          }
+        }
+      };
+      expect(col1 === col2).toEqual(false); // Should fail with no path
+
+      expect(Coll.shallowEqual(col1, col2)).toEqual(false); // Pass in the path, to compare sub-key object
+
+      expect(Coll.shallowEqual(col1, col2, 'foo.bar')).toEqual(true);
     });
   });
 });

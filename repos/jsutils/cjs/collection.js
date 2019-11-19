@@ -4,13 +4,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.repeat = exports.deepClone = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isEmptyColl = exports.isColl = exports.get = void 0;
+exports.shallowEqual = exports.repeat = exports.deepClone = exports.unset = exports.set = exports.reduceColl = exports.mapColl = exports.isEmptyColl = exports.isColl = exports.get = void 0;
 
 var _method = require("./method");
 
 var _array = require("./array");
 
 var _number = require("./number");
+
+var _string = require("./string");
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -24,17 +26,18 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 const updateColl = (obj, path, type, val) => {
   const org = obj;
-  if (!isColl(obj) || !obj || !path) return type !== 'set' && val || undefined;
-  const parts = (0, _array.isArr)(path) ? path : path.split('.');
+  if (!isColl(obj) || !obj || !path) return type !== 'set' && val || undefined; // cloneDeep so we don't modify the reference
+
+  const parts = (0, _array.isArr)(path) ? Array.from(path) : path.split('.');
   const key = parts.pop();
   let prop;
   let breakPath;
 
   while (prop = parts.shift()) {
-    isColl(obj[prop]) ? obj = obj[prop] : (() => {
-      if (type !== 'set') breakPath = true;
-      obj[prop] = {};
-      obj = obj[prop];
+    const next = obj[prop];
+    isColl(next) || (0, _method.isFunc)(next) ? obj = next : (() => {
+      if (type === 'set') obj[prop] = {};else breakPath = true;
+      obj = next;
     })();
     if (breakPath) return val;
   }
@@ -260,5 +263,54 @@ const repeat = (element, times, cloneDeep = false) => {
 
   return arr;
 };
+/**
+ * Compares a collection's keys / values with another collections keys / values
+ * @example
+ * shallowEqual({ foo: 'bar' }, { foo: 'bar' })
+ * // Returns true
+ * @example
+ * shallowEqual({ foo: 'bar', baz: {} }, { foo: 'bar', baz: {} })
+ * // Returns false, because the baz values are different objects
+ * @example
+ * // Works with array too
+ * shallowEqual([ 1, 2 ], [ 1, 2 ])
+ * // Returns true
+ * @example
+ * shallowEqual([{ foo: 'bar' }], [{ foo: 'bar' }])
+ * // Returns false, because the objects in index 0 are different
+ * @example
+ * // Pass a path to compare instead of the root
+ * shallowEqual({ foo: { bar: { baz: 'biz' }}}, { foo: { bar: { baz: 'biz' }}}, 'foo.bar')
+ * // Returns true, because the bar object is compared
+ * @function
+ * @param {Object|Array} col1 - Collection to compare
+ * @param {Object|Array} col2 - Collection to compare
+ * @param {Array|string} path - path of object to compare. Uses the get method to find the path
+ *
+ * @returns {boolean} - true or false if the objects keys values are equal
+ */
+
 
 exports.repeat = repeat;
+
+const shallowEqual = (col1, col2, path) => {
+  // If a path is passed in, update the collections to be that path
+  if (path && ((0, _array.isArr)(path) || (0, _string.isStr)(path))) {
+    col1 = get(col1, path);
+    col2 = get(col2, path);
+  } // If the objects are the same, so return true
+
+
+  if (col1 === col2) return true; // Ensure the objects exist, and they have keys we can compare
+
+  if (typeof col1 !== "object" || !col1 || typeof col2 !== "object" || !col2) return false; // If they have different key lengths, then they are not equal
+
+  if (Object.keys(col1).length !== Object.keys(col2).length) return false; // Loop the keys, and ensure the other collection has the key and it's value is the same
+
+  for (const key in col1) if (col1[key] !== col2[key]) return false; // Keys and values are equal, so return true
+
+
+  return true;
+};
+
+exports.shallowEqual = shallowEqual;
