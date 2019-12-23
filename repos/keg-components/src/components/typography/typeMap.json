@@ -1,0 +1,8 @@
+{
+  "web": {
+    "link": "a",
+    "paragraph": "p",
+    "subtitle": "span",
+    "caption": "pre" 
+  }
+}
