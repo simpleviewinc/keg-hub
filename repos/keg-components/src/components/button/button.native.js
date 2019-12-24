@@ -36,10 +36,10 @@ export const Button = () => {
 
   return (
     <RNButton
-    ref={ref}
-    onPress={onPress}
-    disabled={disabled}
-    style={theme.join(buttonStyle, style)}
+      ref={ref}
+      onPress={onPress}
+      disabled={disabled}
+      style={theme.join(buttonStyle, style)}
     >
       { content }
     </RNButton>

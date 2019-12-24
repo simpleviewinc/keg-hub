@@ -35,10 +35,10 @@ export const Button = () => {
 
   return (
     <button
-    ref={ref}
-    onClick={onPress}
-    disabled={disabled}
-    style={theme.join(buttonStyle, style)}
+      ref={ref}
+      onClick={onPress}
+      disabled={disabled}
+      style={theme.join(buttonStyle, style)}
     >
       { content }
     </button>
