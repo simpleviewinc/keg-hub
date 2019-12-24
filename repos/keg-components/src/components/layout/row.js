@@ -1,6 +1,6 @@
 import React from 'react'
 import { withTheme } from 're-theme'
-import { Container } from 'KegContainer'
+import { Container } from './container'
 import PropTypes from 'prop-types'
 
 export const Row = withTheme(({ children, ...props }) => {

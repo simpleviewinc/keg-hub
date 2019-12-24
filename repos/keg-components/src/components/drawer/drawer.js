@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'jsutils'
 import { useTheme } from 're-theme'
+import { View } from 'KegView'
 
 /**
  * Gets the height of the slider component
@@ -19,8 +20,8 @@ const getHeight = (height, toggled) => {
 }
 
 /**
- * Slider
- * @summary Custom Slider component. All props are optional
+ * Drawer
+ * @summary Custom Drawer component. All props are optional
  *
  * @param {Object} props - see sliderPropTypes
  * @property {String} props.toggled - Is the slider open or closed
@@ -28,7 +29,7 @@ const getHeight = (height, toggled) => {
  * @property {Object} props.children
  *
  */
-export const Slider = props => {
+export const Drawer = props => {
 
   const theme = useTheme()
   const { style, children, toggled } = props
@@ -52,13 +53,13 @@ export const Slider = props => {
   )
 
   return (
-    <div ref={ slideRef } style={ sliderStyle } >
+    <View ref={ slideRef } style={ sliderStyle } >
       { children }
-    </div>
+    </View>
   )
 }
 
-Slider.propTypes = {
+Drawer.propTypes = {
   toggled: PropTypes.boolean,
   style: PropTypes.object,
   children: PropTypes.object,

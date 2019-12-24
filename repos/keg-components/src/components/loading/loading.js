@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTheme } from 're-theme'
 import { get } from 'jsutils'
+import { View } from 'KegView'
 
 /**
  * Progress
@@ -15,14 +16,14 @@ import { get } from 'jsutils'
 const Progress = (props) => {
   const { style, text, theme } = props
   return (
-    <span
+    <View
       style={theme.join(
         get(theme, 'components.loading.progress'),
         style
       )}
     >
       { text || 'Loading...' }
-    </span>
+    </View>
   )
 }
 
@@ -42,14 +43,14 @@ export const Loading = props => {
   const { children, wrapStyle, style, text } = props
 
   return (
-    <div
+    <View
       style={theme.join(
         get(theme, 'components.loading.wrapper'),
         wrapStyle
       )}
     >
       { (children || <Progress style={ style } theme={ theme } text={ text } />) }
-    </div>
+    </View>
   )
 
 }

@@ -40,15 +40,13 @@ export default Array
       alias({
         entries: {
           KegComponents: `src/components`,
-          KegType: `src/components/typography`,
+          KegType: `src/components/typeface`,
           KegLayout: `src/components/layout`,
           KegButton: `src/components/button/button.${platform}.js`,
-          KegContainer: `src/components/layout/container.${platform}.js`,
-          KegDrawer: `src/components/drawer/drawer.${platform}.js`,
           KegImg: `src/components/image/image.${platform}.js`,
-          KegLoading: `src/components/loading/loading.${platform}.js`,
-          KegLink: `src/components/typography/link.${platform}.js`,
-          KegTextWrapper: `src/components/typography/textWrapper.${platform}.js`,
+          KegLink: `src/components/typeface/link.${platform}.js`,
+          KegText: `src/components/typeface/text.${platform}.js`,
+          KegView: `src/components/view/view.${platform}.js`,
         }
       })
     ]

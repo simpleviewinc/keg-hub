@@ -1,1 +1,1 @@
-export * from 'KegLoading'
+export * from './loading'

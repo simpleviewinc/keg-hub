@@ -62,15 +62,13 @@
     "preset": "rollup-jest",
     "moduleNameMapper": {
       "KegComponents": "<rootDir>/src/components",
-      "KegType": "<rootDir>/src/components/typography",
+      "KegType": "<rootDir>/src/components/typeface",
       "KegLayout": "<rootDir>/src/components/layout",
       "KegButton": "<rootDir>/src/components/button/button.${platform}.js",
-      "KegContainer": "<rootDir>/src/components/layout/container.${platform}.js",
-      "KegDrawer": "<rootDir>/src/components/drawer/drawer.${platform}.js",
       "KegImg": "<rootDir>/src/components/image/image.${platform}.js",
-      "KegLoading": "<rootDir>/src/components/loading/loading.${platform}.js",
-      "KegLink": "<rootDir>/src/components/typography/link.${platform}.js",
-      "KegTextWrapper": "<rootDir>/src/components/typography/textWrapper.${platform}.js"
+      "KegLink": "<rootDir>/src/components/typeface/link.${platform}.js",
+      "KegText": "<rootDir>/src/components/typeface/text.${platform}.js",
+      "KegView": "src/components/view/view.${platform}.js"
     },
     "transform": {
       "^.+\\.js$": "babel-jest"

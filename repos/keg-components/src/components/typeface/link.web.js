@@ -1,4 +1,4 @@
 import React from 'react'
-const Link = textWrapper('link')
+const Link = Text('link')
 
 export { Link, Link as A }

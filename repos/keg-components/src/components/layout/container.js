@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
 
 import React from 'react'
+import { View } from 'KegView'
 import PropTypes from 'prop-types'
 
 export const Container = args => {
@@ -10,13 +11,13 @@ export const Container = args => {
   const flex = size ? 0 : props.style && props.style.width ? 0 : 1
 
   return (
-    <div
+    <View
       { ...props }
       style={{ flex, flexDirection: flex && flexDir, ...style }}
-      onClick={ onClick || onPress }
+      onPress={ onClick || onPress }
     >
       { children }
-    </div>
+    </View>
   )
 }
 

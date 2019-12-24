@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from 'KegContainer'
+import { Container } from './container'
 import { Row } from 'KegLayout/row'
 import PropTypes from 'prop-types'
 import { withTheme } from 're-theme'
