@@ -38,9 +38,18 @@ export default Array
     plugins: [
       ...shared.plugins,
       alias({
-        // entries: {
-        //   ReDimensions: `src/dimensions/dimensions.${platform}.js`
-        // }
+        entries: {
+          KegComponents: `src/components`,
+          KegType: `src/components/typography`,
+          KegLayout: `src/components/layout`,
+          KegButton: `src/components/button/button.${platform}.js`,
+          KegContainer: `src/components/layout/container.${platform}.js`,
+          KegDrawer: `src/components/drawer/drawer.${platform}.js`,
+          KegImg: `src/components/image/image.${platform}.js`,
+          KegLoading: `src/components/loading/loading.${platform}.js`,
+          KegLink: `src/components/typography/link.${platform}.js`,
+          KegTextWrapper: `src/components/typography/textWrapper.${platform}.js`,
+        }
       })
     ]
   })))

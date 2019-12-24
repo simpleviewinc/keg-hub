@@ -47,7 +47,7 @@ export const Button = () => {
 
 }
 
-const buttonPropTypes = {
+Button.propTypes = {
   onPress: PropTypes.func,
   text: PropTypes.string,
   type: PropTypes.string,
@@ -56,5 +56,3 @@ const buttonPropTypes = {
   children: PropTypes.object,
   ref: PropTypes.object,
 }
-
-Button.propTypes = buttonPropTypes

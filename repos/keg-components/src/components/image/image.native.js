@@ -5,10 +5,6 @@ import { get, isStr } from 'jsutils'
 import PropTypes from 'prop-types'
 
 
-const imgResizeDef = {
-  
-}
-
 /**
  * Image
  * @summary Custom image component. All props are optional
@@ -39,10 +35,10 @@ export const Image = props => {
       onPress={ onClick || onPress }
     />
   )
-  
+
 }
 
-const imgPropTypes = {
+Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
@@ -50,5 +46,3 @@ const imgPropTypes = {
   style: PropTypes.object,
   ref: PropTypes.object,
 }
-
-Image.propTypes = imgPropTypes

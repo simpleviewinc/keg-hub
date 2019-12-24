@@ -1,3 +1,3 @@
-export * from 'KegComponents/layout/grid'
-export * from 'KegComponents/layout/row'
-export * from 'KegComponents/layout/column'
+export * from 'KegLayout/grid'
+export * from 'KegLayout/row'
+export * from 'KegLayout/column'

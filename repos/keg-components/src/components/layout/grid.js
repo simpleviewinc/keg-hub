@@ -1,6 +1,6 @@
 import React from 'react'
-import { Container } from 'KegComponents/layout/container'
-import { Row } from 'KegComponents/layout/row'
+import { Container } from 'KegContainer'
+import { Row } from 'KegLayout/row'
 import PropTypes from 'prop-types'
 import { withTheme } from 're-theme'
 import { isArr } from 'jsutils'

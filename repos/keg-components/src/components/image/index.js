@@ -1,1 +1,1 @@
-export * from 'KegComponents/image'
+export * from 'KegImg'

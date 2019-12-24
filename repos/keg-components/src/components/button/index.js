@@ -1,1 +1,1 @@
-export * from 'KegComponents/button'
+export * from 'KegButton'

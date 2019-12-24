@@ -1,1 +1,0 @@
-export * from 'KegComponents/slider/slider'

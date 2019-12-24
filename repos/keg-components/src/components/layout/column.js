@@ -2,7 +2,7 @@
 import React from 'react'
 import { withTheme } from 're-theme'
 import { get } from 'jsutils'
-import { Container } from 'KegComponents/layout/container'
+import { Container } from 'KegContainer'
 import PropTypes from 'prop-types'
 
 export const Column = withTheme(({ children, size, center, ...props }) => {

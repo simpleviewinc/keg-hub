@@ -30,10 +30,8 @@ export const Slider = props => {
   )
 }
 
-const sliderPropTypes = {
+Slider.propTypes = {
   toggled: PropTypes.boolean,
   style: PropTypes.object,
   children: PropTypes.object,
 }
-
-Slider.propTypes = sliderPropTypes

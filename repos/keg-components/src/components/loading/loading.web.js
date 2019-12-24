@@ -54,11 +54,9 @@ export const Loading = props => {
 
 }
 
-const loadingPropTypes = {
+Loading.propTypes = {
   text: PropTypes.string,
   style: PropTypes.object,
   wrapStyle: PropTypes.object,
   children: PropTypes.object,
 }
-
-Loading.propTypes = loadingPropTypes

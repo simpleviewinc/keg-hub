@@ -35,7 +35,7 @@ export const Image = props => {
 
 }
 
-const imgPropTypes = {
+Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
@@ -43,5 +43,3 @@ const imgPropTypes = {
   style: PropTypes.object,
   ref: PropTypes.object,
 }
-
-Image.propTypes = imgPropTypes
