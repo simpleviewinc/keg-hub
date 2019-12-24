@@ -40,10 +40,10 @@ export default Array
       alias({
         entries: {
           KegComponents: `src/components`,
-          KegType: `src/components/typeface`,
-          KegLayout: `src/components/layout`,
           KegButton: `src/components/button/button.${platform}.js`,
           KegImg: `src/components/image/image.${platform}.js`,
+          KegInput: `src/components/form/input/input.${platform}.js`,
+          KegForm: `src/components/form/${platform}/index.js`,
           KegLink: `src/components/typeface/link.${platform}.js`,
           KegText: `src/components/typeface/text.${platform}.js`,
           KegView: `src/components/view/view.${platform}.js`,

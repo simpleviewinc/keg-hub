@@ -1,6 +1,6 @@
 export const transition = {
   animate: {
-    main: { transition: 'transform 1s ease' },
+    default: { transition: 'transform 1s ease' },
     at: amount => ({ transition: 'transform ${amount}s ease' })
   },
   maxHeight: {

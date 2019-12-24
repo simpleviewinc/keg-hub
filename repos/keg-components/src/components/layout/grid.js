@@ -3,10 +3,7 @@ import { Container } from './container'
 import { Row } from 'KegLayout/row'
 import PropTypes from 'prop-types'
 import { withTheme } from 're-theme'
-import { isArr } from 'jsutils'
-
-// alignItems = y-axis
-// justifyContent = x-axis
+import { isArr, get } from 'jsutils'
 
 /**
  * Builds the styles based on the passed in isCenter param
@@ -44,19 +41,19 @@ const getChildAttrs = children => {
   )
 }
 
-export const Grid = withTheme(({ children, style, ...props }) => {
+export const Grid = withTheme(({ children, style, theme, ...props }) => {
   const { isRow, isCenter } = getChildAttrs(children)
 
   return (
     <Container
-      {...props}
-      flexDir={isRow ? 'column' : 'row'}
-      size={1}
-      style={{
-        ...props.theme.layout.grid,
-        ...style,
-        ...(isCenter && buildCenterStyles(isCenter)),
-      }}
+      { ...props }
+      flexDir={ isRow ? 'column' : 'row' }
+      size={ 1 }
+      style={ theme.join(
+        get(theme, [ 'layout', 'grid', 'wrapper' ]),
+        style,
+        isCenter && buildCenterStyles(isCenter)
+      )}
     >
       { children }
     </Container>

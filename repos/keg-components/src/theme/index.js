@@ -2,6 +2,7 @@ import { colors } from './colors'
 import { components } from './components'
 import { display } from './display'
 import { flex } from './flex'
+import { form } from './form'
 import { helpers } from './helpers'
 import { join } from './join'
 import { layout } from './layout'
@@ -17,6 +18,7 @@ export const theme = setDefaultTheme({
   components,
   display,
   flex,
+  form,
   helpers,
   join,
   layout,

@@ -1,8 +1,9 @@
 import { colors } from './colors'
+import { Dimensions } from 're-theme'
 
 export const components = {
   button: {
-    main: {
+    default: {
       padding: 8,
       borderRadius: 4,
       outline: 'none',
@@ -24,28 +25,41 @@ export const components = {
     }
   },
   card: {
-    main: {
+    native: {
+      shadowRadius: 3,
+      shadowOpacity: .5,
+      shadowOffset:{ width: 0, height: 3 },
+      borderRadius: 5,
       backgroundColor: colors.scale.white.default,
-      borderRadius: 2
+      maxWidth: Dimensions.get('window').width - 40,
+    },
+    web: {
+      // TODO: Add shadow here
+      borderRadius: 5,
+      backgroundColor: colors.scale.white.default,
+      maxWidth: Dimensions.get('window').width - 40,
     }
   },
   divider: {
-    main: {
+    default: {
       width: "100%",
       backgroundColor: "rgba(0,0,0,.12)"
     }
   },
   drawer: {
-    main: {
+    default: {
 
     },
   },
+  image: {
+    default: {}
+  },
   loading: {
-    main: {},
+    default: {},
     wrapper: {},
     progress: {}
   },
   section: {
-    main: {}
+    default: {}
   }
 }

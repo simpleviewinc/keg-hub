@@ -5,9 +5,8 @@ import { get } from 'jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
 
-export const Column = withTheme(({ children, size, center, ...props }) => {
+export const Column = withTheme(({ children, size, center, theme, ...props }) => {
 
-  const theme = props.theme || { layout: {} }
   const total = get(theme, [ 'layout', 'columns' ], 12)
 
   size = size > total ? total : size
@@ -16,14 +15,14 @@ export const Column = withTheme(({ children, size, center, ...props }) => {
   return (
     <Container
       {...props}
-      theme={theme}
-      size={size}
-      style={{
-        ...get(theme, [ 'layout', 'column' ]),
-        ...props.style,
-        minWidth: `${colWidth}%`,
-      }}
+      theme={ theme }
+      size={ size }
       flexDir='column'
+      style={ theme.join(
+        get(theme, [ 'layout', 'grid', 'column' ]),
+        props.style,
+        { minWidth: `${colWidth}%` },
+      )}
     >
       { children }
     </Container>

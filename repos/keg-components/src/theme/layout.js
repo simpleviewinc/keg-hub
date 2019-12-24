@@ -10,7 +10,7 @@ export const layout = {
     },
   },
   grid: {
-    main: {
+    wrapper: {
       display: 'flex',
       flexWrap: 'wrap',
       minWidth: '100%',

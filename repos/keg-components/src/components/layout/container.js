@@ -5,7 +5,7 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 
 export const Container = args => {
-  const { onPress, onClick, children, flexDir, size, style, theme, ...props } = args
+  const { onPress, onClick, children, flexDir, size, style, ...props } = args
 
   // Get flex type based on size or style
   const flex = size ? 0 : props.style && props.style.width ? 0 : 1
@@ -22,7 +22,6 @@ export const Container = args => {
 }
 
 Container.propTypes = {
-  theme: PropTypes.object,
   style: PropTypes.object,
   onPress: PropTypes.func,
   flexDir: PropTypes.string,

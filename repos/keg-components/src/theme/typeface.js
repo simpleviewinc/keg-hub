@@ -1,5 +1,5 @@
 export const typeface = {
-  main: {
+  default: {
     fontSize: 16,
     lineHeight: 16,
     letterSpacing: 0.15
