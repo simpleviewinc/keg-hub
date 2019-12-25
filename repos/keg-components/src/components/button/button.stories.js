@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { ReThemeProvider } from 're-theme'
-import { theme, Button } from 'keg-components'
+import { theme, Button } from '../../'
 
 const stories = storiesOf('Button', module)
 

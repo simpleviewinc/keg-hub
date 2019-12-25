@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 const Link = withTheme(props => {
   const { onPress, children, style, theme } = props
   
-  linkStyle = get(theme, [ 'typeface', 'link' ])
+  const linkStyle = get(theme, [ 'typeface', 'link' ])
   
   return (
     <TouchableOpacity onPress={onPress}>

@@ -15,3 +15,12 @@ export const Select = withTheme(props => {
     </select>
   )
 })
+
+Select.propTypes = {
+  theme: PropTypes.object,
+  style: PropTypes.object,
+  value: PropTypes.string,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  onChange: PropTypes.func,
+}

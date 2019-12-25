@@ -52,6 +52,10 @@ Button.propTypes = {
   type: PropTypes.string,
   style: PropTypes.object,
   disabled: PropTypes.bool,
-  children: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array
+  ]),
   ref: PropTypes.object,
 }

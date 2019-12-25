@@ -16,3 +16,14 @@ export const Input = withTheme(props => {
     />
   )
 })
+
+Input.propTypes = {
+  theme: PropTypes.object,
+  style: PropTypes.object,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  onChange: PropTypes.func,
+}

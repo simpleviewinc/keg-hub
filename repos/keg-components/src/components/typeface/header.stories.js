@@ -1,7 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { ReThemeProvider } from 're-theme'
-import { theme, H1, H2 } from 'keg-components'
+import { theme, H1, H2 } from '../../'
+
 
 storiesOf('H1', module)
   .add('Default', () =>

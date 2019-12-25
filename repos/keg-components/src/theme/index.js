@@ -24,5 +24,7 @@ export const theme = setDefaultTheme({
   layout,
   margin,
   padding,
+  transform,
   transition,
+  typeface,
 })

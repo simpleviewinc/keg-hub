@@ -17,7 +17,7 @@ export const unitsHelper = value => {
   if (!isStr(value) && !isNum(value)) return value
   if (isStr(value)) {
     const amount = parseInt(value)
-    if ((amount || amount == 0) && amount.toString() === value)
+    if ((amount || amount === 0) && amount.toString() === value)
       value += defaults.font.units
   }
  else value += defaults.font.units

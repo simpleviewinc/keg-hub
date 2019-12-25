@@ -60,7 +60,7 @@ export const Drawer = props => {
 }
 
 Drawer.propTypes = {
-  toggled: PropTypes.boolean,
+  toggled: PropTypes.bool,
   style: PropTypes.object,
   children: PropTypes.object,
 }

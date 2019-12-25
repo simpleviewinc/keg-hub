@@ -31,7 +31,7 @@ const getChildAttrs = children => {
   return children.reduce(
     (attrs, child) => {
       if (attrs.isRow && attrs.isCenter) return attrs
-      if (!attrs.isRow && (child && child.type == Row)) attrs.isRow = true
+      if (!attrs.isRow && (child && child.type === Row)) attrs.isRow = true
       if (!attrs.isCenter && (child && child.props && child.props.center))
         attrs.isCenter = child.props.center.toString().toLowerCase()
 

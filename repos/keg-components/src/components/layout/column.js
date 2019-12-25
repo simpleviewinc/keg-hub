@@ -1,4 +1,3 @@
-'use strict'
 import React from 'react'
 import { withTheme } from 're-theme'
 import { get } from 'jsutils'
