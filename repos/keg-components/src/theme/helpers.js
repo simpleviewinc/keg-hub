@@ -40,6 +40,5 @@ export const helpers = {
   color,
   initial,
   size,
-  weight,
-  setDefaultUnits,
+  weight
 }

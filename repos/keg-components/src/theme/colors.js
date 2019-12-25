@@ -5,7 +5,7 @@ export const colors = {
     error: "#f44336",
     divider: 'rgba(0,0,0,.12)',
     outlined: 'rgba(0,0,0,.29)',
-  }
+  },
   text: {
     primary: "rgba(0, 0, 0, 0.87)",
     secondary: "rgba(0, 0, 0, 0.54)",

@@ -1,8 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
 import { get } from 'jsutils'
 import { View } from 'KegView'
-
 /**
  * Progress
  * @summary Custom Progress component. All props are optional

@@ -1,6 +1,6 @@
 // -------- Flex styles -------- //
 const flex = {
-  align: dir => ({ alignItems: dir })
+  align: dir => ({ alignItems: dir }),
   direction: dir => ({ flexDirection: dir }),
   justify: dir => ({ justifyContent: dir }),
   display: { display: 'flex' },

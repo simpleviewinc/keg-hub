@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { Image as RNImage } from 'react-native'
 import { useTheme } from 're-theme'
 import { get, isStr } from 'jsutils'
 import PropTypes from 'prop-types'
@@ -27,7 +27,7 @@ export const Image = props => {
   const source = isStr(src) ? { uri: src } : src
   
   return (
-    <Image
+    <RNImage
       { ...attrs }
       ref={ ref }
       source={ source }

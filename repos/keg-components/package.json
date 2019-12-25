@@ -2,12 +2,12 @@
   "name": "keg-components",
   "version": "0.1.0",
   "private": true,
-  "main": "build",
+  "main": "build/index.web.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "yarn dev",
+    "dev": "rollup -c rollup.config.js -w",
+    "build": "rollup -c rollup.config.js",
+    "test": "NODE_ENV=test jest --no-cache --verbose"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
@@ -15,14 +15,15 @@
     "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.6.3",
     "@rollup/plugin-alias": "2.2.0",
+    "@rollup/plugin-json": "^4.0.1",
     "babel-jest": "24.9.0",
     "jest": "24.7.1",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git",
     "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-native": "^0.61.5",
     "react-native-web": "^0.12.0-rc.1",
-    "react-dom": "^16.12.0",
     "rollup": "1.20.3",
     "rollup-jest": "0.0.2",
     "rollup-plugin-babel": "4.3.3",
@@ -35,8 +36,8 @@
   },
   "peerDependencies": {
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
-    "react": "^16.12.0",
-    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git"
+    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git",
+    "react": "^16.12.0"
   },
   "optionalDependencies": {
     "react-dom": "^16.12.0",
@@ -61,7 +62,6 @@
   "jest": {
     "preset": "rollup-jest",
     "moduleNameMapper": {
-      "KegComponents": "<rootDir>/src/components",
       "KegForm": "<rootDir>/src/components/form/web",
       "KegInput": "<rootDir>/src/components/form/input/input.web.js",
       "KegButton": "<rootDir>/src/components/button/button.web.js",

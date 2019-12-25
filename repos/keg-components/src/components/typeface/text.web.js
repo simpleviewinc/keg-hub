@@ -3,7 +3,7 @@ import { withTheme } from 're-theme'
 import typeMap from './typeMap'
 
 const getNode = element => {
-  const node = element && element.lowerCase()
+  const node = element && element.toLowerCase()
   return typeMap.web[node] || node || 'span'
 }
 

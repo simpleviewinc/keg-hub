@@ -17,9 +17,9 @@ import PropTypes from 'prop-types'
  * @property {Object} props.ref - reference to native element
  *
  */
-export const Button = () => {
+export const Button = props => {
   const theme = useTheme()
-  
+
   const {
     text,
     type,

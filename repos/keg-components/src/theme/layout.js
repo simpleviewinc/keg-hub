@@ -14,7 +14,7 @@ export const layout = {
       display: 'flex',
       flexWrap: 'wrap',
       minWidth: '100%',
-    }
+    },
     row: {
       minWidth: '100%',
     },

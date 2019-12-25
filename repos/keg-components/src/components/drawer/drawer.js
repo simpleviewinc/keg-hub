@@ -46,8 +46,8 @@ export const Drawer = props => {
   }, [ height ])
 
   const sliderStyle = theme.join(
-    { overflow: 'hidden', transition: 'max-height 1s ease' }
-    get(theme, 'components.slider'),
+    { overflow: 'hidden', transition: 'max-height 1s ease' },
+    get(theme, 'components.drawer'),
     style,
     { maxHeight: getHeight(height, toggled) },
   )
