@@ -12,7 +12,7 @@ export const KegText = element => {
   return withTheme(props => {
     const { theme, style, children, onPress, onClick, ...attrs } = props
     const useFont = get(theme, [ 'typeface', 'font', 'family' ])
-    const textStyles = (theme.typeface && theme.typeface[element]) || theme[element]
+    const textStyles = get(theme, [ 'typeface', element ], get(theme, [ 'typeface', 'default' ]))
     const Node = getNode(element)
 
     return (

@@ -11,12 +11,12 @@ export const typeface = {
     letterSpacing: 0.4
   },
   h1: {
-    fontWeight: "300",
+    fontWeight: 300,
     fontSize: 96,
     letterSpacing: -1.5
   },
   h2: {
-    fontWeight: "300",
+    fontWeight: 300,
     fontSize: 60,
     letterSpacing: -0.5
   },
@@ -33,7 +33,7 @@ export const typeface = {
   h6: {
     fontSize: 20,
     letterSpacing: 0.15,
-    fontWeight: "500"
+    fontWeight: 500
   },
   paragraph: {
     fontSize: 16,
