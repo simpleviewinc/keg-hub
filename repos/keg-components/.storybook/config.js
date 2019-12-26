@@ -1,8 +1,7 @@
-import { configure } from '@storybook/react';
+import './addons'
+import { configure } from '@storybook/react'
 
-const req = require.context("../src/components", true, /.stories.js$/);
-function loadStories() {
-  req.keys().forEach(filename => req(filename));
-}
+const req = require.context("../src/components", true, /.stories.js$/)
+const loadStories = () => (req.keys().forEach(filename => req(filename)))
 
-configure(loadStories, module);
+configure(loadStories, module)

@@ -1,2 +1,2 @@
-import { Text } from 'KegText'
-export const Caption = Text('caption')
+import { KegText } from 'KegText'
+export const Caption = KegText('caption')

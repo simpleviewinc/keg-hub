@@ -1,14 +1,13 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ReThemeProvider } from 're-theme'
-import { theme, Button } from '../../'
+import { Button, Text } from '../../'
 
 const stories = storiesOf('Button', module)
 
 stories.add('Default', () =>
-  <ReThemeProvider theme={ theme } >
-    <Button onClick={() => console.log("clicked!!")}>
+  <Button onClick={() => console.log("clicked!!")}>
+    <Text>
       Hello Button
-    </Button>
-  </ReThemeProvider>
+    </Text>
+  </Button>
 )

@@ -1,23 +1,18 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ReThemeProvider } from 're-theme'
-import { theme, H1, H2 } from '../../'
+import { H1, H2 } from '../../'
 
 
 storiesOf('H1', module)
   .add('Default', () =>
-    <ReThemeProvider theme={ theme } >
-      <H1>
-        Hello H1
-      </H1>
-    </ReThemeProvider>
+    <H1>
+      Hello H1
+    </H1>
   )
 
 storiesOf('H2', module)
   .add('Default', () =>
-    <ReThemeProvider theme={ theme } >
-      <H2>
-        Hello H2
-      </H2>
-    </ReThemeProvider>
+    <H2>
+      Hello H2
+    </H2>
   )

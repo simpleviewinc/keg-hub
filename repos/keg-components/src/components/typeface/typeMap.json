@@ -3,6 +3,7 @@
     "link": "a",
     "paragraph": "p",
     "subtitle": "span",
-    "caption": "pre" 
+    "caption": "pre",
+    "text": "span"
   }
 }
