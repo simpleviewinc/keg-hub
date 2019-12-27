@@ -1,16 +1,20 @@
 import React from 'react'
 import { withTheme } from 're-theme'
 import { Text as RNText } from 'react-native'
-import { get } from 'jsutils'
 
 export const KegText = element => {
   return withTheme(props => {
     const { theme, style, children, ...attrs } = props
-    const useFont = get(theme, [ 'typeface', 'font', 'family' ])
-    const textStyles = get(theme, [ 'typeface', element ], get(theme, [ 'typeface', 'default' ]))
+
+    // Get the styles for the text element
+    const textStyles = theme.join(theme, [
+      [ 'typeface', 'font', 'family' ],
+      [ 'typeface', 'default' ],
+      [ 'typeface', element ]
+    ])
 
     return (
-      <RNText {...attrs} style={theme.join(useFont, textStyles, style)}>
+      <RNText {...attrs} style={theme.join(textStyles, style)}>
         { children }
       </RNText>
     )

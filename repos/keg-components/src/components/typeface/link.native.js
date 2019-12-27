@@ -5,7 +5,6 @@ import { TouchableOpacity, Text } from 'react-native'
 import PropTypes from 'prop-types'
 
 const Link = withTheme(props => {
-
   const { onPress, children, style, theme } = props
   const useFont = get(theme, [ 'typeface', 'font', 'family' ])
   const linkStyle = get(theme, [ 'typeface', 'link' ])

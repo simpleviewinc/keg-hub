@@ -4,7 +4,8 @@ export const typeface = {
   },
   default: {
     fontSize: 16,
-    letterSpacing: 0.15
+    letterSpacing: 0.15,
+    margin: 0,
   },
   caption: {
     fontSize: 12,

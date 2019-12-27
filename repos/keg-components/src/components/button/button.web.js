@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 're-theme'
+import { useTheme, useThemeActive } from 're-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 
@@ -19,26 +19,37 @@ import PropTypes from 'prop-types'
  */
 export const Button = props => {
   const theme = useTheme()
-
+  
   const {
     text,
     type,
     style,
+    onClick,
     onPress,
     disabled,
     children,
     ref,
+    ...btnProps
   } = props
 
-  const buttonStyle = get(theme, [ 'components', 'button', type || 'default' ])
+  const btnStyle = theme.join(theme, [
+    [ 'components', 'button', 'default' ],
+    [ 'components', 'button', type ],
+    disabled && [ 'components', 'button', 'disabled' ],
+  ], style)
+
+  const activeStyle = get(theme, [ 'components', 'button', 'active' ])
+  const [ activeRef, useStyle ] = useThemeActive(btnStyle, activeStyle, { ref })
+  
   const content = children || text  || 'button'
 
   return (
     <button
-      ref={ref}
-      onClick={onPress}
-      disabled={disabled}
-      style={theme.join(buttonStyle, style)}
+      { ...btnProps }
+      ref={ activeRef }
+      onClick={ onClick || onPress }
+      disabled={ disabled }
+      style={ useStyle }
     >
       { content }
     </button>
@@ -47,15 +58,16 @@ export const Button = props => {
 }
 
 Button.propTypes = {
-  onPress: PropTypes.func,
-  text: PropTypes.string,
-  type: PropTypes.string,
-  style: PropTypes.object,
-  disabled: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
     PropTypes.array
   ]),
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
   ref: PropTypes.object,
+  style: PropTypes.object,
+  text: PropTypes.string,
+  type: PropTypes.string,
 }

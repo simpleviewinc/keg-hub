@@ -7,9 +7,10 @@ import { addDecorator } from '@storybook/react'
 
 const ThemeDecorator = storyFn => (
   <ReThemeProvider theme={ theme } >
+    <div style={{ maxWidth: "100vw", margin: 'auto', marginTop: 30,  textAlign: 'center' } } >
     { storyFn() }
+    </div>
   </ReThemeProvider>
 )
-
 
 addDecorator(ThemeDecorator)

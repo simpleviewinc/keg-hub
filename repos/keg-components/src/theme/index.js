@@ -4,7 +4,6 @@ import { display } from './display'
 import { flex } from './flex'
 import { form } from './form'
 import { helpers } from './helpers'
-import { join } from './join'
 import { layout } from './layout'
 import { margin } from './margin'
 import { padding } from './padding'
@@ -20,7 +19,6 @@ export const theme = setDefaultTheme({
   flex,
   form,
   helpers,
-  join,
   layout,
   margin,
   padding,
