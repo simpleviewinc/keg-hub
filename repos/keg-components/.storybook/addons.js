@@ -1,6 +1,7 @@
 import React from 'react'
 import '@storybook/addon-actions/register'
 import '@storybook/addon-links/register'
+import '@storybook/addon-storysource/register';
 import { theme } from '../src/theme'
 import { ReThemeProvider } from 're-theme'
 import { addDecorator } from '@storybook/react'

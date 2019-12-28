@@ -1,3 +1,5 @@
+/* eslint-disable import/first */
+
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { A, Caption, H1, H2, H3, H4, H5, H6, P, Subtitle, Text } from '../../'

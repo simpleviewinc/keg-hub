@@ -1,4 +1,6 @@
 export * from './button'
+export * from './card'
+export * from './divider'
 export * from './image'
 export * from './layout'
 export * from './form'

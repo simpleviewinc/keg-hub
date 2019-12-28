@@ -8,6 +8,12 @@ module.exports = ({ config, mode }) => {
     ...config.resolve.extensions,
   ]
 
+  config.module.rules.push({
+    test: /\.stories\.jsx?$/,
+    loaders: [require.resolve('@storybook/source-loader')],
+    enforce: 'pre',
+  })
+
   config.resolve.alias = {
     ...config.resolve.alias,
     KegButton: path.resolve(__dirname, `../src/components/button/button.${platform}.js`),
