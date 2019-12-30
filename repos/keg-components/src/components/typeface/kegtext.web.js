@@ -1,10 +1,18 @@
 import React from 'react'
 import { withTheme } from 're-theme'
-import typeMap from './typeMap'
+import { reduceObj } from 'jsutils'
+import domMap from './domMap'
+
+const filterAttrs = attrs => reduceObj(attrs, (key, value, updated) => {
+  domMap.attrKeyMap.web[key] !== false &&
+    ( updated[ domMap.attrKeyMap.web[key] || key ] = value )
+
+  return updated
+}, {})
 
 const getNode = element => {
   const node = element && element.toLowerCase()
-  return typeMap.web[node] || 'span'
+  return domMap.elMap.web[node] || 'span'
 }
 
 export const KegText = element => {
@@ -23,7 +31,7 @@ export const KegText = element => {
 
     return (
       <Node
-        { ...attrs }
+        { ...filterAttrs(attrs) }
         style={ theme.join(textStyles, style) }
         onClick={ onClick || onPress }
       >

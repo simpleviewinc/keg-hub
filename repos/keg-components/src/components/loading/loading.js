@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
 import { get } from 'jsutils'
 import { View } from 'KegView'
+import { Text } from '../'
 /**
  * Progress
  * @summary Custom Progress component. All props are optional
@@ -14,15 +15,24 @@ import { View } from 'KegView'
  *
  */
 const Progress = (props) => {
-  const { style, text, theme } = props
+  const { styles, text, theme } = props
   return (
     <View
       style={theme.join(
         get(theme, 'components.loading.progress'),
-        style
+        styles.progress
       )}
     >
-      { text || 'Loading...' }
+      { text && (
+        <Text
+          style={theme.join(
+            get(theme, 'components.loading.text'),
+            styles.text
+          )}
+        >
+        { text }
+        </Text>
+      )}
     </View>
   )
 }
@@ -40,16 +50,17 @@ const Progress = (props) => {
  */
 export const Loading = props => {
   const theme = useTheme()
-  const { children, wrapStyle, style, text } = props
-
+  const { children, text } = props
+  const styles = props.styles || {}
+  
   return (
     <View
       style={theme.join(
         get(theme, 'components.loading.wrapper'),
-        wrapStyle
+        styles.wrapper
       )}
     >
-      { (children || <Progress style={ style } theme={ theme } text={ text } />) }
+      { (children || <Progress styles={ styles } theme={ theme } text={ text } />) }
     </View>
   )
 

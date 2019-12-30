@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get } from 'jsutils'
+import { get, deepMerge, isStr } from 'jsutils'
 import { CardImage } from './cardImage'
 import { Divider, View, Text } from '../'
 
-const CardHeader = ({ header, theme, hasImage, numberOfLines, styles }) => {
+const CardHeader = ({ header, theme, numberOfLines, styles }) => {
 
   if(!header || React.isValidElement(header))
     return header || null
@@ -13,44 +13,38 @@ const CardHeader = ({ header, theme, hasImage, numberOfLines, styles }) => {
   return (
     <View>
       <Text
-        testID="cardTitle"
         numberOfLines={ numberOfLines }
         style={theme.join(
           get(theme, [ 'components', 'card', 'header' ]),
-          hasImage && get(theme, [ 'components', 'card', 'image', 'title' ]),
           styles.header,
         )}
       >
         { header }
       </Text>
 
-      { !hasImage && (
-        <Divider
-          style={theme.join(
-            get(theme, [ 'components', 'card', 'divider' ]),
-            styles.divider
-          )}
-        />
-      )}
+      <Divider
+        style={theme.join(
+          get(theme, [ 'components', 'card', 'divider' ]),
+          styles.divider
+        )}
+      />
     </View>
   )
 }
 
 CardHeader.propTypes = {
   header: PropTypes.string,
-  hasImage: PropTypes.bool,
   numberOfLines: PropTypes.number,
   styles: PropTypes.object,
   theme: PropTypes.object,
 }
 
-const CardContainer = ({ attributes, children, hasImage, styles, theme }) => {
+const CardContainer = ({ attributes, children, styles, theme }) => {
   return (
     <View
       {...attributes}
       style={theme.join(
         get(theme, [ 'components', 'card', 'container' ]),
-        hasImage && { padding: 0 },
         styles.container,
       )}
     >
@@ -68,9 +62,14 @@ const CardContainer = ({ attributes, children, hasImage, styles, theme }) => {
 
 CardContainer.propTypes = {
   attributes: PropTypes.object,
-  hasImage: PropTypes.bool,
   styles: PropTypes.object,
   theme: PropTypes.object,
+}
+
+const getImgProps = (image, styles) => {
+  return isStr(image)
+    ? { src: image, style: styles.image }
+    : { ...image, style: { ...deepMerge(image.style, styles.image) } }
 }
 
 export const Card = ({ styles, ...props}) => {
@@ -85,16 +84,15 @@ export const Card = ({ styles, ...props}) => {
     subtitle,
     headerNumberOfLines,
     image,
-    imageProps,
     ...attributes
   } = props
 
   const hasImage = Boolean(image)
-
+  const imgProps = hasImage && getImgProps(image, styles)
+  
   return (
     <CardContainer
       theme={ theme }
-      hasImage={ hasImage }
       attributes={ attributes }
       styles={{
         container: styles.container,
@@ -105,7 +103,6 @@ export const Card = ({ styles, ...props}) => {
       <CardHeader
         header={ header }
         theme={ theme }
-        hasImage={ hasImage }
         numberOfLines={ headerNumberOfLines }
         styles={{ 
           header: styles.header,
@@ -113,23 +110,26 @@ export const Card = ({ styles, ...props}) => {
         }}
       />
 
-      { !hasImage ? children : (
+      { hasImage && (
         <CardImage
           title={ title }
           subtitle={ subtitle }
-          imageProps={ imageProps }
-          image={ image }
+          image={ imgProps }
           children={ children }
           styles={{
-            image: styles.image,
+            image: imgProps.style,
             overlay: styles.overlay,
             wrapper: styles.imageWrapper,
             title: styles.title,
             subtitle: styles.subtitle,
-            childrenWrap: styles.wrapper
+            loading: styles.loading
           }}
         />
       )}
+
+      <View style={ styles.children } >
+        { children }
+      </View>
 
     </CardContainer>
   )
@@ -140,7 +140,9 @@ Card.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   headerNumberOfLines: PropTypes.number,
-  image: PropTypes.object,
-  imageProps: PropTypes.object,
+  image: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+  ]),
   styles: PropTypes.object,
 }

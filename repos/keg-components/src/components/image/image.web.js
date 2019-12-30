@@ -1,7 +1,7 @@
 import React from 'react'
-import { useTheme } from 're-theme'
-import { get } from 'jsutils'
 import PropTypes from 'prop-types'
+import { ImageWrapper } from './image.wrapper'
+import { uuid } from 'jsutils'
 
 /**
  * Image
@@ -16,30 +16,33 @@ import PropTypes from 'prop-types'
  * @property {string} props.type - image type
  *
  */
-export const Image = props => {
+const Img = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
+  <img
+    alt={ alt }
+    { ...attrs }
+    { ...props }
+    ref={ ref }
+  />
+))
 
-  const { alt, onPress, ref, src, style, type } = props
-
-  const theme = useTheme()
-  const imgStyle = get(theme, [ 'components', 'image', type || 'default' ])
-
-  return (
-    <img
-      ref={ ref }
-      src={ src }
-      alt={ alt }
-      style={ theme.join(style, imgStyle) }
-      onClick={ onPress }
-    />
-  )
-
-}
+export const Image = props => (
+  <ImageWrapper
+    styleId={ uuid() }
+    { ...props }
+    imgType='web'
+    Img={ Img }
+  />
+)
 
 Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
-  src: [ PropTypes.string, PropTypes.object ],
+  styleId: PropTypes.string,
+  src: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
   style: PropTypes.object,
   ref: PropTypes.object,
 }

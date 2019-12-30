@@ -2,28 +2,32 @@ import { colors } from '../colors'
 
 export const card = {
   container: {
-    $android: {
+    $native: {
+      shadowColor: colors.shadow.opacity05,
+      shadowOffset: { height: 0, width: 0 },
+      shadowOpacity: 1,
+      shadowRadius: 1,
       elevation: 1,
     },
+    $web: {
+      boxShadow: `1px 1px 5px ${ colors.shadow.opacity05 }`
+    },
     $all: {
-      backgroundColor: '#ffffff',
+      backgroundColor: colors.palette.white01,
       borderWidth: 1,
       padding: 15,
       margin: 15,
       marginBottom: 0,
-      borderColor: '#e1e8ee',
-      shadowColor: 'rgba(0,0,0, .2)',
-      shadowOffset: { height: 0, width: 0 },
-      shadowOpacity: 1,
-      shadowRadius: 1,
+      borderColor: colors.palette.gray01,
+      borderStyle: 'solid',
     },
   },
   wrapper: {
-    backgroundColor: 'transparent',
+    backgroundColor: colors.palette.transparent,
   },
   title: {
     fontSize: 14,
-    color: '#43484d',
+    color: colors.palette.black02,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 15,
@@ -33,30 +37,33 @@ export const card = {
     hairlineWidth: 1,
   },
   image: {
-    title: {
-      marginTop: 15,
+    wrapper: {
+      display: 'inline-flex',
+      marginBottom: 15,
+      width: '100%'
     },
-    wrapper: {},
-    image: {}
+    image: {
+      width: '100%'
+    }
   },
   featured: {
     title: {
       fontSize: 18,
       marginBottom: 8,
-      color: '#ffffff',
+      color: colors.palette.white01,
       fontWeight: '800',
     },
     subtitle: {
       fontSize: 13,
       marginBottom: 8,
-      color: '#ffffff',
+      color: colors.palette.white01,
       fontWeight: '400',
     }
   },
   overlay: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: colors.shadow.opacity05,
     alignSelf: 'stretch',
     justifyContent: 'center',
     position: 'absolute',

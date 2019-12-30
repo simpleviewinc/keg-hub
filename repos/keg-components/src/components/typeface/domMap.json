@@ -1,0 +1,17 @@
+{
+  "elMap": {
+    "web": {
+      "link": "a",
+      "paragraph": "p",
+      "subtitle": "span",
+      "caption": "pre",
+      "text": "span"
+    }
+  },
+  "attrKeyMap": {
+    "web": {
+      "testID": "id",
+      "numberOfLines": false
+    }
+  }
+}

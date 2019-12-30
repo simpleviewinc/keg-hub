@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Image as RNImage } from 'react-native'
-import { useTheme } from 're-theme'
-import { get, isStr } from 'jsutils'
 import PropTypes from 'prop-types'
-
+import { ImageWrapper } from './image.wrapper'
+import { uuid } from 'jsutils'
 
 /**
  * Image
@@ -18,31 +17,32 @@ import PropTypes from 'prop-types'
  * @property {string} props.type - image type
  *
  */
-export const Image = props => {
+const Img = React.forwardRef(({ attrs, src, ...props }, ref) => (
+  <RNImage
+    { ...attrs }
+    { ...props }
+    ref={ ref }
+  />
+))
 
-  const { src, style, type, ref, onPress, onClick, ...attrs } = props
-
-  const theme = useTheme()
-  const imgStyle = get(theme, [ 'components', 'image', type || 'default' ])
-  const source = isStr(src) ? { uri: src } : src
-  
-  return (
-    <RNImage
-      { ...attrs }
-      ref={ ref }
-      source={ source }
-      style={ theme.join(imgStyle, style) }
-      onPress={ onClick || onPress }
-    />
-  )
-
-}
+export const Image = props => (
+  <ImageWrapper
+    styleId={ uuid() }
+    { ...props }
+    imgType='native'
+    Img={ Img }
+  />
+)
 
 Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
-  src: [ PropTypes.string, PropTypes.object ],
+  styleId: PropTypes.string,
+  src: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
   style: PropTypes.object,
   ref: PropTypes.object,
 }

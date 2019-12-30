@@ -1,6 +1,6 @@
 import React from 'react'
-import { useTheme, useThemeActive } from 're-theme'
-import { get } from 'jsutils'
+import { uuid } from 'jsutils'
+import { ButtonWrapper } from './button.wrapper'
 import PropTypes from 'prop-types'
 
 /**
@@ -14,48 +14,30 @@ import PropTypes from 'prop-types'
  * @property {Function} props.onPress - function to do when button is pressed
  * @property {Boolean} props.disabled
  * @property {Object} props.children
- * @property {Object} props.ref - reference to native element
+ * @property {Object} ref - reference to native element
  *
  */
-export const Button = props => {
-  const theme = useTheme()
-  
-  const {
-    text,
-    type,
-    style,
-    onClick,
-    onPress,
-    disabled,
-    children,
-    ref,
-    ...btnProps
-  } = props
-
-  const btnStyle = theme.join(theme, [
-    [ 'components', 'button', 'default' ],
-    [ 'components', 'button', type ],
-    disabled && [ 'components', 'button', 'disabled' ],
-  ], style)
-
-  const activeStyle = get(theme, [ 'components', 'button', 'active' ])
-  const [ activeRef, useStyle ] = useThemeActive(btnStyle, activeStyle, { ref })
-  
-  const content = children || text  || 'button'
-
+const Btn = React.forwardRef(({ btnProps, children, ...props }, ref) => {
   return (
     <button
       { ...btnProps }
-      ref={ activeRef }
-      onClick={ onClick || onPress }
-      disabled={ disabled }
-      style={ useStyle }
+      { ...props }
+      ref={ ref }
     >
-      { content }
+      { children }
     </button>
   )
+})
 
-}
+
+export const Button = props => (
+  <ButtonWrapper
+    { ...props }
+    Btn={ Btn }
+    btnType='web'
+    styleId={ uuid() }
+  />
+)
 
 Button.propTypes = {
   children: PropTypes.oneOfType([

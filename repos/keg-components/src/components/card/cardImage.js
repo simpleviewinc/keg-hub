@@ -34,41 +34,33 @@ const CardImageTitle = ({ subtitle, title, styles, theme }) => {
   )
 }
 
-export const CardImage = ({ children, image, imageProps, subtitle, styles, title }) => {
+export const CardImage = ({ image, subtitle, styles, title }) => {
   const theme = useTheme()
-  
+
   return (
-    <View style={ theme.join(
-      get(theme, [ 'components', 'card', 'image', 'wrapper' ]),
-      styles.wrapper
-    )}>
-      <Image
-        style={ theme.join(
-          { width: null, height: 150 },
-          get(theme, [ 'components', 'card', 'image', 'image' ]),
-          styles.image
-        )}
-        source={ image }
-        {...imageProps}
-      >
-        {(title || subtitle) && (
-          <CardImageTitle
-            subtitle={ subtitle }
-            title={ title }
-            styles={ styles }
-            theme={ theme }
-          />
-        )}
-      </Image>
-
-      <View style={theme.join({ padding: 10 }, styles.childrenWrap )} >
-        { children }
-      </View>
-
-    </View>
+    <Image
+      { ...image }
+      styles={{ loading: styles.loading, wrapper: styles.wrapper }}
+      style={ theme.join(
+        get(theme, [ 'components', 'card', 'image', 'image' ]),
+        styles.image
+      )}
+    >
+      {(title || subtitle) && (
+        <CardImageTitle
+          subtitle={ subtitle }
+          title={ title }
+          styles={ styles }
+          theme={ theme }
+        />
+      )}
+    </Image>
   )
 }
 
 CardImage.propTypes = {
-  imageProps: PropTypes.object
+  image: PropTypes.object,
+  styles: PropTypes.object,
+  subtitle: PropTypes.string,
+  title: PropTypes.string,
 }

@@ -6,6 +6,7 @@ export const button = {
       padding: 8,
       borderRadius: 4,
       outline: 'none',
+      textAlign: 'center'
     },
     $web: {
       cursor: "pointer"
@@ -13,6 +14,9 @@ export const button = {
   },
   active: {
     opacity: 0.3
+  },
+  hover: {
+    borderColor: "rgba(0,0,0,1)",
   },
   text: {
     fontSize: 14,
