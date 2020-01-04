@@ -12,9 +12,10 @@ const shared = {
   watch: {
     clearScreen: false
   },
-  plugins: [
+  plugins: platform => ([
     replace({
-      "process.env.NODE_ENV": JSON.stringify('production')
+      "process.env.NODE_ENV": JSON.stringify('production'),
+      "process.env.RE_PLATFORM": JSON.stringify(platform),
     }),
     resolve(),
     json(),
@@ -25,7 +26,7 @@ const shared = {
     sourcemaps(),
     commonjs(),
     cleanup(),
-  ],
+  ])
 }
 
 export default Array
@@ -38,13 +39,14 @@ export default Array
       format: "cjs"
     },
     plugins: [
-      ...shared.plugins,
+      ...shared.plugins(platform),
       alias({
         entries: {
           KegButton: `src/components/button/button.${platform}.js`,
-          KegImg: `src/components/image/image.${platform}.js`,
-          KegInput: `src/components/form/input/input.${platform}.js`,
           KegForm: `src/components/form/${platform}/index.js`,
+          KegImg: `src/components/image/image.${platform}.js`,
+          KegIndicator: `src/components/indicator/indicator.${platform}.js`,
+          KegInput: `src/components/form/input/input.${platform}.js`,
           KegLink: `src/components/typeface/link.${platform}.js`,
           KegText: `src/components/typeface/kegtext.${platform}.js`,
           KegView: `src/components/view/view.${platform}.js`,

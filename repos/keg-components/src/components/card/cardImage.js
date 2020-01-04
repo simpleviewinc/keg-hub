@@ -6,14 +6,16 @@ import { Image, View, Text } from '../'
 
 const CardImageTitle = ({ subtitle, title, styles, theme }) => {
   return (
-    <View style={ theme.join(
-      get(theme, [ 'components', 'card', 'overlay' ]),
+    <View style={ theme.get(
+      `${styles.styleId}-overlay`,
+      [ 'components', 'card', 'overlay' ],
       styles.overlay
     )}>
       {title && (
         <Text
-          style={theme.join(
-            get(theme, [ 'components', 'card', 'featured', 'title' ]),
+          style={theme.get(
+            `${styles.styleId}-featured-title`,
+            [ 'components', 'card', 'featured', 'title' ],
             styles.title
           )}
         >
@@ -22,8 +24,9 @@ const CardImageTitle = ({ subtitle, title, styles, theme }) => {
       )}
       {subtitle && (
         <Text
-          style={theme.join(
-            get(theme, [ 'components', 'card', 'featured', 'subtitle' ]),
+          style={theme.get(
+            `${styles.styleId}-featured-subtitle`,
+            [ 'components', 'card', 'featured', 'subtitle' ],
             styles.subtitle
           )}
         >
@@ -41,8 +44,9 @@ export const CardImage = ({ image, subtitle, styles, title }) => {
     <Image
       { ...image }
       styles={{ loading: styles.loading, wrapper: styles.wrapper }}
-      style={ theme.join(
-        get(theme, [ 'components', 'card', 'image', 'image' ]),
+      style={ theme.get(
+        `${styles.styleId}-image`,
+        [ 'components', 'card', 'image', 'image' ],
         styles.image
       )}
     >

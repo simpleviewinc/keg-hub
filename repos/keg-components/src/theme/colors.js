@@ -31,7 +31,7 @@ const transition = (props = [], speed = 250, timingFunc = 'ease') => {
  * @return rgba as string
  */
 const toRgb = (red, green, blue, alpha) => {
-  const obj = isObj(red) ? red : { r: red, g: green, a: alpha }
+  const obj = isObj(red) ? red : { r: red, g: green, b: blue, a: alpha }
   obj.a = (!obj.a && obj.a !== 0) ? 1 : obj.a
 
   return `rgba(${obj.r}, ${obj.g}, ${obj.b}, ${obj.a})`
@@ -61,6 +61,7 @@ export const colors = {
   helpers: {
     toHex,
     toRgb,
+    toRgba: toRgb,
     trans: transition,
   },
   content: {

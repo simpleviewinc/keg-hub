@@ -32,8 +32,15 @@ const color = color => colors[color] ? { color: colors[color] } : { color: color
 const size = num => ({ fontSize: unitsHelper(num) })
 const weight = num => ({ fontWeight: num })
 const initial = prop => prop && { [prop]: 'initial' }
-
+const abs = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+}
 export const helpers = {
+  abs,
   align,
   background,
   bold,

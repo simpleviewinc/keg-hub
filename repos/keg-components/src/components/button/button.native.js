@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { useTheme, useThemeActive } from 're-theme'
-import { get, isFunc, uuid } from 'jsutils'
+import { uuid } from 'jsutils'
 import { ButtonWrapper } from './button.wrapper'
 import { Platform, TouchableOpacity, TouchableNativeFeedback } from 'react-native'
 const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity

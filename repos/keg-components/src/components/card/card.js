@@ -1,70 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get, deepMerge, isStr } from 'jsutils'
+import { get, deepMerge, isStr, uuid } from 'jsutils'
 import { CardImage } from './cardImage'
-import { Divider, View, Text } from '../'
-
-const CardHeader = ({ header, theme, numberOfLines, styles }) => {
-
-  if(!header || React.isValidElement(header))
-    return header || null
-  
-  return (
-    <View>
-      <Text
-        numberOfLines={ numberOfLines }
-        style={theme.join(
-          get(theme, [ 'components', 'card', 'header' ]),
-          styles.header,
-        )}
-      >
-        { header }
-      </Text>
-
-      <Divider
-        style={theme.join(
-          get(theme, [ 'components', 'card', 'divider' ]),
-          styles.divider
-        )}
-      />
-    </View>
-  )
-}
-
-CardHeader.propTypes = {
-  header: PropTypes.string,
-  numberOfLines: PropTypes.number,
-  styles: PropTypes.object,
-  theme: PropTypes.object,
-}
-
-const CardContainer = ({ attributes, children, styles, theme }) => {
-  return (
-    <View
-      {...attributes}
-      style={theme.join(
-        get(theme, [ 'components', 'card', 'container' ]),
-        styles.container,
-      )}
-    >
-      <View
-        style={theme.join(
-          get(theme, [ 'components', 'card', 'wrapper' ]),
-          styles.wrapper
-        )}
-      >
-        { children }
-      </View>
-    </View>
-  )
-}
-
-CardContainer.propTypes = {
-  attributes: PropTypes.object,
-  styles: PropTypes.object,
-  theme: PropTypes.object,
-}
+import { CardContainer, CardFooter, CardHeader } from './cardContent'
+import { View } from '../'
 
 const getImgProps = (image, styles) => {
   return isStr(image)
@@ -79,16 +19,20 @@ export const Card = ({ styles, ...props}) => {
 
   const {
     children,
+    footer,
     header,
     title,
     subtitle,
     headerNumberOfLines,
+    footerNumberOfLines,
     image,
+    styleId,
     ...attributes
   } = props
 
   const hasImage = Boolean(image)
   const imgProps = hasImage && getImgProps(image, styles)
+  const cardStyleId = styleId || `${uuid()}-card`
   
   return (
     <CardContainer
@@ -96,7 +40,8 @@ export const Card = ({ styles, ...props}) => {
       attributes={ attributes }
       styles={{
         container: styles.container,
-        wrapper: styles.wrapper
+        wrapper: styles.wrapper,
+        styleId: cardStyleId,
       }}
     >
 
@@ -106,7 +51,8 @@ export const Card = ({ styles, ...props}) => {
         numberOfLines={ headerNumberOfLines }
         styles={{ 
           header: styles.header,
-          divider: styles.divider
+          divider: styles.divider,
+          styleId: cardStyleId,
         }}
       />
 
@@ -122,14 +68,34 @@ export const Card = ({ styles, ...props}) => {
             wrapper: styles.imageWrapper,
             title: styles.title,
             subtitle: styles.subtitle,
-            loading: styles.loading
+            loading: styles.loading,
+            styleId: cardStyleId,
           }}
         />
       )}
 
-      <View style={ styles.children } >
+      <View
+        style={ theme.get(
+          `${cardStyleId}-card-children`,
+          [ 'components', 'card', 'children' ],
+          styles.children
+        )}
+      >
         { children }
       </View>
+      
+      { footer && (
+        <CardFooter
+          footer={ footer }
+          theme={ theme }
+          numberOfLines={ footerNumberOfLines }
+          styles={{ 
+            footer: styles.footer,
+            divider: styles.divider,
+            styleId: cardStyleId,
+          }}
+        />
+      )}
 
     </CardContainer>
   )
@@ -144,5 +110,6 @@ Card.propTypes = {
     PropTypes.object,
     PropTypes.string,
   ]),
+  styleId: PropTypes.string,
   styles: PropTypes.object,
 }

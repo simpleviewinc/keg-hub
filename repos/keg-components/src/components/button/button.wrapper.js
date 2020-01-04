@@ -10,15 +10,17 @@ const getPressHandler = (isWeb, onClick, onPress) => {
 const buildStyles = (styleId, theme, style, type) => {
   styleId = styleId || uuid()
 
-  const normal = theme.join(theme, [
+  const normal = theme.get(
+    `${styleId}-button-normal`,
     [ 'components', 'button', 'default' ],
     [ 'components', 'button', type ],
-  ], style, `${styleId}-normal`)
+    style
+  )
 
-  const disabled = theme.join(
+  const disabled = theme.get(
+    `${styleId}-button-disabled`,
     normal,
-    get(theme, [ 'components', 'button', 'disabled' ]),
-    `${styleId}-disabled`
+    [ 'components', 'button', 'disabled' ],
   )
 
   return { normal, disabled }

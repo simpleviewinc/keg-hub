@@ -8,10 +8,10 @@
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
     "test": "NODE_ENV=test jest --no-cache --verbose",
-    "storybook": "PLATFORM=web start-storybook",
-    "sb": "PLATFORM=web start-storybook",
-    "sb:web": "PLATFORM=web start-storybook",
-    "sb:native": "PLATFORM=native start-storybook"
+    "storybook": "RE_PLATFORM=web start-storybook",
+    "sb": "RE_PLATFORM=web start-storybook",
+    "sb:web": "RE_PLATFORM=web start-storybook",
+    "sb:native": "RE_PLATFORM=native start-storybook"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
@@ -20,6 +20,7 @@
     "@babel/preset-react": "7.6.3",
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-json": "^4.0.1",
+    "@rollup/plugin-replace": "^2.3.0",
     "@storybook/addon-actions": "^5.2.8",
     "@storybook/addon-links": "^5.2.8",
     "@storybook/addon-storysource": "^5.2.8",
@@ -76,13 +77,14 @@
   "jest": {
     "preset": "rollup-jest",
     "moduleNameMapper": {
-      "KegForm": "<rootDir>/src/components/form/web",
-      "KegInput": "<rootDir>/src/components/form/input/input.web.js",
       "KegButton": "<rootDir>/src/components/button/button.web.js",
+      "KegForm": "<rootDir>/src/components/form/web",
       "KegImg": "<rootDir>/src/components/image/image.web.js",
+      "KegInput": "<rootDir>/src/components/form/input/input.web.js",
+      "KegIndicator": "<rootDir>/src/components/indicator/indicator.web.js",
       "KegLink": "<rootDir>/src/components/typeface/link.web.js",
       "KegText": "<rootDir>/src/components/typeface/text.web.js",
-      "KegView": "src/components/view/view.web.js"
+      "KegView": "<rootDir>/src/components/view/view.web.js"
     },
     "transform": {
       "^.+\\.js$": "babel-jest"

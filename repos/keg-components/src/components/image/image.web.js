@@ -27,8 +27,8 @@ const Img = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
 
 export const Image = props => (
   <ImageWrapper
-    styleId={ uuid() }
     { ...props }
+    styleId={ props.styleId || `${uuid()}-web-image` }
     imgType='web'
     Img={ Img }
   />

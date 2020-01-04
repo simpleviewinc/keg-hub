@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get } from 'jsutils'
+import { get, uuid } from 'jsutils'
 import { View } from 'KegView'
+import { Indicator } from 'KegIndicator'
 import { Text } from '../'
+import { isValidComponent } from '../../utils'
+
 /**
  * Progress
  * @summary Custom Progress component. All props are optional
@@ -15,18 +18,22 @@ import { Text } from '../'
  *
  */
 const Progress = (props) => {
-  const { styles, text, theme } = props
+  const { styles, text, theme, loadIndicator } = props
+  const LoadingIndicator = loadIndicator || Indicator
+
   return (
     <View
-      style={theme.join(
-        get(theme, 'components.loading.progress'),
+      style={theme.get(
+        `${styles.styleId}-progress`,
+        [ 'components', 'loading', 'progress' ],
         styles.progress
       )}
     >
-      { text && (
+      { isValidComponent(LoadingIndicator) ? (<LoadingIndicator />) : text && (
         <Text
-          style={theme.join(
-            get(theme, 'components.loading.text'),
+          style={theme.get(
+            `${styles.styleId}-text`,
+            [ 'components', 'loading', 'text' ],
             styles.text
           )}
         >
@@ -50,17 +57,27 @@ const Progress = (props) => {
  */
 export const Loading = props => {
   const theme = useTheme()
-  const { children, text } = props
+  const { children, text, indicator } = props
+  const styleId = props.styleId || `${uuid()}-loading`
   const styles = props.styles || {}
-  
+  styles.styleId = styleId
+
   return (
     <View
-      style={theme.join(
-        get(theme, 'components.loading.wrapper'),
+      style={theme.get(
+        `${styleId}-wrapper`,
+        [ 'components', 'loading', 'wrapper' ],
         styles.wrapper
       )}
     >
-      { (children || <Progress styles={ styles } theme={ theme } text={ text } />) }
+      { children || (
+        <Progress
+          styles={ styles }
+          theme={ theme }
+          text={ text }
+          loadIndicator={ indicator }
+        />
+      )}
     </View>
   )
 

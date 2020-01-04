@@ -6,8 +6,12 @@ import { theme } from '../src/theme'
 import { ReThemeProvider } from 're-theme'
 import { addDecorator } from '@storybook/react'
 
+const platforms = process.env.RE_PLATFORM === 'native'
+  ? { $native: true, $web: false }
+  : { $native: false, $web: true }
+
 const ThemeDecorator = storyFn => (
-  <ReThemeProvider theme={ theme } >
+  <ReThemeProvider theme={ theme } platforms={ platforms } >
     { storyFn() }
   </ReThemeProvider>
 )

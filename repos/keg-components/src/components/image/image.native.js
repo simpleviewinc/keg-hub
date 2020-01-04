@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Image as RNImage } from 'react-native'
 import PropTypes from 'prop-types'
 import { ImageWrapper } from './image.wrapper'
@@ -27,8 +27,8 @@ const Img = React.forwardRef(({ attrs, src, ...props }, ref) => (
 
 export const Image = props => (
   <ImageWrapper
-    styleId={ uuid() }
     { ...props }
+    styleId={ props.styleId || `${uuid()}-native-image` }
     imgType='native'
     Img={ Img }
   />

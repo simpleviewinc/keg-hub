@@ -1,4 +1,6 @@
 import { colors } from '../colors'
+import { margin } from '../margin'
+import { helpers } from '../helpers'
 
 export const card = {
   container: {
@@ -30,16 +32,16 @@ export const card = {
     color: colors.palette.black02,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 15,
+    marginBottom: margin.size,
   },
   divider: {
-    marginBottom: 15,
+    marginBottom: margin.size,
     hairlineWidth: 1,
   },
   image: {
     wrapper: {
       display: 'inline-flex',
-      marginBottom: 15,
+      marginBottom: margin.size,
       width: '100%'
     },
     image: {
@@ -66,10 +68,9 @@ export const card = {
     backgroundColor: colors.shadow.opacity05,
     alignSelf: 'stretch',
     justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  }
+    ...helpers.abs,
+  },
+  children: {
+    marginTop: margin.size,
+  },
 }
