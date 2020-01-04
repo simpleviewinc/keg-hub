@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTheme, useThemeHover } from 're-theme'
-import { get, checkCall, uuid } from 'jsutils'
+import { get, checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../'
 import { View } from 'KegView'
@@ -15,7 +15,7 @@ const onLoadEvent = (setLoading, props, setStyle, loadedStyle) => {
 }
 
 const buildStyles = (styleId, theme, style, styles, type, imgType) => {
-  styleId = styleId || `${uuid()}-${imgType}-image`
+  styleId = styleId || `keg-${imgType}-image`
 
   const defStyle = theme.get(
     `${styleId}-${type}`,

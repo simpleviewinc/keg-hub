@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get, uuid } from 'jsutils'
+import { get } from 'jsutils'
 import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../'
@@ -58,7 +58,7 @@ const Progress = (props) => {
 export const Loading = props => {
   const theme = useTheme()
   const { children, text, indicator } = props
-  const styleId = props.styleId || `${uuid()}-loading`
+  const styleId = props.styleId || `keg-loading`
   const styles = props.styles || {}
   styles.styleId = styleId
 

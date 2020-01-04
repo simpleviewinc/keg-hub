@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get, deepMerge, isStr, uuid } from 'jsutils'
+import { get, deepMerge, isStr } from 'jsutils'
 import { CardImage } from './cardImage'
 import { CardContainer, CardFooter, CardHeader } from './cardContent'
 import { View } from '../'
@@ -32,7 +32,7 @@ export const Card = ({ styles, ...props}) => {
 
   const hasImage = Boolean(image)
   const imgProps = hasImage && getImgProps(image, styles)
-  const cardStyleId = styleId || `${uuid()}-card`
+  const cardStyleId = styleId || `keg-card`
   
   return (
     <CardContainer

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ImageWrapper } from './image.wrapper'
-import { uuid } from 'jsutils'
 
 /**
  * Image
@@ -28,7 +27,7 @@ const Img = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
 export const Image = props => (
   <ImageWrapper
     { ...props }
-    styleId={ props.styleId || `${uuid()}-web-image` }
+    styleId={ props.styleId || `keg-web-image` }
     imgType='web'
     Img={ Img }
   />

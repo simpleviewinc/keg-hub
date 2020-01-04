@@ -1,13 +1,13 @@
 import React from 'react'
 import { useTheme } from 're-theme'
-import { get, isStr, uuid } from 'jsutils'
+import { get, isStr } from 'jsutils'
 import { indicatorUri } from './indicatorUri'
 import { getImgSrc, getOnLoad } from '../../utils'
 import { View } from '../'
 
 const buildStyles = (theme, style, styles, styleId, isWeb) => {
   const built = {}
-  styleId = styleId || `${uuid()}-${ isWeb ? 'web' : 'native' }-indicator`
+  styleId = styleId || `keg-${ isWeb ? 'web' : 'native' }-indicator`
 
   built.img = theme.get(
     `${styleId}-image`,

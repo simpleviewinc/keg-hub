@@ -1,24 +1,24 @@
 import React from 'react'
 import { useTheme, useThemeActive, useThemeHover } from 're-theme'
-import { get, uuid } from 'jsutils'
+import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 
 const getPressHandler = (isWeb, onClick, onPress) => {
   return { [ isWeb ? 'onClick' : 'onPress' ]: onClick || onPress }
 }
 
-const buildStyles = (styleId, theme, style, type) => {
-  styleId = styleId || uuid()
+const buildStyles = (styleId, theme, style, type, btnType) => {
+  styleId = styleId || `keg-${btnType}-button`
 
   const normal = theme.get(
-    `${styleId}-button-normal`,
+    `${styleId}-${type || 'normal'}`,
     [ 'components', 'button', 'default' ],
     [ 'components', 'button', type ],
     style
   )
 
   const disabled = theme.get(
-    `${styleId}-button-disabled`,
+    `${styleId}-${type || 'normal'}-disabled`,
     normal,
     [ 'components', 'button', 'disabled' ],
   )
@@ -57,7 +57,7 @@ export const ButtonWrapper = props => {
   } = props
 
   const isWeb = btnType === 'web'
-  const builtStyles = buildStyles(styleId, theme, style, type)
+  const builtStyles = buildStyles(styleId, theme, style, type, btnType)
 
   const [ hoverRef, hoverStyle ] = useThemeHover(
     builtStyles.normal,

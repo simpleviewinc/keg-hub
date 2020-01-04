@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { uuid } from 'jsutils'
 import { ButtonWrapper } from './button.wrapper'
 import { Platform, TouchableOpacity, TouchableNativeFeedback } from 'react-native'
 const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
@@ -31,10 +30,10 @@ const Btn = React.forwardRef(({ btnProps, children, ...props}, ref) => (
 
 export const Button = props => (
   <ButtonWrapper
+    styleId={ `keg-native-button` }
     { ...props }
     Btn={ Btn }
     btnType='native'
-    styleId={ uuid() }
   />
 )
 

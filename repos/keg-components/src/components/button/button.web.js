@@ -1,5 +1,4 @@
 import React from 'react'
-import { uuid } from 'jsutils'
 import { ButtonWrapper } from './button.wrapper'
 import PropTypes from 'prop-types'
 
@@ -32,10 +31,10 @@ const Btn = React.forwardRef(({ btnProps, children, ...props }, ref) => {
 
 export const Button = props => (
   <ButtonWrapper
+    styleId={ `keg-web-button` }
     { ...props }
     Btn={ Btn }
     btnType='web'
-    styleId={ uuid() }
   />
 )
 

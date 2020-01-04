@@ -1,6 +1,5 @@
 import React from 'react'
 import { Image } from 'react-native'
-import { uuid } from 'jsutils'
 import { IndicatorImage } from './indicatorImage'
 
 export const Indicator = ({ alt, src, source, style, styleId }) => (
@@ -10,6 +9,6 @@ export const Indicator = ({ alt, src, source, style, styleId }) => (
     isWeb={ false }
     src={ src || source }
     style={ style }
-    styleId={ styleId || `${uuid()}-native-indicator` }
+    styleId={ styleId || `keg-native-indicator` }
   />
 )

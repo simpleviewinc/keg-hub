@@ -1,5 +1,4 @@
 import React from 'react'
-import { uuid } from 'jsutils'
 import { IndicatorImage } from './indicatorImage'
 
 const ImgComp = ({ resizeMode, ...attrs }) => (
@@ -13,6 +12,6 @@ export const Indicator = ({ alt, src, source, style, styleId }) => (
     isWeb={ true }
     src={ src || source }
     style={ style }
-    styleId={ styleId || `${uuid()}-web-indicator` }
+    styleId={ styleId || `keg-web-indicator` }
   />
 )
