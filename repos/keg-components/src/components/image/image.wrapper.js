@@ -19,8 +19,8 @@ const buildStyles = (styleId, theme, style, styles, type, imgType) => {
 
   const defStyle = theme.get(
     `${styleId}-${type}`,
-    theme.transition.opacity(),
-    [ 'components', 'image', type ],
+    checkCall(get(theme, 'transition.opacity')),
+    `components.image.${type}`,
   )
 
   const imgStyle = theme.get(
@@ -32,7 +32,7 @@ const buildStyles = (styleId, theme, style, styles, type, imgType) => {
   const loading = theme.get(
     `${styleId}-loading`,
     defStyle,
-    [ 'components', 'image', 'loading' ],
+    'components.image.loading',
     imgStyle,
     { width: 0, height: 0 }
   )
@@ -40,7 +40,7 @@ const buildStyles = (styleId, theme, style, styles, type, imgType) => {
   const loaded = theme.get(
     `${styleId}-loaded`,
     defStyle,
-    [ 'components', 'image', 'loaded' ],
+    'components.image.loaded',
     imgStyle,
   )
 
@@ -52,13 +52,13 @@ const buildStyles = (styleId, theme, style, styles, type, imgType) => {
 
   const hover = theme.get(
     `${styleId}-hover`,
-    [ 'components', 'image', 'hover' ],
+    'components.image.hover',
     styles.hover,
   )
 
   const wrapper = theme.get(
     `${styleId}-wrapper`,
-    [ 'components', 'image', 'wrapper' ],
+    'components.image.wrapper',
     styles.wrapper,
   )
 

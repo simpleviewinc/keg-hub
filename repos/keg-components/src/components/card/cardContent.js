@@ -15,8 +15,8 @@ export const CardHeader = ({ header, theme, numberOfLines, styles }) => {
         numberOfLines={ numberOfLines }
         style={theme.get(
           `${styles.styleId}-header`,
-          [ 'typeface', 'h5' ],
-          [ 'components', 'card', 'header' ],
+          'typeface.h5',
+          'components.card.header',
           styles.header,
         )}
       >
@@ -26,7 +26,7 @@ export const CardHeader = ({ header, theme, numberOfLines, styles }) => {
       <Divider
         style={theme.get(
           `${styles.styleId}-divider`,
-          [ 'components', 'card', 'divider' ],
+          'components.card.divider',
           styles.divider
         )}
       />
@@ -47,14 +47,14 @@ export  const CardContainer = ({ attributes, children, styles, theme }) => {
       {...attributes}
       style={theme.get(
         `${styles.styleId}-container`,
-        [ 'components', 'card', 'container' ],
+        'components.card.container',
         styles.container,
       )}
     >
       <View
         style={theme.get(
           `${styles.styleId}-wrapper`,
-          [ 'components', 'card', 'wrapper' ],
+          'components.card.wrapper',
           styles.wrapper
         )}
       >
@@ -80,7 +80,7 @@ export const CardFooter = ({ footer, theme, numberOfLines, styles }) => {
       <Divider
         style={theme.get(
           `${styles.styleId}-divider`,
-          [ 'components', 'card', 'divider' ],
+          'components.card.divider',
           styles.divider
         )}
       />
@@ -88,7 +88,7 @@ export const CardFooter = ({ footer, theme, numberOfLines, styles }) => {
         numberOfLines={ numberOfLines }
         style={theme.get(
           `${styles.styleId}-footer`,
-          [ 'components', 'card', 'footer' ],
+          'components.card.footer',
           styles.footer,
         )}
       >

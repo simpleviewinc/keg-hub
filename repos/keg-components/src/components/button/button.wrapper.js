@@ -11,17 +11,18 @@ const buildStyles = (styleId, theme, style, type, btnType) => {
   styleId = styleId || `keg-${btnType}-button`
 
   const normal = theme.get(
-    `${styleId}-${type || 'normal'}`,
-    [ 'components', 'button', 'default' ],
-    [ 'components', 'button', type ],
+    `${styleId}-${type || 'default'}`,
+    'components.button.default',
+    `components.button.${type}`,
     style
   )
 
   const disabled = theme.get(
     `${styleId}-${type || 'normal'}-disabled`,
     normal,
-    [ 'components', 'button', 'disabled' ],
+    'components.button.disabled',
   )
+
 
   return { normal, disabled }
 
@@ -61,13 +62,13 @@ export const ButtonWrapper = props => {
 
   const [ hoverRef, hoverStyle ] = useThemeHover(
     builtStyles.normal,
-    get(theme, [ 'components', 'button', 'hover' ]),
+    get(theme, 'components.button.hover'),
     { ref }
   )
 
   const [ useRef, useStyle ] = useThemeActive(
     hoverStyle,
-    get(theme, [ 'components', 'button', 'active' ]),
+    get(theme, 'components.button.active'),
     { ref: hoverRef }
   )
 

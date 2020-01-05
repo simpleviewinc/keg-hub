@@ -77,7 +77,7 @@ export const Card = ({ styles, ...props}) => {
       <View
         style={ theme.get(
           `${cardStyleId}-card-children`,
-          [ 'components', 'card', 'children' ],
+          'components.card.children',
           styles.children
         )}
       >

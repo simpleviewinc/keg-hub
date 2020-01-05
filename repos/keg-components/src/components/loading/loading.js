@@ -25,7 +25,7 @@ const Progress = (props) => {
     <View
       style={theme.get(
         `${styles.styleId}-progress`,
-        [ 'components', 'loading', 'progress' ],
+        'components.loading.progress',
         styles.progress
       )}
     >
@@ -33,7 +33,7 @@ const Progress = (props) => {
         <Text
           style={theme.get(
             `${styles.styleId}-text`,
-            [ 'components', 'loading', 'text' ],
+            'components.loading.text',
             styles.text
           )}
         >
@@ -66,7 +66,7 @@ export const Loading = props => {
     <View
       style={theme.get(
         `${styleId}-wrapper`,
-        [ 'components', 'loading', 'wrapper' ],
+        'components.loading.wrapper',
         styles.wrapper
       )}
     >

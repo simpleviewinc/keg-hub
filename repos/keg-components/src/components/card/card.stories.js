@@ -9,7 +9,7 @@ const stories = storiesOf('Card', module)
 
 stories.add('No Image', () =>
   <View style={{ maxWidth: '300px', margin: 'auto' } } >
-    <Card header={ 'Keg Card' }>
+    <Card header={ 'Keg Card' } >
       <P>
         Body of the default keg card. This is just some demo text as an example.
       </P>
@@ -23,7 +23,7 @@ stories.add('No Image', () =>
 stories.add('With Image', () =>
   <View style={{ maxWidth: '300px', margin: 'auto' } } >
     <Card 
-      header={ 'Keg Card' }
+      header={ 'Goats in Boats' }
       image={{ src: 'https://placegoat.com/240/240' }}
       styles={{ image: { height: 240, width: 240 } }}
     >

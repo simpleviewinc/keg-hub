@@ -12,7 +12,7 @@ export const Divider = ({ style, styleId, ...props }) => {
       { ...props }
       style={ theme.get(
         styleId || `key-divider`,
-        [ 'components', 'divider' ],
+        'components.divider',
         style
       )}
     />

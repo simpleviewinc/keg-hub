@@ -8,14 +8,14 @@ const CardImageTitle = ({ subtitle, title, styles, theme }) => {
   return (
     <View style={ theme.get(
       `${styles.styleId}-overlay`,
-      [ 'components', 'card', 'overlay' ],
+      'components.card.overlay',
       styles.overlay
     )}>
       {title && (
         <Text
           style={theme.get(
             `${styles.styleId}-featured-title`,
-            [ 'components', 'card', 'featured', 'title' ],
+            'components.card.featured.title',
             styles.title
           )}
         >
@@ -26,7 +26,7 @@ const CardImageTitle = ({ subtitle, title, styles, theme }) => {
         <Text
           style={theme.get(
             `${styles.styleId}-featured-subtitle`,
-            [ 'components', 'card', 'featured', 'subtitle' ],
+            'components.card.featured.subtitle',
             styles.subtitle
           )}
         >
@@ -46,7 +46,7 @@ export const CardImage = ({ image, subtitle, styles, title }) => {
       styles={{ loading: styles.loading, wrapper: styles.wrapper }}
       style={ theme.get(
         `${styles.styleId}-image`,
-        [ 'components', 'card', 'image', 'image' ],
+        'components.card.image.image',
         styles.image
       )}
     >

@@ -11,14 +11,14 @@ const buildStyles = (theme, style, styles, styleId, isWeb) => {
 
   built.img = theme.get(
     `${styleId}-image`,
-    [ 'components', 'indicator', 'image' ],
+    'components.indicator.image',
     styles.image,
     style,
   )
 
   built.wrapper = theme.get(
     `${styleId}-wrapper`,
-    [ 'components', 'indicator', 'wrapper' ],
+    'components.indicator.wrapper',
     styles.wrapper,
   )
 
