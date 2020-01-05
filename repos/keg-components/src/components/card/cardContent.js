@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 're-theme'
-import { get } from 'jsutils'
 import { Divider, View, Text } from '../'
 
 export const CardHeader = ({ header, theme, numberOfLines, styles }) => {

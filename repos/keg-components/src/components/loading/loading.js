@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get } from 'jsutils'
 import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../'

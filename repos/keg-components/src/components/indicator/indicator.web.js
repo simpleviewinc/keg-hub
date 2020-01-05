@@ -2,7 +2,7 @@ import React from 'react'
 import { IndicatorImage } from './indicatorImage'
 
 const ImgComp = ({ resizeMode, ...attrs }) => (
-  <img { ...attrs } />
+  <img alt={ attrs.alt || 'Loading' } { ...attrs } />
 )
 
 export const Indicator = ({ alt, src, source, style, styleId }) => (

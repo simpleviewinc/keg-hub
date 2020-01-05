@@ -1,8 +1,7 @@
 import React from 'react'
 import { useTheme } from 're-theme'
-import { get, isStr } from 'jsutils'
 import { indicatorUri } from './indicatorUri'
-import { getImgSrc, getOnLoad } from '../../utils'
+import { getImgSrc } from '../../utils'
 import { View } from '../'
 
 const buildStyles = (theme, style, styles, styleId, isWeb) => {

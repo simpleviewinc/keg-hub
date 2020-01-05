@@ -1,6 +1,5 @@
 import React from 'react'
 import { withTheme } from 're-theme'
-import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 
@@ -21,3 +20,8 @@ export const Section = withTheme(props => {
     </View>
   )
 })
+
+Section.propTypes = {
+  style: PropTypes.object,
+  type: PropTypes.string,
+}

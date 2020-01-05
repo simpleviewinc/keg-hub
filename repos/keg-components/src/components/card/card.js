@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { get, deepMerge, isStr } from 'jsutils'
+import { deepMerge, isStr } from 'jsutils'
 import { CardImage } from './cardImage'
 import { CardContainer, CardFooter, CardHeader } from './cardContent'
 import { View } from '../'
