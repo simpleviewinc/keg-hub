@@ -22,8 +22,8 @@ module.exports = ({ config, mode }) => {
     KegImg: path.resolve(__dirname, `../src/components/image/image.${platform}.js`),
     KegIndicator: path.resolve(__dirname, `../src/components/indicator/indicator.${platform}.js`),
     KegInput: path.resolve(__dirname, `../src/components/form/input/input.${platform}.js`),
-    KegLink: path.resolve(__dirname, `../src/components/typeface/link.${platform}.js`),
-    KegText: path.resolve(__dirname, `../src/components/typeface/kegtext.${platform}.js`),
+    KegLink: path.resolve(__dirname, `../src/components/link/link.${platform}.js`),
+    KegText: path.resolve(__dirname, `../src/components/typography/kegtext.${platform}.js`),
     KegView: path.resolve(__dirname, `../src/components/view/view.${platform}.js`),
     "react-native": "react-native-web/dist/cjs"
   }

@@ -1,41 +1,25 @@
 import React from 'react'
 import { useTheme, useThemeActive, useThemeHover } from 're-theme'
 import { get } from 'jsutils'
+import { getPressHandler, getActiveOpacity } from '../../utils'
 import PropTypes from 'prop-types'
 
-const getPressHandler = (isWeb, onClick, onPress) => {
-  return { [ isWeb ? 'onClick' : 'onPress' ]: onClick || onPress }
-}
-
-const buildStyles = (styleId, theme, style, type, btnType) => {
+const buildStyles = (styleId, theme, type, btnType) => {
   styleId = styleId || `keg-${btnType}-button`
 
   const normal = theme.get(
     `${styleId}-${type || 'default'}`,
     'components.button.default',
-    `components.button.${type}`,
-    style
+    type && `components.button.${type}`
   )
 
   const disabled = theme.get(
-    `${styleId}-${type || 'normal'}-disabled`,
+    `${styleId}-${type || 'default'}-disabled`,
     normal,
     'components.button.disabled',
   )
 
-
   return { normal, disabled }
-
-}
-
-const getActiveOpacity = (isWeb, props, style) => {
-  // Check if opacity is passed from the props, or use the opacity from disabled styles
-  return isWeb
-    ? {}
-    : {
-      activeOpacity:  props.activeOpacity || props.opacity || (style && style.opacity) || 0.3,
-      accessibilityRole: "button"
-    }
 
 }
 
@@ -43,25 +27,25 @@ export const ButtonWrapper = props => {
   const theme = useTheme()
   
   const {
-    text,
-    type,
-    style,
+    Btn,
+    btnType,
+    children,
+    disabled,
     onClick,
     onPress,
-    disabled,
-    children,
-    styleId,
-    btnType,
-    Btn,
     ref,
+    styleId,
+    style,
+    text,
+    type,
     ...btnProps
   } = props
 
   const isWeb = btnType === 'web'
-  const builtStyles = buildStyles(styleId, theme, style, type, btnType)
+  const builtStyles = buildStyles(styleId, theme, type, btnType)
 
   const [ hoverRef, hoverStyle ] = useThemeHover(
-    builtStyles.normal,
+    theme.join(builtStyles.normal, style),
     get(theme, 'components.button.hover'),
     { ref }
   )

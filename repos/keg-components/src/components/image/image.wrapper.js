@@ -14,7 +14,7 @@ const onLoadEvent = (setLoading, props, setStyle, loadedStyle) => {
   }
 }
 
-const buildStyles = (styleId, theme, style, styles, type, imgType) => {
+const buildStyles = (style, styles, styleId, theme, type, imgType) => {
   styleId = styleId || `keg-${imgType}-image`
 
   const defStyle = theme.get(
@@ -100,7 +100,14 @@ export const ImageWrapper = props => {
   } = props
   
   const isWeb = imgType === 'web'
-  const builtStyles = buildStyles(styleId, theme, style, styles || {}, type || 'default', imgType)
+  const builtStyles = buildStyles(
+    style,
+    styles || {},
+    styleId,
+    theme,
+    type || 'default',
+    imgType
+  )
 
   const [ useRef, useStyle, setStyle ] = useThemeHover(
     builtStyles.loaded,

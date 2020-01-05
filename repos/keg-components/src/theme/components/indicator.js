@@ -1,11 +1,8 @@
-import { colors } from '../colors'
-
 export const indicator = {
   wrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.palette.white03,
     height: 230,
     width: 230,
   },

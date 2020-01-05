@@ -10,7 +10,7 @@ import { padding } from './padding'
 import { setDefaultTheme } from 're-theme'
 import { transform } from './transform'
 import { transition } from './transition'
-import { typeface } from './typeface'
+import { typography } from './typography'
 
 export const theme = setDefaultTheme({
   colors,
@@ -24,5 +24,5 @@ export const theme = setDefaultTheme({
   padding,
   transform,
   transition,
-  typeface,
+  typography,
 })

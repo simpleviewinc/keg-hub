@@ -4,6 +4,7 @@ import { divider } from './divider'
 import { drawer } from './drawer'
 import { image } from './image'
 import { indicator } from './indicator'
+import { link } from './link'
 import { loading } from './loading'
 import { section } from './section'
 
@@ -14,6 +15,7 @@ export const components = {
   drawer,
   image,
   indicator,
+  link,
   loading,
   section
 }

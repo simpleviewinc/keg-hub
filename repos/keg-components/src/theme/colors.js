@@ -65,25 +65,32 @@ export const colors = {
     trans: transition,
   },
   content: {
-    primary: "#1e88e5",
-    secondary: "#f50057",
-    error: "#f44336",
+    primary: '#1e88e5',
+    secondary: '#f50057',
+    error: '#f44336',
     divider: 'rgba(0,0,0,.12)',
     outlined: 'rgba(0,0,0,.29)',
+    link: '#64aff1',
+    linkHover: '#1e88e5'
   },
   text: {
-    primary: "rgba(0, 0, 0, 0.87)",
-    secondary: "rgba(0, 0, 0, 0.54)",
-    disabled: "rgba(0, 0, 0, 0.38)",
-    hint: "rgba(0, 0, 0, 0.38)"
+    primary: 'rgba(0, 0, 0, 0.87)',
+    secondary: 'rgba(0, 0, 0, 0.54)',
+    disabled: 'rgba(0, 0, 0, 0.38)',
+    hint: 'rgba(0, 0, 0, 0.38)'
   },
   state: {
-    active: "rgba(0, 0, 0, .54)",
-    hover: "rgba(0, 0, 0, .08)",
-    hoverOpacity: .08,
-    selected: "rgba(0, 0, 0, .14)",
-    disabled: "rgba(0, 0, 0, .26)",
-    disabledBackground: "rgba(0, 0, 0, .12)"
+    content: {
+      active: 'rgba(0, 0, 0, .54)',
+      hover: 'rgba(0, 0, 0, .08)',
+      hoverOpacity: .08,
+      selected: 'rgba(0, 0, 0, .14)',
+      disabled: 'rgba(0, 0, 0, .26)',
+      disabledBackground: 'rgba(0, 0, 0, .12)',
+    },
+    link: {
+      hover: '#437A16'
+    }
   },
   shadow: {
     solid: 'rgba(0,0,0,1)',

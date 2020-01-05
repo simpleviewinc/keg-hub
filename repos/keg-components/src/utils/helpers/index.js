@@ -1,3 +1,4 @@
+export * from './getActiveOpacity'
 export * from './getImgSrc'
 export * from './getOnLoad'
 export * from './getPressHandler'

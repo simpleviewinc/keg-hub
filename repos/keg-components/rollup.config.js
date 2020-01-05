@@ -47,8 +47,8 @@ export default Array
           KegImg: `src/components/image/image.${platform}.js`,
           KegIndicator: `src/components/indicator/indicator.${platform}.js`,
           KegInput: `src/components/form/input/input.${platform}.js`,
-          KegLink: `src/components/typeface/link.${platform}.js`,
-          KegText: `src/components/typeface/kegtext.${platform}.js`,
+          KegLink: `src/components/link/link.${platform}.js`,
+          KegText: `src/components/typography/kegtext.${platform}.js`,
           KegView: `src/components/view/view.${platform}.js`,
         }
       })

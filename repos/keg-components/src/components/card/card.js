@@ -1,10 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { deepMerge, isStr } from 'jsutils'
+import { deepMerge, isStr, get } from 'jsutils'
 import { CardImage } from './cardImage'
 import { CardContainer, CardFooter, CardHeader } from './cardContent'
 import { View } from '../'
+
+const buildStyles = (styles, styleId, theme) => {
+  const cardStyles = {}
+
+  cardStyles.container = theme.join(
+    get(theme, [ 'components', 'card', 'container' ]),
+    styles.container
+  )
+
+  cardStyles.wrapper = theme.join(
+    get(theme, [ 'components', 'card', 'wrapper' ]),
+    styles.wrapper
+  )
+
+  cardStyles.header = theme.join(
+    theme.get(
+      `${styleId}-header`,
+      'typography.h5',
+      'components.card.header',
+    ),
+    styles.header
+  )
+
+  cardStyles.footer = theme.join(
+    get(theme, [ 'components', 'card', 'footer']),
+    styles.footer
+  )
+
+  cardStyles.divider = theme.join(
+    get(theme, [ 'components', 'card', 'divider' ]),
+    styles.divider
+  )
+
+  cardStyles.children = theme.join(
+    get(theme, ['components', 'card', 'children']),
+    cardStyles.children
+  )
+
+  return cardStyles
+
+}
 
 const getImgProps = (image, styles) => {
   return isStr(image)
@@ -20,40 +61,33 @@ export const Card = ({ styles, ...props}) => {
   const {
     children,
     footer,
+    footerLines,
     header,
-    title,
-    subtitle,
-    headerNumberOfLines,
-    footerNumberOfLines,
+    headerLines,
     image,
     styleId,
+    subtitle,
+    title,
     ...attributes
   } = props
 
   const hasImage = Boolean(image)
   const imgProps = hasImage && getImgProps(image, styles)
   const cardStyleId = styleId || `keg-card`
+  const cardStyles = buildStyles(styles, cardStyleId, theme)
   
   return (
     <CardContainer
       theme={ theme }
       attributes={ attributes }
-      styles={{
-        container: styles.container,
-        wrapper: styles.wrapper,
-        styleId: cardStyleId,
-      }}
+      styles={ cardStyles }
     >
 
       <CardHeader
         header={ header }
         theme={ theme }
-        numberOfLines={ headerNumberOfLines }
-        styles={{ 
-          header: styles.header,
-          divider: styles.divider,
-          styleId: cardStyleId,
-        }}
+        numberOfLines={ headerLines }
+        styles={ cardStyles }
       />
 
       { hasImage && (
@@ -63,24 +97,18 @@ export const Card = ({ styles, ...props}) => {
           image={ imgProps }
           children={ children }
           styles={{
+            children: cardStyles.children,
             image: imgProps.style,
-            overlay: styles.overlay,
-            wrapper: styles.imageWrapper,
-            title: styles.title,
-            subtitle: styles.subtitle,
             loading: styles.loading,
-            styleId: cardStyleId,
+            overlay: styles.overlay,
+            subtitle: styles.subtitle,
+            title: styles.title,
+            wrapper: styles.imageWrapper,
           }}
         />
       )}
 
-      <View
-        style={ theme.get(
-          `${cardStyleId}-card-children`,
-          'components.card.children',
-          styles.children
-        )}
-      >
+      <View style={ cardStyles.children } >
         { children }
       </View>
       
@@ -88,12 +116,8 @@ export const Card = ({ styles, ...props}) => {
         <CardFooter
           footer={ footer }
           theme={ theme }
-          numberOfLines={ footerNumberOfLines }
-          styles={{ 
-            footer: styles.footer,
-            divider: styles.divider,
-            styleId: cardStyleId,
-          }}
+          numberOfLines={ footerLines }
+          styles={ cardStyles }
         />
       )}
 

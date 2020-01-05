@@ -2,30 +2,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
 import { Image, View, Text } from '../'
+import { get } from 'jsutils'
 
 const CardImageTitle = ({ subtitle, title, styles, theme }) => {
   return (
-    <View style={ theme.get(
-      `${styles.styleId}-overlay`,
-      'components.card.overlay',
+    <View style={ theme.join(
+      get(theme, [ 'components', 'card', 'overlay' ]),
       styles.overlay
     )}>
-      {title && (
+      { title && (
         <Text
-          style={theme.get(
-            `${styles.styleId}-featured-title`,
-            'components.card.featured.title',
+          style={ theme.join(
+            get(theme, ['components', 'card', 'featured', 'title']),
             styles.title
           )}
         >
           { title }
         </Text>
       )}
-      {subtitle && (
+      { subtitle && (
         <Text
-          style={theme.get(
-            `${styles.styleId}-featured-subtitle`,
-            'components.card.featured.subtitle',
+          style={ theme.join(
+            get(theme, [ 'components', 'card', 'featured', 'subtitle' ]),
             styles.subtitle
           )}
         >
@@ -43,9 +41,8 @@ export const CardImage = ({ image, subtitle, styles, title }) => {
     <Image
       { ...image }
       styles={{ loading: styles.loading, wrapper: styles.wrapper }}
-      style={ theme.get(
-        `${styles.styleId}-image`,
-        'components.card.image.image',
+      style={ theme.join(
+        get(theme, [ 'components', 'card', 'image', 'image' ]),
         styles.image
       )}
     >

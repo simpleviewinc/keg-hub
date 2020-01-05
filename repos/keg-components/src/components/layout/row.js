@@ -9,7 +9,6 @@ export const Row = withTheme(({ children, ...props }) => {
   return (
     <Container
       {...props}
-      theme={theme}
       style={{ ...theme.layout.grid.row, ...props.style }}
       flexDir='row'
     >

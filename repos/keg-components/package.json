@@ -82,8 +82,8 @@
       "KegImg": "<rootDir>/src/components/image/image.web.js",
       "KegInput": "<rootDir>/src/components/form/input/input.web.js",
       "KegIndicator": "<rootDir>/src/components/indicator/indicator.web.js",
-      "KegLink": "<rootDir>/src/components/typeface/link.web.js",
-      "KegText": "<rootDir>/src/components/typeface/text.web.js",
+      "KegLink": "<rootDir>/src/components/link/link.web.js",
+      "KegText": "<rootDir>/src/components/typography/text.web.js",
       "KegView": "<rootDir>/src/components/view/view.web.js"
     },
     "transform": {

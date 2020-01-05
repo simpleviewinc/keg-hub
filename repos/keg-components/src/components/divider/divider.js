@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
+import { get } from 'jsutils'
 import { View } from '../'
 
 export const Divider = ({ style, styleId, ...props }) => {
@@ -9,9 +10,8 @@ export const Divider = ({ style, styleId, ...props }) => {
   return (
     <View
       { ...props }
-      style={ theme.get(
-        styleId || `key-divider`,
-        'components.divider',
+      style={ theme.join(
+        get(theme, [ 'components', 'divider' ]),
         style
       )}
     />

@@ -14,13 +14,12 @@ export const Column = withTheme(({ children, size, center, theme, ...props }) =>
   return (
     <Container
       {...props}
-      theme={ theme }
       size={ size }
       flexDir='column'
       style={ theme.join(
         get(theme, [ 'layout', 'grid', 'column' ]),
         props.style,
-        { minWidth: `${colWidth}%` },
+        { minWidth: `${colWidth}%`, maxWidth: `${colWidth}%` },
       )}
     >
       { children }
