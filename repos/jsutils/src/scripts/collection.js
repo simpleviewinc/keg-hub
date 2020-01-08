@@ -2,7 +2,7 @@
 
 'use strict'
 
-import { isFunc } from './method'
+import { isFunc, cloneFunc } from './method'
 import { isArr } from './array'
 import { isNum } from './number'
 import { isStr } from './string'
@@ -204,6 +204,7 @@ export const deepClone = (obj, hash = new WeakMap()) => {
   if (obj instanceof Set) return new Set(obj)
   if (hash.has(obj)) return hash.get(obj)
   if (isArr(obj)) return obj.map(x => deepClone(x))
+  if (isFunc(obj)) return cloneFunc(obj)
 
   const result = obj instanceof Date 
     ? new Date(obj)
