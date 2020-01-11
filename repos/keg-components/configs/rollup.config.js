@@ -6,6 +6,16 @@ import commonjs from 'rollup-plugin-commonjs'
 import cleanup from 'rollup-plugin-cleanup'
 import sourcemaps from 'rollup-plugin-sourcemaps'
 import alias from '@rollup/plugin-alias'
+import pathAlias from './aliases.json'
+
+const getAliases = platform => Object
+  .keys(pathAlias)
+  .reduce((updated, key) => {
+    updated[key] = pathAlias[key].replace(/\$\{platform\}/g, platform)
+
+    return updated
+  }, {})
+
 
 const shared = {
   external: ['react', 'react-dom', 'react-native', 'jsutils', 're-theme' ],
@@ -41,16 +51,7 @@ export default Array
     plugins: [
       ...shared.plugins(platform),
       alias({
-        entries: {
-          KegButton: `src/components/button/button.${platform}.js`,
-          KegForm: `src/components/form/${platform}/index.js`,
-          KegImg: `src/components/image/image.${platform}.js`,
-          KegIndicator: `src/components/indicator/indicator.${platform}.js`,
-          KegInput: `src/components/form/input/input.${platform}.js`,
-          KegLink: `src/components/link/link.${platform}.js`,
-          KegText: `src/components/typography/kegtext.${platform}.js`,
-          KegView: `src/components/view/view.${platform}.js`,
-        }
+        entries: getAliases(platform),
       })
     ]
   })))

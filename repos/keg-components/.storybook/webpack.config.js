@@ -1,37 +1,67 @@
 const path = require('path')
 const webpack = require('webpack')
+const { aliases } = require('../configs/aliases.config')
+const { get } = require('jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
 
-module.exports = ({ config, mode }) => {
+// Hard coded plugins
+const addPlugins = [
+  // Find the DefinePlugin, and add the ENV
+  new webpack.DefinePlugin({ RE_PLATFORM: platform })
+]
 
-  config.resolve.extensions = [
-    platform === 'native' && ".native.js" || ".web.js",
-    ...config.resolve.extensions,
-  ]
+// Hard coded aliases
+const addAliases = {
+  // Add the react-native-web overwrite
+  "react-native": "react-native-web/dist/cjs",
+}
 
-  config.module.rules.push({
+// Hard coded Rules
+const addRules = [
+  // Add the source loader for jsx files, which allows our story plugin to work
+  {
     test: /\.stories\.jsx?$/,
     loaders: [require.resolve('@storybook/source-loader')],
     enforce: 'pre',
-  })
+  }
+]
 
-  config.resolve.alias = {
-    ...config.resolve.alias,
-    KegButton: path.resolve(__dirname, `../src/components/button/button.${platform}.js`),
-    KegForm: path.resolve(__dirname, `../src/components/form/${platform}/index.js`),
-    KegImg: path.resolve(__dirname, `../src/components/image/image.${platform}.js`),
-    KegIndicator: path.resolve(__dirname, `../src/components/indicator/indicator.${platform}.js`),
-    KegInput: path.resolve(__dirname, `../src/components/form/input/input.${platform}.js`),
-    KegLink: path.resolve(__dirname, `../src/components/link/link.${platform}.js`),
-    KegText: path.resolve(__dirname, `../src/components/typography/kegtext.${platform}.js`),
-    KegView: path.resolve(__dirname, `../src/components/view/view.${platform}.js`),
-    "react-native": "react-native-web/dist/cjs"
+// Set custom extensions based on the platform
+// This will ensure the platform file is loaded over the default
+const customExtensions = extensions => {
+  return [
+    platform === 'native' && ".native.js" || ".web.js",
+    ...extensions,
+  ]
+}
+
+// Set custom aliases based on the platform
+const customAliases = wpAliases => {
+
+  // Loop over the aliases and set the platform
+  const updated = Object
+    .keys(aliases)
+    .reduce((updatedAliases, key) => {
+    updatedAliases[key] = path.resolve(__dirname, `../${aliases[key]}`)
+
+    return updatedAliases
+  }, {})
+
+  // Return updated aliases with the addAliases
+  return {
+    ...wpAliases,
+    ...updated,
+    ...addAliases
   }
 
-  config.plugins = config.plugins.map(plugin => {
+}
 
-    plugin &&
-      plugin.constructor.name === 'DefinePlugin' &&
+// Add the RE_PLATFORM ENV converted to the current platform
+const customPlugins = plugins => {
+
+  const updated = plugins.map(plugin => {
+    // Find the DefinePlugin, and add the ENV
+    get(plugin, 'constructor.name') === 'DefinePlugin' &&
       (plugin.definitions['process.env'] = {
           ...plugin.definitions['process.env'],
           RE_PLATFORM: JSON.stringify(platform)
@@ -40,10 +70,35 @@ module.exports = ({ config, mode }) => {
     return plugin
   })
 
-  config.plugins = [
-    ...config.plugins,
-    new webpack.DefinePlugin({ RE_PLATFORM: platform })
-  ]
+  return updated.concat(addPlugins)
+}
+
+// Set custom rules for webpack
+const customRules = rules => {
+  
+  const updated = rules.reduce((updatedRules, rule) => {
+    // Remove the eslint loader that we don't use
+    get(rule, 'use.0.loader', '').indexOf('eslint-loader') === -1 && updatedRules.push(rule)
+
+    return updatedRules
+  }, [])
+
+  return updated.concat(addRules)
+}
+
+module.exports = ({ config, mode }) => {
+
+  // Setup custom extensions for loading platform specific files
+  config.resolve.extensions = customExtensions(config.resolve.extensions)
+
+  // Setup custom rule settings
+  config.module.rules = customRules(config.module.rules)
+
+  // Add custom aliases
+  config.resolve.alias = customAliases(config.resolve.alias)
+
+  // Setup custom plugin settings
+  config.plugins = customPlugins(config.plugins)
 
   return config
 }

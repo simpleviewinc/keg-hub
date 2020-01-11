@@ -1,0 +1,10 @@
+{
+  "KegButton": "src/components/button/button.${platform}.js",
+  "KegForm": "src/components/form/${platform}/index.js",
+  "KegImg": "src/components/image/image.${platform}.js",
+  "KegIndicator": "src/components/indicator/indicator.${platform}.js",
+  "KegInput": "src/components/form/input/input.${platform}.js",
+  "KegLink": "src/components/link/link.${platform}.js",
+  "KegText": "src/components/typography/kegtext.${platform}.js",
+  "KegView": "src/components/view/view.${platform}.js"
+}
