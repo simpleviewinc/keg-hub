@@ -2,30 +2,31 @@
 
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { View, Image, Link } from '../../'
+import { StoryWrap } from 'StoryWrap'
+import { Image, Link } from '../../'
 
-const stories = storiesOf('Image', module)
+const wrapStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
 
-const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
-
-stories.add('Default', () =>
-  <View style={ viewStyles } >
-    <Image
-      style={{ width: 320, height: 320 }}
-      src='https://placegoat.com/320/320'
-      alt='A Goat'
-    />
-  </View>
-)
-
-stories.add('Image w/ Link', () =>
-  <View style={ viewStyles } >
-    <Link href='https://placegoat.com' target='_blank' >
+storiesOf('Display | Image', module)
+  .add('Image', () =>
+    <StoryWrap style={ wrapStyles } >
       <Image
-        style={{ width: 500, height: 250 }}
-        src='https://placegoat.com/500/250'
-        alt='Another Goat'
+        style={{ width: 320, height: 320 }}
+        src='https://placegoat.com/320/320'
+        alt='A Goat'
       />
-    </Link>
-  </View>
-)
+    </StoryWrap>
+  )
+
+storiesOf('Display | Image', module)
+  .add('Image w/ Link', () =>
+    <StoryWrap style={ wrapStyles } >
+      <Link href='https://placegoat.com' target='_blank' >
+        <Image
+          style={{ width: 500, height: 250 }}
+          src='https://placegoat.com/500/250'
+          alt='Another Goat'
+        />
+      </Link>
+    </StoryWrap>
+  )

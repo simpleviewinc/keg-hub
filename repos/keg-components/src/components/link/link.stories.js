@@ -6,7 +6,7 @@ import { A, Link, View } from '../../'
 
 const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
 
-storiesOf('Link', module)
+storiesOf('Typography | Link', module)
   .add('Anchor', () =>
     <View style={ viewStyles } >
       <A href='https://placegoat.com' target='_blank' >
@@ -14,7 +14,7 @@ storiesOf('Link', module)
       </A>
     </View>
   )
-  .add('Link', () =>
+  .add('Typography | Link', () =>
     <View style={ viewStyles } >
       <Link href='https://placegoat.com' target='_blank' >
         Keg Link

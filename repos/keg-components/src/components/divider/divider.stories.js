@@ -5,10 +5,10 @@ import { storiesOf } from '@storybook/react'
 import { View, Divider } from '../../'
 import { StoryWrap } from 'StoryWrap'
 
-const stories = storiesOf('Divider', module)
 
-stories.add('Default', () =>
-  <StoryWrap style={{ paddingTop: 30 }} >
-    <Divider />
-  </StoryWrap>
-)
+storiesOf('Display | Divider', module)
+  .add('Divider', () =>
+    <StoryWrap style={{ paddingTop: 30 }} >
+      <Divider />
+    </StoryWrap>
+  )

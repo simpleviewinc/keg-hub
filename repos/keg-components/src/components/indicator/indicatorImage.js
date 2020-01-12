@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from 're-theme'
-import { indicatorUri } from './indicatorUri'
+import { indicatorUri } from '../../assets/spinners/moderate'
 import { getImgSrc } from '../../utils'
 import { View } from '../'
 
