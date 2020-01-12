@@ -16,7 +16,7 @@ const filterAttrs = attrs => reduceObj(attrs, (key, value, updated) => {
 
 const getNode = element => {
   const node = element && element.toLowerCase()
-  return domMap.elMap.web[node] || 'span'
+  return domMap.elMap.web[node] || element || 'span'
 }
 
 const Text = forwardRef((props, ref) => {

@@ -10,7 +10,7 @@ export const Input = withTheme(props => {
   return (
     <TextInput
       { ...args }
-      style={ theme.join(get(theme, ['form', 'input' ]), style) }
+      style={ theme.join(get(theme, ['form', 'input', 'default' ]), style) }
       onChangeText={ onChange }
       onPress={ onClick || onPress }
     />

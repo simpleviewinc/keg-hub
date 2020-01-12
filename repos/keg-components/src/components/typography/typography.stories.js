@@ -2,96 +2,106 @@
 
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { Caption, H1, H2, H3, H4, H5, H6, P, Subtitle, Text, View } from '../../'
+import { Caption, H1, H2, H3, H4, H5, H6, Label, P, Subtitle, Text, View } from '../../'
+import { StoryWrap } from 'StoryWrap'
 
 const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
 
-storiesOf('Typography', module)
+storiesOf('Typography | Caption', module)
   .add('Caption', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <Caption>
         Keg Caption
       </Caption>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | H1', module)
   .add('H1', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <H1>
         Keg H1
       </H1>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | H2', module)
   .add('H2', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <H2>
         Keg H2
       </H2>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | H3', module)
   .add('H3', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <H3>
         Keg H3
       </H3>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | H4', module)
   .add('H4', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <H4>
         Keg H4
       </H4>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | H5', module)
   .add('H5', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <H5>
         Keg H5
       </H5>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | H6', module)
   .add('H6', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <H6>
         Keg H6
       </H6>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | Label', module)
+  .add('Label', () =>
+    <StoryWrap>
+      <Label>
+        Keg Label
+      </Label>
+    </StoryWrap>
+  )
+
+storiesOf('Typography | Paragraph', module)
   .add('Paragraph', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <P>
         Keg Paragraph
       </P>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | Subtitle', module)
   .add('Subtitle', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <Subtitle>
         Keg Subtitle
       </Subtitle>
-    </View>
+    </StoryWrap>
   )
 
-storiesOf('Typography', module)
+storiesOf('Typography | Text', module)
   .add('Text', () =>
-    <View style={ viewStyles } >
+    <StoryWrap>
       <Text>
         Keg Text
       </Text>
-    </View>
+    </StoryWrap>
   )

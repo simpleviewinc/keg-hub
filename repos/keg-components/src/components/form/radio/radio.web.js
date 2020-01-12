@@ -1,4 +1,4 @@
 import React from 'react'
-import { Input } from '../input'
+import { Input } from '../../'
 
 export const Radio = props => (<Input { ...props } type="radio" />)

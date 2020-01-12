@@ -1,4 +1,5 @@
 import { colors } from './colors'
+import { margin } from './margin'
 
 export const typography = {
   font: {
@@ -42,12 +43,19 @@ export const typography = {
     letterSpacing: 0.15,
     fontWeight: 500
   },
+  label: {
+    flexBasis: '100%',
+    fontSize: 11,
+    letterSpacing: 0.15,
+    fontWeight: 700,
+    marginBottom: margin.size / 4
+  },
   paragraph: {
     fontSize: 16,
     letterSpacing: 0.5
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 12,
     letterSpacing: 0.15
-  }
+  },
 }

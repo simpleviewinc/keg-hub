@@ -1,4 +1,6 @@
 import { colors } from '../colors'
+import { padding } from '../padding'
+import { margin } from '../margin'
 
 export const section = {
   default: {
@@ -17,8 +19,8 @@ export const section = {
       borderColor: colors.palette.gray01,
       borderStyle: 'solid',
       borderWidth: 1,
-      padding: 15,
-      margin: 15,
+      padding: padding.size,
+      margin: margin.size,
       marginBottom: 0,
       minHeight: 200
     },

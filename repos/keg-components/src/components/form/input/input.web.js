@@ -9,7 +9,7 @@ export const Input = withTheme(props => {
   return (
     <input
       { ...args }
-      style={ theme.join(get(theme, ['form', 'input' ]), style) }
+      style={ theme.join(get(theme, ['form', 'input', 'default' ]), style) }
       onClick={ onClick || onPress }
     />
   )

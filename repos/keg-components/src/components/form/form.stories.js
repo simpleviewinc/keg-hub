@@ -2,20 +2,40 @@
 
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { Form, Input, Text, View, Select } from '../../'
+import { Form, Input, Label, View, Select, Option, Options } from '../../'
 import { action } from '@storybook/addon-actions'
+import { StoryWrap } from 'StoryWrap'
 
-const stories = storiesOf('Form | Input', module)
+storiesOf('Form | Form', module)
   .add('Default', () =>
-    <View style={{ maxWidth: '100vw', margin: 'auto', marginTop: 30,  textAlign: 'center' } } >
-      <Input />
-    </View>
+    <StoryWrap>
+      <Form name='story-form' >
+        <Label>
+          Enter Some Text
+        </Label>
+        <Input />
+      </Form>
+    </StoryWrap>
   )
 
+storiesOf('Form | Input', module)
+  .add('Default', () =>
+    <StoryWrap>
+      <Input />
+    </StoryWrap>
+  )
 
 storiesOf('Form | Select', module)
   .add('Default', () =>
-    <View style={{ maxWidth: '100vw', margin: 'auto', marginTop: 30,  textAlign: 'center' } } >
-      <Select />
-    </View>
+    <StoryWrap>
+      
+      <Select
+        onChange={ action("Value Changed!") }
+      >
+        <Option label='1' value={ 1 } />
+        <Option label='2' value={ 2 } />
+        <Option label='3' value={ 3 } />
+        <Option label='4' value={ 4 } />
+      </Select>
+    </StoryWrap>
   )

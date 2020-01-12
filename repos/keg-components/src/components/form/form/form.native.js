@@ -1,54 +1,49 @@
 import React from 'react'
-import { ButtonWrapper } from './button.wrapper'
+import { FormWrapper } from './form.wrapper'
+import { View } from '../'
 import PropTypes from 'prop-types'
 
 /**
- * Button
+ * Form
  * @summary Custom button component. All props are optional
  *
- * @param {Object} props - see buttonPropTypes
- * @property {String} props.text - button text
- * @property {String} props.type - flat, text, outlined, contained; default 'flat'
+ * @param {Object} props - see formPropTypes
+ * @property {String} props.type - default ''
  * @property {Object} props.style - custom style
- * @property {Function} props.onPress - function to do when button is pressed
- * @property {Boolean} props.disabled
+ * @property {Function} props.onSubmit - function when form is submitted
  * @property {Object} props.children
  * @property {Object} ref - reference to native element
  *
  */
 const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
   return (
-    <button
+    <View
       { ...elProps }
       { ...props }
       ref={ ref }
     >
       { children }
-    </button>
+    </View>
   )
 })
 
-
-export const Button = props => (
-  <ButtonWrapper
-    styleId={ `keg-web-button` }
+export const Form = props => (
+  <FormWrapper
+    styleId={ `keg-web-form` }
     { ...props }
     Element={ Element }
-    elType='web'
+    elType='native'
   />
 )
 
-Button.propTypes = {
+Form.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
     PropTypes.array
   ]),
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
+  onSubmit: PropTypes.func,
   ref: PropTypes.object,
   style: PropTypes.object,
-  text: PropTypes.string,
   type: PropTypes.string,
 }

@@ -18,9 +18,9 @@ const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : Touchabl
  * @property {Object} props.ref - reference to native element
  *
  */
-const Btn = React.forwardRef(({ btnProps, children, ...props}, ref) => (
+const Element = React.forwardRef(({ elProps, children, ...props}, ref) => (
   <Touchable
-    { ...btnProps }
+    { ...elProps }
     { ...props }
     ref={ ref }
   >
@@ -32,20 +32,23 @@ export const Button = props => (
   <ButtonWrapper
     styleId={ `keg-native-button` }
     { ...props }
-    Btn={ Btn }
-    btnType='native'
+    Element={ Element }
+    elType='native'
   />
 )
 
 Button.propTypes = {
   ...TouchableOpacity.propTypes,
-  btnProps: PropTypes.object,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
     PropTypes.array
   ]),
   disabled: PropTypes.bool,
+  onClick: PropTypes.func,
   onPress: PropTypes.func,
+  ref: PropTypes.object,
   style: PropTypes.object,
+  text: PropTypes.string,
+  type: PropTypes.string,
 }

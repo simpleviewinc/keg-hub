@@ -3,13 +3,12 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { View, Divider } from '../../'
+import { StoryWrap } from 'StoryWrap'
 
 const stories = storiesOf('Divider', module)
 
-const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
-
 stories.add('Default', () =>
-  <View style={ viewStyles } >
+  <StoryWrap style={{ paddingTop: 30 }} >
     <Divider />
-  </View>
+  </StoryWrap>
 )
