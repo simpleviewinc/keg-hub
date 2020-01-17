@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormWrapper } from './form.wrapper'
-import { View } from '../'
+import { View } from 'KegView'
 import PropTypes from 'prop-types'
 
 /**

@@ -2,7 +2,7 @@ import React from 'react'
 import { useTheme } from 're-theme'
 import { indicatorUri } from '../../assets/spinners/moderate'
 import { getImgSrc } from '../../utils'
-import { View } from '../'
+import { View } from 'KegView'
 
 const buildStyles = (theme, style, styles, styleId, isWeb) => {
   const built = {}

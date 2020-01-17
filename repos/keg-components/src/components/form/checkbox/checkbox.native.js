@@ -2,7 +2,7 @@ import React from 'react'
 import { withTheme } from 're-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
-import { Text } from '../../'
+import { Text } from '../../typography/text'
 
 export const CheckBox = withTheme(props => {
   const { theme, style, children, onClick, onPress, text, ...args } = props

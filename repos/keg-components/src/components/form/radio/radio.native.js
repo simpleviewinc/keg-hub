@@ -2,7 +2,7 @@ import React from 'react'
 import { withTheme } from 're-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
-import { Text } from '../../'
+import { Text } from '../../typography/text'
 
 export const Radio = withTheme(props => {
   const { theme, children, style, onClick, onPress, text, ...args } = props

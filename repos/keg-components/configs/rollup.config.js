@@ -8,6 +8,8 @@ import sourcemaps from 'rollup-plugin-sourcemaps'
 import alias from '@rollup/plugin-alias'
 import pathAlias from './aliases.json'
 
+const babelConfig = require('./babel.config.js')
+
 const getAliases = platform => Object
   .keys(pathAlias)
   .reduce((updated, key) => {
@@ -31,7 +33,7 @@ const shared = {
     json(),
     babel({
       exclude: 'node_modules/**',
-      presets: ['@babel/env', '@babel/preset-react']
+      ...babelConfig
     }),
     sourcemaps(),
     commonjs(),

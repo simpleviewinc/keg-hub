@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { Image, View, Text } from '../'
+import { View } from 'KegView'
+import { Image } from 'KegImg'
+import { Text } from '../typography/text'
 import { get } from 'jsutils'
 
 const CardImageTitle = ({ subtitle, title, styles, theme }) => {

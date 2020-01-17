@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTheme, useThemeHover } from 're-theme'
 import { get, checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
-import { Loading } from '../'
+import { Loading } from '../loading'
 import { View } from 'KegView'
 import { getImgSrc, getPressHandler, getOnLoad } from '../../utils'
 

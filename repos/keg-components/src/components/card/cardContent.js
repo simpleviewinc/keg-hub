@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Divider, View, Text } from '../'
+import { View } from 'KegView'
+import { Text } from '../typography/text'
+import { Divider } from '../divider/divider'
 
 export const CardHeader = ({ header, theme, numberOfLines, styles }) => {
 
