@@ -10,15 +10,19 @@ const storyStyles = { textAlign: 'center' }
 storiesOf('Typography | Link', module)
   .add('Anchor', () =>
     <StoryWrap style={ storyStyles } >
+
       <A href='https://placegoat.com' target='_blank' >
         Keg Anchor
       </A>
+
     </StoryWrap>
   )
   .add('Typography | Link', () =>
     <StoryWrap style={ storyStyles } >
+
       <Link href='https://placegoat.com' target='_blank' >
         Keg Link
       </Link>
+
     </StoryWrap>
   )

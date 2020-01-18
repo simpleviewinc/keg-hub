@@ -9,6 +9,8 @@ const storyStyles = { textAlign: 'center' }
 
 storiesOf('Loading', module).add('Default', () =>
   <StoryWrap style={ storyStyles } >
+
     <Loading text={ 'Loading' } />
+
   </StoryWrap>
 )

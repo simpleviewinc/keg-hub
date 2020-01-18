@@ -5,8 +5,6 @@ import { storiesOf } from '@storybook/react'
 import { P, Grid, Column, Row } from '../../'
 import { StoryWrap } from 'StoryWrap'
 
-
-const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30 }
 const textStyles = {
   paddingTop: 15,
   paddingBottom: 15,
@@ -18,15 +16,18 @@ const textStyles = {
 
 storiesOf('Layout | Grid', module)
   .add('Grid', () =>
-    <StoryWrap style={ viewStyles } >
+    <StoryWrap>
+
       <Grid>
         <P>Keg Grid Component</P>
       </Grid>
+
     </StoryWrap>
   )
 storiesOf('Layout | Row', module)
   .add('Row', () =>
-    <StoryWrap style={ viewStyles } >
+    <StoryWrap>
+
       <Grid>
         <Row>
           <P style={ textStyles } >
@@ -44,12 +45,14 @@ storiesOf('Layout | Row', module)
           </P>
         </Row>
       </Grid>
+
     </StoryWrap>
   )
 
 storiesOf('Layout | Column', module)
   .add('Column - Auto Size', () =>
-    <StoryWrap style={ viewStyles } >
+    <StoryWrap>
+
       <Grid>
         <Column>
           <P style={ textStyles } >
@@ -67,12 +70,14 @@ storiesOf('Layout | Column', module)
           </P>
         </Column>
       </Grid>
+
     </StoryWrap>
   )
 
 storiesOf('Layout | Column', module)
   .add('Column - Manual Size', () =>
-    <StoryWrap style={ viewStyles } >
+    <StoryWrap>
+
       <Grid>
         <Column size={ 3 } >
           <P style={ textStyles } >
@@ -90,12 +95,14 @@ storiesOf('Layout | Column', module)
           </P>
         </Column>
       </Grid>
+
     </StoryWrap>
   )
 
 storiesOf('Layout | Grid', module)
   .add('Rows and Columns', () =>
-    <StoryWrap style={ viewStyles } >
+    <StoryWrap>
+
       <Grid>
         <Row>
           <Grid>
@@ -138,5 +145,6 @@ storiesOf('Layout | Grid', module)
           </Grid>
         </Row>
       </Grid>
+
     </StoryWrap>
   )

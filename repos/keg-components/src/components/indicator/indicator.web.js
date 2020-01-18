@@ -8,7 +8,7 @@ const Element = ({ resizeMode, ...attrs }) => (
 export const Indicator = ({ alt, src, source, style, styleId }) => (
   <IndicatorWrapper 
     alt={ alt || 'Loading' }
-    Element={ ImgComp }
+    Element={ Element }
     isWeb={ true }
     src={ src || source }
     style={ style }

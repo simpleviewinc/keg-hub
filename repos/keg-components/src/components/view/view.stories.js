@@ -3,15 +3,17 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { StoryWrap } from 'StoryWrap'
-import { View, H6 } from '../../'
+import { View, P } from '../../'
 
-const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
+const storyStyles = { textAlign: 'center' }
 
 storiesOf('Display | View', module)
   .add('Default', () =>
-    <StoryWrap>
-      <View style={ viewStyles } >
-        <H6>This is a View!</H6>
+    <StoryWrap style={ storyStyles } >
+
+      <View>
+        <P>This is a View!</P>
       </View>
+
     </StoryWrap>
   )
