@@ -10,6 +10,7 @@
   "KegRadio": "src/components/form/radio/radio.${platform}.js",
   "KegSelect": "src/components/form/select/select.${platform}.js",
   "KegSlider": "src/components/form/slider/slider.${platform}.js",
+  "KegSwitch": "src/components/form/switch/switch.${platform}.js",
   "KegText": "src/components/typography/kegtext.${platform}.js",
   "KegView": "src/components/view/view.${platform}.js",
   "KegReTheme": "src/theme/kegReTheme/index.${platform}.js",

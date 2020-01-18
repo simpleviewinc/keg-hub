@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { Form, Input, Label, View, Select, Option, Options } from '../../'
+import { Form, Input, Label, View, Select, Option, Options, Switch } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
@@ -47,6 +47,15 @@ storiesOf('Form | Select', module)
         <Option label='3' value={ 3 } />
         <Option label='4' value={ 4 } />
       </Select>
+
+    </StoryWrap>
+  )
+  
+storiesOf('Form | Switch', module)
+  .add('Default', () =>
+    <StoryWrap>
+
+      <Switch onChange={ action("Select Change!") } value={ true } />
 
     </StoryWrap>
   )

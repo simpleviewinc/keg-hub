@@ -4,6 +4,7 @@ import { input } from './input'
 import { option } from './option'
 import { radio } from './radio'
 import { select } from './select'
+import { switchStyles } from './switch'
 
 export const form = {
   checkbox,
@@ -12,4 +13,5 @@ export const form = {
   option,
   radio,
   select,
+  switch: switchStyles,
 }
