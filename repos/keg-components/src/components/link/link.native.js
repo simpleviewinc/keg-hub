@@ -1,36 +1,51 @@
 import React from 'react'
 import { useTheme } from 'KegReTheme'
 import { get, isStr, checkCall } from 'jsutils'
-import { TouchableOpacity, Text, Linking } from 'react-native'
+import { TouchableOpacity, Linking } from 'react-native'
+import { LinkWrapper } from './link.wrapper'
+import { KegText } from 'KegText'
 import PropTypes from 'prop-types'
+
+const Text = KegText('link')
 
 const openLink = (url, onPress) => {
   return event => {
-    isStr(url) && Linking.openURL(url).catch((err) => console.error('Could not open url!', err))
+    isStr(url) && Linking
+      .openURL(url)
+      .catch(err => console.error('Could not open url!', err))
+
     checkCall(onPress, event, url)
   }
 }
 
-const Link = props => {
+/**
+ * Link
+ * @summary Custom Link component. All props are optional
+ *
+ *
+ */
+const Element = React.forwardRef(({ elProps, children, href, onPress, style, ...props }, ref) => (
+  <TouchableOpacity
+    { ...elProps }
+    { ...props }
+    ref={ ref }
+    onPress={ openLink(href, onPress) }
+  >
+    <Text style={ style } >
+      { children }
+    </Text>
+  </TouchableOpacity>
+))
 
-  const theme = useTheme()
-  const { children, href, onClick, onPress, style, styleId, type } = props
+const Link = props => (
+  <LinkWrapper
+    styleId={ `keg-native-link` }
+    { ...props }
+    elType={ 'native' }
+    Element={ Element }
+  />
+)
 
-  const linkStyle = theme.get(
-    styleId || `keg-web-link-${ type || 'default' }`,
-    'typography.font.family',
-    'components.link.default',
-    type && `components.link.${type}`,
-  )
-
-  return (
-    <TouchableOpacity onPress={ openLink(href, onClick || onPress) }>
-      <Text style={ theme.join(linkStyle, style) }>
-        { children }
-      </Text>
-    </TouchableOpacity>
-  )
-}
 
 Link.propTypes = {
   href: PropTypes.string,

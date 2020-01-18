@@ -7,14 +7,15 @@ import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
 const TextComp = props => <Text>Keg Button</Text>
+const buttonStyle = { width: 150 }
 
 storiesOf('Button', module)
   .add('Default', () =>
     <StoryWrap style={{ textAlign: 'center' }} >
 
       <Button 
-        style={{ width: 150 }}
-        onClick={action("Button Clicked!")}
+        style={ buttonStyle }
+        onClick={ action("Button Clicked!") }
       >
         <TextComp />
       </Button>
@@ -26,8 +27,8 @@ storiesOf('Button', module)
 
       <Button 
         disabled={ true }
-        style={{ width: 150 }}
-        onClick={action("Button Clicked!")}
+        style={ buttonStyle }
+        onClick={ action("Disabled Button Clicked!") }
       >
         <TextComp />
       </Button>

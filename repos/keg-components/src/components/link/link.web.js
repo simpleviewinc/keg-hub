@@ -1,40 +1,37 @@
 import React from 'react'
 import { useTheme, useThemeHover } from 'KegReTheme'
-import { get } from 'jsutils'
+import { LinkWrapper } from './link.wrapper'
 import PropTypes from 'prop-types'
 import { KegText } from 'KegText'
-
 const KegLink = KegText('link')
 
-const Link = props => {
-  const theme = useTheme()
-  const { children, href, onPress, onClick, style, styleId, target, type } = props
-
-  const linkStyle = theme.get(
-    styleId || `keg-web-link-${ type || 'default' }`,
-    'typography.font.family',
-    'components.link.default',
-    type && `components.link.${type}`,
-  )
-
-  const [ ref, themeStyle ] = useThemeHover(
-    theme.join(linkStyle, style),
-    get(theme, `components.link.hover` ),
-  )
-
+/**
+ * Link
+ * @summary Custom Link component. All props are optional
+ *
+ *
+ */
+const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
   return (
     <KegLink
+      { ...elProps }
+      { ...props }
       ref={ ref }
-      href={ href }
-      target={ target }
-      style={ themeStyle }
-      styleId={ styleId && `${styleId}-link-text` }
-      onClick={ onClick || onPress }
     >
       { children }
     </KegLink>
   )
-}
+})
+
+const Link = props => (
+  <LinkWrapper
+    styleId={ `keg-web-link` }
+    { ...props }
+    isWeb={ true }
+    elType={ 'web' }
+    Element={ Element }
+  />
+)
 
 Link.propTypes = {
   href: PropTypes.string,

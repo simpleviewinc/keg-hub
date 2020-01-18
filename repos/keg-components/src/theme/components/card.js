@@ -5,14 +5,14 @@ import { helpers } from '../helpers'
 export const card = {
   container: {
     $native: {
-      shadowColor: colors.shadow.opacity05,
+      shadowColor: colors.opacity.opacity05,
       shadowOffset: { height: 0, width: 0 },
       shadowOpacity: 1,
       shadowRadius: 1,
       elevation: 1,
     },
     $web: {
-      boxShadow: `1px 1px 5px ${ colors.shadow.opacity05 }`
+      boxShadow: `1px 1px 5px ${ colors.opacity.opacity05 }`
     },
     $all: {
       backgroundColor: colors.palette.white01,
@@ -65,7 +65,7 @@ export const card = {
   overlay: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: colors.shadow.opacity05,
+    backgroundColor: colors.opacity.opacity05,
     alignSelf: 'stretch',
     justifyContent: 'center',
     ...helpers.abs,

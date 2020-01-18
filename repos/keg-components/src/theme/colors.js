@@ -1,4 +1,4 @@
-import { isObj, isArr } from 'jsutils'
+import { isObj, isArr, isStr } from 'jsutils'
 
 /**
  * Builds a CSS transition rule
@@ -43,7 +43,7 @@ const toRgb = (red, green, blue, alpha) => {
  * @param  { number } opacity - from 0-1
  * @return rgba as string
  */
-const toHex = (hex, opacity) => {
+const hexToRgba = (hex, opacity) => {
   if (!hex)
     return console.warn('Can not convert hex to rgba', hex) || `rgba(255,255,255,0)`
 
@@ -57,48 +57,39 @@ const toHex = (hex, opacity) => {
   })
 }
 
+
+const opacity = (amount, color) => {
+  return isStr(color) && color.indexOf('#') === 0
+    ? hexToRgba(color, amount)
+    : isObj(color)
+      ? toRgb(color, amount)
+      : `rgba(${color || '0,0,0'}, ${amount})`
+} 
+
 export const colors = {
   helpers: {
-    toHex,
+    hexToRgba,
     toRgb,
     toRgba: toRgb,
     trans: transition,
   },
-  content: {
-    primary: '#1e88e5',
-    secondary: '#f50057',
-    error: '#f44336',
-    divider: 'rgba(0,0,0,.12)',
-    outlined: 'rgba(0,0,0,.29)',
-    link: '#64aff1',
-    linkHover: '#1e88e5'
+  link: {
+    default: '#64aff1',
+    hover: '#1e88e5'
   },
-  text: {
-    primary: 'rgba(0, 0, 0, 0.87)',
-    secondary: 'rgba(0, 0, 0, 0.54)',
-    disabled: 'rgba(0, 0, 0, 0.38)',
-    hint: 'rgba(0, 0, 0, 0.38)'
-  },
-  state: {
-    content: {
-      active: 'rgba(0, 0, 0, .54)',
-      hover: 'rgba(0, 0, 0, .08)',
-      hoverOpacity: .08,
-      selected: 'rgba(0, 0, 0, .14)',
-      disabled: 'rgba(0, 0, 0, .26)',
-      disabledBackground: 'rgba(0, 0, 0, .12)',
-    },
-    link: {
-      hover: '#437A16'
-    }
-  },
-  shadow: {
-    solid: 'rgba(0,0,0,1)',
-    opacity75: 'rgba(0,0,0,.75)',
-    opacity50: 'rgba(0,0,0,.5)',
-    opacity25: 'rgba(0,0,0,.25)',
-    opacity10: 'rgba(0,0,0,.10)',
-    opacity05: 'rgba(0,0,0,.05)',
+  opacity: {
+    solid: opacity(1),
+    opacity90: opacity(.90),
+    opacity85: opacity(.85),
+    opacity75: opacity(.75),
+    opacity60: opacity(.60),
+    opacity50: opacity(.50),
+    opacity30: opacity(.30),
+    opacity25: opacity(.25),
+    opacity15: opacity(.15),
+    opacity10: opacity(.10),
+    opacity05: opacity(.05),
+    opacity00: opacity(.00),
   },
   palette: {
     transparent: 'transparent',
@@ -113,6 +104,12 @@ export const colors = {
     black01: '#666666',
     black02: '#4d4d4d',
     black03: '#333333',
-    black04: '#1a1a1a'
+    black04: '#1a1a1a',
+    blue01: '#64aff1',
+    blue02: '#1e88e5',
+		blue03: "#0b50f1",
+		blue04: "#0070f2",
+    red01: '#f44336',
+		red02: "#b10000",
   },
 }
