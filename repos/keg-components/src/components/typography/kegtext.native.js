@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from 'KegReTheme'
 import { Text as RNText } from 'react-native'
 
 export const KegText = element => {

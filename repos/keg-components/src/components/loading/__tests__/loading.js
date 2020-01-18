@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { theme } from '../../../theme'
-import { ReThemeProvider } from 're-theme'
+import { ReThemeProvider } from 'KegReTheme'
 
 const { Loading } = require('../loading')
 

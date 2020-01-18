@@ -12,5 +12,6 @@
   "KegSlider": "src/components/form/slider/slider.${platform}.js",
   "KegText": "src/components/typography/kegtext.${platform}.js",
   "KegView": "src/components/view/view.${platform}.js",
+  "KegReTheme": "src/theme/kegReTheme/index.${platform}.js",
   "StoryWrap": ".storybook/storyWrap.js"
 }

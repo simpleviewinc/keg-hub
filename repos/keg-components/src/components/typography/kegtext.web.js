@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from 'KegReTheme'
 import { reduceObj } from 'jsutils'
 import domMap from './domMap'
 

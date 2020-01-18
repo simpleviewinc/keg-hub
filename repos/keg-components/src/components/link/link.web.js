@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useTheme, useThemeHover } from 'KegReTheme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { KegText } from 'KegText'

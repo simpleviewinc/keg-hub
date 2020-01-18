@@ -27,7 +27,7 @@ const addRules = [
   },
   {
     test: /\.(js|jsx)$/,
-    exclude: /node_modules\/(?!(re-theme)\/).*/,
+    exclude: /node_modules/,
     use: {
       loader: "babel-loader",
       options: { ...babelConfig }

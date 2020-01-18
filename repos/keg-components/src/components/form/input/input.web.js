@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from 'KegReTheme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 

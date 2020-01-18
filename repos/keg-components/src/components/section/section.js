@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from 'KegReTheme'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 

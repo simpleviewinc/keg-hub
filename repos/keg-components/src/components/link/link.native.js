@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from 'KegReTheme'
 import { get, isStr, checkCall } from 'jsutils'
 import { TouchableOpacity, Text, Linking } from 'react-native'
 import PropTypes from 'prop-types'

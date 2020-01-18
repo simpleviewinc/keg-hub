@@ -6,12 +6,12 @@ import { Section, H6, Divider } from '../../'
 import { StoryWrap } from 'StoryWrap'
 
 
-const sectionStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
+const storyStyles = { textAlign: 'center' }
 
 storiesOf('Display | Section', module)
   .add('Section', () =>
-    <StoryWrap>
-      <Section style={ sectionStyles } >
+    <StoryWrap style={ storyStyles } >
+      <Section>
         <H6>This is a Section!</H6>
         <Divider />
       </Section>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useTheme, useThemeHover } from 'KegReTheme'
 import { get, checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'

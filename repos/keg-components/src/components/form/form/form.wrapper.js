@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from 'KegReTheme'
 import PropTypes from 'prop-types'
 
 const buildStyles = (styleId, theme, type, elType) => {

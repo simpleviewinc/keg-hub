@@ -5,7 +5,7 @@ import { storiesOf } from '@storybook/react'
 import { Caption, H1, H2, H3, H4, H5, H6, Label, P, Subtitle, Text, View } from '../../'
 import { StoryWrap } from 'StoryWrap'
 
-const viewStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30,  textAlign: 'center' }
+const storyStyles = { textAlign: 'center' }
 
 storiesOf('Typography | Caption', module)
   .add('Caption', () =>

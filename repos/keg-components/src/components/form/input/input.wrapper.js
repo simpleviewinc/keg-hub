@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 're-theme'
+import { useTheme } from 'KegReTheme'
 import { getOnChangeHandler, getValueFromChildren, getInputValueKey, getReadOnly } from '../../../utils'
 
 /**

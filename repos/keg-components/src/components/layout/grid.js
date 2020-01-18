@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
-import { withTheme } from 're-theme'
+import { withTheme } from 'KegReTheme'
 import { isArr, get } from 'jsutils'
 
 /**

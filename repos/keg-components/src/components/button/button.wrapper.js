@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useThemeActive, useThemeHover } from 're-theme'
+import { useTheme, useThemeActive, useThemeHover } from 'KegReTheme'
 import { get } from 'jsutils'
 import { getPressHandler, getActiveOpacity } from '../../utils'
 import PropTypes from 'prop-types'
