@@ -62,7 +62,7 @@
   "peerDependencies": {
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git",
-    "react": "^16.12.0"
+    "react": "16.12.0"
   },
   "optionalDependencies": {
     "react-dom": "16.12.0",
