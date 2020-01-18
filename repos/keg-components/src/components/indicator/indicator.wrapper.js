@@ -25,14 +25,25 @@ const buildStyles = (theme, style, styles, styleId, isWeb) => {
 }
 
 
-export const IndicatorImage = props => {
-  const { alt, ImgComp, isWeb, resizeMode, src, source, style, styles, styleId } = props
+export const IndicatorWrapper = props => {
+  const {
+    alt,
+    Element,
+    isWeb,
+    resizeMode,
+    src,
+    source,
+    style,
+    styles,
+    styleId
+  } = props
+
   const theme = useTheme()
   const builtStyles = buildStyles(theme, style, styles || {}, styleId, isWeb)
 
   return (
     <View style={ builtStyles.wrapper } >
-      <ImgComp
+      <Element
         alt={ alt || 'Loading' }
         style={ builtStyles.img }
         resizeMode={ resizeMode || 'contain' }

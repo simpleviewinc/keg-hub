@@ -32,6 +32,7 @@ export const Select = props => (
     { ...props }
     Element={ Slt }
     elType='web'
+    isWeb={ true }
   />
 )
 

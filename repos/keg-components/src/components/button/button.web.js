@@ -35,6 +35,7 @@ export const Button = props => (
     { ...props }
     Element={ Element }
     elType='web'
+    isWeb={ true }
   />
 )
 

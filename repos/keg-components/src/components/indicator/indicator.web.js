@@ -1,14 +1,14 @@
 import React from 'react'
-import { IndicatorImage } from './indicatorImage'
+import { IndicatorWrapper } from './indicator.wrapper'
 
-const ImgComp = ({ resizeMode, ...attrs }) => (
+const Element = ({ resizeMode, ...attrs }) => (
   <img alt={ attrs.alt || 'Loading' } { ...attrs } />
 )
 
 export const Indicator = ({ alt, src, source, style, styleId }) => (
-  <IndicatorImage 
+  <IndicatorWrapper 
     alt={ alt || 'Loading' }
-    ImgComp={ ImgComp }
+    Element={ ImgComp }
     isWeb={ true }
     src={ src || source }
     style={ style }

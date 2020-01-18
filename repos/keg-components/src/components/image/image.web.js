@@ -30,6 +30,7 @@ export const Image = props => (
     styleId={ props.styleId || `keg-web-image` }
     imgType='web'
     Img={ Img }
+    isWeb={ true }
   />
 )
 

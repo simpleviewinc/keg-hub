@@ -6,7 +6,8 @@ export const button = {
       padding: 8,
       borderRadius: 4,
       outline: 'none',
-      textAlign: 'center'
+      textAlign: 'center',
+      margin: 'auto'
     },
     $web: {
       cursor: "pointer"

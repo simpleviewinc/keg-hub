@@ -48,6 +48,7 @@ export const SelectWrapper = props => {
     disabled,
     elType,
     Element,
+    isWeb,
     readOnly,
     onChange,
     onValueChange,
@@ -59,7 +60,6 @@ export const SelectWrapper = props => {
   } = props
   
   const styles = buildStyles(styleId, theme, type, elType)
-  const isWeb = elType === 'web'
 
   return (
     <Element

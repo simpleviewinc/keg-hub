@@ -87,6 +87,7 @@ export const ImageWrapper = props => {
     children,
     imgType,
     Img,
+    isWeb,
     onClick,
     onPress,
     ref,
@@ -98,8 +99,7 @@ export const ImageWrapper = props => {
     type,
     ...attrs
   } = props
-  
-  const isWeb = imgType === 'web'
+
   const builtStyles = buildStyles(
     style,
     styles || {},

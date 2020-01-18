@@ -32,6 +32,7 @@ export const Form = props => (
     { ...props }
     Element={ Element }
     elType='web'
+    isWeb={ true }
   />
 )
 
