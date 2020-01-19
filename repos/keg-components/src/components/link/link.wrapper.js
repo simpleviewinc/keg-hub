@@ -17,7 +17,6 @@ export const LinkWrapper = props => {
     children,
     Element,
     isWeb,
-    elType,
     href,
     onPress,
     onClick,
@@ -29,7 +28,7 @@ export const LinkWrapper = props => {
   } = props
 
   const linkStyle = theme.get(
-    styleId || `keg-${elType}-link-${ type || 'default' }`,
+    styleId || `keg-link-${ type || 'default' }`,
     'typography.font.family',
     'components.link.default',
     type && `components.link.${type}`,

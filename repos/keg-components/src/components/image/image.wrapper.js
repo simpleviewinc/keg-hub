@@ -14,8 +14,8 @@ const onLoadEvent = (setLoading, props, setStyle, loadedStyle) => {
   }
 }
 
-const buildStyles = (style, styles, styleId, theme, type, imgType) => {
-  styleId = styleId || `keg-${imgType}-image`
+const buildStyles = (style, styles, styleId, theme, type) => {
+  styleId = styleId || `keg-image`
 
   const defStyle = theme.get(
     `${styleId}-${type}`,
@@ -85,8 +85,7 @@ export const ImageWrapper = props => {
   const {
     alt,
     children,
-    imgType,
-    Img,
+    Element,
     isWeb,
     onClick,
     onPress,
@@ -105,8 +104,7 @@ export const ImageWrapper = props => {
     styles || {},
     styleId,
     theme,
-    type || 'default',
-    imgType
+    type || 'default'
   )
 
   const [ useRef, useStyle, setStyle ] = useThemeHover(
@@ -125,7 +123,7 @@ export const ImageWrapper = props => {
         />
       )}
 
-      <Img
+      <Element
         ref={ useRef }
         attrs={ attrs }
         alt={ alt }

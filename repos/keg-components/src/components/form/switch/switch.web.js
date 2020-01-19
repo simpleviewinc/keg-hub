@@ -17,21 +17,25 @@ import PropTypes from 'prop-types'
  * @property {Object} ref - reference to native element
  *
  */
-const Element = React.forwardRef(({ elProps, styles, checked, ...props }, ref) => {
+const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
   return (
-    <div { ...elProps } { ...props } style={ styles.wrapper }>
-      <span style={ styles.knob } ></span>
+    <div style={ styles.wrapper }>
       <span style={ styles.slider }></span>
+      <span style={ styles.knob } ></span>
       <input
+        { ...elProps }
+        { ...props }
         type='checkbox'
         ref={ ref }
-        checked={ checked }
         style={{
-          visibility: 'hidden',
-          height: 0,
-          width: 0,
-          maxWidth: 0,
-          maxHeight: 0,
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%',
+          margin: 0,
+          opacity: 0,
+          cursor: 'pointer',
         }}
       />
     </div>
@@ -44,7 +48,6 @@ export const Switch = props => (
     styleId={ `keg-web-switch` }
     { ...props }
     Element={ Element }
-    elType='web'
     isWeb={ true }
   />
 )

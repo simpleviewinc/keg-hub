@@ -64,7 +64,20 @@ const opacity = (amount, color) => {
     : isObj(color)
       ? toRgb(color, amount)
       : `rgba(${color || '0,0,0'}, ${amount})`
-} 
+}
+
+opacity.opacity100 = opacity(1)
+opacity.opacity90 = opacity(.90)
+opacity.opacity85 = opacity(.85)
+opacity.opacity75 = opacity(.75)
+opacity.opacity60 = opacity(.60)
+opacity.opacity50 = opacity(.50)
+opacity.opacity30 = opacity(.30)
+opacity.opacity25 = opacity(.25)
+opacity.opacity15 = opacity(.15)
+opacity.opacity10 = opacity(.10)
+opacity.opacity05 = opacity(.05)
+opacity.opacity00 = opacity(.00)
 
 export const colors = {
   helpers: {
@@ -77,20 +90,7 @@ export const colors = {
     default: '#64aff1',
     hover: '#1e88e5'
   },
-  opacity: {
-    solid: opacity(1),
-    opacity90: opacity(.90),
-    opacity85: opacity(.85),
-    opacity75: opacity(.75),
-    opacity60: opacity(.60),
-    opacity50: opacity(.50),
-    opacity30: opacity(.30),
-    opacity25: opacity(.25),
-    opacity15: opacity(.15),
-    opacity10: opacity(.10),
-    opacity05: opacity(.05),
-    opacity00: opacity(.00),
-  },
+  opacity,
   palette: {
     transparent: 'transparent',
     white01: '#ffffff',
@@ -109,6 +109,10 @@ export const colors = {
     blue02: '#1e88e5',
 		blue03: "#0b50f1",
 		blue04: "#0070f2",
+    green01: '#01e5cf',
+    green02: '#02b4a3',
+    green03: '#009688',
+    green04: '#005f57',
     red01: '#f44336',
 		red02: "#b10000",
   },

@@ -55,7 +55,7 @@ storiesOf('Form | Switch', module)
   .add('Default', () =>
     <StoryWrap>
 
-      <Switch onChange={ action("Select Change!") } value={ true } />
+      <Switch onChange={ action("Select Change!") } />
 
     </StoryWrap>
   )

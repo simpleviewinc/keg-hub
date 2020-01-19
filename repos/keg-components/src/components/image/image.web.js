@@ -15,7 +15,7 @@ import { ImageWrapper } from './image.wrapper'
  * @property {string} props.type - image type
  *
  */
-const Img = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
+const Element = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
   <img
     alt={ alt }
     { ...attrs }
@@ -28,8 +28,7 @@ export const Image = props => (
   <ImageWrapper
     { ...props }
     styleId={ props.styleId || `keg-web-image` }
-    imgType='web'
-    Img={ Img }
+    Element={ Element }
     isWeb={ true }
   />
 )

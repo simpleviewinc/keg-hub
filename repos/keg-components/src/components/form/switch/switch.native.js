@@ -32,7 +32,6 @@ export const Switch = props => (
     styleId={ `keg-native-switch` }
     { ...props }
     Element={ Element }
-    elType='native'
   />
 )
 

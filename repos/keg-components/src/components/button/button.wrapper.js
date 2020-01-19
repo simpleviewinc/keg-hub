@@ -4,8 +4,8 @@ import { get } from 'jsutils'
 import { getPressHandler, getActiveOpacity } from '../../utils'
 import PropTypes from 'prop-types'
 
-const buildStyles = (styleId, theme, type, elType) => {
-  styleId = styleId || `keg-${elType}-button`
+const buildStyles = (styleId, theme, type) => {
+  styleId = styleId || `keg-button`
 
   const normal = theme.get(
     `${styleId}-${type || 'default'}`,
@@ -28,7 +28,6 @@ export const ButtonWrapper = props => {
   
   const {
     Element,
-    elType,
     children,
     disabled,
     isWeb,
@@ -43,7 +42,7 @@ export const ButtonWrapper = props => {
     ...elProps
   } = props
   
-  const builtStyles = buildStyles(styleId, theme, type, elType)
+  const builtStyles = buildStyles(styleId, theme, type)
 
   const [ hoverRef, hoverStyle ] = useThemeHover(
     builtStyles.normal,

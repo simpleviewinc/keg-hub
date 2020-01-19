@@ -16,7 +16,7 @@ import { ImageWrapper } from './image.wrapper'
  * @property {string} props.type - image type
  *
  */
-const Img = React.forwardRef(({ attrs, src, ...props }, ref) => (
+const Element = React.forwardRef(({ attrs, src, ...props }, ref) => (
   <RNImage
     { ...attrs }
     { ...props }
@@ -28,8 +28,7 @@ export const Image = props => (
   <ImageWrapper
     { ...props }
     styleId={ props.styleId || `keg-native-image` }
-    imgType='native'
-    Img={ Img }
+    Element={ Element }
   />
 )
 

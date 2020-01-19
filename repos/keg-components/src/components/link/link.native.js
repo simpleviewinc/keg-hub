@@ -41,7 +41,6 @@ const Link = props => (
   <LinkWrapper
     styleId={ `keg-native-link` }
     { ...props }
-    elType={ 'native' }
     Element={ Element }
   />
 )

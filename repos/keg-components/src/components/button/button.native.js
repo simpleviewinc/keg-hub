@@ -33,7 +33,6 @@ export const Button = props => (
     styleId={ `keg-native-button` }
     { ...props }
     Element={ Element }
-    elType='native'
   />
 )
 

@@ -32,7 +32,6 @@ export const Select = props => (
     styleId={ `keg-native-select` }
     { ...props }
     Element={ Slt }
-    elType='native'
   />
 )
 

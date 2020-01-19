@@ -14,7 +14,7 @@ export const Option = props => {
   const { label, children, text, value } = props
 
   return (
-    <SelectOption 
+    <SelectOption
       label={ getVal(label, value, text) }
       value={ getVal(value, text, children, label) }
     />

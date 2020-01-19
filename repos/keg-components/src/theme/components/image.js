@@ -1,6 +1,8 @@
+import { transition } from '../transition'
+
 export const image = {
   default: {
-    transition: `opacity 0.8s ease`
+    ...transition('opacity', 0.8),
   },
   wrapper: {
     display: 'inline-flex',

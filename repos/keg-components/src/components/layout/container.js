@@ -3,6 +3,7 @@
 import React from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
+import { getPlatform, getPressHandler } from '../../utils'
 
 export const Container = args => {
   const { onPress, onClick, children, flexDir, size, style, ...props } = args
@@ -14,7 +15,7 @@ export const Container = args => {
     <View
       { ...props }
       style={{ flex, flexDirection: flex && flexDir, ...style }}
-      onPress={ onClick || onPress }
+      { ...getPressHandler(getPlatform(), onClick || onPress)  }
     >
       { children }
     </View>

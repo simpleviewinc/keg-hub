@@ -28,7 +28,6 @@ const Link = props => (
     styleId={ `keg-web-link` }
     { ...props }
     isWeb={ true }
-    elType={ 'web' }
     Element={ Element }
   />
 )

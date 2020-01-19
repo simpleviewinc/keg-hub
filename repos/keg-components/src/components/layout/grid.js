@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
-import { withTheme } from 'KegReTheme'
+import { useTheme } from 'KegReTheme'
 import { isArr, get } from 'jsutils'
 
 /**
@@ -41,7 +41,8 @@ const getChildAttrs = children => {
   )
 }
 
-export const Grid = withTheme(({ children, style, theme, ...props }) => {
+export const Grid = ({ children, style, ...props }) => {
+  const theme = useTheme()
   const { isRow, isCenter } = getChildAttrs(children)
 
   return (
@@ -58,7 +59,7 @@ export const Grid = withTheme(({ children, style, theme, ...props }) => {
       { children }
     </Container>
   )
-})
+}
 
 Grid.propTypes = {
   theme: PropTypes.object,
