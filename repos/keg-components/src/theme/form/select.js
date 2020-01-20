@@ -1,3 +1,5 @@
+import defaults from '../defaults.json'
+import { get } from 'jsutils'
 import { colors } from '../colors'
 import { padding } from '../padding'
 
@@ -13,7 +15,7 @@ export const select = {
       borderBottom: `1px solid ${colors.palette.gray03}`,
       boxSizing: 'border-box',
       fontFamily: 'inherit',
-      height: 30,
+      height: get(defaults, 'form.input.height', 35),
       fontSize: 16,
       padding: padding.size / 2,
     },

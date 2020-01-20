@@ -1,6 +1,7 @@
 import React from 'react'
 import { SwitchWrapper } from './switch.wrapper'
 import PropTypes from 'prop-types'
+import { View } from 'KegView'
 
 /**
  * Switch
@@ -19,9 +20,9 @@ import PropTypes from 'prop-types'
  */
 const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
   return (
-    <div style={ styles.wrapper }>
-      <span style={ styles.slider }></span>
-      <span style={ styles.knob } ></span>
+    <View style={ styles.wrapper }>
+      <View style={ styles.area }></View>
+      <View style={ styles.indicator } ></View>
       <input
         { ...elProps }
         { ...props }
@@ -38,7 +39,7 @@ const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
           cursor: 'pointer',
         }}
       />
-    </div>
+    </View>
   )
 })
 

@@ -10,12 +10,6 @@ const buildStyles = (styles, styleId, theme, checked, type) => {
   styleId = styleId || `keg-${type}`
   const status =  checked && 'on' || 'off'
 
-  const container = theme.get(
-    `${styleId}-${type}-container`,
-    `form.${type}.container`,
-    styles && styles.container
-  )
-
   const wrapper = theme.get(
     `${styleId}-${type}-wrapper`,
     `form.${type}.wrapper`,
@@ -51,7 +45,7 @@ const buildStyles = (styles, styleId, theme, checked, type) => {
     styles && styles.rightText
   )
 
-  return { container, wrapper, area, indicator, leftText, rightText }
+  return { wrapper, area, indicator, leftText, rightText }
 
 }
 
@@ -62,9 +56,11 @@ const setCheckedValue = (isChecked, setChecked, onChange) => {
   }
 }
 
-const SideText = ({ text, style }) => {
+const SideText = ({ text, styles, side }) => {
   return isValidComponent(text) ? text : isStr(text) && (
-    <Text style={ style } >{ text }</Text>
+    <View style={ { ...styles.wrapper, width: 'initial' } } >
+      <Text style={ styles[`${side}Text` ] } >{ text }</Text>
+    </View>
   )
 }
 
@@ -96,8 +92,8 @@ export const SwitchWrapper = props => {
 
 
   return (
-    <View style={ builtStyles.container } >
-      <SideText text={ leftText } style={ builtStyles.leftText } />
+    <>
+      <SideText text={ leftText } styles={ builtStyles } side={ 'left' } />
       <Element
         elProps={ elProps }
         disabled={ disabled }
@@ -108,8 +104,8 @@ export const SwitchWrapper = props => {
           isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)
         )}
       />
-      <SideText text={ rightText } style={ builtStyles.rightText } />
-    </View>
+      <SideText text={ rightText } styles={ builtStyles } side={ 'right' } />
+    </>
   )
 
 }

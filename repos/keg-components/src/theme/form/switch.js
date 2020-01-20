@@ -1,25 +1,52 @@
+import defaults from '../defaults.json'
 import { colors } from '../colors'
 import { transition } from '../transition'
+import { margin } from '../margin'
+import { get } from 'jsutils'
+import { sharedToggle } from './sharedToggle'
+
+const space = get(defaults, 'form.checkbox.space', 15)
+const height = get(defaults, 'form.switch.height', 20)
+const width = get(defaults, 'form.switch.width', 20)
 
 export const switchStyles = {
   wrapper: {
+    $all: {
+      marginBottom: margin.size,
+    },
     $web: {
-      height: 20,
-      width: 40,
+      outline: 'none',
+      height: height,
+      width: width * 2,
       display: 'flex',
       alignItems: 'stretch',
       position: 'relative',
+      marginTop: margin.size / 2,
+      marginBottom: margin.size + (margin.size / 2),
     }
   },
-  knob: {
+  area: {
     $web: {
-      backgroundColor: colors.palette.white03,
-      boxShadow: `0px 0px 5px ${ colors.opacity.opacity25 }`,
+      outline: 'none',
+      backgroundColor: get(colors, 'palette.gray03'),
+      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity.opacity15') }`,
+      borderRadius: get(defaults, 'form.border.radius', 5) * 2,
+      height: '70%',
+      width: '100%',
+      position: 'absolute',
+      top: 3,
+    }
+  },
+  indicator: {
+    $web: {
+      outline: 'none',
+      backgroundColor: get(colors, 'palette.white04'),
+      borderRadius: get(defaults, 'form.border.radius', 5) * 2,
+      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity.opacity15') }`,
       marginLeft: 0,
-      borderRadius: 10,
       cursor: 'pointer',
-      height: 20,
-      width: 20,
+      height: height,
+      width: width,
       position: 'absolute',
       top: 0,
       left: 0,
@@ -28,22 +55,13 @@ export const switchStyles = {
   },
   on: {
     $web: {
-      left: 20,
-      backgroundColor: colors.palette.green02,
-      boxShadow: `1px 1px 3px ${ colors.opacity.opacity50 }`,
-    }
-  },
-  slider: {
-    $web: {
-      backgroundColor: colors.palette.gray03,
-      borderRadius: 10,
-      height: '70%',
-      width: '100%',
-      position: 'absolute',
-      top: 3,
+      left: width,
+      backgroundColor: get(colors, 'palette.green02'),
+      boxShadow: `1px 1px 3px ${ get(colors, 'opacity.opacity50') }`,
     }
   },
   disabled: {
     
-  }
+  },
+  ...sharedToggle,
 }
