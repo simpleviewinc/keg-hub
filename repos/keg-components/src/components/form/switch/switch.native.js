@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { SwitchWrapper } from './switch.wrapper'
-import { Switch } from 'react-native'
+import { Switch as RNSwitch, TouchableOpacity } from 'react-native'
 
 /**
  * Switch
@@ -18,13 +18,13 @@ import { Switch } from 'react-native'
  *
  */
 const Element = React.forwardRef(({ elProps, children, ...props }, ref) => (
-  <Switch
+  <RNSwitch
     { ...elProps }
     { ...props }
     ref={ ref }
   >
     { children }
-  </Switch>
+  </RNSwitch>
 ))
 
 export const Switch = props => (

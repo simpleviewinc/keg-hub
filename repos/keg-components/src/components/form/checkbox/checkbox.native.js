@@ -4,7 +4,7 @@ import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography/text'
 
-export const CheckBox = withTheme(props => {
+export const Checkbox = withTheme(props => {
   const { theme, style, children, onClick, onPress, text, ...args } = props
   const checkboxStyle = theme.join(get(theme, ['form', 'checkbox' ]), style)
 
@@ -12,7 +12,7 @@ export const CheckBox = withTheme(props => {
 
 })
 
-CheckBox.propTypes = {
+Checkbox.propTypes = {
   style: PropTypes.object,
   text: PropTypes.string,
 }
