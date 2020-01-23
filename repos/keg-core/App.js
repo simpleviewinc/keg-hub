@@ -1,4 +1,4 @@
 import React from 'react'
-import { App } from '../../index'
+import { App } from 'SVTap'
 
 export default App

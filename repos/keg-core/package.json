@@ -1,11 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject",
+    "android": "PLATFORM=native expo start --android",
     "clean": "yarn clean:cache",
     "clean:babel": "rimraf ./node_modules/.cache/@babel",
     "clean:cache": "yarn clean:rn && yarn clean:babel",
@@ -14,7 +10,10 @@
     "clean:lock": "rimraf ./yarn.lock && rimraf ./package.lock",
     "clean:nm": "yarn cache clean && rimraf node_modules && npm cache clean --force",
     "clean:rn": "yarn cache clean && watchman watch-del-all && rimraf $TMPDIR/react-* && rimraf $TMPDIR/metro-bundler-cache-*",
-    "postinstall": "node ./core/scripts/js/postInstall.js"
+    "ios": "PLATFORM=native expo start --ios",
+    "postinstall": "node ./core/scripts/js/postInstall.js",
+    "start": "expo start",
+    "web": "PLATFORM=web expo start --web"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
