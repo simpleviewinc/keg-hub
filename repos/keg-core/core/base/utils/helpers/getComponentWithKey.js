@@ -1,5 +1,5 @@
 import * as BaseContainers from 'SVContainers'
-import { navigation } from 'SVAppConfig'
+import { navigation } from 'SVConfig'
 import { Values } from 'SVConstants'
 
 /**

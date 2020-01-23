@@ -3,17 +3,17 @@ import { connect } from 'react-redux'
 import { withTheme } from 're-theme'
 import { wordCaps } from 'jsutils'
 import { Platform } from 'react-native'
+import { Button } from 'SVComponents/button'
+import { Image } from 'SVComponents/image'
+import { Loading } from 'SVComponents/loading'
 import {
-  Button,
-  Image,
-  Loading,
   Picker,
   ScrollView,
   Text,
   View,
-} from 'SVComponents'
+} from 'SVComponents/native'
 import { tapSwitcherAction } from 'SVActions'
-import { getOrThrow } from 'SVUtils'
+import { getOrThrow } from 'SVUtils/helpers/method/getOrThrow'
 import tapList from 'SVCore/scripts/js/tapList'
 
 const logoStyles = {

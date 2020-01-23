@@ -1,7 +1,7 @@
 import { dispatch } from 'SVStore'
 import { ActionTypes } from 'SVConstants'
 import { nativeService } from 'SVServices'
-import { reloadAppAction } from 'SVActions'
+import { reloadAppAction } from 'SVActions/app/reloadAppAction'
 
 export const tapSwitcherAction = async tap => {
   // Update the tap on the backend

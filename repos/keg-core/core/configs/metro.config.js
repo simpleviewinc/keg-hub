@@ -3,24 +3,44 @@ const fs = require('fs')
 const { get } = require('jsutils')
 const tapPath = require('app-root-path').path
 const kegPath = path.resolve(__dirname, "../../")
+const package = require(path.resolve(kegPath, 'package.json'))
+
+/**
+ * Modules names to not be included in the extraNodeModules config
+ */
+const blackList = [
+  '@expo/webpack-config',
+  'react-dom',
+  'react-native-web',
+  'react-router-dom',
+  're-theme',
+]
+
+/**
+ * Pulls in the package.json dependencies and adds them to the extraNodeModules key
+ * Any modules defined in the blackList array will not be included ( i.e. web packages )
+ *
+ * @returns {Object} - Build node modules paths
+ */
+const extraNodeModules = () => {
+  return Object.keys(package.dependencies).reduce((nodeModules, name) => {
+    blackList.indexOf(name) === -1 &&
+    (nodeModules[name] = path.resolve(kegPath, 'node_modules', name))
+
+    return nodeModules
+  }, {})
+}
 
 /**
  * Builds metro config, adds taps node_modules, and taps folder
  * Checks if the node_module exists before adding
- * @param  { string } rootPath - path to root of zr-mobile-keg
- * @return { object } - metro config object
+ * @param  {string} rootPath - path to root of zr-mobile-keg
+ * @return {Object} - metro config object
  */
 const buildMetroConfig = rootPath => {
   return {
     resolver: {
-      extraNodeModules: {
-        expo: path.resolve(kegPath, "node_modules/expo"),
-        react: path.resolve(kegPath, "node_modules/react"),
-        "react-native": path.resolve(kegPath, "node_modules/react-native"),
-        "@babel/core": path.resolve(kegPath, "node_modules/@babel/core"),
-        "@babel/runtime": path.resolve(kegPath, "node_modules/@babel/runtime"),
-        "babel-preset-expo": path.resolve(kegPath, "node_modules/babel-preset-expo"),
-      },
+      extraNodeModules: extraNodeModules(),
     },
     projectRoot: kegPath,
     resetCache: true,

@@ -1,5 +1,5 @@
 import { nativeModels, networkResponseModel } from 'SVModels'
-import { networkRequest } from 'SVServices'
+import { networkRequest } from 'SVServices/networkRequest'
 import { logData } from 'jsutils'
 
 const { routes, server } = nativeModels

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'SVComponents'
+import { View } from 'SVComponents/native'
 import { withTheme } from 're-theme'
 
 export const ListItem = withTheme(props => {

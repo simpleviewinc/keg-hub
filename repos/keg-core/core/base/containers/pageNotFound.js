@@ -1,6 +1,6 @@
 import React from 'react'
 import { withTheme } from 're-theme'
-import { View, Text } from 'SVComponents'
+import { View, Text } from 'SVComponents/native'
 
 const stylesCenter = {
   justifyContent: 'center',

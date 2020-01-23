@@ -1,7 +1,7 @@
 import React from 'react'
 import { withTheme } from 're-theme'
 import PropTypes from 'prop-types'
-import { View } from 'SVComponents'
+import { View } from 'SVComponents/native'
 import { Button as RNButton } from 'react-native'
 import { get } from 'jsutils'
 
