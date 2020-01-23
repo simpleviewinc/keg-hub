@@ -1,0 +1,43 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "clean:rn": "yarn cache clean && watchman watch-del-all && rimraf $TMPDIR/react-* && rimraf $TMPDIR/metro-bundler-cache-*",
+    "postinstall": "node ./core/scripts/js/postInstall.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/runtime": "^7.8.3",
+    "@expo/webpack-config": "^0.10.11",
+    "app-root-path": "^3.0.0",
+    "axios": "^0.19.2",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-preset-expo": "~8.0.0",
+    "expo": "~36.0.0",
+    "fs-extra": "^8.1.0",
+    "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "moment": "2.24.0",
+    "moment-timezone": "0.5.25",
+    "prop-types": "15.7.2",
+    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git#useTheme-hook-and-examples",
+    "react": "~16.9.0",
+    "react-dom": "~16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-web": "~0.11.7",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-router-native": "^5.1.2",
+    "redux": "4.0.1",
+    "redux-devtools-extension": "2.13.8",
+    "rimraf": "^3.0.0",
+    "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#ZEN-98-integrate-expo",
+    "webpack-merge": "^4.2.2"
+  },
+  "devDependencies": {},
+  "private": true
+}

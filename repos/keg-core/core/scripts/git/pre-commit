@@ -1,0 +1,2 @@
+echo "Formatting code..."
+yarn format

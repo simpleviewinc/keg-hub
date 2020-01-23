@@ -1,0 +1,144 @@
+{
+  "name": "SVKeg",
+  "displayName": "SVKeg",
+  "expo": {
+    "name": "kegexpo",
+    "slug": "kegexpo",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  },
+  "navigation": {
+    "containerMaps": [
+      {
+        "key": "root",
+        "container": "AppContainer"
+      }
+    ] 
+  },
+  "tapResolver": {
+    "paths": {
+      "temp": "./temp",
+      "baseTap": "./core/base",
+      "tapAssets": "assets",
+      "externalTaps": "",
+      "localTaps": "../../../",
+      "folderRootFile": "index"
+    },
+    "inheritance": [],
+    "extensions": {
+      "assets": [
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".ttf"
+      ],
+      "resolve": [
+        ".web.js",
+        ".native.js",
+        ".ios.js",
+        ".android.js",
+        ".js",
+        ".json",
+        ".sqlite",
+        ".ttf"
+      ]
+    },
+    "aliases": {
+      "nameSpace": "SV",
+      "root": {
+        "AppConfig": "app.json",
+        "Base": "core/base",
+        "Core": "core",
+        "Mocks": "core/mocks"
+      },
+      "base": {
+        "Daos": "daos",
+        "Native": "native",
+        "Store": "store"
+      },
+      "dynamic": {
+        "Actions": "actions",
+        "Assets": "assets",
+        "Components": "components",
+        "Containers": "containers",
+        "Constants": "constants",
+        "Navigation": "navigation",
+        "Models": "models",
+        "Reducers": "reducers",
+        "Base": "",
+        "Services": "services",
+        "Screens": "containers/screens",
+        "Store": "store",
+        "Theme": "theme",
+        "Utils": "utils"
+      },
+      "web": {
+        "^react-native$": "react-native-web",
+        "react-native-svg": "react-native-svg-web",
+        "react-router-native": "react-router-dom"
+      },
+      "native": {}
+    },
+    "babel": {
+      "web": {
+        "presets": [ "babel-preset-expo" ],
+        "plugins": [[ "react-native-web", { "commonjs": true } ]]
+      },
+      "native": {
+        "presets": [ "babel-preset-expo" ],
+        "plugins": []
+      }
+    }
+  },
+  "keg": {
+    "versions": {
+      "development": "1.0.0",
+      "production": "1.0.0",
+      "qa": "1.0.0",
+      "staging": "1.0.0"
+    },
+    "paths": {
+      "buildConfig": "core/configs/build.config.js",
+      "webServerConfig": "core/configs/next.config.js",
+      "nativeServerConfig": false,
+      "exportFolder": "builds"
+    },
+    "web": {
+      "type": "next",
+      "port": 8082
+    },
+    "native": {
+      "type": "metro",
+      "host": "http://localhost",
+      "port": 9090,
+      "log": true,
+      "command": {
+        "cmd": "react-native",
+        "args": [ "start", "--port", "8081" ]
+      }
+    }
+  }
+}
