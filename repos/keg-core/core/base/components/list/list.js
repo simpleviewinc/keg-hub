@@ -1,5 +1,5 @@
 import React from 'react'
-import { List as MList } from 'material-bread'
+import { View } from 'SVComponents'
 import { withTheme } from 're-theme'
 import { isObj, checkCall } from 'jsutils'
 
@@ -12,9 +12,9 @@ export const List = withTheme(props => {
   )
 
   return (
-    <MList style={listStyles}>
+    <View style={listStyles}>
       { checkCall(buildItems, props) }
       { children }
-    </MList>
+    </View>
   )
 })

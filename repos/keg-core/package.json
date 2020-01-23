@@ -6,6 +6,13 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
+    "clean": "yarn clean:cache",
+    "clean:babel": "rimraf ./node_modules/.cache/@babel",
+    "clean:cache": "yarn clean:rn && yarn clean:babel",
+    "clean:dev": "yarn clean:rn && yarn clean:babel && yarn clean:nm && yarn install",
+    "clean:full": "rimraf yarn.lock && yarn clean:dev",
+    "clean:lock": "rimraf ./yarn.lock && rimraf ./package.lock",
+    "clean:nm": "yarn cache clean && rimraf node_modules && npm cache clean --force",
     "clean:rn": "yarn cache clean && watchman watch-del-all && rimraf $TMPDIR/react-* && rimraf $TMPDIR/metro-bundler-cache-*",
     "postinstall": "node ./core/scripts/js/postInstall.js"
   },
@@ -29,14 +36,14 @@
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-web": "~0.11.7",
+    "react-redux": "^7.1.3",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-router-native": "^5.1.2",
     "redux": "4.0.1",
     "redux-devtools-extension": "2.13.8",
     "rimraf": "^3.0.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#ZEN-98-integrate-expo",
-    "webpack-merge": "^4.2.2"
+    "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#ZEN-98-integrate-expo"
   },
   "devDependencies": {},
   "private": true

@@ -97,7 +97,6 @@
       },
       "web": {
         "^react-native$": "react-native-web",
-        "react-native-svg": "react-native-svg-web",
         "react-router-native": "react-router-dom"
       },
       "native": {}
@@ -122,22 +121,16 @@
     },
     "paths": {
       "buildConfig": "core/configs/build.config.js",
-      "webServerConfig": "core/configs/next.config.js",
-      "nativeServerConfig": false,
       "exportFolder": "builds"
     },
-    "web": {
-      "type": "next",
-      "port": 8082
-    },
-    "native": {
-      "type": "metro",
-      "host": "http://localhost",
-      "port": 9090,
-      "log": true,
-      "command": {
-        "cmd": "react-native",
-        "args": [ "start", "--port", "8081" ]
+    "api": {
+      "web": {
+        "host": "http://localhost",
+        "port": 8082
+      },
+      "native": {
+        "host": "http://localhost",
+        "port": 9090
       }
     }
   }

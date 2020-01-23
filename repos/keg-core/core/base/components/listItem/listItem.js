@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem as MListItem } from 'material-bread'
+import { View } from 'SVComponents'
 import { withTheme } from 're-theme'
 
 export const ListItem = withTheme(props => {
@@ -26,22 +26,8 @@ export const ListItem = withTheme(props => {
   )
 
   return (
-    <MListItem
-      actionItem={contentR}
-      disabled={disabled}
-      icon={icon}
-      leadingActionItem={contentL}
-      media={media}
-      onPress={onPress}
-      rippleProps={ripple}
-      secondaryText={subText}
-      secondaryTextStyle={styles && styles.subText}
-      selected={selected}
-      style={itemStyles}
-      text={text}
-      textStyle={styles && styles.text}
-    >
+    <View onPress={onPress} style={itemStyles} >
       { children }
-    </MListItem>
+    </View>
   )
 })

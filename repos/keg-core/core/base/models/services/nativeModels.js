@@ -3,7 +3,7 @@ import { Values } from 'SVConstants'
 import AppConfig from 'SVAppConfig'
 
 const {
-  keg: { native },
+  keg: { api: { native } },
 } = AppConfig
 const { HttpMethods } = Values
 

@@ -3,24 +3,27 @@
 const path = require('path')
 const tapPath = require('app-root-path').path
 const kegPath = path.join(__dirname, '../../')
-const babelConfig = require(path.join(kegPath, './babel.config'))()
-const mergeWebpack = require('webpack-merge')
-const expoConfig = require('@expo/webpack-config')
-const { NODE_ENV } = process.env
-
-const buildConfig = (ootDir, env, argv) => {
-  const config = { module: {} }
-  // Add custom webpack config settings here
-  // ...
-
-  return config
-}
+const getExpoConfig = require('@expo/webpack-config')
 
 module.exports = rootDir => {
   return async (env, argv) => {
-    const expoWebpack = await expoConfig(env, argv)
+    const expoConfig = await getExpoConfig(env, argv)
 
-    return mergeWebpack(expoWebpack || {}, buildConfig(rootDir, env, argv))
+    expoConfig.module.rules.unshift({
+      test: /\.js?$/,
+      include: [
+        path.resolve(tapPath),
+      ],
+      exclude: /node_modules\/(?!(sv-keg)\/).*/,
+      loader: require.resolve('babel-loader')
+    })
+
+    expoConfig.resolve.modules = [
+      ...(expoConfig.resolve.modules || []),
+      path.resolve(kegPath, 'node_modules'),
+      path.resolve(tapPath, 'node_modules'),
+    ]
+
+    return expoConfig
   }
 }
-

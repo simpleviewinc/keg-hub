@@ -2,7 +2,7 @@ import React from 'react'
 import { withTheme } from 're-theme'
 import PropTypes from 'prop-types'
 import { View } from 'SVComponents'
-import { Button as MButton, Icon } from 'material-bread'
+import { Button as RNButton } from 'react-native'
 import { get } from 'jsutils'
 
 /**
@@ -13,7 +13,7 @@ import { get } from 'jsutils'
  * @property {String} props.theme - SVTheme
  * @property {String} props.text - button text
  * @property {String} props.type - flat, text, outlined, contained; default 'flat'
- * @property {String} props.icon - material icon name
+ * @property {String} props.icon - icon name
  * @property {Object} props.style - custom style
  * @property {Function} props.onPress - function to do when button is pressed
  * @property {String} props.textColor - text color
@@ -43,7 +43,7 @@ export const Button = withTheme(props => {
 
   return (
     <View>
-      <MButton
+      <RNButton
         ref={ref}
         icon={<Icon name={icon} />}
         text={text || 'button'}
@@ -55,7 +55,7 @@ export const Button = withTheme(props => {
         style={theme.join(buttonStyle, style)}
       >
         { children }
-      </MButton>
+      </RNButton>
     </View>
   )
 })

@@ -1,11 +1,11 @@
 import React from 'react'
-import { Appbar } from 'material-bread'
+import { View } from 'SVComponents'
 import { withTheme } from 're-theme'
 import PropTypes from 'prop-types'
 import { get } from 'jsutils'
 /**
  * Header
- * @summary Custom Header bar via material-bread. Customize the contents via 'children'
+ * @summary Custom Header bar via Customize the contents via 'children'
  *
  * @param {Object} props
  * @property {String} props.theme - SVTheme
@@ -21,9 +21,9 @@ export const Header = withTheme(props => {
   const barColor = color || get(theme, 'colors.primary.main', 'transparent')
 
   return (
-    <Appbar style={style} barType={barType || 'regular'} color={barColor}>
+    <View style={style}>
       { children }
-    </Appbar>
+    </View>
   )
 })
 

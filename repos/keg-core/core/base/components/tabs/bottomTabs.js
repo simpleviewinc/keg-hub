@@ -1,7 +1,6 @@
 import React from 'react'
 import { View } from 'SVComponents'
 import { withTheme } from 're-theme'
-import { BottomNavigation } from 'material-bread'
 import PropTypes from 'prop-types'
 
 export const BottomTabs = withTheme(props => {
@@ -17,17 +16,9 @@ export const BottomTabs = withTheme(props => {
 
   return (
     <View style={tabStyle}>
-      <BottomNavigation
-        style={{ ...theme.tabs.wrapper }}
-        backgroundColor={
-          backgroundColor || theme.tabs.wrapper.backgroundColor || 'transparent'
-        }
-        value={activeTab}
-        handleChange={onChange}
-        actionItems={actionItems}
-      >
+      <View style={{ ...theme.tabs.wrapper }} >
         { children }
-      </BottomNavigation>
+      </View>
     </View>
   )
 })
