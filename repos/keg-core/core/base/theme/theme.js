@@ -9,20 +9,18 @@ import { padding, margin, flex, layout } from 'SVTheme/layout'
 import { setDefaultTheme } from 're-theme'
 import { deepMerge } from 'jsutils'
 
-export const theme = setDefaultTheme(
-  deepMerge(
-    {
-      components,
-      colors,
-      display,
-      flex,
-      helpers,
-      join,
-      layout,
-      margin,
-      padding,
-      text,
-    },
-    tapTheme
-  )
+export const theme =   deepMerge(
+  {
+    components,
+    colors,
+    display,
+    flex,
+    helpers,
+    join,
+    layout,
+    margin,
+    padding,
+    text,
+  },
+  tapTheme
 )

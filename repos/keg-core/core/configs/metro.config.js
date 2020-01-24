@@ -2,8 +2,9 @@ const path = require('path')
 const fs = require('fs')
 const { get } = require('jsutils')
 const tapPath = require('app-root-path').path
+const tapPackage = require(path.resolve(tapPath, 'package.json'))
 const kegPath = path.resolve(__dirname, "../../")
-const package = require(path.resolve(kegPath, 'package.json'))
+const kegPackage = require(path.resolve(kegPath, 'package.json'))
 
 /**
  * Modules names to not be included in the extraNodeModules config
@@ -13,7 +14,7 @@ const blackList = [
   'react-dom',
   'react-native-web',
   'react-router-dom',
-  're-theme',
+  'sv-keg'
 ]
 
 /**
@@ -22,13 +23,14 @@ const blackList = [
  *
  * @returns {Object} - Build node modules paths
  */
-const extraNodeModules = () => {
-  return Object.keys(package.dependencies).reduce((nodeModules, name) => {
-    blackList.indexOf(name) === -1 &&
-    (nodeModules[name] = path.resolve(kegPath, 'node_modules', name))
+const extraNodeModules = (package) => {
+  return package.dependencies && Object.keys(package.dependencies)
+    .reduce((nodeModules, name) => {
+      blackList.indexOf(name) === -1 &&
+      (nodeModules[name] = path.resolve(kegPath, 'node_modules', name))
 
-    return nodeModules
-  }, {})
+      return nodeModules
+    }, {}) || {}
 }
 
 /**
@@ -40,7 +42,10 @@ const extraNodeModules = () => {
 const buildMetroConfig = rootPath => {
   return {
     resolver: {
-      extraNodeModules: extraNodeModules(),
+      extraNodeModules: {
+        ...extraNodeModules(tapPackage),
+        ...extraNodeModules(kegPackage),
+      },
     },
     projectRoot: kegPath,
     resetCache: true,
