@@ -1,5 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "version": "0.0.1",
   "scripts": {
     "android": "PLATFORM=native expo start --android",
     "clean": "yarn clean:cache",
