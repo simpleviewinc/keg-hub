@@ -2,6 +2,11 @@ import { colors } from 'SVTheme/colors'
 
 export const display = {
   content: {
+    top: {
+      display: 'flex',
+      flex: 1,
+      alignItems: 'center',
+    },
     center: {
       display: 'flex',
       flex: 1,
@@ -24,6 +29,7 @@ export const display = {
   divider: {
     width: '100%',
     backgroundColor: colors.divider,
+    height: 1,
   },
   click: {
     cursor: 'pointer',
