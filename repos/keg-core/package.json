@@ -21,6 +21,8 @@
     "web": "NODE_ENV=development PLATFORM=web expo start --web-only --dev"
   },
   "dependencies": {
+  },
+  "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/runtime": "^7.8.3",
     "@expo/webpack-config": "^0.10.11",
@@ -49,6 +51,5 @@
     "rimraf": "^3.0.0",
     "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#ZEN-98-integrate-expo"
   },
-  "devDependencies": {},
   "private": true
 }
