@@ -3,7 +3,6 @@ const path = require('path')
 const { promisify } = require('util')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
-const tapDir = require('app-root-path').path
 const kegDir = path.join(__dirname, '../../../')
 
 // Set the cmd options to ensure script is allowed to update permissions
