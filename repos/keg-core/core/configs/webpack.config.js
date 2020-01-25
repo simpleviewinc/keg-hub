@@ -4,12 +4,25 @@ const path = require('path')
 const tapPath = require('app-root-path').path
 const kegPath = path.join(__dirname, '../../')
 const getExpoConfig = require('@expo/webpack-config')
+const { NODE_ENV } = process.env
 
 module.exports = rootDir => {
   return async (env, argv) => {
-    const expoConfig = await getExpoConfig(env, argv)
 
-    expoConfig.module.rules.unshift({
+    /**
+     * Get the default expo webpack config so we can add the tap-resolver
+     */
+    const config = await getExpoConfig(env, argv)
+
+    /**
+     * Force the correct NODE_ENV for the webpack bundle
+     */
+     config.mode = NODE_ENV || 'development'
+
+    /**
+     * Setup our JS files to use the tap-resolver through babel
+     */
+    config.module.rules.unshift({
       test: /\.js?$/,
       include: [
         path.resolve(tapPath),
@@ -18,12 +31,15 @@ module.exports = rootDir => {
       loader: require.resolve('babel-loader')
     })
 
-    expoConfig.resolve.modules = [
-      ...(expoConfig.resolve.modules || []),
+    /**
+     * Ensure node_modules can be resolved for both the keg and the tap
+     */
+    config.resolve.modules = [
+      ...(config.resolve.modules || []),
       path.resolve(kegPath, 'node_modules'),
       path.resolve(tapPath, 'node_modules'),
     ]
 
-    return expoConfig
+    return config
   }
 }
