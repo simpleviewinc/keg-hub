@@ -27,29 +27,28 @@ const doYarnInstall = async () => {
  * Checks if expo and react node_modules are install
  * If not, then calls doYarnInstall
  */
-const checkForNodeModules = async () => {
-
+const checkForNodeModules = () => {
+  
+  console.log(`--- Checking for installed Keg node_modules! ---`)
   const checkModules = [
     path.join(kegDir, 'node_modules/expo'),
     path.join(kegDir, 'node_modules/react'),
     path.join(kegDir, 'node_modules/tap-resolver'),
   ]
 
-  const installed = checkModules.map(async dir =>{
-    try {
-      await fs.ensureDir(dir)
-      return true
-    }
-    catch (err) {
-      return false
-    }
-  })
-
-  installed.indexOf(false) !== -1 && doYarnInstall()
+  return checkModules.map(dir => fs.existsSync(dir))
 
 }
 
 ;(async () => {
-  await checkForNodeModules()
-  console.log(`--- Keg node_modules are installed! ---`)
+
+  const installed = checkForNodeModules()
+
+  try {
+    installed.indexOf(false) !== -1 && await doYarnInstall()
+    console.log(`--- Keg node_modules are installed! ---`)
+  }
+  catch(err){}
+
+  process.exit(0)
 })()
