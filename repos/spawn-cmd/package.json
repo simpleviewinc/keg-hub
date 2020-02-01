@@ -1,0 +1,14 @@
+{
+  "name": "spawn-cmd",
+  "version": "1.0.0",
+  "description": "Spawn child process in Node with ease",
+  "repository": "https://github.com/lancetipton/spawn-cmd",
+  "main": "index.js",
+  "author": "Lance Tipton",
+  "license": "MIT",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "tree-kill": "1.2.1"
+  }
+}
