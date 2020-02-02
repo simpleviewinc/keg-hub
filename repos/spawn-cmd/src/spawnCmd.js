@@ -1,7 +1,39 @@
-const { isArr, get, checkCall } = require('jsutils')
+const { isArr, get, checkCall, isFunc } = require('jsutils')
 const rootDir = require('app-root-path').path
 const { errorHandler } = require('./utils')
-const { create, kill, isFunc } = require('./childProcess')
+const { create, kill } = require('./childProcess')
+
+const defEvents = (config, res, rej) => ({
+  onStdOut: (data, procId) => {
+    const onOut = get(config, 'onStdOut')
+    isFunc(onOut)
+      ? onOut(data, procId)
+      : console.log(data)
+  },
+  onStdErr: (err, procId) => {
+    const onErr = get(config, 'onStdErr')
+    isFunc(onErr)
+      ? onErr(err, procId)
+      : (() => {
+        errorHandler(err)
+        kill(procId)
+      })()
+  },
+  onError: (err, procId) => {
+    const onErr = get(config, 'onError')
+    isFunc(onErr)
+      ? onErr(err, procId)
+      : (() => {
+        errorHandler(err)
+        kill(procId)
+      })()
+  },
+  onExit: (exitCode, procId) => {
+    checkCall(get(config, 'onExit'), exitCode, procId)
+    kill(procId)
+    res(exitCode)
+  }
+})
 
 /**
  * Ensures the args Array is an Array
@@ -51,32 +83,7 @@ module.exports = (cmd, config, cwd) => {
     create({
       ...config,
       ...checkExtraArgs(cmd, get(config, 'args', [])),
-      onStdOut: (...data) => {
-        console.log(...data)
-        checkCall(get(config, 'onStdOut'), ...data)
-      },
-      onStdErr: (err, procId) => {
-        const onErr = get(config, 'onStdErr')
-        isFunc(onErr)
-          ? onErr(err, procId)
-          : (() => {
-            errorHandler(err)
-            kill(procId)
-          })()
-      },
-      onError: (err, procId) => {
-        const onErr = get(config, 'onError')
-        isFunc(onErr)
-          ? onErr(err, procId)
-          : (() => {
-            errorHandler(err)
-            kill(procId)
-          })()
-      },
-      onExit: (exitCode, procId) => {
-        checkCall(get(config, 'onExit'), exitCode, procId)
-        res(exitCode)
-      },
+      ...defEvents(config, res, rej),
       options: {
         env: process.env,
         cwd: cwd,

@@ -4,7 +4,7 @@ const killProc = require('tree-kill')
 const rootDir = require('app-root-path').path
 const { exitError, errorHandler } = require('./utils')
 const { logData, mapObj, checkCall, deepMerge } = require('jsutils')
-
+const NO_OP = () => {}
 /**
  * Cache to hold child processes
 */
@@ -43,7 +43,7 @@ const spawnOpts = {
   uid: process.getuid(),
   env: process.env,
   cwd: rootDir,
-  stdio: 'inherit',
+  stdio: 'pipe',
 }
 
 /**
@@ -65,7 +65,8 @@ const defEvents = {
   onExit: defKillProc,
   onStdErr: defKillProc,
   onError: defKillProc,
-  onStdOut: logData
+  onStdOut: logData,
+  onClose: NO_OP
 }
 const evtWrap = (cb, procId, event) => (data => checkCall(cb, data, procId))
 
@@ -81,20 +82,24 @@ const evtWrap = (cb, procId, event) => (data => checkCall(cb, data, procId))
  * @returns {void}
  */
 const addEvents = (procId, events, child) => {
+
   const cbEvents = { ...defEvents, ...events }
 
   child = child || get(procId)
   if (!child) return logData(`No child process found with ID: ${procId}`)
 
-  processes[procId].on('exit', evtWrap(cbEvents.onExit, procId, 'exit'))
-    
-  processes[procId].on('error', evtWrap(cbEvents.onError, procId, 'error'))
+  child.on('exit', evtWrap(cbEvents.onExit, procId, 'exit'))
 
-  processes[procId].stdout &&
-    processes[procId].stdout.on('data', evtWrap(cbEvents.onStdOut, procId, 'stdout'))
+  child.on('close',  evtWrap(cbEvents.onClose, procId, 'close'))
 
-  processes[procId].stderr &&
-    processes[procId].stderr.on('data', evtWrap(cbEvents.onStdErr, procId, 'stderr'))
+  child.on('error', evtWrap(cbEvents.onError, procId, 'error'))
+
+  child.stdout &&
+    child.stdout.on('data', evtWrap(cbEvents.onStdOut, procId, 'stdout'))
+
+  child.stderr &&
+    child.stderr.on('data', evtWrap(cbEvents.onStdErr, procId, 'stderr'))
+
 }
 
 /**
