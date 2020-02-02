@@ -6,9 +6,33 @@
   "main": "index.js",
   "author": "Lance Tipton",
   "license": "MIT",
+  "scripts": {
+    "test": "NODE_ENV=test jest --no-cache --verbose"
+  },
   "dependencies": {
     "app-root-path": "^3.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "tree-kill": "1.2.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.js?(x)"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/src/index.js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx",
+      "es6"
+    ],
+    "globals": {
+      "__DEV__": true
+    },
+    "testEnvironment": "node"
   }
 }

@@ -1,7 +1,7 @@
-const { isArr } = require('jsutils')
+const { isArr, get, checkCall } = require('jsutils')
 const rootDir = require('app-root-path').path
 const { errorHandler } = require('./utils')
-const { create } = require('./childProcess')
+const { create, kill, isFunc } = require('./childProcess')
 
 /**
  * Ensures the args Array is an Array
@@ -44,16 +44,43 @@ const checkExtraArgs = (cmd, args) => {
  *
  * @returns {Promise} - resolves when the spawned process resolves
  */
-module.exports = (cmd, args, cwd) => {
-  cwd = cwd || rootDir
+module.exports = (cmd, config, cwd) => {
+  cwd = cwd || get(config, 'cwd', rootDir)
 
   return new Promise((res, rej) => {
     create({
-      ...checkExtraArgs(cmd, args || []),
-      onExit: () => res(true),
+      ...config,
+      ...checkExtraArgs(cmd, get(config, 'args', [])),
+      onStdOut: (...data) => {
+        console.log(...data)
+        checkCall(get(config, 'onStdOut'), ...data)
+      },
+      onStdErr: (err, procId) => {
+        const onErr = get(config, 'onStdErr')
+        isFunc(onErr)
+          ? onErr(err, procId)
+          : (() => {
+            errorHandler(err)
+            kill(procId)
+          })()
+      },
+      onError: (err, procId) => {
+        const onErr = get(config, 'onError')
+        isFunc(onErr)
+          ? onErr(err, procId)
+          : (() => {
+            errorHandler(err)
+            kill(procId)
+          })()
+      },
+      onExit: (exitCode, procId) => {
+        checkCall(get(config, 'onExit'), exitCode, procId)
+        res(exitCode)
+      },
       options: {
         env: process.env,
         cwd: cwd,
+        ...get(config, 'options', {}),
       },
     })
   })
