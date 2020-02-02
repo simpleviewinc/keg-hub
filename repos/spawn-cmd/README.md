@@ -3,7 +3,7 @@
 
 ### Dependencies
 * [app-root-path](https://github.com/inxilpro/node-app-root-path)
-* [jsutils](git+https://github.com/lancetipton/jsutils.git)
+* [jsutils](https://github.com/lancetipton/jsutils)
 * [tree-kill](https://github.com/pkrumins/node-tree-kill)
 
 ## Install
@@ -56,4 +56,33 @@
           cwd: rootDir, // Project root directory, NOT spawn-cmd directory
           stdio: 'inherit',
         }
+      ```
+
+### Extra Command
+ **asyncCmd**
+  * Extra command that wraps around nodes `child_process.exec`
+  * Makes it a promise wrapped in a try/catch
+  * Also adds the commands exit code
+  * Promise resolves consistently
+  * Example => 
+      ```js
+        const { asyncCmd } = require('spawn-cmd')
+        
+        ;(()=>{
+
+          const { error, data, exitCode } = await asyncCmd('echo test')
+
+          // String output of stderr
+          console.log(error)
+
+          // String output of stdout
+          console.log(data)
+
+          // Numbered exit code from the command
+          // 0 === success, anything else is exit from error
+          console.log(exitCode)
+
+        })()
+        
+
       ```
