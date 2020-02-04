@@ -1,9 +1,7 @@
-import { isFunc } from './method'
-
 /** @module string */
-const { mapEntries, isObj } = require('./object')
-
 'use strict'
+
+import { isFunc } from './method'
 
 /**
  * Builds a string path from passed in args ( i.e. path/to/thing ).
