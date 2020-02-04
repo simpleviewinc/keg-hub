@@ -21,15 +21,27 @@ require("core-js/modules/es.array.slice");
 
 require("core-js/modules/es.date.to-string");
 
+require("core-js/modules/es.function.bind");
+
+require("core-js/modules/es.function.name");
+
 require("core-js/modules/es.object.define-property");
 
+require("core-js/modules/es.object.keys");
+
+require("core-js/modules/es.object.set-prototype-of");
+
 require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.reflect.construct");
 
 require("core-js/modules/es.regexp.exec");
 
 require("core-js/modules/es.regexp.to-string");
 
 require("core-js/modules/es.string.iterator");
+
+require("core-js/modules/es.string.match");
 
 require("core-js/modules/es.string.replace");
 
@@ -40,7 +52,7 @@ require("core-js/modules/web.timers");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uuid = exports.limbo = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = exports.applyToFunc = exports.pipeline = void 0;
+exports.match = exports.cloneFunc = exports.uuid = exports.limbo = exports.throttleLast = exports.throttle = exports.memorize = exports.isFunc = exports.doIt = exports.debounce = exports.eitherFunc = exports.checkCall = exports.applyToFunc = exports.pipeline = void 0;
 
 var _array = require("./array");
 
@@ -48,11 +60,21 @@ var _number = require("./number");
 
 var _object = require("./object");
 
+var _ext = require("./ext");
+
 var _this = void 0;
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -70,6 +92,17 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+/**
+ * Function for making repeated nested function calls (the 'pipeline') succinct. Passes "item" into
+ * <br> the first function (as its first argument), takes its result and passes that into the next function, and repeats.
+ * <br> Continues until no functions remain, at which point it returns the value returned by the last function.
+ * <br>  - you can also pass in an array in place of a function to specify a function to be called with some arguments. E.g.: [foo, 2, 3] would return foo(item, 2, 3)
+ * @example: pipeline(1, addFour, subtract3, (x) => x * x) // would return 4
+ * @function
+ * @param {* | Function} item - the starting input. If it is a function, it will be executed immediately and the result will be piped into the remaining functions.
+ * @param {...Function} functions 
+ * @returns the final result of calling the pipeline of functions , starting with item as input
+ */
 var pipeline = function pipeline(item) {
   for (var _len = arguments.length, functions = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     functions[_key - 1] = arguments[_key];
@@ -254,6 +287,7 @@ var isFunc = function isFunc(func) {
  * @function
  * @param {function} func - method to memorize output of
  * @param {function} getCacheKey - gets the key to save cached output
+ *
  * @return {function} memorized function with cache
  */
 
@@ -262,14 +296,14 @@ exports.isFunc = isFunc;
 
 var memorize = function memorize(func, getCacheKey) {
   var limit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-  if (!isFunc(func) || getCacheKey && !isFunc(getCacheKey)) throw new TypeError('Expected a function');
+  if (!isFunc(func) || getCacheKey && !isFunc(getCacheKey)) return console.error('Error: Expected a function', func, getCacheKey);
 
   var _memorized = function memorized() {
     var cache = _memorized.cache;
     var key = getCacheKey ? getCacheKey.apply(this, arguments) : arguments[0];
     if ((0, _object.hasOwn)(cache, key)) return cache[key];
     var result = func.apply(this, arguments);
-    !(0, _number.isNum)(limit) || Object.key(cache).length < limit ? cache[key] = result : _memorized.cache = _defineProperty({}, key, result);
+    (0, _number.isNum)(limit) && Object.keys(cache).length < limit ? cache[key] = result : _memorized.cache = _defineProperty({}, key, result);
     return result;
   };
 
@@ -279,7 +313,7 @@ var memorize = function memorize(func, getCacheKey) {
     getCacheKey = undefined;
     _memorized.cache = undefined;
     _memorized.destroy = undefined;
-    _memorized = (_readOnlyError("memorized"), undefined);
+    _memorized = undefined;
   };
 
   return _memorized;
@@ -390,5 +424,143 @@ exports.limbo = limbo;
 var uuid = function uuid(a) {
   return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
 };
+/**
+ * Clones a function using the Function constructor and calling toString on the passed in function
+ * @example
+ * const func = () => { console.log('test') }
+ * const clone = cloneFunc(func)
+ * // clone !== func
+ * @function
+ * @param {function} func - function to clone
+ *
+ * @returns {Object} cloned function
+ */
+
 
 exports.uuid = uuid;
+
+var cloneFunc = function cloneFunc(func) {
+  var funcRef = func;
+
+  var funcWrap = function funcWrap() {
+    for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+      args[_key7] = arguments[_key7];
+    }
+
+    return _construct(funcRef, args);
+  };
+
+  var funcClone = function funcClone() {
+    for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+      args[_key8] = arguments[_key8];
+    }
+
+    return func instanceof funcClone ? funcWrap.apply(null, args) : funcRef.apply(func, args);
+  };
+
+  for (var key in func) {
+    func.hasOwnProperty(key) && (funcClone[key] = func[key]);
+  }
+
+  Object.defineProperty(funcClone, 'name', {
+    value: func.name,
+    configurable: true
+  });
+
+  funcClone.toString = function () {
+    return func.toString();
+  };
+
+  return funcClone;
+};
+/**
+* @function
+* Pattern matching function. Iterates through the entries,
+* which have the form [ check value or predicate, return value ], and
+* when it encounters an entry whose check value matches the matchArg
+* (or the predicate returns true when passed the matchArg), it returns
+* the return value of that entry.
+*
+* For the default case: use [ match.default, <your default value> ]
+*
+* @param {*} matchArg 
+* @param {Array} entries - the cases
+* @param {*} fallback (optional) fallback default
+* @returns the return value of the first entry with a matching check value, else null
+*
+* @example 
+* const value = 1
+* match(value,
+*  [ 1, "hello" ],
+*  [ x => x > 2, "greater" ] 
+*  [ match.default, "defaulted"]
+* ) 
+* => returns "hello"
+* 
+* @example 
+* const value = 3
+* match(value,
+*  [ 1, "hello" ],
+*  [ x => x > 2, "greater" ] 
+* ) 
+* => returns "greater"
+*
+* @example 
+* // react reducer:
+*function todoReducer(state, action) {
+*   const reducer = match(action.type,
+*       [ 'ADD-TODO', addTodo ],
+*       [ 'REMOVE-TODO', removeTodo ],
+*       [ 'UPDATE-TODO', updateTodo ],
+*       [ match.default, state ]
+*   )
+*
+*   return reducer(state, action)
+*}
+*/
+
+
+exports.cloneFunc = cloneFunc;
+
+var match = function match(matchArg) {
+  for (var _len9 = arguments.length, args = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
+    args[_key9 - 1] = arguments[_key9];
+  }
+
+  if (!args.length) return null; // check all cases and return a value if a match is found
+
+  for (var _i = 0, _args = args; _i < _args.length; _i++) {
+    var entry = _args[_i];
+
+    if (!(0, _array.isArr)(entry)) {
+      console.error("Matching case must be an entry (a 2-element array). Found: ".concat((0, _ext.typeOf)(entry)), entry);
+      break;
+    }
+
+    var _entry = _slicedToArray(entry, 2),
+        caseValueOrPredicate = _entry[0],
+        valueOnMatch = _entry[1];
+
+    if (isFunc(caseValueOrPredicate) && caseValueOrPredicate(matchArg)) return valueOnMatch;
+    if (caseValueOrPredicate === matchArg) return valueOnMatch;
+  }
+
+  return null;
+};
+/**
+ * The default case function you can use with match. Just returns true so the case value can be used.
+ * @function
+ * @example
+ * match(foo
+ *    [ 100, 'a' ],
+ *    [ 200, 'b' ],
+ *    [ match.default, 'default value' ]
+ * )
+ */
+
+
+exports.match = match;
+
+match["default"] = function () {
+  return true;
+};

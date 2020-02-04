@@ -1,4 +1,5 @@
-"use strict";
+/** @module string */
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -7,18 +8,11 @@ exports.isLowerCase = exports.isUpperCase = exports.wordCaps = exports.toStr = e
 
 var _method = require("./method");
 
-const _require = require('./object'),
-      mapEntries = _require.mapEntries,
-      isObj = _require.isObj;
-
-'use strict';
 /**
  * Builds a string path from passed in args ( i.e. path/to/thing ).
  * @function
  * @return {string} - built path from arguments
  */
-
-
 const buildPath = (...args) => {
   const built = args.reduce((path, arg) => {
     let str = toStr(arg);

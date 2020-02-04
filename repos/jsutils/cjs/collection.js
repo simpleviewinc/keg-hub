@@ -24,6 +24,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+/**
+ * Updates a collection by removing, getting, adding to it.
+ * @memberof collection
+ * @param {Object} obj - object to update
+ * @param {string|array} path - path to the property to update
+ * @param {*} type - value to update || type
+ * @return {*} based on update method
+ */
 const updateColl = (obj, path, type, val) => {
   const org = obj;
   if (!isColl(obj) || !obj || !path) return type !== 'set' && val || undefined; // cloneDeep so we don't modify the reference
@@ -196,6 +204,7 @@ const deepClone = (obj, hash = new WeakMap()) => {
   if (obj instanceof Set) return new Set(obj);
   if (hash.has(obj)) return hash.get(obj);
   if ((0, _array.isArr)(obj)) return obj.map(x => deepClone(x));
+  if ((0, _method.isFunc)(obj)) return (0, _method.cloneFunc)(obj);
   const result = obj instanceof Date ? new Date(obj) : obj instanceof RegExp ? new RegExp(obj.source, obj.flags) : !obj.constructor ? Object.create(null) : null; // if result is null, object has a constructor and wasn't an instance of Date nor RegExp
 
   if (result === null) return cloneObjWithPrototypeAndProperties(obj);

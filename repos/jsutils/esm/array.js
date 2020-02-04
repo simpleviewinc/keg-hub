@@ -9,6 +9,8 @@ require("core-js/modules/es.symbol.iterator");
 
 require("core-js/modules/es.array.filter");
 
+require("core-js/modules/es.array.flat-map");
+
 require("core-js/modules/es.array.from");
 
 require("core-js/modules/es.array.index-of");
@@ -17,9 +19,15 @@ require("core-js/modules/es.array.is-array");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.array.reduce");
+
 require("core-js/modules/es.array.sort");
 
 require("core-js/modules/es.array.splice");
+
+require("core-js/modules/es.array.unscopables.flat-map");
 
 require("core-js/modules/es.date.to-string");
 
@@ -38,9 +46,23 @@ require("core-js/modules/web.dom-collections.iterator");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArr = exports.randomArr = void 0;
+exports.flatMap = exports.omitRange = exports.cloneArr = exports.isArr = exports.uniqArr = exports.randomizeArr = exports.randomArr = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+var _number = require("./number");
+
+var _object = require("./object");
+
+var _method = require("./method");
+
+var _validation = require("./validation");
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -50,11 +72,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-var _require = require('./number'),
-    isNum = _require.isNum;
-
-var _require2 = require('./object'),
-    isObj = _require2.isObj;
 /**
  * Randomly selects values from a passed in array.
  * @function
@@ -65,8 +82,6 @@ var _require2 = require('./object'),
  * @param {number} amount - number of values to select from the array
  * @return {array} - randomly sorted array
  */
-
-
 var randomArr = function randomArr(arr, amount) {
   if (!isArr(arr)) return arr;
   var useAmount = amount || 1;
@@ -145,10 +160,11 @@ var isArr = function isArr(value) {
 exports.isArr = isArr;
 
 var cloneArr = function cloneArr(arr) {
-  return Array.from(_toConsumableArray(isArr(arr) && arr || isObj(arr) && Object.entries(arr) || []));
+  return Array.from(_toConsumableArray(isArr(arr) && arr || (0, _object.isObj)(arr) && Object.entries(arr) || []));
 };
 /**
  * Returns a new array with the same elements as arr, excluding `count` elements beginning at index `startIndex`
+ * @function
  * @param {Array} arr 
  * @param {Number} startIndex 
  * @param {Number} count 
@@ -158,25 +174,59 @@ var cloneArr = function cloneArr(arr) {
 exports.cloneArr = cloneArr;
 
 var omitRange = function omitRange(arr, startIndex, count) {
-  if (!isArr(arr)) {
-    console.error("omitRange expected Array. Found ".concat(_typeof(arr)));
-    return arr;
-  }
+  var _validate = (0, _validation.validate)({
+    arr: arr,
+    startIndex: startIndex,
+    count: count
+  }, {
+    arr: isArr,
+    $default: _number.isNonNegative
+  }),
+      _validate2 = _slicedToArray(_validate, 1),
+      inputIsValid = _validate2[0];
 
-  if (!isNum(startIndex) || startIndex < 0) {
-    console.error("omitRange expected non-negative startIndex. Found ".concat(startIndex));
-    return arr;
-  }
-
-  if (!isNum(count) || count < 0) {
-    console.error("omitRange expected non-negative count. Found ".concat(count));
-    return arr;
-  }
+  if (!inputIsValid) return arr;
 
   var nextArr = _toConsumableArray(arr);
 
   nextArr.splice(startIndex, count);
   return nextArr;
 };
+/**
+ * Maps each element using mapping function `mapFn`, but returns the result as a flattened array.
+ * It is equivalent to map() followed by flattening to depth 1, but flatMap is a useful shortcut,
+ * and merging both steps into one method (with one pass over the array) is slightly more efficient. 
+ * @function
+ * @example
+ * [1, 2].map(x => [x * 2]) // returns [[2], [4]]
+ * flatMap([1, 2], x => [x * 2]) // returns [2, 4]
+ * @param {Array} arr - array to map across
+ * @param {Function} mapFn - function for mapping
+ */
+
 
 exports.omitRange = omitRange;
+
+var flatMap = function flatMap(arr, mapFn) {
+  var _validate3 = (0, _validation.validate)({
+    arr: arr,
+    mapFn: mapFn
+  }, {
+    arr: isArr,
+    mapFn: _method.isFunc
+  }),
+      _validate4 = _slicedToArray(_validate3, 1),
+      inputIsValid = _validate4[0];
+
+  if (!inputIsValid) return arr; // iterate across the array, calling mapFn on each element, then flattening into final array
+
+  return arr.reduce(function (finalArr, current) {
+    var result = mapFn(current);
+    isArr(result) ? result.map(function (el) {
+      return finalArr.push(el);
+    }) : finalArr.push(result);
+    return finalArr;
+  }, []);
+};
+
+exports.flatMap = flatMap;

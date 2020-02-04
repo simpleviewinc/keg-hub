@@ -1,4 +1,5 @@
-"use strict";
+/** @module string */
+'use strict';
 
 require("core-js/modules/es.symbol");
 
@@ -43,18 +44,11 @@ exports.isLowerCase = exports.isUpperCase = exports.wordCaps = exports.toStr = e
 
 var _method = require("./method");
 
-var _require = require('./object'),
-    mapEntries = _require.mapEntries,
-    isObj = _require.isObj;
-
-'use strict';
 /**
  * Builds a string path from passed in args ( i.e. path/to/thing ).
  * @function
  * @return {string} - built path from arguments
  */
-
-
 var buildPath = function buildPath() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];

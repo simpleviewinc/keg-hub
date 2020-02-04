@@ -16,9 +16,41 @@ require("core-js/modules/es.string.replace");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toNum = exports.toInt = exports.toFloat = exports.nth = exports.isNum = exports.isInt = exports.isFloat = exports.getNums = exports.equalsNaN = void 0;
+exports.toNum = exports.toInt = exports.toFloat = exports.nth = exports.isNum = exports.isInt = exports.isFloat = exports.getNums = exports.equalsNaN = exports.isNonNegative = void 0;
 
 var _string = require("./string");
+
+/**
+ * Checks if val is a non-negative number
+ * @param {*} val 
+ * @example
+ *  isNonNegative(0) // true
+ *  isNonNegative(1) // true
+ *  isNonNegative(-1) // false
+ * @function
+ * @returns T/F - if value is non negative number
+ */
+var isNonNegative = function isNonNegative(val) {
+  return isNum(val) && val >= 0;
+};
+/**
+ * Checks if a value is NaN.
+ * @example
+ * equalsNaN(NaN)
+ * // Returns true
+ * @example
+ * equalsNaN(1)
+ * // Returns false
+ * @example
+ * equalsNaN('')
+ * // Returns false
+ * @function
+ * @param {number} val - value to check if is NaN
+ * @return {boolean} T/F - if value is a number
+ */
+
+
+exports.isNonNegative = isNonNegative;
 
 var equalsNaN = function equalsNaN(val) {
   return typeof val === 'number' && val != val;

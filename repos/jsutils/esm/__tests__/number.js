@@ -111,4 +111,17 @@ describe('/number', function () {
       expect(Num.toNum('Total: 56%')).toEqual(56);
     });
   });
+  describe('isNonNegative', function () {
+    it('should handle integers and floats', function () {
+      expect(Num.isNonNegative(0)).toEqual(true);
+      expect(Num.isNonNegative(1)).toEqual(true);
+      expect(Num.isNonNegative(-1)).toEqual(false);
+      expect(Num.isNonNegative(0.123)).toEqual(true);
+      expect(Num.isNonNegative(-0.123)).toEqual(false);
+    });
+    it('should handle other types', function () {
+      expect(Num.isNonNegative('hello')).toEqual(false);
+      expect(Num.isNonNegative([])).toEqual(false);
+    });
+  });
 });

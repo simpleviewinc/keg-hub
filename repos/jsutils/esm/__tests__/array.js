@@ -6,6 +6,8 @@ require("core-js/modules/es.symbol.description");
 
 require("core-js/modules/es.symbol.iterator");
 
+require("core-js/modules/es.array.flat-map");
+
 require("core-js/modules/es.array.for-each");
 
 require("core-js/modules/es.array.from");
@@ -17,6 +19,8 @@ require("core-js/modules/es.array.is-array");
 require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.array.unscopables.flat-map");
 
 require("core-js/modules/es.date.to-string");
 
@@ -212,6 +216,25 @@ describe('/array', function () {
         expect(result).toEqual(['x']);
         expect(console.error).toBeCalled();
       });
+    });
+  });
+  describe('flatMap', function () {
+    it('should return a flattened, mapped array', function () {
+      var arr = [1, 2, 3];
+      var result = Arr.flatMap(arr, function (x) {
+        return [x * x];
+      }); // a regular .map call with the function above would return [ [1], [4], [9] ], but flatMap should flatten:
+
+      expect(result).toEqual([1, 4, 9]);
+    });
+    it('should ignore flattening when encountering anything other than an array', function () {
+      var arr = [1, 2, 3]; // so the mapping function just returns 'hello' for 2. This requires no flattening, whereas the other elements of the array did require flattening
+      // this test just makes sure it doesn't error out trying to flatten a non-array
+
+      var result = Arr.flatMap(arr, function (x) {
+        return x === 2 ? 'hello' : [x * 3];
+      });
+      expect(result).toEqual([3, 'hello', 9]);
     });
   });
 });

@@ -1,11 +1,20 @@
-/** @module validation */
+"use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.validate = void 0;
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? Object(arguments[i]) : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/** @module validation */
 const OPTIONS = {
   SHOULD_LOG: true,
   SHOULD_THROW: false,
   LOG_PREFIX: null
-}
-
+};
 /** 
  * @function
  *  Validates each key-value entry in argObj using the validator functions in validators with matching keys. 
@@ -29,29 +38,35 @@ const OPTIONS = {
  *    console.log(isValid) // false
  *    console.log(results.elements.success) // false
  */
-export const validate = (argObj, validators={}, { logs=OPTIONS.SHOULD_LOG, throws=OPTIONS.SHOULD_THROW, prefix=OPTIONS.LOG_PREFIX }={}) => {
-  const validationCaseEntries = Object.entries(argObj)
 
-  // if no default or custom validator set for an arg, just assert it is valid
-  const defaultValidator = () => true
+const validate = (argObj, validators = {}, {
+  logs = OPTIONS.SHOULD_LOG,
+  "throws": throws = OPTIONS.SHOULD_THROW,
+  prefix = OPTIONS.LOG_PREFIX
+} = {}) => {
+  const validationCaseEntries = Object.entries(argObj); // if no default or custom validator set for an arg, just assert it is valid
 
-  // validate each argument
-  const validationResults = validationCaseEntries.map(
-    ([argName, argValue]) => validateArgument(
-      argName,
-      argValue,
-      validators[argName] || validators['$default'] || defaultValidator
-    )
-  )
+  const defaultValidator = () => true; // validate each argument
 
-  // reduce the argument validation results into a single object of form { success, cases }.
+
+  const validationResults = validationCaseEntries.map(([argName, argValue]) => validateArgument(argName, argValue, validators[argName] || validators['$default'] || defaultValidator)); // reduce the argument validation results into a single object of form { success, cases }.
   // success is true if all arguments passed their validators. Cases holds each argument's validation results.
-  const reduceCases = (total, next) => validationReducer(total, next, { logs, throws, prefix })
-  const { success, cases } = validationResults.reduce(reduceCases, { success: true, cases: {} })
 
-  return [ success, cases ]
-}
+  const reduceCases = (total, next) => validationReducer(total, next, {
+    logs,
+    "throws": throws,
+    prefix
+  });
 
+  const _validationResults$re = validationResults.reduce(reduceCases, {
+    success: true,
+    cases: {}
+  }),
+        success = _validationResults$re.success,
+        cases = _validationResults$re.cases;
+
+  return [success, cases];
+};
 /**
  * @function
  * If you need to configure validation properties globally, you can do so here. These are overridden by the validate options arguments,
@@ -61,28 +76,38 @@ export const validate = (argObj, validators={}, { logs=OPTIONS.SHOULD_LOG, throw
  * @param {Boolean} options.throws - indicates validate() should throw an error when a case fails
  * @param {String} options.prefix - a prefix to any console error logs or to messages of errors thrown
  */
-validate.setOptions = ({ logs, throws, prefix }) => {
-  if (logs !== undefined) {
-    OPTIONS.SHOULD_LOG = logs
-  }
-  if (throws !== undefined) {
-    OPTIONS.SHOULD_THROW = throws
-  }
-  if (prefix !== undefined) {
-    OPTIONS.LOG_PREFIX = prefix
-  }
-}
 
+
+exports.validate = validate;
+
+validate.setOptions = ({
+  logs,
+  "throws": throws,
+  prefix
+}) => {
+  if (logs !== undefined) {
+    OPTIONS.SHOULD_LOG = logs;
+  }
+
+  if (throws !== undefined) {
+    OPTIONS.SHOULD_THROW = throws;
+  }
+
+  if (prefix !== undefined) {
+    OPTIONS.LOG_PREFIX = prefix;
+  }
+};
 /**
  * @function
  * Resets the global validation options to their defaults
  */
-validate.resetOptions = () => {
-  OPTIONS.SHOULD_LOG = true
-  OPTIONS.SHOULD_THROW = false
-  OPTIONS.LOG_PREFIX = null
-}
 
+
+validate.resetOptions = () => {
+  OPTIONS.SHOULD_LOG = true;
+  OPTIONS.SHOULD_THROW = false;
+  OPTIONS.LOG_PREFIX = null;
+};
 /**
  * Helper for `validate`. Validates a single value given a validator
  * @param {*} key 
@@ -90,43 +115,44 @@ validate.resetOptions = () => {
  * @param {Function} validator 
  * @returns {Object} of form { success, reason }
  */
+
+
 const validateArgument = (key, value, validator) => {
-  const success = validator(value)
-
-  // if validator is a named function, use its name. If it is an inline anonymous arrow function, its name
+  const success = validator(value); // if validator is a named function, use its name. If it is an inline anonymous arrow function, its name
   // matches the argument key and it has no useful/descriptive name, so just stringify it
-  const shouldStringifyValidator = !validator.name || (validator.name === key) || (validator.name === '$default')
-  const validatorString = shouldStringifyValidator ? validator.toString() : validator.name
 
-  const reason = success
-    ? null
-    : [
-      `Argument "${key}" with value `, 
-      value, 
-      ` failed validator: ${validatorString}.`
-    ] 
-   
-  return { success, key, value, validator, reason }
-}
-
+  const shouldStringifyValidator = !validator.name || validator.name === key || validator.name === '$default';
+  const validatorString = shouldStringifyValidator ? validator.toString() : validator.name;
+  const reason = success ? null : [`Argument "${key}" with value `, value, ` failed validator: ${validatorString}.`];
+  return {
+    success,
+    key,
+    value,
+    validator,
+    reason
+  };
+};
 /**
  * Helper for `validate`. Reduces validations into a single object of form { success, cases }
  * @param {*} finalResult 
  * @param {*} nextValidation 
  */
-const validationReducer = (finalResult, nextValidation, { logs, throws, prefix }) => {
-  // handle the failure
-  !nextValidation.success && handleFailure(nextValidation, logs, throws, prefix)
 
+
+const validationReducer = (finalResult, nextValidation, {
+  logs,
+  "throws": throws,
+  prefix
+}) => {
+  // handle the failure
+  !nextValidation.success && handleFailure(nextValidation, logs, throws, prefix);
   return {
     success: finalResult.success && nextValidation.success,
-    cases: {
-      ...finalResult.cases,
+    cases: _objectSpread({}, finalResult.cases, {
       [nextValidation.key]: nextValidation
-    }
-  }
-}
-
+    })
+  };
+};
 /**
  * Handles a validation failure given validation options
  * @param {Object} validation 
@@ -134,15 +160,11 @@ const validationReducer = (finalResult, nextValidation, { logs, throws, prefix }
  * @param {Boolean} shouldThrow 
  * @param {String} prefix - optional prefix to any error or console log 
  */
+
+
 const handleFailure = (validation, shouldLog, shouldThrow, prefix) => {
   // prepend the prefix if one is defined
-  const reason = prefix
-    ? [ prefix, ...validation.reason ]
-    : validation.reason
-
-  if (shouldThrow)
-    throw new Error(reason.join())
-  
-  if (shouldLog)
-    console.error(...reason)
-}
+  const reason = prefix ? [prefix, ...validation.reason] : validation.reason;
+  if (shouldThrow) throw new Error(reason.join());
+  if (shouldLog) console.error(...reason);
+};

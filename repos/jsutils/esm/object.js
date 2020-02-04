@@ -80,7 +80,7 @@ var _array = require("./array");
 
 var _ext = require("./ext");
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? Object(arguments[i]) : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -102,6 +102,12 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+/**
+ * Clones an object by converting to JSON string and back.
+ * @function
+ * @param {Object} obj - object to clone
+ * @returns {Object} copy of original object
+ */
 var cloneJson = function cloneJson(obj) {
   try {
     return JSON.parse(JSON.stringify(obj));
@@ -197,25 +203,22 @@ var deepMerge = function deepMerge() {
   }
 
   return sources.reduce(function (merged, source) {
-    return source instanceof Array ? // Check if it's array, and join the arrays
-    [].concat(_toConsumableArray(merged instanceof Array && merged || []), _toConsumableArray(source)) : // Check if it's an object, and loop the properties
-    source instanceof Object ? Object.entries(source) // Loop the entries of the object, and add them to the merged object
-    .reduce(function (joined, _ref3) {
+    return (0, _array.isArr)(source) // Check if it's array, and join the arrays
+    ? [].concat(_toConsumableArray((0, _array.isArr)(merged) && merged || []), _toConsumableArray((0, _collection.deepClone)(source))) // Check if it's an object, and loop the properties
+    : isObj(source) // Loop the entries of the object, and add them to the merged object
+    ? Object.entries(source).reduce(function (joined, _ref3) {
       var _ref4 = _slicedToArray(_ref3, 2),
           key = _ref4[0],
           value = _ref4[1];
 
-      return _objectSpread({}, joined, _defineProperty({}, key, // Check if the value is not a function and is an object
-      // Also check if key is in the object
-      // Set to value or deepMerge the object with the current merged object
-      !(0, _method.isFunc)(value) && value instanceof Object && key in joined && // This will always return an object
+      return _objectSpread({}, joined, _defineProperty({}, key, (0, _collection.isColl)(value) && key in joined // This will always return an object
       // So if it gets called then value is not getting set
-      deepMerge(joined[key], value) || // Otherwise just set the value
-      value));
-    }, // Pass in merged at the joined object
-    merged) : // If it's not an array or object, just return the merge object
-    merged;
-  }, {});
+      ? deepMerge(joined[key], (0, _collection.deepClone)(value)) // Otherwise just set the value
+      : (0, _collection.deepClone)(value)));
+    }, merged) // If it's not an array or object, just return the merge object
+    : merged;
+  }, // Check the first source to decide what to merged value should start as
+  (0, _array.isArr)(sources[0]) && [] || {});
 };
 /**
  * Deep clones Object obj, then returns the result of calling function mutatorCb with the clone as its argument

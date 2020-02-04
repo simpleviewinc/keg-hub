@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>collection.js - Documentation</title>
+    <title>validation.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -40,7 +40,7 @@ if one is defined in validate().</a></li><li data-type='method'><a href="module-
 
 <div id="main">
     
-    <h1 class="page-title">collection.js</h1>
+    <h1 class="page-title">validation.js</h1>
     
 
     
@@ -50,343 +50,155 @@ if one is defined in validate().</a></li><li data-type='method'><a href="module-
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module collection */
+            <pre class="prettyprint source linenums"><code>/** @module validation */
 
-'use strict'
-
-import { isFunc, cloneFunc } from './method'
-import { isArr } from './array'
-import { isNum } from './number'
-import { isStr } from './string'
-
-/**
- * Updates a collection by removing, getting, adding to it.
- * @memberof collection
- * @param {Object} obj - object to update
- * @param {string|array} path - path to the property to update
- * @param {*} type - value to update || type
- * @return {*} based on update method
- */
-const updateColl = (obj, path, type, val) => {
-  const org = obj
-  if (!isColl(obj) || !obj || !path)
-    return type !== 'set' &amp;&amp; val || undefined
-  
-  // cloneDeep so we don't modify the reference
-  const parts = isArr(path) ? Array.from(path) : path.split('.')
-  const key = parts.pop()
-  let prop
-  let breakPath
-
-  while (prop = parts.shift()) {
-    const next = obj[prop]
-
-    isColl(next) || isFunc(next)
-      ? ( obj = next )
-      : (() => {
-          if(type === 'set') obj[prop] = {}
-          else breakPath = true
-          obj = next
-        })()
-
-    if (breakPath) return val
-  }
-
-  return type === 'get'
-    // Get return the value
-    ? key in obj
-      ? obj[key]
-      : val
-    : type === 'unset'
-      // Unset, return if the key was removed
-      ? ( delete obj[key] )
-      // Set, updated object
-      : ( obj[key] = val ) &amp;&amp; org || org
+const OPTIONS = {
+  SHOULD_LOG: true,
+  SHOULD_THROW: false,
+  LOG_PREFIX: null
 }
 
-/**
- * Searches an object based on the path param
- * &lt;br> I.E. path = 'data.foo.bar' => will return obj.data.foo.bar.
- * &lt;br> If bar does not exist, then will return obj.data.foo
- * @example
- * get(obj, 'data.foo.bar')
- * // Returns the value of bar
- * @example
- * get(obj, ['data', 'foo', 'bar'])
- * // Returns the value of bar
+/** 
  * @function
- * @param {Object} obj - will search the object based on the path
- * @param {string|array} path - . separated string to search the object
- * @return the final value found from the path
+ *  Validates each key-value entry in argObj using the validator functions in validators with matching keys. 
+ *  For any failures, validate will console.error the reason.
+ *  @param { Object } argObj - object, where keys are the name of the argument to validate, and value is its value
+ *  @param { Object } validators - object, where keys match the argument and values are predicate functions (return true/false and are passed the arg with the same key). 
+ *     - Use the `$default` key to define a default validator, which will validate any argument that doesn't have a custom validator defined.
+ *  @param { Object } options - contains `logs` and `throws` props. When a validation fails, it will throw an error if `throws` is true. Else it logs error if `logs` is true.
+ *  @returns { Array } - an entry with two values [ success, results ]. 
+ *     - success: { Boolean } that is true if all arguments passed their validators, false otherwise
+ *     - results: { Object } that holds the validation results for each argument, keyed by the same keys as in argObj. For each
+ *                result object, the properties are: { success, key, value, validator, reason }.
+ *  @example 
+ *    const elements = {}
+ *    const name = 'michael'
+ *    const address = '12345 E. Street'
+ *    const [ isValid, results ] = validate(
+ *      { elements, name, address },
+ *      { elements: isArr, $default: isStr }
+ *    )
+ *    console.log(isValid) // false
+ *    console.log(results.elements.success) // false
  */
-export const get = (obj, path, fallback) => (
-  updateColl(obj, path, 'get', fallback)
-)
+export const validate = (argObj, validators={}, { logs=OPTIONS.SHOULD_LOG, throws=OPTIONS.SHOULD_THROW, prefix=OPTIONS.LOG_PREFIX }={}) => {
+  const validationCaseEntries = Object.entries(argObj)
 
-/**
- * Checks if the value is a collection ( object || array ).
- * @example
- * isColl([1,2,3])
- * // Returns true
- * @example
- * isColl({ foo: 'bar' })
- * // Returns true
- * @example
- * isColl(null)
- * // Returns false
- * @function
- * @param {*} val - value to check
- * @return {boolean} T/F if the value is a collection
- */
-export const isColl = val => (
-  typeof val === 'object' &amp;&amp; val !== null
-)
+  // if no default or custom validator set for an arg, just assert it is valid
+  const defaultValidator = () => true
 
-/**
- * Checks if passed in obj || array is empty.
- * @example
- * isEmptyColl({})
- * // Returns true
- * @example
- * isEmptyColl({ foo: 'bar' })
- * // Returns false
- * @example
- * isEmptyColl([])
- * // Returns true
- * @function
- * @param {Object} obj - object to check if empty
- * @return {boolean}  true || false
- */
-export const isEmptyColl = obj => (
-  isArr(obj)
-    ? obj.length === 0
-    : isColl(obj) &amp;&amp; Object.getOwnPropertyNames(obj).length === 0
-)
-
-/**
- * Loops over a collection and calls a passed in function for each one.
- * @example
- * mapColl([1, 2, 3], (key, val, coll) => { console.log(key) })
- * // Will log all keys of the collection
- * @function
- * @param {Array|Object} - collection to loop over
- * @return {Array|Object} returns the same type of collection passed in
- */
-export const mapColl = (coll, cb) => (
-  isFunc(cb) &amp;&amp; isColl(coll)
-    ? Object
-      .keys(coll)
-      .map(key => cb(key, coll[key], coll))
-    : isArr(coll)
-      ? []
-      : {}
-)
-
-/**
- * Loops over collection and calls reduce.
- * @example
- * reduceColl([1, 2, 3], (key, val, coll) => { console.log(key) }, {})
- * // Returns what ever is returned from the last iteration of the reduce loop
- * @function
- * @param {Object} obj - object loop over
- * @param {function} path - path that should be created on the object, separated by .
- * @param {*} reduce - starting data passed to reduce method
- * @return {Object} - last returned data from the loop
- */
-export const reduceColl = (coll, cb, reduce) => (
-  isFunc(cb) &amp;&amp; isColl(coll)
-    ? Object
-      .keys(coll)
-      .reduce((data, key) => cb(key, coll[key], coll, data), reduce)
-    : isArr(coll)
-      ? []
-      : {}
-)
-
-/**
- * Adds a path to an object.
- * &lt;br> If the path already exists, but not in the correct format it will be replaced.
- * &lt;br> The path is built from a `.` separated string.
- * &lt;br> I.E. path = 'data.foo.bar' => obj.data.foo.bar will be created on the object.
- * @example
- * set(obj, [ 'foo', 'bar' ], 'baz')
- * // Returns the passed in obj, with the value of bar set to baz
- * @example
- * set(obj, 'foo.bar', 'baz')
- * // Returns the passed in obj, with the value of bar set to baz
- * @function
- * @param {Object} obj - object to have the path added to it
- * @param {string|array} path - path that should be created on the object, separated by .
- * @param {*} finalValue - when ever the final value of the path should be
- * @return {Object} the obj param
- */
-export const set = (obj, path, val) => (
-  updateColl(obj, path, 'set', val)
-)
-
-/**
- * Removes a path from an object.
- * @example
- * unset(obj, 'foo.bar')
- * // Returns the passed in obj, with the value of bar set to undefined
- * @function
- * @param {Object} obj - object to have the attribute removed
- * @param {string|array} path - path of attribute to be removed, separated by string
- * @return the passed in object, with the attribute found at the path removed
- */
-export const unset = (obj, path) => updateColl(obj, path, 'unset')
-
-/**
- * Recursively clones an object or array.
-  * @example
- * const test = { foo: [ { bar: 'baz' } ] }
- * const clone = deepClone(test)
- * console.log(test === clone)) // prints false
- * console.log(test.foo === clone.foo) // prints false
- * @example
- * // Works with array too
- * deepClone([ [ [ 0 ] ] ])
- * // Returns copy of the passed in collection item
- * @function
- * @param {Object} obj - object to clone
- * @return {Object} - cloned Object
- */
-export const deepClone = (obj, hash = new WeakMap()) => {
-  if (Object(obj) !== obj) return obj
-  if (obj instanceof Set) return new Set(obj)
-  if (hash.has(obj)) return hash.get(obj)
-  if (isArr(obj)) return obj.map(x => deepClone(x))
-  if (isFunc(obj)) return cloneFunc(obj)
-
-  const result = obj instanceof Date 
-    ? new Date(obj)
-    : obj instanceof RegExp 
-      ? new RegExp(obj.source, obj.flags)
-      : (!obj.constructor)
-        ? Object.create(null)
-        : null
-  
-  // if result is null, object has a constructor and wasn't an instance of Date nor RegExp
-  if (result === null) return cloneObjWithPrototypeAndProperties(obj)
-
-  hash.set(obj, result)
-
-  if (obj instanceof Map)
-    return Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)) )
-
-  return Object
-    .assign(
-      result,
-      ...Object.keys(obj)
-        .map(key => ({ [key]: deepClone(obj[key], hash) }))
+  // validate each argument
+  const validationResults = validationCaseEntries.map(
+    ([argName, argValue]) => validateArgument(
+      argName,
+      argValue,
+      validators[argName] || validators['$default'] || defaultValidator
     )
+  )
+
+  // reduce the argument validation results into a single object of form { success, cases }.
+  // success is true if all arguments passed their validators. Cases holds each argument's validation results.
+  const reduceCases = (total, next) => validationReducer(total, next, { logs, throws, prefix })
+  const { success, cases } = validationResults.reduce(reduceCases, { success: true, cases: {} })
+
+  return [ success, cases ]
 }
 
 /**
- * Helper for deepClone. Deeply clones the object, including its properties, and preserves the prototype and isFrozen and isSealed state
  * @function
- * @param {Object} objectWithPrototype - any object that has a prototype
- * @returns {Object} the cloned object 
+ * If you need to configure validation properties globally, you can do so here. These are overridden by the validate options arguments,
+ * if one is defined in validate().
+ * @param {Object} options 
+ * @param {Boolean} options.logs - indicates you want validate() to log errors when a case fails
+ * @param {Boolean} options.throws - indicates validate() should throw an error when a case fails
+ * @param {String} options.prefix - a prefix to any console error logs or to messages of errors thrown
  */
-const cloneObjWithPrototypeAndProperties = (objectWithPrototype) => {
-  if (!objectWithPrototype) return objectWithPrototype
-
-  const prototype = Object.getPrototypeOf(objectWithPrototype)
-  
-  const sourceDescriptors = Object.getOwnPropertyDescriptors(objectWithPrototype)
-
-  for (const [key, descriptor] of Object.entries(sourceDescriptors)) {
-    sourceDescriptors[key].value = deepClone(descriptor.value)
+validate.setOptions = ({ logs, throws, prefix }) => {
+  if (logs !== undefined) {
+    OPTIONS.SHOULD_LOG = logs
   }
-
-  const clone = Object.create(prototype, sourceDescriptors)
-
-  if (Object.isFrozen(objectWithPrototype)) Object.freeze(clone)
-  if (Object.isSealed(objectWithPrototype)) Object.seal(clone)
-  return clone 
+  if (throws !== undefined) {
+    OPTIONS.SHOULD_THROW = throws
+  }
+  if (prefix !== undefined) {
+    OPTIONS.LOG_PREFIX = prefix
+  }
 }
 
 /**
- * Returns an array composed of element repeated "times" times. If element is a function, it will be called.
- * &lt;br> Note: if you simply want to run a function some number of times, without returning an array of its results, @see Method.doIt
- * @param {*} element - a value or a function. If it is a function, repeat will call it each repeated time
- * @param {number} times - number of times that element should be included/called for the resulting array. Anything less than or equal to 0, or not a number, will return an empty array.
  * @function
- * @param {boolean} cloneDeep - if true, it will deeply clone the element for every instance in the resulting array 
- * @returns an array of repeated elements or results from the function call
- * @example repeat(1, 3) // returns [1, 1, 1]
- * @example repeat(() => 2 * 2, 3) // returns [4, 4, 4]
+ * Resets the global validation options to their defaults
  */
-export const repeat = (element, times, cloneDeep=false) => {
-  if (!times || times &lt;= 0) return []
-  if (!isNum(times)) {
-    console.error("Times argument must be a number")
-    return []
-  }
-  const arr = []
-  for (let i = 0; i &lt; times; i++) {
-    const value = isFunc(element)
-      ? element() 
-      : cloneDeep
-        ? deepClone(element)
-        : element
-    arr.push(value)
-  }
-  return arr
+validate.resetOptions = () => {
+  OPTIONS.SHOULD_LOG = true
+  OPTIONS.SHOULD_THROW = false
+  OPTIONS.LOG_PREFIX = null
 }
 
+/**
+ * Helper for `validate`. Validates a single value given a validator
+ * @param {*} key 
+ * @param {*} value 
+ * @param {Function} validator 
+ * @returns {Object} of form { success, reason }
+ */
+const validateArgument = (key, value, validator) => {
+  const success = validator(value)
+
+  // if validator is a named function, use its name. If it is an inline anonymous arrow function, its name
+  // matches the argument key and it has no useful/descriptive name, so just stringify it
+  const shouldStringifyValidator = !validator.name || (validator.name === key) || (validator.name === '$default')
+  const validatorString = shouldStringifyValidator ? validator.toString() : validator.name
+
+  const reason = success
+    ? null
+    : [
+      `Argument "${key}" with value `, 
+      value, 
+      ` failed validator: ${validatorString}.`
+    ] 
+   
+  return { success, key, value, validator, reason }
+}
 
 /**
- * Compares a collection's keys / values with another collections keys / values
- * @example
- * shallowEqual({ foo: 'bar' }, { foo: 'bar' })
- * // Returns true
- * @example
- * shallowEqual({ foo: 'bar', baz: {} }, { foo: 'bar', baz: {} })
- * // Returns false, because the baz values are different objects
- * @example
- * // Works with array too
- * shallowEqual([ 1, 2 ], [ 1, 2 ])
- * // Returns true
- * @example
- * shallowEqual([{ foo: 'bar' }], [{ foo: 'bar' }])
- * // Returns false, because the objects in index 0 are different
- * @example
- * // Pass a path to compare instead of the root
- * shallowEqual({ foo: { bar: { baz: 'biz' }}}, { foo: { bar: { baz: 'biz' }}}, 'foo.bar')
- * // Returns true, because the bar object is compared
- * @function
- * @param {Object|Array} col1 - Collection to compare
- * @param {Object|Array} col2 - Collection to compare
- * @param {Array|string} path - path of object to compare. Uses the get method to find the path
- *
- * @returns {boolean} - true or false if the objects keys values are equal
+ * Helper for `validate`. Reduces validations into a single object of form { success, cases }
+ * @param {*} finalResult 
+ * @param {*} nextValidation 
  */
-export const shallowEqual = (col1, col2, path) => {
+const validationReducer = (finalResult, nextValidation, { logs, throws, prefix }) => {
+  // handle the failure
+  !nextValidation.success &amp;&amp; handleFailure(nextValidation, logs, throws, prefix)
 
-  // If a path is passed in, update the collections to be that path
-  if(path &amp;&amp; (isArr(path) || isStr(path))){
-    col1 = get(col1, path)
-    col2 = get(col2, path)
+  return {
+    success: finalResult.success &amp;&amp; nextValidation.success,
+    cases: {
+      ...finalResult.cases,
+      [nextValidation.key]: nextValidation
+    }
   }
+}
+
+/**
+ * Handles a validation failure given validation options
+ * @param {Object} validation 
+ * @param {Boolean} shouldLog 
+ * @param {Boolean} shouldThrow 
+ * @param {String} prefix - optional prefix to any error or console log 
+ */
+const handleFailure = (validation, shouldLog, shouldThrow, prefix) => {
+  // prepend the prefix if one is defined
+  const reason = prefix
+    ? [ prefix, ...validation.reason ]
+    : validation.reason
+
+  if (shouldThrow)
+    throw new Error(reason.join())
   
-  // If the objects are the same, so return true
-  if(col1 === col2) return true
-
-  // Ensure the objects exist, and they have keys we can compare
-  if (typeof col1 !== "object" || !col1 || typeof col2 !== "object" || !col2)
-    return false
-
-  // If they have different key lengths, then they are not equal
-  if (Object.keys(col1).length !== Object.keys(col2).length) return false
-  
-  // Loop the keys, and ensure the other collection has the key and it's value is the same
-  for (const key in col1)
-    if (col1[key] !== col2[key]) return false
-
-  // Keys and values are equal, so return true
-  return true
-}</code></pre>
+  if (shouldLog)
+    console.error(...reason)
+}
+</code></pre>
         </article>
     </section>
 

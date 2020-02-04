@@ -15,6 +15,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 const _require = require('../array'),
       isArr = _require.isArr;
 
+const _require2 = require('../string'),
+      isStr = _require2.isStr;
+
 const Method = require('../method');
 
 const promiseHelper = isValid => new Promise((res, rej) => {
@@ -146,11 +149,196 @@ describe('/method', () => {
       expect(Method.isFunc(null)).toEqual(false);
     });
   });
+  describe('cloneFunc', () => {
+    it('should return a function', () => {
+      expect(typeof Method.cloneFunc(() => {
+        console.log('test');
+      })).toBe('function');
+    });
+    it('should Not return the same function passed in', () => {
+      const test = () => {
+        console.log('test');
+      };
+
+      expect(Method.cloneFunc(test)).not.toBe(test);
+    });
+    it('should return a function with access to in scope variables', () => {
+      const oldLog = console.log;
+      console.log = jest.fn();
+      const data = 'test';
+
+      const test = () => {
+        console.log(data);
+      };
+
+      const clone = Method.cloneFunc(test);
+      clone();
+      expect(console.log).toHaveBeenCalledWith(data);
+      console.log = oldLog;
+    });
+    it('should return a function that returns the same content of the original', () => {
+      const data = 'test';
+
+      const test = () => {
+        return data;
+      };
+
+      const clone = Method.cloneFunc(test);
+      expect(clone()).toBe(test());
+    });
+    it('should copy any extra keys and values added to the function', () => {
+      const data = 'test';
+
+      const test = () => {
+        return data;
+      };
+
+      test.extra = {
+        foo: 'bar'
+      };
+      test.extra2 = 'baz';
+      const clone = Method.cloneFunc(test);
+      expect(clone.extra).toBe(test.extra);
+      expect(clone.extra2).toBe(test.extra2);
+    });
+    it('should copy the functions name', () => {
+      function test() {
+        return 'test';
+      }
+
+      expect(test.name).toBe('test');
+      const clone = Method.cloneFunc(test);
+      expect(clone.name).toBe('test');
+    });
+    it('should have the same response from the toString method', () => {
+      const test = () => {
+        return 'test';
+      };
+
+      const clone = Method.cloneFunc(test);
+      expect(clone.toString()).toBe(test.toString());
+    });
+  });
   describe('memorize', () => {
-    it('should return a function', () => {});
-    it('should return the last response to a method when params are the same', () => {});
-    it('should set the response to the memorize cache', () => {});
-    it('should clear the cache when memorize.destroy is called', () => {});
+    it('should return a function', () => {
+      const memo = Method.memorize(() => {});
+      expect(typeof memo).toBe('function');
+      memo.destroy();
+    });
+    it('should call the getCacheKey function if its passed as a function', () => {
+      const func = data => {
+        return data;
+      };
+
+      const key = 'test';
+      const getKey = jest.fn(() => key);
+      const memo = Method.memorize(func, getKey);
+      memo();
+      expect(getKey).toHaveBeenCalled();
+      memo.destroy();
+    });
+    it('should return the last response and not call the passed in method', () => {
+      const func = jest.fn(data => {
+        return data;
+      });
+      const key = 'test';
+      const getKey = jest.fn(() => key);
+      const memo = Method.memorize(func, getKey);
+      expect(memo('test')).toBe(memo('test'));
+      expect(func).toHaveBeenCalledTimes(1);
+      memo.destroy();
+    });
+    it('should return a function with cache object added to it', () => {
+      const func = jest.fn(data => {
+        return data;
+      });
+      const key = 'test';
+      const getKey = jest.fn(() => key);
+      const memo = Method.memorize(func, getKey);
+      memo('test');
+      expect(typeof memo.cache).toBe('object');
+      memo.destroy();
+    });
+    it('should set the response to the memorize cache', () => {
+      const func = jest.fn(data => {
+        return data;
+      });
+      const key = 'test';
+      const getKey = jest.fn(() => key);
+      const memo = Method.memorize(func, getKey);
+      const resp = memo('test');
+      expect(memo.cache[key]).toBe(resp);
+      memo.destroy();
+    });
+    it('should return a function with destroy function added to it', () => {
+      const func = jest.fn(data => {
+        return data;
+      });
+      const key = 'test';
+      const getKey = jest.fn(() => key);
+      const memo = Method.memorize(func, getKey);
+      memo('test');
+      expect(typeof memo.destroy).toBe('function');
+      memo.destroy();
+    });
+    it('should clean up cache and destroy keys when memorize.destroy is called', () => {
+      const func = jest.fn(data => {
+        return data;
+      });
+      const key = 'test';
+      const getKey = jest.fn(() => key);
+      const memo = Method.memorize(func, getKey);
+      const resp = memo('test');
+      expect(typeof getKey).toBe('function');
+      memo.destroy();
+      expect(memo.cache).toBe(undefined);
+      expect(memo.destroy).toBe(undefined);
+    });
+    it('should reset cache after the limit has been reached', () => {
+      let count = 0;
+      const func = jest.fn(data => {
+        return count++;
+      });
+      const getKey = jest.fn(() => count);
+      const memo = Method.memorize(func, getKey);
+      const respFoo = memo('foo');
+      expect(memo.cache[0]).toBe(respFoo);
+      const respBar = memo('bar');
+      expect(memo.cache[0]).toBe(undefined);
+      expect(memo.cache[1]).toBe(respBar);
+      memo.destroy();
+    });
+    it('should change the limit based on the third passed in parameter', () => {
+      let count = 0;
+      const func = jest.fn(data => {
+        return count++;
+      });
+      const getKey = jest.fn(() => count);
+      const memo = Method.memorize(func, getKey, 2);
+      const respFoo = memo('foo');
+      const respBar = memo('bar');
+      expect(memo.cache[0]).toBe(respFoo);
+      expect(memo.cache[1]).toBe(respBar);
+      const respBaz = memo('baz');
+      expect(memo.cache[0]).toBe(undefined);
+      expect(memo.cache[1]).toBe(undefined);
+      expect(memo.cache[2]).toBe(respBaz);
+      memo.destroy();
+    });
+    it('should NOT change the limit if the third parameter is not a number', () => {
+      let count = 0;
+      const func = jest.fn(data => {
+        return count++;
+      });
+      const getKey = jest.fn(() => count);
+      const memo = Method.memorize(func, getKey, 'test');
+      const respFoo = memo('foo');
+      expect(memo.cache[0]).toBe(respFoo);
+      const respBar = memo('bar');
+      expect(memo.cache[0]).toBe(undefined);
+      expect(memo.cache[1]).toBe(respBar);
+      memo.destroy();
+    });
   });
   describe('throttle', () => {
     it('should only call the passed in method once over a given amount of time', () => {});
@@ -317,6 +505,40 @@ describe('/method', () => {
       expect(Method.pipeline(1, square, "invalid expression")).toEqual(1);
       expect(console.error).toHaveBeenCalled();
       console.error = orgError;
+    });
+  });
+  describe('match', () => {
+    it('should match the first matching case', () => {
+      const expectedResult = 55;
+      const matchArg = 'wow';
+      const result = Method.match(matchArg, ['whoa', 1], ['wow', expectedResult]);
+      expect(result).toEqual(expectedResult);
+    });
+    it('should work with predicate functions as the matching value', () => {
+      const expectedResult = 22;
+      const result = Method.match('fooby', [isStr, expectedResult], [isArr, 55]);
+      expect(result).toEqual(expectedResult);
+    });
+    it('should default to null if no matches were valid and no fallback was specified', () => {
+      const result = Method.match('fooby', [isArr, 12], ['barbaz', 55]);
+      expect(result).toBeNull();
+    });
+    it('should console error if a case is not an entry', () => {
+      const orig = console.error;
+      console.error = jest.fn();
+      const result = Method.match('fooby', 'wow');
+      expect(console.error).toHaveBeenCalled();
+      expect(result).toBe(null);
+      console.error = orig;
+    });
+    it('should return the fallback if no cases match', () => {
+      const expectedResult = 22;
+      const result = Method.match(1, [isStr, 33], [isArr, 55], [Method.match.default, expectedResult]);
+      expect(result).toEqual(expectedResult);
+    });
+    it('should return null with no cases defined', () => {
+      const result = Method.match('my arg');
+      expect(result).toBeNull();
     });
   });
 });

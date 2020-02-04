@@ -12,13 +12,19 @@ require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.date.to-string");
 
+require("core-js/modules/es.function.name");
+
 require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.promise");
 
+require("core-js/modules/es.regexp.exec");
+
 require("core-js/modules/es.regexp.to-string");
 
 require("core-js/modules/es.string.iterator");
+
+require("core-js/modules/es.string.match");
 
 require("core-js/modules/web.dom-collections.iterator");
 
@@ -34,14 +40,17 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var _require = require('../array'),
     isArr = _require.isArr;
+
+var _require2 = require('../string'),
+    isStr = _require2.isStr;
 
 var Method = require('../method');
 
@@ -182,11 +191,214 @@ describe('/method', function () {
       expect(Method.isFunc(null)).toEqual(false);
     });
   });
+  describe('cloneFunc', function () {
+    it('should return a function', function () {
+      expect(_typeof(Method.cloneFunc(function () {
+        console.log('test');
+      }))).toBe('function');
+    });
+    it('should Not return the same function passed in', function () {
+      var test = function test() {
+        console.log('test');
+      };
+
+      expect(Method.cloneFunc(test)).not.toBe(test);
+    });
+    it('should return a function with access to in scope variables', function () {
+      var oldLog = console.log;
+      console.log = jest.fn();
+      var data = 'test';
+
+      var test = function test() {
+        console.log(data);
+      };
+
+      var clone = Method.cloneFunc(test);
+      clone();
+      expect(console.log).toHaveBeenCalledWith(data);
+      console.log = oldLog;
+    });
+    it('should return a function that returns the same content of the original', function () {
+      var data = 'test';
+
+      var test = function test() {
+        return data;
+      };
+
+      var clone = Method.cloneFunc(test);
+      expect(clone()).toBe(test());
+    });
+    it('should copy any extra keys and values added to the function', function () {
+      var data = 'test';
+
+      var test = function test() {
+        return data;
+      };
+
+      test.extra = {
+        foo: 'bar'
+      };
+      test.extra2 = 'baz';
+      var clone = Method.cloneFunc(test);
+      expect(clone.extra).toBe(test.extra);
+      expect(clone.extra2).toBe(test.extra2);
+    });
+    it('should copy the functions name', function () {
+      function test() {
+        return 'test';
+      }
+
+      expect(test.name).toBe('test');
+      var clone = Method.cloneFunc(test);
+      expect(clone.name).toBe('test');
+    });
+    it('should have the same response from the toString method', function () {
+      var test = function test() {
+        return 'test';
+      };
+
+      var clone = Method.cloneFunc(test);
+      expect(clone.toString()).toBe(test.toString());
+    });
+  });
   describe('memorize', function () {
-    it('should return a function', function () {});
-    it('should return the last response to a method when params are the same', function () {});
-    it('should set the response to the memorize cache', function () {});
-    it('should clear the cache when memorize.destroy is called', function () {});
+    it('should return a function', function () {
+      var memo = Method.memorize(function () {});
+      expect(_typeof(memo)).toBe('function');
+      memo.destroy();
+    });
+    it('should call the getCacheKey function if its passed as a function', function () {
+      var func = function func(data) {
+        return data;
+      };
+
+      var key = 'test';
+      var getKey = jest.fn(function () {
+        return key;
+      });
+      var memo = Method.memorize(func, getKey);
+      memo();
+      expect(getKey).toHaveBeenCalled();
+      memo.destroy();
+    });
+    it('should return the last response and not call the passed in method', function () {
+      var func = jest.fn(function (data) {
+        return data;
+      });
+      var key = 'test';
+      var getKey = jest.fn(function () {
+        return key;
+      });
+      var memo = Method.memorize(func, getKey);
+      expect(memo('test')).toBe(memo('test'));
+      expect(func).toHaveBeenCalledTimes(1);
+      memo.destroy();
+    });
+    it('should return a function with cache object added to it', function () {
+      var func = jest.fn(function (data) {
+        return data;
+      });
+      var key = 'test';
+      var getKey = jest.fn(function () {
+        return key;
+      });
+      var memo = Method.memorize(func, getKey);
+      memo('test');
+      expect(_typeof(memo.cache)).toBe('object');
+      memo.destroy();
+    });
+    it('should set the response to the memorize cache', function () {
+      var func = jest.fn(function (data) {
+        return data;
+      });
+      var key = 'test';
+      var getKey = jest.fn(function () {
+        return key;
+      });
+      var memo = Method.memorize(func, getKey);
+      var resp = memo('test');
+      expect(memo.cache[key]).toBe(resp);
+      memo.destroy();
+    });
+    it('should return a function with destroy function added to it', function () {
+      var func = jest.fn(function (data) {
+        return data;
+      });
+      var key = 'test';
+      var getKey = jest.fn(function () {
+        return key;
+      });
+      var memo = Method.memorize(func, getKey);
+      memo('test');
+      expect(_typeof(memo.destroy)).toBe('function');
+      memo.destroy();
+    });
+    it('should clean up cache and destroy keys when memorize.destroy is called', function () {
+      var func = jest.fn(function (data) {
+        return data;
+      });
+      var key = 'test';
+      var getKey = jest.fn(function () {
+        return key;
+      });
+      var memo = Method.memorize(func, getKey);
+      var resp = memo('test');
+      expect(_typeof(getKey)).toBe('function');
+      memo.destroy();
+      expect(memo.cache).toBe(undefined);
+      expect(memo.destroy).toBe(undefined);
+    });
+    it('should reset cache after the limit has been reached', function () {
+      var count = 0;
+      var func = jest.fn(function (data) {
+        return count++;
+      });
+      var getKey = jest.fn(function () {
+        return count;
+      });
+      var memo = Method.memorize(func, getKey);
+      var respFoo = memo('foo');
+      expect(memo.cache[0]).toBe(respFoo);
+      var respBar = memo('bar');
+      expect(memo.cache[0]).toBe(undefined);
+      expect(memo.cache[1]).toBe(respBar);
+      memo.destroy();
+    });
+    it('should change the limit based on the third passed in parameter', function () {
+      var count = 0;
+      var func = jest.fn(function (data) {
+        return count++;
+      });
+      var getKey = jest.fn(function () {
+        return count;
+      });
+      var memo = Method.memorize(func, getKey, 2);
+      var respFoo = memo('foo');
+      var respBar = memo('bar');
+      expect(memo.cache[0]).toBe(respFoo);
+      expect(memo.cache[1]).toBe(respBar);
+      var respBaz = memo('baz');
+      expect(memo.cache[0]).toBe(undefined);
+      expect(memo.cache[1]).toBe(undefined);
+      expect(memo.cache[2]).toBe(respBaz);
+      memo.destroy();
+    });
+    it('should NOT change the limit if the third parameter is not a number', function () {
+      var count = 0;
+      var func = jest.fn(function (data) {
+        return count++;
+      });
+      var getKey = jest.fn(function () {
+        return count;
+      });
+      var memo = Method.memorize(func, getKey, 'test');
+      var respFoo = memo('foo');
+      expect(memo.cache[0]).toBe(respFoo);
+      var respBar = memo('bar');
+      expect(memo.cache[0]).toBe(undefined);
+      expect(memo.cache[1]).toBe(respBar);
+      memo.destroy();
+    });
   });
   describe('throttle', function () {
     it('should only call the passed in method once over a given amount of time', function () {});
@@ -471,6 +683,40 @@ describe('/method', function () {
       expect(Method.pipeline(1, square, "invalid expression")).toEqual(1);
       expect(console.error).toHaveBeenCalled();
       console.error = orgError;
+    });
+  });
+  describe('match', function () {
+    it('should match the first matching case', function () {
+      var expectedResult = 55;
+      var matchArg = 'wow';
+      var result = Method.match(matchArg, ['whoa', 1], ['wow', expectedResult]);
+      expect(result).toEqual(expectedResult);
+    });
+    it('should work with predicate functions as the matching value', function () {
+      var expectedResult = 22;
+      var result = Method.match('fooby', [isStr, expectedResult], [isArr, 55]);
+      expect(result).toEqual(expectedResult);
+    });
+    it('should default to null if no matches were valid and no fallback was specified', function () {
+      var result = Method.match('fooby', [isArr, 12], ['barbaz', 55]);
+      expect(result).toBeNull();
+    });
+    it('should console error if a case is not an entry', function () {
+      var orig = console.error;
+      console.error = jest.fn();
+      var result = Method.match('fooby', 'wow');
+      expect(console.error).toHaveBeenCalled();
+      expect(result).toBe(null);
+      console.error = orig;
+    });
+    it('should return the fallback if no cases match', function () {
+      var expectedResult = 22;
+      var result = Method.match(1, [isStr, 33], [isArr, 55], [Method.match["default"], expectedResult]);
+      expect(result).toEqual(expectedResult);
+    });
+    it('should return null with no cases defined', function () {
+      var result = Method.match('my arg');
+      expect(result).toBeNull();
     });
   });
 });
