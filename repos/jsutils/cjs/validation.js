@@ -16,7 +16,6 @@ const OPTIONS = {
   LOG_PREFIX: null
 };
 /** 
- * @function
  *  Validates each key-value entry in argObj using the validator functions in validators with matching keys. 
  *  For any failures, validate will console.error the reason.
  *  @param { Object } argObj - object, where keys are the name of the argument to validate, and value is its value
@@ -27,6 +26,7 @@ const OPTIONS = {
  *     - success: { Boolean } that is true if all arguments passed their validators, false otherwise
  *     - results: { Object } that holds the validation results for each argument, keyed by the same keys as in argObj. For each
  *                result object, the properties are: { success, key, value, validator, reason }.
+ *  @function
  *  @example 
  *    const elements = {}
  *    const name = 'michael'
@@ -68,9 +68,9 @@ const validate = (argObj, validators = {}, {
   return [success, cases];
 };
 /**
- * @function
  * If you need to configure validation properties globally, you can do so here. These are overridden by the validate options arguments,
  * if one is defined in validate().
+ * @function
  * @param {Object} options 
  * @param {Boolean} options.logs - indicates you want validate() to log errors when a case fails
  * @param {Boolean} options.throws - indicates validate() should throw an error when a case fails
@@ -98,8 +98,8 @@ validate.setOptions = ({
   }
 };
 /**
- * @function
  * Resets the global validation options to their defaults
+ * @function
  */
 
 

@@ -36,7 +36,7 @@ var _array = require("./array");
 /**
  * takes a raw querystring input and converts it to an object
  * @param {String} string - querystring to parse into an object
- * 
+ * @function
  * @returns {Object}
  */
 var queryToObj = function queryToObj(string) {
@@ -67,7 +67,7 @@ var queryToObj = function queryToObj(string) {
 /**
  * Converts the input object to url querystring
  * @param {Object} obj - object with kvp to convert into a querystring
- * 
+ * @function
  * @returns {String} querystring
  */
 
@@ -89,7 +89,7 @@ var objToQuery = function objToQuery(obj) {
  * Checks if the given string is a valid URL
  * Must begin with ftp/http/https
  * @param {String} string - any string to check if it's a valid url
- *
+ * @function
  * @returns {Boolean}
  */
 

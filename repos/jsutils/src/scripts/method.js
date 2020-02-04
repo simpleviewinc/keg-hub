@@ -308,7 +308,6 @@ export const cloneFunc = func => {
 }
 
 /**
-* @function
 * Pattern matching function. Iterates through the entries,
 * which have the form [ check value or predicate, return value ], and
 * when it encounters an entry whose check value matches the matchArg
@@ -316,10 +315,10 @@ export const cloneFunc = func => {
 * the return value of that entry.
 *
 * For the default case: use [ match.default, <your default value> ]
+* @function
 *
-* @param {*} matchArg 
+* @param {*} matchArg - the argument to match against the cases
 * @param {Array} entries - the cases
-* @param {*} fallback (optional) fallback default
 * @returns the return value of the first entry with a matching check value, else null
 *
 * @example 

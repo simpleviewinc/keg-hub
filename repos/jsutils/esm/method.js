@@ -474,7 +474,6 @@ var cloneFunc = function cloneFunc(func) {
   return funcClone;
 };
 /**
-* @function
 * Pattern matching function. Iterates through the entries,
 * which have the form [ check value or predicate, return value ], and
 * when it encounters an entry whose check value matches the matchArg
@@ -482,6 +481,7 @@ var cloneFunc = function cloneFunc(func) {
 * the return value of that entry.
 *
 * For the default case: use [ match.default, <your default value> ]
+* @function
 *
 * @param {*} matchArg 
 * @param {Array} entries - the cases
