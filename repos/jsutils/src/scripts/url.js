@@ -2,86 +2,103 @@
 
 'use strict'
 
-// import { reduceObj, isObj } from './object'
+import { reduceObj } from './object'
+import { isStr } from './string'
+import { isNum } from './number'
+import { isBool } from './boolean'
+import { isColl } from './collection'
+import { isArr } from './array'
 
-// export const getUrlParamObj = url => {
-//   const currentParams = {}
-//   const params = urlGetQuery(url)
-//   if(!params) return currentParams
+// 1. takes a querystring and return object
+// 2. takes an object and return querystring
+
+/**
+ * takes a raw querystring input and converts it to an object
+ * @param {String} string - querystring to parse into an object
+ * 
+ * @returns {Object}
+ */
+export const queryToObj = string => {
+
+  const currentQueryItems = {}
+  const stringSplit = string.split('?')
+  const querystring = stringSplit[ stringSplit.length -1 ]
   
-//   const split = params.split('&')
-//   split.length &&
-//     split.map(item => {
-//       const itemSplit = item.split('=')
-//       if (itemSplit.length === 2) {
-//         currentParams[decodeURIComponent(itemSplit[0])] = decodeURIComponent(itemSplit[1])
-//       }
-//     })
+  if(!querystring) return currentQueryItems
 
-//   return currentParams
-// }
+  const split = querystring.split('&')
 
-// export const objToUrlParams = obj => {
-//   let firstSet
-//   return reduceObj(obj, (key, value, urlStr) => {
-//     if(!value) return urlStr
+  split.length &&
+    split.map(item => {
 
-//     const useVal = isStr(value) ? value : isObj(value) ? JSON.stringify(value) : null
-//     if(!useVal) return urlStr
+      const components = item.split('=')
+      if (components.length <= 1) return currentQueryItems
 
-//     urlStr = !firstSet
-//       ? `${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
-//       : `${urlStr}&${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
-//     firstSet = true
+      // split on the first instance of '=', so we join the rest if any
+      const itemSplit = [components.shift(), components.join('=')]
 
-//     return urlStr
-//   }, '')
-// }
+      if (itemSplit.length === 2) {
+        
+        // if the value contains special char ',' then make it into an array
+        const array = decodeURIComponent(itemSplit[1]).split(',')
+        if (array && array.length > 1)
+          currentQueryItems[itemSplit[0]] = array
+        
+        // check if key already exists
+        else if (itemSplit[0] in currentQueryItems) {
+           // convert to array or append to it
+           const val = currentQueryItems[itemSplit[0]]
+           currentQueryItems[itemSplit[0]] = isArr(val) 
+             ? val.push(decodeURIComponent(itemSplit[1])) 
+             : [val, decodeURIComponent(itemSplit[1])]        
+        }
+        else
+          currentQueryItems[itemSplit[0]] = decodeURIComponent(itemSplit[1])
+      }
+    })
 
-// export const getUrlObj = url => {
-//   const urlRegEx = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
-//   const result = urlRegEx.exec(url || window.location.href)
+  return currentQueryItems
+}
 
-//   const attrs = ['url', 'scheme', 'slash', 'host', 'port', 'path', 'query', 'hash']
-//   const urlData = attrs.reduce((data, attr) => {
-//     if(typeof result[attr] === "undefined") result[attr] = ""  
-//     if(result[attr] !== "" && (attrs[attr] === "port" || attrs[attr] === "slash"))
-//         result[attr] = `:${result[attr]}`
+/**
+ * Converts the input object to url querystring
+ * @param {Object} obj - object with kvp to convert into a querystring
+ * 
+ * @returns {String} querystring
+ */
+export const objToQuery = obj => {
+  let firstSet
+  return reduceObj(obj, (key, value, urlStr) => {
+    if(!value) return urlStr
+
+    const useVal = isStr(value) || isNum(value) || isBool(value)
+      ? value 
+      : isColl(value)
+        ? isArr(value) 
+          ? value.join(',') 
+          : JSON.stringify(value)
+        : null
     
-//     data[attr] = result[attr]
-//     return data
-//   }, {})
+    if(!useVal) return urlStr
 
-//   urlData['path'] = "/" + urlData['path']
+    urlStr = !firstSet
+      ? `?${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
+      : `${urlStr}&${encodeURIComponent(key)}=${encodeURIComponent(useVal)}`
+    firstSet = true
 
-//   return urlData
-// }
+    return urlStr
+  }, '')
+}
 
-// export const urlUpcertParam = (url, key, value) => {
-//   url = url || ''
-//   const re = new RegExp('(\\?|&)'+ key +'=[^&]*' )
-//   const param = `${key}=${encodeURIComponent(value)}`
+/**
+ * Checks if the given string is a valid URL
+ * Must begin with ftp/http/https
+ * @param {String} string - any string to check if it's a valid url
+ *
+ * @returns {Boolean}
+ */
+export const isValidUrl = string => {
+  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
 
-//   return re.test(url)
-//     ? url.replace(re, `${$1}${param}`)
-//     : addParam(url, null, null, param)
-// }
-
-// export const urlAddParam = (url, key, value, param) => {
-//   url = url || ''
-//   param = param || `${key}=${encodeURIComponent(value)}`
-//   url.indexOf('?') === -1 && (url += '?')
-//   url.indexOf('=') !== -1 && (url += '&')
-
-//   return `${url}${param}`
-// }
-
-// export const urlHasParam(url, paramName) {
-//   const regex = new RegExp('(\\?|&)'+ paramName +'=', 'g')
-//   return regex.test(urlGetQuery(url))
-// }
-
-// export const urlGetQuery = url => {
-//   const queryString = /\?[a-zA-Z0-9\=\&\%\$\-\_\.\+\!\*\'\(\)\,]+/.exec(url)
-//   return queryString ? decodeURIComponent(queryString[0].replace(/\+/g,' ')) : ''
-// }
+  return regexp.test(string)
+}
