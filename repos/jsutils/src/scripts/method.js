@@ -292,7 +292,7 @@ export const cloneFunc = func => {
   const funcRef = func
   const funcWrap = (...args) => new funcRef(...args)
 
-  const funcClone = (...args) => {
+  const funcClone = function(...args){
     return func instanceof funcClone
       ? funcWrap.apply(null, args)
       : funcRef.apply(func, args)
