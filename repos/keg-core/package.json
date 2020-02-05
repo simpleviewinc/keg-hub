@@ -33,7 +33,7 @@
     "babel-preset-expo": "~8.0.0",
     "expo": "~36.0.0",
     "fs-extra": "^8.1.0",
-    "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.0",
     "moment": "2.24.0",
     "moment-timezone": "0.5.25",
     "prop-types": "15.7.2",
