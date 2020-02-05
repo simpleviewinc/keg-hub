@@ -26,17 +26,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Function for making repeated nested function calls (the 'pipeline') succinct. Passes "item" into
- * <br> the first function (as its first argument), takes its result and passes that into the next function, and repeats.
- * <br> Continues until no functions remain, at which point it returns the value returned by the last function.
- * <br>  - you can also pass in an array in place of a function to specify a function to be called with some arguments. E.g.: [foo, 2, 3] would return foo(item, 2, 3)
- * @example: pipeline(1, addFour, subtract3, (x) => x * x) // would return 4
- * @function
- * @param {* | Function} item - the starting input. If it is a function, it will be executed immediately and the result will be piped into the remaining functions.
- * @param {...Function} functions 
- * @returns the final result of calling the pipeline of functions , starting with item as input
- */
 const pipeline = (item, ...functions) => {
   return functions.reduce((result, fn) => applyToFunc(result, fn), item);
 };
@@ -336,7 +325,7 @@ const cloneFunc = func => {
 
   const funcWrap = (...args) => new funcRef(...args);
 
-  const funcClone = (...args) => {
+  const funcClone = function funcClone(...args) {
     return func instanceof funcClone ? funcWrap.apply(null, args) : funcRef.apply(func, args);
   };
 
@@ -361,9 +350,8 @@ const cloneFunc = func => {
 * For the default case: use [ match.default, <your default value> ]
 * @function
 *
-* @param {*} matchArg 
+* @param {*} matchArg - the argument to match against the cases
 * @param {Array} entries - the cases
-* @param {*} fallback (optional) fallback default
 * @returns the return value of the first entry with a matching check value, else null
 *
 * @example 

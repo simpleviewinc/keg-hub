@@ -104,14 +104,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-/**
- * Updates a collection by removing, getting, adding to it.
- * @memberof collection
- * @param {Object} obj - object to update
- * @param {string|array} path - path to the property to update
- * @param {*} type - value to update || type
- * @return {*} based on update method
- */
 var updateColl = function updateColl(obj, path, type, val) {
   var org = obj;
   if (!isColl(obj) || !obj || !path) return type !== 'set' && val || undefined; // cloneDeep so we don't modify the reference

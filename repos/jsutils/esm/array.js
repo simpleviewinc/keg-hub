@@ -72,16 +72,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-/**
- * Randomly selects values from a passed in array.
- * @function
- * @example
- * randomArr([1,2,3], 1)
- * // Returns an array with one of the values in the passed in array
- * @param {array} arr - array to select values from
- * @param {number} amount - number of values to select from the array
- * @return {array} - randomly sorted array
- */
 var randomArr = function randomArr(arr, amount) {
   if (!isArr(arr)) return arr;
   var useAmount = amount || 1;

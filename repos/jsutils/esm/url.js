@@ -30,15 +30,6 @@ var _collection = require("./collection");
 
 var _array = require("./array");
 
-// 1. takes a querystring and return object
-// 2. takes an object and return querystring
-
-/**
- * takes a raw querystring input and converts it to an object
- * @param {String} string - querystring to parse into an object
- * @function
- * @returns {Object}
- */
 var queryToObj = function queryToObj(string) {
   var currentQueryItems = {};
   var stringSplit = string.split('?');

@@ -8,11 +8,6 @@ exports.isLowerCase = exports.isUpperCase = exports.wordCaps = exports.toStr = e
 
 var _method = require("./method");
 
-/**
- * Builds a string path from passed in args ( i.e. path/to/thing ).
- * @function
- * @return {string} - built path from arguments
- */
 const buildPath = (...args) => {
   const built = args.reduce((path, arg) => {
     let str = toStr(arg);

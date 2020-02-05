@@ -44,11 +44,6 @@ var _object = require("./object");
 
 var _method = require("./method");
 
-/**
- * Converts a standard callback method into Promise
- * @param {function} method - method to turn into a promise
- * @return method as a promise
- */
 var promisify = function promisify(method) {
   if (!(0, _method.isFunc)(method)) throw "Argument must be a function";
   return function () {
