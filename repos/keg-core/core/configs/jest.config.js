@@ -1,5 +1,5 @@
-const ROOT_DIR = require('app-root-path').path
-const { TAP } = process.env
+const path = require('path')
+const kegPath = require('app-root-path').path
 
 /**
  * Builds the correct paths when running tests based on TAP env
@@ -7,41 +7,46 @@ const { TAP } = process.env
  *
  * @returns {Object} - paths for testing
  */
-const buildTestPaths = (tap) => {
+const buildTestPaths = () => {
 
-  const testPath = tap
-    ? `${ROOT_DIR}/taps/${tap}`
-    : `${ROOT_DIR}/core/base`
-    
+  const rootDir = kegPath
+  const moduleDirectories = [ 'node_modules' ]
+
   return {
-    rootDir: testPath,
+    rootDir,
+    moduleDirectories,
     testMatch: [
-      `${testPath}/**/__tests__/**/*.js?(x)`,
-      `${testPath}/**/?(*.)(test).js?(x)`,
+      `${rootDir}/**/__tests__/**/*.js?(x)`,
+      `${rootDir}/**/?(*.)(test).js?(x)`,
     ],
-    collectCoverageFrom: [
-      `${testPath}/*.{js,jsx}`,
-    ]
+    collectCoverageFrom: [ `${rootDir}/*.{js,jsx}`, ]
   }
 }
 
 /**
- * Get the paths base on the TAP ENV
+ * Setup keg paths
  */
-const { collectCoverageFrom, testMatch, rootDir } = buildTestPaths(TAP)
+const { collectCoverageFrom, moduleDirectories, testMatch, rootDir } = buildTestPaths()
 
 /**
  * Modules that should be transpiled before the tests are run
  */
 const transpileForTests = [
-  'react-native',
-  'material-bread',
-  'react-native-vector-icons',
-  'react-native-firebase',
+  'sv-keg',
+  '@expo(nent)?/.*',
+  '@react-native-community',
+  '@react-navigation/.*',
+  '@unimodules/.*',
+  'expo(nent)?',
   're-theme',
+  'react-clone-referenced-element',
+  'react-native',
+  'react-navigation',
   'react-router-native',
   'react-router',
-  'react-router-dom'
+  'react-router-dom',
+  'sentry-expo',
+  'unimodules',
 ].join('|')
 
 /**
@@ -65,24 +70,23 @@ module.exports = {
   rootDir,
   testMatch,
   collectCoverageFrom,
-  preset: 'react-native',
+  moduleDirectories,
+  preset: 'jest-expo',
   transform: {
-    '^.+\\.js$': `${ROOT_DIR}/node_modules/react-native/jest/preprocessor.js`
+    '^.+\\.js$': `${kegPath}/node_modules/react-native/jest/preprocessor.js`
   },
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
     [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1'
   },
   verbose: true,
-  testPathIgnorePatterns: [ '/node_modules/' ],
-  transformIgnorePatterns: [ `node_modules/(?!(${transpileForTests})/)` ],
-  "reporters": [
-    "default",
-    "jest-html-reporters"
+  testPathIgnorePatterns: [ '/node_modules/', ],
+  transformIgnorePatterns: [
+    `node_modules/(?!(${transpileForTests})/)`
   ],
-  "reporters": [
-    "default",
-    "jest-html-reporters"
+  reporters: [
+    'default',
+    'jest-html-reporters'
   ],
   testResultsProcessor: 'jest-sonar-reporter',
   testURL: 'http://localhost/',
@@ -90,6 +94,6 @@ module.exports = {
     __DEV__: true
   },
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: [ `${ROOT_DIR}/core/scripts/js/setupTests.js` ],
+  setupFilesAfterEnv: [ `${kegPath}/core/scripts/js/setupTests.js` ],
   snapshotSerializers: [ 'enzyme-to-json/serializer' ]
 }

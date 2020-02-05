@@ -9,6 +9,8 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-
+jest_html_reporters.html
+test-report.xml
+core/base/assets/index.js
 # macOS
 .DS_Store
