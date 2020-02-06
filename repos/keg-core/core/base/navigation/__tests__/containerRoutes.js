@@ -1,27 +1,28 @@
-import { Mocks, Route } from 'SVMocks'
+import { Mocks, RouterSwitch, Route } from 'SVMocks'
 import React from 'react'
 import renderer from 'react-test-renderer'
 
-Mocks.setMocks({ components: { Route } })
+Mocks.setMocks({ components: { RouterSwitch, Route } })
 const { ContainerRoutes } = require('../containerRoutes')
 
 describe('containerRoutes', () => {
   it('empty routeConfigs', () => {
-    const container = renderer.create(<ContainerRoutes routeConfigs={[]} />)
+    const container = renderer.create(<ContainerRoutes navigationConfigs={null} />)
 
     expect(container.toJSON()).toBeNull()
   })
 
   it('non-empty routeConfigs', () => {
-    const routes = [
-      {
-        path: '/keg',
-        containerKey: 'home',
-        exact: true,
-      },
-    ]
-    const container = renderer.create(<ContainerRoutes routeConfigs={routes} />)
-
+    const navigationConfigs = {
+      "navigation": {
+        "/": "HomeContainer",
+        "/examples": "ExamplesContainer",
+        "/blue": "BlueContainer",
+        "/green": "GreenContainer",
+        "/user/:id": "UserContainer"
+      }
+    }
+    const container = renderer.create(<ContainerRoutes navigationConfigs={navigationConfigs} />)
     expect(container.toJSON()).toBeTruthy()
   })
 })

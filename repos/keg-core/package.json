@@ -26,6 +26,7 @@
     "@babel/core": "^7.0.0",
     "@babel/runtime": "^7.8.3",
     "@expo/webpack-config": "^0.10.11",
+    "@testing-library/react-hooks": "^3.2.1",
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
     "babel-loader": "^8.0.6",

@@ -1,7 +1,8 @@
+import { resetMocks } from './resetMocks'
+
 const path = require('path')
 const { isObj, mapObj } = require('jsutils')
 const BASE_PATH = path.join('../../base')
-const resetMocks = path.join('./reset_mocks')
 const packageConf = require('../../../package.json')
 const TESTS_FOLDER = '/__tests__/'
 

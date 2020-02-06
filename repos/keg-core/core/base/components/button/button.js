@@ -27,11 +27,7 @@ export const Button = withTheme(props => {
   const {
     theme,
     text,
-    type,
-    icon,
-    style,
     onPress,
-    textColor,
     color,
     disabled,
     children,
@@ -39,20 +35,15 @@ export const Button = withTheme(props => {
   } = props
 
   const bgColor = color || get(theme, [ 'colors', 'primary', 'main' ])
-  const buttonStyle = get(theme, [ 'components', 'button', 'default' ])
 
   return (
     <View>
       <RNButton
         ref={ref}
-        icon={<Icon name={icon} />}
-        text={text || 'button'}
-        textColor={textColor}
-        type={type || 'flat'}
+        title={text || 'button'}
         onPress={onPress}
         disabled={disabled}
         color={bgColor}
-        style={theme.join(buttonStyle, style)}
       >
         { children }
       </RNButton>
