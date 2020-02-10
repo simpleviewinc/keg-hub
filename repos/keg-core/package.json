@@ -54,7 +54,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.25",
     "prop-types": "15.7.2",
-    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git#master",
+    "re-theme": "git+https://github.com/simpleviewinc/re-theme.git#master",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -69,7 +69,7 @@
     "redux": "4.0.1",
     "redux-devtools-extension": "2.13.8",
     "rimraf": "^3.0.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#master"
+    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git#master"
   },
   "private": true
 }
