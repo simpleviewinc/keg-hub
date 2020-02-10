@@ -2,11 +2,11 @@
   "main": "node_modules/expo/AppEntry.js",
   "version": "0.0.1",
   "scripts": {
-    "android": "NODE_ENV=development PLATFORM=native expo start --android --dev",
+    "android": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -c --android --dev",
     "build:android": "NODE_ENV=production PLATFORM=native expo build:android",
     "build:ios": "NODE_ENV=production PLATFORM=native expo build:ios",
     "build:web": "yarn clean:web:build && NODE_ENV=production PLATFORM=web expo build:web",
-    "clean": "yarn clean:cache",
+    "clean": "yarn clean:cache && yarn clean:nm",
     "clean:babel": "rimraf ./node_modules/.cache/@babel",
     "clean:cache": "yarn clean:rn && yarn clean:babel",
     "clean:dev": "yarn clean:rn && yarn clean:babel && yarn clean:nm && yarn install",
@@ -15,11 +15,21 @@
     "clean:nm": "yarn cache clean && rimraf node_modules && npm cache clean --force",
     "clean:rn": "yarn cache clean && watchman watch-del-all && rimraf $TMPDIR/react-* && rimraf $TMPDIR/metro-bundler-cache-*",
     "clean:web:build": "rimraf ./web-build",
-    "ios": "NODE_ENV=development PLATFORM=native expo start --ios --dev",
+    "ios": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -c --ios --dev",
     "postinstall": "node ./core/scripts/js/postInstall.js",
     "start": "NODE_ENV=development expo start",
     "test": "PLATFORM=web NODE_ENV=test jest --no-cache --config=./core/configs/jest.config.js",
-    "web": "NODE_ENV=development PLATFORM=web expo start --web-only --dev"
+    "web": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=web expo start --web-only --dev",
+    "cp": "/bin/bash cp.sh",
+    "web:keg": "yarn cp keg; yarn web",
+    "web:keg:full": "yarn cp keg full; yarn web",
+    "web:keg:tr": "yarn cp keg resolver; yarn web",
+    "web:keg:tr:full": "yarn cp keg resolver full; yarn web",
+    "web:keg:re": "yarn cp keg retheme; yarn web",
+    "web:tr": "yarn cp resolver; yarn web",
+    "web:tr:full": "yarn cp resolver full; yarn web",
+    "web:jsutils": "yarn cp jsutils; yarn web",
+    "web:re": "yarn cp retheme; yarn web"
   },
   "dependencies": {},
   "devDependencies": {
@@ -37,14 +47,14 @@
     "enzyme-to-json": "3.3.0",
     "expo": "~36.0.0",
     "fs-extra": "^8.1.0",
-    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
     "jest-expo": "^36.0.1",
     "jest-html-reporters": "^1.2.1",
     "jest-sonar-reporter": "^2.0.0",
+    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
     "moment": "2.24.0",
     "moment-timezone": "0.5.25",
     "prop-types": "15.7.2",
-    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git#useTheme-hook-and-examples",
+    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme.git#master",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -59,7 +69,7 @@
     "redux": "4.0.1",
     "redux-devtools-extension": "2.13.8",
     "rimraf": "^3.0.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#ZEN-98-integrate-expo"
+    "tap-resolver": "git+https://github.com/simpleviewinc/sv-tap-resolver.git#master"
   },
   "private": true
 }

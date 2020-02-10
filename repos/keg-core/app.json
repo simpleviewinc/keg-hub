@@ -29,102 +29,94 @@
       "supportsTablet": true
     }
   },
-  "tapResolver": {
-    "paths": {
-      "temp": "./temp",
-      "baseTap": "./core/base",
-      "tapAssets": "assets",
-      "externalTaps": "",
-      "localTaps": "../../../",
-      "folderRootFile": "index"
-    },
-    "inheritance": [],
-    "extensions": {
-      "assets": [
-        ".png",
-        ".jpg",
-        ".jpeg",
-        ".gif",
-        ".ttf"
-      ],
-      "resolve": [
-        ".web.js",
-        ".native.js",
-        ".ios.js",
-        ".android.js",
-        ".js",
-        ".json",
-        ".sqlite",
-        ".ttf"
-      ]
-    },
-    "aliases": {
-      "nameSpace": "SV",
-      "root": {
-        "AppConfig": "app.json",
-        "Base": "core/base",
-        "Core": "core",
-        "Mocks": "core/mocks"
-      },
-      "base": {
-        "Daos": "daos",
-        "Native": "native",
-        "Store": "store"
-      },
-      "dynamic": {
-        "Actions": "actions",
-        "Assets": "assets",
-        "Components": "components",
-        "Containers": "containers",
-        "Constants": "constants",
-        "Navigation": "navigation",
-        "Models": "models",
-        "Reducers": "reducers",
-        "Base": "",
-        "Services": "services",
-        "Screens": "containers/screens",
-        "Store": "store",
-        "Theme": "theme",
-        "Utils": "utils"
-      },
-      "web": {
-        "^react-native$": "react-native-web",
-        "react-router-native": "react-router-dom"
-      },
-      "native": {}
-    },
-    "babel": {
-      "web": {
-        "presets": [ "babel-preset-expo" ],
-        "plugins": [[ "react-native-web", { "commonjs": true } ]]
-      },
-      "native": {
-        "presets": [ "babel-preset-expo" ],
-        "plugins": []
-      }
-    }
-  },
   "keg": {
+    "name": "SVKeg",
     "navigation": {},
-    "versions": {
-      "development": "1.0.0",
-      "production": "1.0.0",
-      "qa": "1.0.0",
-      "staging": "1.0.0"
+    "overrides": {
+      "kegName": [ "keg", "name" ],
+      "kegSrc": [ "tapResolver", "paths", "kegSrc" ]
     },
     "paths": {
       "buildConfig": "core/configs/build.config.js",
       "exportFolder": "builds"
     },
-    "api": {
-      "web": {
-        "host": "http://localhost",
-        "port": 8082
+    "tapResolver": {
+      "paths": {
+        "temp": "./temp",
+        "kegSrc": "./core/base",
+        "tapAssets": "assets",
+        "folderRootFile": "index"
       },
-      "native": {
-        "host": "http://localhost",
-        "port": 9090
+      "extensions": {
+        "assets": [
+          ".png",
+          ".jpg",
+          ".jpeg",
+          ".gif",
+          ".ttf"
+        ],
+        "resolve": [
+          ".web.js",
+          ".native.js",
+          ".ios.js",
+          ".android.js",
+          ".js",
+          ".json",
+          ".sqlite",
+          ".ttf"
+        ]
+      },
+      "aliases": {
+        "nameSpace": "SV",
+        "root": {
+          "AppConfig": "app.json",
+          "Base": "core/base",
+          "Core": "core",
+          "Mocks": "core/mocks"
+        },
+        "base": {
+          "Daos": "daos",
+          "Native": "native",
+          "Store": "store"
+        },
+        "dynamic": {
+          "Actions": "actions",
+          "Assets": "assets",
+          "Components": "components",
+          "Containers": "containers",
+          "Constants": "constants",
+          "Navigation": "navigation",
+          "Models": "models",
+          "Reducers": "reducers",
+          "Base": "",
+          "Services": "services",
+          "Screens": "containers/screens",
+          "Store": "store",
+          "Theme": "theme",
+          "Utils": "utils"
+        },
+        "web": {
+          "^react-native$": "react-native-web",
+          "react-router-native": "react-router-dom"
+        },
+        "native": {}
+      },
+      "babel": {
+        "web": {
+          "presets": [ "babel-preset-expo" ],
+          "plugins": [[ "react-native-web", { "commonjs": true } ]]
+        },
+        "native": {
+          "presets": [ "babel-preset-expo" ],
+          "plugins": []
+        }
       }
+    },
+    "versions": {
+      "development": "1.0.0",
+      "production": "1.0.0",
+      "qa": "1.0.0",
+      "staging": "1.0.0"
     }
   }
 }

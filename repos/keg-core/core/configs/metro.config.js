@@ -3,7 +3,7 @@ const fs = require('fs')
 const { get } = require('jsutils')
 const tapPath = require('app-root-path').path
 const tapPackage = require(path.resolve(tapPath, 'package.json'))
-const kegPath = path.resolve(__dirname, "../../")
+const kegPath = path.join(__dirname, "../../")
 const kegPackage = require(path.resolve(kegPath, 'package.json'))
 
 /**
@@ -23,11 +23,16 @@ const blackList = [
  *
  * @returns {Object} - Build node modules paths
  */
-const extraNodeModules = (package) => {
-  return package.dependencies && Object.keys(package.dependencies)
+const extraNodeModules = (package, repoPath) => {
+  const dependencies = {
+    ...get(package, 'dependencies', {}),
+    ...get(package, 'devDependencies', {}),
+  }
+
+  return Object.keys(dependencies)
     .reduce((nodeModules, name) => {
       blackList.indexOf(name) === -1 &&
-      (nodeModules[name] = path.resolve(kegPath, 'node_modules', name))
+      (nodeModules[name] = path.resolve(repoPath, 'node_modules', name))
 
       return nodeModules
     }, {}) || {}
@@ -40,18 +45,18 @@ const extraNodeModules = (package) => {
  * @return {Object} - metro config object
  */
 const buildMetroConfig = rootPath => {
-  return {
+  return metroConf = {
     resolver: {
       extraNodeModules: {
-        ...extraNodeModules(tapPackage),
-        ...extraNodeModules(kegPackage),
+        ...extraNodeModules(tapPackage, tapPath),
+        ...extraNodeModules(kegPackage, kegPath),
       },
     },
     projectRoot: kegPath,
     resetCache: true,
     watchFolders: [
       tapPath,
-      path.resolve(kegPath),
+      kegPath,
     ],
   }
 }

@@ -6,10 +6,9 @@ import { join } from 'SVTheme/join'
 import { text } from 'SVTheme/text'
 import { theme as tapTheme } from 'SVTheme/tapIndex'
 import { padding, margin, flex, layout } from 'SVTheme/layout'
-import { setDefaultTheme } from 're-theme'
 import { deepMerge } from 'jsutils'
 
-export const theme =   deepMerge(
+export const theme = deepMerge(
   {
     components,
     colors,
