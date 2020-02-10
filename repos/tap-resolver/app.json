@@ -1,37 +1,38 @@
 {
   "name": "tapResolver",
   "displayName": "Tap Resolver",
-  "tapResolver": {
-    "paths": {
-      "temp": "./temp",
-      "baseTap": "",
-      "tapAssets": "",
-      "tapList": "",
-      "tapListFile": "",
-      "externalTaps": "",
-      "localTaps": "",
-      "contentResolver": "",
-      "webResolver": ""
-    },
-    "tapInheritance": [],
-    "extensions": [],
-    "aliases": {
-      "nameSpace": "",
-      "root": {},
-      "base": {},
-      "dynamic": {},
-      "web": {},
-      "native": {}
-    },
-    "babel": {
-      "web": {
-        "presets": [],
-        "plugins": []
+  "keg": {
+    "name": "tapResolver",
+    "navigation": {},
+    "overrides": {},
+    "tapResolver": {
+      "paths": {
+        "temp": "./temp",
+        "kegSrc": "",
+        "tapSrc": "",
+        "tapAssets": "",
+        "contentResolver": "",
+        "webResolver": ""
       },
-      "native": {
-        "presets": [],
-        "plugins": []
-      }
-    } 
+      "extensions": [],
+      "aliases": {
+        "nameSpace": "",
+        "root": {},
+        "base": {},
+        "dynamic": {},
+        "web": {},
+        "native": {}
+      },
+      "babel": {
+        "web": {
+          "presets": [],
+          "plugins": []
+        },
+        "native": {
+          "presets": [],
+          "plugins": []
+        }
+      } 
+    }
   }
 }

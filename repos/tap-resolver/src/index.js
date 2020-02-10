@@ -1,22 +1,11 @@
-const buildAliases = require('./buildAliases')
-const buildAssets = require('./buildAssets')
-const buildTapList = require('./buildTapList')
-const buildConstants = require('./buildConstants')
-const getAppConfig = require('./getAppConfig')
-const contentResolver = require('./contentResolver')
-const cacheInvalidator = require('./cacheInvalidator')
-const setup = require('./setup')
-const setupTap = require('./setupTap')
-const webResolver = require('./webResolver')
+const builders = require('./builders')
+const resolvers = require('./resolvers')
+const runSetup = require('./runSetup')
+const tap = require('./tap')
 
 exports = {
-  buildAliases,
-  buildAssets,
-  buildTapList,
-  buildConstants,
-  getAppConfig,
-  contentResolver,
-  setup,
-  setupTap,
-  webResolver,
+  ...builders,
+  ...resolvers,
+  ...tap,
+  runSetup,
 }

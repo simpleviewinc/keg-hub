@@ -3,7 +3,7 @@
 ios/platform.sqlite
 
 **/taps/**/temp
-/temp
+temp
 
 /temp_assets
 /builds

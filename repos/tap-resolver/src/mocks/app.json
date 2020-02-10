@@ -1,0 +1,59 @@
+{
+  "name": "tapResolver",
+  "displayName": "Tap Resolver",
+  "keg": {
+    "name": "SVKeg",
+    "tapResolver": {
+      "paths": {
+        "temp": "temp",
+        "kegSrc": "src/mocks/base",
+        "tapSrc": "src/mocks/taps/test",
+        "tapAssets": "assets",
+        "webResolver": "src/mocks/base/webResolver",
+        "testResolver": "src/mocks/base/should_not_exist"
+      },
+      "extensions": {
+        "assets": [
+          ".png",
+          ".jpg"
+        ],
+        "resolve": [
+          ".web.js",
+          ".native.js",
+          ".ios.js",
+          ".android.js",
+          ".js"
+        ]
+      },
+      "aliases": {
+        "nameSpace": "Test",
+        "root": {
+          "AppConfig": "src/mocks/app.json",
+          "Base": "src/mocks/base",
+          "Core": "src/mocks",
+          "Mocks": "src/mocks"
+        },
+        "base": {
+          "Daos": "daos",
+          "Native": "native",
+          "Store": "store"
+        },
+        "dynamic": {
+          "Assets": "assets",
+          "Components": "components",
+          "Screens": "containers/screens"
+        }
+      },
+      "babel": {
+        "web": {
+          "presets": [ "babel-expo-web" ],
+          "plugins": [ "module-resolver-web" ]
+        },
+        "native": {
+          "presets": [ "babel-expo-native" ],
+          "plugins": [ "module-resolver-native" ]
+        }
+      } 
+    }
+  }
+}

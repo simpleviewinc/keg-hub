@@ -1,9 +1,0 @@
-{
-  "name": "test",
-  "displayName": "Test Tap",
-  "tapResolver": {
-    "aliases": {
-      "nameSpace": "MyTestTap"
-    }
-  }
-}

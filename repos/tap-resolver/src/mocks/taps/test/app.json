@@ -1,0 +1,11 @@
+{
+  "name": "test",
+  "displayName": "Test Tap",
+  "keg": {
+    "tapResolver": {
+      "aliases": {
+        "nameSpace": "MyTestTap"
+      }
+    }
+  }
+}

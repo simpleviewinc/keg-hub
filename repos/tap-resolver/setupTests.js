@@ -1,4 +1,4 @@
-const { FS } = require('./mocks')
+const { FS } = require('./src/mocks')
 jest.setMock('fs', FS)
 
 global.testMocks = global.testMocks || {}
