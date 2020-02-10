@@ -120,3 +120,7 @@ test-report.xml
 ./cp.sh
 jest_html_reporters.html
 re-theme-touch.js
+
+app/src/Readme.md
+!.gitkeep
+*.log

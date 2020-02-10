@@ -1,27 +1,17 @@
-import { rollup } from 'rollup'
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import replace from 'rollup-plugin-replace'
 import commonjs from 'rollup-plugin-commonjs'
 import cleanup from 'rollup-plugin-cleanup'
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import { terser } from 'rollup-plugin-terser'
-import buildHook from './buildHook'
+import alias from '@rollup/plugin-alias'
 
-const outputFile = "./build/index.js"
-
-export default {
-  input: "./src/index.js",
-  output: {
-    file: outputFile,
-    format: "cjs"
-  },
-  external: ['react', 'react-native', 'jsutils' ],
+const shared = {
+  external: ['react', 'react-dom', 'react-native', 'jsutils' ],
   watch: {
     clearScreen: false
   },
   plugins: [
-    buildHook(),
     replace({
       "process.env.NODE_ENV": JSON.stringify('production')
     }),
@@ -31,8 +21,29 @@ export default {
         presets: ['@babel/env', '@babel/preset-react']
     }),
     sourcemaps(),
-    // terser(),
     commonjs(),
     cleanup(),
   ],
 }
+
+export default Array
+  .from([ 'web', 'native' ])
+  .map((platform => ({
+    ...shared,
+    input: `./src/index.js`,
+    output: {
+      file: `./build/index.${platform}.js`,
+      format: "cjs"
+    },
+    plugins: [
+      ...shared.plugins,
+      alias({
+        entries: {
+          ReDimensions: `src/dimensions/dimensions.${platform}.js`,
+          RePlatform: `src/context/platform.${platform}.js`,
+          ReJoinTheme: `src/cache/joinTheme.${platform}.js`,
+          ReHooks: `src/hooks/index.${platform}.js`,
+        }
+      })
+    ]
+  })))

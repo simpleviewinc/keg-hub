@@ -1,11 +1,12 @@
 /** @module dimensions */
 'use strict'
 
-import { mapObj, isObj, toNum, isNum } from 'jsutils'
+import { mapObj, isObj, toNum, isNum, softFalsy, logData } from 'jsutils'
 
 /**
  * Default sizes for a screen width
  * <br/> Can be overwritten with setSizes helper
+ * @object
  */
 const sizeMap = {
   /**
@@ -21,14 +22,14 @@ const sizeMap = {
     [ 'xlarge', 1366 ]
   ],
   hash: {},
-  indexes: {},
-  keys: [],
+  indexes: {}
 }
 
 /**
  * Builds an index of the entry locations in the sizeMap entries
  * <br/>Builds the key value hash of the entries
  * <br/>Builds the keys array of the entries
+ * @function
  *
  * @returns {void}
 */
@@ -44,9 +45,6 @@ const buildSizeMapParts = () => {
     // Convert the sizeMap.entries into an object of key value pairs
     sizeMap.hash[ entry[0] ] = entry[1]
 
-    // Build the keys while building the indexes
-    sizeMap.keys.push(entry[0])
-
     return indexes
   }, {})
 }
@@ -56,21 +54,29 @@ const buildSizeMapParts = () => {
  * Updates the sizeMap.entries with custom values
  * <br/>Keys must already exist in the default sizeMap.indexes
  * <br/>Allowed keys are => xsmall | small | medium | large | xlarge
+ * @function
  * @param {Object} dims - key value pair of custom sizeMap.entries
  *
  * @returns {Object} - Updated sizeMap object
  */
 export const setSizes = dims => {
   if(!isObj(dims))
-    return console.error(
+    return logData(
       `setDimensions method requires an argument of type 'Object'.\nReceived: `,
-      dims
+      dims,
+      'error'
     )
 
   mapObj(dims, (key, value) => {
 
-    // Get the key index form the sizeMap
+    // Get the key index from the sizeMap
     const keyIndex = sizeMap.indexes[key]
+
+    if(!softFalsy(keyIndex))
+      return logData(
+        `Invalid ${key} for theme size! Allowed keys are xsmall | small | medium | large | xlarge`,
+        'warn'
+      )
 
     // Convert the value to an integer, just a helper incase value is a string
     const newSize = toNum(dims[key])
@@ -78,7 +84,13 @@ export const setSizes = dims => {
     // Ensure key is a valid key in the sizeMap indexes and the new size is a valid number
     // Also ensure the entry exists based on the keyIndex
     //  * This should never happen, but just incase
-    if(!keyIndex || !newSize || !sizeMap.entries[keyIndex]) return
+    if(!newSize || !sizeMap.entries[keyIndex])
+      return logData(
+        `Invalid size entry. Size must be a number and the size entry must exist!`,
+        `Size: ${newSize}`,
+        `Entry: ${sizeMap.entries[keyIndex]}`,
+        'warn'
+      )
 
     // Use the keyIndex to find the entry
     // Set the value to be an entry with key and new size
@@ -93,6 +105,7 @@ export const setSizes = dims => {
 
 /**
  * Helper to get the a size from the sizeMap based on the passed in width
+ * @function
  * @param {string|number} width - number to find the size from
  *
  * @returns
@@ -103,23 +116,14 @@ export const getSize = width => {
 
   const name = sizeMap.entries
     .reduce((updateSize, [ key, value ]) => {
-      
-      // If the checkWidth if more then or equal, just return the updates size
-      if(checkWidth <= value) return updateSize
 
-      // Check if the value is less then the checkWidth
-      value <= checkWidth
+      checkWidth >= value
         // If it is check if there is an updateSize already sent
         ? updateSize
-
           // If an update size exists, then check if it's value is less then value
-          // If it is, update the size
           ? value > sizeMap.hash[updateSize] && (updateSize = key)
-
           // Otherwise just update the size
           : (updateSize = key)
-
-        // If value not less then the check width, just bypass with null
         : null
 
       return updateSize
@@ -132,6 +136,7 @@ export const getSize = width => {
 
 /**
  * Get an array of all sizes to be merged together
+ * @function
  * @param {string} key - Name of the size
  *
  * @returns {Array} - Array of size key names
@@ -147,8 +152,9 @@ export const getMergeSizes = key => {
 buildSizeMapParts()
 
 /**
- * Get the sizeMap
+ * Get the sizeMap object
+ * @function
  *
- * @returns {void}
+ * @returns {Object} - built sizeMap object
  */
 export const getSizeMap = () => sizeMap

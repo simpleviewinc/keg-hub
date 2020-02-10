@@ -1,3 +1,3 @@
-'use strict';
+'use strict'
 
-module.exports = require('./build/index.js')
+module.exports = require('./build')

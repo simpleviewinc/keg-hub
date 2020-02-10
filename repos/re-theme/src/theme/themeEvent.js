@@ -1,7 +1,7 @@
 /** @module theme */
 'use strict'
 
-import { isArr, isFunc } from 'jsutils'
+import { isArr, isFunc, isNum } from 'jsutils'
 
 const listeners = {}
 

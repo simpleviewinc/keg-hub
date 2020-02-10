@@ -1,0 +1,11 @@
+.read-me-wrapper h3 {
+  border-bottom: 1px solid rgb(229, 236, 234);
+}
+
+.read-me-wrapper h1#retheme, .read-me-wrapper h1#retheme ~ p:first-of-type {
+  display: none;
+}
+
+.read-me-wrapper h3#setup {
+  margin-top: 0px;
+}

@@ -1,7 +1,6 @@
 /** @module context */
 'use strict'
 
-
 import React from 'react'
 import { getDefaultTheme } from '../theme/default'
 

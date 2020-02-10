@@ -1,17 +1,12 @@
 # ReTheme
-Simple React ant React Native Theme builder / switcher
+Simple React and React Native Theme builder / switcher
 
+### Setup
+Add to your package.json
 
-# Setup
-  * Add to your package.json
-```js
-  "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme"
-```
-
-## ReThemeProvider
-  * Import the `ReThemeProvider` into your `App.js` or whatever the entry point is for the app
-  * Wrap your app with the `ReThemeProvider`, and pass in your theme
-  * Theme will be merged with the default theme
+  ```js
+    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme"
+  ```
 
 ### Example 
 ```js
@@ -32,7 +27,7 @@ export const App from Component {
   
   render(){
     return  (
-      <ReThemeProvider value={ this.state.theme } >
+      <ReThemeProvider theme={theme} merge={false} >
         <App />
       </ReThemeProvider>
     )
@@ -41,28 +36,5 @@ export const App from Component {
 }
 ```
 
-## withTheme
-  * Import the `withTheme` method into your components
-  * Wrap your components in the `withTheme` method
-  * `theme` object will now be added to components props
-
-### Example 
-```js
-import { withTheme } from 're-theme'
-
-class Header extends Component {
-  
-  render(){
-    const { theme } = this.props
-    
-    return  (
-      <h1 style={ theme.headingOne } >
-        How to train your dragon
-      </h1>
-    )
-  }
-
-}
-
-export withTheme(Header)
-```
+### API
+Checkout the [Example App](https://simpleviewinc.github.io/sv-re-theme/) for documentation.

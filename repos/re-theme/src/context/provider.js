@@ -2,13 +2,24 @@
 'use strict'
 
 import React, { useEffect, useState } from 'react'
-import { isObj } from 'jsutils'
 import { ReThemeContext } from './context'
-import { Dimensions } from "../dimensions/dimensions"
-import { buildTheme, getDefaultTheme } from '../theme'
+import { Dimensions } from "ReDimensions"
+import { getSize } from "../dimensions/sizeMap"
+import { buildTheme, getDefaultTheme, addThemeEvent, removeThemeEvent } from '../theme'
+import { Constants } from '../constants'
+import { get } from 'jsutils'
 
-// Get the original window dimensions
-const dims = Dimensions.get("window")
+/**
+ * Holds the current theme after it's built
+ */
+let currentTheme = {}
+
+/**
+ * Helper to update the current Theme when ever the theme is built
+ * Gets added as an event listener, and is called every time the theme is re-built
+ * @param {Object} updatedTheme - Update built theme
+ */
+const updateCurrentTheme = updatedTheme => currentTheme = updatedTheme
 
 /**
  * Context Provider used to set the theme.
@@ -21,13 +32,18 @@ const dims = Dimensions.get("window")
  * @returns {Component|Object} - ReThemeContext.Provider - Provides the theme to the Context consumer
  */
 export const ReThemeProvider = props => {
-  const { children, theme,  merge: doMerge } = props
+  const { children, theme,  merge: doMerge, platforms, logRenders } = props
   const merge = Boolean(doMerge || (!doMerge && doMerge !== false)) || false
   
   /**
    * Set the original dimensions to the state hook
    */
-  const [ dimensions, setDimensions ] = useState(dims)
+  const [ dimensions, setDimensions ] = useState(Dimensions.get("window"))
+
+  /**
+   * Boolean to ensure we only add the event listeners once
+   */
+  const [ hasListener, setListener ] = useState(false)
   
   /**
    * onChange listener for when the screen size changes
@@ -38,9 +54,21 @@ export const ReThemeProvider = props => {
     // Pull out the relevant items form the window object
     const { width, height, scale, fontScale } = win
 
+    // Get the size we should change to
+    const changeToSize = getSize(width)
+    // If no size to change to, just return
+    if(!changeToSize) return
+
+    // Get the string version of the size to change to
+    const sizeToBe = changeToSize[0]
+
+    // Get the current size string version
+    const currentSize = get(currentTheme, [ 'RTMeta', 'key' ])
+
+    // Check if the sizes are not equal, and if so update the Dimensions with the new size
     // Update the state with the updated dimensions data
-    setDimensions({ width, height, scale, fontScale })
-    
+    sizeToBe !== currentSize && setDimensions({ width, height, scale, fontScale })
+
   }
 
   /**
@@ -48,12 +76,23 @@ export const ReThemeProvider = props => {
    */
   useEffect(() => {
 
-    // Add the event listener
-    Dimensions.addEventListener("change", onChange)
+    if(!hasListener){
+      // Add the event listeners
+      Dimensions.addEventListener("change", onChange)
+      addThemeEvent(Constants.BUILD_EVENT, updateCurrentTheme)
+      setListener(true)
+    }
 
-    // Return a function to remove the event listener
-    return () => Dimensions.removeEventListener("change", onChange)
+    // Return a function to remove the event listeners
+    return () => {
+      Dimensions.removeEventListener("change", onChange)
+      removeThemeEvent(Constants.BUILD_EVENT, updateCurrentTheme)
+      currentTheme = {}
+    }
   }, [])
+
+  logRenders &&
+    console.log(`---------- RE-THEME RE-RENDER ----------`)
 
   return (
     <ReThemeContext.Provider value={
@@ -61,7 +100,8 @@ export const ReThemeProvider = props => {
         theme,
         dimensions.width,
         dimensions.height,
-        merge && getDefaultTheme()
+        merge && getDefaultTheme(),
+        platforms
       )
     }>
       { children }

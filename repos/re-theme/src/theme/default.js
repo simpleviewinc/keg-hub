@@ -2,16 +2,13 @@
 'use strict'
 
 import { deepMerge, isObj } from 'jsutils'
-import { Dimensions } from "../dimensions/dimensions"
+import { Dimensions } from "ReDimensions"
 import { buildTheme } from './buildTheme'
 
 /**
  * Holds the default theme which can be set with the setDefaultTheme helper
  */
 let defaultTheme = {}
-
-// Initial window dimensions
-const dims = Dimensions.get("window");
 
 /**
  * Overwrites the default them with passed in theme
@@ -37,6 +34,7 @@ export const setDefaultTheme = (theme, merge=false) => {
     : theme
 
   // Get subset theme that matches current dimensions is useDimensions is true
+  const dims = Dimensions.get("window")
   const useTheme = buildTheme(defaultTheme, dims.width, dims.height)
 
   // Return the newly set default theme
