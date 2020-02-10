@@ -34,7 +34,7 @@
     "navigation": {},
     "overrides": {
       "kegName": [ "keg", "name" ],
-      "kegSrc": [ "tapResolver", "paths", "kegSrc" ]
+      "kegSrc": [ "keg", "tapResolver", "paths", "kegSrc" ]
     },
     "paths": {
       "buildConfig": "core/configs/build.config.js",
