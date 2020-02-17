@@ -29,7 +29,6 @@ const Element = React.forwardRef(({ elProps, children, ...props }, ref) => (
 
 export const Switch = props => (
   <SwitchWrapper
-    styleId={ `keg-native-switch` }
     { ...props }
     Element={ Element }
   />

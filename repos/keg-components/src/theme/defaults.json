@@ -1,4 +1,20 @@
 {
+  "colors": {
+    "defaultType": "default",
+    "types": [
+      "default",
+      "primary",
+      "secondary",
+      "warn",
+      "danger"
+    ],
+    "states": [
+      "default",
+      "disabled",
+      "hover",
+      "active"
+    ]
+  },
   "layout": {
     "sides": [ "left", "right", "top", "bottom" ],
     "margin": 15,

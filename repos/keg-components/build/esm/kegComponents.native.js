@@ -1,0 +1,2556 @@
+import PropTypes from 'prop-types';
+import React, { isValidElement, useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { withTheme, useTheme, useThemeHover, setDefaultTheme } from 're-theme';
+import { isFunc, reduceObj, isObj, isStr, isArr, get, checkCall, deepMerge, isNum, toBool, trainCase, capitalize } from 'jsutils';
+import { Text as Text$2, Platform, TouchableNativeFeedback, TouchableOpacity, View as View$1, Image as Image$1, TextInput, Picker, Switch as Switch$1, Linking } from 'react-native';
+import FAIcon from 'react-native-vector-icons/dist/FontAwesome';
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
+
+var isValidComponent = function isValidComponent(Component) {
+  return isValidElement(Component) || isFunc(Component);
+};
+
+var renderFromType = function renderFromType(Element, props, Wrapper) {
+  return isValidComponent(Element) ? isFunc(Element) ? React.createElement(Element, props) : Element : Wrapper ? React.createElement(Wrapper, props, Element) : Element;
+};
+
+var getActiveKey = function getActiveKey(keys, isDefault) {
+  return reduceObj(keys, function (key, value, activeKey) {
+    !activeKey && value && (activeKey = key === 'type' ? value : key);
+    return activeKey;
+  }, false) || isDefault;
+};
+
+var getActiveOpacity = function getActiveOpacity(isWeb, props, style) {
+  return !isWeb ? {
+    activeOpacity: props.activeOpacity || props.opacity || style && style.opacity || 0.3,
+    accessibilityRole: "button"
+  } : {};
+};
+
+var getChecked = function getChecked(isWeb, isChecked) {
+  return _defineProperty({}, isWeb ? 'checked' : 'value', isChecked);
+};
+
+var getImgSrc = function getImgSrc(isWeb, src, source, uri) {
+  var imgSrc = src || source || uri;
+  var key = isWeb ? 'src' : 'source';
+  return _defineProperty({}, key, isWeb ? isObj(imgSrc) ? imgSrc.uri : imgSrc : isStr(imgSrc) ? {
+    uri: imgSrc
+  } : imgSrc);
+};
+
+var getInputValueKey = function getInputValueKey(isWeb, onChange, onValueChange, readOnly) {
+  return !isWeb ? 'selectedValue' : isFunc(onChange) || isFunc(onValueChange) || readOnly ? 'value' : 'defaultValue';
+};
+var getValueFromChildren = function getValueFromChildren(value, children) {
+  return value ? value : children ? isArr(children) ? get(children, ['0', 'props', 'children']) : get(children, ['props', 'children']) : '';
+};
+
+var getOnLoad = function getOnLoad(isWeb, callback) {
+  return _defineProperty({}, isWeb ? 'onLoad' : 'onLoadEnd', callback);
+};
+
+var getOnChangeHandler = function getOnChangeHandler(isWeb, onChange, onValueChange) {
+  return _defineProperty({}, isWeb ? 'onChange' : 'onValueChange', onChange || onValueChange);
+};
+
+var getReadOnly = function getReadOnly(isWeb, readOnly, disabled, editable) {
+  var key = isWeb ? 'readOnly' : 'editable';
+  var value = isWeb ? readOnly || disabled || !editable : !(readOnly || disabled || !editable);
+  return _defineProperty({}, key, value);
+};
+
+var getPressHandler = function getPressHandler(isWeb, onClick, onPress) {
+  var action = onClick || onPress;
+  return isFunc(action) && _defineProperty({}, isWeb ? 'onClick' : 'onPress', onClick || onPress) || {};
+};
+
+var getStyles = function getStyles(isWeb, styles) {
+  return isWeb ? isObj(styles) && {
+    styles: styles
+  } || {
+    styles: {}
+  } : {};
+};
+
+var getTarget = function getTarget(isWeb, target) {
+  return isWeb && target ? {
+    target: target
+  } : {};
+};
+
+var getPlatform = function getPlatform() {
+  return 'native';
+};
+
+var colors = {
+	defaultType: "default",
+	types: [
+		"default",
+		"primary",
+		"secondary",
+		"warn",
+		"danger"
+	],
+	states: [
+		"default",
+		"disabled",
+		"hover",
+		"active"
+	]
+};
+var layout = {
+	sides: [
+		"left",
+		"right",
+		"top",
+		"bottom"
+	],
+	margin: 15,
+	padding: 15
+};
+var font = {
+	size: 500,
+	bold: 700,
+	units: "px"
+};
+var form = {
+	border: {
+		radius: 5
+	},
+	input: {
+		height: 35
+	},
+	"switch": {
+		space: 15,
+		height: 20,
+		width: 20
+	},
+	checkbox: {
+		space: 15,
+		height: 20,
+		width: 20
+	},
+	select: {
+		height: 35
+	}
+};
+var defaults = {
+	colors: colors,
+	layout: layout,
+	font: font,
+	form: form
+};
+
+var defaultColorType = get(defaults, 'colors.defaultType');
+var colorTypes = get(defaults, 'colors.types');
+var buildCompStyles = function buildCompStyles(theme, path, typeOpts, colorOpts) {
+  var extraStyles = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+  var compType = getActiveKey.apply(void 0, _toConsumableArray(typeOpts));
+  if (!compType) return {};
+  var paths = ["".concat(path, ".").concat(compType)];
+  var colorType = getActiveKey.apply(void 0, _toConsumableArray(colorOpts));
+  colorType && colorType !== 'default' && paths.push("".concat(path, ".").concat(compType, ".").concat(colorType));
+  var built = theme.get.apply(theme, _toConsumableArray(paths.concat(extraStyles)));
+  return reduceObj(built, function (key, value, filteredStyles) {
+    (key === defaultColorType || colorTypes.indexOf(key) === -1) && (filteredStyles[key] = value);
+    return filteredStyles;
+  }, {});
+};
+
+var transition = function transition() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var speed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 250;
+  var timingFunc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'ease';
+  return typeof props === 'string' ? "".concat(props, " ").concat(speed, "ms ").concat(timingFunc) : isArr(props) ? props.reduce(function (trans, prop) {
+    trans.push("".concat(prop, " ").concat(speed, "ms ").concat(timingFunc));
+    return trans;
+  }, []).join(', ') : null;
+};
+var toRgb = function toRgb(red, green, blue, alpha) {
+  var obj = isObj(red) ? red : {
+    r: red,
+    g: green,
+    b: blue,
+    a: alpha
+  };
+  obj.a = !obj.a && obj.a !== 0 ? 1 : obj.a;
+  return "rgba(".concat(obj.r, ", ").concat(obj.g, ", ").concat(obj.b, ", ").concat(obj.a, ")");
+};
+var hexToRgba = function hexToRgba(hex, opacity, asObj) {
+  if (!hex) return console.warn('Can not convert hex to rgba', hex) || "rgba(255,255,255,0)";
+  hex = hex.indexOf('#') === 0 ? hex.replace('#', '') : hex;
+  opacity = opacity > 1 ? (opacity / 100).toFixed(4) : opacity;
+  var rgbaObj = {
+    r: parseInt(hex.substring(0, 2), 16),
+    g: parseInt(hex.substring(2, 4), 16),
+    b: parseInt(hex.substring(4, 6), 16),
+    a: !opacity && opacity !== 0 ? 1 : opacity
+  };
+  return asObj ? rgbaObj : toRgb(rgbaObj);
+};
+var convertToPercent = function convertToPercent(num, percent) {
+  return parseInt(num * (100 + percent) / 100);
+};
+var checkColorMax = function checkColorMax(num) {
+  return num < 255 ? num : 255;
+};
+var convertToColor = function convertToColor(num, percent) {
+  var asPercent = convertToPercent(num, percent);
+  var withMax = checkColorMax(asPercent);
+  var asStr = withMax.toString(16);
+  return asStr.length == 1 ? "0".concat(asStr) : asStr;
+};
+var shadeHex = function shadeHex(color, percent) {
+  var rgba = hexToRgba(color, 1, true);
+  return "#" + convertToColor(rgba.r, percent) + convertToColor(rgba.g, percent) + convertToColor(rgba.b, percent);
+};
+var opacity = function opacity(amount, color) {
+  return isStr(color) && color.indexOf('#') === 0 ? hexToRgba(color, amount) : isObj(color) ? toRgb(color, amount) : "rgba(".concat(color || '0,0,0', ", ").concat(amount, ")");
+};
+for (var amount = 100; amount >= 0; amount -= 5) {
+  opacity["_".concat(amount)] = opacity((amount / 100).toFixed(2));
+}
+var palette = {
+  transparent: 'transparent',
+  white01: '#ffffff',
+  white02: '#fafafa',
+  white03: '#f5f5f5',
+  white04: '#f0f0f0',
+  gray01: '#e6e6e6',
+  gray02: '#dddddd',
+  gray03: '#b3b3b3',
+  gray04: '#999999',
+  black01: '#666666',
+  black02: '#4d4d4d',
+  black03: '#333333',
+  black04: '#1a1a1a',
+  blue01: shadeHex('#2196F3', 20),
+  blue02: "#2196F3",
+  blue03: shadeHex('#2196F3', -20),
+  green01: shadeHex('#02b4a3', 20),
+  green02: '#02b4a3',
+  green03: shadeHex('#02b4a3', -20),
+  orange01: shadeHex('#e05402', 20),
+  orange02: '#ff5f01',
+  orange03: shadeHex('#e05402', -20),
+  red01: shadeHex('#f51f10', 20),
+  red02: '#f51f10',
+  red03: shadeHex('#f51f10', -20)
+};
+var surface = {
+  default: {
+    main: palette.gray04,
+    light: palette.gray03,
+    dark: palette.black01
+  },
+  primary: {
+    main: palette.green02,
+    light: palette.green01,
+    dark: palette.green03
+  },
+  secondary: {
+    main: palette.blue02,
+    light: palette.blue01,
+    dark: palette.blue03
+  },
+  warn: {
+    main: palette.orange02,
+    light: palette.orange01,
+    dark: palette.orange03
+  },
+  danger: {
+    main: palette.red02,
+    light: palette.red01,
+    dark: palette.red03
+  }
+};
+var colors$1 = {
+  helpers: {
+    shadeHex: shadeHex,
+    hexToRgba: hexToRgba,
+    toRgb: toRgb,
+    toRgba: toRgb,
+    trans: transition
+  },
+  link: {
+    default: '#64aff1',
+    hover: '#1e88e5'
+  },
+  surface: surface,
+  opacity: opacity,
+  palette: palette
+};
+
+var defaultColorType$1 = get(defaults, 'colors.defaultType', 'default');
+var colorSurface = get(colors$1, 'surface', {});
+var colorStyles = function colorStyles(type, states, cb) {
+  if (type === defaultColorType$1) return states.default;
+  return Object.keys(states).reduce(function (built, key) {
+    return _objectSpread2({}, built, _defineProperty({}, key, checkCall(cb, colorSurface[type || defaultColorType$1], key)));
+  }, {});
+};
+var buildColorStyles = function buildColorStyles(states, cb) {
+  return get(defaults, 'colors.types', []).reduce(function (built, type) {
+    var styles = colorStyles(type, states, cb);
+    styles && (built[type] = styles);
+    return built;
+  }, {});
+};
+
+var allPlatforms = "$all";
+var platform = "$" + getPlatform();
+var nonPlatform =  "$web" ;
+var platforms = [allPlatforms, platform, nonPlatform];
+var mergePlatforms = function mergePlatforms(toMerge) {
+  var $all = toMerge.$all,
+      $web = toMerge.$web,
+      $native = toMerge.$native,
+      otherKeys = _objectWithoutProperties(toMerge, ["$all", "$web", "$native"]);
+  return platforms.reduce(function (merged, plat) {
+    var platStyles = plat !== nonPlatform && get(toMerge, [plat]);
+    return platStyles ? deepMerge(merged, platStyles) : merged;
+  }, otherKeys);
+};
+var platformFlatten = function platformFlatten(initial) {
+  var hasPlatforms = Object.keys(initial).some(function (key) {
+    return platforms.indexOf(key) !== -1;
+  });
+  var noPlatforms = hasPlatforms && mergePlatforms(initial) || _objectSpread2({}, initial);
+  return reduceObj(noPlatforms, function (key, value, merged) {
+    merged[key] = isObj(value) ? platformFlatten(value) : value;
+    return merged;
+  }, noPlatforms);
+};
+
+var inheritFrom = function inheritFrom() {
+  for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {
+    styles[_key] = arguments[_key];
+  }
+  return deepMerge.apply(void 0, _toConsumableArray(styles.map(function (style) {
+    return isObj(style) ? platformFlatten(style) : undefined;
+  })));
+};
+
+var useStyles = function useStyles(theme, path, typeOpts, colorOpts) {
+  var extraStyles = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+  var _useState = useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      activeStyles = _useState2[0],
+      setActiveStyles = _useState2[1];
+  var styles = activeStyles || buildCompStyles(theme, path, typeOpts, colorOpts, extraStyles);
+  useEffect(function () {
+    styles !== activeStyles && setActiveStyles(styles);
+  }, [styles, activeStyles, theme]);
+  return [styles, setActiveStyles];
+};
+
+var KegText = function KegText(element) {
+  return withTheme(function (props) {
+    var children = props.children,
+        style = props.style,
+        theme = props.theme,
+        attrs = _objectWithoutProperties(props, ["children", "style", "theme"]);
+    var textStyles = theme.get('typography.font.family', 'typography.default', element && "typography.".concat(element));
+    return React.createElement(Text$2, _extends({}, attrs, {
+      style: theme.join(textStyles, style)
+    }), children);
+  });
+};
+
+var Text = KegText('text');
+
+var getChildren = function getChildren(Children, theme, activeStyle) {
+  var styles = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  return renderFromType(Children, {
+    style: theme.join(activeStyle.content, styles.content)
+  }, Text);
+};
+var ButtonWrapper = function ButtonWrapper(props) {
+  var theme = useTheme();
+  var Element = props.Element,
+      children = props.children,
+      content = props.content,
+      disabled = props.disabled,
+      danger = props.danger,
+      isWeb = props.isWeb,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      outline = props.outline,
+      contained = props.contained,
+      primary = props.primary,
+      ref = props.ref,
+      style = props.style,
+      styles = props.styles,
+      secondary = props.secondary,
+      text = props.text,
+      type = props.type,
+      warn = props.warn,
+      elProps = _objectWithoutProperties(props, ["Element", "children", "content", "disabled", "danger", "isWeb", "onClick", "onPress", "outline", "contained", "primary", "ref", "style", "styles", "secondary", "text", "type", "warn"]);
+  var _useStyles = useStyles(theme, "components.button", [{
+    type: type,
+    outline: outline,
+    text: text,
+    contained: contained
+  }, 'contained'], [{
+    primary: primary,
+    secondary: secondary,
+    warn: warn,
+    danger: danger
+  }, 'default']),
+      _useStyles2 = _slicedToArray(_useStyles, 2),
+      btnStyles = _useStyles2[0],
+      setBtnStyles = _useStyles2[1];
+  var _useThemeHover = useThemeHover(btnStyles.default, btnStyles.hover, {
+    ref: ref,
+    noMerge: true
+  }),
+      _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
+      hoverRef = _useThemeHover2[0],
+      activeStyle = _useThemeHover2[1];
+  return React.createElement(Element, _extends({
+    elProps: elProps,
+    ref: hoverRef,
+    disabled: disabled,
+    style: theme.join(activeStyle.main, styles && get(styles, ['button', 'main']), disabled && get(btnStyles, ['disabled', 'main']), disabled && styles && get(styles, ['button', 'disabled']), style),
+    children: getChildren(children || content, theme, activeStyle, styles)
+  }, getPressHandler(isWeb, onClick, onPress), getActiveOpacity(isWeb, props, activeStyle)));
+};
+ButtonWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
+  content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
+  danger: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  outline: PropTypes.bool,
+  ref: PropTypes.object,
+  primary: PropTypes.bool,
+  secondary: PropTypes.bool,
+  style: PropTypes.object,
+  type: PropTypes.string,
+  warn: PropTypes.bool
+};
+
+var Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
+var Element = React.forwardRef(function (_ref, ref) {
+  var elProps = _ref.elProps,
+      children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
+  return React.createElement(Touchable, _extends({}, elProps, props, {
+    ref: ref
+  }), children);
+});
+var Button = function Button(props) {
+  return React.createElement(ButtonWrapper, _extends({}, props, {
+    Element: Element
+  }));
+};
+Button.propTypes = _objectSpread2({}, TouchableOpacity.propTypes, {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  outline: PropTypes.bool,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  text: PropTypes.bool,
+  type: PropTypes.string
+});
+
+var View = React.forwardRef(function (_ref, ref) {
+  var children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["children"]);
+  return React.createElement(View$1, _extends({}, props, {
+    ref: ref
+  }), children);
+});
+
+var indicatorUri = "data:image/webp;base64,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";
+
+var buildStyles = function buildStyles(theme, style, styles, isWeb) {
+  var built = {};
+  built.img = theme.get('components.indicator.image', styles.image, style);
+  built.wrapper = theme.get('components.indicator.wrapper', styles.wrapper);
+  return built;
+};
+var IndicatorWrapper = function IndicatorWrapper(props) {
+  var alt = props.alt,
+      Element = props.Element,
+      isWeb = props.isWeb,
+      resizeMode = props.resizeMode,
+      src = props.src,
+      source = props.source,
+      style = props.style,
+      styles = props.styles;
+  var theme = useTheme();
+  var builtStyles = buildStyles(theme, style, styles || {});
+  return React.createElement(View, {
+    style: builtStyles.wrapper
+  }, React.createElement(Element, _extends({
+    alt: alt || 'Loading',
+    style: builtStyles.img,
+    resizeMode: resizeMode || 'contain'
+  }, getImgSrc(isWeb, src, source, indicatorUri))));
+};
+
+var Indicator = function Indicator(_ref) {
+  var alt = _ref.alt,
+      src = _ref.src,
+      source = _ref.source,
+      style = _ref.style;
+  return React.createElement(IndicatorWrapper, {
+    alt: alt || 'Loading',
+    Element: Image$1,
+    src: src || source,
+    style: style
+  });
+};
+
+var Progress = function Progress(props) {
+  var styles = props.styles,
+      text = props.text,
+      theme = props.theme,
+      loadIndicator = props.loadIndicator;
+  var LoadingIndicator = loadIndicator || Indicator;
+  return React.createElement(View, {
+    style: theme.get('components.loading.progress', styles.progress)
+  }, isValidComponent(LoadingIndicator) ? React.createElement(LoadingIndicator, null) : text && React.createElement(Text, {
+    style: theme.get('components.loading.text', styles.text)
+  }, text));
+};
+var Loading = function Loading(props) {
+  var theme = useTheme();
+  var children = props.children,
+      text = props.text,
+      indicator = props.indicator;
+  var styles = props.styles || {};
+  return React.createElement(View, {
+    style: theme.get('components.loading.wrapper', styles.wrapper)
+  }, children || React.createElement(Progress, {
+    styles: styles,
+    theme: theme,
+    text: text,
+    loadIndicator: indicator
+  }));
+};
+Loading.propTypes = {
+  text: PropTypes.string,
+  style: PropTypes.object,
+  wrapStyle: PropTypes.object,
+  children: PropTypes.object
+};
+
+var onLoadEvent = function onLoadEvent(setLoading, props, setStyle, loadedStyle) {
+  return function (event) {
+    checkCall(setLoading, false);
+    checkCall(setStyle, loadedStyle);
+    checkCall(props.onLoad, event, props);
+  };
+};
+var buildStyles$1 = function buildStyles(style, styles, theme, type) {
+  var defStyle = theme.get(checkCall(get(theme, 'transition.opacity')), "components.image.".concat(type));
+  var imgStyle = theme.get(styles.image, style);
+  var loading = theme.get(defStyle, 'components.image.loading', imgStyle, {
+    width: 0,
+    height: 0
+  });
+  var loaded = theme.get(defStyle, 'components.image.loaded', imgStyle);
+  var loadingComp = theme.get({
+    width: loaded.width,
+    height: loaded.height
+  }, styles.loading);
+  var hover = theme.get('components.image.hover', styles.hover);
+  var wrapper = theme.get('components.image.wrapper', styles.wrapper);
+  return {
+    hover: hover,
+    loading: loading,
+    loadingComp: loadingComp,
+    loaded: loaded,
+    wrapper: wrapper
+  };
+};
+var ImageWrapper = function ImageWrapper(props) {
+  var theme = useTheme();
+  var _useState = useState(true),
+      _useState2 = _slicedToArray(_useState, 2),
+      loading = _useState2[0],
+      setLoading = _useState2[1];
+  var alt = props.alt,
+      children = props.children,
+      Element = props.Element,
+      isWeb = props.isWeb,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      ref = props.ref,
+      src = props.src,
+      source = props.source,
+      style = props.style,
+      styles = props.styles,
+      type = props.type,
+      attrs = _objectWithoutProperties(props, ["alt", "children", "Element", "isWeb", "onClick", "onPress", "ref", "src", "source", "style", "styles", "type"]);
+  var builtStyles = buildStyles$1(style, styles || {}, theme, type || 'default');
+  var _useThemeHover = useThemeHover(builtStyles.loaded, builtStyles.hover, {
+    ref: ref
+  }),
+      _useThemeHover2 = _slicedToArray(_useThemeHover, 3),
+      useRef = _useThemeHover2[0],
+      useStyle = _useThemeHover2[1],
+      setStyle = _useThemeHover2[2];
+  return React.createElement(View, {
+    style: builtStyles.wrapper
+  }, loading && React.createElement(Loading, {
+    type: 'image',
+    style: builtStyles.loadingComp
+  }), React.createElement(Element, _extends({
+    ref: useRef,
+    attrs: attrs,
+    alt: alt,
+    style: loading ? builtStyles.loading : useStyle
+  }, getPressHandler(isWeb, onClick, onPress), getImgSrc(isWeb, src, source), getOnLoad(isWeb, onLoadEvent(setLoading, props, setStyle, builtStyles.loaded)))));
+};
+ImageWrapper.propTypes = {
+  onPress: PropTypes.func,
+  type: PropTypes.string,
+  alt: PropTypes.string,
+  src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  style: PropTypes.object,
+  ref: PropTypes.object
+};
+
+var Element$1 = React.forwardRef(function (_ref, ref) {
+  var attrs = _ref.attrs,
+      src = _ref.src,
+      props = _objectWithoutProperties(_ref, ["attrs", "src"]);
+  return React.createElement(Image$1, _extends({}, attrs, props, {
+    ref: ref
+  }));
+});
+var Image = function Image(props) {
+  return React.createElement(ImageWrapper, _extends({}, props, {
+    Element: Element$1
+  }));
+};
+Image.propTypes = {
+  onPress: PropTypes.func,
+  type: PropTypes.string,
+  alt: PropTypes.string,
+  src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  style: PropTypes.object,
+  ref: PropTypes.object
+};
+
+var CardImageTitle = function CardImageTitle(_ref) {
+  var subtitle = _ref.subtitle,
+      title = _ref.title,
+      styles = _ref.styles,
+      theme = _ref.theme;
+  return React.createElement(View, {
+    style: theme.join(get(theme, ['components', 'card', 'overlay']), styles.overlay)
+  }, title && React.createElement(Text, {
+    style: theme.join(get(theme, ['components', 'card', 'featured', 'title']), styles.title)
+  }, title), subtitle && React.createElement(Text, {
+    style: theme.join(get(theme, ['components', 'card', 'featured', 'subtitle']), styles.subtitle)
+  }, subtitle));
+};
+var CardImage = function CardImage(_ref2) {
+  var image = _ref2.image,
+      subtitle = _ref2.subtitle,
+      styles = _ref2.styles,
+      title = _ref2.title;
+  var theme = useTheme();
+  return React.createElement(Image, _extends({}, image, {
+    styles: {
+      loading: styles.loading,
+      wrapper: styles.wrapper
+    },
+    style: theme.join(get(theme, ['components', 'card', 'image', 'image']), styles.image)
+  }), (title || subtitle) && React.createElement(CardImageTitle, {
+    subtitle: subtitle,
+    title: title,
+    styles: styles,
+    theme: theme
+  }));
+};
+CardImage.propTypes = {
+  image: PropTypes.object,
+  styles: PropTypes.object,
+  subtitle: PropTypes.string,
+  title: PropTypes.string
+};
+
+var Divider = function Divider(_ref) {
+  var style = _ref.style,
+      props = _objectWithoutProperties(_ref, ["style"]);
+  var theme = useTheme();
+  return React.createElement(View, _extends({}, props, {
+    style: theme.join(get(theme, ['components', 'divider']), style)
+  }));
+};
+Divider.propTypes = {
+  style: PropTypes.object
+};
+
+var CardHeader = function CardHeader(_ref) {
+  var header = _ref.header,
+      theme = _ref.theme,
+      numberOfLines = _ref.numberOfLines,
+      styles = _ref.styles;
+  if (!header || React.isValidElement(header)) return header || null;
+  return React.createElement(View, null, React.createElement(Text, {
+    numberOfLines: numberOfLines,
+    style: styles.header
+  }, header), React.createElement(Divider, {
+    style: styles.divider
+  }));
+};
+CardHeader.propTypes = {
+  header: PropTypes.string,
+  numberOfLines: PropTypes.number,
+  styles: PropTypes.object,
+  theme: PropTypes.object
+};
+var CardContainer = function CardContainer(_ref2) {
+  var attributes = _ref2.attributes,
+      children = _ref2.children,
+      styles = _ref2.styles,
+      theme = _ref2.theme;
+  return React.createElement(View, _extends({}, attributes, {
+    style: styles.container
+  }), React.createElement(View, {
+    style: styles.wrapper
+  }, children));
+};
+CardContainer.propTypes = {
+  attributes: PropTypes.object,
+  styles: PropTypes.object,
+  theme: PropTypes.object
+};
+var CardFooter = function CardFooter(_ref3) {
+  var footer = _ref3.footer,
+      theme = _ref3.theme,
+      numberOfLines = _ref3.numberOfLines,
+      styles = _ref3.styles;
+  if (!footer || React.isValidElement(footer)) return footer || null;
+  return React.createElement(View, null, React.createElement(Divider, {
+    style: styles.divider
+  }), React.createElement(Text, {
+    numberOfLines: numberOfLines,
+    style: styles.footer
+  }, footer));
+};
+CardFooter.propTypes = {
+  header: PropTypes.string,
+  numberOfLines: PropTypes.number,
+  styles: PropTypes.object,
+  theme: PropTypes.object
+};
+
+var buildStyles$2 = function buildStyles(styles, theme) {
+  var cardStyles = {};
+  cardStyles.container = theme.join(get(theme, ['components', 'card', 'container']), styles.container);
+  cardStyles.wrapper = theme.join(get(theme, ['components', 'card', 'wrapper']), styles.wrapper);
+  cardStyles.header = theme.join(theme.get('typography.h5', 'components.card.header'), styles.header);
+  cardStyles.footer = theme.join(get(theme, ['components', 'card', 'footer']), styles.footer);
+  cardStyles.divider = theme.join(get(theme, ['components', 'card', 'divider']), styles.divider);
+  cardStyles.children = theme.join(get(theme, ['components', 'card', 'children']), cardStyles.children);
+  return cardStyles;
+};
+var getImgProps = function getImgProps(image, styles) {
+  return isStr(image) ? {
+    src: image,
+    style: styles.image
+  } : _objectSpread2({}, image, {
+    style: _objectSpread2({}, deepMerge(image.style, styles.image))
+  });
+};
+var Card = function Card(_ref) {
+  var styles = _ref.styles,
+      props = _objectWithoutProperties(_ref, ["styles"]);
+  var theme = useTheme();
+  styles = styles || {};
+  var children = props.children,
+      footer = props.footer,
+      footerLines = props.footerLines,
+      header = props.header,
+      headerLines = props.headerLines,
+      image = props.image,
+      subtitle = props.subtitle,
+      title = props.title,
+      attributes = _objectWithoutProperties(props, ["children", "footer", "footerLines", "header", "headerLines", "image", "subtitle", "title"]);
+  var hasImage = Boolean(image);
+  var imgProps = hasImage && getImgProps(image, styles);
+  var cardStyles = buildStyles$2(styles, theme);
+  return React.createElement(CardContainer, {
+    theme: theme,
+    attributes: attributes,
+    styles: cardStyles
+  }, React.createElement(CardHeader, {
+    header: header,
+    theme: theme,
+    numberOfLines: headerLines,
+    styles: cardStyles
+  }), hasImage && React.createElement(CardImage, {
+    title: title,
+    subtitle: subtitle,
+    image: imgProps,
+    children: children,
+    styles: {
+      children: cardStyles.children,
+      image: imgProps.style,
+      loading: styles.loading,
+      overlay: styles.overlay,
+      subtitle: styles.subtitle,
+      title: styles.title,
+      wrapper: styles.imageWrapper
+    }
+  }), React.createElement(View, {
+    style: cardStyles.children
+  }, children), footer && React.createElement(CardFooter, {
+    footer: footer,
+    theme: theme,
+    numberOfLines: footerLines,
+    styles: cardStyles
+  }));
+};
+Card.propTypes = {
+  header: PropTypes.string,
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  headerNumberOfLines: PropTypes.number,
+  image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  styles: PropTypes.object
+};
+
+var getHeight = function getHeight(height, toggled) {
+  return toggled ? height : height && !toggled ? 0 : null;
+};
+var Drawer = function Drawer(props) {
+  var theme = useTheme();
+  var style = props.style,
+      children = props.children,
+      toggled = props.toggled;
+  var slideRef = useRef(null);
+  var _useState = useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      height = _useState2[0],
+      setHeight = _useState2[1];
+  useLayoutEffect(function () {
+    var curHeight = get(slideRef, 'current.offsetHeight');
+    if (curHeight === 0) return;
+    height !== curHeight && setHeight(curHeight);
+  }, [height]);
+  var sliderStyle = theme.join({
+    overflow: 'hidden',
+    transition: 'max-height 1s ease'
+  }, get(theme, 'components.drawer'), style, {
+    maxHeight: getHeight(height, toggled)
+  });
+  return React.createElement(View, {
+    ref: slideRef,
+    style: sliderStyle
+  }, children);
+};
+Drawer.propTypes = {
+  toggled: PropTypes.bool,
+  style: PropTypes.object,
+  children: PropTypes.object
+};
+
+var Checkbox = withTheme(function (props) {
+  var theme = props.theme,
+      style = props.style,
+      children = props.children,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      text = props.text,
+      args = _objectWithoutProperties(props, ["theme", "style", "children", "onClick", "onPress", "text"]);
+  var checkboxStyle = theme.join(get(theme, ['form', 'checkbox']), style);
+  return React.createElement(Text, _extends({}, args, {
+    style: checkboxStyle
+  }), text);
+});
+Checkbox.propTypes = {
+  style: PropTypes.object,
+  text: PropTypes.string
+};
+
+var buildStyles$3 = function buildStyles(theme, type, elType) {
+  var form = theme.get('form.form.default', type && "form.form.".concat(type));
+  return {
+    form: form
+  };
+};
+var FormWrapper = React.forwardRef(function (props, ref) {
+  var theme = useTheme();
+  var children = props.children,
+      Element = props.Element,
+      elType = props.elType,
+      isWeb = props.isWeb,
+      style = props.style,
+      type = props.type,
+      elProps = _objectWithoutProperties(props, ["children", "Element", "elType", "isWeb", "style", "type"]);
+  var builtStyles = buildStyles$3(theme, type);
+  return React.createElement(Element, {
+    elProps: elProps,
+    ref: ref,
+    style: theme.join(builtStyles.form, style),
+    children: children
+  });
+});
+FormWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  type: PropTypes.string
+};
+
+var Element$2 = React.forwardRef(function (_ref, ref) {
+  var elProps = _ref.elProps,
+      children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
+  return React.createElement(View, _extends({}, elProps, props, {
+    ref: ref
+  }), children);
+});
+var Form = function Form(props) {
+  return React.createElement(FormWrapper, _extends({}, props, {
+    Element: Element$2,
+    elType: "native"
+  }));
+};
+Form.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  onSubmit: PropTypes.func,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  type: PropTypes.string
+};
+
+var Input = withTheme(function (props) {
+  var theme = props.theme,
+      children = props.children,
+      style = props.style,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      onChange = props.onChange,
+      args = _objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress", "onChange"]);
+  return React.createElement(TextInput, _extends({}, args, {
+    style: theme.join(get(theme, ['form', 'input', 'default']), style),
+    onChangeText: onChange,
+    onPress: onClick || onPress
+  }));
+});
+Input.propTypes = {
+  theme: PropTypes.object,
+  style: PropTypes.object,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  onChange: PropTypes.func
+};
+
+var SelectOption = Picker.Item;
+var useable = function useable(item) {
+  return (isStr(item) || isNum(item)) && item;
+};
+var getVal = function getVal(value, text, children, label) {
+  return useable(value) || useable(text) || useable(children) || useable(label);
+};
+var Option = function Option(props) {
+  var label = props.label,
+      children = props.children,
+      text = props.text,
+      value = props.value;
+  return React.createElement(SelectOption, {
+    label: getVal(label, value, text),
+    value: getVal(value, text, children, label)
+  });
+};
+Option.propTypes = {
+  children: PropTypes.string,
+  label: PropTypes.string,
+  text: PropTypes.string,
+  value: PropTypes.string
+};
+
+var Radio = withTheme(function (props) {
+  var theme = props.theme,
+      children = props.children,
+      style = props.style,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      text = props.text,
+      args = _objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress", "text"]);
+  var radioStyle = theme.join(get(theme, ['form', 'radio']), style);
+  return React.createElement(Text, _extends({}, args, {
+    style: radioStyle
+  }), text);
+});
+Radio.propTypes = {
+  style: PropTypes.object,
+  text: PropTypes.string
+};
+
+var getValue = function getValue(_ref, isWeb) {
+  var children = _ref.children,
+      onChange = _ref.onChange,
+      onValueChange = _ref.onValueChange,
+      readOnly = _ref.readOnly,
+      value = _ref.value;
+  var setValue = getValueFromChildren(value, children);
+  var valKey = getInputValueKey(isWeb, onChange, onValueChange, readOnly);
+  return _defineProperty({}, valKey, setValue);
+};
+var buildStyles$4 = function buildStyles(theme, type) {
+  var select = theme.get('form.select.default', type && "form.select.".concat(type));
+  return {
+    select: select
+  };
+};
+var SelectWrapper = function SelectWrapper(props) {
+  var theme = useTheme();
+  var children = props.children,
+      editable = props.editable,
+      disabled = props.disabled,
+      Element = props.Element,
+      isWeb = props.isWeb,
+      readOnly = props.readOnly,
+      onChange = props.onChange,
+      onValueChange = props.onValueChange,
+      style = props.style,
+      type = props.type,
+      value = props.value,
+      elProps = _objectWithoutProperties(props, ["children", "editable", "disabled", "Element", "isWeb", "readOnly", "onChange", "onValueChange", "style", "type", "value"]);
+  var styles = buildStyles$4(theme, type);
+  return React.createElement(Element, _extends({
+    elProps: elProps,
+    style: theme.join(styles.select, style)
+  }, getReadOnly(isWeb, readOnly, disabled, editable), getValue(props, isWeb), getOnChangeHandler(isWeb, onChange, onValueChange)), children);
+};
+SelectWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  onChange: PropTypes.func,
+  onValueChange: PropTypes.func,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  type: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+};
+
+var Slt = React.forwardRef(function (_ref, ref) {
+  var elProps = _ref.elProps,
+      children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
+  return React.createElement(Picker, _extends({}, elProps, props, {
+    ref: ref
+  }), children);
+});
+var Select = function Select(props) {
+  return React.createElement(SelectWrapper, _extends({}, props, {
+    Element: Slt
+  }));
+};
+Select.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func,
+  onValueChange: PropTypes.func,
+  style: PropTypes.object
+};
+
+var Caption = KegText('caption');
+
+var H1 = KegText('h1');
+
+var H2 = KegText('h2');
+
+var H3 = KegText('h3');
+
+var H4 = KegText('h4');
+
+var H5 = KegText('h5');
+
+var H6 = KegText('h6');
+
+var Label = KegText('label');
+
+var P = KegText('paragraph');
+
+var Subtitle = KegText('subtitle');
+
+var buildStyles$5 = function buildStyles(styles, theme, checked, type) {
+  var status = checked && 'on' || 'off';
+  var container = theme.get("form.".concat(type, ".container"), styles && styles.container);
+  var wrapper = theme.get("form.".concat(type, ".wrapper"), styles && styles.wrapper);
+  var area = theme.get("form.".concat(type, ".area"), styles && styles.bounds);
+  var indicator = theme.get("form.".concat(type, ".indicator"), "form.".concat(type, ".").concat(status), styles && styles.indicator);
+  var leftText = theme.get("form.".concat(type, ".text"), "form.".concat(type, ".leftText"), styles && styles.text, styles && styles.leftText);
+  var rightText = theme.get("form.".concat(type, ".text"), "form.".concat(type, ".rightText"), styles && styles.text, styles && styles.rightText);
+  return {
+    container: container,
+    wrapper: wrapper,
+    area: area,
+    indicator: indicator,
+    leftText: leftText,
+    rightText: rightText
+  };
+};
+var setCheckedValue = function setCheckedValue(isChecked, setChecked, onChange) {
+  return function (event) {
+    setChecked(!isChecked);
+    checkCall(onChange, event, !isChecked);
+  };
+};
+var SideText = function SideText(_ref) {
+  var text = _ref.text,
+      style = _ref.style;
+  return isValidComponent(text) ? text : isStr(text) && React.createElement(Text, {
+    style: style
+  }, text);
+};
+var SwitchWrapper = function SwitchWrapper(props) {
+  var theme = useTheme();
+  var checked = props.checked,
+      Element = props.Element,
+      disabled = props.disabled,
+      isWeb = props.isWeb,
+      leftText = props.leftText,
+      onChange = props.onChange,
+      onValueChange = props.onValueChange,
+      ref = props.ref,
+      rightText = props.rightText,
+      style = props.style,
+      styles = props.styles,
+      type = props.type,
+      value = props.value,
+      children = props.children,
+      elProps = _objectWithoutProperties(props, ["checked", "Element", "disabled", "isWeb", "leftText", "onChange", "onValueChange", "ref", "rightText", "style", "styles", "type", "value", "children"]);
+  var _useState = useState(toBool(checked || value)),
+      _useState2 = _slicedToArray(_useState, 2),
+      isChecked = _useState2[0],
+      setChecked = _useState2[1];
+  var builtStyles = buildStyles$5(styles, theme, isChecked, type || 'switch');
+  return React.createElement(View, {
+    style: builtStyles.container
+  }, React.createElement(SideText, {
+    text: leftText,
+    style: builtStyles.leftText
+  }), React.createElement(Element, _extends({
+    elProps: elProps,
+    disabled: disabled,
+    style: style
+  }, getChecked(isWeb, isChecked), getStyles(isWeb, builtStyles), getOnChangeHandler(isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), React.createElement(SideText, {
+    text: rightText,
+    style: builtStyles.rightText
+  }));
+};
+SwitchWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  text: PropTypes.string,
+  type: PropTypes.string
+};
+
+var Element$3 = React.forwardRef(function (_ref, ref) {
+  var elProps = _ref.elProps,
+      children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
+  return React.createElement(Switch$1, _extends({}, elProps, props, {
+    ref: ref
+  }), children);
+});
+var Switch = function Switch(props) {
+  return React.createElement(SwitchWrapper, _extends({}, props, {
+    Element: Element$3
+  }));
+};
+Switch.propTypes = _objectSpread2({}, TouchableOpacity.propTypes, {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  text: PropTypes.string,
+  type: PropTypes.string
+});
+
+var IconWrapper = React.forwardRef(function (props, ref) {
+  var theme = useTheme();
+  var children = props.children,
+      color = props.color,
+      Element = props.Element,
+      isWeb = props.isWeb,
+      name = props.name,
+      size = props.size,
+      style = props.style,
+      styles = props.styles,
+      type = props.type,
+      attrs = _objectWithoutProperties(props, ["children", "color", "Element", "isWeb", "name", "size", "style", "styles", "type"]);
+  var containerStyle = theme.get('components.icon.container', get(styles, 'container'), styles);
+  var iconProps = {
+    ref: ref,
+    name: name
+  };
+  iconProps.style = theme.get('components.icon.icon', get(styles, 'icon'), styles);
+  iconProps.color = color || get(iconStyles, 'color');
+  iconProps.size = size || get(iconStyles, 'fontSize');
+  var Icon = isValidComponent(Element) ? Element : FAIcon;
+  return React.createElement(View, {
+    style: containerStyle
+  }, React.createElement(Icon, iconProps));
+});
+IconWrapper.propTypes = {
+  color: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  type: PropTypes.string
+};
+
+var Icon = function Icon(props) {
+  return React.createElement(IconWrapper, props);
+};
+Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
+
+var Container = function Container(args) {
+  var onPress = args.onPress,
+      onClick = args.onClick,
+      children = args.children,
+      flexDir = args.flexDir,
+      size = args.size,
+      style = args.style,
+      props = _objectWithoutProperties(args, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
+  var flex = size ? 0 : props.style && props.style.width ? 0 : 1;
+  return React.createElement(View, _extends({}, props, {
+    style: _objectSpread2({
+      flex: flex,
+      flexDirection: flex && flexDir
+    }, style)
+  }, getPressHandler(getPlatform(), onClick || onPress)), children);
+};
+Container.propTypes = {
+  style: PropTypes.object,
+  onPress: PropTypes.func,
+  flexDir: PropTypes.string,
+  size: PropTypes.number
+};
+
+var Row = withTheme(function (_ref) {
+  var children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["children"]);
+  var theme = props.theme || {
+    layout: {}
+  };
+  return React.createElement(Container, _extends({}, props, {
+    style: _objectSpread2({}, theme.layout.grid.row, {}, props.style),
+    flexDir: "row"
+  }), children);
+});
+Row.propTypes = {
+  center: PropTypes.string,
+  theme: PropTypes.object,
+  style: PropTypes.object
+};
+
+var buildCenterStyles = function buildCenterStyles(isCenter) {
+  return isCenter === 'x' || isCenter === 'xaxis' || isCenter === 'x-axis' ? {
+    justifyContent: 'center'
+  } : isCenter === 'y' || isCenter === 'yaxis' || isCenter === 'y-axis' ? {
+    alignItems: 'center'
+  } : isCenter && {
+    alignItems: 'center',
+    justifyContent: 'center'
+  } || {};
+};
+var getChildAttrs = function getChildAttrs(children) {
+  children = isArr(children) && children || [children];
+  return children.reduce(function (attrs, child) {
+    if (attrs.isRow && attrs.isCenter) return attrs;
+    if (!attrs.isRow && child && child.type === Row) attrs.isRow = true;
+    if (!attrs.isCenter && child && child.props && child.props.center) attrs.isCenter = child.props.center.toString().toLowerCase();
+    return attrs;
+  }, {
+    isRow: false,
+    isCenter: false
+  });
+};
+var Grid = function Grid(_ref) {
+  var children = _ref.children,
+      style = _ref.style,
+      props = _objectWithoutProperties(_ref, ["children", "style"]);
+  var theme = useTheme();
+  var _getChildAttrs = getChildAttrs(children),
+      isRow = _getChildAttrs.isRow,
+      isCenter = _getChildAttrs.isCenter;
+  return React.createElement(Container, _extends({}, props, {
+    flexDir: isRow ? 'column' : 'row',
+    size: 1,
+    style: theme.join(get(theme, ['layout', 'grid', 'wrapper']), style, isCenter && buildCenterStyles(isCenter))
+  }), children);
+};
+Grid.propTypes = {
+  theme: PropTypes.object,
+  style: PropTypes.object
+};
+
+var Column = withTheme(function (_ref) {
+  var children = _ref.children,
+      size = _ref.size,
+      center = _ref.center,
+      theme = _ref.theme,
+      props = _objectWithoutProperties(_ref, ["children", "size", "center", "theme"]);
+  var total = get(theme, ['layout', 'columns'], 12);
+  size = size > total ? total : size;
+  var colWidth = parseFloat(size * (100 / total)).toFixed(4);
+  return React.createElement(Container, _extends({}, props, {
+    size: size,
+    flexDir: "column",
+    style: theme.join(get(theme, ['layout', 'grid', 'column']), props.style, {
+      minWidth: "".concat(colWidth, "%"),
+      maxWidth: "".concat(colWidth, "%")
+    })
+  }), children);
+});
+Column.propTypes = {
+  size: PropTypes.number,
+  center: PropTypes.string,
+  theme: PropTypes.object,
+  style: PropTypes.object
+};
+
+var getSpacer = function getSpacer(isWeb) {
+  return isWeb ? ' ' : '\n';
+};
+var LinkWrapper = function LinkWrapper(props) {
+  var theme = useTheme();
+  var children = props.children,
+      Element = props.Element,
+      isWeb = props.isWeb,
+      href = props.href,
+      onPress = props.onPress,
+      onClick = props.onClick,
+      space = props.space,
+      style = props.style,
+      target = props.target,
+      type = props.type;
+  var linkStyle = theme.get('typography.font.family', 'components.link.default', type && "components.link.".concat(type));
+  var _useThemeHover = useThemeHover(theme.join(linkStyle, style), get(theme, "components.link.hover")),
+      _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
+      ref = _useThemeHover2[0],
+      themeStyle = _useThemeHover2[1];
+  var spacer = space && getSpacer(space);
+  return React.createElement(React.Fragment, null, spacer, React.createElement(Element, _extends({
+    ref: ref,
+    href: href,
+    style: themeStyle
+  }, getPressHandler(isWeb, onClick, onPress), getTarget(isWeb, target)), children), spacer);
+};
+LinkWrapper.propTypes = {
+  href: PropTypes.string,
+  onClick: PropTypes.func,
+  text: PropTypes.string,
+  style: PropTypes.object,
+  target: PropTypes.string,
+  type: PropTypes.string
+};
+
+var Text$1 = KegText('link');
+var openLink = function openLink(url, onPress) {
+  return function (event) {
+    isStr(url) && Linking.openURL(url).catch(function (err) {
+      return console.error('Could not open url!', err);
+    });
+    checkCall(onPress, event, url);
+  };
+};
+var Element$4 = React.forwardRef(function (_ref, ref) {
+  var elProps = _ref.elProps,
+      children = _ref.children,
+      href = _ref.href,
+      onPress = _ref.onPress,
+      style = _ref.style,
+      props = _objectWithoutProperties(_ref, ["elProps", "children", "href", "onPress", "style"]);
+  return React.createElement(TouchableOpacity, _extends({}, elProps, props, {
+    ref: ref,
+    onPress: openLink(href, onPress)
+  }), React.createElement(Text$1, {
+    style: style
+  }, children));
+});
+var Link = function Link(props) {
+  return React.createElement(LinkWrapper, _extends({}, props, {
+    Element: Element$4
+  }));
+};
+Link.propTypes = {
+  href: PropTypes.string,
+  onPress: PropTypes.func,
+  text: PropTypes.string,
+  style: PropTypes.object,
+  type: PropTypes.string
+};
+
+var Section = withTheme(function (props) {
+  var theme = props.theme,
+      children = props.children,
+      style = props.style,
+      type = props.type,
+      args = _objectWithoutProperties(props, ["theme", "children", "style", "type"]);
+  return React.createElement(View, _extends({}, args, {
+    style: theme.get("keg-section-".concat(type || 'default'), "components.section.default", type && "components.section.".concat(type), style)
+  }), children);
+});
+Section.propTypes = {
+  style: PropTypes.object,
+  type: PropTypes.string
+};
+
+var transition$1 = function transition() {
+  var prop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
+  var amount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '1s';
+  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'ease';
+  prop = isArr(prop) && prop.join(', ') || prop;
+  amount = isNum(amount) && "".concat(amount, "s") || amount;
+  return {
+    transitionProperty: trainCase(prop),
+    transitionDuration: amount,
+    transitionTimingFunction: type
+  };
+};
+transition$1.move = function () {
+  var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'ease';
+  return {
+    transition: "transform ".concat(amount, "s ").concat(type)
+  };
+};
+transition$1.opacity = function () {
+  var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'ease';
+  return {
+    transition: "opacity ".concat(amount, "s ").concat(type)
+  };
+};
+transition$1.maxHeight = {
+  overflow: 'hidden',
+  transition: 'max-height 1s ease'
+};
+
+var containedStates = {
+  default: {
+    main: {
+      $all: _objectSpread2({
+        borderWidth: 0,
+        borderRadius: 4,
+        backgroundColor: get(colors$1, 'surface.default.main'),
+        padding: 9,
+        minHeight: 35,
+        outline: 'none',
+        textAlign: 'center',
+        margin: 'auto'
+      }, transition$1(['backgroundColor', 'borderColor'], 0.3)),
+      $web: {
+        cursor: 'pointer',
+        boxShadow: 'none'
+      },
+      $native: {}
+    },
+    content: _objectSpread2({
+      color: get(colors$1, 'palette.white01'),
+      fontSize: 14,
+      fontWeight: '500',
+      letterSpacing: 0.5,
+      textAlign: 'center'
+    }, transition$1(['color'], 0.15))
+  },
+  disabled: {
+    main: {
+      $all: {
+        opacity: 0.4
+      },
+      $web: {
+        cursor: 'not-allowed',
+        pointerEvents: 'none'
+      },
+      $native: {}
+    },
+    content: {
+      color: get(colors$1, 'opacity._50')
+    }
+  },
+  hover: {
+    main: {
+      backgroundColor: get(colors$1, 'surface.default.dark')
+    },
+    content: {}
+  },
+  active: {
+    main: {
+      backgroundColor: get(colors$1, 'surface.default.dark')
+    },
+    content: {}
+  }
+};
+var colorStyle = function colorStyle(color, state) {
+  return {
+    main: {
+      backgroundColor: state !== 'hover' ? color.main : color.dark
+    }
+  };
+};
+var contained = _objectSpread2({}, buildColorStyles(containedStates, colorStyle));
+contained.default = inheritFrom(containedStates.default);
+contained.disabled = inheritFrom(contained.default, containedStates.disabled);
+contained.hover = inheritFrom(contained.default, containedStates.hover);
+contained.active = inheritFrom(contained.default, containedStates.hover, containedStates.active);
+
+var transparent = get(colors$1, 'opacity._00');
+var textStyles = {
+  default: {
+    main: {
+      backgroundColor: transparent
+    },
+    content: {
+      color: get(colors$1, 'opacity._80')
+    }
+  },
+  disabled: {
+    main: {},
+    content: {}
+  },
+  hover: {
+    main: {
+      backgroundColor: get(colors$1, 'palette.white03')
+    },
+    content: {}
+  },
+  active: {
+    main: {},
+    content: {}
+  }
+};
+var colorStyle$1 = function colorStyle(color, state) {
+  return state !== 'hover' ? {
+    main: {},
+    content: {
+      color: color.main
+    }
+  } : {
+    main: {
+      backgroundColor: colors$1.opacity(10, color.dark)
+    },
+    content: {
+      color: color.dark
+    }
+  };
+};
+var text = _objectSpread2({}, buildColorStyles(textStyles, colorStyle$1));
+text.default = inheritFrom(containedStates.default, textStyles.default);
+text.disabled = inheritFrom(text.default, containedStates.disabled, textStyles.disabled);
+text.hover = inheritFrom(text.default, containedStates.hover, textStyles.hover);
+text.active = inheritFrom(text.hover, textStyles.active);
+
+var outlineStates = {
+  default: {
+    main: {
+      padding: 8,
+      outline: 'none',
+      borderWidth: 1,
+      borderColor: get(colors$1, 'surface.default.main'),
+      backgroundColor: get(colors$1, 'palette.white01')
+    },
+    content: {
+      color: get(colors$1, 'opacity._80')
+    }
+  },
+  disabled: {
+    main: {},
+    content: {}
+  },
+  hover: {
+    main: {
+      backgroundColor: get(colors$1, 'palette.white03')
+    },
+    content: {}
+  },
+  active: {
+    main: {},
+    content: {}
+  }
+};
+var colorStyle$2 = function colorStyle(color, state) {
+  return state !== 'hover' ? {
+    main: {
+      borderColor: color.main
+    },
+    content: {
+      color: color.main
+    }
+  } : {
+    main: {
+      borderColor: color.dark,
+      backgroundColor: colors$1.opacity(10, color.dark)
+    },
+    content: {
+      color: color.dark
+    }
+  };
+};
+var outline = _objectSpread2({}, buildColorStyles(outlineStates, colorStyle$2));
+outline.default = inheritFrom(containedStates.default, outlineStates.default);
+outline.disabled = inheritFrom(outline.default, containedStates.disabled, outlineStates.disabled);
+outline.hover = inheritFrom(outline.default, outlineStates.hover);
+outline.active = inheritFrom(outline.hover, outlineStates.active);
+
+var button = {
+  contained: contained,
+  text: text,
+  outline: outline
+};
+
+var spaceHelper = function spaceHelper(amount) {
+  var sides = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var type = arguments.length > 2 ? arguments[2] : undefined;
+  sides = sides.length && sides || defaults.layout.sides;
+  if (sides === 'all' || isArr(sides) && sides[0] === 'all') sides = defaults.layout.sides;
+  return sides.reduce(function (styles, side) {
+    styles["".concat(type).concat(capitalize(side))] = unitsHelper(amount);
+    return styles;
+  }, {});
+};
+var unitsHelper = function unitsHelper(value) {
+  if (!isStr(value) && !isNum(value)) return value;
+  if (isStr(value)) {
+    var amount = parseInt(value);
+    if ((amount || amount === 0) && amount.toString() === value) value += defaults.font.units;
+  } else value += defaults.font.units;
+  return value;
+};
+var align = function align(dir) {
+  return isStr(dir) && {
+    textAlign: dir
+  } || {};
+};
+var background = function background(color) {
+  return {
+    backgroundColor: colors$1[color] || color || ''
+  };
+};
+var bold = function bold() {
+  return {
+    fontWeight: defaults.font.bold
+  };
+};
+var color = function color(_color) {
+  return colors$1[_color] ? {
+    color: colors$1[_color]
+  } : {
+    color: _color
+  };
+};
+var size = function size(num) {
+  return {
+    fontSize: unitsHelper(num)
+  };
+};
+var weight = function weight(num) {
+  return {
+    fontWeight: num
+  };
+};
+var initial = function initial(prop) {
+  return prop && _defineProperty({}, prop, 'initial');
+};
+var abs = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0
+};
+var helpers = {
+  abs: abs,
+  align: align,
+  background: background,
+  bold: bold,
+  color: color,
+  initial: initial,
+  size: size,
+  weight: weight
+};
+
+var size$1 = defaults.layout.margin;
+var margin = function margin(amount) {
+  var sides = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  return spaceHelper(amount, sides, 'margin');
+};
+margin.size = size$1;
+margin.full = {
+  margin: size$1
+};
+margin.all = margin.full;
+margin.vert = {
+  marginLeft: size$1,
+  marginRight: size$1
+};
+margin.left = {
+  marginLeft: size$1
+};
+margin.right = {
+  marginRight: size$1
+};
+margin.hor = {
+  marginTop: size$1,
+  marginBottom: size$1
+};
+margin.top = {
+  marginTop: size$1
+};
+margin.bottom = {
+  marginBottom: size$1
+};
+
+var card = {
+  container: {
+    $native: {
+      shadowColor: colors$1.opacity._05,
+      shadowOffset: {
+        height: 0,
+        width: 0
+      },
+      shadowOpacity: 1,
+      shadowRadius: 1,
+      elevation: 1
+    },
+    $web: {
+      boxShadow: "1px 1px 5px ".concat(colors$1.opacity._05)
+    },
+    $all: {
+      backgroundColor: colors$1.palette.white01,
+      borderWidth: 1,
+      padding: 15,
+      margin: 15,
+      marginBottom: 0,
+      borderColor: colors$1.palette.gray01,
+      borderStyle: 'solid'
+    }
+  },
+  wrapper: {
+    backgroundColor: colors$1.palette.transparent
+  },
+  title: {
+    fontSize: 14,
+    color: colors$1.palette.black02,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: margin.size
+  },
+  divider: {
+    marginBottom: margin.size,
+    hairlineWidth: 1
+  },
+  image: {
+    wrapper: {
+      display: 'inline-flex',
+      marginBottom: margin.size,
+      width: '100%'
+    },
+    image: {
+      width: '100%'
+    }
+  },
+  featured: {
+    title: {
+      fontSize: 18,
+      marginBottom: 8,
+      color: colors$1.palette.white01,
+      fontWeight: '800'
+    },
+    subtitle: {
+      fontSize: 13,
+      marginBottom: 8,
+      color: colors$1.palette.white01,
+      fontWeight: '400'
+    }
+  },
+  overlay: _objectSpread2({
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: colors$1.opacity._05,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  }, helpers.abs),
+  children: {
+    marginTop: margin.size
+  }
+};
+
+var divider = {
+  $all: {
+    width: "100%",
+    backgroundColor: colors$1.opacity._15,
+    marginBottom: margin.size,
+    marginTop: margin.size / 3,
+    height: 1
+  },
+  $native: {
+    hairlineWidth: 1
+  }
+};
+
+var drawer = {};
+
+var image = {
+  default: _objectSpread2({}, transition$1('opacity', 0.8)),
+  wrapper: {
+    display: 'inline-flex'
+  },
+  loading: {
+    opacity: 0
+  },
+  loaded: {
+    opacity: 1
+  }
+};
+
+var indicator = {
+  wrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 230,
+    width: 230
+  },
+  image: {
+    $all: {
+      width: '50%',
+      margin: 'auto',
+      maxWidth: '300px',
+      maxHeight: '300px'
+    },
+    $web: {
+      position: 'relative'
+    },
+    $native: {
+      height: '100%',
+      position: 'relative'
+    }
+  }
+};
+
+var link = {
+  default: {
+    $all: {
+      color: colors$1.palette.blue01
+    },
+    $native: {
+      textDecorationLine: 'underline',
+      textDecorationColor: colors$1.palette.blue02
+    },
+    $web: {
+      textDecoration: 'underline',
+      cursor: 'pointer'
+    }
+  },
+  hover: {
+    $web: {
+      color: colors$1.palette.blue02
+    }
+  }
+};
+
+var loading = {
+  default: {},
+  wrapper: {},
+  progress: {}
+};
+
+var size$2 = defaults.layout.padding;
+var padding = function padding(amount) {
+  var sides = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  return spaceHelper(amount, sides, 'padding');
+};
+padding.size = size$2;
+padding.full = {
+  padding: size$2
+};
+padding.all = padding.full;
+padding.vert = {
+  paddingLeft: size$2,
+  paddingRight: size$2
+};
+padding.left = {
+  paddingLeft: size$2
+};
+padding.right = {
+  paddingRight: size$2
+};
+padding.hor = {
+  paddingTop: size$2,
+  paddingBottom: size$2
+};
+padding.top = {
+  paddingTop: size$2
+};
+padding.bottom = {
+  paddingBottom: size$2
+};
+
+var section = {
+  default: {
+    $native: {
+      shadowColor: colors$1.opacity._05,
+      shadowOffset: {
+        height: 0,
+        width: 0
+      },
+      shadowOpacity: 1,
+      shadowRadius: 1,
+      elevation: 1
+    },
+    $web: {
+      boxShadow: "1px 1px 5px ".concat(colors$1.opacity._05)
+    },
+    $all: {
+      backgroundColor: colors$1.palette.white01,
+      borderColor: colors$1.palette.gray01,
+      borderStyle: 'solid',
+      borderWidth: 1,
+      padding: padding.size,
+      margin: margin.size,
+      marginBottom: 0,
+      minHeight: 200
+    }
+  }
+};
+
+var components = {
+  button: button,
+  card: card,
+  divider: divider,
+  drawer: drawer,
+  image: image,
+  indicator: indicator,
+  link: link,
+  loading: loading,
+  section: section
+};
+
+var display = {
+  none: {
+    display: 'none'
+  },
+  inline: {
+    display: 'inline'
+  },
+  inlineBlock: {
+    display: 'inline-block'
+  },
+  block: {
+    display: 'block'
+  },
+  flex: {
+    display: 'flex'
+  },
+  float: {
+    left: {
+      float: 'left'
+    },
+    right: {
+      float: 'right'
+    },
+    none: {
+      float: 'none'
+    }
+  },
+  click: {
+    cursor: 'pointer'
+  },
+  noRadius: {
+    borderRadius: 0
+  }
+};
+
+var flex = {
+  align: function align(dir) {
+    return {
+      alignItems: dir
+    };
+  },
+  direction: function direction(dir) {
+    return {
+      flexDirection: dir
+    };
+  },
+  justify: function justify(dir) {
+    return {
+      justifyContent: dir
+    };
+  },
+  display: {
+    display: 'flex'
+  },
+  wrap: {
+    flexWrap: 'wrap'
+  },
+  center: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  left: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
+  right: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  }
+};
+flex.direction.row = {
+  flexDirection: 'row'
+};
+flex.direction.column = {
+  flexDirection: 'column'
+};
+flex.row = flex.direction.row;
+flex.column = flex.direction.column;
+flex.justify.start = {
+  justifyContent: 'flex-start'
+};
+flex.justify.end = {
+  justifyContent: 'flex-end'
+};
+flex.justify.center = {
+  justifyContent: 'center'
+};
+flex.justify.between = {
+  justifyContent: 'space-between'
+};
+flex.justify.around = {
+  justifyContent: 'space-around'
+};
+flex.justify.even = {
+  justifyContent: 'space-evenly'
+};
+flex.align.start = {
+  alignItems: 'flex-start'
+};
+flex.align.end = {
+  alignItems: 'flex-end'
+};
+flex.align.center = {
+  alignItems: 'center'
+};
+flex.align.stretch = {
+  alignItems: 'stretch'
+};
+flex.align.base = {
+  alignItems: 'baseline'
+};
+
+var form$1 = {
+  default: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  }
+};
+
+var space = get(defaults, 'form.checkbox.space', 15);
+var height = get(defaults, 'form.switch.height', 20);
+var width = get(defaults, 'form.switch.width', 20);
+var sharedToggle = {
+  container: {
+    width: '100%',
+    display: 'flex'
+  },
+  text: {
+    outline: 'none',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: height + space
+  },
+  leftText: {
+    marginRight: margin.size
+  },
+  rightText: {
+    marginLeft: margin.size
+  }
+};
+
+var space$1 = get(defaults, 'form.checkbox.space', 15);
+var height$1 = get(defaults, 'form.checkbox.height', 20);
+var width$1 = get(defaults, 'form.checkbox.width', 20);
+var checkbox = _objectSpread2({
+  container: {
+    width: '100%',
+    display: 'flex'
+  },
+  wrapper: {
+    $all: {
+      marginBottom: margin.size
+    },
+    $web: {
+      outline: 'none',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative',
+      cursor: 'pointer',
+      height: height$1 + space$1,
+      width: width$1 + space$1
+    }
+  },
+  area: {},
+  indicator: {
+    $all: {
+      outline: 'none'
+    },
+    $web: {
+      top: 0,
+      left: 0,
+      height: height$1,
+      width: width$1,
+      boxShadow: "inset 0px 0px 5px ".concat(get(colors$1, 'opacity._15')),
+      backgroundColor: get(colors$1, 'palette.gray02'),
+      borderRadius: get(defaults, 'form.border.radius', 5)
+    }
+  },
+  on: {
+    $web: {
+      backgroundColor: get(colors$1, 'palette.green02')
+    }
+  },
+  disabled: {
+    $all: {
+      opacity: 0.4
+    }
+  }
+}, sharedToggle);
+
+var typography = {
+  font: {
+    family: {
+      fontFamily: 'Verdana, Geneva, sans-serif'
+    }
+  },
+  default: {
+    color: colors$1.opacity._85,
+    fontSize: 16,
+    letterSpacing: 0.15,
+    margin: 0
+  },
+  caption: {
+    color: colors$1.opacity._60,
+    fontSize: 12,
+    letterSpacing: 0.4
+  },
+  h1: {
+    fontWeight: 300,
+    fontSize: 96,
+    letterSpacing: -1.5
+  },
+  h2: {
+    fontWeight: 300,
+    fontSize: 60,
+    letterSpacing: -0.5
+  },
+  h3: {
+    color: colors$1.opacity._60,
+    fontSize: 48
+  },
+  h4: {
+    fontSize: 34,
+    letterSpacing: 0.25
+  },
+  h5: {
+    fontSize: 24
+  },
+  h6: {
+    color: colors$1.opacity._60,
+    fontSize: 20,
+    letterSpacing: 0.15,
+    fontWeight: 500
+  },
+  label: {
+    flexBasis: '100%',
+    fontSize: 11,
+    letterSpacing: 0.15,
+    fontWeight: 700,
+    marginBottom: margin.size / 4
+  },
+  paragraph: {
+    fontSize: 16,
+    letterSpacing: 0.5
+  },
+  subtitle: {
+    fontSize: 12,
+    letterSpacing: 0.15
+  }
+};
+
+var input = {
+  default: {
+    $all: {
+      backgroundColor: get(colors$1, 'palette.white01'),
+      outline: 'none',
+      minWidth: 100,
+      borderRadius: 5
+    },
+    $web: _objectSpread2({
+      border: "1px solid ".concat(get(colors$1, 'palette.white03')),
+      borderBottom: "1px solid ".concat(get(colors$1, 'palette.gray03')),
+      height: get(defaults, 'form.input.height', 35),
+      boxSizing: 'border-box',
+      padding: padding.size / 2
+    }, typography.font.family, {
+      fontSize: 14
+    }),
+    $native: {
+      borderBottomColor: get(colors$1, 'palette.gray04'),
+      borderStyle: 'solid',
+      borderWidth: 2
+    }
+  }
+};
+
+var option = {};
+
+var radio = {};
+
+var select = {
+  default: {
+    $all: {
+      backgroundColor: colors$1.palette.white01,
+      outline: 'none',
+      minWidth: 100
+    },
+    $web: _objectSpread2({}, typography.font.family, {
+      border: "1px solid ".concat(colors$1.palette.gray01),
+      borderBottom: "1px solid ".concat(colors$1.palette.gray03),
+      boxSizing: 'border-box',
+      height: get(defaults, 'form.input.height', 35),
+      fontSize: 14,
+      padding: padding.size / 2
+    }),
+    $native: {
+      borderBottomColor: colors$1.palette.gray04,
+      borderStyle: 'solid',
+      borderWidth: 2
+    }
+  }
+};
+
+var space$2 = get(defaults, 'form.checkbox.space', 15);
+var height$2 = get(defaults, 'form.switch.height', 20);
+var width$2 = get(defaults, 'form.switch.width', 20);
+var switchStyles = _objectSpread2({
+  wrapper: {
+    $all: {
+      marginBottom: margin.size
+    },
+    $web: {
+      outline: 'none',
+      height: height$2,
+      width: width$2 * 2,
+      display: 'flex',
+      alignItems: 'stretch',
+      position: 'relative',
+      marginTop: margin.size / 2,
+      marginBottom: margin.size + margin.size / 2
+    }
+  },
+  area: {
+    $web: {
+      outline: 'none',
+      backgroundColor: get(colors$1, 'palette.gray02'),
+      boxShadow: "inset 0px 0px 5px ".concat(get(colors$1, 'opacity._15')),
+      borderRadius: get(defaults, 'form.border.radius', 5) * 2,
+      height: '70%',
+      width: '100%',
+      position: 'absolute',
+      top: 3
+    }
+  },
+  indicator: {
+    $web: _objectSpread2({
+      outline: 'none',
+      backgroundColor: get(colors$1, 'palette.white02'),
+      borderRadius: get(defaults, 'form.border.radius', 5) * 2,
+      boxShadow: "0px 1px 3px ".concat(get(colors$1, 'opacity._50')),
+      marginLeft: 0,
+      cursor: 'pointer',
+      height: height$2,
+      width: width$2,
+      position: 'absolute',
+      top: 0,
+      left: 0
+    }, transition$1('left', 0.2))
+  },
+  on: {
+    $web: {
+      left: width$2,
+      backgroundColor: get(colors$1, 'surface.primary.dark'),
+      boxShadow: "1px 1px 3px ".concat(get(colors$1, 'opacity._50'))
+    }
+  },
+  disabled: {
+    $all: {
+      opacity: 0.4
+    }
+  }
+}, sharedToggle);
+
+var form$2 = {
+  checkbox: checkbox,
+  form: form$1,
+  input: input,
+  option: option,
+  radio: radio,
+  select: select,
+  switch: switchStyles
+};
+
+var layout$1 = {
+  full: {
+    width: {
+      width: '100%'
+    },
+    height: {
+      height: '100vh',
+      overflowY: 'auto',
+      overflowX: 'hidden'
+    }
+  },
+  grid: {
+    wrapper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      minWidth: '100%'
+    },
+    row: {
+      minWidth: '100%'
+    },
+    column: {},
+    columns: 12
+  }
+};
+
+var transform = {
+  rotate: {
+    at: function at(amount) {
+      return {
+        transform: "rotate(".concat(amount, "deg)")
+      };
+    },
+    45: {
+      transform: 'rotate(45deg)'
+    },
+    90: {
+      transform: 'rotate(90deg)'
+    },
+    180: {
+      transform: 'rotate(180deg)'
+    },
+    270: {
+      transform: 'rotate(270deg)'
+    }
+  }
+};
+
+var theme = setDefaultTheme({
+  colors: colors$1,
+  components: components,
+  display: display,
+  flex: flex,
+  form: form$2,
+  helpers: helpers,
+  layout: layout$1,
+  margin: margin,
+  padding: padding,
+  transform: transform,
+  transition: transition$1,
+  typography: typography
+});
+
+export { Link as A, Button, Caption, Card, Checkbox, Column, Divider, Drawer, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, View, theme };

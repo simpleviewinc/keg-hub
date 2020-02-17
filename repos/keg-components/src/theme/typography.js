@@ -6,13 +6,13 @@ export const typography = {
     family: { fontFamily: 'Verdana, Geneva, sans-serif' }
   },
   default: {
-    color: colors.opacity.opacity85,
+    color: colors.opacity._85,
     fontSize: 16,
     letterSpacing: 0.15,
     margin: 0,
   },
   caption: {
-    color: colors.opacity.opacity60,
+    color: colors.opacity._60,
     fontSize: 12,
     letterSpacing: 0.4
   },
@@ -27,7 +27,7 @@ export const typography = {
     letterSpacing: -0.5
   },
   h3: {
-    color: colors.opacity.opacity60,
+    color: colors.opacity._60,
     fontSize: 48,
   },
   h4: {
@@ -38,7 +38,7 @@ export const typography = {
     fontSize: 24,
   },
   h6: {
-    color: colors.opacity.opacity60,
+    color: colors.opacity._60,
     fontSize: 20,
     letterSpacing: 0.15,
     fontWeight: 500

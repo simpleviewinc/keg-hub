@@ -27,19 +27,26 @@ const addRules = [
   },
   {
     test: /\.(js|jsx)$/,
-    exclude: /node_modules/,
+    exclude: /node_modules\/(?!(react-native-vector-icons)\/).*/,
     use: {
       loader: "babel-loader",
       options: { ...babelConfig }
     }
-  }
+  },
+  {
+    test: /\.ttf$/,
+    loader: "url-loader", // or directly file-loader
+    include: path.resolve(__dirname, "node_modules/react-native-vector-icons"),
+  },
 ]
 
 // Set custom extensions based on the platform
 // This will ensure the platform file is loaded over the default
 const customExtensions = extensions => {
   return [
-    platform === 'native' && ".native.js" || ".web.js",
+    `${platform}.cjs`,
+    `${platform}.mjs`,
+    `${platform}.js`,
     ...extensions,
   ]
 }

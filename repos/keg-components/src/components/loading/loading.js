@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
@@ -23,7 +23,6 @@ const Progress = (props) => {
   return (
     <View
       style={theme.get(
-        `${styles.styleId}-progress`,
         'components.loading.progress',
         styles.progress
       )}
@@ -31,7 +30,6 @@ const Progress = (props) => {
       { isValidComponent(LoadingIndicator) ? (<LoadingIndicator />) : text && (
         <Text
           style={theme.get(
-            `${styles.styleId}-text`,
             'components.loading.text',
             styles.text
           )}
@@ -57,14 +55,11 @@ const Progress = (props) => {
 export const Loading = props => {
   const theme = useTheme()
   const { children, text, indicator } = props
-  const styleId = props.styleId || `keg-loading`
   const styles = props.styles || {}
-  styles.styleId = styleId
 
   return (
     <View
       style={theme.get(
-        `${styleId}-wrapper`,
         'components.loading.wrapper',
         styles.wrapper
       )}

@@ -8,9 +8,10 @@ const resolvePath = toResolve => path.resolve(
 )
 
 module.exports = {
-  presets: [ "@babel/env", "@babel/preset-react" ],
+  presets: [ '@babel/env', '@babel/preset-react' ],
   plugins: [
-    [ "module-resolver", {
+    [ '@babel/plugin-proposal-class-properties' ],
+    [ 'module-resolver', {
         root: ["./"],
         alias: {
           ...Object.entries(aliases)

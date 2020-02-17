@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useThemeHover } from 'KegReTheme'
+import { useTheme, useThemeHover } from 're-theme'
 import { getPressHandler, getTarget } from '../../utils'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
@@ -22,13 +22,11 @@ export const LinkWrapper = props => {
     onClick,
     space,
     style,
-    styleId,
     target,
     type 
   } = props
 
   const linkStyle = theme.get(
-    styleId || `keg-link-${ type || 'default' }`,
     'typography.font.family',
     'components.link.default',
     type && `components.link.${type}`,
@@ -63,7 +61,6 @@ LinkWrapper.propTypes = {
   onClick: PropTypes.func,
   text: PropTypes.string,
   style: PropTypes.object,
-  styleId: PropTypes.string,
   target: PropTypes.string,
   type: PropTypes.string,
 }

@@ -2,6 +2,9 @@ const ROOT_DIR = require('app-root-path').path
 const { aliases } = require('./aliases.config.js')
 const { reduceObj } = require('jsutils')
 
+const { PLATFORM, RE_PLATFORM } = process.env
+const platform = PLATFORM || RE_PLATFORM
+
 const mappedNames = reduceObj(aliases, (key, value, updated) => {
   updated[key] = `${ROOT_DIR}/${value}`
   return updated
@@ -43,7 +46,6 @@ module.exports = {
   testPathIgnorePatterns: [ '/node_modules/' ],
   transformIgnorePatterns: [ `node_modules/(?!(${transpileForTests})/)` ],
   transform: {
-    // '^.+\\.js$': "babel-jest",
     '^.+\\.js$': `${ROOT_DIR}/node_modules/react-native/jest/preprocessor.js`
   },
   testMatch: [
@@ -53,6 +55,7 @@ module.exports = {
     `${ROOT_DIR}/src/index.js`
   ],
   moduleFileExtensions: [
+    `${platform}.js`,
     "js",
     "json",
     "jsx",
@@ -62,6 +65,5 @@ module.exports = {
     __DEV__: true
   },
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: [ `${ROOT_DIR}/setupTests.js` ],
-  // snapshotSerializers: [ 'enzyme-to-json/serializer' ]
+  setupFilesAfterEnv: [ `${ROOT_DIR}/setupTests.js` ]
 }

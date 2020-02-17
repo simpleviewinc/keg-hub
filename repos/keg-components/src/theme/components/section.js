@@ -5,14 +5,14 @@ import { margin } from '../margin'
 export const section = {
   default: {
     $native: {
-      shadowColor: colors.opacity.opacity05,
+      shadowColor: colors.opacity._05,
       shadowOffset: { height: 0, width: 0 },
       shadowOpacity: 1,
       shadowRadius: 1,
       elevation: 1,
     },
     $web: {
-      boxShadow: `1px 1px 5px ${ colors.opacity.opacity05 }`
+      boxShadow: `1px 1px 5px ${ colors.opacity._05 }`
     },
     $all: {
       backgroundColor: colors.palette.white01,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useThemeHover } from 'KegReTheme'
+import { useTheme, useThemeHover } from 're-theme'
 import { LinkWrapper } from './link.wrapper'
 import PropTypes from 'prop-types'
 import { KegText } from 'KegText'
@@ -25,7 +25,6 @@ const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
 
 const Link = props => (
   <LinkWrapper
-    styleId={ `keg-web-link` }
     { ...props }
     isWeb={ true }
     Element={ Element }
@@ -37,7 +36,6 @@ Link.propTypes = {
   onClick: PropTypes.func,
   text: PropTypes.string,
   style: PropTypes.object,
-  styleId: PropTypes.string,
   target: PropTypes.string,
   type: PropTypes.string,
 }

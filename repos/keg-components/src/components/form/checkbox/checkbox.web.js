@@ -1,7 +1,7 @@
 import React from 'react'
 import { SwitchWrapper } from '../switch/switch.wrapper'
 import { View } from 'KegView'
-import { Text } from 'KegText'
+import { Text } from '../../typography'
 
 const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
   return (
@@ -30,7 +30,6 @@ const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
 
 export const Checkbox = props => (
   <SwitchWrapper
-    styleId={ `keg-web-checkbox` }
     { ...props }
     type={ 'checkbox' }
     Element={ Element }

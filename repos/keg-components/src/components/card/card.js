@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import { deepMerge, isStr, get } from 'jsutils'
 import { CardImage } from './cardImage'
 import { CardContainer, CardFooter, CardHeader } from './cardContent'
 import { View } from 'KegView'
 
-const buildStyles = (styles, styleId, theme) => {
+const buildStyles = (styles, theme) => {
   const cardStyles = {}
 
   cardStyles.container = theme.join(
@@ -21,7 +21,6 @@ const buildStyles = (styles, styleId, theme) => {
 
   cardStyles.header = theme.join(
     theme.get(
-      `${styleId}-header`,
       'typography.h5',
       'components.card.header',
     ),
@@ -65,7 +64,6 @@ export const Card = ({ styles, ...props}) => {
     header,
     headerLines,
     image,
-    styleId,
     subtitle,
     title,
     ...attributes
@@ -73,8 +71,7 @@ export const Card = ({ styles, ...props}) => {
 
   const hasImage = Boolean(image)
   const imgProps = hasImage && getImgProps(image, styles)
-  const cardStyleId = styleId || `keg-card`
-  const cardStyles = buildStyles(styles, cardStyleId, theme)
+  const cardStyles = buildStyles(styles, theme)
   
   return (
     <CardContainer
@@ -134,6 +131,5 @@ Card.propTypes = {
     PropTypes.object,
     PropTypes.string,
   ]),
-  styleId: PropTypes.string,
   styles: PropTypes.object,
 }

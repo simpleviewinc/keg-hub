@@ -27,7 +27,6 @@ const Element = React.forwardRef(({ attrs, src, ...props }, ref) => (
 export const Image = props => (
   <ImageWrapper
     { ...props }
-    styleId={ props.styleId || `keg-native-image` }
     Element={ Element }
   />
 )
@@ -36,7 +35,6 @@ Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
-  styleId: PropTypes.string,
   src: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object

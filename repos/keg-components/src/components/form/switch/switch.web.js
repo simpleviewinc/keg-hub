@@ -46,7 +46,6 @@ const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
 
 export const Switch = props => (
   <SwitchWrapper
-    styleId={ `keg-web-switch` }
     { ...props }
     Element={ Element }
     isWeb={ true }

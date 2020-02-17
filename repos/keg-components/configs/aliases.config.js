@@ -8,5 +8,7 @@ const getAliases = platform => Object
     return updated
   }, {})
 
+const usePlatform = process.env.PLATFORM || process.env.RE_PLATFORM
+
 module.exports.getAliases = getAliases
-module.exports.aliases = process.env.RE_PLATFORM && getAliases(process.env.RE_PLATFORM) || {}
+module.exports.aliases = usePlatform && getAliases(usePlatform) || {}

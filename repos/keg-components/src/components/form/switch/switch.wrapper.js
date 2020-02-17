@@ -1,42 +1,36 @@
 import React, { useState } from 'react'
-import { useTheme, useThemeActive, useThemeHover } from 'KegReTheme'
-import { Text } from '../../'
+import { useTheme, useThemeHover } from 're-theme'
+import { Text } from '../../typography'
 import { View } from 'KegView'
 import { get, isStr, toBool, checkCall } from 'jsutils'
 import { getOnChangeHandler, getChecked, getStyles, isValidComponent } from '../../../utils'
 import PropTypes from 'prop-types'
 
-const buildStyles = (styles, styleId, theme, checked, type) => {
-  styleId = styleId || `keg-${type}`
+const buildStyles = (styles, theme, checked, type) => {
   const status =  checked && 'on' || 'off'
 
   const container = theme.get(
-    `${styleId}-${type}-container`,
     `form.${type}.container`,
     styles && styles.container
   )
 
   const wrapper = theme.get(
-    `${styleId}-${type}-wrapper`,
     `form.${type}.wrapper`,
     styles && styles.wrapper
   )
 
   const area = theme.get(
-    `${styleId}-area`,
     `form.${type}.area`,
     styles && styles.bounds
   )
 
   const indicator = theme.get(
-    `${styleId}-indicator-${status}`,
     `form.${type}.indicator`,
     `form.${type}.${status}`,
     styles && styles.indicator
   )
 
   const leftText = theme.get(
-    `${styleId}-leftText}`,
     `form.${type}.text`,
     `form.${type}.leftText`,
     styles && styles.text,
@@ -44,7 +38,6 @@ const buildStyles = (styles, styleId, theme, checked, type) => {
   )
 
   const rightText = theme.get(
-    `${styleId}-rightText}`,
     `form.${type}.text`,
     `form.${type}.rightText`,
     styles && styles.text,
@@ -81,7 +74,6 @@ export const SwitchWrapper = props => {
     onValueChange,
     ref,
     rightText,
-    styleId,
     style,
     styles,
     type,
@@ -92,7 +84,7 @@ export const SwitchWrapper = props => {
   
   const [ isChecked, setChecked ] = useState(toBool(checked || value))
 
-  const builtStyles = buildStyles(styles, styleId, theme, isChecked, type || 'switch')
+  const builtStyles = buildStyles(styles, theme, isChecked, type || 'switch')
 
 
   return (

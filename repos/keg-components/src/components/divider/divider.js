@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import { get } from 'jsutils'
 import { View } from 'KegView'
 
-export const Divider = ({ style, styleId, ...props }) => {
+export const Divider = ({ style, ...props }) => {
   const theme = useTheme()
 
   return (

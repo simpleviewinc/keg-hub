@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 'KegReTheme'
+import { withTheme } from 're-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { TextInput } from 'react-native'

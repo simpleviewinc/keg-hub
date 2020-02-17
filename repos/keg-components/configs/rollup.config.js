@@ -20,7 +20,17 @@ const getAliases = platform => Object
 
 
 const shared = {
-  external: ['react', 'react-dom', 'react-native', 'jsutils', 're-theme' ],
+  external: [
+    'react',
+    'react-dom',
+    'react-native',
+    'jsutils',
+    're-theme',
+    'prop-types',
+    'react-native-vector-icons',
+    'react-native-vector-icons/dist/FontAwesome',
+    'react-native-vector-icons/Fonts/FontAwesome.ttf'
+  ],
   watch: {
     clearScreen: false
   },
@@ -31,12 +41,15 @@ const shared = {
     }),
     resolve(),
     json(),
+    commonjs({
+      include: 'node_modules/**',
+    }),
     babel({
       exclude: 'node_modules/**',
+      runtimeHelpers: true,
       ...babelConfig
     }),
     sourcemaps(),
-    commonjs(),
     cleanup(),
   ])
 }
@@ -46,10 +59,18 @@ export default Array
   .map((platform => ({
     ...shared,
     input: `./src/index.js`,
-    output: {
-      file: `./build/index.${platform}.js`,
-      format: "cjs"
-    },
+    output: [
+      {
+        file: `./build/cjs/kegComponents.${platform}.js`,
+        format: 'cjs',
+        sourcemaps: true
+      },
+      {
+        file: `./build/esm/kegComponents.${platform}.js`,
+        format: 'esm',
+        sourcemaps: true
+      },
+    ],
     plugins: [
       ...shared.plugins(platform),
       alias({

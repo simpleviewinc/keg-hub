@@ -28,8 +28,8 @@ export const switchStyles = {
   area: {
     $web: {
       outline: 'none',
-      backgroundColor: get(colors, 'palette.gray03'),
-      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity.opacity15') }`,
+      backgroundColor: get(colors, 'palette.gray02'),
+      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity._15') }`,
       borderRadius: get(defaults, 'form.border.radius', 5) * 2,
       height: '70%',
       width: '100%',
@@ -40,9 +40,9 @@ export const switchStyles = {
   indicator: {
     $web: {
       outline: 'none',
-      backgroundColor: get(colors, 'palette.white04'),
+      backgroundColor: get(colors, 'palette.white02'),
       borderRadius: get(defaults, 'form.border.radius', 5) * 2,
-      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity.opacity15') }`,
+      boxShadow: `0px 1px 3px ${ get(colors, 'opacity._50') }`,
       marginLeft: 0,
       cursor: 'pointer',
       height: height,
@@ -50,18 +50,20 @@ export const switchStyles = {
       position: 'absolute',
       top: 0,
       left: 0,
-      ...transition('left', 0.3),
+      ...transition('left', 0.2),
     }
   },
   on: {
     $web: {
       left: width,
-      backgroundColor: get(colors, 'palette.green02'),
-      boxShadow: `1px 1px 3px ${ get(colors, 'opacity.opacity50') }`,
+      backgroundColor: get(colors, 'surface.primary.dark'),
+      boxShadow: `1px 1px 3px ${ get(colors, 'opacity._50') }`,
     }
   },
   disabled: {
-    
+    $all: {
+      opacity: 0.4,
+    }
   },
   ...sharedToggle,
 }

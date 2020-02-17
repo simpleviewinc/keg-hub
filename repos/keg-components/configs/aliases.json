@@ -3,6 +3,7 @@
   "KegCheckbox": "src/components/form/checkbox/checkbox.${platform}.js",
   "KegForm": "src/components/form/form/form.${platform}.js",
   "KegImg": "src/components/image/image.${platform}.js",
+  "KegIcon": "src/components/icon/icon.${platform}.js",
   "KegIndicator": "src/components/indicator/indicator.${platform}.js",
   "KegInput": "src/components/form/input/input.${platform}.js",
   "KegLink": "src/components/link/link.${platform}.js",
@@ -13,7 +14,6 @@
   "KegSwitch": "src/components/form/switch/switch.${platform}.js",
   "KegText": "src/components/typography/kegtext.${platform}.js",
   "KegView": "src/components/view/view.${platform}.js",
-  "KegReTheme": "src/theme/kegReTheme/index.${platform}.js",
   "KegGetPlatform": "src/utils/helpers/getPlatform.${platform}.js",
   "StoryWrap": ".storybook/storyWrap.js"
 }

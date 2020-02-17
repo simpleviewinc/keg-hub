@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import { get, isStr, checkCall } from 'jsutils'
 import { TouchableOpacity, Linking } from 'react-native'
 import { LinkWrapper } from './link.wrapper'
@@ -39,7 +39,6 @@ const Element = React.forwardRef(({ elProps, children, href, onPress, style, ...
 
 const Link = props => (
   <LinkWrapper
-    styleId={ `keg-native-link` }
     { ...props }
     Element={ Element }
   />
@@ -51,7 +50,6 @@ Link.propTypes = {
   onPress: PropTypes.func,
   text: PropTypes.string,
   style: PropTypes.object,
-  styleId: PropTypes.string,
   type: PropTypes.string,
 }
 

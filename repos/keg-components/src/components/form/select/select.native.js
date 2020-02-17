@@ -29,7 +29,6 @@ const Slt = React.forwardRef(({ elProps, children, ...props }, ref) => (
 
 export const Select = props => (
   <SelectWrapper
-    styleId={ `keg-native-select` }
     { ...props }
     Element={ Slt }
   />

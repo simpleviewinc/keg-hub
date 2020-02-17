@@ -43,20 +43,45 @@ const toRgb = (red, green, blue, alpha) => {
  * @param  { number } opacity - from 0-1
  * @return rgba as string
  */
-const hexToRgba = (hex, opacity) => {
+const hexToRgba = (hex, opacity, asObj) => {
   if (!hex)
     return console.warn('Can not convert hex to rgba', hex) || `rgba(255,255,255,0)`
 
   hex = hex.indexOf('#') === 0 ? hex.replace('#', '') : hex
-
-  return toRgb({
+  
+  opacity = opacity > 1 ? (opacity / 100).toFixed(4) : opacity
+  
+  const rgbaObj = {
     r: parseInt(hex.substring(0, 2), 16),
     g: parseInt(hex.substring(2, 4), 16),
     b: parseInt(hex.substring(4, 6), 16),
     a: !opacity && opacity !== 0 ? 1 : opacity
-  })
+  }
+
+  return asObj ? rgbaObj : toRgb(rgbaObj)
 }
 
+
+const convertToPercent = (num, percent) => parseInt(num * (100 + percent) / 100)
+const checkColorMax = num => num < 255 ? num : 255
+
+const convertToColor = (num, percent) => {
+  const asPercent = convertToPercent(num, percent)
+  const withMax = checkColorMax(asPercent)
+  const asStr = withMax.toString(16)
+  
+  return asStr.length == 1 ? `0${asStr}` : asStr
+}
+
+const shadeHex = (color, percent) => {
+    
+    const rgba = hexToRgba(color, 1, true)
+
+    return "#" +
+      convertToColor(rgba.r, percent) +
+      convertToColor(rgba.g, percent) +
+      convertToColor(rgba.b, percent)
+}
 
 const opacity = (amount, color) => {
   return isStr(color) && color.indexOf('#') === 0
@@ -66,21 +91,70 @@ const opacity = (amount, color) => {
       : `rgba(${color || '0,0,0'}, ${amount})`
 }
 
-opacity.opacity100 = opacity(1)
-opacity.opacity90 = opacity(.90)
-opacity.opacity85 = opacity(.85)
-opacity.opacity75 = opacity(.75)
-opacity.opacity60 = opacity(.60)
-opacity.opacity50 = opacity(.50)
-opacity.opacity30 = opacity(.30)
-opacity.opacity25 = opacity(.25)
-opacity.opacity15 = opacity(.15)
-opacity.opacity10 = opacity(.10)
-opacity.opacity05 = opacity(.05)
-opacity.opacity00 = opacity(.00)
+// Map opacity amounts by .5
+for(let amount = 100; amount >= 0;  amount-=5)
+  opacity[`_${amount}`] = opacity((amount / 100).toFixed(2))
+
+
+const palette = {
+  transparent: 'transparent',
+  white01: '#ffffff',
+  white02: '#fafafa',
+  white03: '#f5f5f5',
+  white04: '#f0f0f0',
+  gray01: '#e6e6e6',
+  gray02: '#dddddd',
+  gray03: '#b3b3b3',
+  gray04: '#999999',
+  black01: '#666666',
+  black02: '#4d4d4d',
+  black03: '#333333',
+  black04: '#1a1a1a',
+  blue01: shadeHex('#2196F3', 20),
+  blue02: "#2196F3",
+  blue03: shadeHex('#2196F3', -20),
+  green01: shadeHex('#02b4a3', 20),
+  green02: '#02b4a3',
+  green03: shadeHex('#02b4a3', -20),
+  orange01: shadeHex('#e05402', 20),
+  orange02: '#ff5f01',
+  orange03: shadeHex('#e05402', -20),
+  red01: shadeHex('#f51f10', 20),
+  red02: '#f51f10',
+  red03: shadeHex('#f51f10', -20),
+}
+
+const surface = {
+  default: {
+    main: palette.gray04,
+    light: palette.gray03,
+    dark: palette.black01,
+  },
+  primary: {
+    main: palette.green02,
+    light: palette.green01,
+    dark: palette.green03,
+  },
+  secondary: {
+    main: palette.blue02,
+    light: palette.blue01,
+    dark: palette.blue03,
+  },
+  warn: {
+    main: palette.orange02,
+    light: palette.orange01,
+    dark: palette.orange03,
+  },
+  danger: {
+    main: palette.red02,
+    light: palette.red01,
+    dark: palette.red03,
+  }
+}
 
 export const colors = {
   helpers: {
+    shadeHex,
     hexToRgba,
     toRgb,
     toRgba: toRgb,
@@ -90,31 +164,7 @@ export const colors = {
     default: '#64aff1',
     hover: '#1e88e5'
   },
+  surface,
   opacity,
-  palette: {
-    transparent: 'transparent',
-    white01: '#ffffff',
-    white02: '#fafafa',
-    white03: '#f5f5f5',
-    white04: '#f0f0f0',
-    gray01: '#e6e6e6',
-    gray02: '#cccccc',
-    gray03: '#b3b3b3',
-    gray04: '#999999',
-    black01: '#666666',
-    black02: '#4d4d4d',
-    black03: '#333333',
-    black04: '#1a1a1a',
-    blue01: '#64aff1',
-    blue02: "#2196F3",
-    blue03: '#1e88e5',
-		blue04: "#0b50f1",
-		blue05: "#0070f2",
-    green01: '#01e5cf',
-    green02: '#02b4a3',
-    green03: '#009688',
-    green04: '#005f57',
-    red01: '#f44336',
-		red02: "#b10000",
-  },
+  palette,
 }

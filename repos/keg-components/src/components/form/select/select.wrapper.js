@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import { getOnChangeHandler, getValueFromChildren, getInputValueKey, getReadOnly } from '../../../utils'
 
 /**
@@ -21,17 +21,13 @@ const getValue = ({ children, onChange, onValueChange, readOnly, value }, isWeb)
 
 /**
  * Builds the styles for the select component
- * @param {string} styleId - Cached id of the styles
  * @param {Object} theme - Global theme object
  * @param {string} type - Type of select theme to use
  *
  * @returns {Object} - Contains all built stlyes
  */
-const buildStyles = (styleId, theme, type) => {
-  styleId = styleId || `keg-select`
-
+const buildStyles = (theme, type) => {
   const select = theme.get(
-    `${styleId}-${type || 'default'}`,
     'form.select.default',
     type && `form.select.${type}`
   )
@@ -51,13 +47,12 @@ export const SelectWrapper = props => {
     onChange,
     onValueChange,
     style,
-    styleId,
     type,
     value,
     ...elProps
   } = props
   
-  const styles = buildStyles(styleId, theme, type)
+  const styles = buildStyles(theme, type)
 
   return (
     <Element
@@ -83,7 +78,6 @@ SelectWrapper.propTypes = {
   onValueChange: PropTypes.func,
   ref: PropTypes.object,
   style: PropTypes.object,
-  styleId: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.number,

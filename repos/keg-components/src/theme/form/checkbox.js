@@ -28,16 +28,7 @@ export const checkbox = {
       width: width + space,
     }
   },
-  area: {
-    $web: {
-      // outline: 'none',
-      // position: 'absolute',
-      // top: 0,
-      // left: 0,
-      // height: height,
-      // width: width,
-    }
-  },
+  area: {},
   indicator: {
     $all: {
       outline: 'none',
@@ -47,14 +38,19 @@ export const checkbox = {
       left: 0,
       height: height,
       width: width,
-      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity.opacity15') }`,
-      backgroundColor: get(colors, 'palette.white04'),
+      boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity._15') }`,
+      backgroundColor: get(colors, 'palette.gray02'),
       borderRadius: get(defaults, 'form.border.radius', 5),
     }
   },
   on: {
     $web: {
       backgroundColor: get(colors, 'palette.green02'),
+    }
+  },
+  disabled: {
+    $all: {
+      opacity: 0.4,
     }
   },
   ...sharedToggle,

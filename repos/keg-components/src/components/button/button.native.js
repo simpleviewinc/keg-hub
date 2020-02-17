@@ -30,24 +30,9 @@ const Element = React.forwardRef(({ elProps, children, ...props}, ref) => (
 
 export const Button = props => (
   <ButtonWrapper
-    styleId={ `keg-native-button` }
     { ...props }
     Element={ Element }
   />
 )
 
-Button.propTypes = {
-  ...TouchableOpacity.propTypes,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array
-  ]),
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  ref: PropTypes.object,
-  style: PropTypes.object,
-  text: PropTypes.string,
-  type: PropTypes.string,
-}
+Button.propTypes = { ...Touchable.propTypes, ...ButtonWrapper.propTypes }

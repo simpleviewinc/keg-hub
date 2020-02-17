@@ -1,12 +1,9 @@
 import React from 'react'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import PropTypes from 'prop-types'
 
-const buildStyles = (styleId, theme, type, elType) => {
-  styleId = styleId || `keg-${elType}-button`
-
+const buildStyles = (theme, type, elType) => {
   const form = theme.get(
-    `${styleId}-${type || 'default'}`,
     'form.form.default',
     type && `form.form.${type}`
   )
@@ -24,12 +21,11 @@ export const FormWrapper = React.forwardRef((props, ref) => {
     elType,
     isWeb,
     style,
-    styleId,
     type,
     ...elProps
   } = props
 
-  const builtStyles = buildStyles(styleId, theme, type, elType)
+  const builtStyles = buildStyles(theme, type, elType)
 
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 'KegReTheme'
+import { useTheme } from 're-theme'
 import { View } from 'KegView'
 import { Image } from 'KegImg'
 import { Text } from '../typography/text'

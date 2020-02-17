@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 'KegReTheme'
+import { withTheme } from 're-theme'
 import { get } from 'jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
@@ -28,7 +28,7 @@ export const Column = withTheme(({ children, size, center, theme, ...props }) =>
 })
 
 Column.propTypes = {
-  size: PropTypes.number.isRequired,
+  size: PropTypes.number,
   center: PropTypes.string,
   theme: PropTypes.object,
   style: PropTypes.object,

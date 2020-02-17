@@ -29,7 +29,6 @@ const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
 
 export const Form = props => (
   <FormWrapper
-    styleId={ `keg-web-form` }
     { ...props }
     Element={ Element }
     elType='native'
