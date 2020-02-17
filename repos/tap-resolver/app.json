@@ -3,7 +3,7 @@
   "displayName": "Tap Resolver",
   "keg": {
     "name": "tapResolver",
-    "navigation": {},
+    "routes": {},
     "overrides": {},
     "tapResolver": {
       "paths": {
