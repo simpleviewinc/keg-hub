@@ -15,11 +15,11 @@ const containedStates = {
         outline: 'none',
         textAlign: 'center',
         margin: 'auto',
-        ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
       },
       $web: {
         cursor: 'pointer',
         boxShadow: 'none',
+        ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
       },
       $native: {}
     },
@@ -29,7 +29,9 @@ const containedStates = {
       fontWeight: '500',
       letterSpacing: 0.5,
       textAlign: 'center',
-      ...transition([ 'color' ], 0.15),
+      $web: {
+        ...transition([ 'color' ], 0.15),
+      }
     }
   },
   disabled: {

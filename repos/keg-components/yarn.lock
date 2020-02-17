@@ -9454,7 +9454,7 @@ jstransformer@1.0.0:
     is-promise "^2.0.0"
     promise "^7.0.1"
 
-"jsutils@git+https://github.com/lancetipton/jsutils.git":
+"jsutils@git+https://github.com/lancetipton/jsutils.git#3.2.1":
   version "3.2.1"
   resolved "git+https://github.com/lancetipton/jsutils.git#7ab68067911d5ae41909d85c320bbb3da5616a8a"
 
@@ -12674,9 +12674,9 @@ raw-loader@^3.1.0:
     loader-utils "^1.1.0"
     schema-utils "^2.0.1"
 
-"re-theme@git+https://github.com/simpleviewinc/re-theme.git#fix-extentions":
+"re-theme@git+https://github.com/simpleviewinc/re-theme.git#master":
   version "1.1.0"
-  resolved "git+https://github.com/simpleviewinc/re-theme.git#243241f4ef41deb0402f821b23d2aa351b71056b"
+  resolved "git+https://github.com/simpleviewinc/re-theme.git#0c23eab9e8fe17a5bf8230965db30eec030c97b2"
 
 react-app-polyfill@^1.0.5:
   version "1.0.6"

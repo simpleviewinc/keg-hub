@@ -3,7 +3,6 @@ import React, { isValidElement, useState, useEffect, useRef, useLayoutEffect } f
 import { withTheme, useTheme, useThemeHover, setDefaultTheme } from 're-theme';
 import { isFunc, reduceObj, isObj, isStr, isArr, get, checkCall, deepMerge, isNum, toBool, trainCase, capitalize } from 'jsutils';
 import { Text as Text$2, Platform, TouchableNativeFeedback, TouchableOpacity, View as View$1, Image as Image$1, TextInput, Picker, Switch as Switch$1, Linking } from 'react-native';
-import FAIcon from 'react-native-vector-icons/dist/FontAwesome';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -593,6 +592,7 @@ ButtonWrapper.propTypes = {
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
   style: PropTypes.object,
+  styles: PropTypes.object,
   type: PropTypes.string,
   warn: PropTypes.bool
 };
@@ -611,17 +611,7 @@ var Button = function Button(props) {
     Element: Element
   }));
 };
-Button.propTypes = _objectSpread2({}, TouchableOpacity.propTypes, {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  outline: PropTypes.bool,
-  ref: PropTypes.object,
-  style: PropTypes.object,
-  text: PropTypes.bool,
-  type: PropTypes.string
-});
+Button.propTypes = _objectSpread2({}, Touchable.propTypes, {}, ButtonWrapper.propTypes);
 
 var View = React.forwardRef(function (_ref, ref) {
   var children = _ref.children,
@@ -1346,44 +1336,11 @@ Switch.propTypes = _objectSpread2({}, TouchableOpacity.propTypes, {
   type: PropTypes.string
 });
 
-var IconWrapper = React.forwardRef(function (props, ref) {
-  var theme = useTheme();
-  var children = props.children,
-      color = props.color,
-      Element = props.Element,
-      isWeb = props.isWeb,
-      name = props.name,
-      size = props.size,
-      style = props.style,
-      styles = props.styles,
-      type = props.type,
-      attrs = _objectWithoutProperties(props, ["children", "color", "Element", "isWeb", "name", "size", "style", "styles", "type"]);
-  var containerStyle = theme.get('components.icon.container', get(styles, 'container'), styles);
-  var iconProps = {
-    ref: ref,
-    name: name
-  };
-  iconProps.style = theme.get('components.icon.icon', get(styles, 'icon'), styles);
-  iconProps.color = color || get(iconStyles, 'color');
-  iconProps.size = size || get(iconStyles, 'fontSize');
-  var Icon = isValidComponent(Element) ? Element : FAIcon;
-  return React.createElement(View, {
-    style: containerStyle
-  }, React.createElement(Icon, iconProps));
-});
-IconWrapper.propTypes = {
-  color: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  ref: PropTypes.object,
-  style: PropTypes.object,
-  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  type: PropTypes.string
-};
-
 var Icon = function Icon(props) {
-  return React.createElement(IconWrapper, props);
+  return React.createElement(View$1, null, React.createElement(Text$2, null, "Not Implemented"));
 };
-Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
+Icon.propTypes = {
+};
 
 var Container = function Container(args) {
   var onPress = args.onPress,
@@ -1612,7 +1569,7 @@ transition$1.maxHeight = {
 var containedStates = {
   default: {
     main: {
-      $all: _objectSpread2({
+      $all: {
         borderWidth: 0,
         borderRadius: 4,
         backgroundColor: get(colors$1, 'surface.default.main'),
@@ -1621,20 +1578,21 @@ var containedStates = {
         outline: 'none',
         textAlign: 'center',
         margin: 'auto'
-      }, transition$1(['backgroundColor', 'borderColor'], 0.3)),
-      $web: {
+      },
+      $web: _objectSpread2({
         cursor: 'pointer',
         boxShadow: 'none'
-      },
+      }, transition$1(['backgroundColor', 'borderColor'], 0.3)),
       $native: {}
     },
-    content: _objectSpread2({
+    content: {
       color: get(colors$1, 'palette.white01'),
       fontSize: 14,
       fontWeight: '500',
       letterSpacing: 0.5,
-      textAlign: 'center'
-    }, transition$1(['color'], 0.15))
+      textAlign: 'center',
+      $web: _objectSpread2({}, transition$1(['color'], 0.15))
+    }
   },
   disabled: {
     main: {
@@ -1974,7 +1932,9 @@ var divider = {
 var drawer = {};
 
 var image = {
-  default: _objectSpread2({}, transition$1('opacity', 0.8)),
+  default: {
+    $web: _objectSpread2({}, transition$1('opacity', 0.8))
+  },
   wrapper: {
     display: 'inline-flex'
   },
@@ -2311,7 +2271,10 @@ var checkbox = _objectSpread2({
 var typography = {
   font: {
     family: {
-      fontFamily: 'Verdana, Geneva, sans-serif'
+      $native: {},
+      $web: {
+        fontFamily: 'Verdana, Geneva, sans-serif'
+      }
     }
   },
   default: {
@@ -2326,12 +2289,12 @@ var typography = {
     letterSpacing: 0.4
   },
   h1: {
-    fontWeight: 300,
+    fontWeight: '300',
     fontSize: 96,
     letterSpacing: -1.5
   },
   h2: {
-    fontWeight: 300,
+    fontWeight: '300',
     fontSize: 60,
     letterSpacing: -0.5
   },
@@ -2350,13 +2313,13 @@ var typography = {
     color: colors$1.opacity._60,
     fontSize: 20,
     letterSpacing: 0.15,
-    fontWeight: 500
+    fontWeight: '500'
   },
   label: {
     flexBasis: '100%',
     fontSize: 11,
     letterSpacing: 0.15,
-    fontWeight: 700,
+    fontWeight: '700',
     marginBottom: margin.size / 4
   },
   paragraph: {
