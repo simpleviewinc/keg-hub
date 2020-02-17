@@ -31,7 +31,7 @@
   },
   "keg": {
     "name": "SVKeg",
-    "navigation": {},
+    "routes": {},
     "overrides": {
       "kegName": [ "keg", "name" ],
       "kegSrc": [ "keg", "tapResolver", "paths", "kegSrc" ]
