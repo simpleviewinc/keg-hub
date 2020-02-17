@@ -8,6 +8,7 @@ import { AppContainer } from 'SVContainers'
 import { Router } from 'SVComponents'
 import { checkCall, get } from 'jsutils'
 import { theme } from 'SVTheme'
+import { getHistory } from 'SVNavigation'
 
 setDefaultTheme(theme)
 
@@ -29,7 +30,7 @@ const App = props => {
       <StatusBar
         barStyle={get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])}
       />
-      <Router>
+      <Router history={getHistory()}>
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={activeTheme} merge={false}>
