@@ -15,4 +15,5 @@ test-report.xml
 core/base/assets/index.js
 # macOS
 .DS_Store
+.vscode
 core/base/assets/index.js

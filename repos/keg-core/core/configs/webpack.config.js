@@ -31,6 +31,10 @@ module.exports = rootDir => {
       loader: require.resolve('babel-loader')
     })
 
+    // necessary to provide web workers access to the window object and 
+    // postMessage function (see https://github.com/webpack/webpack/issues/6642#issuecomment-371087342)
+    config.output.globalObject = 'this'
+
     /**
      * Ensure node_modules can be resolved for both the keg and the tap
      */
