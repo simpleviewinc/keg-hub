@@ -97,7 +97,7 @@ const listeners = {}
  *
  * @returns {Object} - window or screen property of the dimensions object
  */
-const get = (dimension) => (dimensions[dimension])
+const get = key => dimensions[key]
 
 /**
  * Sets a dimensions property based on the passed in values
@@ -106,8 +106,8 @@ const get = (dimension) => (dimensions[dimension])
  * @returns {null}
  */
 const set = ({ screen, window: win }) => {
-  if(screen) dimensions.screen = screen
-  if(win) dimensions.window = win
+  screen && ( dimensions.screen = screen )
+  win && ( dimensions.window = win )
 }
 
 /**

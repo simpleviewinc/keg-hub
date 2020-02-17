@@ -4,7 +4,6 @@
 import { getSizeMap } from '../dimensions'
 import { Constants } from '../constants'
 import { RePlatform, getRNPlatform } from 'RePlatform'
-import { checkValueUnits } from './unitRules'
 import { isObj, deepMerge, reduceObj, isEmpty, unset, get } from 'jsutils'
 
 // Default platforms to use when restructuring the theme
@@ -137,9 +136,7 @@ const getPlatformTheme = (theme, platforms, Platform={}) => {
     // Otherwise check the values units
     platformTheme[key] = isObj(value)
       ? getPlatformTheme(mergePlatformOS(value, platforms), platforms, Platform)
-      : Platform && Platform.OS === 'web'
-        ? checkValueUnits(key, value)
-        : value
+      : value
 
     // Return the update platformTheme object
     return platformTheme

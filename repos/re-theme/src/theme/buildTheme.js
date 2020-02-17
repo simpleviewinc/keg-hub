@@ -2,8 +2,7 @@
 'use strict'
 
 import { fireThemeEvent } from './themeEvent'
-import { join } from 'ReJoinTheme'
-import { getTheme } from '../cache/getTheme'
+import { getTheme, joinTheme } from '../helpers'
 import { Constants } from '../constants'
 import { getMergeSizes, getSize } from '../dimensions'
 import { isObj, deepMerge } from 'jsutils'
@@ -94,7 +93,7 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
     : extraTheme
 
   builtTheme.RTMeta = { key, size, width, height }
-  builtTheme.join = builtTheme.join || join
+  builtTheme.join = builtTheme.join || joinTheme
   builtTheme.get = builtTheme.get || getTheme.bind(builtTheme)
 
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme)

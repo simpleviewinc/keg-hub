@@ -90,17 +90,6 @@ describe('Theme', () => {
 
     })
 
-
-    it('should add px to number values without units', () => {
-
-      expect(get(testTheme, 'meeting.medium.$web.$web.text.user.width')).toEqual(200)
-
-      const theme = Theme.restructureTheme(themeClone)
-
-      expect(get(theme, 'medium.meeting.$web.text.user.width')).toEqual('200px')
-
-    })
-
     it('should allow passing custom platforms as the second argument', () => {
 
       const webFont = get(testTheme, 'meeting.large.text.$web.time.font')

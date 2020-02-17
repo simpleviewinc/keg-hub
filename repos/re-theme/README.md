@@ -5,7 +5,7 @@ Simple React and React Native Theme builder / switcher
 Add to your package.json
 
   ```js
-    "re-theme": "git+https://github.com/simpleviewinc/sv-re-theme"
+    "re-theme": "git+https://github.com/simpleviewinc/re-theme"
   ```
 
 ### Example 
@@ -37,4 +37,4 @@ export const App from Component {
 ```
 
 ### API
-Checkout the [Example App](https://simpleviewinc.github.io/sv-re-theme/) for documentation.
+Checkout the [Example App](https://simpleviewinc.github.io/re-theme/) for documentation.

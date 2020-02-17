@@ -20,8 +20,6 @@ export const Readme = withTheme(props => {
   useEffect(() => {
 
     const articleEl = readmeRef.current
-    
-    console.log(articleEl.offsetHeight )
     const height = articleEl.offsetHeight > 0
       ? articleEl.offsetHeight + 50
       : articleEl.offsetHeight

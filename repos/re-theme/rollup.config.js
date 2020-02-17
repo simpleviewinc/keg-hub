@@ -30,11 +30,19 @@ export default Array
   .from([ 'web', 'native' ])
   .map((platform => ({
     ...shared,
-    input: `./src/index.js`,
-    output: {
-      file: `./build/index.${platform}.js`,
-      format: "cjs"
-    },
+    input: `./src/index.${platform}.js`,
+    output: [
+      {
+        file: `./build/cjs/reTheme.${platform}.js`,
+        format: 'cjs',
+        sourcemaps: true
+      },
+      {
+        file: `./build/esm/reTheme.${platform}.js`,
+        format: 'esm',
+        sourcemaps: true
+      },
+    ],
     plugins: [
       ...shared.plugins,
       alias({

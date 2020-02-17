@@ -86,6 +86,7 @@ export const testTheme = {
           padding: 8,
           borderRadius: 4,
           fontSize: 14,
+          color: '#ffffff',
           small: {
             fontSize: 12,
             borderRadius: 10,

@@ -1,24 +1,31 @@
 {
-  "name": "app",
+  "name": "re-theme-example",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://simpleviewinc.github.io/re-theme",
   "dependencies": {
+    "@babel/core": "^7.8.4",
     "@fortawesome/fontawesome-svg-core": "1.2.26",
     "@fortawesome/free-solid-svg-icons": "5.12.0",
     "@fortawesome/react-fontawesome": "0.1.8",
+    "core-js": "^3.6.4",
+    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
     "raw-loader": "4.0.0",
-    "re-theme": "file:../build/web",
+    "re-theme": "file:node_modules/re-theme",
     "react": "16.12.0",
     "react-dom": "16.12.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
-    "build": "yarn copy:readme; react-scripts build; yarn copy:docs",
-    "copy:readme": "cp ../README.md ./src/Readme.md",
-    "copy:docs": "cp -Rf ./build ../docs",
+    "build": "yarn copy:build; yarn clean:docs; yarn copy:readme; react-scripts build; yarn copy:docs",
+    "clean:docs": "rimraf ../docs",
+    "copy:readme": "node scripts/copyReadme.js",
+    "copy:docs": "node scripts/copyDocs.js",
+    "copy:build": "node scripts/copyBuild.js",
     "eject": "react-scripts eject",
-    "start": "yarn copy:readme; react-scripts start",
-    "test": "react-scripts test"
+    "start": "yarn copy:build; yarn copy:readme; react-scripts start; yarn",
+    "test": "yarn copy:build; react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,6 +44,8 @@
   },
   "devDependencies": {
     "fork-me-on-github": "^1.0.6",
-    "marked": "^0.8.0"
+    "marked": "^0.8.0",
+    "ncp": "^2.0.0",
+    "react-app-rewired": "^2.1.5"
   }
 }

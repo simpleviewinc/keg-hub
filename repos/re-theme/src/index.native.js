@@ -6,7 +6,7 @@ import {
   setSizes,
   useDimensions,
 } from './dimensions'
-import { Dimensions, setRNDimensions } from "ReDimensions"
+import { setRNDimensions } from "ReDimensions"
 import { setRNPlatform } from "RePlatform"
 
 import {
@@ -28,7 +28,6 @@ import {
 export {
 
   // Dimensions exports
-  Dimensions,
   setRNDimensions,
   setRNPlatform,
   getSize,

@@ -2,18 +2,24 @@
   "name": "re-theme",
   "version": "1.1.0",
   "description": "Simple Theme switcher / builder for React and React Native",
-  "main": "index.js",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
   "repository": "https://github.com/lancetipton/ReTheme",
+  "homepage" : "https://simpleviewinc.github.io/re-theme",
   "author": "Lance Tipton",
   "license": "MIT",
+  "files": [
+    "build/cjs/*",
+    "build/esm/*"
+  ],
   "scripts": {
-    "build": "yarn clean:build; rollup -c rollup.config.js; yarn copy:web; yarn build:app",
-    "build:app": "yarn clean:docs; cd app; yarn build",
-    "clean:build": "rimraf build; mkdir build; mkdir build/web",
-    "clean:docs": "rimraf ./docs",
-    "copy:web": "cp build/index.web.js build/web/index.js",
-    "deploy": "yarn build; gh-pages -d docs",
+    "build": "yarn clean:build; rollup -c rollup.config.js",
+    "build:app": "cd app; yarn build",
+    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
+    "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
+    "deploy": "gh-pages -d docs -o upstream",
     "dev": "yarn clean:build; rollup -c rollup.config.js -w",
+    "app": "cd app; yarn start",
     "start": "yarn dev",
     "test": "NODE_ENV=test jest --no-cache --verbose"
   },
@@ -43,13 +49,8 @@
     "rollup-plugin-terser": "5.1.2"
   },
   "peerDependencies": {
-    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
-    "react": "16.9.0"
-  },
-  "optionalDependencies": {
-    "react-dom": "16.9.0",
-    "react-native": "0.61.1",
-    "react-native-web": "0.11.7"
+    "jsutils": "^git+https://github.com/lancetipton/jsutils.git#v3.2.1",
+    "react": "^16.9.0"
   },
   "jest": {
     "preset": "rollup-jest",
