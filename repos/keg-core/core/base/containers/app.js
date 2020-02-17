@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, H5, Image } from 'SVComponents'
+import { View, H5, Button, Text } from 'SVComponents'
 import { useTheme } from 're-theme'
 import { get }  from 'jsutils'
 
@@ -15,6 +15,9 @@ export const AppContainer = props => {
 
   const theme = useTheme()
 
+  const textStyle = { color: get(theme, 'colors.palette.white01') }
+  const buttonStyle = { margin: get(theme, 'margin.size') }
+
   return (
     <View
       style={theme.join(
@@ -25,6 +28,16 @@ export const AppContainer = props => {
       <H5>
         Welcome to the Keg
       </H5>
+      <Button style={ buttonStyle } >
+        <Text>
+          Keg Component Default Button
+        </Text>
+      </Button>
+      <Button style={ buttonStyle } primary >
+        <Text style={ textStyle } >
+          Keg Component Primary Button
+        </Text>
+      </Button>
     </View>
   )
 }
