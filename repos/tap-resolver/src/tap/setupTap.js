@@ -155,10 +155,10 @@ const setupTapConfig = (options, TAP_PATH, HAS_TAP) => {
   const { kegPath, config } = options
 
   // Data to load tap from
-  let tapData = { APP_CONFIG: config, APP_CONFIG_PATH: configKeys.TAP_RESOLVER_LOC }
+  let tapData = { APP_CONFIG: config, APP_CONFIG_PATH: config[configKeys.TAP_RESOLVER_LOC] }
 
   // If no tap just return the default tapData
-  if(!HAS_TAP) return tapData
+  if (!HAS_TAP) return tapData
 
   // Get the location where temp tap configs should be stored
   const TEMP_FOLDER_PATH = getTempFolderPath(options, TAP_PATH)
