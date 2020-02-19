@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFunc } from 'jsutils'
+import { isFunc, isArr } from 'jsutils'
 import { isValidComponent } from '../helpers/isValidComponent'
 
 /**
@@ -16,7 +16,9 @@ export const renderFromType = (Element, props, Wrapper) => {
     ? isFunc(Element)
       ? (<Element { ...props } />)
       : Element
-    : Wrapper
-      ? (<Wrapper { ...props }>{ Element }</Wrapper>)
-      : Element
+    : isArr(Element)
+      ? Element
+      : Wrapper
+        ? (<Wrapper { ...props }>{ Element }</Wrapper>)
+        : Element
 }

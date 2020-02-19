@@ -7,7 +7,9 @@ import cleanup from 'rollup-plugin-cleanup'
 import sourcemaps from 'rollup-plugin-sourcemaps'
 import alias from '@rollup/plugin-alias'
 import pathAlias from './aliases.json'
+import buildHook from './buildHook'
 
+const { DEV_MODE } = process.env
 const babelConfig = require('./babel.config.js')
 
 const getAliases = platform => Object
@@ -27,17 +29,18 @@ const shared = {
     'jsutils',
     're-theme',
     'prop-types',
-    'react-native-vector-icons',
-    'react-native-vector-icons/dist/FontAwesome',
-    'react-native-vector-icons/Fonts/FontAwesome.ttf'
+    '@expo/vector-icons',
+    'expo-fonts'
   ],
   watch: {
     clearScreen: false
   },
   plugins: platform => ([
+    platform === 'native' && DEV_MODE && buildHook(DEV_MODE),
     replace({
-      "process.env.NODE_ENV": JSON.stringify('production'),
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
       "process.env.RE_PLATFORM": JSON.stringify(platform),
+      "process.env.PLATFORM": JSON.stringify(platform),
     }),
     resolve(),
     json(),

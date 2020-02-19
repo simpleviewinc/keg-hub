@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useTheme } from 're-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { isValidComponent } from '../../utils'
-import FAIcon from 'react-native-vector-icons/dist/FontAwesome'
 
 /**
  * IconWrapper
@@ -49,14 +48,14 @@ export const IconWrapper = React.forwardRef((props, ref) => {
     styles
   )
 
-  iconProps.color = color || get(iconStyles, 'color')
-  iconProps.size = size || get(iconStyles, 'fontSize')
+  iconProps.color = color || get(iconProps.style, 'color', get(theme, 'typography.default.color'))
+  iconProps.size = size || get(iconProps.style, 'fontSize', (get(theme, 'typography.default.fontSize', 15) * 2))
 
-  const Icon = isValidComponent(Element) ? Element : FAIcon
+  const Icon = isValidComponent(Element) ? Element : false
 
   return (
     <View style={ containerStyle } >
-      <Icon { ...iconProps } />
+      { Icon && <Icon { ...iconProps } />}
     </View>
   )
 

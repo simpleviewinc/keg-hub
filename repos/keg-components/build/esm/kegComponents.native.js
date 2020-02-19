@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { isValidElement, useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { withTheme, useTheme, useThemeHover, setDefaultTheme } from 're-theme';
-import { isFunc, reduceObj, isObj, isStr, isArr, get, checkCall, deepMerge, isNum, toBool, trainCase, capitalize } from 'jsutils';
+import { isFunc, isArr, reduceObj, isObj, isStr, get, checkCall, deepMerge, isNum, toBool, trainCase, capitalize } from 'jsutils';
 import { Text as Text$2, Platform, TouchableNativeFeedback, TouchableOpacity, View as View$1, Image as Image$1, TextInput, Picker, Switch as Switch$1, Linking } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -174,7 +175,7 @@ var isValidComponent = function isValidComponent(Component) {
 };
 
 var renderFromType = function renderFromType(Element, props, Wrapper) {
-  return isValidComponent(Element) ? isFunc(Element) ? React.createElement(Element, props) : Element : Wrapper ? React.createElement(Wrapper, props, Element) : Element;
+  return isValidComponent(Element) ? isFunc(Element) ? React.createElement(Element, props) : Element : isArr(Element) ? Element : Wrapper ? React.createElement(Wrapper, props, Element) : Element;
 };
 
 var getActiveKey = function getActiveKey(keys, isDefault) {
@@ -274,9 +275,11 @@ var layout = {
 	padding: 15
 };
 var font = {
-	size: 500,
-	bold: 700,
-	units: "px"
+	size: 16,
+	spacing: 0.15,
+	bold: "700",
+	units: "px",
+	family: "Verdana, Geneva, sans-serif"
 };
 var form = {
 	border: {
@@ -1336,11 +1339,46 @@ Switch.propTypes = _objectSpread2({}, TouchableOpacity.propTypes, {
   type: PropTypes.string
 });
 
+var IconWrapper = React.forwardRef(function (props, ref) {
+  var theme = useTheme();
+  var children = props.children,
+      color = props.color,
+      Element = props.Element,
+      isWeb = props.isWeb,
+      name = props.name,
+      size = props.size,
+      style = props.style,
+      styles = props.styles,
+      type = props.type,
+      attrs = _objectWithoutProperties(props, ["children", "color", "Element", "isWeb", "name", "size", "style", "styles", "type"]);
+  var containerStyle = theme.get('components.icon.container', get(styles, 'container'), styles);
+  var iconProps = {
+    ref: ref,
+    name: name
+  };
+  iconProps.style = theme.get('components.icon.icon', get(styles, 'icon'), styles);
+  iconProps.color = color || get(iconProps.style, 'color', get(theme, 'typography.default.color'));
+  iconProps.size = size || get(iconProps.style, 'fontSize', get(theme, 'typography.default.fontSize', 15) * 2);
+  var Icon = isValidComponent(Element) ? Element : false;
+  return React.createElement(View, {
+    style: containerStyle
+  }, Icon && React.createElement(Icon, iconProps));
+});
+IconWrapper.propTypes = {
+  color: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  ref: PropTypes.object,
+  style: PropTypes.object,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  type: PropTypes.string
+};
+
 var Icon = function Icon(props) {
-  return React.createElement(View$1, null, React.createElement(Text$2, null, "Not Implemented"));
+  return React.createElement(IconWrapper, _extends({}, props, {
+    Element: props.Element || FontAwesome
+  }));
 };
-Icon.propTypes = {
-};
+Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
 
 var Container = function Container(args) {
   var onPress = args.onPress,
@@ -2268,19 +2306,20 @@ var checkbox = _objectSpread2({
   }
 }, sharedToggle);
 
+var fontDefs = get(defaults, 'font', {});
 var typography = {
   font: {
     family: {
       $native: {},
       $web: {
-        fontFamily: 'Verdana, Geneva, sans-serif'
+        fontFamily: fontDefs.family || "Verdana, Geneva, sans-serif"
       }
     }
   },
   default: {
     color: colors$1.opacity._85,
-    fontSize: 16,
-    letterSpacing: 0.15,
+    fontSize: fontDefs.size || 16,
+    letterSpacing: fontDefs.spacing || 0.15,
     margin: 0
   },
   caption: {
@@ -2323,12 +2362,12 @@ var typography = {
     marginBottom: margin.size / 4
   },
   paragraph: {
-    fontSize: 16,
+    fontSize: fontDefs.size || 16,
     letterSpacing: 0.5
   },
   subtitle: {
     fontSize: 12,
-    letterSpacing: 0.15
+    letterSpacing: fontDefs.spacing || 0.15
   }
 };
 

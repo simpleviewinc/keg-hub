@@ -27,17 +27,14 @@ const addRules = [
   },
   {
     test: /\.(js|jsx)$/,
-    exclude: /node_modules\/(?!(react-native-vector-icons)\/).*/,
+    include: [
+      path.resolve(__dirname, "../node_modules/@expo/vector-icons"),
+    ],
     use: {
       loader: "babel-loader",
       options: { ...babelConfig }
     }
-  },
-  {
-    test: /\.ttf$/,
-    loader: "url-loader", // or directly file-loader
-    include: path.resolve(__dirname, "node_modules/react-native-vector-icons"),
-  },
+  }
 ]
 
 // Set custom extensions based on the platform

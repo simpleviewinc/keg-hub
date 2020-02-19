@@ -1,8 +1,6 @@
 import React from 'react'
-import { View, Text } from 'react-native'
-
-// Commenting out for now until font awesome issues are fixed
-// import { IconWrapper } from './icon.wrapper'
+import { FontAwesome } from '@expo/vector-icons'
+import { IconWrapper } from './icon.wrapper'
 
 /**
  * Icon
@@ -18,11 +16,12 @@ import { View, Text } from 'react-native'
  *
  */
 export const Icon = props => (
-  <View>
-    <Text>Not Implemented</Text>
-  </View>
+  <IconWrapper
+    { ...props }
+    Element={ props.Element || FontAwesome }
+  />
 )
 
 Icon.propTypes = {
-  // ...IconWrapper.propTypes
+  ...IconWrapper.propTypes
 }

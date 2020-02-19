@@ -9,8 +9,7 @@ var React__default = _interopDefault(React);
 var reTheme = require('re-theme');
 var jsutils = require('jsutils');
 var PropTypes = _interopDefault(require('prop-types'));
-var FAIcon = _interopDefault(require('react-native-vector-icons/dist/FontAwesome'));
-var iconFont = _interopDefault(require('react-native-vector-icons/Fonts/FontAwesome.ttf'));
+var vectorIcons = require('@expo/vector-icons');
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -182,7 +181,7 @@ var isValidComponent = function isValidComponent(Component) {
 };
 
 var renderFromType = function renderFromType(Element, props, Wrapper) {
-  return isValidComponent(Element) ? jsutils.isFunc(Element) ? React__default.createElement(Element, props) : Element : Wrapper ? React__default.createElement(Wrapper, props, Element) : Element;
+  return isValidComponent(Element) ? jsutils.isFunc(Element) ? React__default.createElement(Element, props) : Element : jsutils.isArr(Element) ? Element : Wrapper ? React__default.createElement(Wrapper, props, Element) : Element;
 };
 
 var getActiveKey = function getActiveKey(keys, isDefault) {
@@ -282,9 +281,11 @@ var layout = {
 	padding: 15
 };
 var font = {
-	size: 500,
-	bold: 700,
-	units: "px"
+	size: 16,
+	spacing: 0.15,
+	bold: "700",
+	units: "px",
+	family: "Verdana, Geneva, sans-serif"
 };
 var form = {
 	border: {
@@ -468,18 +469,6 @@ var buildColorStyles = function buildColorStyles(states, cb) {
     styles && (built[type] = styles);
     return built;
   }, {});
-};
-
-var hasDom = typeof window !== 'undefined';
-var addedFonts = [];
-var generateFontStyles = function generateFontStyles(name, uri) {
-  if (!hasDom || addedFonts.indexOf(name) !== -1) return;
-  addedFonts.push(name);
-  var fontStyles = "@font-face {\n    src: url(".concat(uri, ");\n    font-family: ").concat(name, ";\n  }");
-  var style = document.createElement('style');
-  style.type = 'text/css';
-  style.styleSheet ? style.styleSheet.cssText = fontStyles : style.appendChild(document.createTextNode(fontStyles));
-  document.head.appendChild(style);
 };
 
 var allPlatforms = "$all";
@@ -1444,12 +1433,12 @@ var IconWrapper = React__default.forwardRef(function (props, ref) {
     name: name
   };
   iconProps.style = theme.get('components.icon.icon', jsutils.get(styles, 'icon'), styles);
-  iconProps.color = color || jsutils.get(iconStyles, 'color');
-  iconProps.size = size || jsutils.get(iconStyles, 'fontSize');
-  var Icon = isValidComponent(Element) ? Element : FAIcon;
+  iconProps.color = color || jsutils.get(iconProps.style, 'color', jsutils.get(theme, 'typography.default.color'));
+  iconProps.size = size || jsutils.get(iconProps.style, 'fontSize', jsutils.get(theme, 'typography.default.fontSize', 15) * 2);
+  var Icon = isValidComponent(Element) ? Element : false;
   return React__default.createElement(View, {
     style: containerStyle
-  }, React__default.createElement(Icon, iconProps));
+  }, Icon && React__default.createElement(Icon, iconProps));
 });
 IconWrapper.propTypes = {
   color: PropTypes.string,
@@ -1460,9 +1449,9 @@ IconWrapper.propTypes = {
   type: PropTypes.string
 };
 
-generateFontStyles('FontAwesome', iconFont);
 var Icon = function Icon(props) {
   return React__default.createElement(IconWrapper, _extends({}, props, {
+    Element: props.Element || vectorIcons.FontAwesome,
     isWeb: true
   }));
 };
@@ -2382,19 +2371,20 @@ var checkbox = _objectSpread2({
   }
 }, sharedToggle);
 
+var fontDefs = jsutils.get(defaults, 'font', {});
 var typography = {
   font: {
     family: {
       $native: {},
       $web: {
-        fontFamily: 'Verdana, Geneva, sans-serif'
+        fontFamily: fontDefs.family || "Verdana, Geneva, sans-serif"
       }
     }
   },
   default: {
     color: colors$1.opacity._85,
-    fontSize: 16,
-    letterSpacing: 0.15,
+    fontSize: fontDefs.size || 16,
+    letterSpacing: fontDefs.spacing || 0.15,
     margin: 0
   },
   caption: {
@@ -2437,12 +2427,12 @@ var typography = {
     marginBottom: margin.size / 4
   },
   paragraph: {
-    fontSize: 16,
+    fontSize: fontDefs.size || 16,
     letterSpacing: 0.5
   },
   subtitle: {
     fontSize: 12,
-    letterSpacing: 0.15
+    letterSpacing: fontDefs.spacing || 0.15
   }
 };
 

@@ -1,12 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { IconWrapper } from './icon.wrapper'
-import { generateFontStyles } from '../../utils'
-import iconFont from 'react-native-vector-icons/Fonts/FontAwesome.ttf'
-
-// Adds the required css for font-awesome fonts
-// iconFont === path to the font file ( font-awesome.ttf )
-generateFontStyles('FontAwesome', iconFont)
+import { FontAwesome } from '@expo/vector-icons'
 
 /**
  * Icon
@@ -23,6 +17,7 @@ generateFontStyles('FontAwesome', iconFont)
 export const Icon = props => (
   <IconWrapper
     { ...props }
+    Element={ props.Element || FontAwesome }
     isWeb={ true }
   />
 )

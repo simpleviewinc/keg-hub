@@ -1,19 +1,23 @@
 import { colors } from './colors'
 import { margin } from './margin'
+import defaults from './defaults.json'
+import { get } from 'jsutils'
+
+const fontDefs = get(defaults, 'font', {})
 
 export const typography = {
   font: {
     family: {
       $native: {},
       $web: {
-        fontFamily: 'Verdana, Geneva, sans-serif'
+        fontFamily: fontDefs.family || "Verdana, Geneva, sans-serif"
       }
     }
   },
   default: {
     color: colors.opacity._85,
-    fontSize: 16,
-    letterSpacing: 0.15,
+    fontSize: fontDefs.size || 16,
+    letterSpacing: fontDefs.spacing || 0.15,
     margin: 0,
   },
   caption: {
@@ -56,11 +60,11 @@ export const typography = {
     marginBottom: margin.size / 4
   },
   paragraph: {
-    fontSize: 16,
+    fontSize: fontDefs.size || 16,
     letterSpacing: 0.5
   },
   subtitle: {
     fontSize: 12,
-    letterSpacing: 0.15
+    letterSpacing: fontDefs.spacing || 0.15,
   },
 }
