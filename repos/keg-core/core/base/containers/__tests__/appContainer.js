@@ -11,7 +11,7 @@ Mocks.setMocks({
   'utils/platform/getWindow': { getWindow: () => Utils.validWindowMock },
 })
 
-const { AppContainer } = require('../app')
+const { AppContainer } = require('../appContainer')
 
 describe('App Container', () => {
   afterAll(() => Mocks.resetMocks())

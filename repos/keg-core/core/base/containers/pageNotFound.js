@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'SVComponents/native'
+import { View, Text } from 'SVComponents'
 
 const stylesCenter = {
   justifyContent: 'center',
