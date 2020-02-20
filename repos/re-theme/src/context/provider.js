@@ -41,11 +41,6 @@ export const ReThemeProvider = props => {
   const [ dimensions, setDimensions ] = useState(Dimensions.get("window"))
 
   /**
-   * Boolean to ensure we only add the event listeners once
-   */
-  const [ hasListener, setListener ] = useState(false)
-  
-  /**
    * onChange listener for when the screen size changes
    *
    * @param {Object} arguments.window - holds the size of the current window
@@ -76,12 +71,9 @@ export const ReThemeProvider = props => {
    */
   useEffect(() => {
 
-    if(!hasListener){
-      // Add the event listeners
-      Dimensions.addEventListener("change", onChange)
-      addThemeEvent(Constants.BUILD_EVENT, updateCurrentTheme)
-      setListener(true)
-    }
+    // Add the event listeners
+    Dimensions.addEventListener("change", onChange)
+    addThemeEvent(Constants.BUILD_EVENT, updateCurrentTheme)
 
     // Return a function to remove the event listeners
     return () => {

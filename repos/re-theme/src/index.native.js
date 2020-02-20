@@ -8,6 +8,7 @@ import {
 } from './dimensions'
 import { setRNDimensions } from "ReDimensions"
 import { setRNPlatform } from "RePlatform"
+import { helpers } from "./helpers"
 
 import {
   addThemeEvent,
@@ -53,5 +54,8 @@ export {
   // Context Exports
   ReThemeContext,
   ReThemeProvider,
+
+  // Style Helpers
+  helpers
 
 }
