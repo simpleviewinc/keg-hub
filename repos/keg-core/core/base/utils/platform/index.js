@@ -1,0 +1,5 @@
+export * from './isIOSWeb'
+export * from './isStandalonePWA'
+export * from './isNative'
+export * from './getWindow'
+export * from './getNavigator'

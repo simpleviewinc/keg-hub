@@ -2,6 +2,7 @@ import React from 'react'
 import { View, H5, Button, Text } from 'SVComponents'
 import { useTheme } from 're-theme'
 import { get }  from 'jsutils'
+import { isNative, isStandalonePWA, isIOSWeb } from 'SVUtils'
 
 const logoStyles = {
   height: 250,
@@ -38,6 +39,15 @@ export const AppContainer = props => {
           Keg Component Primary Button
         </Text>
       </Button>
+      <Text>
+        Is Native: { isNative().toString() }
+      </Text>
+      <Text>
+        Is IOS Web: { isIOSWeb().toString() }
+      </Text>
+      <Text>
+        Is Standalone PWA: { isStandalonePWA().toString() }
+      </Text>
     </View>
   )
 }
