@@ -3,7 +3,7 @@ import { buildColorStyles, inheritFrom } from '../../../utils'
 import { containedStates } from './contained'
 import { get } from 'jsutils'
 
-const outlineStates = {
+const states = {
   default: {
     main: {
       padding: 8,
@@ -39,30 +39,33 @@ const outlineStates = {
  *
  * @returns {Object} - Built color style for the state
  */
-const colorStyle = (color, state) => {
-  return state !== 'hover'
-    ? {
-        main: { borderColor: color.main, },
-        content: { color: color.main, }
-      }
-    : {
-        main: {
-          borderColor: color.dark,
-          backgroundColor: colors.opacity(10, color.dark),
-        },
-        content: {
-          color: color.dark,
-        }
-      }
+const colorStyle = (surface, state) => {
+  const activeState = states[state]
+  const activeColor = state === 'hover'
+    ? get(surface, 'colors.dark')
+    : state === 'active'
+      ? get(surface, 'colors.light')
+      : get(surface, 'colors.main')
+
+
+  const style = {
+    main: { ...activeState.main, borderColor: activeColor },
+    content: { ...activeState.content, color: activeColor }
+  }
+  
+  state === 'hover' && ( style.main.backgroundColor = colors.opacity(10, activeColor) )
+
+  return style
+
 }
 
-const outline = { ...buildColorStyles(outlineStates, colorStyle) }
-outline.default = inheritFrom(containedStates.default, outlineStates.default)
-outline.disabled = inheritFrom(outline.default, containedStates.disabled, outlineStates.disabled)
-outline.hover = inheritFrom(outline.default, outlineStates.hover)
-outline.active = inheritFrom(outline.hover, outlineStates.active)
+states.default = inheritFrom(containedStates.default, states.default)
+states.disabled = inheritFrom(containedStates.disabled, states.default, states.disabled)
+states.hover = inheritFrom(states.default, states.hover)
+states.active = inheritFrom(states.hover, states.active)
+const outline = { ...buildColorStyles(states, colorStyle) }
 
 export {
   outline,
-  outlineStates
+  states as outlineStates
 }

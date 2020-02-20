@@ -9,16 +9,8 @@ import PropTypes from 'prop-types'
  * @param {Object} ref - React Ref Object
  *
  */
-const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
-  return (
-    <button
-      { ...elProps }
-      { ...props }
-      ref={ ref }
-    >
-      { children }
-    </button>
-  )
+const Element = React.forwardRef((props, ref) => {
+  return (<button { ...props } ref={ ref } />)
 })
 
 

@@ -21,7 +21,7 @@ export const select = {
       padding: padding.size / 2,
     },
     $native: {
-      borderBottomColor: colors.palette.gray04,
+      borderBottomColor: colors.palette.gray02,
       borderStyle: 'solid',
       borderWidth: 2,
     }

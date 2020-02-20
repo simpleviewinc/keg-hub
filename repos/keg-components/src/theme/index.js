@@ -12,9 +12,8 @@ import { transform } from './transform'
 import { transition } from './transition'
 import { typography } from './typography'
 
-export const theme = setDefaultTheme({
+export const theme = {
   colors,
-  components,
   display,
   flex,
   form,
@@ -25,4 +24,5 @@ export const theme = setDefaultTheme({
   transform,
   transition,
   typography,
-})
+  ...components,
+}

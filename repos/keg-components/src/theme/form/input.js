@@ -22,7 +22,7 @@ export const input = {
       fontSize: 14,
     },
     $native: {
-      borderBottomColor: get(colors, 'palette.gray04'),
+      borderBottomColor: get(colors, 'palette.gray02'),
       borderStyle: 'solid',
       borderWidth: 2,
     }

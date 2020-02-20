@@ -3,12 +3,10 @@ import { buildColorStyles, inheritFrom } from '../../../utils'
 import { get } from 'jsutils'
 import { containedStates } from './contained'
 
-const transparent = get(colors, 'opacity._00')
-
-const textStyles = {
+const states = {
   default: {
     main: {
-      backgroundColor: transparent,
+      backgroundColor: get(colors, 'palette.transparent'),
     },
     content: {
       color: get(colors, 'opacity._80'),
@@ -37,21 +35,29 @@ const textStyles = {
  *
  * @returns {Object} - Built color style for the state
  */
-const colorStyle = (color, state) => {
-  return state !== 'hover'
-    ? { main: {}, content: { color: color.main, }}
-    : {
-        main: { backgroundColor: colors.opacity(10, color.dark) },
-        content: { color: color.dark }
-      }
+const colorStyle = (surface, state) => {
+  const activeState = states[state]
+  const activeColor = state === 'hover'
+    ? get(surface, 'colors.dark')
+    : state === 'active'
+      ? get(surface, 'colors.light')
+      : get(surface, 'colors.main')
+
+  const styles = { 
+    main: { ...activeState.main },
+    content: { ...activeState.content, color: activeColor, }
+  }
+  state === 'hover' && ( styles.main.backgroundColor = colors.opacity(10, activeColor) )
+
+  return styles
 }
 
-const text = { ...buildColorStyles(textStyles, colorStyle) }
+states.default = inheritFrom(containedStates.default, states.default)
+states.disabled = inheritFrom(containedStates.disabled, states.default, states.disabled)
+states.hover = inheritFrom(states.default, containedStates.hover, states.hover)
+states.active = inheritFrom(states.hover, states.active)
 
-text.default = inheritFrom(containedStates.default, textStyles.default)
-text.disabled = inheritFrom(text.default, containedStates.disabled, textStyles.disabled)
-text.hover = inheritFrom(text.default, containedStates.hover, textStyles.hover)
-text.active = inheritFrom(text.hover, textStyles.active)
+const text = { ...buildColorStyles(states, colorStyle) }
 
 export {
   text

@@ -176,346 +176,57 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
 
-var isValidComponent = function isValidComponent(Component) {
-  return React.isValidElement(Component) || jsutils.isFunc(Component);
+var checkEqual = function checkEqual(obj1, obj2) {
+  return obj1 === obj2 || jsutils.jsonEqual(obj1, obj2);
 };
-
-var renderFromType = function renderFromType(Element, props, Wrapper) {
-  return isValidComponent(Element) ? jsutils.isFunc(Element) ? React__default.createElement(Element, props) : Element : jsutils.isArr(Element) ? Element : Wrapper ? React__default.createElement(Wrapper, props, Element) : Element;
+var getStylesFromPath = function getStylesFromPath(theme, path) {
+  return jsutils.get(theme, path) || function () {
+    console.warn("Could not find ".concat(path, " on theme"), theme);
+    var split = path.split('.');
+    split[split.length] = 'default';
+    return jsutils.get(theme, split, {});
+  }();
 };
-
-var getActiveKey = function getActiveKey(keys, isDefault) {
-  return jsutils.reduceObj(keys, function (key, value, activeKey) {
-    !activeKey && value && (activeKey = key === 'type' ? value : key);
-    return activeKey;
-  }, false) || isDefault;
-};
-
-var getActiveOpacity = function getActiveOpacity(isWeb, props, style) {
-  return !isWeb ? {
-    activeOpacity: props.activeOpacity || props.opacity || style && style.opacity || 0.3,
-    accessibilityRole: "button"
-  } : {};
-};
-
-var getChecked = function getChecked(isWeb, isChecked) {
-  return _defineProperty({}, isWeb ? 'checked' : 'value', isChecked);
-};
-
-var getImgSrc = function getImgSrc(isWeb, src, source, uri) {
-  var imgSrc = src || source || uri;
-  var key = isWeb ? 'src' : 'source';
-  return _defineProperty({}, key, isWeb ? jsutils.isObj(imgSrc) ? imgSrc.uri : imgSrc : jsutils.isStr(imgSrc) ? {
-    uri: imgSrc
-  } : imgSrc);
-};
-
-var getInputValueKey = function getInputValueKey(isWeb, onChange, onValueChange, readOnly) {
-  return !isWeb ? 'selectedValue' : jsutils.isFunc(onChange) || jsutils.isFunc(onValueChange) || readOnly ? 'value' : 'defaultValue';
-};
-var getValueFromChildren = function getValueFromChildren(value, children) {
-  return value ? value : children ? jsutils.isArr(children) ? jsutils.get(children, ['0', 'props', 'children']) : jsutils.get(children, ['props', 'children']) : '';
-};
-
-var getOnLoad = function getOnLoad(isWeb, callback) {
-  return _defineProperty({}, isWeb ? 'onLoad' : 'onLoadEnd', callback);
-};
-
-var getOnChangeHandler = function getOnChangeHandler(isWeb, onChange, onValueChange) {
-  return _defineProperty({}, isWeb ? 'onChange' : 'onValueChange', onChange || onValueChange);
-};
-
-var getReadOnly = function getReadOnly(isWeb, readOnly, disabled, editable) {
-  var key = isWeb ? 'readOnly' : 'editable';
-  var value = isWeb ? readOnly || disabled || !editable : !(readOnly || disabled || !editable);
-  return _defineProperty({}, key, value);
-};
-
-var getPressHandler = function getPressHandler(isWeb, onClick, onPress) {
-  var action = onClick || onPress;
-  return jsutils.isFunc(action) && _defineProperty({}, isWeb ? 'onClick' : 'onPress', onClick || onPress) || {};
-};
-
-var getStyles = function getStyles(isWeb, styles) {
-  return isWeb ? jsutils.isObj(styles) && {
-    styles: styles
-  } || {
-    styles: {}
-  } : {};
-};
-
-var getTarget = function getTarget(isWeb, target) {
-  return isWeb && target ? {
-    target: target
-  } : {};
-};
-
-var getPlatform = function getPlatform() {
-  return 'web';
-};
-
-var colors = {
-	defaultType: "default",
-	types: [
-		"default",
-		"primary",
-		"secondary",
-		"warn",
-		"danger"
-	],
-	states: [
-		"default",
-		"disabled",
-		"hover",
-		"active"
-	]
-};
-var layout = {
-	sides: [
-		"left",
-		"right",
-		"top",
-		"bottom"
-	],
-	margin: 15,
-	padding: 15
-};
-var font = {
-	size: 16,
-	spacing: 0.15,
-	bold: "700",
-	units: "px",
-	family: "Verdana, Geneva, sans-serif"
-};
-var form = {
-	border: {
-		radius: 5
-	},
-	input: {
-		height: 35
-	},
-	"switch": {
-		space: 15,
-		height: 20,
-		width: 20
-	},
-	checkbox: {
-		space: 15,
-		height: 20,
-		width: 20
-	},
-	select: {
-		height: 35
-	}
-};
-var defaults = {
-	colors: colors,
-	layout: layout,
-	font: font,
-	form: form
-};
-
-var defaultColorType = jsutils.get(defaults, 'colors.defaultType');
-var colorTypes = jsutils.get(defaults, 'colors.types');
-var buildCompStyles = function buildCompStyles(theme, path, typeOpts, colorOpts) {
-  var extraStyles = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
-  var compType = getActiveKey.apply(void 0, _toConsumableArray(typeOpts));
-  if (!compType) return {};
-  var paths = ["".concat(path, ".").concat(compType)];
-  var colorType = getActiveKey.apply(void 0, _toConsumableArray(colorOpts));
-  colorType && colorType !== 'default' && paths.push("".concat(path, ".").concat(compType, ".").concat(colorType));
-  var built = theme.get.apply(theme, _toConsumableArray(paths.concat(extraStyles)));
-  return jsutils.reduceObj(built, function (key, value, filteredStyles) {
-    (key === defaultColorType || colorTypes.indexOf(key) === -1) && (filteredStyles[key] = value);
-    return filteredStyles;
+var getStyles = function getStyles(pathStyles, userStyles) {
+  if (!userStyles) return pathStyles;
+  var pathKeys = Object.keys(pathStyles);
+  var userKeys = Object.keys(userStyles);
+  return pathKeys.indexOf(userKeys[0]) !== -1
+  ? jsutils.deepMerge(pathStyles, userStyles)
+  : jsutils.reduceObj(pathStyles, function (key, value, updated) {
+    updated[key] = jsutils.deepMerge(value, userStyles);
+    return updated;
   }, {});
 };
-
-var transition = function transition() {
-  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var speed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 250;
-  var timingFunc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'ease';
-  return typeof props === 'string' ? "".concat(props, " ").concat(speed, "ms ").concat(timingFunc) : jsutils.isArr(props) ? props.reduce(function (trans, prop) {
-    trans.push("".concat(prop, " ").concat(speed, "ms ").concat(timingFunc));
-    return trans;
-  }, []).join(', ') : null;
-};
-var toRgb = function toRgb(red, green, blue, alpha) {
-  var obj = jsutils.isObj(red) ? red : {
-    r: red,
-    g: green,
-    b: blue,
-    a: alpha
-  };
-  obj.a = !obj.a && obj.a !== 0 ? 1 : obj.a;
-  return "rgba(".concat(obj.r, ", ").concat(obj.g, ", ").concat(obj.b, ", ").concat(obj.a, ")");
-};
-var hexToRgba = function hexToRgba(hex, opacity, asObj) {
-  if (!hex) return console.warn('Can not convert hex to rgba', hex) || "rgba(255,255,255,0)";
-  hex = hex.indexOf('#') === 0 ? hex.replace('#', '') : hex;
-  opacity = opacity > 1 ? (opacity / 100).toFixed(4) : opacity;
-  var rgbaObj = {
-    r: parseInt(hex.substring(0, 2), 16),
-    g: parseInt(hex.substring(2, 4), 16),
-    b: parseInt(hex.substring(4, 6), 16),
-    a: !opacity && opacity !== 0 ? 1 : opacity
-  };
-  return asObj ? rgbaObj : toRgb(rgbaObj);
-};
-var convertToPercent = function convertToPercent(num, percent) {
-  return parseInt(num * (100 + percent) / 100);
-};
-var checkColorMax = function checkColorMax(num) {
-  return num < 255 ? num : 255;
-};
-var convertToColor = function convertToColor(num, percent) {
-  var asPercent = convertToPercent(num, percent);
-  var withMax = checkColorMax(asPercent);
-  var asStr = withMax.toString(16);
-  return asStr.length == 1 ? "0".concat(asStr) : asStr;
-};
-var shadeHex = function shadeHex(color, percent) {
-  var rgba = hexToRgba(color, 1, true);
-  return "#" + convertToColor(rgba.r, percent) + convertToColor(rgba.g, percent) + convertToColor(rgba.b, percent);
-};
-var opacity = function opacity(amount, color) {
-  return jsutils.isStr(color) && color.indexOf('#') === 0 ? hexToRgba(color, amount) : jsutils.isObj(color) ? toRgb(color, amount) : "rgba(".concat(color || '0,0,0', ", ").concat(amount, ")");
-};
-for (var amount = 100; amount >= 0; amount -= 5) {
-  opacity["_".concat(amount)] = opacity((amount / 100).toFixed(2));
-}
-var palette = {
-  transparent: 'transparent',
-  white01: '#ffffff',
-  white02: '#fafafa',
-  white03: '#f5f5f5',
-  white04: '#f0f0f0',
-  gray01: '#e6e6e6',
-  gray02: '#dddddd',
-  gray03: '#b3b3b3',
-  gray04: '#999999',
-  black01: '#666666',
-  black02: '#4d4d4d',
-  black03: '#333333',
-  black04: '#1a1a1a',
-  blue01: shadeHex('#2196F3', 20),
-  blue02: "#2196F3",
-  blue03: shadeHex('#2196F3', -20),
-  green01: shadeHex('#02b4a3', 20),
-  green02: '#02b4a3',
-  green03: shadeHex('#02b4a3', -20),
-  orange01: shadeHex('#e05402', 20),
-  orange02: '#ff5f01',
-  orange03: shadeHex('#e05402', -20),
-  red01: shadeHex('#f51f10', 20),
-  red02: '#f51f10',
-  red03: shadeHex('#f51f10', -20)
-};
-var surface = {
-  default: {
-    main: palette.gray04,
-    light: palette.gray03,
-    dark: palette.black01
-  },
-  primary: {
-    main: palette.green02,
-    light: palette.green01,
-    dark: palette.green03
-  },
-  secondary: {
-    main: palette.blue02,
-    light: palette.blue01,
-    dark: palette.blue03
-  },
-  warn: {
-    main: palette.orange02,
-    light: palette.orange01,
-    dark: palette.orange03
-  },
-  danger: {
-    main: palette.red02,
-    light: palette.red01,
-    dark: palette.red03
-  }
-};
-var colors$1 = {
-  helpers: {
-    shadeHex: shadeHex,
-    hexToRgba: hexToRgba,
-    toRgb: toRgb,
-    toRgba: toRgb,
-    trans: transition
-  },
-  link: {
-    default: '#64aff1',
-    hover: '#1e88e5'
-  },
-  surface: surface,
-  opacity: opacity,
-  palette: palette
-};
-
-var defaultColorType$1 = jsutils.get(defaults, 'colors.defaultType', 'default');
-var colorSurface = jsutils.get(colors$1, 'surface', {});
-var colorStyles = function colorStyles(type, states, cb) {
-  if (type === defaultColorType$1) return states.default;
-  return Object.keys(states).reduce(function (built, key) {
-    return _objectSpread2({}, built, _defineProperty({}, key, jsutils.checkCall(cb, colorSurface[type || defaultColorType$1], key)));
-  }, {});
-};
-var buildColorStyles = function buildColorStyles(states, cb) {
-  return jsutils.get(defaults, 'colors.types', []).reduce(function (built, type) {
-    var styles = colorStyles(type, states, cb);
-    styles && (built[type] = styles);
-    return built;
-  }, {});
-};
-
-var allPlatforms = "$all";
-var platform = "$" + getPlatform();
-var nonPlatform =  "$native";
-var platforms = [allPlatforms, platform, nonPlatform];
-var mergePlatforms = function mergePlatforms(toMerge) {
-  var $all = toMerge.$all,
-      $web = toMerge.$web,
-      $native = toMerge.$native,
-      otherKeys = _objectWithoutProperties(toMerge, ["$all", "$web", "$native"]);
-  return platforms.reduce(function (merged, plat) {
-    var platStyles = plat !== nonPlatform && jsutils.get(toMerge, [plat]);
-    return platStyles ? jsutils.deepMerge(merged, platStyles) : merged;
-  }, otherKeys);
-};
-var platformFlatten = function platformFlatten(initial) {
-  var hasPlatforms = Object.keys(initial).some(function (key) {
-    return platforms.indexOf(key) !== -1;
-  });
-  var noPlatforms = hasPlatforms && mergePlatforms(initial) || _objectSpread2({}, initial);
-  return jsutils.reduceObj(noPlatforms, function (key, value, merged) {
-    merged[key] = jsutils.isObj(value) ? platformFlatten(value) : value;
-    return merged;
-  }, noPlatforms);
-};
-
-var inheritFrom = function inheritFrom() {
-  for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {
-    styles[_key] = arguments[_key];
-  }
-  return jsutils.deepMerge.apply(void 0, _toConsumableArray(styles.map(function (style) {
-    return jsutils.isObj(style) ? platformFlatten(style) : undefined;
-  })));
-};
-
-var useStyles = function useStyles(theme, path, typeOpts, colorOpts) {
-  var extraStyles = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
-  var _useState = React.useState(null),
+var useThemePath = function useThemePath(path, styles) {
+  var theme = reTheme.useTheme();
+  var foundStyles = getStylesFromPath(theme, path);
+  var _useState = React.useState(foundStyles),
       _useState2 = _slicedToArray(_useState, 2),
-      activeStyles = _useState2[0],
-      setActiveStyles = _useState2[1];
-  var styles = activeStyles || buildCompStyles(theme, path, typeOpts, colorOpts, extraStyles);
-  React.useEffect(function () {
-    styles !== activeStyles && setActiveStyles(styles);
-  }, [styles, activeStyles, theme]);
-  return [styles, setActiveStyles];
+      pathStyles = _useState2[0],
+      setPathStyles = _useState2[1];
+  var _useState3 = React.useState(styles),
+      _useState4 = _slicedToArray(_useState3, 2),
+      userStyles = _useState4[0],
+      setUserStyles = _useState4[1];
+  var _useState5 = React.useState(React.useMemo(function () {
+    return getStyles(pathStyles, userStyles);
+  }, [foundStyles, styles])),
+      _useState6 = _slicedToArray(_useState5, 2),
+      themeStyles = _useState6[0],
+      setThemeStyles = _useState6[1];
+  React.useLayoutEffect(function () {
+    var userEqual = checkEqual(styles, userStyles);
+    var pathEqual = checkEqual(foundStyles, pathStyles);
+    if (userEqual && pathEqual) return;
+    !userEqual && setUserStyles(styles);
+    !pathEqual && setPathStyles(foundStyles)
+    ;
+    (!userEqual || !pathEqual) && setThemeStyles(React.useMemo(function () {
+      return getStyles(foundStyles, styles);
+    }, [foundStyles, styles]));
+  }, [foundStyles, styles]);
+  return [themeStyles, setThemeStyles];
 };
 
 var elMap = {
@@ -576,86 +287,290 @@ var KegText = function KegText(element) {
 
 var Text$1 = KegText('text');
 
-var getChildren = function getChildren(Children, theme, activeStyle) {
-  var styles = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+var isValidComponent = function isValidComponent(Component) {
+  return React.isValidElement(Component) || jsutils.isFunc(Component);
+};
+
+var renderFromType = function renderFromType(Element, props, Wrapper) {
+  return isValidComponent(Element) ? jsutils.isFunc(Element) ? React__default.createElement(Element, props) : Element : jsutils.isArr(Element) ? Element : Wrapper ? React__default.createElement(Wrapper, props, Element) : Element;
+};
+
+var getActiveOpacity = function getActiveOpacity(isWeb, props, style) {
+  return !isWeb ? {
+    activeOpacity: props.activeOpacity || props.opacity || style && style.opacity || 0.3,
+    accessibilityRole: "button"
+  } : {};
+};
+
+var getChecked = function getChecked(isWeb, isChecked) {
+  return _defineProperty({}, isWeb ? 'checked' : 'value', isChecked);
+};
+
+var getImgSrc = function getImgSrc(isWeb, src, source, uri) {
+  var imgSrc = src || source || uri;
+  var key = isWeb ? 'src' : 'source';
+  return _defineProperty({}, key, isWeb ? jsutils.isObj(imgSrc) ? imgSrc.uri : imgSrc : jsutils.isStr(imgSrc) ? {
+    uri: imgSrc
+  } : imgSrc);
+};
+
+var getInputValueKey = function getInputValueKey(isWeb, onChange, onValueChange, readOnly) {
+  return !isWeb ? 'selectedValue' : jsutils.isFunc(onChange) || jsutils.isFunc(onValueChange) || readOnly ? 'value' : 'defaultValue';
+};
+var getValueFromChildren = function getValueFromChildren(value, children) {
+  return value ? value : children ? jsutils.isArr(children) ? jsutils.get(children, ['0', 'props', 'children']) : jsutils.get(children, ['props', 'children']) : '';
+};
+
+var getOnLoad = function getOnLoad(isWeb, callback) {
+  return _defineProperty({}, isWeb ? 'onLoad' : 'onLoadEnd', callback);
+};
+
+var getOnChangeHandler = function getOnChangeHandler(isWeb, onChange, onValueChange) {
+  return _defineProperty({}, isWeb ? 'onChange' : 'onValueChange', onChange || onValueChange);
+};
+
+var getReadOnly = function getReadOnly(isWeb, readOnly, disabled, editable) {
+  var key = isWeb ? 'readOnly' : 'editable';
+  var value = isWeb ? readOnly || disabled || !editable : !(readOnly || disabled || !editable);
+  return _defineProperty({}, key, value);
+};
+
+var getPressHandler = function getPressHandler(isWeb, onClick, onPress) {
+  var action = onClick || onPress;
+  return jsutils.isFunc(action) && _defineProperty({}, isWeb ? 'onClick' : 'onPress', onClick || onPress) || {};
+};
+
+var getStyles$1 = function getStyles(isWeb, styles) {
+  return isWeb ? jsutils.isObj(styles) && {
+    styles: styles
+  } || {
+    styles: {}
+  } : {};
+};
+
+var getTarget = function getTarget(isWeb, target) {
+  return isWeb && target ? {
+    target: target
+  } : {};
+};
+
+var getPlatform = function getPlatform() {
+  return 'web';
+};
+
+var colors = {
+	defaultType: "default",
+	types: {
+		"default": "gray",
+		primary: "green",
+		secondary: "blue",
+		warn: "orange",
+		danger: "red"
+	},
+	palette: {
+		transparent: "rgba(255,255,255,0)",
+		white01: "#ffffff",
+		white02: "#fafafa",
+		white03: "#f5f5f5",
+		black: [
+			20,
+			"#333333",
+			-20
+		],
+		gray: [
+			20,
+			"#999999",
+			-20
+		],
+		blue: [
+			20,
+			"#2196F3",
+			-20
+		],
+		green: [
+			20,
+			"#02b4a3",
+			-20
+		],
+		orange: [
+			20,
+			"#ff5f01",
+			-20
+		],
+		red: [
+			20,
+			"#f51f10",
+			-20
+		]
+	}
+};
+var layout = {
+	sides: [
+		"left",
+		"right",
+		"top",
+		"bottom"
+	],
+	margin: 15,
+	padding: 15
+};
+var font = {
+	size: 16,
+	spacing: 0.15,
+	bold: "700",
+	units: "px",
+	family: "Verdana, Geneva, sans-serif"
+};
+var form = {
+	border: {
+		radius: 5
+	},
+	input: {
+		height: 35
+	},
+	"switch": {
+		space: 15,
+		height: 20,
+		width: 20
+	},
+	checkbox: {
+		space: 15,
+		height: 20,
+		width: 20
+	},
+	select: {
+		height: 35
+	}
+};
+var defaults = {
+	colors: colors,
+	layout: layout,
+	font: font,
+	form: form
+};
+
+var defPalette = jsutils.get(defaults, 'colors.palette', {});
+var defTypes = jsutils.get(defaults, 'colors.types', {});
+var colors$1 = {
+  opacity: reTheme.helpers.colors.opacity,
+  palette: jsutils.reduceObj(defPalette, function (key, value, updated) {
+    !jsutils.isArr(value) ? updated[key] = value : value.map(function (val, i) {
+      var name = "".concat(key, "0").concat(i + 1);
+      updated[name] = jsutils.isStr(val) ? val : reTheme.helpers.colors.shadeHex(value[1], value[i]);
+    });
+    return updated;
+  }, {})
+};
+colors$1.surface = jsutils.reduceObj(defTypes, function (key, value, updated) {
+  updated[key] = {
+    light: colors$1.palette["".concat(value, "01")],
+    main: colors$1.palette["".concat(value, "02")],
+    dark: colors$1.palette["".concat(value, "03")]
+  };
+  return updated;
+}, {});
+
+var colorSurface = jsutils.get(colors$1, 'surface', {});
+var colorStyles = function colorStyles(type, states, cb) {
+  return Object.keys(states).reduce(function (built, key) {
+    return _objectSpread2({}, built, _defineProperty({}, key, jsutils.checkCall(cb, colorSurface[type], key)));
+  }, {});
+};
+var buildColorStyles = function buildColorStyles(states, cb) {
+  return Object.keys(jsutils.get(defaults, 'colors.types', {})).reduce(function (built, type) {
+    var styles = colorStyles(type, states, cb);
+    styles && (built[type] = styles);
+    return built;
+  }, {});
+};
+
+var allPlatforms = "$all";
+var platform = "$" + getPlatform();
+var nonPlatform =  "$native";
+var platforms = [allPlatforms, platform, nonPlatform];
+var mergePlatforms = function mergePlatforms(toMerge) {
+  var $all = toMerge.$all,
+      $web = toMerge.$web,
+      $native = toMerge.$native,
+      otherKeys = _objectWithoutProperties(toMerge, ["$all", "$web", "$native"]);
+  return platforms.reduce(function (merged, plat) {
+    var platStyles = plat !== nonPlatform && jsutils.get(toMerge, [plat]);
+    return platStyles ? jsutils.deepMerge(merged, platStyles) : merged;
+  }, otherKeys);
+};
+var platformFlatten = function platformFlatten(initial) {
+  var hasPlatforms = Object.keys(initial).some(function (key) {
+    return platforms.indexOf(key) !== -1;
+  });
+  var noPlatforms = hasPlatforms && mergePlatforms(initial) || _objectSpread2({}, initial);
+  return jsutils.reduceObj(noPlatforms, function (key, value, merged) {
+    merged[key] = jsutils.isObj(value) ? platformFlatten(value) : value;
+    return merged;
+  }, noPlatforms);
+};
+
+var inheritFrom = function inheritFrom() {
+  for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {
+    styles[_key] = arguments[_key];
+  }
+  return jsutils.deepMerge.apply(void 0, _toConsumableArray(styles.map(function (style) {
+    return jsutils.isObj(style) ? platformFlatten(style) : undefined;
+  })));
+};
+
+var getChildren = function getChildren(Children) {
+  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   return renderFromType(Children, {
-    style: theme.join(activeStyle.content, styles.content)
+    style: styles.content
   }, Text$1);
 };
+var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
+  return disabled ? _objectSpread2({}, mainStyles, {}, jsutils.get(btnStyles, 'disabled.main')) : mainStyles;
+};
 var ButtonWrapper = function ButtonWrapper(props) {
-  var theme = reTheme.useTheme();
   var Element = props.Element,
       children = props.children,
       content = props.content,
-      disabled = props.disabled,
-      danger = props.danger,
       isWeb = props.isWeb,
       onClick = props.onClick,
       onPress = props.onPress,
-      outline = props.outline,
-      contained = props.contained,
-      primary = props.primary,
+      themePath = props.themePath,
       ref = props.ref,
-      style = props.style,
       styles = props.styles,
-      secondary = props.secondary,
-      text = props.text,
-      type = props.type,
-      warn = props.warn,
-      elProps = _objectWithoutProperties(props, ["Element", "children", "content", "disabled", "danger", "isWeb", "onClick", "onPress", "outline", "contained", "primary", "ref", "style", "styles", "secondary", "text", "type", "warn"]);
-  var _useStyles = useStyles(theme, "components.button", [{
-    type: type,
-    outline: outline,
-    text: text,
-    contained: contained
-  }, 'contained'], [{
-    primary: primary,
-    secondary: secondary,
-    warn: warn,
-    danger: danger
-  }, 'default']),
-      _useStyles2 = _slicedToArray(_useStyles, 2),
-      btnStyles = _useStyles2[0],
-      setBtnStyles = _useStyles2[1];
-  var _useThemeHover = reTheme.useThemeHover(btnStyles.default, btnStyles.hover, {
+      elProps = _objectWithoutProperties(props, ["Element", "children", "content", "isWeb", "onClick", "onPress", "themePath", "ref", "styles"]);
+  var _useThemePath = useThemePath(themePath || 'button.contained.default', styles),
+      _useThemePath2 = _slicedToArray(_useThemePath, 2),
+      btnStyles = _useThemePath2[0],
+      setBtnStyles = _useThemePath2[1];
+  var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
     ref: ref,
     noMerge: true
   }),
-      _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
-      hoverRef = _useThemeHover2[0],
-      activeStyle = _useThemeHover2[1];
-  return React__default.createElement(Element, _extends({
-    elProps: elProps,
-    ref: hoverRef,
-    disabled: disabled,
-    style: theme.join(activeStyle.main, styles && jsutils.get(styles, ['button', 'main']), disabled && jsutils.get(btnStyles, ['disabled', 'main']), disabled && styles && jsutils.get(styles, ['button', 'disabled']), style),
-    children: getChildren(children || content, theme, activeStyle, styles)
-  }, getPressHandler(isWeb, onClick, onPress), getActiveOpacity(isWeb, props, activeStyle)));
+      _useThemeHover2 = _slicedToArray(_useThemeHover, 3),
+      themeRef = _useThemeHover2[0],
+      themeStyles = _useThemeHover2[1],
+      setThemeHover = _useThemeHover2[2];
+  return React__default.createElement(Element, _extends({}, elProps, {
+    ref: themeRef,
+    style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
+    children: getChildren(children || content, themeStyles)
+  }, getPressHandler(isWeb, onClick, onPress), getActiveOpacity(isWeb, props, btnStyles)));
 };
 ButtonWrapper.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
   content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
-  danger: PropTypes.bool,
+  Element: PropTypes.oneOfType([PropTypes.element, PropTypes.object, PropTypes.string, PropTypes.array]),
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   onPress: PropTypes.func,
-  outline: PropTypes.bool,
   ref: PropTypes.object,
-  primary: PropTypes.bool,
-  secondary: PropTypes.bool,
-  style: PropTypes.object,
-  styles: PropTypes.object,
-  type: PropTypes.string,
-  warn: PropTypes.bool
+  styles: PropTypes.object
 };
 
-var Element = React__default.forwardRef(function (_ref, ref) {
-  var elProps = _ref.elProps,
-      children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
-  return React__default.createElement("button", _extends({}, elProps, props, {
+var Element = React__default.forwardRef(function (props, ref) {
+  return React__default.createElement("button", _extends({}, props, {
     ref: ref
-  }), children);
+  }));
 });
 var Button = function Button(props) {
   return React__default.createElement(ButtonWrapper, _extends({}, props, {
@@ -1157,7 +1072,7 @@ var SwitchWrapper = function SwitchWrapper(props) {
     elProps: elProps,
     disabled: disabled,
     style: style
-  }, getChecked(isWeb, isChecked), getStyles(isWeb, builtStyles), getOnChangeHandler(isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), React__default.createElement(SideText, {
+  }, getChecked(isWeb, isChecked), getStyles$1(isWeb, builtStyles), getOnChangeHandler(isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), React__default.createElement(SideText, {
     text: rightText,
     style: builtStyles.rightText
   }));
@@ -1638,7 +1553,7 @@ Section.propTypes = {
   type: PropTypes.string
 };
 
-var transition$1 = function transition() {
+var transition = function transition() {
   var prop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
   var amount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '1s';
   var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'ease';
@@ -1650,26 +1565,26 @@ var transition$1 = function transition() {
     transitionTimingFunction: type
   };
 };
-transition$1.move = function () {
+transition.move = function () {
   var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'ease';
   return {
     transition: "transform ".concat(amount, "s ").concat(type)
   };
 };
-transition$1.opacity = function () {
+transition.opacity = function () {
   var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'ease';
   return {
     transition: "opacity ".concat(amount, "s ").concat(type)
   };
 };
-transition$1.maxHeight = {
+transition.maxHeight = {
   overflow: 'hidden',
   transition: 'max-height 1s ease'
 };
 
-var containedStates = {
+var states = {
   default: {
     main: {
       $all: {
@@ -1685,7 +1600,7 @@ var containedStates = {
       $web: _objectSpread2({
         cursor: 'pointer',
         boxShadow: 'none'
-      }, transition$1(['backgroundColor', 'borderColor'], 0.3)),
+      }, transition(['backgroundColor', 'borderColor'], 0.3)),
       $native: {}
     },
     content: {
@@ -1694,7 +1609,7 @@ var containedStates = {
       fontWeight: '500',
       letterSpacing: 0.5,
       textAlign: 'center',
-      $web: _objectSpread2({}, transition$1(['color'], 0.15))
+      $web: _objectSpread2({}, transition(['color'], 0.15))
     }
   },
   disabled: {
@@ -1726,23 +1641,23 @@ var containedStates = {
   }
 };
 var colorStyle = function colorStyle(color, state) {
-  return {
-    main: {
+  var activeState = states[state] || {};
+  return _objectSpread2({}, activeState, {
+    main: _objectSpread2({}, activeState.main, {
       backgroundColor: state !== 'hover' ? color.main : color.dark
-    }
-  };
+    })
+  });
 };
-var contained = _objectSpread2({}, buildColorStyles(containedStates, colorStyle));
-contained.default = inheritFrom(containedStates.default);
-contained.disabled = inheritFrom(contained.default, containedStates.disabled);
-contained.hover = inheritFrom(contained.default, containedStates.hover);
-contained.active = inheritFrom(contained.default, containedStates.hover, containedStates.active);
+states.default = inheritFrom(states.default);
+states.disabled = inheritFrom(states.default, states.disabled);
+states.hover = inheritFrom(states.default, states.hover);
+states.active = inheritFrom(states.default, states.hover, states.active);
+var contained = _objectSpread2({}, buildColorStyles(states, colorStyle));
 
-var transparent = jsutils.get(colors$1, 'opacity._00');
-var textStyles = {
+var states$1 = {
   default: {
     main: {
-      backgroundColor: transparent
+      backgroundColor: jsutils.get(colors$1, 'palette.transparent')
     },
     content: {
       color: jsutils.get(colors$1, 'opacity._80')
@@ -1764,27 +1679,24 @@ var textStyles = {
   }
 };
 var colorStyle$1 = function colorStyle(color, state) {
-  return state !== 'hover' ? {
-    main: {},
-    content: {
-      color: color.main
-    }
-  } : {
-    main: {
-      backgroundColor: colors$1.opacity(10, color.dark)
-    },
-    content: {
-      color: color.dark
-    }
+  var activeState = states$1[state];
+  var activeColor = state !== 'hover' ? color.main : color.dark;
+  var styles = {
+    main: _objectSpread2({}, activeState.main),
+    content: _objectSpread2({}, activeState.content, {
+      color: activeColor
+    })
   };
+  state === 'hover' && (styles.main.backgroundColor = colors$1.opacity(10, activeColor));
+  return styles;
 };
-var text = _objectSpread2({}, buildColorStyles(textStyles, colorStyle$1));
-text.default = inheritFrom(containedStates.default, textStyles.default);
-text.disabled = inheritFrom(text.default, containedStates.disabled, textStyles.disabled);
-text.hover = inheritFrom(text.default, containedStates.hover, textStyles.hover);
-text.active = inheritFrom(text.hover, textStyles.active);
+states$1.default = inheritFrom(states.default, states$1.default);
+states$1.disabled = inheritFrom(states.disabled, states$1.default, states$1.disabled);
+states$1.hover = inheritFrom(states$1.default, states.hover, states$1.hover);
+states$1.active = inheritFrom(states$1.hover, states$1.active);
+var text = _objectSpread2({}, buildColorStyles(states$1, colorStyle$1));
 
-var outlineStates = {
+var states$2 = {
   default: {
     main: {
       padding: 8,
@@ -1813,28 +1725,24 @@ var outlineStates = {
   }
 };
 var colorStyle$2 = function colorStyle(color, state) {
-  return state !== 'hover' ? {
-    main: {
-      borderColor: color.main
-    },
-    content: {
-      color: color.main
-    }
-  } : {
-    main: {
-      borderColor: color.dark,
-      backgroundColor: colors$1.opacity(10, color.dark)
-    },
-    content: {
-      color: color.dark
-    }
+  var activeState = states$2[state];
+  var activeColor = state !== 'hover' ? color.main : color.dark;
+  var style = {
+    main: _objectSpread2({}, activeState.main, {
+      borderColor: activeColor
+    }),
+    content: _objectSpread2({}, activeState.content, {
+      color: activeColor
+    })
   };
+  state === 'hover' && (style.main.backgroundColor = colors$1.opacity(10, activeColor));
+  return style;
 };
-var outline = _objectSpread2({}, buildColorStyles(outlineStates, colorStyle$2));
-outline.default = inheritFrom(containedStates.default, outlineStates.default);
-outline.disabled = inheritFrom(outline.default, containedStates.disabled, outlineStates.disabled);
-outline.hover = inheritFrom(outline.default, outlineStates.hover);
-outline.active = inheritFrom(outline.hover, outlineStates.active);
+states$2.default = inheritFrom(states.default, states$2.default);
+states$2.disabled = inheritFrom(states.disabled, states$2.default, states$2.disabled);
+states$2.hover = inheritFrom(states$2.default, states$2.hover);
+states$2.active = inheritFrom(states$2.hover, states$2.active);
+var outline = _objectSpread2({}, buildColorStyles(states$2, colorStyle$2));
 
 var button = {
   contained: contained,
@@ -2036,7 +1944,7 @@ var drawer = {};
 
 var image = {
   default: {
-    $web: _objectSpread2({}, transition$1('opacity', 0.8))
+    $web: _objectSpread2({}, transition('opacity', 0.8))
   },
   wrapper: {
     display: 'inline-flex'
@@ -2454,7 +2362,7 @@ var input = {
       fontSize: 14
     }),
     $native: {
-      borderBottomColor: jsutils.get(colors$1, 'palette.gray04'),
+      borderBottomColor: jsutils.get(colors$1, 'palette.gray02'),
       borderStyle: 'solid',
       borderWidth: 2
     }
@@ -2481,7 +2389,7 @@ var select = {
       padding: padding.size / 2
     }),
     $native: {
-      borderBottomColor: colors$1.palette.gray04,
+      borderBottomColor: colors$1.palette.gray02,
       borderStyle: 'solid',
       borderWidth: 2
     }
@@ -2532,7 +2440,7 @@ var switchStyles = _objectSpread2({
       position: 'absolute',
       top: 0,
       left: 0
-    }, transition$1('left', 0.2))
+    }, transition('left', 0.2))
   },
   on: {
     $web: {
@@ -2605,9 +2513,8 @@ var transform = {
   }
 };
 
-var theme = reTheme.setDefaultTheme({
+var theme = _objectSpread2({
   colors: colors$1,
-  components: components,
   display: display,
   flex: flex,
   form: form$2,
@@ -2616,9 +2523,9 @@ var theme = reTheme.setDefaultTheme({
   margin: margin,
   padding: padding,
   transform: transform,
-  transition: transition$1,
+  transition: transition,
   typography: typography
-});
+}, components);
 
 exports.A = Link;
 exports.Button = Button;

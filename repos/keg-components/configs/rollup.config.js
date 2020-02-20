@@ -36,7 +36,7 @@ const shared = {
     clearScreen: false
   },
   plugins: platform => ([
-    platform === 'native' && DEV_MODE && buildHook(DEV_MODE),
+   DEV_MODE && buildHook(DEV_MODE),
     replace({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
       "process.env.RE_PLATFORM": JSON.stringify(platform),

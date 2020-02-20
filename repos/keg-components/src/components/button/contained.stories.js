@@ -12,86 +12,85 @@ storiesOf('Button | Contained', module)
   .add('Standard', () =>
     <StoryWrap style={{ textAlign: 'center' }} >
 
-        <Button
-          style={ buttonStyle }
-          onClick={ action("Button Clicked!") }
-        >
-          Default
-        </Button>
+      <Button
+        themePath="button.contained.default"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Default' }
+      />
 
-        <Button
-          primary
-          style={ buttonStyle }
-          onClick={ action("Button Clicked!") }
-          content={ 'Primary' }
-        />
+      <Button
+        themePath="button.contained.primary"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Primary' }
+      />
 
-        <Button
-          secondary
-          style={ buttonStyle }
-          onClick={ action("Button Clicked!") }
-          content={ 'Secondary' }
-        >
-        </Button>
+      <Button
+        themePath="button.contained.secondary"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Secondary' }
+      />
 
-        <Button
-          warn
-          style={ buttonStyle }
-          onClick={ action("Button Clicked!") }
-          content={ 'Warning' }
-        />
+      <Button
+        themePath="button.contained.warn"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Warning' }
+      />
 
-        <Button
-          danger
-          style={ buttonStyle }
-          onClick={ action("Button Clicked!") }
-          content={ 'Danger' }
-        />
+      <Button
+        themePath="button.contained.danger"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Danger' }
+      />
 
     </StoryWrap>
   )
   .add('Disabled', () =>
     <StoryWrap style={{ textAlign: 'center' }} >
 
-        <Button
-          disabled
-          style={ buttonStyle }
-          onClick={ action("Button Clicked!") }
-        >
-          Default
-        </Button>
+      <Button
+        disabled
+        themePath="button.contained.default"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Default' }
+      />
 
-        <Button
-          primary
-          style={ buttonStyle }
-          disabled
-          onClick={ action("Disabled Button Clicked!") }
-          content={ 'Primary' }
-        />
+      <Button
+        disabled
+        themePath="button.contained.primary"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Primary' }
+      />
 
-        <Button
-          secondary
-          disabled
-          style={ buttonStyle }
-          onClick={ action("Disabled Button Clicked!") }
-          content={ 'Secondary' }
-        />
+      <Button
+        disabled
+        themePath="button.contained.secondary"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Secondary' }
+      />
 
-        <Button
-          warn
-          disabled
-          style={ buttonStyle }
-          onClick={ action("Disabled Button Clicked!") }
-          content={ 'Warning' }
-        />
+      <Button
+        disabled
+        themePath="button.contained.warn"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Warning' }
+      />
 
-        <Button
-          danger
-          disabled
-          style={ buttonStyle }
-          onClick={ action("Disabled Button Clicked!") }
-          content={ 'Danger' }
-        />
+      <Button
+        disabled
+        themePath="button.contained.danger"
+        styles={ { main: buttonStyle } }
+        onClick={ action("Button Clicked!") }
+        content={ 'Danger' }
+      />
 
     </StoryWrap>
   )

@@ -14,7 +14,6 @@
     "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
     "dev": "rollup -c ./configs/rollup.config.js -w",
     "dev:keg": "DEV_MODE=keg rollup -c ./configs/rollup.config.js -w",
-    "dev:tap": "rollup -c ./configs/rollup.config.js -w",
     "start": "yarn dev",
     "test": "yarn test:web",
     "test:native": "PLATFORM=native RE_PLATFORM=native NODE_ENV=test jest --no-cache --config=./configs/jest.config.js",

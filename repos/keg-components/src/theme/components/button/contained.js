@@ -3,13 +3,13 @@ import { buildColorStyles, inheritFrom } from '../../../utils'
 import { transition } from '../../transition'
 import { get } from 'jsutils'
 
-const containedStates = {
+const states = {
   default: {
     main: {
       $all: {
         borderWidth: 0,
         borderRadius: 4,
-        backgroundColor: get(colors, 'surface.default.main'),
+        backgroundColor: get(colors, 'surface.default.colors.main'),
         padding: 9,
         minHeight: 35,
         outline: 'none',
@@ -66,17 +66,30 @@ const containedStates = {
  *
  * @returns {Object} - Built color style for the state
  */
-const colorStyle = (color, state) => {
-  return { main: { backgroundColor: state !== 'hover' ? color.main : color.dark } }
+const colorStyle = (surface, state) => {
+  const activeState = states[state] || {}
+
+  return {
+    ...activeState,
+    main: {
+      ...activeState.main,
+      backgroundColor: state === 'hover'
+        ? get(surface, 'colors.dark')
+        : state === 'active'
+          ? get(surface, 'colors.light')
+          : get(surface, 'colors.main')
+    }
+  }
+
 }
 
-const contained = { ...buildColorStyles(containedStates, colorStyle) }
-contained.default = inheritFrom(containedStates.default)
-contained.disabled = inheritFrom(contained.default, containedStates.disabled)
-contained.hover = inheritFrom(contained.default, containedStates.hover)
-contained.active = inheritFrom(contained.default, containedStates.hover, containedStates.active)
+states.default = inheritFrom(states.default)
+states.disabled = inheritFrom(states.default, states.disabled)
+states.hover = inheritFrom(states.default, states.hover)
+states.active = inheritFrom(states.default, states.hover, states.active)
+const contained = { ...buildColorStyles(states, colorStyle) }
 
 export {
   contained,
-  containedStates,
+  states as containedStates,
 }
