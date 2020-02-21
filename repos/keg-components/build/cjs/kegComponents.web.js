@@ -181,22 +181,24 @@ var checkEqual = function checkEqual(obj1, obj2) {
 };
 var getStylesFromPath = function getStylesFromPath(theme, path) {
   return jsutils.get(theme, path) || function () {
-    console.warn("Could not find ".concat(path, " on theme"), theme);
+    jsutils.logData("Could not find ".concat(path, " on theme"), theme, "warn");
     var split = path.split('.');
     split[split.length] = 'default';
     return jsutils.get(theme, split, {});
   }();
 };
 var getStyles = function getStyles(pathStyles, userStyles) {
-  if (!userStyles) return pathStyles;
-  var pathKeys = Object.keys(pathStyles);
-  var userKeys = Object.keys(userStyles);
-  return pathKeys.indexOf(userKeys[0]) !== -1
-  ? jsutils.deepMerge(pathStyles, userStyles)
-  : jsutils.reduceObj(pathStyles, function (key, value, updated) {
-    updated[key] = jsutils.deepMerge(value, userStyles);
-    return updated;
-  }, {});
+  return React.useMemo(function () {
+    if (!userStyles) return pathStyles;
+    var pathKeys = Object.keys(pathStyles);
+    var userKeys = Object.keys(userStyles);
+    return pathKeys.indexOf(userKeys[0]) !== -1
+    ? jsutils.deepMerge(pathStyles, userStyles)
+    : jsutils.reduceObj(pathStyles, function (key, value, updated) {
+      updated[key] = jsutils.deepMerge(value, userStyles);
+      return updated;
+    }, {});
+  }, [pathStyles, userStyles]);
 };
 var useThemePath = function useThemePath(path, styles) {
   var theme = reTheme.useTheme();
@@ -209,9 +211,7 @@ var useThemePath = function useThemePath(path, styles) {
       _useState4 = _slicedToArray(_useState3, 2),
       userStyles = _useState4[0],
       setUserStyles = _useState4[1];
-  var _useState5 = React.useState(React.useMemo(function () {
-    return getStyles(pathStyles, userStyles);
-  }, [foundStyles, styles])),
+  var _useState5 = React.useState(getStyles(pathStyles, userStyles)),
       _useState6 = _slicedToArray(_useState5, 2),
       themeStyles = _useState6[0],
       setThemeStyles = _useState6[1];
@@ -222,9 +222,7 @@ var useThemePath = function useThemePath(path, styles) {
     !userEqual && setUserStyles(styles);
     !pathEqual && setPathStyles(foundStyles)
     ;
-    (!userEqual || !pathEqual) && setThemeStyles(React.useMemo(function () {
-      return getStyles(foundStyles, styles);
-    }, [foundStyles, styles]));
+    (!userEqual || !pathEqual) && setThemeStyles(getStyles(pathStyles, userStyles));
   }, [foundStyles, styles]);
   return [themeStyles, setThemeStyles];
 };
@@ -361,11 +359,21 @@ var getPlatform = function getPlatform() {
 var colors = {
 	defaultType: "default",
 	types: {
-		"default": "gray",
-		primary: "green",
-		secondary: "blue",
-		warn: "orange",
-		danger: "red"
+		"default": {
+			palette: "gray"
+		},
+		primary: {
+			palette: "green"
+		},
+		secondary: {
+			palette: "blue"
+		},
+		warn: {
+			palette: "orange"
+		},
+		danger: {
+			palette: "red"
+		}
 	},
 	palette: {
 		transparent: "rgba(255,255,255,0)",
@@ -400,6 +408,11 @@ var colors = {
 		red: [
 			20,
 			"#f51f10",
+			-20
+		],
+		purple: [
+			20,
+			"#782dad",
 			-20
 		]
 	}
@@ -463,9 +476,11 @@ var colors$1 = {
 };
 colors$1.surface = jsutils.reduceObj(defTypes, function (key, value, updated) {
   updated[key] = {
-    light: colors$1.palette["".concat(value, "01")],
-    main: colors$1.palette["".concat(value, "02")],
-    dark: colors$1.palette["".concat(value, "03")]
+    colors: {
+      light: colors$1.palette["".concat(value.palette, "01")],
+      main: colors$1.palette["".concat(value.palette, "02")],
+      dark: colors$1.palette["".concat(value.palette, "03")]
+    }
   };
   return updated;
 }, {});
@@ -539,17 +554,22 @@ var ButtonWrapper = function ButtonWrapper(props) {
       styles = props.styles,
       elProps = _objectWithoutProperties(props, ["Element", "children", "content", "isWeb", "onClick", "onPress", "themePath", "ref", "styles"]);
   var _useThemePath = useThemePath(themePath || 'button.contained.default', styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 2),
-      btnStyles = _useThemePath2[0],
-      setBtnStyles = _useThemePath2[1];
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      btnStyles = _useThemePath2[0];
   var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
     ref: ref,
     noMerge: true
   }),
-      _useThemeHover2 = _slicedToArray(_useThemeHover, 3),
-      themeRef = _useThemeHover2[0],
-      themeStyles = _useThemeHover2[1],
-      setThemeHover = _useThemeHover2[2];
+      _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
+      hoverRef = _useThemeHover2[0],
+      hoverStyles = _useThemeHover2[1];
+  var _useThemeActive = reTheme.useThemeActive(hoverStyles, jsutils.get(btnStyles, 'active'), {
+    ref: hoverRef,
+    noMerge: true
+  }),
+      _useThemeActive2 = _slicedToArray(_useThemeActive, 2),
+      themeRef = _useThemeActive2[0],
+      themeStyles = _useThemeActive2[1];
   return React__default.createElement(Element, _extends({}, elProps, {
     ref: themeRef,
     style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
@@ -561,10 +581,12 @@ ButtonWrapper.propTypes = {
   content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
   Element: PropTypes.oneOfType([PropTypes.element, PropTypes.object, PropTypes.string, PropTypes.array]),
   disabled: PropTypes.bool,
+  isWeb: PropTypes.bool,
   onClick: PropTypes.func,
   onPress: PropTypes.func,
   ref: PropTypes.object,
-  styles: PropTypes.object
+  styles: PropTypes.object,
+  themePath: PropTypes.string
 };
 
 var Element = React__default.forwardRef(function (props, ref) {
@@ -1372,15 +1394,20 @@ var Icon = function Icon(props) {
 };
 Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
 
-var Container = function Container(args) {
-  var onPress = args.onPress,
-      onClick = args.onClick,
-      children = args.children,
-      flexDir = args.flexDir,
-      size = args.size,
-      style = args.style,
-      props = _objectWithoutProperties(args, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
-  var flex = size ? 0 : props.style && props.style.width ? 0 : 1;
+var hasWidth = function hasWidth(style) {
+  return React.useMemo(function () {
+    return Object.keys(jsutils.pickKeys(style, ['width', 'minWidth', 'maxWidth'])).length;
+  }, [style]);
+};
+var Container = function Container(_ref) {
+  var onPress = _ref.onPress,
+      onClick = _ref.onClick,
+      children = _ref.children,
+      flexDir = _ref.flexDir,
+      size = _ref.size,
+      style = _ref.style,
+      props = _objectWithoutProperties(_ref, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
+  var flex = size ? 0 : hasWidth(style) ? 0 : 1;
   return React__default.createElement(View, _extends({}, props, {
     style: _objectSpread2({
       flex: flex,
@@ -1389,10 +1416,12 @@ var Container = function Container(args) {
   }, getPressHandler(getPlatform(), onClick || onPress)), children);
 };
 Container.propTypes = {
-  style: PropTypes.object,
-  onPress: PropTypes.func,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
   flexDir: PropTypes.string,
-  size: PropTypes.number
+  onPress: PropTypes.func,
+  onClick: PropTypes.func,
+  size: PropTypes.number,
+  style: PropTypes.object
 };
 
 var Row = reTheme.withTheme(function (_ref) {
@@ -1590,7 +1619,7 @@ var states = {
       $all: {
         borderWidth: 0,
         borderRadius: 4,
-        backgroundColor: jsutils.get(colors$1, 'surface.default.main'),
+        backgroundColor: jsutils.get(colors$1, 'surface.default.colors.main'),
         padding: 9,
         minHeight: 35,
         outline: 'none',
@@ -1640,11 +1669,11 @@ var states = {
     content: {}
   }
 };
-var colorStyle = function colorStyle(color, state) {
+var colorStyle = function colorStyle(surface, state) {
   var activeState = states[state] || {};
   return _objectSpread2({}, activeState, {
     main: _objectSpread2({}, activeState.main, {
-      backgroundColor: state !== 'hover' ? color.main : color.dark
+      backgroundColor: state === 'hover' ? jsutils.get(surface, 'colors.dark') : state === 'active' ? jsutils.get(surface, 'colors.light') : jsutils.get(surface, 'colors.main')
     })
   });
 };
@@ -1678,9 +1707,9 @@ var states$1 = {
     content: {}
   }
 };
-var colorStyle$1 = function colorStyle(color, state) {
+var colorStyle$1 = function colorStyle(surface, state) {
   var activeState = states$1[state];
-  var activeColor = state !== 'hover' ? color.main : color.dark;
+  var activeColor = state === 'hover' ? jsutils.get(surface, 'colors.dark') : state === 'active' ? jsutils.get(surface, 'colors.light') : jsutils.get(surface, 'colors.main');
   var styles = {
     main: _objectSpread2({}, activeState.main),
     content: _objectSpread2({}, activeState.content, {
@@ -1724,9 +1753,9 @@ var states$2 = {
     content: {}
   }
 };
-var colorStyle$2 = function colorStyle(color, state) {
+var colorStyle$2 = function colorStyle(surface, state) {
   var activeState = states$2[state];
-  var activeColor = state !== 'hover' ? color.main : color.dark;
+  var activeColor = state === 'hover' ? jsutils.get(surface, 'colors.dark') : state === 'active' ? jsutils.get(surface, 'colors.light') : jsutils.get(surface, 'colors.main');
   var style = {
     main: _objectSpread2({}, activeState.main, {
       borderColor: activeColor

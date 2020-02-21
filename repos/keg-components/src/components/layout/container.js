@@ -1,15 +1,32 @@
 /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { getPlatform, getPressHandler } from '../../utils'
+import { pickKeys } from 'jsutils'
 
-export const Container = args => {
-  const { onPress, onClick, children, flexDir, size, style, ...props } = args
+/**
+ * Checks the for width styles in the props styles object
+ * @param {Object} style - passed in styles for the Container
+ *
+ * @return {boolean} - If a width style rule exists
+ */
+const hasWidth = style => (
+  useMemo(() => {
+    return Object.keys(pickKeys(style, [ 'width', 'minWidth', 'maxWidth' ])).length
+  }, [ style ])
+)
 
+/**
+ * Container
+ * General Wrapper component that's use to build the Grid / Row / Column components
+ * @param {Object} props - see PropTypes below
+ *
+ */
+export const Container = ({ onPress, onClick, children, flexDir, size, style, ...props }) => {
   // Get flex type based on size or style
-  const flex = size ? 0 : props.style && props.style.width ? 0 : 1
+  const flex = size ? 0 : hasWidth(style) ? 0 : 1
 
   return (
     <View
@@ -23,8 +40,15 @@ export const Container = args => {
 }
 
 Container.propTypes = {
-  style: PropTypes.object,
-  onPress: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.func,
+  ]),
   flexDir: PropTypes.string,
+  onPress: PropTypes.func,
+  onClick: PropTypes.func,
   size: PropTypes.number,
+  style: PropTypes.object,
 }
