@@ -1,21 +1,32 @@
 {
-  "name": "Keg-CLI",
+  "name": "keg-cli",
   "version": "1.0.0",
   "description": "Commands when working with the Keg",
   "main": "./keg",
   "repository": "https://github.com/lancetipton/Keg-CLI",
   "author": "Lance Tipton",
   "license": "MIT",
+  "bin": {
+    "keg": "./keg"
+  },
+  "files": [
+    "./keg",
+    "src/"
+  ],
+  "preferGlobal": true,
+  "engines": {
+    "node": ">= 12.15.0"
+  },
   "scripts": {
-    "postinstall": "node ./src/utils/postinstall/executable.js",
+    "postinstall": "node ./src/utils/postinstall/makeExecutable.js",
     "clean": "yarn clean:lock && yarn cache clean && rimraf node_modules && npm cache clean --force",
     "clean:lock": "rimraf ./yarn.lock && rimraf ./package.lock"
   },
   "dependencies": {
     "app-root-path": "^2.2.1",
+    "colors": "^1.4.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
-    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git",
-    "keg": "./keg"
+    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git"
   },
   "devDependencies": {
     "rimraf": "2.6.3",

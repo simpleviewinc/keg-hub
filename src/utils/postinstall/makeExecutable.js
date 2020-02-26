@@ -2,7 +2,8 @@ const { promisify } = require('util')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const path = require('path')
-const cliIndex = path.join(__dirname, '../../../', 'keg')
+const rootDir = path.join(__dirname, '../../../')
+const cliIndex = path.join(rootDir, 'keg')
 
 /**
  * Ensure the cli index is executable
@@ -11,6 +12,7 @@ const cliIndex = path.join(__dirname, '../../../', 'keg')
  */
 const makeExecutable = async () => {
   // Call command to make executable
+  console.log(`Making keg executable...`)
   const { stderr } = await cmdExec(
     `chmod +x ${cliIndex}`,
     {
@@ -18,7 +20,7 @@ const makeExecutable = async () => {
       userID: process.getuid(),
       maxBuffer: Infinity,
       env: process.env,
-      cwd: path.join(__dirname, '../')
+      cwd: rootDir
     }
   )
   
@@ -27,4 +29,6 @@ const makeExecutable = async () => {
 
 }
 
-makeExecutable()
+module.exports = {
+  makeExecutable
+}

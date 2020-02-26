@@ -4,7 +4,7 @@ const { promisify } = require('util')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const rootDir = require('app-root-path')
-const { handleError } = require('../../utils')
+const { handleError } = require('../terminal')
 
 /**
  * Holds all spawned processes

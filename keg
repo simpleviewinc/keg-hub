@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
+const colors = require('colors')
 const { getGlobalConfig } = require('./src/utils/')
 
-// Pull in the run method, and call immediately
+// Pull in the runTask method, and call it immediately
 require('./src/runTask')(getGlobalConfig())

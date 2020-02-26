@@ -1,4 +1,5 @@
-const { getConfig, handleError } = require('../utils')
+const { handleError } = require('../libs/terminal')
+const { getConfig } = require('../utils')
 const { TASK_REQURIED } = require('../constants')
 const { get, reduceObj, isObj } = require('jsutils')
 const appConfig = getConfig()

@@ -7,7 +7,7 @@ const { get, isArr } = require('jsutils')
  *
  * @returns {Object} - Tasks object with name and alias set
  */
-const addTaskAlias = (task, file) => {
+const buildTaskAlias = (task, file) => {
   if(!task.name) throw new Error(`Task name is required, but could not find taks name for ${file}`)
   
   const namedTask = { [task.name]: task }
@@ -24,5 +24,5 @@ const addTaskAlias = (task, file) => {
 }
 
 module.exports = {
-  addTaskAlias
+  buildTaskAlias
 }

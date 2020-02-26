@@ -1,6 +1,7 @@
 const { isFunc, isStr } = require('jsutils')
+const { getTask } = require('./utils')
 const { executeCmd } = require('./libs/process')
-const { handleError, showHelp, showNoTask, getTask } = require('./utils')
+const { handleError, showHelp, showNoTask } = require('./libs/terminal')
 const Tasks = require('./tasks')
 
 /**

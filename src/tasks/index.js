@@ -1,5 +1,5 @@
 const { isObj, isFunc, reduceObj } = require('jsutils')
-const { addTaskAlias } = require('../utils/addTaskAlias')
+const { buildTaskAlias } = require('../utils/builders/buildTaskAlias')
 
 /**
  * Initializes tasks for the CLI. Loads all default and custom tasks
@@ -15,7 +15,7 @@ const initialize = (tasks, name, config) => {
     const parentTask = parentTasks[key]
     return {
       ...updates,
-      ...addTaskAlias(parentTask, name),
+      ...buildTaskAlias(parentTask, name),
     }
   }, {})
 
