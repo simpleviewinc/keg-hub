@@ -1,0 +1,11 @@
+{
+  "name": "keg-cli",
+  "displayName": "Keg CLI",
+  "keg": {
+    "cli": {
+      "paths": {
+        "customTasks": ""
+      }
+    }
+  }
+}

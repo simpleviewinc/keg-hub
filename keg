@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+const { getGlobalConfig } = require('./src/utils/')
+
+// Pull in the run method, and call immediately
+require('./src/runTask')(getGlobalConfig())
