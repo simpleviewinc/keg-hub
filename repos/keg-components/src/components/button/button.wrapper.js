@@ -40,13 +40,15 @@ export const ButtonWrapper = props => {
     isWeb,
     onClick,
     onPress,
-    themePath,
+    themePath='button.contained.default',
     ref,
     styles,
     ...elProps
   } = props
 
-  const [ btnStyles ] = useThemePath(themePath || 'button.contained.default', styles)
+  const [ btnStyles ] = useThemePath(themePath, styles)
+
+  console.log({btnStyles})
 
   const [ hoverRef, hoverStyles ] = useThemeHover(
     get(btnStyles, 'default', {}),
@@ -64,7 +66,7 @@ export const ButtonWrapper = props => {
     <Element
       { ...elProps }
       ref={ themeRef }
-      style={ checkDisabled(themeStyles.main, btnStyles, props.disabled) }
+      style={ btnStyles.main }
       children={ getChildren(children || content, themeStyles) }
       { ...getPressHandler(isWeb, onClick, onPress) }
       { ...getActiveOpacity(isWeb, props, btnStyles) }

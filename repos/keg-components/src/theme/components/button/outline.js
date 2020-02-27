@@ -1,6 +1,6 @@
 import { colors } from '../../colors'
 import { buildColorStyles, inheritFrom } from '../../../utils'
-import { containedStates } from './contained'
+import { contained } from './contained'
 import { get } from 'jsutils'
 
 const states = {
@@ -59,10 +59,10 @@ const colorStyle = (surface, state) => {
 
 }
 
-states.default = inheritFrom(containedStates.default, states.default)
-states.disabled = inheritFrom(containedStates.disabled, states.default, states.disabled)
-states.hover = inheritFrom(states.default, states.hover)
-states.active = inheritFrom(states.hover, states.active)
+states.default = inheritFrom(contained.default.default, states.default)
+states.disabled = inheritFrom(contained.default.disabled, states.default, states.disabled)
+states.hover = inheritFrom(states.default.default, states.hover)
+states.active = inheritFrom(states.default.hover, states.active)
 const outline = { ...buildColorStyles(states, colorStyle) }
 
 export {
