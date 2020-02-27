@@ -43,6 +43,7 @@ const getStylesFromPath = (theme, path) => {
  * @returns {Object} - Merged styles object
  */
 const getStyles = (pathStyles, userStyles) => (
+  console.log({pathStyles, userStyles}) ||
   useMemo(() => {
 
     // If no user styles, just return the pathStyles

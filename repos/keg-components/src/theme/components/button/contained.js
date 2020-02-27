@@ -1,4 +1,5 @@
 import { colors } from '../../colors'
+import defaults from '../../defaults'
 import { transition } from '../../transition'
 import { get, flatMap, deepMerge } from 'jsutils'
 
@@ -20,22 +21,22 @@ const containedStyles = (state='default', colorType='default') => ({
       outline: 'none',
       textAlign: 'center',
       margin: 'auto',
-      opacity: state === 'disabled' 
+      opacity: (state === 'disabled') 
         ? 0.4 
         : 1
     },
     $web: {
-      cursor: state === 'disabled' 
+      cursor: (state === 'disabled') 
         ? 'not-allowed' 
         : 'pointer',
-      pointerEvents: state === 'disabled' && 'not-allowed' ,
+      pointerEvents: (state === 'disabled') && 'not-allowed' ,
       boxShadow: 'none',
       ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
     },
     $native: {}
   },
   content: {
-    color:  state === 'disabled' 
+    color: (state === 'disabled') 
       ? get(colors, 'opacity._50')
       : get(colors, 'palette.white01'),
     fontSize: 14,
@@ -48,13 +49,16 @@ const containedStyles = (state='default', colorType='default') => ({
   }
 })
 
+/**
+ * builds a single theme object with all combinations of colorTypes and state keys
+ * @param {*} theme 
+ */
 const buildTheme = (theme) => {
-  const states = ['default', 'disabled', 'hover', 'active']
-  const colorTypes = ['default', 'primary', 'secondary', 'danger', 'warn']
+  const colorTypes = Object.keys(defaults.colors.types)
 
-  // makes an array of pairs of states and color types
+  // makes an array of pairs of states and color types => [ [state, color ] ... ]
   const combinations = flatMap(
-    states, 
+    defaults.states, 
     state => colorTypes.map(type => [ state, type ])
   )
 

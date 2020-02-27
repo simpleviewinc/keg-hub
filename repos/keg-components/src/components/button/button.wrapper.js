@@ -48,8 +48,6 @@ export const ButtonWrapper = props => {
 
   const [ btnStyles ] = useThemePath(themePath, styles)
 
-  console.log({btnStyles})
-
   const [ hoverRef, hoverStyles ] = useThemeHover(
     get(btnStyles, 'default', {}),
     get(btnStyles, 'hover'),
@@ -66,7 +64,7 @@ export const ButtonWrapper = props => {
     <Element
       { ...elProps }
       ref={ themeRef }
-      style={ btnStyles.main }
+      style={ checkDisabled(themeStyles.main, btnStyles, props.disabled) }
       children={ getChildren(children || content, themeStyles) }
       { ...getPressHandler(isWeb, onClick, onPress) }
       { ...getActiveOpacity(isWeb, props, btnStyles) }

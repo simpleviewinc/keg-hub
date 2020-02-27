@@ -59,10 +59,11 @@ const colorStyle = (surface, state) => {
 
 }
 
+console.log({contained})
 states.default = inheritFrom(contained.default.default, states.default)
 states.disabled = inheritFrom(contained.default.disabled, states.default, states.disabled)
-states.hover = inheritFrom(states.default.default, states.hover)
-states.active = inheritFrom(states.default.hover, states.active)
+states.hover = inheritFrom(states.default.hover, states.hover)
+states.active = inheritFrom(states.default.active, states.active)
 const outline = { ...buildColorStyles(states, colorStyle) }
 
 export {
