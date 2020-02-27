@@ -1,1 +1,6 @@
-module.exports = require('./terminal')
+
+module.exports = {
+  ...require('./printHeader'),
+  ...require('./showHelp'),
+  ...require('./terminal')
+}

@@ -24,12 +24,25 @@
   },
   "dependencies": {
     "app-root-path": "^2.2.1",
+    "better-module-alias": "^1.0.4",
     "colors": "^1.4.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "simple-git": "^1.131.0",
     "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git"
   },
   "devDependencies": {
     "rimraf": "2.6.3",
     "sync-glob": "^1.4.0"
+  },
+  "_moduleAliases": {
+    "KegRoot": ".",
+    "KegConst": "src/constants",
+    "KegLibs": "src/libs",
+    "KegProc": "src/libs/process",
+    "KegSrc": "src",
+    "KegRunTask": "src/runTask",
+    "KegTerm": "src/libs/terminal",
+    "KegTasks": "src/tasks",
+    "KegUtils": "src/utils"
   }
 }

@@ -1,13 +1,13 @@
 const path = require('path')
 const packageJson = require('../../../package.json')
-const appJson = require('../../../app.json')
+const cliJson = require('../../../cli.json')
 const { deepMerge } = require('jsutils') 
 
 const cliRoot = path.join(__dirname, '../../../')
 const cliParent = path.join(__dirname, '../../../../')
 
 /**
- * Builds the default global config from the package.json and the app.json
+ * Builds the default global config from the package.json and the cli.json
  * Merges the two together, and returns it
  *
  * @returns {Object} - Default global config
@@ -16,9 +16,19 @@ const defaultConfig = () => {
   const config = {}
   config.version = packageJson.version
   config.name = packageJson.name
-  config.cli = { root: cliRoot, parent: cliParent }
+  config.keg = {
+    cli: {
+      paths: {
+        cli: cliRoot,
+        keg: cliParent,
+        core: path.join(cliParent, 'keg-core'),
+        components: path.join(cliParent, 'keg-components'),
+        taps: path.join(cliParent, 'taps'),
+      }
+    }
+  }
 
-  return deepMerge(config, appJson)
+  return deepMerge(config, cliJson)
 }
 
 

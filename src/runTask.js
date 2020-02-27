@@ -1,8 +1,8 @@
 const { isFunc, isStr } = require('jsutils')
-const { getTask } = require('./utils')
-const { executeCmd } = require('./libs/process')
-const { handleError, showHelp, showNoTask } = require('./libs/terminal')
-const Tasks = require('./tasks')
+const { getTask } = require('KegUtils')
+const { executeCmd } = require('KegProc')
+const { handleError, showHelp, showNoTask } = require('KegTerm')
+const Tasks = require('KegTasks')
 
 /**
  * Executes the passed in task.
@@ -16,15 +16,16 @@ const Tasks = require('./tasks')
  *
  * @returns {Any} - response from the task.action function
  */
-const executeTask = async (command, task, Tasks) => {
-
+const executeTask = async (args) => {
+  const { command, task, tasks } = args
+  
   const cmdOutput = isStr(task.cmd)
     ? await executeCmd(command, task)
     : isFunc(task.cmd)
       ? await task.cmd(command, task, tasks)
       : {}
 
-  return task.action(cmdOutput, task, Tasks)
+  return task.action({ ...args, cmdOutput })
 
 }
 
@@ -33,7 +34,7 @@ const executeTask = async (command, task, Tasks) => {
  *
  * @returns {Any} - Output of the executed task
  */
-module.exports = async (globalConfig) => {
+ const runTask = async (globalConfig) => {
   try {
 
     const tasks = Tasks(globalConfig)
@@ -47,13 +48,24 @@ module.exports = async (globalConfig) => {
 
     // Ensure a task exists
     return !task || !isFunc(task.action)
-      ? showNoTask(command, Tasks)
-      : executeTask(command, task, Tasks)
+      ? showNoTask(command, options, tasks, globalConfig)
+      : executeTask({
+          command,
+          options,
+          task,
+          tasks,
+          globalConfig
+      })
 
   }
   catch(err){
     handleError(err)
   }
+}
+ 
+module.exports = {
+  executeTask,
+  runTask,
 }
 
 

@@ -1,30 +1,7 @@
-const path = require('path')
-const fs = require('fs')
 const { checkCall } = require('jsutils')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants')
-const { defaultConfig } = require('./defaultConfig')
-const { ensureDirSync, requireFile } = require('tap-resolver/src/helpers')
-
-/**
- * Creates a global config, and saves it to ( ~/.kegConfig/cli.config.json )
- *
- * @returns {Object} - Saved global cli config
- */
-const createGlobalConfig = () => {
-  const globalPath = ensureDirSync(GLOBAL_CONFIG_FOLDER)
-  if(!globalPath) throw new Error(`Could not create global config folder at ${globalPath}!`)
-
-  const config = defaultConfig()
-
-  // Write the temp config file
-  fs.writeFileSync(
-    path.join(GLOBAL_CONFIG_FOLDER, `${GLOBAL_CONFIG_FILE}.json`),
-    JSON.stringify(config, null, 2),
-    'utf8'
-  )
-
-  return config
-}
+const { requireFile } = require('tap-resolver/src/helpers')
+const { createGlobalConfig } = require('./createGlobalConfig')
 
 /**
  * Loads the global cli config from the global config folder ( ~/.kegConfig )
@@ -46,5 +23,5 @@ const getGlobalConfig = () => {
 }
 
 module.exports = {
-  getGlobalConfig,
+  getGlobalConfig
 }

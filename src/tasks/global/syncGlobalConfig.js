@@ -1,6 +1,13 @@
+const { createGlobalConfig } = require('KegUtils/globalConfig')
+const {} = require('KegTerm')
 
-const syncGlobalConfig = () => {
-  console.log(`--- Sync global config ---`)
+const syncGlobalConfig = (args) => {
+  
+  const { command, options, globalConfig } = args
+  const merge = options.indexOf('merge') !== -1
+
+  return createGlobalConfig(globalConfig, merge)
+
 }
 
 module.exports = {
