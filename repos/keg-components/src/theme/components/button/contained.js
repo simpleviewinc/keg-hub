@@ -1,7 +1,7 @@
 import { colors } from '../../colors'
 import { transition } from '../../transition'
 import { get } from 'jsutils'
-import { buildTheme} from '../../../utils/styles/buildTheme'
+import { buildTheme} from '../../../utils/styles'
 
 const stateColors = {
   'active': 'light',

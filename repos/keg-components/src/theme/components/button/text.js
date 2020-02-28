@@ -1,7 +1,7 @@
 import { colors } from '../../colors'
 import { get } from 'jsutils'
 import { contained } from './contained'
-import { buildTheme } from '../../../utils/styles/buildTheme'
+import { buildTheme } from '../../../utils/styles'
 
 const stateColors = {
   'hover': 'dark',
