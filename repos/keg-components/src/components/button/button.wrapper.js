@@ -40,14 +40,13 @@ export const ButtonWrapper = props => {
     isWeb,
     onClick,
     onPress,
-    themePath='button.contained.default',
+    themePath,
     ref,
     styles,
     ...elProps
   } = props
 
-  const [ btnStyles ] = useThemePath(themePath, styles)
-
+  const [ btnStyles ] = useThemePath(themePath || 'button.contained.default', styles)
 
   const [ hoverRef, hoverStyles ] = useThemeHover(
     get(btnStyles, 'default', {}),
@@ -60,10 +59,6 @@ export const ButtonWrapper = props => {
     get(btnStyles, 'active'),
     { ref: hoverRef, noMerge: true }
   )
-
-  if (themePath.includes('default')) {
-    console.log({themeStyles, btnStyles})
-  }
 
   return (
     <Element
