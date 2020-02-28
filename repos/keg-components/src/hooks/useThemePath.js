@@ -23,7 +23,6 @@ const getStylesFromPath = (theme, path) => {
   // If they don't exist, then try to get the default
   return get(theme, path) || (() => {
     logData(`Could not find ${path} on theme`, theme, `warn`)
-    console.error({theme, path})
 
     // Replace the last item, with default
     const split = path.split('.')
