@@ -1,72 +1,37 @@
 import { colors } from '../../colors'
-import { buildColorStyles, inheritFrom } from '../../../utils'
 import { contained } from './contained'
 import { get } from 'jsutils'
+import { buildTheme } from './buildTheme'
 
-const states = {
-  default: {
+const stateColors = {
+  'active': 'light',
+  'hover': 'dark',
+  'default': 'main',
+  'disabled': 'main'
+}
+
+const outlineStyles = (state, colorType) => {
+  const activeColor = get(colors, `surface.${colorType}.colors.${stateColors[state]}`)
+  return {
     main: {
-      padding: 8,
-      outline: 'none',
-      borderWidth: 1,
-      borderColor: get(colors, 'surface.default.main'),
-      backgroundColor: get(colors, 'palette.white01'),
+      $all: {
+        padding: 8,
+        outline: 'none',
+        borderWidth: 1,
+        borderColor: activeColor,
+        backgroundColor: state === 'hover'
+          ? colors.opacity(10, activeColor) 
+          : get(colors, 'palette.white01'),
+      }
     },
     content: {
-      color: get(colors, 'opacity._80'),
+      $all: {
+        color: activeColor,
+      }
     }
-  },
-  disabled: {
-    main: {},
-    content: {}
-  },
-  hover: {
-    main: {
-      backgroundColor: get(colors, 'palette.white03'),
-    },
-    content: {}
-  },
-  active: {
-    main: {},
-    content: {}
   }
 }
 
-/**
- * Builds the color style based on the passed in state
- * @param {Object} color - Color to use from the color.surface of the theme
- * @param {string} state - Current state to built styles for
- *
- * @returns {Object} - Built color style for the state
- */
-const colorStyle = (surface, state) => {
-  const activeState = states[state]
-  const activeColor = state === 'hover'
-    ? get(surface, 'colors.dark')
-    : state === 'active'
-      ? get(surface, 'colors.light')
-      : get(surface, 'colors.main')
+const outline = buildTheme(outlineStyles, { parents: [ contained ] })
 
-
-  const style = {
-    main: { ...activeState.main, borderColor: activeColor },
-    content: { ...activeState.content, color: activeColor }
-  }
-  
-  state === 'hover' && ( style.main.backgroundColor = colors.opacity(10, activeColor) )
-
-  return style
-
-}
-
-console.log({contained})
-states.default = inheritFrom(contained.default.default, states.default)
-states.disabled = inheritFrom(contained.default.disabled, states.default, states.disabled)
-states.hover = inheritFrom(states.default.hover, states.hover)
-states.active = inheritFrom(states.default.active, states.active)
-const outline = { ...buildColorStyles(states, colorStyle) }
-
-export {
-  outline,
-  states as outlineStates
-}
+export { outline }

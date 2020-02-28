@@ -1,7 +1,7 @@
 import { colors } from '../../colors'
-import defaults from '../../defaults'
 import { transition } from '../../transition'
-import { get, flatMap, deepMerge } from 'jsutils'
+import { get } from 'jsutils'
+import { buildTheme} from './buildTheme'
 
 const stateColors = {
   'active': 'light',
@@ -48,32 +48,5 @@ const containedStyles = (state='default', colorType='default') => ({
     }
   }
 })
-
-/**
- * builds a single theme object with all combinations of colorTypes and state keys
- * @param {*} theme 
- */
-const buildTheme = (theme) => {
-  const colorTypes = Object.keys(defaults.colors.types)
-
-  // makes an array of pairs of states and color types => [ [state, color ] ... ]
-  const combinations = flatMap(
-    defaults.states, 
-    state => colorTypes.map(type => [ state, type ])
-  )
-
-  // create a single theme object of structure button.[state].[colorType].<properties>
-  return combinations.reduce(
-    (merged, [ state, colorType ]) => deepMerge(
-      merged,
-      {
-        [colorType]: { 
-          [state]: theme(state, colorType) 
-        }
-      }
-    ),
-    {} 
-  )
-}
 
 export const contained = buildTheme(containedStyles)

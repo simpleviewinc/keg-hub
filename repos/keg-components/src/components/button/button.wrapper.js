@@ -48,6 +48,7 @@ export const ButtonWrapper = props => {
 
   const [ btnStyles ] = useThemePath(themePath, styles)
 
+
   const [ hoverRef, hoverStyles ] = useThemeHover(
     get(btnStyles, 'default', {}),
     get(btnStyles, 'hover'),
@@ -59,6 +60,10 @@ export const ButtonWrapper = props => {
     get(btnStyles, 'active'),
     { ref: hoverRef, noMerge: true }
   )
+
+  if (themePath.includes('default')) {
+    console.log({themeStyles, btnStyles})
+  }
 
   return (
     <Element
