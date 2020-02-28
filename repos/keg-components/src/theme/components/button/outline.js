@@ -1,7 +1,7 @@
 import { colors } from '../../colors'
 import { contained } from './contained'
 import { get } from 'jsutils'
-import { buildTheme } from './buildTheme'
+import { buildTheme } from '../../../utils/styles/buildTheme'
 
 const stateColors = {
   'active': 'light',
@@ -32,6 +32,4 @@ const outlineStyles = (state, colorType) => {
   }
 }
 
-const outline = buildTheme(outlineStyles, { parents: [ contained ] })
-
-export { outline }
+export const outline = buildTheme(outlineStyles, { inheritFrom: [ contained ] })

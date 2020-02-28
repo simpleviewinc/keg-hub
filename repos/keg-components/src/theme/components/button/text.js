@@ -1,7 +1,7 @@
 import { colors } from '../../colors'
 import { get } from 'jsutils'
 import { contained } from './contained'
-import { buildTheme } from './buildTheme'
+import { buildTheme } from '../../../utils/styles/buildTheme'
 
 const stateColors = {
   'hover': 'dark',
@@ -29,4 +29,4 @@ const textStyle = (state, colorType) => {
   }
 }
 
-export const text = buildTheme(textStyle, { parents: [ contained ] })
+export const text = buildTheme(textStyle, { inheritFrom: [ contained ] })
