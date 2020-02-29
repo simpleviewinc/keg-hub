@@ -1,4 +1,5 @@
 import defaults from '../../theme/defaults'
+import { platformFlatten } from './platformFlatten'
 import { 
   isFunc, 
   isObj,
@@ -6,6 +7,7 @@ import {
   deepMerge, 
   flatMap 
 } from 'jsutils'
+
 
 const defaultColorTypes = Object.keys(defaults.colors.types)
 
@@ -36,10 +38,11 @@ export const buildTheme = (themeFn, options={}) => {
   // create a single theme object of structure [colorType].[state].<properties>
   const themeWithTypes = combinations.reduce(themeReducer(themeFn), {})
 
-  // merge with any parents, letting the new theme override parents
-  const merged = deepMerge(...inheritFrom, themeWithTypes)
+  // conduct platform-flattening of parents and theme
+  const themesToMerge = [ ...inheritFrom, themeWithTypes ].map(platformFlatten)
 
-  return merged
+  // merge with any parents, letting the new theme override parents
+  return deepMerge(...themesToMerge)
 }
 
 /**
