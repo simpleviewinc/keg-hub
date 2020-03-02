@@ -1,5 +1,13 @@
 {
-  "states": ["default", "disabled", "hover", "active"],
+  "states": {
+    "defaultType": "default",
+    "types": {
+      "active": { "shade": "light" },
+      "default": { "shade": "main" },
+      "disabled": { "shade": "main" },
+      "hover": { "shade": "dark" }
+    } 
+  },
   "colors": {
     "defaultType": "default",
     "types": {

@@ -8,8 +8,8 @@ import {
   flatMap 
 } from 'jsutils'
 
-
 const defaultColorTypes = Object.keys(defaults.colors.types)
+const defaultStateTypes = Object.keys(defaults.states.types)
 
 /**
  * builds a single theme object with all combinations of colorTypes and state keys
@@ -27,7 +27,7 @@ export const buildTheme = (themeFn, options={}) => {
   if (!valid) return
 
   const {
-    states=defaults.states,
+    states=defaultStateTypes,
     colorTypes=defaultColorTypes,
     inheritFrom=[]
   } = options
@@ -38,11 +38,13 @@ export const buildTheme = (themeFn, options={}) => {
   // create a single theme object of structure [colorType].[state].<properties>
   const themeWithTypes = combinations.reduce(themeReducer(themeFn), {})
 
-  // conduct platform-flattening of parents and theme
-  const themesToMerge = [ ...inheritFrom, themeWithTypes ].map(platformFlatten)
-
   // merge with any parents, letting the new theme override parents
-  return deepMerge(...themesToMerge)
+  return platformFlatten(
+    deepMerge(
+      ...inheritFrom,
+      themeWithTypes
+    )
+  )
 }
 
 /**
@@ -70,6 +72,12 @@ const themeReducer = (themeFn) => {
   )
 }
 
+/**
+ * Returns the theme object for the specified state and colorType
+ * @param {Function} themeFn - function that produces the theme object
+ * @param {String} state - state of component
+ * @param {String} colorType - color type of component
+ */
 const themeForType = (themeFn, state, colorType) => ({
   [colorType]: {
     [state]: themeFn(state, colorType)

@@ -2,17 +2,11 @@ import { colors } from '../../colors'
 import { get } from 'jsutils'
 import { contained } from './contained'
 import { buildTheme } from '../../../utils/styles'
-
-const stateColors = {
-  'hover': 'dark',
-  'active': 'light',
-  'default': 'main',
-  'disabled': 'main'
-}
+import defaults from '../../defaults.json'
 
 const textStyle = (state, colorType) => {
-  const stateColor = stateColors[state] || stateColors['default']
-  const activeColor = get(colors, `surface.${colorType}.colors.${stateColor}`)
+  const shade = get(defaults, `states.types.${state}.shade`)
+  const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
   return {
     main: {
       $all: {

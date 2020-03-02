@@ -2,16 +2,11 @@ import { colors } from '../../colors'
 import { contained } from './contained'
 import { get } from 'jsutils'
 import { buildTheme } from '../../../utils/styles'
-
-const stateColors = {
-  'active': 'light',
-  'hover': 'dark',
-  'default': 'main',
-  'disabled': 'main'
-}
+import defaults from '../../defaults.json'
 
 const outlineStyles = (state, colorType) => {
-  const activeColor = get(colors, `surface.${colorType}.colors.${stateColors[state]}`)
+  const stateShade = defaults.states.types[state].shade
+  const activeColor = get(colors, `surface.${colorType}.colors.${stateShade}`)
   return {
     main: {
       $all: {
