@@ -27,6 +27,7 @@ const App = props => {
 
   return (
     <>
+      <SafeAreaView style={{backgroundColor:get(activeTheme, 'colors.surface.primary.colors.dark')}}/>
       <StatusBar
         barStyle={get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])}
       />

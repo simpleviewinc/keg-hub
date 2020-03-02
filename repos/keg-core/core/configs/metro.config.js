@@ -39,6 +39,21 @@ const extraNodeModules = (package, repoPath) => {
 }
 
 /**
+ * builds the extra node modules for the metro config
+ * @return {Object} - config obj for extraNodeModules
+ */
+const getNodeModules = () => {
+
+  return tapPath !== kegPath 
+    ? {
+        ...extraNodeModules(kegPackage, kegPath),
+        ...extraNodeModules(tapPackage, tapPath)
+      }
+    : extraNodeModules(tapPackage, tapPath)
+    
+}
+
+/**
  * Builds metro config, adds taps node_modules, and taps folder
  * Checks if the node_module exists before adding
  * @param  {string} rootPath - path to root of zr-mobile-keg
@@ -47,10 +62,7 @@ const extraNodeModules = (package, repoPath) => {
 const buildMetroConfig = rootPath => {
   return metroConf = {
     resolver: {
-      extraNodeModules: {
-        ...extraNodeModules(tapPackage, tapPath),
-        ...extraNodeModules(kegPackage, kegPath),
-      },
+      extraNodeModules: getNodeModules(),
     },
     projectRoot: kegPath,
     resetCache: true,

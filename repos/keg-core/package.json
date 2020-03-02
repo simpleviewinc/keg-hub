@@ -51,7 +51,6 @@
     "jest-html-reporters": "^1.2.1",
     "jest-sonar-reporter": "^2.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
-    "keg-components": "git+https://github.com/simpleviewinc/keg-components.git#master",
     "moment": "2.24.0",
     "moment-timezone": "0.5.25",
     "prop-types": "15.7.2",
@@ -70,7 +69,8 @@
     "redux": "4.0.1",
     "redux-devtools-extension": "2.13.8",
     "rimraf": "^3.0.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git#master"
+    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git#master",
+    "keg-components": "git+https://github.com/simpleviewinc/keg-components.git#master"
   },
   "private": true
 }
