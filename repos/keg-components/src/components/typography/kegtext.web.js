@@ -19,14 +19,22 @@ const getNode = element => {
   return domMap.elMap.web[node] || element || 'span'
 }
 
+const ellipsisStyle = {
+  textOverflow: 'ellipsis', 
+  overflow: 'hidden', 
+  whiteSpace: 'nowrap',
+  display: 'block'
+}
+
 const Text = forwardRef((props, ref) => {
   const theme = useTheme()
-  const { children, element, style, onPress, onClick, ...attrs } = props
+  const { children, element, style, onPress, onClick, ellipsis, ...attrs } = props
 
   // Get the styles for the text element
   const textStyles = theme.get(
     'typography.font.family',
     'typography.default',
+    ellipsis && ellipsisStyle,
     element && `typography.${element}`,
   )
 

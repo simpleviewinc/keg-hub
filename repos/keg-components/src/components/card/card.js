@@ -10,35 +10,35 @@ const buildStyles = (styles, theme) => {
   const cardStyles = {}
 
   cardStyles.container = theme.join(
-    get(theme, [ 'components', 'card', 'container' ]),
+    get(theme, [ 'card', 'container' ]),
     styles.container
   )
 
   cardStyles.wrapper = theme.join(
-    get(theme, [ 'components', 'card', 'wrapper' ]),
+    get(theme, [ 'card', 'wrapper' ]),
     styles.wrapper
   )
 
   cardStyles.header = theme.join(
     theme.get(
       'typography.h5',
-      'components.card.header',
+      'card.header',
     ),
     styles.header
   )
 
   cardStyles.footer = theme.join(
-    get(theme, [ 'components', 'card', 'footer']),
+    get(theme, [ 'card', 'footer']),
     styles.footer
   )
 
   cardStyles.divider = theme.join(
-    get(theme, [ 'components', 'card', 'divider' ]),
+    get(theme, [ 'card', 'divider' ]),
     styles.divider
   )
 
   cardStyles.children = theme.join(
-    get(theme, ['components', 'card', 'children']),
+    get(theme, [ 'card', 'children' ]),
     cardStyles.children
   )
 

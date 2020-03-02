@@ -7,6 +7,7 @@ import { indicator } from './indicator'
 import { link } from './link'
 import { loading } from './loading'
 import { section } from './section'
+import { appHeader } from './appHeader'
 
 export const components = {
   button,
@@ -17,5 +18,6 @@ export const components = {
   indicator,
   link,
   loading,
-  section
+  section,
+  appHeader
 }

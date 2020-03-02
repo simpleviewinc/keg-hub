@@ -11,7 +11,7 @@ export const Divider = ({ style, ...props }) => {
     <View
       { ...props }
       style={ theme.join(
-        get(theme, [ 'components', 'divider' ]),
+        get(theme, ['divider']),
         style
       )}
     />

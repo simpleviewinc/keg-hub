@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.6",
-    "expo-font": "^8.0.0"
+    "expo-font": "^8.0.0",
+    "expo": "~36.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",

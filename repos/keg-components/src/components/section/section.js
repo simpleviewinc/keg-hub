@@ -11,8 +11,8 @@ export const Section = withTheme(props => {
       { ...args }
       style={theme.get(
         `keg-section-${ type || 'default' }`,
-        `components.section.default`,
-        type && `components.section.${ type }`,
+        `section.default`,
+        type && `section.${ type }`,
         style
       )}
     >

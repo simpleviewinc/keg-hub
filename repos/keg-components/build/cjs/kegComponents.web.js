@@ -258,6 +258,12 @@ var getNode = function getNode(element) {
   var node = element && element.toLowerCase();
   return domMap.elMap.web[node] || element || 'span';
 };
+var ellipsisStyle = {
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  display: 'block'
+};
 var Text = React.forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
   var children = props.children,
@@ -265,8 +271,9 @@ var Text = React.forwardRef(function (props, ref) {
       style = props.style,
       onPress = props.onPress,
       onClick = props.onClick,
-      attrs = _objectWithoutProperties(props, ["children", "element", "style", "onPress", "onClick"]);
-  var textStyles = theme.get('typography.font.family', 'typography.default', element && "typography.".concat(element));
+      ellipsis = props.ellipsis,
+      attrs = _objectWithoutProperties(props, ["children", "element", "style", "onPress", "onClick", "ellipsis"]);
+  var textStyles = theme.get('typography.font.family', 'typography.default', ellipsis && ellipsisStyle, element && "typography.".concat(element));
   var Node = getNode(element);
   return React__default.createElement(Node, _extends({}, filterAttrs(attrs), {
     style: theme.join(textStyles, style),
@@ -840,7 +847,7 @@ var Divider = function Divider(_ref) {
       props = _objectWithoutProperties(_ref, ["style"]);
   var theme = reTheme.useTheme();
   return React__default.createElement(View, _extends({}, props, {
-    style: theme.join(jsutils.get(theme, ['components', 'divider']), style)
+    style: theme.join(jsutils.get(theme, ['divider']), style)
   }));
 };
 Divider.propTypes = {
@@ -904,12 +911,12 @@ CardFooter.propTypes = {
 
 var buildStyles$2 = function buildStyles(styles, theme) {
   var cardStyles = {};
-  cardStyles.container = theme.join(jsutils.get(theme, ['components', 'card', 'container']), styles.container);
-  cardStyles.wrapper = theme.join(jsutils.get(theme, ['components', 'card', 'wrapper']), styles.wrapper);
-  cardStyles.header = theme.join(theme.get('typography.h5', 'components.card.header'), styles.header);
-  cardStyles.footer = theme.join(jsutils.get(theme, ['components', 'card', 'footer']), styles.footer);
-  cardStyles.divider = theme.join(jsutils.get(theme, ['components', 'card', 'divider']), styles.divider);
-  cardStyles.children = theme.join(jsutils.get(theme, ['components', 'card', 'children']), cardStyles.children);
+  cardStyles.container = theme.join(jsutils.get(theme, ['card', 'container']), styles.container);
+  cardStyles.wrapper = theme.join(jsutils.get(theme, ['card', 'wrapper']), styles.wrapper);
+  cardStyles.header = theme.join(theme.get('typography.h5', 'card.header'), styles.header);
+  cardStyles.footer = theme.join(jsutils.get(theme, ['card', 'footer']), styles.footer);
+  cardStyles.divider = theme.join(jsutils.get(theme, ['card', 'divider']), styles.divider);
+  cardStyles.children = theme.join(jsutils.get(theme, ['card', 'children']), cardStyles.children);
   return cardStyles;
 };
 var getImgProps = function getImgProps(image, styles) {
@@ -1574,12 +1581,114 @@ var Section = reTheme.withTheme(function (props) {
       type = props.type,
       args = _objectWithoutProperties(props, ["theme", "children", "style", "type"]);
   return React__default.createElement(View, _extends({}, args, {
-    style: theme.get("keg-section-".concat(type || 'default'), "components.section.default", type && "components.section.".concat(type), style)
+    style: theme.get("keg-section-".concat(type || 'default'), "section.default", type && "section.".concat(type), style)
   }), children);
 });
 Section.propTypes = {
   style: PropTypes.object,
   type: PropTypes.string
+};
+
+var AppHeader = function AppHeader(props) {
+  var theme = reTheme.useTheme();
+  var title = props.title,
+      styles = props.styles,
+      RightComponent = props.RightComponent,
+      CenterComponent = props.CenterComponent,
+      LeftComponent = props.LeftComponent,
+      onLeftClick = props.onLeftClick,
+      leftIcon = props.leftIcon,
+      onRightClick = props.onRightClick,
+      rightIcon = props.rightIcon,
+      shadow = props.shadow,
+      ellipsis = props.ellipsis,
+      themePath = props.themePath,
+      children = props.children;
+  var _useThemePath = useThemePath(themePath || 'appHeader.default', styles),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      headerStyles = _useThemePath2[0];
+  return React__default.createElement(View, {
+    style: theme.join(jsutils.get(headerStyles, ['container']), shadow && jsutils.get(headerStyles, ['container', 'shadow']), styles)
+  }, children || React__default.createElement(React__default.Fragment, null, React__default.createElement(Side, {
+    defaultStyle: headerStyles,
+    iconName: leftIcon,
+    action: onLeftClick
+  }, LeftComponent), React__default.createElement(Center, {
+    ellipsis: ellipsis,
+    theme: theme,
+    defaultStyle: headerStyles,
+    title: title,
+    textStyle: jsutils.get(headerStyles, ['center', 'content', 'title'])
+  }, CenterComponent), React__default.createElement(Side, {
+    right: true,
+    defaultStyle: headerStyles,
+    iconName: rightIcon,
+    action: onRightClick
+  }, RightComponent)));
+};
+AppHeader.propTypes = {
+  title: PropTypes.string,
+  styles: PropTypes.object,
+  RightComponent: PropTypes.element,
+  LeftComponent: PropTypes.element,
+  CenterComponent: PropTypes.element,
+  onLeftClick: PropTypes.func,
+  leftIcon: PropTypes.string,
+  onRightClick: PropTypes.func,
+  rightIcon: PropTypes.string,
+  shadow: PropTypes.bool,
+  ellipsis: PropTypes.bool,
+  themePath: PropTypes.string
+};
+var Center = function Center(props) {
+  var theme = props.theme,
+      defaultStyle = props.defaultStyle,
+      title = props.title,
+      textStyle = props.textStyle,
+      _props$ellipsis = props.ellipsis,
+      ellipsis = _props$ellipsis === void 0 ? true : _props$ellipsis,
+      children = props.children;
+  return React__default.createElement(View, {
+    style: jsutils.get(defaultStyle, ['center', 'main'])
+  }, children && renderFromType(children, {}, null) || React__default.createElement(H6, {
+    ellipsis: ellipsis,
+    style: theme.join(jsutils.get(defaultStyle, ['center', 'content', 'title']), textStyle)
+  }, title));
+};
+var Side = function Side(props) {
+  var defaultStyle = props.defaultStyle,
+      iconName = props.iconName,
+      action = props.action,
+      children = props.children,
+      right = props.right;
+  var position = right ? 'right' : 'left';
+  var iconProps = {
+    defaultStyle: defaultStyle,
+    iconName: iconName,
+    position: position
+  };
+  return React__default.createElement(View, {
+    style: jsutils.get(defaultStyle, ['side', position, 'main'])
+  }, children && renderFromType(children, {}, null) || (action ? React__default.createElement(Button, {
+    styles: {
+      main: jsutils.get(defaultStyle, ['side', position, 'content', 'container'])
+    },
+    onClick: action
+  }, iconName && React__default.createElement(CustomIcon, iconProps)) : iconName && React__default.createElement(CustomIcon, _extends({
+    styled: true
+  }, iconProps))));
+};
+var CustomIcon = function CustomIcon(props) {
+  var styled = props.styled,
+      defaultStyle = props.defaultStyle,
+      iconName = props.iconName,
+      position = props.position;
+  return React__default.createElement(Icon, {
+    styles: styled && jsutils.get(defaultStyle, ['side', position, 'content', 'icon', 'style']),
+    name: iconName,
+    color: jsutils.get(defaultStyle, ['side', position, 'content', 'icon', 'color']),
+    size: jsutils.get(defaultStyle, ['side', position, 'content', 'icon', 'size'])
+  });
 };
 
 var transition = function transition() {
@@ -2097,53 +2206,6 @@ var section = {
   }
 };
 
-var components = {
-  button: button,
-  card: card,
-  divider: divider,
-  drawer: drawer,
-  image: image,
-  indicator: indicator,
-  link: link,
-  loading: loading,
-  section: section
-};
-
-var display = {
-  none: {
-    display: 'none'
-  },
-  inline: {
-    display: 'inline'
-  },
-  inlineBlock: {
-    display: 'inline-block'
-  },
-  block: {
-    display: 'block'
-  },
-  flex: {
-    display: 'flex'
-  },
-  float: {
-    left: {
-      float: 'left'
-    },
-    right: {
-      float: 'right'
-    },
-    none: {
-      float: 'none'
-    }
-  },
-  click: {
-    cursor: 'pointer'
-  },
-  noRadius: {
-    borderRadius: 0
-  }
-};
-
 var flex = {
   align: function align(dir) {
     return {
@@ -2225,6 +2287,160 @@ flex.align.stretch = {
 };
 flex.align.base = {
   alignItems: 'baseline'
+};
+
+var defaultSectionStyle = {
+  height: '100%',
+  backgroundColor: 'transparent'
+};
+var defaultSideSectionStyle = {
+  main: _objectSpread2({}, defaultSectionStyle, {
+    flexDirection: 'row',
+    maxWidth: '20%'
+  }),
+  content: {
+    container: _objectSpread2({}, defaultSectionStyle),
+    icon: {
+      style: {
+        alignSelf: 'center',
+        padding: 5
+      },
+      color: '#111111',
+      size: 30
+    }
+  },
+  native: {
+    content: {
+      container: _objectSpread2({}, flex.center, {
+        flex: 0
+      })
+    }
+  }
+};
+var appHeader = {
+  default: {
+    container: {
+      $native: {
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        flex: 0,
+        shadow: {
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2
+          },
+          shadowOpacity: 0.5,
+          shadowRadius: 1
+        },
+        title: {}
+      },
+      $web: {
+        shadow: {
+          boxShadow: '0px 4px 7px 0px #9E9E9E'
+        }
+      },
+      $all: _objectSpread2({
+        backgroundColor: jsutils.get(colors$1, 'surface.primary.colors.dark'),
+        height: 70,
+        width: '100%'
+      }, flex.left, {
+        flexDirection: 'row'
+      })
+    },
+    side: {
+      left: {
+        $all: {
+          main: _objectSpread2({}, flex.left, {}, defaultSideSectionStyle.main),
+          content: _objectSpread2({}, defaultSideSectionStyle.content)
+        },
+        $web: {
+          content: {
+            container: _objectSpread2({}, flex.left)
+          }
+        },
+        $native: _objectSpread2({}, defaultSideSectionStyle.native)
+      },
+      right: {
+        $all: {
+          main: _objectSpread2({}, flex.right, {}, defaultSideSectionStyle.main),
+          content: _objectSpread2({}, defaultSideSectionStyle.content)
+        },
+        $web: {
+          content: {
+            container: _objectSpread2({}, flex.right)
+          }
+        },
+        $native: _objectSpread2({}, defaultSideSectionStyle.native)
+      }
+    },
+    center: {
+      $native: {
+        main: {},
+        content: {
+          title: {}
+        }
+      },
+      $web: {
+        main: {},
+        content: {}
+      },
+      $all: {
+        main: _objectSpread2({}, flex.center, {}, defaultSectionStyle, {
+          width: '60%'
+        }),
+        content: {}
+      }
+    }
+  }
+};
+
+var components = {
+  button: button,
+  card: card,
+  divider: divider,
+  drawer: drawer,
+  image: image,
+  indicator: indicator,
+  link: link,
+  loading: loading,
+  section: section,
+  appHeader: appHeader
+};
+
+var display = {
+  none: {
+    display: 'none'
+  },
+  inline: {
+    display: 'inline'
+  },
+  inlineBlock: {
+    display: 'inline-block'
+  },
+  block: {
+    display: 'block'
+  },
+  flex: {
+    display: 'flex'
+  },
+  float: {
+    left: {
+      float: 'left'
+    },
+    right: {
+      float: 'right'
+    },
+    none: {
+      float: 'none'
+    }
+  },
+  click: {
+    cursor: 'pointer'
+  },
+  noRadius: {
+    borderRadius: 0
+  }
 };
 
 var form$1 = {
@@ -2557,6 +2773,7 @@ var theme = _objectSpread2({
 }, components);
 
 exports.A = Link;
+exports.AppHeader = AppHeader;
 exports.Button = Button;
 exports.Caption = Caption;
 exports.Card = Card;
