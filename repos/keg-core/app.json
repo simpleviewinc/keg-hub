@@ -93,7 +93,8 @@
           "Screens": "containers/screens",
           "Store": "store",
           "Theme": "theme",
-          "Utils": "utils"
+          "Utils": "utils",
+          "Hooks": "hooks"
         },
         "web": {
           "^react-native$": "react-native-web",
