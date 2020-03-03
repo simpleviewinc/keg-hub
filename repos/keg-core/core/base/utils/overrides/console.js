@@ -1,50 +1,38 @@
 import './platform'
+import { isStr } from 'jsutils'
 
-const isProduction = () => typeof __DEV__ === 'undefined' && !global.__DEV__
-// const isServer = typeof window === 'undefined'
+const logMethods = {
+  ...console
+}
 
+const  { NODE_ENV } = process.env
 const IGNORE_WARN = [
   'Remote debugger is in a background tab which may cause apps to perform slowly',
   'Require cycle:',
+  'Require cycles',
   'Warning: componentWillMount',
   'Warning: componentWillReceiveProps',
+  'react-native-screens is not fully supported',
 ]
 
-const oldLog = console.log
-console.log = function() {
-  return !isProduction() && oldLog.apply(console, arguments)
+const isProduction = NODE_ENV === 'production' ||
+  ( typeof __DEV__ === 'undefined' && !global.__DEV__ )
 
-  // if(isServer) return oldLog.apply(console, arguments)
+const overrideConsole = type => {
+  function override(...args) {
+    // Check if the warning should be ignored
+    !isProduction &&
+      isStr(args[0]) &&
+      // Check if the warning exists in the ignore warning array
+      !IGNORE_WARN.some(ingnorMessage => args[0].trim().startsWith(ingnorMessage)) &&
+      // Call the original warning log
+      logMethods[type].apply(console, [ ...args ])
+  }
 
-  // let trace
-  // try{ throw new Error('|--[SV-KEG-TRACE-KEY]--|') }
-  // catch(e){
-  //   trace = e
-  //     .stack
-  //     .split('\n')
-  //     .map(line => line.trim())
-  //     .slice(2, 3)
-  //     .pop()
-  //     .replace(/^at/, '')
-  // }
-
-  // !isProduction() && oldLog.apply(console, Array.from([ `${trace}\n\n`, ...arguments, '\n\n' ]))
+  return override
 }
 
 // Overwrite the main console.warn to add log helper info, and ignore warnings
-const oldWarn = console.warn
-console.warn = function() {
-  if (isProduction()) return
-
-  const args = Array.from(arguments)
-
-  // Check if the warning should be ignored
-  if (
-    typeof args[0] === 'string' &&
-    IGNORE_WARN.some(inWarn => args[0].startsWith(inWarn))
-  )
-    return
-
-  // Call the original warning log
-  oldWarn.apply(console, [ ...args ])
-}
+console.log = overrideConsole('log')
+console.info = overrideConsole('info')
+console.warn = overrideConsole('warn')
