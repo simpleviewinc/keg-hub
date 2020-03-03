@@ -2,6 +2,7 @@ import { button } from './button'
 import { card } from './card'
 import { divider } from './divider'
 import { drawer } from './drawer'
+import { filePicker } from './filePicker'
 import { image } from './image'
 import { indicator } from './indicator'
 import { link } from './link'
@@ -14,6 +15,7 @@ export const components = {
   card,
   divider,
   drawer,
+  filePicker,
   image,
   indicator,
   link,

@@ -17,7 +17,6 @@ const containedStyles = (state, colorType) => {
         minHeight: 35,
         outline: 'none',
         textAlign: 'center',
-        margin: 'auto',
         opacity: (state === 'disabled') 
           ? 0.4 
           : 1

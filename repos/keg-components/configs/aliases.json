@@ -2,6 +2,7 @@
   "KegButton": "src/components/button/button.${platform}.js",
   "KegCheckbox": "src/components/form/checkbox/checkbox.${platform}.js",
   "KegForm": "src/components/form/form/form.${platform}.js",
+  "KegFilePicker": "src/components/filePicker/filePicker.${platform}.js",
   "KegImg": "src/components/image/image.${platform}.js",
   "KegIcon": "src/components/icon/icon.${platform}.js",
   "KegIndicator": "src/components/indicator/indicator.${platform}.js",

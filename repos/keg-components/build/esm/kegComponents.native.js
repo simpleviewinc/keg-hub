@@ -957,6 +957,30 @@ Drawer.propTypes = {
   children: PropTypes.object
 };
 
+var Caption = KegText('caption');
+
+var H1 = KegText('h1');
+
+var H2 = KegText('h2');
+
+var H3 = KegText('h3');
+
+var H4 = KegText('h4');
+
+var H5 = KegText('h5');
+
+var H6 = KegText('h6');
+
+var Label = KegText('label');
+
+var P = KegText('paragraph');
+
+var Subtitle = KegText('subtitle');
+
+var FilePicker = function FilePicker(props) {
+  return React.createElement(View, null, React.createElement(P, null, "FilePicker Not yet implemented for native."));
+};
+
 var Checkbox = withTheme(function (props) {
   var theme = props.theme,
       style = props.style,
@@ -1160,26 +1184,6 @@ Select.propTypes = {
   onValueChange: PropTypes.func,
   style: PropTypes.object
 };
-
-var Caption = KegText('caption');
-
-var H1 = KegText('h1');
-
-var H2 = KegText('h2');
-
-var H3 = KegText('h3');
-
-var H4 = KegText('h4');
-
-var H5 = KegText('h5');
-
-var H6 = KegText('h6');
-
-var Label = KegText('label');
-
-var P = KegText('paragraph');
-
-var Subtitle = KegText('subtitle');
 
 var buildStyles$5 = function buildStyles(styles, theme, checked, type) {
   var status = checked && 'on' || 'off';
@@ -1665,8 +1669,7 @@ var states = {
         padding: 9,
         minHeight: 35,
         outline: 'none',
-        textAlign: 'center',
-        margin: 'auto'
+        textAlign: 'center'
       },
       $web: _objectSpread2({
         cursor: 'pointer',
@@ -2013,6 +2016,42 @@ var divider = {
 
 var drawer = {};
 
+var filePicker = {
+  default: {
+    $all: {
+      main: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
+      },
+      content: {
+        input: {
+          opacity: 0,
+          position: 'absolute',
+          display: 'none'
+        },
+        view: {
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center'
+        },
+        file: {
+          marginLeft: 5,
+          fontSize: 11
+        },
+        button: {
+          margin: 0
+        }
+      }
+    }
+  },
+  disabled: {},
+  hover: {},
+  active: {}
+};
+
 var image = {
   default: {
     $web: _objectSpread2({}, transition('opacity', 0.8))
@@ -2333,6 +2372,7 @@ var components = {
   card: card,
   divider: divider,
   drawer: drawer,
+  filePicker: filePicker,
   image: image,
   indicator: indicator,
   link: link,
@@ -2705,4 +2745,4 @@ var theme = _objectSpread2({
   typography: typography
 }, components);
 
-export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, View, theme };
+export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, View, theme };

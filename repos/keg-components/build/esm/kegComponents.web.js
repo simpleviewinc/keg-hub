@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect, forwardRef, isValidElement, useRef } from 'react';
+import React, { useState, useMemo, useLayoutEffect, forwardRef, isValidElement, useRef, useCallback, useEffect } from 'react';
 import { useTheme, helpers as helpers$1, useThemeHover, useThemeActive, withTheme } from 're-theme';
 import { get, logData, deepMerge, reduceObj, jsonEqual, isFunc, isArr, isObj, isStr, checkCall, toBool, pickKeys, trainCase, isNum, capitalize } from 'jsutils';
 import PropTypes from 'prop-types';
@@ -1033,6 +1033,77 @@ var P = KegText('paragraph');
 
 var Subtitle = KegText('subtitle');
 
+var FilePicker = React.forwardRef(function (props, _ref) {
+  var onChange = props.onChange,
+      title = props.title,
+      children = props.children,
+      _props$style = props.style,
+      style = _props$style === void 0 ? {} : _props$style,
+      _props$showFile = props.showFile,
+      showFile = _props$showFile === void 0 ? true : _props$showFile,
+      onFilePicked = props.onFilePicked,
+      _props$themePath = props.themePath,
+      themePath = _props$themePath === void 0 ? 'filePicker.default' : _props$themePath,
+      _props$buttonThemePat = props.buttonThemePath,
+      buttonThemePath = _props$buttonThemePat === void 0 ? 'button.contained.default' : _props$buttonThemePat,
+      capture = props.capture,
+      _props$openOnMount = props.openOnMount,
+      openOnMount = _props$openOnMount === void 0 ? false : _props$openOnMount,
+      args = _objectWithoutProperties(props, ["onChange", "title", "children", "style", "showFile", "onFilePicked", "themePath", "buttonThemePath", "capture", "openOnMount"]);
+  var theme = useTheme();
+  var _useThemePath = useThemePath(themePath),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      componentTheme = _useThemePath2[0];
+  var _useState = useState({}),
+      _useState2 = _slicedToArray(_useState, 2),
+      file = _useState2[0],
+      setFile = _useState2[1];
+  var handleInputChange = useCallback(function (event) {
+    onChange && onChange(event);
+    var file = event.target.files[0];
+    file && onFilePicked && onFilePicked(file);
+    file && setFile(file);
+  }, [onChange, onFilePicked, setFile]);
+  var refToInput = useRef();
+  var clickInput = useCallback(function () {
+    return refToInput.current && refToInput.current.click();
+  }, [refToInput]);
+  useEffect(function () {
+    openOnMount && clickInput();
+  }, []);
+  return React.createElement(View, {
+    style: theme.join(get(componentTheme, 'main'), style)
+  }, React.createElement(Button, {
+    content: title,
+    onClick: clickInput,
+    style: get(componentTheme, 'content.button'),
+    themePath: buttonThemePath
+  }, children),
+  showFile && React.createElement(P, {
+    style: get(componentTheme, 'content.file')
+  }, file.name), React.createElement("input", _extends({}, args, {
+    ref: function ref(input) {
+      _ref && (_ref.current = input);
+      refToInput.current = input;
+    },
+    onChange: handleInputChange,
+    style: get(componentTheme, 'content.input'),
+    type: "file",
+    capture: capture
+  })));
+});
+FilePicker.propTypes = {
+  title: PropTypes.string,
+  style: PropTypes.object,
+  buttonStyle: PropTypes.object,
+  fileStyle: PropTypes.object,
+  themePath: PropTypes.string,
+  buttonThemePath: PropTypes.string,
+  onChange: PropTypes.func,
+  onFilePicked: PropTypes.func,
+  showFile: PropTypes.bool
+};
+
 var buildStyles$3 = function buildStyles(styles, theme, checked, type) {
   var status = checked && 'on' || 'off';
   var container = theme.get("form.".concat(type, ".container"), styles && styles.container);
@@ -1725,8 +1796,7 @@ var states = {
         padding: 9,
         minHeight: 35,
         outline: 'none',
-        textAlign: 'center',
-        margin: 'auto'
+        textAlign: 'center'
       },
       $web: _objectSpread2({
         cursor: 'pointer',
@@ -2073,6 +2143,42 @@ var divider = {
 
 var drawer = {};
 
+var filePicker = {
+  default: {
+    $all: {
+      main: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
+      },
+      content: {
+        input: {
+          opacity: 0,
+          position: 'absolute',
+          display: 'none'
+        },
+        view: {
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center'
+        },
+        file: {
+          marginLeft: 5,
+          fontSize: 11
+        },
+        button: {
+          margin: 0
+        }
+      }
+    }
+  },
+  disabled: {},
+  hover: {},
+  active: {}
+};
+
 var image = {
   default: {
     $web: _objectSpread2({}, transition('opacity', 0.8))
@@ -2393,6 +2499,7 @@ var components = {
   card: card,
   divider: divider,
   drawer: drawer,
+  filePicker: filePicker,
   image: image,
   indicator: indicator,
   link: link,
@@ -2765,4 +2872,4 @@ var theme = _objectSpread2({
   typography: typography
 }, components);
 
-export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text$1 as Text, View, theme };
+export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text$1 as Text, View, theme };

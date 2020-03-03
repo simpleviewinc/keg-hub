@@ -6,7 +6,7 @@ import { Button, Text, View } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
-const buttonStyle = { width: 125, marginRight: 10 }
+const buttonStyle = { width: 125, marginRight: 10, margin: 'auto' }
 
 storiesOf('Button | Text', module)
   .add('Standard', () =>
