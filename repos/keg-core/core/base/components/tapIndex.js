@@ -1,1 +1,1 @@
-export * from 'keg-components'
+export * from 'SVComponents/kegComponents'

@@ -1,3 +1,3 @@
-import { theme as kegComponentsTheme } from 'keg-components'
+import { kegComponentsTheme } from 'SVTheme/kegComponentsTheme'
 
 export const theme = kegComponentsTheme
