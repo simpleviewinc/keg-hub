@@ -1,1 +1,1 @@
-export * from './tapIndex'
+export * from 'SVTheme/tapIndex'
