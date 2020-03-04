@@ -1,3 +1,5 @@
+const colors = require('colors/safe')
+
 /**
  * Helper to log out CLI message header
  * @param {string} title
@@ -14,10 +16,10 @@ const printHeader = title => {
   })
 
   console.log(``)
-  console.log(line.underline.brightGreen)
+  console.log(colors.underline.brightGreen(line))
   console.log(line)
-  console.log(middle.brightGreen)
-  console.log(line.underline.brightGreen)
+  console.log(colors..brightGreen(middle))
+  console.log(colors.underline.brightGreen(line))
   console.log(``)
 }
 

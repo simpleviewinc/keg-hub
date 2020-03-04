@@ -20,7 +20,7 @@ const executeTask = async (args) => {
   const { command, task, tasks } = args
   
   const cmdOutput = isStr(task.cmd)
-    ? await executeCmd(command, task)
+    ? await executeCmd(task)
     : isFunc(task.cmd)
       ? await task.cmd(command, task, tasks)
       : {}

@@ -1,5 +1,6 @@
 const { isStr, isObj } = require('jsutils')
 const { printHeader } = require('./printHeader')
+const colors = require('colors/safe')
 
 /**
  * Prints CLI help message with tasks and their description
@@ -16,7 +17,7 @@ const showHelp = (tasks, header, spacer) => {
     : header || `Keg-CLI Help`
 
   header && printHeader(`Keg-CLI Help`)
-  header && console.log(`Available Commands: `.brightBlue)
+  header && console.log(colors.brightBlue(`Available Commands: `))
   header && console.log(``)
   
 
@@ -26,23 +27,23 @@ const showHelp = (tasks, header, spacer) => {
 
     const subSpacer = header && spacer || dblSpacer
 
-    console.log(`${subSpacer}Command:`.gray, `${key}`.brightGreen.bold)
+    console.log(colors..gray(`${subSpacer}Command:`), colors.brightGreen.bold(`${key}`))
     
     const infoSpacer = header && dblSpacer || `${dblSpacer}  `
     
     tasks[key].description && console.log(
-      `${infoSpacer}Description:`.brightCyan,
-      `${tasks[key].description}`.brightWhite
+      colors.brightCyan(`${infoSpacer}Description:`),
+      colors..brightWhite(`${tasks[key].description}`)
     )
     tasks[key].example && console.log(
-      `${infoSpacer}Example:`.brightCyan,
-      `${tasks[key].example}`.brightWhite
+      colors.brightCyan(`${infoSpacer}Example:`),
+      colors.brightWhite(`${tasks[key].example}`)
     )
       
 
     if(isObj(tasks[key]) && isObj(tasks[key].tasks)){
       console.log(``)
-      console.log(`${dblSpacer}Sub Commands:`.brightBlue)
+      console.log(colors.brightBlue(`${dblSpacer}Sub Commands:`))
       showHelp(tasks[key].tasks, false, `${dblSpacer}`)
     }
 

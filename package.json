@@ -28,7 +28,8 @@
     "colors": "^1.4.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "simple-git": "^1.131.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git"
+    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git",
+    "tree-kill": "^1.2.2"
   },
   "devDependencies": {
     "rimraf": "2.6.3",

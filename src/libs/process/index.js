@@ -1,1 +1,1 @@
-module.exports = require('./child_process')
+module.exports = require('./runCommand')

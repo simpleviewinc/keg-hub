@@ -3,7 +3,6 @@
 // Regretter the alias at the every beginning 
 require('better-module-alias')(__dirname)
 const { runTask } = require('KegRunTask')
-const colors = require('colors')
 const { getGlobalConfig } = require('KegUtils/globalConfig')
 
 // Load the users global config, or create it on the fly
