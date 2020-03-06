@@ -45,5 +45,4 @@ const containedStyles = (state, colorType) => {
   }
 }
 
-buildTheme({})
 export const contained = buildTheme(containedStyles)
