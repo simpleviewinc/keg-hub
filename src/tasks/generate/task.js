@@ -1,7 +1,13 @@
+const { get } = require('jsutils')
+
 const generateTask = (args) => {
 
-  console.log(`---------- generate task ----------`)
+  
   const { command, options, globalConfig } = args
+  
+  console.log(`---------- globalConfig ----------`)
+  // console.log(globalConfig)
+  console.log(get(globalConfig, 'keg.cli.paths'))
 
 }
 
