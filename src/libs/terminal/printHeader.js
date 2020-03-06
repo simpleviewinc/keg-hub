@@ -18,7 +18,7 @@ const printHeader = title => {
   console.log(``)
   console.log(colors.underline.brightGreen(line))
   console.log(line)
-  console.log(colors..brightGreen(middle))
+  console.log(colors.brightGreen(middle))
   console.log(colors.underline.brightGreen(line))
   console.log(``)
 }

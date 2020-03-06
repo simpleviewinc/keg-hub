@@ -1,6 +1,42 @@
-const { isStr, isObj } = require('jsutils')
+const { get, isStr, isObj } = require('jsutils')
 const { printHeader } = require('./printHeader')
 const colors = require('colors/safe')
+
+
+const showCommandInfo = (infoName, infoDescription, infoSpacer) => {
+  infoDescription && console.log(
+    colors.brightCyan(`${infoSpacer}${infoName}:`),
+    colors.brightWhite(infoDescription)
+  )
+}
+
+const showHelpHeader = header => {
+  header = header === false
+    ? header
+    : header || `Keg-CLI Help`
+
+  if(!header) return
+
+  printHeader(header)
+  console.log(colors.brightBlue(`Available Commands: `))
+  console.log(``)
+}
+
+const showCommandHeader = (key, header, spacer, dblSpacer) => {
+  const subSpacer = header && spacer || dblSpacer
+
+  console.log(colors.gray(`${subSpacer}Command:`), colors.brightGreen.bold(`${key}`))
+}
+
+const showSubCommands = (task, dblSpacer) => {
+
+  if(!isObj(task) || !isObj(task.tasks)) return
+
+  console.log(``)
+  console.log(colors.brightBlue(`${dblSpacer}  Sub Commands:`))
+  showHelp(task.tasks, false, `${dblSpacer}`)
+
+}
 
 /**
  * Prints CLI help message with tasks and their description
@@ -12,40 +48,20 @@ const showHelp = (tasks, header, spacer) => {
   spacer = spacer || '  '
   const dblSpacer = `${spacer}${spacer}`
 
-  header = header === false
-    ? header
-    : header || `Keg-CLI Help`
+  showHelpHeader(header)
 
-  header && printHeader(`Keg-CLI Help`)
-  header && console.log(colors.brightBlue(`Available Commands: `))
-  header && console.log(``)
-  
-
-  const allTasks = Object.keys(tasks)
-  allTasks.map(key => {
+  Object.keys(tasks).map(key => {
     if(isStr(tasks[key])) return
 
-    const subSpacer = header && spacer || dblSpacer
-
-    console.log(colors..gray(`${subSpacer}Command:`), colors.brightGreen.bold(`${key}`))
+    showCommandHeader(key, header, spacer, dblSpacer)
     
     const infoSpacer = header && dblSpacer || `${dblSpacer}  `
     
-    tasks[key].description && console.log(
-      colors.brightCyan(`${infoSpacer}Description:`),
-      colors..brightWhite(`${tasks[key].description}`)
-    )
-    tasks[key].example && console.log(
-      colors.brightCyan(`${infoSpacer}Example:`),
-      colors.brightWhite(`${tasks[key].example}`)
-    )
-      
+    showCommandInfo('Description', get(tasks, `${key}.description`, ''), infoSpacer)
+    showCommandInfo('Example', get(tasks, `${key}.example`, ''), infoSpacer)
+    showCommandInfo('Alias', get(tasks, `${key}.alias`, []).join(' | '), infoSpacer)
 
-    if(isObj(tasks[key]) && isObj(tasks[key].tasks)){
-      console.log(``)
-      console.log(colors.brightBlue(`${dblSpacer}Sub Commands:`))
-      showHelp(tasks[key].tasks, false, `${dblSpacer}`)
-    }
+    showSubCommands(tasks[key], dblSpacer)
 
   })
   console.log(``)

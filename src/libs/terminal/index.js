@@ -2,6 +2,6 @@
 module.exports = {
   ...require('./printHeader'),
   ...require('./showHelp'),
-  ...require('./terminal')
+  ...require('./terminal'),
   ...require('./logger')
 }

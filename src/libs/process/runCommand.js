@@ -44,7 +44,7 @@ const addSpawn = spawn => {
  *
  * @returns {void}
  */
-const cleanup = event => spawns.map(spawn => spawn.kill(event))
+const cleanup = event => Object.keys(spawns).map(id => spawns[id].kill(event))
 
 /**
  * Catch all exit events, and run cleanup

@@ -22,12 +22,12 @@ const getTask = (tasks, ...args) => {
   // Check if the parent is a string ( alias ), and use that to find the task
   // Otherwise use the parent should already be an object for a valid task
   const parentTask = isStr(parent) ? tasks[parent] : parent
-  
+
   // Just return if no valid task is found
   if(!isObj(parentTask)) return null
 
-  // Check it there's child tasks, and try to find one matching the passed inargs
-  const childTask = isObj(parentTask.tasks) && getTask(parentTask.tasks, args)
+  // Check it there's child tasks, and try to find one matching the passed in args
+  const childTask = isObj(parentTask.tasks) && getTask(parentTask.tasks, ...args)
 
   // Return the found child task, or parent task
   return childTask || parentTask

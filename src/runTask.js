@@ -1,4 +1,4 @@
-const { isFunc, isStr } = require('jsutils')
+const { isFunc, isStr, isObj } = require('jsutils')
 const { getTask } = require('KegUtils')
 const { executeCmd } = require('KegProc')
 const { handleError, showHelp, showNoTask } = require('KegTerm')
@@ -42,12 +42,12 @@ const executeTask = async (args) => {
     const [ command, ...options ] = process.argv.slice(2);
     // Ensure a command exists
     if(!command) return showHelp(tasks)
-    
+
     // Get the task from available tasks
     const task = getTask(tasks, command, ...options)
 
     // Ensure a task exists
-    return !task || !isFunc(task.action)
+    return !isObj(task) || !isFunc(task.action)
       ? showNoTask(command, options, tasks, globalConfig)
       : executeTask({
           command,
