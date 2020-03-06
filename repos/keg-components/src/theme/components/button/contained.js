@@ -5,6 +5,7 @@ import { buildTheme} from '../../../utils/styles'
 import defaults from '../../defaults.json'
 
 const containedStyles = (state, colorType) => {
+  const opacity = get(defaults, `states.types.${state}.opacity`)
   const shade = get(defaults, `states.types.${state}.shade`)
   const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
   return {
@@ -17,9 +18,7 @@ const containedStyles = (state, colorType) => {
         minHeight: 35,
         outline: 'none',
         textAlign: 'center',
-        opacity: (state === 'disabled') 
-          ? 0.4 
-          : 1
+        opacity, 
       },
       $web: {
         cursor: (state === 'disabled') 
@@ -46,4 +45,5 @@ const containedStyles = (state, colorType) => {
   }
 }
 
+buildTheme({})
 export const contained = buildTheme(containedStyles)

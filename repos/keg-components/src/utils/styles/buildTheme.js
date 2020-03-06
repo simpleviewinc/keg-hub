@@ -23,7 +23,7 @@ const defaultStateTypes = Object.keys(defaults.states.types)
  */
 export const buildTheme = (themeFn, options={}) => {
 
-  const [ valid ] = validate({ themeFn, options }, { themeFn: isFunc, options: isObj })
+  const [ valid ] = validate({ themeFn, options }, { themeFn: isFunc, options: isObj }, { prefix: '[buildTheme] Invalid theme setup.'})
   if (!valid) return
 
   const {
@@ -61,9 +61,10 @@ const pairsOf = (states, colorTypes) => flatMap(
 )
 
 /**
- * Uses themeFn to create the theme for the given state and colorType. Then merges with the totalTheme, which
- * includes all the other colorTypes
- * @param {*} themeFn 
+ * Uses themeFn to create the theme for the given state and colorType.  
+ * @param {Function} themeFn 
+ * 
+ * @returns {Object} the merged object with totalTheme, which includes all the other colorTypes
  */
 const themeReducer = (themeFn) => {
   return (totalTheme, [ state, colorType ]) => deepMerge(
@@ -73,10 +74,11 @@ const themeReducer = (themeFn) => {
 }
 
 /**
- * Returns the theme object for the specified state and colorType
  * @param {Function} themeFn - function that produces the theme object
  * @param {String} state - state of component
  * @param {String} colorType - color type of component
+ * 
+ * @returns {Object} the theme object for the specified state and colorType
  */
 const themeForType = (themeFn, state, colorType) => ({
   [colorType]: {

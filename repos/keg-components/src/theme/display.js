@@ -12,3 +12,4 @@ export const display = {
   click: { cursor: 'pointer' },
   noRadius: { borderRadius: 0 },
 }
+

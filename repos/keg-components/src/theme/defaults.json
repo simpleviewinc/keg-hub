@@ -2,10 +2,10 @@
   "states": {
     "defaultType": "default",
     "types": {
-      "active": { "shade": "light" },
-      "default": { "shade": "main" },
-      "disabled": { "shade": "main" },
-      "hover": { "shade": "dark" }
+      "active": { "shade": "light", "opacity": 1 },
+      "default": { "shade": "main", "opacity": 1 },
+      "disabled": { "shade": "main", "opacity": 0.4 },
+      "hover": { "shade": "dark", "opacity": 1 }
     } 
   },
   "colors": {
