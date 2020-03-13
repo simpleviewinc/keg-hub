@@ -18,13 +18,17 @@ const IGNORE_WARN = [
 const isProduction = NODE_ENV === 'production' ||
   ( typeof __DEV__ === 'undefined' && !global.__DEV__ )
 
+
+const shouldLog = (logString) => {
+  // log if data is not string or if it's a string other than warnings
+  return !isStr(logString) || !IGNORE_WARN.some(ignoreMessage => logString.trim().startsWith(ignoreMessage))
+}
+
 const overrideConsole = type => {
   function override(...args) {
     // Check if the warning should be ignored
     !isProduction &&
-      isStr(args[0]) &&
-      // Check if the warning exists in the ignore warning array
-      !IGNORE_WARN.some(ingnorMessage => args[0].trim().startsWith(ingnorMessage)) &&
+    shouldLog(args[0]) &&
       // Call the original warning log
       logMethods[type].apply(console, [ ...args ])
   }
