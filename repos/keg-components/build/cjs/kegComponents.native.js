@@ -300,6 +300,27 @@ var getPlatform = function getPlatform() {
   return 'native';
 };
 
+var states = {
+	defaultType: "default",
+	types: {
+		active: {
+			shade: "light",
+			opacity: 1
+		},
+		"default": {
+			shade: "main",
+			opacity: 1
+		},
+		disabled: {
+			shade: "main",
+			opacity: 0.4
+		},
+		hover: {
+			shade: "dark",
+			opacity: 1
+		}
+	}
+};
 var colors = {
 	defaultType: "default",
 	types: {
@@ -400,6 +421,7 @@ var form = {
 	}
 };
 var defaults = {
+	states: states,
 	colors: colors,
 	layout: layout,
 	font: font,
@@ -430,18 +452,6 @@ colors$1.surface = jsutils.reduceObj(defTypes, function (key, value, updated) {
 }, {});
 
 var colorSurface = jsutils.get(colors$1, 'surface', {});
-var colorStyles = function colorStyles(type, states, cb) {
-  return Object.keys(states).reduce(function (built, key) {
-    return _objectSpread2({}, built, _defineProperty({}, key, jsutils.checkCall(cb, colorSurface[type], key)));
-  }, {});
-};
-var buildColorStyles = function buildColorStyles(states, cb) {
-  return Object.keys(jsutils.get(defaults, 'colors.types', {})).reduce(function (built, type) {
-    var styles = colorStyles(type, states, cb);
-    styles && (built[type] = styles);
-    return built;
-  }, {});
-};
 
 var allPlatforms = "$all";
 var platform = "$" + getPlatform();
@@ -475,6 +485,51 @@ var inheritFrom = function inheritFrom() {
   return jsutils.deepMerge.apply(void 0, _toConsumableArray(styles.map(function (style) {
     return jsutils.isObj(style) ? platformFlatten(style) : undefined;
   })));
+};
+
+var defaultColorTypes = Object.keys(defaults.colors.types);
+var defaultStateTypes = Object.keys(defaults.states.types);
+var buildTheme = function buildTheme(themeFn) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var _validate = jsutils.validate({
+    themeFn: themeFn,
+    options: options
+  }, {
+    themeFn: jsutils.isFunc,
+    options: jsutils.isObj
+  }, {
+    prefix: '[buildTheme] Invalid theme setup.'
+  }),
+      _validate2 = _slicedToArray(_validate, 1),
+      valid = _validate2[0];
+  if (!valid) return;
+  var _options$states = options.states,
+      states = _options$states === void 0 ? defaultStateTypes : _options$states,
+      _options$colorTypes = options.colorTypes,
+      colorTypes = _options$colorTypes === void 0 ? defaultColorTypes : _options$colorTypes,
+      _options$inheritFrom = options.inheritFrom,
+      inheritFrom = _options$inheritFrom === void 0 ? [] : _options$inheritFrom;
+  var combinations = pairsOf(states, colorTypes);
+  var themeWithTypes = combinations.reduce(themeReducer(themeFn), {});
+  return platformFlatten(jsutils.deepMerge.apply(void 0, _toConsumableArray(inheritFrom).concat([themeWithTypes])));
+};
+var pairsOf = function pairsOf(states, colorTypes) {
+  return jsutils.flatMap(states, function (state) {
+    return colorTypes.map(function (type) {
+      return [state, type];
+    });
+  });
+};
+var themeReducer = function themeReducer(themeFn) {
+  return function (totalTheme, _ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        state = _ref2[0],
+        colorType = _ref2[1];
+    return jsutils.deepMerge(totalTheme, themeForType(themeFn, state, colorType));
+  };
+};
+var themeForType = function themeForType(themeFn, state, colorType) {
+  return _defineProperty({}, colorType, _defineProperty({}, state, themeFn(state, colorType)));
 };
 
 var validateFunctions = function validateFunctions(functionObj) {
@@ -2030,164 +2085,84 @@ transition.maxHeight = {
   transition: 'max-height 1s ease'
 };
 
-var states = {
-  default: {
+var containedStyles = function containedStyles(state, colorType) {
+  var opacity = jsutils.get(defaults, "states.types.".concat(state, ".opacity"));
+  var shade = jsutils.get(defaults, "states.types.".concat(state, ".shade"));
+  var activeColor = jsutils.get(colors$1, "surface.".concat(colorType, ".colors.").concat(shade));
+  return {
     main: {
       $all: {
         borderWidth: 0,
         borderRadius: 4,
-        backgroundColor: jsutils.get(colors$1, 'surface.default.colors.main'),
+        backgroundColor: activeColor,
         padding: 9,
         minHeight: 35,
         outline: 'none',
-        textAlign: 'center'
+        textAlign: 'center',
+        opacity: opacity
       },
       $web: _objectSpread2({
-        cursor: 'pointer',
+        cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
+        pointerEvents: state === 'disabled' && 'not-allowed',
         boxShadow: 'none'
       }, transition(['backgroundColor', 'borderColor'], 0.3)),
       $native: {}
     },
     content: {
-      color: jsutils.get(colors$1, 'palette.white01'),
+      color: state === 'disabled' ? jsutils.get(colors$1, 'opacity._50') : jsutils.get(colors$1, 'palette.white01'),
       fontSize: 14,
       fontWeight: '500',
       letterSpacing: 0.5,
       textAlign: 'center',
       $web: _objectSpread2({}, transition(['color'], 0.15))
     }
-  },
-  disabled: {
+  };
+};
+var contained = buildTheme(containedStyles);
+
+var textStyle = function textStyle(state, colorType) {
+  var shade = jsutils.get(defaults, "states.types.".concat(state, ".shade"));
+  var activeColor = jsutils.get(colors$1, "surface.".concat(colorType, ".colors.").concat(shade));
+  return {
     main: {
       $all: {
-        opacity: 0.4
-      },
-      $web: {
-        cursor: 'not-allowed',
-        pointerEvents: 'none'
-      },
-      $native: {}
+        backgroundColor: state === 'hover' ? colors$1.opacity(10, activeColor) : jsutils.get(colors$1, 'palette.transparent')
+      }
     },
     content: {
-      color: jsutils.get(colors$1, 'opacity._50')
+      $all: {
+        color: activeColor
+      }
     }
-  },
-  hover: {
-    main: {
-      backgroundColor: jsutils.get(colors$1, 'surface.default.dark')
-    },
-    content: {}
-  },
-  active: {
-    main: {
-      backgroundColor: jsutils.get(colors$1, 'surface.default.dark')
-    },
-    content: {}
-  }
-};
-var colorStyle = function colorStyle(surface, state) {
-  var activeState = states[state] || {};
-  return _objectSpread2({}, activeState, {
-    main: _objectSpread2({}, activeState.main, {
-      backgroundColor: state === 'hover' ? jsutils.get(surface, 'colors.dark') : state === 'active' ? jsutils.get(surface, 'colors.light') : jsutils.get(surface, 'colors.main')
-    })
-  });
-};
-states.default = inheritFrom(states.default);
-states.disabled = inheritFrom(states.default, states.disabled);
-states.hover = inheritFrom(states.default, states.hover);
-states.active = inheritFrom(states.default, states.hover, states.active);
-var contained = _objectSpread2({}, buildColorStyles(states, colorStyle));
-
-var states$1 = {
-  default: {
-    main: {
-      backgroundColor: jsutils.get(colors$1, 'palette.transparent')
-    },
-    content: {
-      color: jsutils.get(colors$1, 'opacity._80')
-    }
-  },
-  disabled: {
-    main: {},
-    content: {}
-  },
-  hover: {
-    main: {
-      backgroundColor: jsutils.get(colors$1, 'palette.white03')
-    },
-    content: {}
-  },
-  active: {
-    main: {},
-    content: {}
-  }
-};
-var colorStyle$1 = function colorStyle(surface, state) {
-  var activeState = states$1[state];
-  var activeColor = state === 'hover' ? jsutils.get(surface, 'colors.dark') : state === 'active' ? jsutils.get(surface, 'colors.light') : jsutils.get(surface, 'colors.main');
-  var styles = {
-    main: _objectSpread2({}, activeState.main),
-    content: _objectSpread2({}, activeState.content, {
-      color: activeColor
-    })
   };
-  state === 'hover' && (styles.main.backgroundColor = colors$1.opacity(10, activeColor));
-  return styles;
 };
-states$1.default = inheritFrom(states.default, states$1.default);
-states$1.disabled = inheritFrom(states.disabled, states$1.default, states$1.disabled);
-states$1.hover = inheritFrom(states$1.default, states.hover, states$1.hover);
-states$1.active = inheritFrom(states$1.hover, states$1.active);
-var text = _objectSpread2({}, buildColorStyles(states$1, colorStyle$1));
+var text = buildTheme(textStyle, {
+  inheritFrom: [contained]
+});
 
-var states$2 = {
-  default: {
+var outlineStyles = function outlineStyles(state, colorType) {
+  var stateShade = defaults.states.types[state].shade;
+  var activeColor = jsutils.get(colors$1, "surface.".concat(colorType, ".colors.").concat(stateShade));
+  return {
     main: {
-      padding: 8,
-      outline: 'none',
-      borderWidth: 1,
-      borderColor: jsutils.get(colors$1, 'surface.default.main'),
-      backgroundColor: jsutils.get(colors$1, 'palette.white01')
+      $all: {
+        padding: 8,
+        outline: 'none',
+        borderWidth: 1,
+        borderColor: activeColor,
+        backgroundColor: state === 'hover' ? colors$1.opacity(10, activeColor) : jsutils.get(colors$1, 'palette.white01')
+      }
     },
     content: {
-      color: jsutils.get(colors$1, 'opacity._80')
+      $all: {
+        color: activeColor
+      }
     }
-  },
-  disabled: {
-    main: {},
-    content: {}
-  },
-  hover: {
-    main: {
-      backgroundColor: jsutils.get(colors$1, 'palette.white03')
-    },
-    content: {}
-  },
-  active: {
-    main: {},
-    content: {}
-  }
-};
-var colorStyle$2 = function colorStyle(surface, state) {
-  var activeState = states$2[state];
-  var activeColor = state === 'hover' ? jsutils.get(surface, 'colors.dark') : state === 'active' ? jsutils.get(surface, 'colors.light') : jsutils.get(surface, 'colors.main');
-  var style = {
-    main: _objectSpread2({}, activeState.main, {
-      borderColor: activeColor
-    }),
-    content: _objectSpread2({}, activeState.content, {
-      color: activeColor
-    })
   };
-  state === 'hover' && (style.main.backgroundColor = colors$1.opacity(10, activeColor));
-  return style;
 };
-states$2.default = inheritFrom(states.default, states$2.default);
-states$2.disabled = inheritFrom(states.disabled, states$2.default, states$2.disabled);
-states$2.hover = inheritFrom(states$2.default, states$2.hover);
-states$2.active = inheritFrom(states$2.hover, states$2.active);
-var outline = _objectSpread2({}, buildColorStyles(states$2, colorStyle$2));
+var outline = buildTheme(outlineStyles, {
+  inheritFrom: [contained]
+});
 
 var button = {
   contained: contained,
