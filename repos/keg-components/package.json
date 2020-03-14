@@ -1,6 +1,6 @@
 {
   "name": "keg-components",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -10,7 +10,7 @@
     "clean:nm": "rimraf ./node_modules; yarn cache clean; yarn install",
     "clean:full": "rimraf yarn.lock; rimraf ./package.lock; yarn clean:nm; yarn cache clean; yarn install",
     "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
-    "clean:docs": "rimraf docs; echo \"DO NOT DELETE\" >> docs/.gitkeep",
+    "clean:docs": "rimraf docs",
     "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
     "dev": "rollup -c ./configs/rollup.config.js -w",
     "dev:keg": "DEV_MODE=keg rollup -c ./configs/rollup.config.js -w",
