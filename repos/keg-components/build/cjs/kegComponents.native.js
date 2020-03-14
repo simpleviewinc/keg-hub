@@ -1333,6 +1333,36 @@ var Icon = function Icon(props) {
 };
 Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
 
+var withTouch = function withTouch(Component) {
+  var wrapped = React__default.forwardRef(function (props, ref) {
+    var _props$touchThemePath = props.touchThemePath,
+        touchThemePath = _props$touchThemePath === void 0 ? '' : _props$touchThemePath,
+        _props$touchStyle = props.touchStyle,
+        touchStyle = _props$touchStyle === void 0 ? {} : _props$touchStyle,
+        onPress = props.onPress,
+        otherProps = _objectWithoutProperties(props, ["touchThemePath", "touchStyle", "onPress"]);
+    var theme = reTheme.useTheme();
+    var _useThemePath = useThemePath(touchThemePath),
+        _useThemePath2 = _slicedToArray(_useThemePath, 1),
+        style = _useThemePath2[0];
+    return React__default.createElement(reactNative.TouchableOpacity, {
+      style: theme.join(style, touchStyle),
+      onPress: onPress
+    }, React__default.createElement(Component, _extends({
+      ref: ref
+    }, otherProps)));
+  });
+  wrapped.propTypes = {
+    touchThemePath: PropTypes.string,
+    touchStyle: PropTypes.object,
+    onPress: PropTypes.func
+  };
+  return wrapped;
+};
+
+var TouchableIcon = withTouch(Icon);
+TouchableIcon.propTypes = _objectSpread2({}, TouchableIcon.propTypes, {}, Icon.propTypes);
+
 var hasWidth = function hasWidth(style) {
   return React.useMemo(function () {
     return Object.keys(jsutils.pickKeys(style, ['width', 'minWidth', 'maxWidth'])).length;
@@ -2785,5 +2815,6 @@ exports.Select = Select;
 exports.Subtitle = Subtitle;
 exports.Switch = Switch;
 exports.Text = Text;
+exports.TouchableIcon = TouchableIcon;
 exports.View = View;
 exports.theme = theme;

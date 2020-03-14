@@ -1326,6 +1326,36 @@ var Icon = function Icon(props) {
 };
 Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
 
+var withTouch = function withTouch(Component) {
+  var wrapped = React.forwardRef(function (props, ref) {
+    var _props$touchThemePath = props.touchThemePath,
+        touchThemePath = _props$touchThemePath === void 0 ? '' : _props$touchThemePath,
+        _props$touchStyle = props.touchStyle,
+        touchStyle = _props$touchStyle === void 0 ? {} : _props$touchStyle,
+        onPress = props.onPress,
+        otherProps = _objectWithoutProperties(props, ["touchThemePath", "touchStyle", "onPress"]);
+    var theme = useTheme();
+    var _useThemePath = useThemePath(touchThemePath),
+        _useThemePath2 = _slicedToArray(_useThemePath, 1),
+        style = _useThemePath2[0];
+    return React.createElement(TouchableOpacity, {
+      style: theme.join(style, touchStyle),
+      onPress: onPress
+    }, React.createElement(Component, _extends({
+      ref: ref
+    }, otherProps)));
+  });
+  wrapped.propTypes = {
+    touchThemePath: PropTypes.string,
+    touchStyle: PropTypes.object,
+    onPress: PropTypes.func
+  };
+  return wrapped;
+};
+
+var TouchableIcon = withTouch(Icon);
+TouchableIcon.propTypes = _objectSpread2({}, TouchableIcon.propTypes, {}, Icon.propTypes);
+
 var hasWidth = function hasWidth(style) {
   return useMemo(function () {
     return Object.keys(pickKeys(style, ['width', 'minWidth', 'maxWidth'])).length;
@@ -2745,4 +2775,4 @@ var theme = _objectSpread2({
   typography: typography
 }, components);
 
-export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, View, theme };
+export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, TouchableIcon, View, theme };
