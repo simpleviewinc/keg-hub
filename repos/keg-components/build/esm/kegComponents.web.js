@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useLayoutEffect, forwardRef, isValidElement, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useLayoutEffect, isValidElement, forwardRef, useRef, useCallback, useEffect } from 'react';
 import { useTheme, helpers as helpers$1, useThemeHover, useThemeActive, withTheme } from 're-theme';
-import { get, logData, deepMerge, reduceObj, jsonEqual, isFunc, isArr, isObj, isStr, checkCall, toBool, pickKeys, trainCase, isNum, capitalize } from 'jsutils';
+import { get, logData, deepMerge, reduceObj, jsonEqual, isFunc, isArr, isObj, isStr, checkCall, mapEntries, toBool, pickKeys, trainCase, isNum, capitalize } from 'jsutils';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { Platform, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -221,71 +221,6 @@ var useThemePath = function useThemePath(path, styles) {
   return [themeStyles, setThemeStyles];
 };
 
-var elMap = {
-	web: {
-		link: "a",
-		paragraph: "p",
-		subtitle: "span",
-		caption: "pre",
-		text: "span"
-	}
-};
-var attrKeyMap = {
-	web: {
-		testID: "id",
-		numberOfLines: false
-	}
-};
-var domMap = {
-	elMap: elMap,
-	attrKeyMap: attrKeyMap
-};
-
-var domAttrKeys = Object.keys(domMap.attrKeyMap.web);
-var filterAttrs = function filterAttrs(attrs) {
-  return reduceObj(attrs, function (key, value, updated) {
-    domAttrKeys.indexOf(key) === -1 ? updated[key] = value : domMap.attrKeyMap.web[key] !== false && (updated[domMap.attrKeyMap.web[key] || key] = value);
-    return updated;
-  }, {});
-};
-var getNode = function getNode(element) {
-  var node = element && element.toLowerCase();
-  return domMap.elMap.web[node] || element || 'span';
-};
-var ellipsisStyle = {
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  display: 'block'
-};
-var Text = forwardRef(function (props, ref) {
-  var theme = useTheme();
-  var children = props.children,
-      element = props.element,
-      style = props.style,
-      onPress = props.onPress,
-      onClick = props.onClick,
-      ellipsis = props.ellipsis,
-      attrs = _objectWithoutProperties(props, ["children", "element", "style", "onPress", "onClick", "ellipsis"]);
-  var textStyles = theme.get('typography.font.family', 'typography.default', ellipsis && ellipsisStyle, element && "typography.".concat(element));
-  var Node = getNode(element);
-  return React.createElement(Node, _extends({}, filterAttrs(attrs), {
-    style: theme.join(textStyles, style),
-    onClick: onClick || onPress,
-    ref: ref
-  }), children);
-});
-var KegText = function KegText(element) {
-  return forwardRef(function (props, ref) {
-    return React.createElement(Text, _extends({}, props, {
-      element: element,
-      ref: ref
-    }));
-  });
-};
-
-var Text$1 = KegText('text');
-
 var isValidComponent = function isValidComponent(Component) {
   return isValidElement(Component) || isFunc(Component);
 };
@@ -328,8 +263,9 @@ var getOnChangeHandler = function getOnChangeHandler(isWeb, onChange, onValueCha
   return _defineProperty({}, isWeb ? 'onChange' : 'onValueChange', onChange || onValueChange);
 };
 
-var getReadOnly = function getReadOnly(isWeb, readOnly, disabled, editable) {
-  var key = isWeb ? 'readOnly' : 'editable';
+var getReadOnly = function getReadOnly(isWeb, readOnly, disabled) {
+  var editable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+  var key = isWeb ? 'disabled' : 'editable';
   var value = isWeb ? readOnly || disabled || !editable : !(readOnly || disabled || !editable);
   return _defineProperty({}, key, value);
 };
@@ -387,7 +323,7 @@ var colors = {
 			-20
 		],
 		gray: [
-			20,
+			45,
 			"#999999",
 			-20
 		],
@@ -533,6 +469,144 @@ var inheritFrom = function inheritFrom() {
     return isObj(style) ? platformFlatten(style) : undefined;
   })));
 };
+
+var validateFunctions = function validateFunctions(functionObj) {
+  return mapEntries(functionObj, function (name, func) {
+    return [name, isFunc(func)];
+  });
+};
+
+var makeHandlerObject = function makeHandlerObject(handler, _ref) {
+  var onChange = _ref.onChange,
+      onValueChange = _ref.onValueChange,
+      onChangeText = _ref.onChangeText;
+  return Boolean(onChange || onValueChange || onChangeText) ? {
+    onChange: handler
+  } : {};
+};
+var useInputHandlers = function useInputHandlers() {
+  var handlers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var onChange = handlers.onChange,
+      onValueChange = handlers.onValueChange,
+      onChangeText = handlers.onChangeText;
+  return useMemo(function () {
+    var areValidFuncs = validateFunctions(handlers);
+    var handleChange = function handleChange(event) {
+      var value = get(event, 'target.value');
+      areValidFuncs.onChange && onChange(event);
+      areValidFuncs.onValueChange && onValueChange(value);
+      areValidFuncs.onChangeText && onChangeText(value);
+    };
+    return makeHandlerObject(handleChange, areValidFuncs);
+  }, [onChange, onValueChange, onChangeText]);
+};
+
+var makeHandlerObject$1 = function makeHandlerObject(handler, _ref) {
+  var onChange = _ref.onChange,
+      onValueChange = _ref.onValueChange;
+  return Boolean(onChange || onValueChange) ? {
+    onChange: handler
+  } : {};
+};
+var useSelectHandlers = function useSelectHandlers() {
+  var handlers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var onChange = handlers.onChange,
+      onValueChange = handlers.onValueChange;
+  return useMemo(function () {
+    var validFuncMap = validateFunctions(handlers);
+    var onChangeHandler = function onChangeHandler(event) {
+      var value = get(event, 'target.value');
+      validFuncMap.onChange && onChange(event);
+      validFuncMap.onValueChange && onValueChange(value);
+    };
+    return makeHandlerObject$1(onChangeHandler, validFuncMap);
+  }, [onChange, onValueChange]);
+};
+
+var makeHandlerObject$2 = function makeHandlerObject(isWeb, handler, _ref) {
+  var onPress = _ref.onPress,
+      onClick = _ref.onClick;
+  var handlerName = isWeb ? 'onClick' : 'onPress';
+  return Boolean(onPress || onClick) ? _defineProperty({}, handlerName, handler) : {};
+};
+var usePressHandlers = function usePressHandlers(isWeb) {
+  var handlers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var onPress = handlers.onPress,
+      onClick = handlers.onClick;
+  return useMemo(function () {
+    var validFuncsMap = validateFunctions(handlers);
+    var handler = function handler(event) {
+      validFuncsMap.onPress && onPress(event);
+      validFuncsMap.onClick && onClick(event);
+    };
+    return makeHandlerObject$2(isWeb, handler, validFuncsMap);
+  }, [onPress, onClick]);
+};
+
+var elMap = {
+	web: {
+		link: "a",
+		paragraph: "p",
+		subtitle: "span",
+		caption: "pre",
+		text: "span"
+	}
+};
+var attrKeyMap = {
+	web: {
+		testID: "id",
+		numberOfLines: false
+	}
+};
+var domMap = {
+	elMap: elMap,
+	attrKeyMap: attrKeyMap
+};
+
+var domAttrKeys = Object.keys(domMap.attrKeyMap.web);
+var filterAttrs = function filterAttrs(attrs) {
+  return reduceObj(attrs, function (key, value, updated) {
+    domAttrKeys.indexOf(key) === -1 ? updated[key] = value : domMap.attrKeyMap.web[key] !== false && (updated[domMap.attrKeyMap.web[key] || key] = value);
+    return updated;
+  }, {});
+};
+var getNode = function getNode(element) {
+  var node = element && element.toLowerCase();
+  return domMap.elMap.web[node] || element || 'span';
+};
+var ellipsisStyle = {
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  display: 'block'
+};
+var Text = forwardRef(function (props, ref) {
+  var theme = useTheme();
+  var children = props.children,
+      element = props.element,
+      style = props.style,
+      onPress = props.onPress,
+      onClick = props.onClick,
+      ellipsis = props.ellipsis,
+      attrs = _objectWithoutProperties(props, ["children", "element", "style", "onPress", "onClick", "ellipsis"]);
+  var textStyles = theme.get('typography.font.family', 'typography.default', ellipsis && ellipsisStyle, element && "typography.".concat(element));
+  var Node = getNode(element);
+  return React.createElement(Node, _extends({}, filterAttrs(attrs), {
+    style: theme.join(textStyles, style),
+    onClick: onClick || onPress,
+    ref: ref
+  }), children);
+});
+var KegText = function KegText(element) {
+  return forwardRef(function (props, ref) {
+    return React.createElement(Text, _extends({}, props, {
+      element: element,
+      ref: ref
+    }));
+  });
+};
+
+var Text$1 = KegText('text');
 
 var getChildren = function getChildren(Children) {
   var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -1267,28 +1341,87 @@ Form.propTypes = {
   type: PropTypes.string
 };
 
-var Input = withTheme(function (props) {
-  var theme = props.theme,
-      children = props.children,
-      style = props.style,
+var getValue = function getValue(_ref) {
+  var children = _ref.children,
+      value = _ref.value;
+  var setValue = getValueFromChildren(value, children);
+  return value !== undefined ? {
+    value: setValue
+  } : {};
+};
+var InputWrapper = forwardRef(function (props, ref) {
+  var theme = useTheme();
+  var children = props.children,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$editable = props.editable,
+      editable = _props$editable === void 0 ? true : _props$editable,
+      Element = props.Element,
+      elType = props.elType,
+      onChange = props.onChange,
+      onValueChange = props.onValueChange,
+      onChangeText = props.onChangeText,
       onClick = props.onClick,
       onPress = props.onPress,
-      args = _objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress"]);
-  return React.createElement("input", _extends({}, args, {
-    style: theme.join(get(theme, ['form', 'input', 'default']), style),
-    onClick: onClick || onPress
+      _props$readOnly = props.readOnly,
+      readOnly = _props$readOnly === void 0 ? false : _props$readOnly,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'default' : _props$type,
+      _props$themePath = props.themePath,
+      themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
+      style = props.style,
+      value = props.value,
+      elProps = _objectWithoutProperties(props, ["children", "disabled", "editable", "Element", "elType", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+  var isWeb = elType === 'web';
+  var _useThemePath = useThemePath(themePath),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      inputStyles = _useThemePath2[0];
+  return React.createElement(Element, _extends({
+    elProps: elProps,
+    style: theme.join(inputStyles, style),
+    ref: ref
+  }, getReadOnly(isWeb, readOnly, disabled, editable), getValue(props), useInputHandlers({
+    onChange: onChange,
+    onValueChange: onValueChange,
+    onChangeText: onChangeText
+  }), usePressHandlers(isWeb, {
+    onClick: onClick,
+    onPress: onPress
+  })), children);
+});
+InputWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  elType: PropTypes.string,
+  onChange: PropTypes.func,
+  onValueChange: PropTypes.func,
+  onChangeText: PropTypes.func,
+  style: PropTypes.object,
+  type: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+};
+
+var WebInput = React.forwardRef(function (_ref, ref) {
+  var elProps = _ref.elProps,
+      args = _objectWithoutProperties(_ref, ["elProps"]);
+  return React.createElement("input", _extends({}, args, elProps, {
+    ref: ref
   }));
 });
-Input.propTypes = {
+var Input = function Input(props) {
+  return React.createElement(InputWrapper, _extends({
+    Element: WebInput,
+    elType: 'web'
+  }, props));
+};
+Input.propTypes = _objectSpread2({}, InputWrapper.propTypes, {
   theme: PropTypes.object,
   style: PropTypes.object,
   value: PropTypes.string,
   placeholder: PropTypes.string,
   type: PropTypes.string,
   onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  onChange: PropTypes.func
-};
+  onPress: PropTypes.func
+});
 
 var Option = function Option(props) {
   var children = props.children,
@@ -1314,7 +1447,7 @@ var Radio = function Radio(props) {
   }));
 };
 
-var getValue = function getValue(_ref, isWeb) {
+var getValue$1 = function getValue(_ref, isWeb) {
   var children = _ref.children,
       onChange = _ref.onChange,
       onValueChange = _ref.onValueChange,
@@ -1323,12 +1456,6 @@ var getValue = function getValue(_ref, isWeb) {
   var setValue = getValueFromChildren(value, children);
   var valKey = getInputValueKey(isWeb, onChange, onValueChange, readOnly);
   return _defineProperty({}, valKey, setValue);
-};
-var buildStyles$5 = function buildStyles(theme, type) {
-  var select = theme.get('form.select.default', type && "form.select.".concat(type));
-  return {
-    select: select
-  };
 };
 var SelectWrapper = function SelectWrapper(props) {
   var theme = useTheme();
@@ -1340,15 +1467,23 @@ var SelectWrapper = function SelectWrapper(props) {
       readOnly = props.readOnly,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'default' : _props$type,
+      _props$themePath = props.themePath,
+      themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath,
       style = props.style,
-      type = props.type,
       value = props.value,
-      elProps = _objectWithoutProperties(props, ["children", "editable", "disabled", "Element", "isWeb", "readOnly", "onChange", "onValueChange", "style", "type", "value"]);
-  var styles = buildStyles$5(theme, type);
+      elProps = _objectWithoutProperties(props, ["children", "editable", "disabled", "Element", "isWeb", "readOnly", "onChange", "onValueChange", "type", "themePath", "style", "value"]);
+  var _useThemePath = useThemePath(themePath),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      selectStyles = _useThemePath2[0];
   return React.createElement(Element, _extends({
     elProps: elProps,
-    style: theme.join(styles.select, style)
-  }, getReadOnly(isWeb, readOnly, disabled, editable), getValue(props, isWeb), getOnChangeHandler(isWeb, onChange, onValueChange)), children);
+    style: theme.join(selectStyles, style)
+  }, getReadOnly(isWeb, readOnly, disabled, editable), getValue$1(props, isWeb), useSelectHandlers({
+    onChange: onChange,
+    onValueChange: onValueChange
+  })), children);
 };
 SelectWrapper.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
@@ -1363,7 +1498,8 @@ SelectWrapper.propTypes = {
 var Slt = React.forwardRef(function (_ref, ref) {
   var elProps = _ref.elProps,
       children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
+      readOnly = _ref.readOnly,
+      props = _objectWithoutProperties(_ref, ["elProps", "children", "readOnly"]);
   return React.createElement("select", _extends({}, elProps, props, {
     ref: ref
   }), children);
@@ -1466,7 +1602,11 @@ var Icon = function Icon(props) {
 };
 Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
 
+var TouchableWithFeedback = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
 var withTouch = function withTouch(Component) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var _options$showFeedback = options.showFeedback,
+      showFeedback = _options$showFeedback === void 0 ? true : _options$showFeedback;
   var wrapped = React.forwardRef(function (props, ref) {
     var _props$touchThemePath = props.touchThemePath,
         touchThemePath = _props$touchThemePath === void 0 ? '' : _props$touchThemePath,
@@ -1478,7 +1618,8 @@ var withTouch = function withTouch(Component) {
     var _useThemePath = useThemePath(touchThemePath),
         _useThemePath2 = _slicedToArray(_useThemePath, 1),
         style = _useThemePath2[0];
-    return React.createElement(TouchableOpacity, {
+    var TouchWrapper = showFeedback ? TouchableWithFeedback : TouchableWithoutFeedback;
+    return React.createElement(TouchWrapper, {
       style: theme.join(style, touchStyle),
       onPress: onPress
     }, React.createElement(Component, _extends({
@@ -1784,6 +1925,195 @@ var CustomIcon = function CustomIcon(props) {
     color: get(defaultStyle, ['side', position, 'content', 'icon', 'color']),
     size: get(defaultStyle, ['side', position, 'content', 'icon', 'size'])
   });
+};
+
+var flex = {
+  align: function align(dir) {
+    return {
+      alignItems: dir
+    };
+  },
+  direction: function direction(dir) {
+    return {
+      flexDirection: dir
+    };
+  },
+  justify: function justify(dir) {
+    return {
+      justifyContent: dir
+    };
+  },
+  display: {
+    display: 'flex'
+  },
+  wrap: {
+    flexWrap: 'wrap'
+  },
+  center: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  left: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
+  right: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  }
+};
+flex.direction.row = {
+  flexDirection: 'row'
+};
+flex.direction.column = {
+  flexDirection: 'column'
+};
+flex.row = flex.direction.row;
+flex.column = flex.direction.column;
+flex.justify.start = {
+  justifyContent: 'flex-start'
+};
+flex.justify.end = {
+  justifyContent: 'flex-end'
+};
+flex.justify.center = {
+  justifyContent: 'center'
+};
+flex.justify.between = {
+  justifyContent: 'space-between'
+};
+flex.justify.around = {
+  justifyContent: 'space-around'
+};
+flex.justify.even = {
+  justifyContent: 'space-evenly'
+};
+flex.align.start = {
+  alignItems: 'flex-start'
+};
+flex.align.end = {
+  alignItems: 'flex-end'
+};
+flex.align.center = {
+  alignItems: 'center'
+};
+flex.align.stretch = {
+  alignItems: 'stretch'
+};
+flex.align.base = {
+  alignItems: 'baseline'
+};
+
+var defaultSectionStyle = {
+  height: '100%',
+  backgroundColor: 'transparent'
+};
+var defaultSideSectionStyle = {
+  main: _objectSpread2({}, defaultSectionStyle, {
+    flexDirection: 'row',
+    maxWidth: '20%'
+  }),
+  content: {
+    container: _objectSpread2({}, defaultSectionStyle),
+    icon: {
+      style: {
+        alignSelf: 'center',
+        padding: 5
+      },
+      color: '#111111',
+      size: 30
+    }
+  },
+  native: {
+    content: {
+      container: _objectSpread2({}, flex.center, {
+        flex: 0
+      })
+    }
+  }
+};
+var appHeader = {
+  default: {
+    container: {
+      $native: {
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        flex: 0,
+        shadow: {
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2
+          },
+          shadowOpacity: 0.5,
+          shadowRadius: 1
+        },
+        title: {}
+      },
+      $web: {
+        shadow: {
+          boxShadow: '0px 4px 7px 0px #9E9E9E'
+        }
+      },
+      $all: _objectSpread2({
+        backgroundColor: get(colors$1, 'surface.primary.colors.dark'),
+        height: 70,
+        width: '100%'
+      }, flex.left, {
+        flexDirection: 'row'
+      })
+    },
+    side: {
+      left: {
+        $all: {
+          main: _objectSpread2({}, flex.left, {}, defaultSideSectionStyle.main),
+          content: _objectSpread2({}, defaultSideSectionStyle.content)
+        },
+        $web: {
+          content: {
+            container: _objectSpread2({}, flex.left)
+          }
+        },
+        $native: _objectSpread2({}, defaultSideSectionStyle.native)
+      },
+      right: {
+        $all: {
+          main: _objectSpread2({}, flex.right, {}, defaultSideSectionStyle.main),
+          content: _objectSpread2({}, defaultSideSectionStyle.content)
+        },
+        $web: {
+          content: {
+            container: _objectSpread2({}, flex.right)
+          }
+        },
+        $native: _objectSpread2({}, defaultSideSectionStyle.native)
+      }
+    },
+    center: {
+      $native: {
+        main: {},
+        content: {
+          title: {}
+        }
+      },
+      $web: {
+        main: {},
+        content: {}
+      },
+      $all: {
+        main: _objectSpread2({}, flex.center, {}, defaultSectionStyle, {
+          width: '60%'
+        }),
+        content: {}
+      }
+    }
+  }
 };
 
 var transition = function transition() {
@@ -2336,196 +2666,81 @@ var section = {
   }
 };
 
-var flex = {
-  align: function align(dir) {
-    return {
-      alignItems: dir
-    };
-  },
-  direction: function direction(dir) {
-    return {
-      flexDirection: dir
-    };
-  },
-  justify: function justify(dir) {
-    return {
-      justifyContent: dir
-    };
-  },
-  display: {
-    display: 'flex'
-  },
-  wrap: {
-    flexWrap: 'wrap'
-  },
-  center: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  left: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
-  },
-  right: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end'
-  }
-};
-flex.direction.row = {
-  flexDirection: 'row'
-};
-flex.direction.column = {
-  flexDirection: 'column'
-};
-flex.row = flex.direction.row;
-flex.column = flex.direction.column;
-flex.justify.start = {
-  justifyContent: 'flex-start'
-};
-flex.justify.end = {
-  justifyContent: 'flex-end'
-};
-flex.justify.center = {
-  justifyContent: 'center'
-};
-flex.justify.between = {
-  justifyContent: 'space-between'
-};
-flex.justify.around = {
-  justifyContent: 'space-around'
-};
-flex.justify.even = {
-  justifyContent: 'space-evenly'
-};
-flex.align.start = {
-  alignItems: 'flex-start'
-};
-flex.align.end = {
-  alignItems: 'flex-end'
-};
-flex.align.center = {
-  alignItems: 'center'
-};
-flex.align.stretch = {
-  alignItems: 'stretch'
-};
-flex.align.base = {
-  alignItems: 'baseline'
+var wrapper = {
+	width: 250,
+	padding: 5
 };
 
-var defaultSectionStyle = {
-  height: '100%',
-  backgroundColor: 'transparent'
-};
-var defaultSideSectionStyle = {
-  main: _objectSpread2({}, defaultSectionStyle, {
-    flexDirection: 'row',
-    maxWidth: '20%'
-  }),
-  content: {
-    container: _objectSpread2({}, defaultSectionStyle),
-    icon: {
-      style: {
-        alignSelf: 'center',
-        padding: 5
+var surface = colors$1.surface,
+    palette = colors$1.palette;
+var contained$1 = {
+  default: {
+    $all: {
+      main: {
+        minHeight: 100,
+        width: wrapper.width,
+        padding: wrapper.padding,
+        backgroundColor: get(surface, 'default.colors.light'),
+        display: 'flex',
+        flexDirection: 'column'
       },
-      color: '#111111',
-      size: 30
+      content: {
+        wrapper: {
+          display: 'flex',
+          marginRight: wrapper.padding + 5,
+          flex: 1,
+          flexWrap: 'wrap'
+        },
+        text: {
+          color: get(palette, 'black03'),
+          fontWeight: 'bold',
+          fontSize: 10
+        },
+        clipboard: {
+          opacity: 0.7,
+          right: 0,
+          top: 0,
+          margin: wrapper.padding - 2,
+          position: 'absolute'
+        }
+      }
+    },
+    $native: {
+      main: {
+        flexDirection: 'row',
+        flex: 1
+      },
+      content: {
+        clipboard: {}
+      }
     }
   },
-  native: {
-    content: {
-      container: _objectSpread2({}, flex.center, {
-        flex: 0
-      })
+  disabled: {},
+  hover: {},
+  active: {}
+};
+
+var surface$1 = colors$1.surface;
+var outlined = {
+  default: {
+    $all: {
+      main: {
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: get(surface$1, 'default.colors.main')
+      }
     }
   }
 };
-var appHeader = {
-  default: {
-    container: {
-      $native: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        flex: 0,
-        shadow: {
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2
-          },
-          shadowOpacity: 0.5,
-          shadowRadius: 1
-        },
-        title: {}
-      },
-      $web: {
-        shadow: {
-          boxShadow: '0px 4px 7px 0px #9E9E9E'
-        }
-      },
-      $all: _objectSpread2({
-        backgroundColor: get(colors$1, 'surface.primary.colors.dark'),
-        height: 70,
-        width: '100%'
-      }, flex.left, {
-        flexDirection: 'row'
-      })
-    },
-    side: {
-      left: {
-        $all: {
-          main: _objectSpread2({}, flex.left, {}, defaultSideSectionStyle.main),
-          content: _objectSpread2({}, defaultSideSectionStyle.content)
-        },
-        $web: {
-          content: {
-            container: _objectSpread2({}, flex.left)
-          }
-        },
-        $native: _objectSpread2({}, defaultSideSectionStyle.native)
-      },
-      right: {
-        $all: {
-          main: _objectSpread2({}, flex.right, {}, defaultSideSectionStyle.main),
-          content: _objectSpread2({}, defaultSideSectionStyle.content)
-        },
-        $web: {
-          content: {
-            container: _objectSpread2({}, flex.right)
-          }
-        },
-        $native: _objectSpread2({}, defaultSideSectionStyle.native)
-      }
-    },
-    center: {
-      $native: {
-        main: {},
-        content: {
-          title: {}
-        }
-      },
-      $web: {
-        main: {},
-        content: {}
-      },
-      $all: {
-        main: _objectSpread2({}, flex.center, {}, defaultSectionStyle, {
-          width: '60%'
-        }),
-        content: {}
-      }
-    }
-  }
+outlined.default = inheritFrom(contained$1.default, outlined.default);
+
+var textBox = {
+  outlined: outlined,
+  contained: contained$1
 };
 
 var components = {
+  appHeader: appHeader,
   button: button,
   card: card,
   divider: divider,
@@ -2536,7 +2751,7 @@ var components = {
   link: link,
   loading: loading,
   section: section,
-  appHeader: appHeader
+  textBox: textBox
 };
 
 var display = {

@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 're-theme'
-import { getOnChangeHandler, getValueFromChildren, getInputValueKey, getReadOnly } from '../../../utils'
+import { useThemePath } from '../../../hooks'
+import { getValueFromChildren, getInputValueKey, getReadOnly } from '../../../utils'
+import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
 
 /**
  * Gets the key value pair for the select components value
@@ -19,22 +21,6 @@ const getValue = ({ children, onChange, onValueChange, readOnly, value }, isWeb)
   return { [valKey]: setValue }
 }
 
-/**
- * Builds the styles for the select component
- * @param {Object} theme - Global theme object
- * @param {string} type - Type of select theme to use
- *
- * @returns {Object} - Contains all built stlyes
- */
-const buildStyles = (theme, type) => {
-  const select = theme.get(
-    'form.select.default',
-    type && `form.select.${type}`
-  )
-  
-  return { select }
-}
-
 export const SelectWrapper = props => {
   const theme = useTheme()
   const { 
@@ -46,21 +32,22 @@ export const SelectWrapper = props => {
     readOnly,
     onChange,
     onValueChange,
+    type='default',
+    themePath=`form.select.${type}`,
     style,
-    type,
     value,
     ...elProps
   } = props
   
-  const styles = buildStyles(theme, type)
+  const [ selectStyles ] = useThemePath(themePath)
 
   return (
     <Element
       elProps={ elProps }
-      style={ theme.join(styles.select, style) }
-      {  ...getReadOnly(isWeb, readOnly, disabled, editable) }
+      style={ theme.join(selectStyles, style) }
+      { ...getReadOnly(isWeb, readOnly, disabled, editable) }
       { ...getValue(props, isWeb) }
-      { ...getOnChangeHandler(isWeb, onChange, onValueChange) }
+      { ...useSelectHandlers({ onChange, onValueChange }) }
     >
       { children }
     </Element>

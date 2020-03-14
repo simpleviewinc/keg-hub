@@ -1,3 +1,4 @@
+import { appHeader } from './appHeader'
 import { button } from './button'
 import { card } from './card'
 import { divider } from './divider'
@@ -8,9 +9,10 @@ import { indicator } from './indicator'
 import { link } from './link'
 import { loading } from './loading'
 import { section } from './section'
-import { appHeader } from './appHeader'
+import { textBox } from './textBox'
 
 export const components = {
+  appHeader,
   button,
   card,
   divider,
@@ -21,5 +23,5 @@ export const components = {
   link,
   loading,
   section,
-  appHeader
+  textBox,
 }

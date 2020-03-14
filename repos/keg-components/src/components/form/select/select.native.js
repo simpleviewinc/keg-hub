@@ -17,10 +17,11 @@ import { SelectWrapper } from './select.wrapper'
  * @property {Object} props.ref - reference to native element
  *
  */
-const Slt = React.forwardRef(({ elProps, children, ...props }, ref) => (
+const Slt = React.forwardRef(({ elProps, children, editable, ...props }, ref) => (
   <Picker
     { ...elProps }
     { ...props }
+    enabled={editable}
     ref={ ref }
   >
     { children }

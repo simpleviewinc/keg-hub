@@ -1,15 +1,24 @@
 import React from 'react'
-import { TouchableOpacity } from "react-native";
+import { Platform, TouchableOpacity, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native'
 import { useThemePath } from '../hooks'
 import { useTheme } from 're-theme'
 import PropTypes from 'prop-types'
 
+const TouchableWithFeedback = Platform.OS === 'android' 
+  ? TouchableNativeFeedback 
+  : TouchableOpacity
+
 /**
- * Returns a new component that wraps the passed in component with TouchableOpacity. 
+ * Returns a new component that wraps `Component` with touchable capabilities. 
  * @param {Function} Component - a react component to be wrapped
+ * @param {Object} options - options obj
+ * @param {Boolean} options.showFeedback - if true, show feedback opacity animation (from TouchableOpacity or TouchableNativeFeedback), otherwise show none (TouchableWithoutFeedback)
  * @returns {Function} - react component that wraps Component
  */
-export const withTouch = (Component) => {
+export const withTouch = (Component, options={}) => {
+
+  const { showFeedback=true } = options
+
   /**
    * Wrapped react component
    * @param {Object} props
@@ -29,8 +38,12 @@ export const withTouch = (Component) => {
     const theme = useTheme()
     const [ style ] = useThemePath(touchThemePath)
 
+    const TouchWrapper = showFeedback 
+      ? TouchableWithFeedback
+      : TouchableWithoutFeedback
+
     return (
-      <TouchableOpacity
+      <TouchWrapper
         style={ theme.join(style, touchStyle) }
         onPress={onPress}
       >
@@ -38,7 +51,7 @@ export const withTouch = (Component) => {
           ref={ref}
           { ...otherProps } 
         />
-      </TouchableOpacity>  
+      </TouchWrapper>  
     )
   })
 

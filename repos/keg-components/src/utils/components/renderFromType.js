@@ -1,6 +1,6 @@
 import React from 'react'
 import { isFunc, isArr } from 'jsutils'
-import { isValidComponent } from '../helpers/isValidComponent'
+import { isValidComponent } from '../validate/isValidComponent'
 
 /**
  * Checks the passed in Elements type and formats it so react can render it
