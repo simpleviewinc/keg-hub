@@ -3,8 +3,8 @@ module.exports = {
     name: 'global',
     alias: [ 'glob', 'gl', 'pull', 'push', 'commit' ],
     tasks: {
-      sync: require('./syncGlobalConfig'),
       test: require('./test'),
+      ...require('./config'),
       ...require('./git')
     },
     action: require('./global'),
