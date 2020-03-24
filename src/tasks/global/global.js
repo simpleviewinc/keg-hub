@@ -5,6 +5,8 @@ const { executeTask } = require('KegRunTask')
 
 const globalDefCmd = args => {
 
+  console.log(`---------- global command ----------`)
+
   const { command, options, tasks, globalConfig } = args
 
   // Check if it's a git command, and if so execute it

@@ -3,18 +3,18 @@ const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const path = require('path')
 const rootDir = path.join(__dirname, '../../../')
-const cliIndex = path.join(rootDir, 'keg')
 
 /**
  * Ensure the cli index is executable
  *
  * @returns {void}
  */
-const makeExecutable = async () => {
+const makeExecutable = async (file) => {
+
   // Call command to make executable
-  console.log(`Making keg executable...`)
+  console.log(`Making "${file}" executable...`)
   const { stderr } = await cmdExec(
-    `chmod +x ${cliIndex}`,
+    `chmod +x ${file}`,
     {
       groupID: process.getgid(),
       userID: process.getuid(),
