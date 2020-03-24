@@ -25,8 +25,9 @@ module.exports = config => {
   return {
     ...initialize(require('./global'), 'global', config),
     ...initialize(require('./generate'), 'generate', config),
+    ...initialize(require('./core'), config),
+    ...initialize(require('./cli'), config),
     // ...initialize(require('./components'), config),
-    // ...initialize(require('./core'), config),
     // ...initialize(require('./general'), config),
     // ...initialize(require('./taps'), config),
     // ...initialize(require('./customTasks'), config),

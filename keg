@@ -1,10 +1,46 @@
-#!/usr/bin/env node
+#!/bin/bash
 
-// Regretter the alias at the every beginning 
-require('better-module-alias')(__dirname)
-const { runTask } = require('KegRunTask')
-const { getGlobalConfig } = require('KegUtils/globalConfig')
 
-// Load the users global config, or create it on the fly
-// Pull in the runTask method, and call it immediately
-runTask(getGlobalConfig())
+# IMPORTANT TODO: figure out how to add to active terminal session
+# Need to `source ~/keg/cli/keg` add to .bashrc or .bash_profile
+
+# Reloads the keg cli
+# TODO: update to load the keg path dynamically
+# may work with $0
+keg_cli_reload(){
+  echo "Reloading Keg CLI..."
+  unset KEG_CLI_IS_SOURCED
+  source ~/keg/cli/keg
+}
+
+# Opening to the keg cli
+# Calls the node cli script for most commands
+keg(){
+
+  if [[ "$1" == "reload" || "$1" == "rl" ]]; then
+    keg_cli_reload
+    return
+  fi
+
+  # Gets the current diretory of the script
+  # Not corss platform so will run into issues on other machines
+  # Need better way to set this
+  local KEG_CLI_DIR=$(dirname "$0")
+
+  # This buffers all output of keg-cli into a single string variable
+  # Need to come up with some way to split the output, and get the command data
+  # While at the same time printing console.logs to the terminal window
+  # Works for basic commads but, long running, servers commands it does not
+  local KEG_OUTPUT=$(node ~/keg/cli/keg-cli $@)
+
+  local OUTPUT_SPLIT=($KEG_OUTPUT)
+  local HAS_PREFIX=${OUTPUT_SPLIT[0]}
+
+  # Ensures we are only runnign eval on commands that need it
+  if [[ "$HAS_PREFIX" == "__KEG_EVAL__" ]]; then
+    local KEG_CMD=${KEG_OUTPUT:12}
+    eval $KEG_CMD
+  else
+    printf "%s\n" "$KEG_OUTPUT"
+  fi
+}
