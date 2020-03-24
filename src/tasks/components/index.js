@@ -1,5 +1,5 @@
 module.exports = {
-  global: {
+  components: {
     name: 'components',
     alias: [ 'comp' ],
     tasks: {
