@@ -1,81 +1,52 @@
 {
   "name": "jsutils",
-  "version": "3.2.1",
+  "version": "4.0.0",
   "description": "common javascript utils",
-  "main": "cjs/",
-  "module": "esm/",
+  "main": "build/umd/index.js",
+  "module": "build/esm/index.js",
   "repository": "https://github.com/lancetipton/jsutils.git",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ENV=development webpack --watch --progress",
-    "build": "yarn build:clean && yarn build:webpack && yarn docs",
-    "build:clean": "rimraf ./esm && rimraf ./cjs && rimraf ./build",
-    "build:esm": "babel --delete-dir-on-start -d esm/ src/scripts/",
-    "build:cjs": "babel --delete-dir-on-start --env-name cjs -d cjs/ src/scripts/",
-    "build:modules": "yarn build:esm && yarn build:cjs",
-    "build:webpack": "rimraf ./build && ENV=production webpack --mode production",
-    "clean": "rimraf yarn.lock && rimraf node_modules && yarn install --force",
-    "test": "NODE_ENV=test jest --no-cache --verbose",
-    "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc src/scripts -d ./docs --debug --verbose --package ./package.json -t ./node_modules/docdash -R README.md && yarn docs:move",
-    "docs:move": "node ./move_docs.js",
-    "deploy": "yarn build && gh-pages -d docs"
+    "build": "yarn build:clean && yarn build:rollup",
+    "build:clean": "rimraf ./build/esm && rimraf ./build/umd && rimraf ./build/cjs",
+    "build:rollup": "NODE_ENV=production rollup -c ./configs/rollup.config.js",
+    "clean": "yarn cache clean && rimraf yarn.lock && rimraf node_modules && yarn install --force",
+    "deploy": "yarn build && yarn docs && gh-pages -d docs",
+    "dev": "rollup -c ./configs/rollup.config.js -w",
+    "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc -c ./configs/jsdoc.json",
+    "docs:move": "node ./configs/moveDocs.js",
+    "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
+    "web": "http-server ./docs -p 8888 --cors"
   },
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
-    "@babel/cli": "7.4.4",
-    "@babel/core": "7.4.3",
-    "@babel/plugin-proposal-object-rest-spread": "7.4.3",
-    "@babel/plugin-transform-object-assign": "7.2.0",
-    "@babel/plugin-transform-property-literals": "7.2.0",
-    "@babel/preset-env": "7.4.3",
-    "@babel/runtime": "7.4.5",
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.8.7",
+    "@babel/preset-env": "7.8.7",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/runtime": "7.8.7",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-replace": "^2.3.1",
     "babel-jest": "24.7.1",
-    "babel-loader": "8.0.5",
-    "clean-webpack-plugin": "1.0.0",
-    "copy-webpack-plugin": "4.6.0",
-    "core-js": "3.1.2",
+    "core-js": "3.6.4",
     "docdash": "1.1.1",
     "fs-extra": "8.1.0",
     "gh-pages": "2.1.1",
-    "html-webpack-plugin": "3.2.0",
     "ink-docstrap": "1.3.2",
     "jest": "24.7.1",
     "jestlib": "git+https://github.com/simpleviewinc/jestlib#4d215e59992faa7111c9cd07780fcac2679359b0",
+    "jsdoc": "3.6.3",
     "jsutils": "file:./",
     "jsvalidator": "^1.2.0",
-    "jsdoc": "3.6.3",
-    "raw-loader": "2.0.0",
-    "remove-comments-loader": "0.1.2",
     "rimraf": "3.0.0",
-    "terser-webpack-plugin": "1.3.0",
-    "webpack": "4.33.0",
-    "webpack-cli": "3.1.2",
-    "webpack-shell-plugin": "https://github.com/cdeutsch/webpack-shell-plugin.git#bee537d"
-  },
-  "jest": {
-    "roots": [ "<rootDir>/src" ],
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.js?(x)"
-    ],
-    "collectCoverageFrom": [
-      "<rootDir>/src/index.js"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "jsx",
-      "es6"
-    ],
-    "globals": {
-      "__DEV__": true
-    },
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ]
+    "rollup": "1.20.3",
+    "rollup-jest": "0.0.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-cleanup": "3.1.1",
+    "rollup-plugin-sourcemaps": "0.4.2",
+    "rollup-plugin-terser": "5.1.2"
   }
 }

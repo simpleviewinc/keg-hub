@@ -1,0 +1,51 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "source": {
+    "include": [
+      "src/",
+      "README.md"
+    ],
+    "excludePattern": "(__mocks__|__tests__|node_modules/|docs)"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "template": "node_modules/docdash",
+    "encoding": "utf8",
+    "destination": "docs/",
+    "recurse": true,
+    "verbose": true
+  },
+  "docdash": {
+    "static": true,
+    "sort": true,
+    "disqus": "",
+    "openGraph": {
+      "title": "JS Utils",
+      "type": "website",
+      "site_name": "jsutils",
+      "url": "https://lancetipton.github.io/jsutils/"
+    },
+    "meta": {
+      "title": "JS Utils",
+      "description": "common javascript utils",
+      "keyword": "utils, javascript, helpers, lodash, underscore"
+    },
+    "search": true,
+    "collapse": false,
+    "typedefs": true,
+    "removeQuotes": "none",
+    "scripts": [],
+    "menu": {
+      "Github repo": {
+        "href":"https://github.com/lancetipton/jsutils",
+        "target":"_blank",
+        "class":"menu-item",
+        "id":"repository"
+      }
+    }
+  }
+}
