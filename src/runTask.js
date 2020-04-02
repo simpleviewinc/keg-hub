@@ -29,6 +29,8 @@ const executeTask = async (args) => {
 
 }
 
+const hasHelpArg = (arg) => (HELP_ARGS.indexOf(arg) !== -1)
+
 /**
  * Runs a Keg CLI command
  *
@@ -45,14 +47,20 @@ const executeTask = async (args) => {
     const tasks = Tasks(globalConfig)
 
     // Check if the command is global help
-    if(HELP_ARGS.indexOf(command) !== -1) return showHelp(tasks)
+    if(hasHelpArg(command))
+      return showHelp(tasks)
 
     // Get the task from available tasks
     const task = getTask(tasks, command, ...options)
 
+    // Check if the last argument is a help argument
+    // If it is, print the help for that command
+    if(hasHelpArg(options[ options.length -1 ]))
+      return showHelp(false, task)
+
     // Ensure a task exists
     return !isObj(task) || !isFunc(task.action)
-      ? showNoTask(command, options, tasks, globalConfig)
+      ? showNoTask(command)
       : executeTask({
           command,
           options,
