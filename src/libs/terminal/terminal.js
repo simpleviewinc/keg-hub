@@ -30,7 +30,7 @@ const showNoTask = (command, unknown=true) => {
  */
 const handleError = err => {
   printHeader(`Keg-CLI Error:`)
-  console.log(`  ${err.message}`)
+  Logger.error(`  ${err.message}`)
   console.log('')
   process.exit(1)
 }
