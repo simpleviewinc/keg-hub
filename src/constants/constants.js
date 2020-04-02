@@ -27,4 +27,10 @@ module.exports = deepFreeze({
   // Global config settings
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
+  HELP_ARGS: [
+    'help',
+    '--help',
+    '-h',
+    '--h',
+  ]
 })

@@ -1,9 +1,9 @@
-const { isFunc, isStr, isObj } = require('jsutils')
-const { getTask } = require('KegUtils')
+const { get, isFunc, isStr, isObj } = require('jsutils')
+const { getTask, moveDirectory } = require('KegUtils')
 const { executeCmd } = require('KegProc')
 const { handleError, showHelp, showNoTask } = require('KegTerm')
 const Tasks = require('KegTasks')
-
+const { HELP_ARGS } = require('KegConst')
 /**
  * Executes the passed in task.
  * <br/> Checks if a tasks has cmd key as a string, and if so runs it in a child process
@@ -37,11 +37,15 @@ const executeTask = async (args) => {
  const runTask = async (globalConfig) => {
   try {
 
+    const [ command, ...options ] = process.argv.slice(2)
+    // If no command, more to the keg directory
+    if(!command) return moveDirectory(globalConfig, 'keg')
+
+    // Load all possible tasks
     const tasks = Tasks(globalConfig)
 
-    const [ command, ...options ] = process.argv.slice(2);
-    // Ensure a command exists
-    if(!command) return showHelp(tasks)
+    // Check if the command is global help
+    if(HELP_ARGS.indexOf(command) !== -1) return showHelp(tasks)
 
     // Get the task from available tasks
     const task = getTask(tasks, command, ...options)

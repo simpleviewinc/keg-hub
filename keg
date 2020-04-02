@@ -1,46 +1,68 @@
 #!/bin/bash
 
-
-# IMPORTANT TODO: figure out how to add to active terminal session
+# TODO: **IMPORTANT** figure out how to add to active terminal session
 # Need to `source ~/keg/cli/keg` add to .bashrc or .bash_profile
 
-# Reloads the keg cli
-# TODO: update to load the keg path dynamically
-# may work with $0
-keg_cli_reload(){
-  echo "Reloading Keg CLI..."
-  unset KEG_CLI_IS_SOURCED
-  source ~/keg/cli/keg
+# TODO: **IMPORTANT** Need to set this path dyamically some how
+export KEG_CLI_PATH=~/keg/cli
+
+keg_check_move_directory(){
+
+  local CMD_OUTPUT
+
+  # If no arguments, then default to keg path
+  if [[ "$#" == "0" ]]; then
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js keg)"
+  else
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js $@)"
+  fi
+
+  # Convert the ouput to an array
+  IFS=$'\n'
+  local OUTPUT_ARR=($CMD_OUTPUT)
+  unset IFS
+
+  # Get the second line containing the path to move to
+  local MOVE_TO_PATH="${OUTPUT_ARR[1]}"
+
+  if [[ "$MOVE_TO_PATH" ]]; then
+    echo "${OUTPUT_ARR[0]}"
+    cd $MOVE_TO_PATH
+    echo ""
+    return 0
+  fi
+
+  return 1
 }
 
 # Opening to the keg cli
-# Calls the node cli script for most commands
+# For navigation commands, calls keg_check_move_directory
+# All other commands call keg-cli node script
 keg(){
 
+  # Check if reloading the bash portion of the keg cli
   if [[ "$1" == "reload" || "$1" == "rl" ]]; then
-    keg_cli_reload
+
+    # Reload this bash script
+    echo "Reloading Keg CLI..."
+    source $KEG_CLI_PATH/keg
     return
+
+  # Check if this is a move directory command
+  elif [[ "$#" == "0" || "$#" == "1" || "$#" == "2" ]]; then
+
+    # # Check if this is a change dir command
+    keg_check_move_directory $@
+    # Get the return code from the move dir command
+    local KEG_MOVE_DIR=$?
+
+    # If 0 is returned, then we changed dirs, so check and exit
+    if [[ "$KEG_MOVE_DIR" == 0 ]]; then
+      return 0
+    fi
   fi
 
-  # Gets the current diretory of the script
-  # Not corss platform so will run into issues on other machines
-  # Need better way to set this
-  local KEG_CLI_DIR=$(dirname "$0")
+  # All other commands get passed on to the node keg-cli script
+  node $KEG_CLI_PATH/keg-cli $@
 
-  # This buffers all output of keg-cli into a single string variable
-  # Need to come up with some way to split the output, and get the command data
-  # While at the same time printing console.logs to the terminal window
-  # Works for basic commads but, long running, servers commands it does not
-  local KEG_OUTPUT=$(node ~/keg/cli/keg-cli $@)
-
-  local OUTPUT_SPLIT=($KEG_OUTPUT)
-  local HAS_PREFIX=${OUTPUT_SPLIT[0]}
-
-  # Ensures we are only runnign eval on commands that need it
-  if [[ "$HAS_PREFIX" == "__KEG_EVAL__" ]]; then
-    local KEG_CMD=${KEG_OUTPUT:12}
-    eval $KEG_CMD
-  else
-    printf "%s\n" "$KEG_OUTPUT"
-  fi
 }
