@@ -4,7 +4,7 @@ const killProc = require('tree-kill')
 const rootDir = require('app-root-path').path
 const { exitError, errorHandler } = require('./utils')
 const { logData, mapObj, checkCall, deepMerge } = require('jsutils')
-const NO_OP = () => {}
+
 /**
  * Cache to hold child processes
 */
@@ -43,7 +43,7 @@ const spawnOpts = {
   uid: process.getuid(),
   env: process.env,
   cwd: rootDir,
-  stdio: 'pipe',
+  stdio: 'inherit',
 }
 
 /**
@@ -58,16 +58,16 @@ const defKillProc = async (_, procId) => {
   catch (e){
     return 1
   }
-  
 }
 
 const defEvents = {
-  onExit: defKillProc,
-  onStdErr: defKillProc,
-  onError: defKillProc,
-  onStdOut: logData,
-  onClose: NO_OP
+  onExit: { method: defKillProc,  name: 'exit' },
+  onStdErr: { name: 'stderr', childKey: 'stderr' },
+  onError: { name: 'error' },
+  onStdOut: { name: 'stdout', childKey: 'stdout' },
+  onClose: { name: 'close' }
 }
+
 const evtWrap = (cb, procId, event) => (data => checkCall(cb, data, procId))
 
 /**
@@ -81,24 +81,19 @@ const evtWrap = (cb, procId, event) => (data => checkCall(cb, data, procId))
  * @param {Object} child - child process to attach events to
  * @returns {void}
  */
-const addEvents = (procId, events, child) => {
-
-  const cbEvents = { ...defEvents, ...events }
+const addEvents = (procId, cbEvents, child) => {
 
   child = child || get(procId)
   if (!child) return logData(`No child process found with ID: ${procId}`)
 
-  child.on('exit', evtWrap(cbEvents.onExit, procId, 'exit'))
+  mapObj(defEvents, (key, { name, method, childKey }) => {
+    const validChild = childKey ? Boolean(child[childKey]) : true
+    const callback = cbEvents[key] || method
 
-  child.on('close',  evtWrap(cbEvents.onClose, procId, 'close'))
-
-  child.on('error', evtWrap(cbEvents.onError, procId, 'error'))
-
-  child.stdout &&
-    child.stdout.on('data', evtWrap(cbEvents.onStdOut, procId, 'stdout'))
-
-  child.stderr &&
-    child.stderr.on('data', evtWrap(cbEvents.onStdErr, procId, 'stderr'))
+    validChild &&
+      callback &&
+      child.on(name, evtWrap(callback, procId, name))
+  })
 
 }
 
