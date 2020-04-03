@@ -1,4 +1,4 @@
-const { get, isStr, isObj } = require('jsutils')
+const { get, isStr, isObj, mapObj } = require('jsutils')
 const { printHeader } = require('./printHeader')
 const colors = require('colors/safe')
 
@@ -80,24 +80,38 @@ const showSubTasks = (task, dblSpacer) => {
  * @returns {void}
  */
 const showTaskInfo = (task, infoSpacer) => {
+  showTaskInfoItem('Alias', get(task, `alias`, []).join(' | '), infoSpacer)
   showTaskInfoItem('Description', get(task, `description`, ''), infoSpacer)
   showTaskInfoItem('Example', get(task, `example`, ''), infoSpacer)
-  showTaskInfoItem('Alias', get(task, `alias`, []).join(' | '), infoSpacer)
 }
 
 /**
  * Prints specific info about a specific task
- * @param {string} infoName - Name of the info
- * @param {string} infoDescription - description of the info
+ * @param {string} name - Name of the info
+ * @param {string} desc - description of the info
  * @param {string} infoSpacer - Extra space added to the beginning of the line
  *
  * @returns {void}
  */
-const showTaskInfoItem = (infoName, infoDescription, infoSpacer) => {
-  infoDescription && console.log(
-    colors.brightCyan(`${infoSpacer}${infoName}:`),
-    colors.brightWhite(infoDescription)
+const showTaskInfoItem = (name, desc, infoSpacer) => {
+  desc && console.log(
+    colors.brightCyan(`${infoSpacer}${name}:`),
+    colors.brightWhite(desc)
   )
+}
+
+const showTaskOptions = (task, infoSpacer, dblSpacer) => {
+  if(!task.options) return
+
+  console.log('')
+  console.log(colors.brightBlue(`${infoSpacer}Options:`))
+  mapObj(task.options, (name, desc) => {
+    console.log(
+      colors.brightCyan(`${infoSpacer}  ${name}:`),
+      colors.brightWhite(desc)
+    )
+  })
+
 }
 
 /**
@@ -141,6 +155,7 @@ const showTaskHelp = (task, header, space) => {
   showHelpHeader(header)
   showTaskHeader(task.name, header, spacer, dblSpacer)
   showTaskInfo(task, infoSpacer)
+  showTaskOptions(task, infoSpacer, dblSpacer)
   showSubTasks(task, dblSpacer)
 
 }
