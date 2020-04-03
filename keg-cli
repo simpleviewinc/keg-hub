@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-// Regretter the alias at the every beginning 
-require('better-module-alias')(__dirname)
+require('module-alias/register')
 const { runTask } = require('KegRunTask')
 const { getGlobalConfig } = require('KegUtils/globalConfig')
 

@@ -1,7 +1,9 @@
+require('module-alias/register')
+
 const { get } = require('jsutils')
-const { getGlobalConfig } = require('../../src/utils')
-const { GLOBAL_CONFIG_FOLDER } = require('../../src/constants')
-const { Logger } = require('../../src/libs/terminal/logger')
+const { getGlobalConfig } = require('KegUtils')
+const { GLOBAL_CONFIG_FOLDER } = require('KegConst')
+const { Logger } = require('KegTerm/logger')
 
 /**
  * Gets the name of the path to load from the global config from passed in arguments

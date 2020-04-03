@@ -25,15 +25,16 @@
   },
   "dependencies": {
     "app-root-path": "^2.2.1",
-    "better-module-alias": "^1.0.4",
     "colors": "^1.4.0",
     "inquirer": "^7.0.6",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "module-alias": "^2.2.2",
     "recursive-readdir": "^2.2.2",
-    "simple-git": "^1.131.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git",
     "rimraf": "2.6.3",
+    "simple-git": "^1.131.0",
     "sync-glob": "^1.4.0",
+    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git",
+    "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git",
     "tree-kill": "^1.2.2"
   },
   "devDependencies": {},
@@ -46,6 +47,6 @@
     "KegRunTask": "src/runTask",
     "KegTerm": "src/libs/terminal",
     "KegTasks": "src/tasks",
-    "KegUtils": "src/utils"
+    "KegUtils": "src/utils/"
   }
 }
