@@ -1,5 +1,5 @@
 const { get, isFunc, isStr, isObj } = require('jsutils')
-const { getTask, moveDirectory } = require('KegUtils')
+const { getTask } = require('KegUtils')
 const { executeCmd } = require('KegProc')
 const { handleError, showHelp, showNoTask } = require('KegTerm')
 const Tasks = require('KegTasks')
@@ -41,7 +41,7 @@ const hasHelpArg = (arg) => (HELP_ARGS.indexOf(arg) !== -1)
 
     const [ command, ...options ] = process.argv.slice(2)
     // If no command, more to the keg directory
-    if(!command) return moveDirectory(globalConfig, 'keg')
+    if(!command) return showHelp(tasks)
 
     // Load all possible tasks
     const tasks = Tasks(globalConfig)

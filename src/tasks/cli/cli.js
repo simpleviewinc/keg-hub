@@ -1,10 +1,9 @@
-const { moveDirectory } = require('../../utils')
 
-const coreCommand = args => {
+const cliCommand = args => {
   const { command, options, tasks, globalConfig } = args
 
-  if(!options.length) return moveDirectory(globalConfig, 'cli')
+  console.log(`---------- cli command ----------`)
 
 }
 
-module.exports = coreCommand
+module.exports = cliCommand
