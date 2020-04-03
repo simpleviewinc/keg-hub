@@ -74,7 +74,7 @@ const hasHelpArg = (arg) => (HELP_ARGS.indexOf(arg) !== -1)
     handleError(err)
   }
 }
- 
+
 module.exports = {
   executeTask,
   runTask,
