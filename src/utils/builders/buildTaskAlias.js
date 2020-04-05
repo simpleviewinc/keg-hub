@@ -7,7 +7,10 @@ const { deepClone, get, isArr, mapObj, set } = require('jsutils')
  * @returns {Object} - Tasks object with name and alias set
  */
 const buildTaskAlias = task => {
-  if(!task.name) throw new Error(`Task name is required, but couldn't be found on the task object!`)
+  if(!task.name)
+  throw new Error(
+      `Task name is required, but couldn't be found on the task: ${JSON.stringify(task)}`
+    )
 
   const namedTask = { [task.name]: deepClone(task) }
   const alias = get(task, 'alias')

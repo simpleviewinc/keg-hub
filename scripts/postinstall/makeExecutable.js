@@ -2,7 +2,7 @@ const { promisify } = require('util')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const path = require('path')
-const rootDir = path.join(__dirname, '../../../')
+const rootDir = path.join(__dirname, '../../')
 
 /**
  * Ensure the cli index is executable

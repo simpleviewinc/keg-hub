@@ -18,7 +18,7 @@ const { HELP_ARGS } = require('KegConst')
  */
 const executeTask = async (args) => {
   const { command, task, tasks } = args
-  
+
   const cmdOutput = isStr(task.cmd)
     ? await executeCmd(task)
     : isFunc(task.cmd)

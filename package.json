@@ -18,10 +18,11 @@
     "node": ">= 12.15.0"
   },
   "scripts": {
-    "postinstall": "node ./src/utils/postinstall/index.js",
+    "postinstall": "node ./scripts/postinstall/index.js",
     "clean": "yarn clean:lock && yarn cache clean && rimraf node_modules && npm cache clean --force",
     "clean:lock": "rimraf ./yarn.lock && rimraf ./package.lock",
-    "keg": "./keg"
+    "keg": "./keg",
+    "setup:bash": "bash ./scripts/setup/setup.sh"
   },
   "dependencies": {
     "app-root-path": "^2.2.1",
