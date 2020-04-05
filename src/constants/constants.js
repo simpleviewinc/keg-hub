@@ -1,6 +1,7 @@
 const { deepFreeze } = require('jsutils')
 const homeDir = require('os').homedir()
 const path = require('path')
+const cliRootDir = path.join(__dirname, '../../')
 
 const { GLOBAL_CONFIG_PATH } = process.env
 // The default global config path
@@ -15,6 +16,9 @@ if(GLOBAL_CONFIG_PATH){
 }
 
 module.exports = deepFreeze({
+
+  // Docker Settings
+  TAP_DOCKER_FILE: path.join(cliRootDir, 'scripts/docker/Dockerfile'),
 
   // Tasks settings
   TASK_REQURIED: [

@@ -1,3 +1,5 @@
+const { reduceObj } = require('jsutils')
+
 /*
   * What startTap method should do
     1. Start a docker container for the tap
@@ -12,7 +14,37 @@
     5. Start the expo server type based on params
       * Native || Web
     6. Expose the ports to allow host machine to access the server in the container
+    
+    Tap Mount
+    -v ${dirs.tap}/:/keg/tap 
+    Core Mount
+    -v ${dirs.core}/:/keg/tap/node_modules/sv-keg
+    ReTheme Mount
+    -v ${reThemeDir}/:/keg/tap/node_modules/sv-keg/node_modules/re-theme
+    Components Mount
+    -v ${keg-components}/:/keg/tap/node_modules/sv-keg/node_modules/keg-components
+
 */
+
+const dockerError = (message) => {
+  const errorMes = `Can not start docker container. `
+  throw new Error(errorMes + message)
+}
+
+const addVolumeMounts = (cmd, dirs) => {
+  return reduceObj(dirs, (key, path) => (`${cmd} ${path}`), cmd)
+}
+
+const startDocker = (dirs) => {
+  !dirs.tap && dockerError(`Tap directory can not be undefined!`)
+
+  const dockerCmd = addVolumeMounts(`docker run --rm -it`, dirs)
+  
+
+  // -p 10000:10000 \
+  // :local /bin/bash
+
+}
 
 const startTap = (args) => {
   console.log(`--- startTap a cli command ---`)

@@ -3,6 +3,7 @@ module.exports = {
     name: 'tap',
     alias: [ 'taps' ],
     tasks: {
+      build: require('./build'),
       new: require('./new'),
       start: require('./start'),
     },
