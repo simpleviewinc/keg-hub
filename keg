@@ -41,7 +41,7 @@ keg_check_move_directory(){
 keg(){
 
   # Check if reloading the bash portion of the keg cli
-  if [[ "$1" == "reload" || "$1" == "rl" ]]; then
+  if [[ "$1" == "reload" || "$1" == "rl" || "$1" == "src" ]]; then
 
     # Reload this bash script
     echo "Reloading Keg CLI..."
