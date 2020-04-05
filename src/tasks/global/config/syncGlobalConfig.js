@@ -1,5 +1,4 @@
 const { createGlobalConfig } = require('KegUtils/globalConfig')
-const {} = require('KegTerm')
 
 const syncGlobalConfig = (args) => {
   
