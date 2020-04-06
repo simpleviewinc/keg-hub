@@ -3,7 +3,7 @@
     1. Build a docker container for the tap
 */
 
-const { getContainerName, getBuildTags } = require('KegUtils')
+const { getArgument, getBuildTags } = require('KegUtils')
 const { TAP_DOCKER_FILE } = require('KegConst')
 const { spawnCmd } = require('KegProc')
 const path = require('path')
@@ -15,7 +15,7 @@ const path = require('path')
  */
 const buildTap = async (args) => {
   const { command, options, tasks, globalConfig } = args
-  const name = getContainerName(`tap`, options)
+  const name = getArgument({ options, def: `tap` })
   const dockerCmd = `docker build -f ${TAP_DOCKER_FILE} ${ getBuildTags(name, options) } .`
 
   await spawnCmd(

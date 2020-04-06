@@ -24,7 +24,8 @@ const defaultConfig = () => {
         core: path.join(cliParent, 'keg-core'),
         components: path.join(cliParent, 'keg-components'),
         taps: path.join(cliParent, 'taps'),
-      }
+      },
+      taps: { links: {} }
     }
   }
 

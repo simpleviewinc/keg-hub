@@ -66,6 +66,8 @@ class Log {
     isObj(colorMap) && (this.colorMap = { ...this.colorMap, ...colorMap })
   }
 
+  emptyLine = () => console.log('')
+
 }
 
 // Create a Log instance, so we have a singleton through out the application

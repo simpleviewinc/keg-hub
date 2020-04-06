@@ -29,6 +29,11 @@ module.exports = deepFreeze({
   ],
 
   // Global config settings
+  GLOBAL_CONFIG_PATHS: {
+    TAPS: `keg.cli.taps`,
+    TAP_LINKS: `keg.cli.taps.links`,
+  },
+
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
   HELP_ARGS: [
