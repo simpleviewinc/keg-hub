@@ -59,6 +59,9 @@ class Log {
     // Loop the colorMap and build the log method for it
     Object.keys(this.colorMap).map(key => this[key] = logData(this, key))
 
+    // Add the colors module for easy access
+    this.colors = colors
+
   }
 
   // Helper to change the default colors

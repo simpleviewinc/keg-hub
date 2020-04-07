@@ -1,15 +1,9 @@
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount } = require('./getDirsToMount')
-const { getDockerArgs } = require('./getDockerArgs')
+const { addContainerName, addTapMount, getDockerArgs } = require('./getDockerArgs')
 const { getVolumeMounts } = require('./getVolumeMounts')
+const { getBuildArgs } = require('./getBuildArgs')
 
-const getName = (name, dockerCmd='') => {
-  return `${dockerCmd} --name ${name}`
-}
-
-const addTapMount = (location, dockerCmd) => {
-  return `${dockerCmd} -v ${location}:/keg/tap`
-}
 
 /**
  * Creates a docker run command as a string. Adds any needed volume mounts
@@ -21,20 +15,17 @@ const addTapMount = (location, dockerCmd) => {
  *
  * @returns {string} - Built docker build command
  */
-const createBuildCmd = ({ dockerCmd, location, name, tags, version }) => {
+const createBuildCmd = (globalConfig, { dockerCmd, location, name, branch, tags, version }) => {
 
   // Add any tags if needed
   dockerCmd = getBuildTags({ name, tags, version, dockerCmd })
 
-  // TODO: Move these into their own function
-  const gitHubKey = `--build-arg GIT_HUB_KEY=${ process.env.GIT_HUB_KEY }`
-  const git_tap_url = 'https://github.com/simpleviewinc/tap-events-force.git'
-
-  const gitHubUrl = `--build-arg GIT_TAP_URL=${git_tap_url}`
+  // Add the build args for the github key and tap git url
+  dockerCmd = getBuildArgs(globalConfig, { name, branch, dockerCmd })
 
   // Add the location last. This is the location the container will be built from
   return location
-    ? `${dockerCmd} ${gitHubKey} ${gitHubUrl} ${location}`
+    ? `${dockerCmd} ${location}`
     : dockerCmd
 
 }
@@ -49,10 +40,10 @@ const createBuildCmd = ({ dockerCmd, location, name, tags, version }) => {
  *
  * @returns {string} - Built docker run command
  */
-const createRunCmd = (globalConfig, { dockerCmd, img, location, mounts, name }) => {
+const createRunCmd = (globalConfig, { dockerCmd, location, name, branch, img, mounts }) => {
 
   // Get the name for the docker container
-  dockerCmd = getName(name, dockerCmd)
+  dockerCmd = addContainerName(name, dockerCmd)
 
   // Mount the tap location by default
   dockerCmd = addTapMount(location, dockerCmd)
@@ -81,6 +72,7 @@ const createRunCmd = (globalConfig, { dockerCmd, img, location, mounts, name }) 
  */
 const buildDockerCmd = (globalConfig, args) => {
   const {
+    branch,
     cmd,
     envs,
     img,
@@ -97,8 +89,8 @@ const buildDockerCmd = (globalConfig, args) => {
 
   // Add any tags if needed
   return cmd === 'build'
-    ? createBuildCmd({ dockerCmd, location, name, tags, version })
-    : createRunCmd(globalConfig, { dockerCmd, img, location, name, mounts })
+    ? createBuildCmd(globalConfig, { dockerCmd, location, name, branch, tags, version })
+    : createRunCmd(globalConfig, { dockerCmd, location, name, branch, img, mounts })
 
 }
 

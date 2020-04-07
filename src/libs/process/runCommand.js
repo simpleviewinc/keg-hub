@@ -24,7 +24,10 @@ const getExtraArgs = extra => {
  */
 const doSpawnCmd = (...args) => {
   const extra = getExtraArgs(args[1])
-  Logger.info(`Running command: ${args[0]}${extra}`)
+  console.log(
+    Logger.colors.brightCyan(`Running command:`),
+    Logger.colors.brightWhite(`${args[0]}${extra}`)
+  )
 
   return spawnCmd(...args)
 }

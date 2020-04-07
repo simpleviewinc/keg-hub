@@ -42,6 +42,31 @@ const getDockerArgs = (cmd, args, dockerCmd='') => {
 
 }
 
+/**
+ * Adds the name of the container to the dockerCmd
+ * @param {string} name - Name of the container to add to the dockerCmd
+ * @param {string} [dockerCmd=''] - Docker command to add the name to
+ *
+ * @returns {string} - dockerCmd with the name arg added
+ */
+const addContainerName = (name, dockerCmd='') => {
+  return `${dockerCmd} --name ${name}`
+}
+
+/**
+ * Adds location as a mounted volume to the dockerCmd
+ * @param {string} location - Local location of the tap to mount
+ * @param {string} [dockerCmd=''] - Docker command to add the mounted tap to
+ *
+ * @returns {string} - dockerCmd with the mounted tap arg added
+ */
+const addTapMount = (location, dockerCmd) => {
+  return `${dockerCmd} -v ${location}:/keg/tap`
+}
+
+
 module.exports = {
+  addContainerName,
+  addTapMount,
   getDockerArgs
 }

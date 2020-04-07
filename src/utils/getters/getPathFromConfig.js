@@ -1,5 +1,5 @@
 const { get } = require('jsutils')
-const { GLOBAL_CONFIG_FOLDER } = require('KegConst')
+const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_PATHS } = require('KegConst')
 
 /**
  * Gets a path from the stored paths in the globalConfig object
@@ -13,7 +13,7 @@ const getPathFromConfig = (globalConfig, pathName) => {
     // If getting the global config path, just use the constants
     ? GLOBAL_CONFIG_FOLDER
     // Load the global config and get the path from the config
-    : get(globalConfig, `keg.cli.paths.${pathName}`)
+    : get(globalConfig, `${ GLOBAL_CONFIG_PATHS.CLI_PATHS }.${pathName}`)
 }
 
 module.exports = {

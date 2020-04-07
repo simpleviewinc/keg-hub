@@ -1,4 +1,4 @@
-const { deepFreeze } = require('jsutils')
+const { deepFreeze, keyMap } = require('jsutils')
 const homeDir = require('os').homedir()
 const path = require('path')
 
@@ -17,6 +17,11 @@ if(GLOBAL_CONFIG_PATH){
 
 module.exports = deepFreeze({
 
+  BUILD_ARGS: keyMap([
+    'GIT_KEY',
+    'GIT_TAP_URL',
+  ], true),
+
   // Tasks settings
   TASK_REQURIED: [
     'prefix',
@@ -27,6 +32,9 @@ module.exports = deepFreeze({
 
   // Global config settings
   GLOBAL_CONFIG_PATHS: {
+    CLI: 'keg.cli',
+    CLI_PATHS: 'keg.cli.paths',
+    GIT: 'keg.cli.git',
     TAPS: `keg.cli.taps`,
     TAP_LINKS: `keg.cli.taps.links`,
   },

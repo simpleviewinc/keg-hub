@@ -1,4 +1,4 @@
-const { isArr, isStr } = require('jsutils')
+const { isArr, isStr, isObj } = require('jsutils')
 
 /**
  * Searches for a argument in the options array, and gets it's value
@@ -13,6 +13,7 @@ const { isArr, isStr } = require('jsutils')
 const getArgument = ({ options, long, short, def }) => {
   return (isStr(long) || isStr(short)) && isArr(options) &&
     options.reduce((argument, option, index) => {
+
       return argument
         ? argument
         : option === long ||
@@ -20,13 +21,38 @@ const getArgument = ({ options, long, short, def }) => {
           option === short ||
           option === `-${short}`
             ? options[index + 1]
-            : option.indexOf(`${long}=`) || option.indexOf(`${short}=`)
+            : option.indexOf(`${long}=`) === 0 || option.indexOf(`${short}=`) === 0
               ? option.split('=')[1]
               : argument
 
     }, false) || def
 }
 
+/**
+ * Maps all passed in options to the cmdOpts based on keys
+ * @param {Array} params.options - items passed from the command line
+ * @param {Object} params.task..options - Options accepted by the command being run
+ * @param {Object} [defaults={}] - Default values to use if the key does not exist
+ *
+ * @returns {Object} - Mapped arguments object
+ */
+const getArguments = ({ options, task }, defaults={}) => {
+
+  return isObj(task.options) && Object.keys(task.options)
+    .reduce((args, key) => {
+      const value = getArgument({
+        options,
+        long: key,
+        short: key[0],
+        def: defaults[key]
+      })
+
+      if(value) args[key] = value
+
+      return args
+    }, {})
+}
+
 module.exports = {
-  getArgument
+  getArguments
 }

@@ -3,10 +3,10 @@ FROM node:12.15.0
 RUN apt-get install git openssh-client
 WORKDIR /keg
 
-# Add the GIT_HUB_KEY arg, and set value to invalid
-# This expects --build-arg GIT_HUB_KEY=key_value to be set
+# Add the GIT_KEY arg, and set value to invalid
+# This expects --build-arg GIT_KEY=key_value to be set
 # Which will override the default invalid value, and allow updating git
-ARG GIT_HUB_KEY=INVALID
+ARG GIT_KEY=INVALID
 
 # Add the GIT_TAP_URL arg, and set value to invalid
 # This expects --build-arg GIT_TAP_URL=key_value to be set
@@ -14,7 +14,7 @@ ARG GIT_HUB_KEY=INVALID
 ARG GIT_TAP_URL=INVALID
 
 # Update git calls to github to include the key so private repos can be pulled
-RUN git config --global url.https://$GIT_HUB_KEY@github.com/.insteadOf https://github.com/
+RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/
 
 # Pull down the tap locally
 RUN git clone $GIT_TAP_URL ./tap

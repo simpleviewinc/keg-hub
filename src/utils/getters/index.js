@@ -1,7 +1,9 @@
 
 module.exports = {
-  ...require('./getArgument'),
+  ...require('./getArguments'),
   ...require('./getConfig'),
+  ...require('./getGitKey'),
+  ...require('./getGitUrl'),
   ...require('./getPathFromConfig'),
   ...require('./getTapPath'),
   ...require('./getTask'),

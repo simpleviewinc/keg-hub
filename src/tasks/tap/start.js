@@ -1,6 +1,6 @@
 const { reduceObj } = require('jsutils')
 const { buildDockerCmd, getVolumeMounts, dockerError } = require('KegDocker')
-const { getArgument, getTapPath } = require('KegUtils')
+const { getArguments, getTapPath } = require('KegUtils')
 const { spawnCmd, executeCmd } = require('KegProc')
 
 /*
@@ -31,9 +31,7 @@ const { spawnCmd, executeCmd } = require('KegProc')
 const startTap = async (args) => {
   const { command, options, tasks, globalConfig } = args
 
-  const name = getArgument({ options, long: 'name', short: 'n' })
-  const env = getArgument({ options, long: 'env', short: 'e' })
-
+  const { name, env } = getArguments(args)
   const location = getTapPath(globalConfig, name)
   const { version } = require(`${location}/package.json`)
   
@@ -57,6 +55,6 @@ module.exports = {
   example: 'keg tap start <options>',
   options: {
     name: 'Name of the tap to run. Must be a tap linked in the cli global config',
-    env: 'Environment to build the Docker image for. Gets added as a tag to the image.'
+    env: 'Environment to start the Docker container in'
   }
 }
