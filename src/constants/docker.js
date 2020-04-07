@@ -8,7 +8,6 @@ module.exports = deepFreeze({
   DOCKER: {
     RUN: {
       VALUES: {
-        file: `-f ${dockerFile}`,
         network: '--network=host',
         clean: '--rm',
         attached: '-it',
@@ -17,7 +16,6 @@ module.exports = deepFreeze({
       DEFAULTS: {
         attached: true,
         clean: true,
-        file: true,
         network: true,
       }
     },

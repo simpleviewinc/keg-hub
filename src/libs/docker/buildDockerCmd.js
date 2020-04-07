@@ -38,7 +38,7 @@ const buildDockerCmd = args => {
   dockerCmd = mounts ? getVolumeMounts(mounts, dockerCmd) : dockerCmd
 
   // Add any tags if needed
-  dockerCmd = name && tags ? getBuildTags(name, tags, dockerCmd) : dockerCmd
+  dockerCmd = cmd === 'build' ? getBuildTags(name, tags, dockerCmd) : dockerCmd
   
   // Add the location last. This is the location the container will be built from
   return location

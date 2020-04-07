@@ -1,13 +1,6 @@
-/*
-  * What buildTap method should do
-    1. Build a docker container for the tap
-*/
-
 const { getArgument, getTapPath } = require('KegUtils')
-const { buildDockerCmd, getBuildTags } = require('KegDocker')
-const { SSH_KEY_PATH } = require('KegConst')
+const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd, executeCmd } = require('KegProc')
-const path = require('path')
 
 /**
  * Builds a docker container for a tap so it can be run
@@ -19,12 +12,13 @@ const buildTap = async (args) => {
 
   const name = getArgument({ options, long: 'name', short: 'n' })
   const location = getTapPath(globalConfig, name)
+  const { version } = require(`${location}/package.json`)
 
   const dockerCmd = buildDockerCmd({
     name,
     location,
     cmd: `build`,
-    tags: options,
+    tags: options.concat([ '-t', version ]),
   })
 
   await spawnCmd(dockerCmd, location)

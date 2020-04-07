@@ -14,7 +14,7 @@ const getBuildTags = (name, options, dockerCmd='') => {
   const tags = isArr(options) && options
     .reduce((tags, option, index) => {
 
-      option === '-t' || option === 'tag'
+      option === '-t' || option === '--tag' || option === 'tag'
         ? tags.push(options[index + 1])
         : option.indexOf('t=') === 0 ||
           option.indexOf('tag=') === 0 ||

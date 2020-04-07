@@ -45,6 +45,7 @@
     "KegLibs": "src/libs",
     "KegLog": "src/libs/terminal/logger",
     "KegProc": "src/libs/process",
+    "KegPackage": "package.json",
     "KegQuestions": "src/libs/questions",
     "KegRoot": ".",
     "KegRunTask": "src/runTask",

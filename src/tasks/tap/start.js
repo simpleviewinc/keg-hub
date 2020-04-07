@@ -1,5 +1,7 @@
 const { reduceObj } = require('jsutils')
-const { getVolumeMounts, dockerError } = require('KegDocker')
+const { buildDockerCmd, getVolumeMounts, dockerError } = require('KegDocker')
+const { getArgument, getTapPath } = require('KegUtils')
+const { spawnCmd, executeCmd } = require('KegProc')
 
 /*
   * What startTap method should do
@@ -27,19 +29,21 @@ const { getVolumeMounts, dockerError } = require('KegDocker')
 
 */
 
-const startDocker = (dirs) => {
-  !dirs.tap && dockerError(`Tap directory can not be undefined!`)
 
-  const dockerCmd = getVolumeMounts(`docker run --rm -it --network=host`, dirs)
+const startTap = async (args) => {
+  const { command, options, tasks, globalConfig } = args
+
+  const name = getArgument({ options, long: 'name', short: 'n' })
+  const location = getTapPath(globalConfig, name)
+  const { version } = require(`${location}/package.json`)
   
+  const dockerCmd = buildDockerCmd({
+    name,
+    cmd: `run`,
+  })
 
-  // -p 10000:10000 \
-  // :local /bin/bash
+  await spawnCmd(`${dockerCmd.trim()} ${name}:${version}`, location)
 
-}
-
-const startTap = (args) => {
-  console.log(`--- startTap a cli command ---`)
 }
 
 module.exports = {
@@ -47,5 +51,8 @@ module.exports = {
   alias: [ 'st', 'run' ],
   action: startTap,
   description: `Runs a tap in a docker container`,
-  example: 'keg tap start <options>'
+  example: 'keg tap start <options>',
+  options: {
+    name: 'Name of the tap to run. Must be a tap linked in the cli global config',
+  }
 }
