@@ -11,14 +11,17 @@ const buildTap = async (args) => {
   const { command, options, tasks, globalConfig } = args
 
   const name = getArgument({ options, long: 'name', short: 'n' })
+  const env = getArgument({ options, long: 'env', short: 'e' })
+
   const location = getTapPath(globalConfig, name)
   const { version } = require(`${location}/package.json`)
 
-  const dockerCmd = buildDockerCmd({
+  const dockerCmd = buildDockerCmd(globalConfig, {
     name,
     location,
+    version,
     cmd: `build`,
-    tags: options.concat([ '-t', version ]),
+    tags: options,
   })
 
   await spawnCmd(dockerCmd, location)
@@ -30,5 +33,9 @@ module.exports = {
   alias: [ 'bld', 'make' ],
   action: buildTap,
   description: `Builds a taps docker container`,
-  example: 'keg tap build <options>'
+  example: 'keg tap build <options>',
+  options: {
+    name: 'Name of the tap to build a Docker image for',
+    env: 'Environment to build the Docker image for. Gets added as a tag to the image.'
+  }
 }

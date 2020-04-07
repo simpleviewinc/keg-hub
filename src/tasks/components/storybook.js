@@ -1,6 +1,6 @@
 const { deepMerge } = require('jsutils')
 const { spawnCmd } = require('KegProc')
-const { getConfigPath } = require('KegUtils')
+const { getPathFromConfig } = require('KegUtils')
 
 const storybook = async args => {
   const { command, options, tasks, globalConfig } = args
@@ -27,7 +27,7 @@ const storybook = async args => {
 
   await spawnCmd(
     `yarn ${runCmd}${ sbOpts.length ? ' ' + sbOpts.join(' ') : '' }`,
-    getConfigPath(globalConfig, 'components')
+    getPathFromConfig(globalConfig, 'components')
   )
 
 }

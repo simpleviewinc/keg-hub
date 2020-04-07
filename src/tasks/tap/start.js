@@ -28,21 +28,24 @@ const { spawnCmd, executeCmd } = require('KegProc')
     -v ${keg-components}/:/keg/tap/node_modules/sv-keg/node_modules/keg-components
 
 */
-
-
 const startTap = async (args) => {
   const { command, options, tasks, globalConfig } = args
 
   const name = getArgument({ options, long: 'name', short: 'n' })
+  const env = getArgument({ options, long: 'env', short: 'e' })
+
   const location = getTapPath(globalConfig, name)
   const { version } = require(`${location}/package.json`)
   
-  const dockerCmd = buildDockerCmd({
+  const dockerCmd = buildDockerCmd(globalConfig, {
     name,
+    location,
     cmd: `run`,
+    img: `${name}:${version}`,
+    mounts: [ 'core', 'components', 're-theme' ]
   })
 
-  await spawnCmd(`${dockerCmd.trim()} ${name}:${version}`, location)
+  await spawnCmd(dockerCmd, location)
 
 }
 
@@ -54,5 +57,6 @@ module.exports = {
   example: 'keg tap start <options>',
   options: {
     name: 'Name of the tap to run. Must be a tap linked in the cli global config',
+    env: 'Environment to build the Docker image for. Gets added as a tag to the image.'
   }
 }

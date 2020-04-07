@@ -1,21 +1,33 @@
 FROM node:12.15.0
 
 RUN apt-get install git openssh-client
+WORKDIR /keg
 
+# Add the GIT_HUB_KEY arg, and set value to invalid
+# This expects --build-arg GIT_HUB_KEY=key_value to be set
+# Which will override the default invalid value, and allow updating git
+ARG GIT_HUB_KEY=INVALID
+
+# Add the GIT_TAP_URL arg, and set value to invalid
+# This expects --build-arg GIT_TAP_URL=key_value to be set
+# URL of the tap to clone from github
+ARG GIT_TAP_URL=INVALID
+
+# Update git calls to github to include the key so private repos can be pulled
+RUN git config --global url.https://$GIT_HUB_KEY@github.com/.insteadOf https://github.com/
+
+# Pull down the tap locally
+RUN git clone $GIT_TAP_URL ./tap
+
+# Navigate to the taps directory
 WORKDIR /keg/tap
 
-RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+# Copy over the package.json, and yarn.lock files
+COPY package.json /keg/tap/package.json
+COPY yarn.lock /keg/tap/yarn.lock
 
-RUN touch start.sh
-RUN ls -la >> start.sh
+# Install the dependecies
+RUN yarn setup
 
-# COPY package.json /keg/tap/package.json
-# COPY yarn.lock /keg/tap/yarn.lock
-# RUN yarn install
-# To run the keg without a tap
-# docker run --rm -it \
-# -v $PWD/:/keg/keg-core \
-# -v $PWD/package.json:/keg/keg-core/package.json \
-# keg-core:local /bin/bash
-
-CMD [ "/bin/bash", "start.sh" ]
+# Run 
+CMD [ "yarn", "web" ]

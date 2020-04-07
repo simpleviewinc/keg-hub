@@ -2,7 +2,7 @@
 module.exports = {
   ...require('./getArgument'),
   ...require('./getConfig'),
-  ...require('./getConfigPath'),
+  ...require('./getPathFromConfig'),
   ...require('./getTapPath'),
   ...require('./getTask'),
 }

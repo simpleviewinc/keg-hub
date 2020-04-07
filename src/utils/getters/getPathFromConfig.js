@@ -8,7 +8,7 @@ const { GLOBAL_CONFIG_FOLDER } = require('KegConst')
  *
  * @returns {string} - Found path
  */
-const getConfigPath = (globalConfig, pathName) => {
+const getPathFromConfig = (globalConfig, pathName) => {
   return pathName === 'config'
     // If getting the global config path, just use the constants
     ? GLOBAL_CONFIG_FOLDER
@@ -17,5 +17,5 @@ const getConfigPath = (globalConfig, pathName) => {
 }
 
 module.exports = {
-  getConfigPath
+  getPathFromConfig
 }

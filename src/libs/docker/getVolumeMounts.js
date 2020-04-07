@@ -1,5 +1,6 @@
 const { reduceObj, isStr } = require('jsutils')
 
+
 /**
  * Formats volume mounts into a docker string format from an object
  * @param {Object} dirs - Key/Value pairs of folder paths to mount
@@ -8,10 +9,10 @@ const { reduceObj, isStr } = require('jsutils')
  * @returns {string} - Volume mounts joined as a docker formatted string
  */
 const getVolumeMounts = (dirs, dockerCmd='') => {
-  return reduceObj(dirs, (local, mount) => {
+  return reduceObj(dirs, (local, mount, joinedCmd) => {
     return isStr(mount)
-      ? `${dockerCmd} -v ${local}:${mount}`
-      : dockerCmd
+      ? `${joinedCmd} -v ${local}:${mount}`
+      : joinedCmd
   }, dockerCmd)
 }
 
