@@ -22,6 +22,9 @@ RUN git clone $GIT_TAP_URL ./tap
 # Navigate to the taps directory
 WORKDIR /keg/tap
 
+# Install the expo-cli globaly to it can be accessed from any where
+RUN yarn global add expo-cli
+
 # Copy over the package.json, and yarn.lock files
 COPY package.json /keg/tap/package.json
 COPY yarn.lock /keg/tap/yarn.lock
