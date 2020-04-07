@@ -5,10 +5,11 @@ const { isArr } = require('jsutils')
  * Formats found tags option into docker format
  * @param {string} name - Name of the container being built
  * @param {Array} options - Options passed from the command line
+ * @param {string} [dockerCmd=''] - Docker command to add mounts to
  *
  * @returns {string} - Formatted string of tags for docker
  */
-const getBuildTags = (name, options) => {
+const getBuildTags = (name, options, dockerCmd='') => {
 
   const tags = isArr(options) && options
     .reduce((tags, option, index) => {
@@ -28,7 +29,9 @@ const getBuildTags = (name, options) => {
       return tags
     }, [])
 
-  return tags && tags.length ? `-t ${name}:` + tags.join(` -t ${name}:`).trim() : ''
+  return tags && tags.length
+    ? `${dockerCmd} -t ${name}:` + tags.join(` -t ${name}:`).trim()
+    : dockerCmd
 
 }
 

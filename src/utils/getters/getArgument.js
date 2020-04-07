@@ -16,7 +16,7 @@ const getArgument = ({ options, long, short, def }) => {
       return argument
         ? argument
         : option === long ||
-          option === `-${long}` ||
+          option === `--${long}` ||
           option === short ||
           option === `-${short}`
             ? options[index + 1]

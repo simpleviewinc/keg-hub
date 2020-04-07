@@ -1,13 +1,19 @@
 FROM node:12.15.0
 
-COPY package.json /keg/package.json
-RUN cd /keg && yarn install
+RUN apt-get install git openssh-client
 
-WORKDIR /keg/keg-core
+WORKDIR /keg/tap
+
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+# COPY package.json /keg/tap/package.json
+# COPY yarn.lock /keg/tap/yarn.lock
+# RUN yarn install
+
+
 
 # To run the keg without a tap
 # docker run --rm -it \
 # -v $PWD/:/keg/keg-core \
 # -v $PWD/package.json:/keg/keg-core/package.json \
-# -p 10000:10000 \
 # keg-core:local /bin/bash

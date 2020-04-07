@@ -1,9 +1,9 @@
 const { deepFreeze } = require('jsutils')
 const homeDir = require('os').homedir()
 const path = require('path')
-const cliRootDir = path.join(__dirname, '../../')
 
 const { GLOBAL_CONFIG_PATH } = process.env
+
 // The default global config path
 let GLOBAL_CONFIG_FOLDER = path.join(homeDir, '.kegConfig')
 let GLOBAL_CONFIG_FILE = 'cli.config'
@@ -16,9 +16,6 @@ if(GLOBAL_CONFIG_PATH){
 }
 
 module.exports = deepFreeze({
-
-  // Docker Settings
-  TAP_DOCKER_FILE: path.join(cliRootDir, 'scripts/docker/Dockerfile'),
 
   // Tasks settings
   TASK_REQURIED: [
@@ -33,6 +30,8 @@ module.exports = deepFreeze({
     TAPS: `keg.cli.taps`,
     TAP_LINKS: `keg.cli.taps.links`,
   },
+
+  SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
 
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,

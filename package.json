@@ -40,15 +40,17 @@
   },
   "devDependencies": {},
   "_moduleAliases": {
-    "KegRoot": ".",
     "KegConst": "src/constants",
+    "KegDocker": "src/libs/docker",
     "KegLibs": "src/libs",
-    "KegProc": "src/libs/process",
-    "KegSrc": "src",
-    "KegRunTask": "src/runTask",
-    "KegTerm": "src/libs/terminal",
-    "KegQuestions": "src/libs/questions",
     "KegLog": "src/libs/terminal/logger",
+    "KegProc": "src/libs/process",
+    "KegQuestions": "src/libs/questions",
+    "KegRoot": ".",
+    "KegRunTask": "src/runTask",
+    "KegScripts": "scripts",
+    "KegSrc": "src",
+    "KegTerm": "src/libs/terminal",
     "KegTasks": "src/tasks",
     "KegUtils": "src/utils/"
   }

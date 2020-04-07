@@ -3,7 +3,7 @@ const inquirer = require('inquirer')
 const { get, set, isObj } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')
-const { getArgument, addGlobalConfigProp } = require('KegUtils')
+const { getArgument, addGlobalConfigProp, getTapPath } = require('KegUtils')
 
 /**
  * Gets the arguments from the passed in options array
@@ -28,7 +28,8 @@ const getArgs = options => {
  * @returns {boolean} - If the link should be added
  */
 const ensureAddLink = async (globalConfig, linkPath, tapName) => {
-  const exists = get(globalConfig, linkPath)
+
+  const exists = getTapPath(globalConfig, tapName)
 
   return exists
     ? ask.confirm(`Overwrite tap link '${tapName}' => '${exists}'?`)
@@ -70,9 +71,9 @@ const linkTap = async args => {
   
   const { tapName, tapPath } = getArgs(options)
 
+  const addLink = await ensureAddLink(globalConfig, tapName)
+
   const linkPath = `${GLOBAL_CONFIG_PATHS.TAP_LINKS}.${tapName}`
-  
-  const addLink = await ensureAddLink(globalConfig, linkPath, tapName)
 
   addLink
     ? addTapLink(globalConfig, linkPath, tapName, tapPath)

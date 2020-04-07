@@ -1,4 +1,5 @@
 const { reduceObj } = require('jsutils')
+const { getVolumeMounts, dockerError } = require('KegDocker')
 
 /*
   * What startTap method should do
@@ -26,19 +27,10 @@ const { reduceObj } = require('jsutils')
 
 */
 
-const dockerError = (message) => {
-  const errorMes = `Can not start docker container. `
-  throw new Error(errorMes + message)
-}
-
-const addVolumeMounts = (cmd, dirs) => {
-  return reduceObj(dirs, (key, path) => (`${cmd} ${path}`), cmd)
-}
-
 const startDocker = (dirs) => {
   !dirs.tap && dockerError(`Tap directory can not be undefined!`)
 
-  const dockerCmd = addVolumeMounts(`docker run --rm -it`, dirs)
+  const dockerCmd = getVolumeMounts(`docker run --rm -it --network=host`, dirs)
   
 
   // -p 10000:10000 \
