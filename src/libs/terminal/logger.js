@@ -52,6 +52,7 @@ class Log {
       cyan: 'brightCyan',
       magenta: 'brightMagenta',
       blue: 'brightBlue',
+      gray: 'gray'
     }
 
     this.default = get(props, 'default', 'log')
@@ -69,7 +70,7 @@ class Log {
     isObj(colorMap) && (this.colorMap = { ...this.colorMap, ...colorMap })
   }
 
-  emptyLine = () => console.log('')
+  empty = () => console.log('')
 
 }
 

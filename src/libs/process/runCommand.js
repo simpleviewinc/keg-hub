@@ -1,6 +1,6 @@
 const { isObj, isArr } = require('jsutils')
 const { spawnCmd, asyncCmd } = require('spawn-cmd')
-const { Logger } = require('../terminal/logger')
+const { Logger } = require('KegLog')
 
 /**
  * Gets any extra arguments passed to the spawned command so they can be logged

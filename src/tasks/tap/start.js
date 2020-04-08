@@ -1,6 +1,6 @@
 const { reduceObj } = require('jsutils')
-const { buildDockerCmd, getVolumeMounts, dockerError } = require('KegDocker')
-const { getArguments, getTapPath } = require('KegUtils')
+const { buildDockerCmd, getVolumeMounts } = require('KegDocker')
+const { getArguments, getTapPath, logVirtualIP } = require('KegUtils')
 const { spawnCmd, executeCmd } = require('KegProc')
 
 /*
@@ -29,6 +29,7 @@ const { spawnCmd, executeCmd } = require('KegProc')
 
 */
 const startTap = async (args) => {
+
   const { command, options, tasks, globalConfig } = args
 
   const { name, env } = getArguments(args)
@@ -42,6 +43,8 @@ const startTap = async (args) => {
     img: `${name}:${version}`,
     mounts: [ 'core', 'components', 're-theme' ]
   })
+
+  await logVirtualIP()
 
   await spawnCmd(dockerCmd, location)
 

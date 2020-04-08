@@ -1,39 +1,60 @@
 #!/bin/bash
 
-# Check if homebrew is installed
+
+keg_message(){
+  echo "[ KEG CLI ] $@" >&2
+  return
+}
+
+
+# Check and install homebrew
 mac_brew_install(){
   # Check for brew install
   if [[ -x "$(command -v brew)" ]]; then
-    echo "Brew is installed"
+    keg_message "Brew is installed"
   else
     #  Install brew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 }
 
-# Check if docker is installed
+# Check and install docker
 mac_docker_install(){
 
   if [[ -x "$(command -v docker)" ]]; then
-    echo "Docker is installed"
+    keg_message "Docker is installed"
   else
-    brew cask install docker
+    brew install docker
   fi
 
 }
 
+# Setup docker-machine to use virtualbox
+# Allows port-forwarding on mac
 mac_setup_docker_machine(){
-  zr_message "Setting up docker-machine"
-  docker-machine create --driver virtualbox default
+  keg_message "Setting up docker-machine"
+
+  # Ensure docker-machine starts on launch
+  brew services start docker-machine
+
+  # Setup docker-machine to use the virtualbox drive
+  # docker-machine create --driver virtualbox default
+  # Create the docker VM with virtualbox, and force the IP address to be consistent
+  docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.99.100/32" default
+
+  # Save as the default environment
   docker-machine env default
+
+  # Execute the default environment in place for the active terminal
   eval "$(docker-machine env default)"
 }
 
+# Check and install virtualbox
 mac_setup_virtualbox(){
 
   # Check for virtualbox install
   if [[ -x "$(command -v VBoxManage)" ]]; then
-    zr_message "Virtualbox is installed"
+    keg_message "Virtualbox is installed"
   else
     brew cask install virtualbox
     mac_setup_docker_machine
@@ -41,18 +62,43 @@ mac_setup_virtualbox(){
 
 }
 
+# Check and install nvm and node
+mac_setup_nvm_node(){
 
-# Check if yarn is installed
+  if [[ -x "$(command -v nvm)" ]]; then
+    keg_message "NVM already installed!"
+  else
+    keg_message "Installing NVM"
+
+    # Download and run the bash install script
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+
+    # Sets up NVM to be used right away
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    # Install the node version
+    nvm install 12.15.0
+  fi
+
+}
+
+# Check and install yarn
 mac_setup_yarn(){
-  
+
   # Check for yarn install
   if [[ -x "$(command -v yarn)" ]]; then
-    zr_message "yarn is installed"
+    keg_message "yarn is installed"
   else
     curl -sL https://dl.yarnpkg.com/rpm/yarn.repo -o /etc/yum.repos.d/yarn.repo
     sudo yum -y install yarn
   fi
   
+}
+
+keg_install_cli(){
+  echo "TODO!!!"
 }
 
 keg_setup(){
@@ -72,9 +118,9 @@ keg_setup(){
   # Setup and install brew
   # To run:
   # bash setup.sh brew
-  #  * Runs only the docker portion of this script
+  #  * Runs only the brew portion of this script
   if [[ $INIT_SETUP || "$SETUP_TYPE" == "brew" ]]; then
-    echo "Checking for brew install..."
+    keg_message "Checking for brew install..."
     mac_brew_install "${@:2}"
   fi
 
@@ -83,27 +129,48 @@ keg_setup(){
   # bash setup.sh docker
   #  * Runs only the docker portion of this script
   if [[ $INIT_SETUP || "$SETUP_TYPE" == "docker" ]]; then
-    echo "Checking for docker install..."
+    keg_message "Checking for docker install..."
     mac_docker_install "${@:2}"
   fi
 
   # Setup and install virtualbox
   # To run:
   # bash setup.sh virtualbox
-  #  * Runs only the docker portion of this script
+  #  * Runs only the virtualbox portion of this script
   if [[ $INIT_SETUP || "$SETUP_TYPE" == "virtualbox" ]]; then
-    echo "Checking for virtualbox install..."
+    keg_message "Checking for virtualbox install..."
     mac_setup_virtualbox "${@:2}"
+  fi
+
+  # Setup and install node
+  # To run:
+  # bash setup.sh node
+  #  * Runs only the node portion of this script
+  if [[ $INIT_SETUP || "$SETUP_TYPE" == "node" ]]; then
+    keg_message "Checking for node install..."
+    mac_setup_nvm_node "${@:2}"
   fi
 
   # Setup and install yarn
   # To run:
   # bash setup.sh yarn
-  #  * Runs only the docker portion of this script
+  #  * Runs only the yarn portion of this script
   if [[ $INIT_SETUP || "$SETUP_TYPE" == "yarn" ]]; then
-    echo "Checking for yarn install..."
+    keg_message "Checking for yarn install..."
     mac_setup_yarn "${@:2}"
   fi
 
+  # Setup and install cli
+  # To run:
+  # bash setup.sh cli
+  #  * Runs only the keg cli portion of this script
+  if [[ $INIT_SETUP || "$SETUP_TYPE" == "cli" ]]; then
+    keg_message "Checking keg cli install..."
+    keg_install_cli "${@:2}"
+  fi
+
+  
+
+  keg_message "Keg CLI setup complete!"
 
 }

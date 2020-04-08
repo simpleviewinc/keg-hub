@@ -9,12 +9,13 @@ module.exports = deepFreeze({
   DOCKER: {
     RUN: {
       VALUES: {
-        network: '--network=host',
+        port: '-p 80:19006',
         clean: '--rm',
         attached: '-it',
-        detached: '-d'
+        detached: '-d',
       },
       DEFAULTS: {
+        port: true,
         attached: true,
         clean: true,
         network: true,

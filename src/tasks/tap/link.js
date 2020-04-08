@@ -58,7 +58,7 @@ const addTapLink = (globalConfig, linkPath, tapName, tapPath) => {
   )
 
   Logger.success(`Successfully linked tap '${tapName}' => '${tapPath}'`)
-  Logger.emptyLine()
+  Logger.empty()
 
 }
 
@@ -83,7 +83,7 @@ const linkTap = async args => {
   // Check if we should add the link, or log that the link was canceled!
   addLink
     ? addTapLink(globalConfig, linkPath, tapName, tapPath)
-    : Logger.info(`Tap link canceled!`) || Logger.emptyLine()
+    : Logger.info(`Tap link canceled!`) || Logger.empty()
 
 }
 
