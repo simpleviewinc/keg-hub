@@ -1,6 +1,8 @@
-const { reduceObj, isArr } = require('jsutils')
+const { reduceObj, isArr, get } = require('jsutils')
 const { getPathFromConfig } = require('KegUtils')
 const { DOCKER } = require('KegConst')
+
+const volPaths = get(DOCKER, 'VOLUMES.PATHS', {})
 
 /**
  * Gets the mount paths for mounting local volumes to the docker container
@@ -12,8 +14,8 @@ const { DOCKER } = require('KegConst')
 const getDirsToMount = (globalConfig, mounts) => {
   return isArr(mounts) && mounts.reduce((dirs, key) => {
 
-    const localPath = DOCKER.MOUNT_PATHS[key] && getPathFromConfig(globalConfig, key)
-    localPath && ( dirs[localPath] = DOCKER.MOUNT_PATHS[key] )
+    const localPath = volPaths[key] && getPathFromConfig(globalConfig, key)
+    localPath && ( dirs[localPath] = volPaths[key] )
 
     return dirs
   }, {})

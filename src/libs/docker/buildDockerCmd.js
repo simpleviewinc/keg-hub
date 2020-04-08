@@ -4,7 +4,6 @@ const { addContainerName, addTapMount, getDockerArgs } = require('./getDockerArg
 const { getVolumeMounts } = require('./getVolumeMounts')
 const { getBuildArgs } = require('./getBuildArgs')
 
-
 /**
  * Creates a docker run command as a string. Adds any needed volume mounts
  * @param {Object} globalConfig - Global config object for the keg-cli
@@ -74,6 +73,7 @@ const buildDockerCmd = (globalConfig, args) => {
   const {
     branch,
     cmd,
+    docker='',
     envs,
     img,
     location,
@@ -85,7 +85,7 @@ const buildDockerCmd = (globalConfig, args) => {
   } = args
 
   // Get the default docker arguments
-  let dockerCmd = getDockerArgs(cmd, dockerOpts, `docker ${cmd}`)
+  let dockerCmd = getDockerArgs(cmd, dockerOpts, `docker ${cmd} ${docker}`.trim())
 
   // Add any tags if needed
   return cmd === 'build'

@@ -1,5 +1,21 @@
 const { isArr, isStr, isObj } = require('jsutils')
 
+
+/**
+ * Maps the env arg value shortcut to it's actual value
+ * @param {string} value - Value to map shortcut to full name
+ *
+ * @returns {string} - Full env value if found or the original value
+ */
+const mapEnvArg = value => {
+  if(!value || value === 'dev' || value === 'd') return 'development'
+  if(value === 'qa' || value === 'q') return 'qa'
+  if(value === 'st' || value === 's') return 'staging'
+  if(value === 'prod' || value === 'p') return 'production'
+
+  return value
+}
+
 /**
  * Searches for a argument in the options array, and gets it's value
  * @param {Object} params - Contains the data to be searched
@@ -46,8 +62,10 @@ const getArguments = ({ options, task }, defaults={}) => {
         short: key[0],
         def: defaults[key]
       })
-
-      if(value) args[key] = value
+    
+      key === 'env'
+        ? ( args[key] = mapEnvArg(value) )
+        : value && ( args[key] = value )
 
       return args
     }, {})

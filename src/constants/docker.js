@@ -31,11 +31,18 @@ module.exports = deepFreeze({
         file: true,
       }
     },
-    MOUNT_PATHS: {
-      core: corePath,
-      components: `${corePath}/node_modules/keg-components`,
-      resolver: `${corePath}/node_modules/keg-components`,
-      're-theme': `${corePath}/node_modules/re-theme`,
+    VOLUMES: {
+      PATHS: {
+        core: corePath,
+        components: `${corePath}/node_modules/keg-components`,
+        resolver: `${corePath}/node_modules/keg-components`,
+        're-theme': `${corePath}/node_modules/re-theme`,
+      },
+      DEV_DEFAULTS: [
+        'core',
+        'components',
+        're-theme'
+      ]
     }
   }
 })

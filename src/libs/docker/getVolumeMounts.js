@@ -1,5 +1,5 @@
 const { reduceObj, isStr } = require('jsutils')
-
+const fs = require('fs')
 
 /**
  * Formats volume mounts into a docker string format from an object
@@ -10,7 +10,7 @@ const { reduceObj, isStr } = require('jsutils')
  */
 const getVolumeMounts = (dirs, dockerCmd='') => {
   return reduceObj(dirs, (local, mount, joinedCmd) => {
-    return isStr(mount)
+    return fs.existsSync(local) && isStr(mount)
       ? `${joinedCmd} -v ${local}:${mount}`
       : joinedCmd
   }, dockerCmd)
