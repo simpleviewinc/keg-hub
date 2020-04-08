@@ -852,7 +852,7 @@ var buildStyles$1 = function buildStyles(style, styles, theme, type) {
     wrapper: wrapper
   };
 };
-var ImageWrapper = function ImageWrapper(props) {
+var ImageWrapper = forwardRef(function (props, ref) {
   var theme = useTheme();
   var _useState = useState(true),
       _useState2 = _slicedToArray(_useState, 2),
@@ -864,13 +864,14 @@ var ImageWrapper = function ImageWrapper(props) {
       isWeb = props.isWeb,
       onClick = props.onClick,
       onPress = props.onPress,
-      ref = props.ref,
       src = props.src,
       source = props.source,
       style = props.style,
       styles = props.styles,
       type = props.type,
-      attrs = _objectWithoutProperties(props, ["alt", "children", "Element", "isWeb", "onClick", "onPress", "ref", "src", "source", "style", "styles", "type"]);
+      _props$useLoading = props.useLoading,
+      useLoading = _props$useLoading === void 0 ? true : _props$useLoading,
+      attrs = _objectWithoutProperties(props, ["alt", "children", "Element", "isWeb", "onClick", "onPress", "src", "source", "style", "styles", "type", "useLoading"]);
   var builtStyles = buildStyles$1(style, styles || {}, theme, type || 'default');
   var _useThemeHover = useThemeHover(builtStyles.loaded, builtStyles.hover, {
     ref: ref
@@ -881,7 +882,7 @@ var ImageWrapper = function ImageWrapper(props) {
       setStyle = _useThemeHover2[2];
   return React.createElement(View, {
     style: builtStyles.wrapper
-  }, loading && React.createElement(Loading, {
+  }, loading && useLoading && React.createElement(Loading, {
     type: 'image',
     style: builtStyles.loadingComp
   }), React.createElement(Element, _extends({
@@ -890,17 +891,16 @@ var ImageWrapper = function ImageWrapper(props) {
     alt: alt,
     style: loading ? builtStyles.loading : useStyle
   }, getPressHandler(isWeb, onClick, onPress), getImgSrc(isWeb, src, source), getOnLoad(isWeb, onLoadEvent(setLoading, props, setStyle, builtStyles.loaded)))));
-};
+});
 ImageWrapper.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
   src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  style: PropTypes.object,
-  ref: PropTypes.object
+  style: PropTypes.object
 };
 
-var Element$2 = React.forwardRef(function (_ref, ref) {
+var Element$2 = forwardRef(function (_ref, ref) {
   var attrs = _ref.attrs,
       alt = _ref.alt,
       onPress = _ref.onPress,
@@ -911,19 +911,19 @@ var Element$2 = React.forwardRef(function (_ref, ref) {
     ref: ref
   }));
 });
-var Image = function Image(props) {
+var Image = forwardRef(function (props, ref) {
   return React.createElement(ImageWrapper, _extends({}, props, {
+    ref: ref,
     Element: Element$2,
     isWeb: true
   }));
-};
+});
 Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
   src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  style: PropTypes.object,
-  ref: PropTypes.object
+  style: PropTypes.object
 };
 
 var CardImageTitle = function CardImageTitle(_ref) {

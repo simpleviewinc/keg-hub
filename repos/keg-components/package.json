@@ -1,6 +1,6 @@
 {
   "name": "keg-components",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -27,9 +27,9 @@
     "sb:server": "npx http-server docs"
   },
   "dependencies": {
-    "@expo/vector-icons": "^10.0.6",
-    "expo-font": "^8.0.0",
-    "expo": "~36.0.0"
+    "@expo/vector-icons": "10.0.6",
+    "expo-font": "8.0.0",
+    "expo": "36.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
@@ -77,8 +77,8 @@
     "rollup-plugin-terser": "5.1.2"
   },
   "peerDependencies": {
-    "jsutils": "^git+https://github.com/lancetipton/jsutils.git",
-    "re-theme": "^git+https://github.com/simpleviewinc/re-theme.git",
+    "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "re-theme": "git+https://github.com/simpleviewinc/re-theme.git",
     "react": "^16.9.0"
   },
   "eslintConfig": {
