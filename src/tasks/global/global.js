@@ -1,12 +1,13 @@
 const gitCmds = require('./git')
 const setupCmds = require('./setup')
+const tapCmds = require('../tap')
 const { isFunc } = require('jsutils')
 const { executeTask } = require('KegRunTask')
 
 const globalDefCmd = args => {
 
   const { command, options, tasks, globalConfig } = args
-  const useSubCmd = gitCmds[command] || setupCmds[command]
+  const useSubCmd = gitCmds[ command ] || setupCmds[ command ]
 
   // Check if it's a sub-command, and if so execute it
   if(useSubCmd)
