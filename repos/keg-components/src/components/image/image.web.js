@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { ImageWrapper } from './image.wrapper'
 
@@ -15,7 +15,7 @@ import { ImageWrapper } from './image.wrapper'
  * @property {string} props.type - image type
  *
  */
-const Element = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
+const Element = forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
   <img
     alt={ alt }
     { ...attrs }
@@ -24,13 +24,14 @@ const Element = React.forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
   />
 ))
 
-export const Image = props => (
+export const Image = forwardRef((props, ref) => (
   <ImageWrapper
     { ...props }
+    ref={ref}
     Element={ Element }
     isWeb={ true }
   />
-)
+))
 
 Image.propTypes = {
   onPress: PropTypes.func,
@@ -41,5 +42,4 @@ Image.propTypes = {
     PropTypes.object
   ]),
   style: PropTypes.object,
-  ref: PropTypes.object,
 }

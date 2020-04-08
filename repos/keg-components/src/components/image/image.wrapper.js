@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, forwardRef } from 'react'
 import { useTheme, useThemeHover } from 're-theme'
 import { get, checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
@@ -64,13 +64,13 @@ const buildStyles = (style, styles, theme, type) => {
  * @param {Object} props - see buttonPropTypes
  * @property {string} props.alt - Alternate text when image fails to load
  * @property {Function} props.onPress - function to do when image is pressed
- * @property {Object} props.ref - reference to native element
  * @property {String} props.src - Source url of the image
  * @property {Object} props.style - custom style
  * @property {string} props.type - image type
+ * @property {Boolean} props.useLoading - (defaults true) if true, show a loading spinner for remote sources until they load
  *
  */
-export const ImageWrapper = props => {
+export const ImageWrapper = forwardRef((props, ref) => {
   const theme = useTheme()
   const [ loading, setLoading ] = useState(true)
   
@@ -81,12 +81,12 @@ export const ImageWrapper = props => {
     isWeb,
     onClick,
     onPress,
-    ref,
     src,
     source,
     style,
     styles,
     type,
+    useLoading=true,
     ...attrs
   } = props
 
@@ -106,12 +106,12 @@ export const ImageWrapper = props => {
   return (
     <View style={ builtStyles.wrapper }>
 
-      { loading && (
-        <Loading
-          type={ 'image' }
-          style={ builtStyles.loadingComp }
-        />
-      )}
+      { loading && useLoading &&
+          <Loading
+            type={ 'image' }
+            style={ builtStyles.loadingComp }
+          />
+      }
 
       <Element
         ref={ useRef }
@@ -126,7 +126,7 @@ export const ImageWrapper = props => {
     </View>
   )
 
-}
+})
 
 ImageWrapper.propTypes = {
   onPress: PropTypes.func,
@@ -137,5 +137,4 @@ ImageWrapper.propTypes = {
     PropTypes.object
   ]),
   style: PropTypes.object,
-  ref: PropTypes.object,
 }
