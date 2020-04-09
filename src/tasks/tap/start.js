@@ -49,6 +49,9 @@ const startTap = async (args) => {
   const { command, options, tasks, globalConfig } = args
 
   const { name, env, docker, mounts, image } = getArguments(args)
+
+  if(!name) throw new Error(`Task name is a required argument!`)
+
   const location = getTapPath(globalConfig, name)
   const { version } = require(`${location}/package.json`)
   

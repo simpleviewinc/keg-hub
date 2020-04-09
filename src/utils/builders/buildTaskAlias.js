@@ -28,7 +28,7 @@ const buildTaskAlias = task => {
   subTasks && mapObj(subTasks, (key, value) => {
     set(namedTask, `${task.name}.tasks`, {
       ...subTasks,
-      ...buildTaskAlias(value) 
+      ...buildTaskAlias(value)
     })
   })
 
