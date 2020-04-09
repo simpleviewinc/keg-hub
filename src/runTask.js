@@ -51,7 +51,7 @@ const hasHelpArg = (arg) => (HELP_ARGS.indexOf(arg) !== -1)
       return showHelp(tasks)
 
     // Get the task from available tasks
-    const task = getTask(tasks, command, ...options)
+    const task = getTask(globalConfig, tasks, command, ...options)
 
     // Check if the last argument is a help argument
     // If it is, print the help for that command

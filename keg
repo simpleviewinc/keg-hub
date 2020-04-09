@@ -49,7 +49,7 @@ keg(){
     return
 
   # Check if this is a move directory command
-  elif [[ "$#" == "0" || "$#" == "1" || "$#" == "2" ]]; then
+  elif [[ "$#" == "0" || "$#" == "1" ]]; then
 
     # # Check if this is a change dir command
     keg_check_move_directory $@
