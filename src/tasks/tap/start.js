@@ -50,11 +50,8 @@ const startTap = async (args) => {
 
   const { name, env, docker, mounts, image } = getArguments(args)
 
-  if(!name) throw new Error(`Task name is a required argument!`)
-
   const location = getTapPath(globalConfig, name)
   const { version } = require(`${location}/package.json`)
-  
   const dockerCmd = buildDockerCmd(globalConfig, {
     name,
     location,
@@ -77,10 +74,22 @@ module.exports = {
   description: `Runs a tap in a docker container`,
   example: 'keg tap start <options>',
   options: {
-    name: 'Name of the tap to run. Must be a tap linked in the cli global config',
-    env: 'Environment to start the Docker container in',
-    docker: `Extra docker arguments to pass to the 'docker run command'`,
-    mounts: `List of key names or folder paths to mount into the docker container`,
-    image: `Name of the docker image to use. Defaults to tap-name:tap-version.`,
+    name: { 
+      description: 'Name of the tap to run. Must be a tap linked in the global config',
+      required: true,
+    },
+    env: {
+      description: 'Environment to start the Docker container in',
+      default: 'development',
+    },
+    docker: {
+      description: `Extra docker arguments to pass to the 'docker run command'`
+    },
+    mounts: {
+      description: `List of key names or folder paths to mount into the docker container`
+    },
+    image: {
+      description: `Name of the docker image to use. Defaults to tap-name:tap-version.`
+    },
   }
 }

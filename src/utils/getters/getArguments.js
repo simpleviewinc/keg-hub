@@ -1,5 +1,15 @@
-const { isArr, isStr, isObj } = require('jsutils')
+const { isArr, isStr, isObj, softFalsy, wordCaps } = require('jsutils')
+const { Logger } = require('KegLog')
+const requireError = (task, key, meta) => {
+  
+  const extra = meta.description
+    ? `\n '${key}' => ${meta.description}\n`
+    : ''
 
+  Logger.error(`\n Task '${task.name}' requires '${key}' argument.${extra}`)
+
+  throw new Error(`Task failed!`)
+}
 
 /**
  * Maps the env arg value shortcut to it's actual value
@@ -52,20 +62,30 @@ const getArgument = ({ options, long, short, def }) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const getArguments = ({ options, task }, defaults={}) => {
+const getArguments = ({ options, task }) => {
 
   return isObj(task.options) && Object.keys(task.options)
     .reduce((args, key) => {
+
+      // Get the option meta for the key
+      const meta = isObj(task.options[key])
+        ? task.options[key]
+        : { description: task.options[key] }
+
       const value = getArgument({
         options,
         long: key,
         short: key[0],
-        def: defaults[key]
+        def: meta.default
       })
     
+      // Check if the arg is env, and if we should map env shortcuts
       key === 'env'
         ? ( args[key] = mapEnvArg(value) )
         : value && ( args[key] = value )
+
+      // Ensure all required arguments exit
+      meta.required && !softFalsy(args[key]) && requireError(task, key, meta)
 
       return args
     }, {})

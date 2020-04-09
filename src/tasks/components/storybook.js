@@ -39,9 +39,17 @@ module.exports = {
   description: `Run storybook in development mode`,
   example: 'keg component storybook <options>',
   options: {
-    [`default (No Options Passed)`]: 'Run keg-components storybook in a development environment',
-    build: 'Build storybook for the keg-components',
-    deploy: 'Deploy to the keg-components storybook website',
-    native: 'Run storybook in a native context',
+    [`default (No Options)`]: {
+      description: 'Run keg-components storybook in a development environment'
+    },
+    build: {
+      description: 'Build storybook for the keg-components'
+    },
+    deploy: {
+      description: 'Deploy to the keg-components storybook website'
+    },
+    native: {
+      description: 'Run storybook in a native context'
+    },
   }
 }

@@ -13,9 +13,7 @@ const { getArguments, addGlobalConfigProp, getTapPath } = require('KegUtils')
  */
 const getArgs = (args) => {
 
-  const { name, path } = getArguments(args, { path: process.cwd() })
-
-  if(!name)  throw new Error(`Tap name is required to link at tap!`)
+  const { name, path } = getArguments(args)
 
   return { tapName: name, tapPath: path }
 }
@@ -94,7 +92,13 @@ module.exports = {
   description: `Links a tap's path to the global config`,
   example: 'keg tap link <options>',
   options: {
-    name: 'Name used to access the linked tap.',
-    path: `Path to the local tap directory. Example => /Users/developer/taps/my-tap.\nDefaults to current directory.`,
+    name: {
+      description: 'Name used to access the linked tap',
+      required: true,
+    },
+    path: {
+      description: `Path to the local tap directory. Example => /Users/developer/taps/my-tap`,
+      default: process.cwd(),
+    }
   }
 }

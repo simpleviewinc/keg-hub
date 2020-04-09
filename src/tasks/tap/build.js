@@ -33,7 +33,13 @@ module.exports = {
   description: `Builds a taps docker container`,
   example: 'keg tap build <options>',
   options: {
-    name: 'Name of the tap to build a Docker image for',
-    env: 'Environment to build the Docker image for. Gets added as a tag to the image.'
+    name: {
+      description: 'Name of the tap to build a Docker image for',
+      required: true
+    },
+    env: {
+      description: 'Environment to build the Docker image for. Gets added as a tag to the image.',
+      default: 'development',
+    }
   }
 }

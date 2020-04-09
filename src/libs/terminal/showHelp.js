@@ -105,10 +105,14 @@ const showTaskOptions = (task, infoSpacer, dblSpacer) => {
 
   console.log('')
   console.log(colors.brightBlue(`${infoSpacer}Options:`))
-  mapObj(task.options, (name, desc) => {
+  mapObj(task.options, (name, meta) => {
+    const { description, required, alts } = isStr(meta) ? { description: meta } : meta
+
     console.log(
-      colors.brightCyan(`${infoSpacer}  ${name}:`),
-      colors.brightWhite(desc)
+      infoSpacer,
+      required && colors.red(` *`) || '  ',
+      colors.brightCyan(`${name}:`),
+      colors.brightWhite(meta.description)
     )
   })
 
