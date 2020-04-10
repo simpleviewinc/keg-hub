@@ -5,8 +5,8 @@ const { validateGlobalConfig } = require('./validateGlobalConfig')
 /**
  * Adds a property to the global config object, then saves it
  * @param {Object} config - Global config object for the keg-cli
- * @param {*} propPath - path on the global config object to save the value
- * @param {*} value - value to set
+ * @param {string} propPath - path on the global config object to save the value
+ * @param {Object|Array|string|number} value - value to set
  *
  * @returns {Object} Global config object for the keg-cli
  */

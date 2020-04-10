@@ -7,6 +7,7 @@ module.exports = {
       link: require('./link'),
       new: require('./new'),
       start: require('./start'),
+      unlink: require('./unlink'),
     },
     action: require('./tap'),
     description: 'Keg CLI tap specific tasks',
