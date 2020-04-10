@@ -1,4 +1,5 @@
 const { saveGlobalConfig } = require('KegUtils/globalConfig')
+const { confirmExec } = require('KegUtils/helpers')
 const { softFalsy, set } = require('jsutils')
 
 /**
@@ -27,17 +28,22 @@ const getKeyValue = ([ key, value ]) => {
  *
  * @returns {void}
  */
-const setConfigValue = (args) => {
+const setConfigValue = async args => {
   const { command, options, globalConfig } = args
   const [ key, value ] = getKeyValue(options)
 
-  if(!key || !softFalsy(value))
+  if(!key || !softFalsy(value) && value !== false)
     throw new Error(
       `Can not set global config ${key}:${value}. Both key and value must exist!`
     )
 
-  // TODO: Add confirm to ensure setting the value in the global config
-  saveGlobalConfig(set(globalConfig, key, value))
+  confirmExec({
+    execute: () => saveGlobalConfig(globalConfig, key, value),
+    confirm: `Are you sure you want to set globalConfig.${key} => ${value}?`,
+    success: `Global Config value set!`,
+    cancel: `Set Global config value canceled!`,
+  })
+ 
 }
 
 module.exports = {

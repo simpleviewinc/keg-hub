@@ -3,5 +3,6 @@ module.exports = {
   ...require('./git'),
   ...require('./globalConfig'),
   ...require('./getters'),
-  ...require('./log')
+  ...require('./helpers'),
+  ...require('./log'),
 }

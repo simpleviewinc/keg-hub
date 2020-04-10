@@ -14,6 +14,10 @@
           "components": "keg-components",
           "re-theme": "re-theme"
         }
+      },
+      "taps": {
+        "links": {
+        }
       }
     }
   }

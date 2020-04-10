@@ -63,7 +63,7 @@ const unlinkTap = async args => {
   // Check if we should add the link, or log that the link was canceled!
   removeLink
     ? removeTapLink(globalConfig, linkPath, name)
-    : Logger.info(`Tap unlink canceled!`) || Logger.empty()
+    : Logger.warn(`Tap unlink canceled!`) || Logger.empty()
 
 }
 

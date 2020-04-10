@@ -1,4 +1,6 @@
 const { createGlobalConfig } = require('KegUtils/globalConfig')
+const { confirmExec } = require('KegUtils/helpers')
+const { getArguments } = require('KegUtils')
 
 /**
  * Syncs the repos keg cli global config object with the user's ~/.kegConfig/cli.config.json config
@@ -10,12 +12,17 @@ const { createGlobalConfig } = require('KegUtils/globalConfig')
  *
  * @returns {void}
  */
-const syncGlobalConfig = (args) => {
+const syncGlobalConfig = args => {
   
   const { command, options, globalConfig } = args
-  const merge = options.indexOf('merge') !== -1
+  const { merge } = getArguments(args)
 
-  return createGlobalConfig(globalConfig, merge)
+  confirmExec({
+    execute: () => createGlobalConfig(globalConfig, merge),
+    confirm: `Are you sure you want to sync${ merge ? '-merge ' : ' ' }global configs?`,
+    success: `Global config synced!`,
+    cancel: `Global config sync canceled!`,
+  })
 
 }
 
@@ -23,5 +30,11 @@ module.exports = {
   name: 'sync',
   action: syncGlobalConfig,
   description: `Syncs config from this repo with the global config.`,
-  example: 'keg global sync <options>'
+  example: 'keg global sync <options>',
+  options: {
+    merge: {
+      description: 'Merge the repos global config with the User global config!',
+      default: true,
+    }
+  }
 }
