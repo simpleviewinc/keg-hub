@@ -19,7 +19,13 @@ const getKeyValue = ([ key, value ]) => {
  * Overwrites any pervious value
  * Uses dot notation to set nested config values
  *
- * @param {*} args
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Initial command being run
+ * @param {Array} args.options - arguments passed from the command line
+ * @param {Object} args.tasks - All registered tasks of the CLI
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ *
+ * @returns {void}
  */
 const setConfigValue = (args) => {
   const { command, options, globalConfig } = args

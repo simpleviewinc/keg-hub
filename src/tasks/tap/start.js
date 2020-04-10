@@ -43,6 +43,14 @@ const getMounts = (mounts, env) => {
  * -v ${reThemeDir}/:/keg/tap/node_modules/sv-keg/node_modules/re-theme
  * Components Mount
  * -v ${keg-components}/:/keg/tap/node_modules/sv-keg/node_modules/keg-components
+ *
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Initial command being run
+ * @param {Array} args.options - arguments passed from the command line
+ * @param {Object} args.tasks - All registered tasks of the CLI
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ *
+ * @returns {void}
  */
 const startTap = async (args) => {
 
