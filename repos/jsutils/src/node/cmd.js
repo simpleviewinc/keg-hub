@@ -147,7 +147,7 @@ const ensureFolderPath = async function(checkPath){
 * @function
 * @param {string} path - location to save the file
 * @param {string} data - data to save in the file
-* @return { promise || boolean } - if the file was saved
+* @return {promise|boolean} - if the file was saved
 */
 const writeFile = (filePath, data) => (
   new Promise((req, rej) => fs.writeFile(filePath, data, err => err ? rej(err) : req(true)))
