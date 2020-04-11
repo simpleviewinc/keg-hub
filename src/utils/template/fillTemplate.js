@@ -1,9 +1,11 @@
 const { get, mapObj } = require('jsutils')
-const { template } = require('jsutils/build/cjs/string')
+const { template } = require('jsutils')
 const rootDir = require('app-root-path').path
 const { getRootDir } = require('../getters')
 const { readFile } = require('KegFileSys')
 const path = require('path')
+
+template.regex = /{{([^}]*)}}/g
 
 const getTemplate = async (filePath, fromRoot=false) => {
   const location = fromRoot

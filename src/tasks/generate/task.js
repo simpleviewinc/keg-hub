@@ -32,13 +32,16 @@ const saveTask = async (content, { parent, name }) => {
 
   if(taskExists) throw new Error(`Can not create task. File already exists => ${taskFile}`)
 
+  let doWrite = false
+
   if(!parentExists){
     const doMkDir = await ask.confirm(`Confirm, create task parent folder => ${parentPath}`)
     if(!doMkDir) return Logger.warn(`Generate task cancelled!`) || Logger.empty()
     await mkDir(parentPath)
+    doWrite = true
   }
-  
-  const doWrite = await ask.confirm(`Confirm, write task file => ${taskFile}`)
+
+  doWrite = doWrite || await ask.confirm(`Confirm, write task file => ${taskFile}`)
   if(!doWrite) return Logger.warn(`Generate task cancelled!`) || Logger.empty()
 
   await writeFile(taskFile, content)
