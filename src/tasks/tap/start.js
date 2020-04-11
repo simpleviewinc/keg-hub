@@ -38,11 +38,11 @@ const getMounts = (mounts, env) => {
  * Tap Mount
  * -v ${dirs.tap}/:/keg/tap 
  * Core Mount
- * -v ${dirs.core}/:/keg/tap/node_modules/sv-keg
+ * -v ${dirs.core}/:/keg/tap/node_modules/keg-core
  * ReTheme Mount
- * -v ${reThemeDir}/:/keg/tap/node_modules/sv-keg/node_modules/re-theme
+ * -v ${reThemeDir}/:/keg/tap/node_modules/keg-core/node_modules/re-theme
  * Components Mount
- * -v ${keg-components}/:/keg/tap/node_modules/sv-keg/node_modules/keg-components
+ * -v ${keg-components}/:/keg/tap/node_modules/keg-core/node_modules/keg-components
  *
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run

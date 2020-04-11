@@ -3,7 +3,7 @@ const path = require('path')
 const cliRootDir = path.join(__dirname, '../../')
 
 const dockerFile = path.join(cliRootDir, 'scripts/docker/Dockerfile')
-const corePath = '/keg/tap/node_modules/sv-keg'
+const corePath = '/keg/tap/node_modules/keg-core'
 
 module.exports = deepFreeze({
   DOCKER: {
