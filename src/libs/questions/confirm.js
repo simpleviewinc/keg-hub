@@ -1,21 +1,16 @@
+const { buildModel } = require('./buildModel')
 const { isStr, isObj } = require('jsutils')
 
-const defConfirm = {
+const defModel = {
   type: 'confirm',
   name: 'confirm',
   message: 'Are you sure?',
   default: false
 }
 
-
 const confirm = question => {
-  return isStr(question)
-    ? { ...defConfirm, message: question }
-    : isObj(question)
-      ? { ...defConfirm, ...question }
-      : { ...defConfirm }
+  return buildModel(defModel, question)
 }
-
 
 module.exports = {
   confirm,

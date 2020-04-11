@@ -1,6 +1,7 @@
 const { isArr } = require('jsutils')
 const inquirer = require('inquirer')
 const { confirm } = require('./confirm')
+const { input } = require('./input')
 
 /**
  * Asks a question or multiple questions to a user from the terminal
@@ -14,12 +15,34 @@ const ask = questions => {
   return inquirer.prompt(questions)
 }
 
-ask.confirm = async question => {
-  const toAsk = confirm(question)
-  const answers = await ask({ ...toAsk, name: 'confirm' })
+/**
+ * Asks a single question, then get the value of the answer
+ * @param {object} model - Model the the question to ask match inquirer's model spec
+ * @param {string} name - Name of the question to ask
+ *
+ * @returns {*} - Response from the asked question
+ */
+const singleQuestion = async (model, name) => {
+  const answers = await ask({ ...model, name })
 
-  return answers.confirm
+  return answers[name]
 }
+
+/**
+ * Helper to ask a single confirm question
+ * @param {Object|string} question - Confirm question to ask
+ *
+ * @returns {*} - Response from the asked question
+ */
+ask.confirm = question => singleQuestion(confirm(question), 'confirm')
+
+/**
+ * Helper to ask a single input question
+ * @param {Object|string} question - Input question to ask
+ *
+ * @returns {*} - Response from the asked question
+ */
+ask.input = question => singleQuestion(input(question), 'input')
 
 module.exports = {
   ask

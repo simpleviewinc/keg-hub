@@ -5,4 +5,5 @@ module.exports = {
   ...require('./getters'),
   ...require('./helpers'),
   ...require('./log'),
+  ...require('./template'),
 }

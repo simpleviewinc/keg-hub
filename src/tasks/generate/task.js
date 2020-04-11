@@ -1,4 +1,50 @@
-const { get } = require('jsutils')
+const { get, mapObj } = require('jsutils')
+const { getArguments, fillTemplate, getRootDir } = require('KegUtils')
+const { readFile, writeFile, pathExists, mkDir } = require('KegFileSys')
+const { ask, input } = require('KegQuestions')
+const { Logger } = require('KegLog')
+const path = require('path')
+const rootDir = getRootDir()
+
+const taskQuestions = {
+  name: 'Enter the task name',
+  description: 'Enter the task description',
+  example: 'Enter an example of calling the task?',
+  parent: 'Enter the task parent'
+}
+
+const buildQuestions = (questions, defaults) => {
+  return mapObj(questions, (name, message) => input({ name, message, default: defaults[name] }))
+}
+
+const getParentPath = (parent, name) => {
+  return parent === 'keg'
+    ? path.join(rootDir, `src/tasks/${name}`)
+    : path.join(rootDir, `src/tasks/${parent}`)
+}
+
+const saveTask = async (content, { parent, name }) => {
+
+  const parentPath = getParentPath(parent, name)
+  const parentExists = await pathExists(parentPath)
+  const taskFile = path.join(parentPath, `${name}.js`)
+  const taskExists = await pathExists(taskFile)
+
+  if(taskExists) throw new Error(`Can not create task. File already exists => ${taskFile}`)
+
+  if(!parentExists){
+    const doMkDir = await ask.confirm(`Confirm, create task parent folder => ${parentPath}`)
+    if(!doMkDir) return Logger.warn(`Generate task cancelled!`) || Logger.empty()
+    await mkDir(parentPath)
+  }
+  
+  const doWrite = await ask.confirm(`Confirm, write task file => ${taskFile}`)
+  if(!doWrite) return Logger.warn(`Generate task cancelled!`) || Logger.empty()
+
+  await writeFile(taskFile, content)
+  Logger.success(`Generated new task => ${taskFile}`)
+
+}
 
 /**
  * 
@@ -10,17 +56,20 @@ const { get } = require('jsutils')
  *
  * @returns {void}
  */
-const generateTask = args => {
-
-  
+const generateTask = async args => {
   const { command, options, globalConfig } = args
+  const defaults = getArguments(args)
+
+  const answers = await ask(buildQuestions(taskQuestions, defaults))
+
+  const filled = await fillTemplate({
+    loc: path.join(__dirname, './templates/task.template.js'),
+    data: answers,
+  })
   
-  console.log(`---------- globalConfig ----------`)
-  // console.log(globalConfig)
-  console.log(get(globalConfig, 'keg.cli.paths'))
+  await saveTask(filled, answers)
 
 }
-
 
 module.exports = {
   name: 'task',
@@ -28,4 +77,15 @@ module.exports = {
   action: generateTask,
   description: `Generates scaffolding for a new CLI Task!`,
   example: 'keg generate task <options>',
+  options: {
+    name: {
+      description: 'Name of the new task',
+    },
+    description: {
+      description: 'Explanation of what the task does',
+    },
+    parent: {
+      description: 'Parent task of the new task',
+    }
+  }
 }
