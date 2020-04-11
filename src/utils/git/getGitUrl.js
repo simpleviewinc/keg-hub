@@ -28,13 +28,7 @@ const getGitUrl = (globalConfig, key, branch) => {
 
   const { orgUrl, repos } = get(globalConfig, GLOBAL_CONFIG_PATHS.GIT)
 
-  if((!orgUrl && !repos[key]))
-    throw new Error(`Git config not configured in the global config!`)
-
-  if(!repos[key])
-    throw new Error(`Git repo for ${key} not configured in the global config!`)
-
-  return buildGitUrl(
+  return orgUrl && repos[key] && buildGitUrl(
     orgUrl,
     repos[key],
     branch ? `#{branch}` : ''

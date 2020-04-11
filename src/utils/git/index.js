@@ -1,6 +1,6 @@
-const getGit = require('./getGit')
-
 
 module.exports = {
-  getGit
+  ...require('./getGitKey'),
+  ...require('./getGitUrl'),
+  ...require('./getGit')
 }

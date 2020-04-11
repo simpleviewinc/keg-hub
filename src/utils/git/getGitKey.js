@@ -9,9 +9,10 @@ const { BUILD_ARGS, GLOBAL_CONFIG_PATHS } = require('KegConst')
  * @returns {string} - Found git key
  */
 const getGitKey = globalConfig => {
-  return process.env[ BUILD_ARGS.GIT_KEY ] ||
-    get(globalConfig, `${GLOBAL_CONFIG_PATHS.GIT}.key`) ||
-    (() => { throw new Error(`Git key not configured in the global config!`) })()
+  return process.env[ BUILD_ARGS.GIT_KEY ] || get(
+    globalConfig,
+    `${GLOBAL_CONFIG_PATHS.GIT}.key`
+  )
 }
 
 module.exports = {

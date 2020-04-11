@@ -28,19 +28,23 @@ const createBuildArg = (key, value, dockerCmd) => {
  */
 const getBuildArgs = (globalConfig, { name, branch, dockerCmd }) => {
   
-  const key = getGitKey(globalConfig)
-  
-  dockerCmd = createBuildArg(
-    BUILD_ARGS.GIT_KEY,
-    getGitKey(globalConfig),
-    dockerCmd
-  )
+  const gitKey = getGitKey(globalConfig)
+  dockerCmd = !gitKey
+    ? dockerCmd
+    : createBuildArg(
+        BUILD_ARGS.GIT_KEY,
+        gitKey,
+        dockerCmd
+      )
 
-  dockerCmd = createBuildArg(
-    BUILD_ARGS.GIT_TAP_URL,
-    getGitUrl(globalConfig, name, branch),
-    dockerCmd
-  )
+  const gitUrl = getGitUrl(globalConfig, name, branch)
+  dockerCmd = !gitUrl
+    ? dockerCmd
+    : createBuildArg(
+        BUILD_ARGS.GIT_TAP_URL,
+        gitUrl,
+        dockerCmd
+      )
 
   return dockerCmd
 

@@ -17,7 +17,9 @@ ARG GIT_TAP_URL=INVALID
 RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/
 
 # Pull down the tap locally
-RUN git clone $GIT_TAP_URL ./tap
+RUN if [ "$GIT_KEY" != "INVALID" ] || [ "$GIT_TAP_URL" != "INVALID" ]; then \
+      git clone $GIT_TAP_URL ./tap; \
+    fi
 
 # Navigate to the taps directory
 WORKDIR /keg/tap
