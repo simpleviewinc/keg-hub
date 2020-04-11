@@ -12,12 +12,12 @@ export { c as cloneObjWithPrototypeAndProperties, d as deepClone, s as set } fro
 import './cloneFunc-1aaa9008.js';
 
 const cleanColl = (coll, recursive = true) => {
-  return isColl(coll) && Object.keys(coll).reduce((cleaned, key) => {
+  return isColl(coll) ? Object.keys(coll).reduce((cleaned, key) => {
     const value = coll[key];
     if (value === null || value === undefined) return cleaned;
     cleaned[key] = recursive && isColl(value) ? cleanColl(value) : value;
     return cleaned;
-  }, isObj(coll) && {} || []) || coll;
+  }, isObj(coll) && {} || []) : console.error(`cleanColl requires a collection as the first argument`) || coll;
 };
 
 const isEmptyColl = obj => isArr(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;

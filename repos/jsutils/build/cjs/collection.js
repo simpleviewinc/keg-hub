@@ -13,12 +13,12 @@ var deepClone = require('./deepClone-24b52c1a.js');
 require('./cloneFunc-6f1b4c75.js');
 
 const cleanColl = (coll, recursive = true) => {
-  return isColl.isColl(coll) && Object.keys(coll).reduce((cleaned, key) => {
+  return isColl.isColl(coll) ? Object.keys(coll).reduce((cleaned, key) => {
     const value = coll[key];
     if (value === null || value === undefined) return cleaned;
     cleaned[key] = recursive && isColl.isColl(value) ? cleanColl(value) : value;
     return cleaned;
-  }, isObj.isObj(coll) && {} || []) || coll;
+  }, isObj.isObj(coll) && {} || []) : console.error(`cleanColl requires a collection as the first argument`) || coll;
 };
 
 const isEmptyColl = obj => isArr.isArr(obj) ? obj.length === 0 : isColl.isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;

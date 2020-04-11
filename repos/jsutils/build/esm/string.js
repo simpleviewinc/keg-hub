@@ -136,13 +136,14 @@ const wordCaps = str => {
   return cleaned.split(' ').map(word => word && capitalize(word) || '').join(' ');
 };
 
-const template = (template, data, fallback = '') => {
+const template = (tempStr, data, fallback = '') => {
   data = isColl(data) && data || {};
-  return isStr(template) && template.replace(/\${([^{]+[^}])}/g, match => {
-    const path = match.substr(2, match.length - 3).trim();
+  const regex = template.regex || /\${([^{]+[^}])}/g;
+  return isStr(tempStr) ? tempStr.replace(regex, (match, exact) => {
+    const path = (exact || match.substr(2, match.length - 3)).trim();
     const replaceWith = get(data, path, fallback);
     return isFunc(replaceWith) ? replaceWith(data, path, fallback) : replaceWith;
-  }) || template;
+  }) : console.error(`template requires a string as the first argument`) || tempStr;
 };
 
 export { buildPath, camelCase, capitalize, cleanStr, containsStr, delimitString, eitherStr, isEmail, isLowerCase, isPhone, isUpperCase, isUrl, isUuid, mapString, parseJSON, plural, removeDot, singular, snakeCase, styleCase, template, trainCase, wordCaps };
