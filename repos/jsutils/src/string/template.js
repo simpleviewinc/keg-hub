@@ -18,11 +18,12 @@ import { isStr } from './isStr'
  */
 export const template = (tempStr, data, fallback='') => {
   data = isColl(data) && data || {}
-  return isStr(tempStr)
-    ? tempStr.replace(/\${([^{]+[^}])}/g, (match) => {
-      const path = match.substr(2, match.length - 3).trim()
-      const replaceWith = get(data, path, fallback)
+  const regex = template.regex || /\${([^{]+[^}])}/g
 
+  return isStr(tempStr)
+    ? tempStr.replace(regex, (match, exact) => {
+      const path = (exact || match.substr(2, match.length - 3)).trim()
+      const replaceWith = get(data, path, fallback)
       return isFunc(replaceWith)
         ? replaceWith(data, path, fallback)
         : replaceWith

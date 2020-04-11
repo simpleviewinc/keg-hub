@@ -81,4 +81,14 @@ describe('template', () => {
 
   })
 
+  it('should allow overriding the default regex', () => {
+
+    const template = '{{animals.0.farm.type}} live in the {{ location }}'
+    const data = { animals: [ { farm: { type: 'goats'} } ], location: 'boondocks' }
+
+    Str.template.regex = /{{([^}]*)}}/g
+    expect(Str.template(template, data)).toEqual("goats live in the boondocks")
+
+  })
+
 })
