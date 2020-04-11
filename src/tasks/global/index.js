@@ -1,7 +1,7 @@
 module.exports = {
   global: {
     name: 'global',
-    alias: [ 'commit', 'glob', 'gl', 'pull', 'push', 'setup' ],
+    alias: [ 'commit', 'git', 'glob', 'gl', 'pull', 'push', 'setup' ],
     tasks: {
       test: require('./test'),
       ...require('./config'),
