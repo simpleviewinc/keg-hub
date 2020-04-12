@@ -65,7 +65,18 @@ const addTapMount = (location, dockerCmd) => {
 }
 
 
+const addContainerEnv = (dockerCmd='', options={}) => {
+  return Object.keys(options)
+    .reduce((cmd, key) => {
+        return options[key]
+          ? `${cmd} -e ${key.toUpperCase()}=${options[key]}`
+          : cmd
+      }, dockerCmd)
+}
+
+
 module.exports = {
+  addContainerEnv,
   addContainerName,
   addTapMount,
   getDockerArgs

@@ -1,5 +1,5 @@
 const { get } = require('jsutils')
-const { BUILD_ARGS, GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst')
 
 /**
  * Gets the git key to allow cloning private repos
@@ -9,7 +9,7 @@ const { BUILD_ARGS, GLOBAL_CONFIG_PATHS } = require('KegConst')
  * @returns {string} - Found git key
  */
 const getGitKey = globalConfig => {
-  return process.env[ BUILD_ARGS.GIT_KEY ] || get(
+  return process.env[ DOCKER.BUILD.ARGS.GIT_KEY ] || get(
     globalConfig,
     `${GLOBAL_CONFIG_PATHS.GIT}.key`
   )

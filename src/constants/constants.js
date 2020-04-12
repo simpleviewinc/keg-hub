@@ -17,11 +17,6 @@ if(GLOBAL_CONFIG_PATH){
 
 module.exports = deepFreeze({
 
-  BUILD_ARGS: keyMap([
-    'GIT_KEY',
-    'GIT_TAP_URL',
-  ], true),
-
   // Tasks settings
   TASK_REQURIED: [
     'prefix',

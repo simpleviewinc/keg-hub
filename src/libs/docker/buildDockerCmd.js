@@ -1,6 +1,6 @@
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount } = require('./getDirsToMount')
-const { addContainerName, addTapMount, getDockerArgs } = require('./getDockerArgs')
+const { addContainerName, addContainerEnv, addTapMount, getDockerArgs } = require('./getDockerArgs')
 const { getVolumeMounts } = require('./getVolumeMounts')
 const { getBuildArgs } = require('./getBuildArgs')
 
@@ -14,7 +14,7 @@ const { getBuildArgs } = require('./getBuildArgs')
  *
  * @returns {string} - Built docker build command
  */
-const createBuildCmd = (globalConfig, { dockerCmd, ...params }) => {
+const createBuildCmd = (globalConfig, dockerCmd, params) => {
   const { location, name, branch, tags, version } = params
 
   // Add any tags if needed
@@ -40,11 +40,19 @@ const createBuildCmd = (globalConfig, { dockerCmd, ...params }) => {
  *
  * @returns {string} - Built docker run command
  */
-const createRunCmd = (globalConfig, { dockerCmd, ...params }) => {
-  const { location, name, branch, img, mounts } = params
+const createRunCmd = (globalConfig, dockerCmd, params) => {
+  const { execCmd, location, name, branch, img, mounts, platform, tap } = params
 
   // Get the name for the docker container
   dockerCmd = addContainerName(name, dockerCmd)
+
+  // Add the env to the docker command
+  dockerCmd = addContainerEnv(dockerCmd, {
+    TAP: tap,
+    GIT_BRANCH: branch,
+    PLATFORM: platform,
+    EXEC_CMD: execCmd,
+  })
 
   // Mount the tap location by default
   dockerCmd = addTapMount(location, dockerCmd)
@@ -77,11 +85,14 @@ const buildDockerCmd = (globalConfig, params) => {
     cmd,
     docker='',
     envs,
+    execCmd,
     img,
     location,
     mounts,
     name,
+    platform,
     tags,
+    tap,
     version,
     ...dockerOpts
   } = params
@@ -91,8 +102,8 @@ const buildDockerCmd = (globalConfig, params) => {
 
   // Add any tags if needed
   return cmd === 'build'
-    ? createBuildCmd(globalConfig, { dockerCmd, location, name, branch, tags, version })
-    : createRunCmd(globalConfig, { dockerCmd, location, name, branch, img, mounts })
+    ? createBuildCmd(globalConfig, dockerCmd, params)
+    : createRunCmd(globalConfig, dockerCmd, params)
 
 }
 

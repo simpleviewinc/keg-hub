@@ -68,6 +68,7 @@ keg(){
   # Ensure docker machine is loaded
   elif [[ "$1" == "docker_machine" || "$1" == "docm" ]]; then
     keg_cli_init_docker_machine
+    return
 
   # Check if this is a move directory command
   elif [[ "$#" == "0" || "$#" == "1" ]]; then

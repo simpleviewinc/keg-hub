@@ -66,7 +66,8 @@ const startTap = async (args) => {
     name: 'tap',
     cmd: `run`,
     img: image || 'tap',
-    mounts: getMounts(mounts, env)
+    mounts: getMounts(mounts, env),
+    tap: name,
   })
 
   await logVirtualIP()

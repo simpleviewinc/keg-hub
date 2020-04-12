@@ -1,6 +1,7 @@
 const { isArr } = require('jsutils')
 const { getGitUrl, getGitKey } = require('KegUtils')
-const { BUILD_ARGS } = require('KegConst')
+const { DOCKER } = require('KegConst')
+const { BUILD } = DOCKER
 
 /**
  * Formats a build-arg string to match the docker cli api
@@ -32,7 +33,7 @@ const getBuildArgs = (globalConfig, { name, branch, dockerCmd }) => {
   dockerCmd = !gitKey
     ? dockerCmd
     : createBuildArg(
-        BUILD_ARGS.GIT_KEY,
+        BUILD.ARGS.GIT_KEY,
         gitKey,
         dockerCmd
       )
@@ -41,7 +42,7 @@ const getBuildArgs = (globalConfig, { name, branch, dockerCmd }) => {
   dockerCmd = !gitUrl
     ? dockerCmd
     : createBuildArg(
-        BUILD_ARGS.GIT_TAP_URL,
+        BUILD.ARGS.GIT_TAP_URL,
         gitUrl,
         dockerCmd
       )
