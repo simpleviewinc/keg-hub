@@ -1,0 +1,15 @@
+version: "2"
+services:
+  tap:
+    build:
+      context: ${TAP_PATH}
+      dockerfile: ${DOCKER_PATH}/Dockerfile
+      args:
+        GIT_KEY: ${GIT_KEY}
+        GIT_TAP_URL: ${GIT_TAP_URL}
+    container_name: ${CONTAINER_NAME}
+    env_file: .env
+    environment:
+      - TAP=${TAP}
+    ports: 
+      - ${TAP_PORT}:${TAP_PORT}

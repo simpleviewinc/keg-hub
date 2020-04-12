@@ -97,6 +97,45 @@ mac_setup_yarn(){
   
 }
 
+# If you run into this problem =>
+# mkmf.rb can't find header files for ruby at /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/include/ruby.h
+# Follow the stpes of the first answer here=>
+# https://stackoverflow.com/questions/46377667/docker-for-mac-mkmf-rb-cant-find-header-files-for-ruby
+mac_setup_docker_sync(){
+
+  if which ruby >/dev/null && which gem >/dev/null; then
+    keg_message "Installing docker-sync"
+    gem install docker-sync
+    keg_message "Updating \$PATH"
+    export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    
+    # Check for .bash_profile file
+    local PROFILE=~/.bash_profile
+    if [[ -f "$PROFILE" ]]; then
+      source $PROFILE
+
+    else
+
+      # Check for the .bash_rc file
+      local BASH_RC=~/.bash_rc
+      if [[ -f "$BASH_RC" ]]; then
+        source $BASH_RC
+      fi
+
+    fi
+
+    # Install the docker-sync dep unison
+    if [[ -x "$(command -v unison)" ]]; then
+      keg_message "Installing unison"
+      brew install unison
+      brew tap eugenmayer/dockersync
+      brew install eugenmayer/dockersync/unox
+      # brew install autozimu/homebrew-formulas/unison-fsmonitor
+    fi
+
+  fi
+}
+
 keg_install_cli(){
   echo "TODO!!!"
 }
@@ -169,7 +208,15 @@ keg_setup(){
     keg_install_cli "${@:2}"
   fi
 
-  
+  # Setup and install cli
+  # To run:
+  # bash setup.sh cli
+  #  * Runs only the keg cli portion of this script
+  if [[ $INIT_SETUP || "$SETUP_TYPE" == "sync" ]]; then
+    keg_message "Checking docker-sync install..."
+    mac_setup_docker_sync "${@:2}"
+  fi
+
 
   keg_message "Keg CLI setup complete!"
 
