@@ -14,8 +14,8 @@ const { getBuildArgs } = require('./getBuildArgs')
  *
  * @returns {string} - Built docker build command
  */
-const createBuildCmd = (globalConfig, params) => {
-  const { dockerCmd, location, name, branch, tags, version } = params
+const createBuildCmd = (globalConfig, { dockerCmd, ...params }) => {
+  const { location, name, branch, tags, version } = params
 
   // Add any tags if needed
   dockerCmd = getBuildTags({ name, tags, version, dockerCmd })
@@ -40,8 +40,8 @@ const createBuildCmd = (globalConfig, params) => {
  *
  * @returns {string} - Built docker run command
  */
-const createRunCmd = (globalConfig, params) => {
-  const { dockerCmd, location, name, branch, img, mounts } = params
+const createRunCmd = (globalConfig, { dockerCmd, ...params }) => {
+  const { location, name, branch, img, mounts } = params
 
   // Get the name for the docker container
   dockerCmd = addContainerName(name, dockerCmd)

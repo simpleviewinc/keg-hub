@@ -30,8 +30,8 @@ const getBuildTags = ({ name, options, version, dockerCmd='' }) => {
     }, [])
 
   return tags && tags.length
-    ? `${dockerCmd} -t ${name}:` + tags.join(` -t ${name}:`).trim()
-    : `${dockerCmd} -t ${name}:${version}`
+    ? `${dockerCmd} -t ${name} -t ${name}:` + tags.join(` -t ${name}:`).trim()
+    : `${dockerCmd} -t ${name} -t ${name}:${version}`
 
 }
 

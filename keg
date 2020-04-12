@@ -6,7 +6,24 @@
 # TODO: **IMPORTANT** Need to set this path dyamically some how
 export KEG_CLI_PATH=~/keg/cli
 
-keg_check_move_directory(){
+# TODO: **IMPORTANT** Add check for if on mac, and run these docker-machine commands
+# Save as the default environment
+# docker-machine env default
+# Execute the default environment in place for the active terminal
+# eval "$(docker-machine env default)"
+
+keg_cli_init_docker_machine(){
+  
+  if [[ -x "$(command -v VBoxManage)" ]]; then
+    echo "[KEG CLI] Loading docker-machine default env!"
+    docker-machine env default
+    eval "$(docker-machine env default)"
+  else
+    echo "[KEG CLI] docker-machine not installed!"
+  fi
+}
+
+keg_cli_move_directory(){
 
   local CMD_OUTPUT
 
@@ -36,7 +53,7 @@ keg_check_move_directory(){
 }
 
 # Opening to the keg cli
-# For navigation commands, calls keg_check_move_directory
+# For navigation commands, calls keg_cli_move_directory
 # All other commands call keg-cli node script
 keg(){
 
@@ -44,15 +61,19 @@ keg(){
   if [[ "$1" == "reload" || "$1" == "rl" || "$1" == "src" ]]; then
 
     # Reload this bash script
-    echo "Reloading Keg CLI..."
+    echo "[KEG CLI] Reloading Keg CLI..."
     source $KEG_CLI_PATH/keg
     return
+
+  # Ensure docker machine is loaded
+  elif [[ "$1" == "docker_machine" || "$1" == "docm" ]]; then
+    keg_cli_init_docker_machine
 
   # Check if this is a move directory command
   elif [[ "$#" == "0" || "$#" == "1" ]]; then
 
     # # Check if this is a change dir command
-    keg_check_move_directory $@
+    keg_cli_move_directory $@
     # Get the return code from the move dir command
     local KEG_MOVE_DIR=$?
 

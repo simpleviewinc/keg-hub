@@ -1,15 +1,10 @@
-const { addGlobalConfigProp } = require('./addGlobalConfigProp')
-const { createGlobalConfig } = require('./createGlobalConfig')
-const { getGlobalConfig } = require('./getGlobalConfig')
-const { removeGlobalConfigProp } = require('./removeGlobalConfigProp')
-const { saveGlobalConfig } = require('./saveGlobalConfig')
-const { validateGlobalConfig } = require('./validateGlobalConfig')
 
 module.exports = {
-  addGlobalConfigProp,
-  createGlobalConfig,
-  getGlobalConfig,
-  removeGlobalConfigProp,
-  saveGlobalConfig,
-  validateGlobalConfig
+  ...require('./addGlobalConfigProp'),
+  ...require('./createGlobalConfig'),
+  ...require('./getGlobalConfig'),
+  ...require('./getPathFromConfig'),
+  ...require('./removeGlobalConfigProp'),
+  ...require('./saveGlobalConfig'),
+  ...require('./validateGlobalConfig'),
 }

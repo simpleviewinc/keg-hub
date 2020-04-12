@@ -1,4 +1,4 @@
-const { getArguments, getTapPath } = require('KegUtils')
+const { getArguments, getTapPath, getPathFromConfig } = require('KegUtils')
 const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd, executeCmd } = require('KegProc')
 
@@ -17,12 +17,14 @@ const buildTap = async (args) => {
 
   const { name, env } = getArguments(args)
   const location = getTapPath(globalConfig, name)
-  const { version } = require(`${location}/package.json`)
+
+  const corePath = getPathFromConfig(globalConfig, 'core')
+  const { version } = require(`${corePath}/package.json`)
 
   const dockerCmd = buildDockerCmd(globalConfig, {
-    name,
     location,
     version,
+    name: 'tap',
     cmd: `build`,
     tags: options,
   })
