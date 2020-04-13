@@ -41,6 +41,7 @@
   "devDependencies": {},
   "_moduleAliases": {
     "KegConst": "src/constants",
+    "KegCrypto": "src/libs/crypto",
     "KegDocker": "src/libs/docker",
     "KegFileSys": "src/libs/fileSys",
     "KegLibs": "src/libs",

@@ -1,9 +1,13 @@
 const crypto = require('crypto')
 
-const randP = 'd6F3Efeq'
-const algorithm = 'aes-256-cbc'
-const strFormat = 'utf8'
+const algorithm = 'aes-128-cbc'
 const secretFormat = 'hex'
+const iv = crypto.randomBytes(16)
+const hash = crypto.createHash("sha1")
+const salt = 'a4E36cDq'
+
+hash.update(salt)
+const key = hash.digest().slice(0, 16)
 
 /**
  * Encrypts the passed in string
@@ -12,11 +16,11 @@ const secretFormat = 'hex'
  * @returns {string} - Encrypted string
  */
 const encrypt = str => {
-  const cipher = crypto.createCipher(algorithm, randP)
-  let data = cipher.update(str, strFormat, secretFormat)
-  data += cipher.final(secretFormat)
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  const encrypted = cipher.update(str)
+  const encryptedBuffer = Buffer.concat([encrypted, cipher.final()])
 
-  return data
+  return iv.toString(secretFormat) + ':' + encryptedBuffer.toString(secretFormat)
 }
 
 /**
@@ -25,12 +29,17 @@ const encrypt = str => {
  *
  * @returns {string} - Decrypted string
  */
-const decrypt = data => {
-  const decipher = crypto.createDecipher(algorithm, randP)
-  let str = decipher.update(data, secretFormat, strFormat)
-  str += decipher.final(strFormat)
+const decrypt = str => {
 
-  return str;
+  const strSplit = str.split(':')
+  const ivFromKey = Buffer.from(strSplit.shift(), secretFormat);
+  const encryptedText = Buffer.from(strSplit.join(':'), secretFormat)
+
+  const decipher = crypto.createDecipheriv(algorithm, key, ivFromKey)
+  const decrypted = decipher.update(encryptedText)
+
+  return Buffer.concat([decrypted, decipher.final()]).toString()
+
 }
 
 module.exports = {

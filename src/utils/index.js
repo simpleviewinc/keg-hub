@@ -1,5 +1,6 @@
 
 module.exports = {
+  ...require('./error'),
   ...require('./git'),
   ...require('./globalConfig'),
   ...require('./getters'),

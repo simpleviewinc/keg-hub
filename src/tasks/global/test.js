@@ -1,4 +1,4 @@
-
+const { getArguments } = require('KegUtils')
 
 /**
  * Test task for global commands
@@ -11,12 +11,28 @@
  * @returns {void}
  */
 const testCommand = args => {
-  console.log(`--- Test a cli command ---`)
+
+  const { command, options, tasks, globalConfig } = args
+  const data = getArguments(args)
+
 }
 
 module.exports = {
   name: 'test',
   action: testCommand,
   description: `Test a cli command`,
-  example: 'keg global test'
+  example: 'keg global test',
+  options: {
+    foo: {
+      description: 'Is foo bar',
+    },
+    boo: {
+      description: 'Sounds from casper',
+      required: true
+    },
+    do: {
+      types: [ 'one', 'two' ],
+      description: 'Things to do!'
+    }
+  }
 }

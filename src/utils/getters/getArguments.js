@@ -1,44 +1,27 @@
 const { isArr, isStr, isObj, softFalsy, wordCaps, isStrBool, toBool } = require('jsutils')
 const { Logger } = require('KegLog')
+const { throwRequired } = require('KegUtils/error')
+const { exists, mapEnv } = require('KegUtils/helpers')
 
 /**
- * Formats and throws an error when a required argument is not included
- * @param {Object} task - Current task being run
- * @param {string} key - Name of the argument that's required
- * @param {Object} meta - Information about the missing required argument
+ * Removes an option from the options array
+ * @function
+ * @param {Array} options - Arguments passed in from the terminal
+ * @param {string} opt - Item to remove from the array
  *
- * @returns {void}
+ * @returns {Array} - Updated options array
  */
-const requireError = (task, key, meta) => {
-  
-  const extra = meta.description
-    ? `\n '${key}' => ${meta.description}\n`
-    : ''
+const removeOption = (options, opt) => {
+  options.splice(options.indexOf(opt), 1)
 
-  Logger.error(`\n Task '${task.name}' requires '${key}' argument.${extra}`)
-
-  throw new Error(`Task failed!`)
-}
-
-/**
- * Maps the env arg value shortcut to it's actual value
- * @param {string} value - Value to map shortcut to full name
- *
- * @returns {string} - Full env value if found or the original value
- */
-const mapEnvArg = value => {
-  if(!value || value === 'dev' || value === 'd') return 'development'
-  if(value === 'qa' || value === 'q') return 'qa'
-  if(value === 'st' || value === 's') return 'staging'
-  if(value === 'prod' || value === 'p') return 'production'
-
-  return value
+  return options
 }
 
 /**
  * Matches the option against the passed in matchTypes
  * Then, Compares the next value with taskKeys to ensure it's not a argument key
  * If a match is found and it's not a task key, it returns the passed in next value
+ * @function
  * @param {Array} taskKeys - Names of arguments for the current task
  * @param {Array} matchTypes - Keys to match the option against
  * @param {string} option - Passed in option from the command line
@@ -62,6 +45,7 @@ const matchArgType = (taskKeys, matchTypes, option, value) => {
 
 /**
  * Checks arguments for '=' and splits it to key value pair
+ * @function
  * @param {string} option - Option passer from command line to check for '='
  * @param {string} long - Long version of the option
  * @param {string} short - Short version of the option
@@ -78,7 +62,9 @@ const splitEqualsMatch = (option, long, short, argument) => {
 
 /**
  * Searches for a argument in the options array, and gets it's value
+ * @function
  * @param {Object} params - Contains the data to be searched
+ * @param {Array} params.taskKeys - All argument names of the current task
  * @param {Array} params.options - items passed from the command line
  * @param {string} params.long - Long form name of the argument to find
  * @param {string} params.short - Short form name of the argument to find
@@ -86,50 +72,106 @@ const splitEqualsMatch = (option, long, short, argument) => {
  *
  * @returns {string} - The found value || the passed in default
  */
-const getArgument = ({ taskKeys, options, long, short, def }) => {
+const getArgValue = ({ taskKeys, options, long, short }) => {
 
   const matchTypes = [ long, `--${long}`, short, `-${short}` ]
 
   return (isStr(long) || isStr(short)) && isArr(options) &&
     options.reduce((argument, option, index) => {
+
       // If the value was already found return it
-      if(softFalsy(argument) || argument === false ) return argument
+      if(exists(argument)) return argument
+      
+      const nextOpt = options[ index + 1 ]
       
       // Check if the current option matches any in the matchTypes array
       // Pass along the next option, so we can also set the value
       // Pass the taskKeys, to ensure the next option is not a task key option
       // This is to ensure the next option is a value, and not a key to a value
-      const match = matchArgType(
+      let value = matchArgType(
         taskKeys,
         matchTypes,
         option,
-        options[ index + 1 ]
+        nextOpt
       )
 
-      // If match is not equal to null, then use the match value
-      // Otherwise look for a splitEqual matche
-      const value = match !== null
-        ? match
-        : splitEqualsMatch(option, long, short, argument)
+      // If no value if found, then check for a split equals match
+      if(!exists(value))
+        value = splitEqualsMatch(option, long, short, argument)
+
+      // If value is the next option, remove it from the options array
+      if(value === nextOpt) options = removeOption(options, value)
 
       // If the value is 'true' || 'false', convert it to a true boolean
       return isStrBool(value)
         ? toBool(value)
         : value
 
-    }, null) || def
+    }, null)
+}
+
+
+/**
+ * Finds the value to the passed in keg argument
+ * @function
+ * @param {*} { key, meta={}, ...params }
+ * @param {Object} params - Contains the data to be searched
+ * @param {Array} params.options - items passed from the command line
+ * @param {Object} params.task - Task Model of current task being run
+ * @param {Array} params.key - Name the argument to find
+ * @param {string} params.meta - Info about the argument from the task
+ *
+ * @returns {*} - Value of the search for argument from passed in options
+ */
+const findArgument = ({ key, meta={}, ...params }) => {
+
+  const value = getArgValue({
+    ...params,
+    long: key,
+    short: key[0]
+  })
+
+  // If value exists, then return it
+  if(exists(value)) return value
+
+  // Otherwise if there's not types, then return the default
+  if(!isArr(meta.types)) return meta.default
+
+  // Otherwise loop the types and check if one exists in the options array
+  // If a type if found, it will be used as the value for the argument key
+  const typeMatch = meta.types.reduce((foundVal, type) => {
+    return exists(foundVal)
+      ? foundVal
+      : params.options.indexOf(type) !== -1
+        ? type
+        : foundVal
+  }, null)
+
+  // If there's a type match then remove it from the options array
+  params.options = typeMatch
+    ? removeOption(params.options, typeMatch)
+    : params.options
+
+  return typeMatch || meta.default
+
 }
 
 /**
  * Maps all passed in options to the cmdOpts based on keys
+ * @function
  * @param {Array} params.options - items passed from the command line
- * @param {Object} params.task..options - Options accepted by the command being run
- * @param {Object} [defaults={}] - Default values to use if the key does not exist
+ * @param {Object} params.task - Task Model of current task being run
+ * @param {Object} params.task.options - Options accepted by the command being run
  *
  * @returns {Object} - Mapped arguments object
  */
-const getArguments = ({ options, task }) => {
+const getArguments = ({ options=[], task }) => {
 
+  // Make copy of options, so we don't affect the original
+  const optsCopy = Array.from(options)
+
+  // Get all the name of the options for the task
+  // This is used later to compare the keys with the passed in options
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
   return taskKeys && taskKeys.reduce((args, key) => {
@@ -139,23 +181,19 @@ const getArguments = ({ options, task }) => {
         ? task.options[key]
         : { description: task.options[key] }
 
-      const value = getArgument({
+      // Find the value of the argument from the passed in options
+      const value = findArgument({
+        key,
+        meta,
         taskKeys,
-        options,
-        long: key,
-        short: key[0],
-        def: meta.default
+        options: optsCopy,
       })
-    
-      // Check if the arg is env, and if we should map env shortcuts
-      key === 'env'
-        ? ( args[key] = mapEnvArg(value) )
-        : softFalsy(value) || value === false
-          ? ( args[key] = value )
-          : null
 
-      // Ensure all required arguments exit
-      meta.required && !softFalsy(args[key]) && requireError(task, key, meta)
+      // If no value exists, and it's required, then throw required error
+      if(!exists(value)) meta.required && throwRequired(task, key, meta)
+
+      // Check if the arg is env, and map it from the env shortcuts
+      else args[key] = key === 'env' ? mapEnv(value) : value
 
       return args
     }, {})

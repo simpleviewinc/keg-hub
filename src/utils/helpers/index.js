@@ -1,3 +1,5 @@
 module.exports = {
-  ...require('./confirmExec')
+  ...require('./confirmExec'),
+  ...require('./exists'),
+  ...require('./mapEnv'),
 }

@@ -1,5 +1,6 @@
 
 module.exports = {
-  sync: require('./syncGlobalConfig'),
+  open: require('./open'),
   print: require('./print'),
+  sync: require('./syncGlobalConfig'),
 }

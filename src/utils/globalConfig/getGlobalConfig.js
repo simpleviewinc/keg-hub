@@ -1,5 +1,5 @@
 const { checkCall } = require('jsutils')
-const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants')
+const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst')
 const { requireFile } = require('tap-resolver/src/helpers')
 const { createGlobalConfig } = require('./createGlobalConfig')
 
