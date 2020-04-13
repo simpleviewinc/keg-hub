@@ -112,3 +112,6 @@ test-report.xml
 
 # Don't even know what this is
 *.tgz
+
+# Ingnore docker-sync deamon logs
+.docker-sync

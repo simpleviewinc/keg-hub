@@ -17,9 +17,9 @@ const startDockerSync = async args => {
   const location = getPathFromConfig(globalConfig, 'docker')
   if(!location) throwNoConfigPath(globalConfig, 'docker')
 
-  const { background } = getArguments(args)
+  const { detached } = getArguments(args)
 
-  Boolean(background)
+  Boolean(detached)
     ? await spawnCmd(`docker-sync start`, location)
     : await spawnCmd(`docker-sync-stack start`, location)
 
@@ -32,7 +32,7 @@ module.exports = {
   description: `Starts the docker-sync`,
   example: 'keg docker sync start',
   options: {
-    background: {
+    detached: {
       description: 'Runs the docker-sync process in the background',
       default: false
     }
