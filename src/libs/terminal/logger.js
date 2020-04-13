@@ -1,4 +1,4 @@
-const { get, isCol, isObj, isStr } = require('jsutils')
+const { get, isColl, isObj, isStr, isFunc } = require('jsutils')
 const colors = require('colors/safe')
 
 /**
@@ -20,11 +20,11 @@ const logData = (logger, type) => {
 
     // Loop the passed in data to log, and apply the log color
     const toLog = args.map(data => {
-      return isStr(data)
-        ? colors[logColor](data)
+      return isColl(data)
+        ? colors[logColor](JSON.stringify(data, null, 2))
         : isFunc(data.toString)
           ? colors[logColor](data.toString())
-          : colors[logColor](JSON.stringify(data, null, 2))
+          : colors[logColor](data)
     })
 
     console[logMethod](...toLog)

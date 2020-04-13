@@ -106,7 +106,10 @@ const findTask = (globalConfig, tasks, command, options) => {
 
     // Ensure a task exists
     return !isObj(task) || !isFunc(task.action)
-      ? showNoTask(command)
+      // TODO: update showNoTask accept the task and not command
+      // Because the found task could be a sub-task of the command
+      // So right now it's showing the wrong text when showNoTask prints to terminal
+      ? showNoTask(command) 
       : executeTask({
           command,
           options,

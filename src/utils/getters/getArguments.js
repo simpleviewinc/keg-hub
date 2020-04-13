@@ -134,25 +134,25 @@ const findArgument = ({ key, meta={}, ...params }) => {
   // If value exists, then return it
   if(exists(value)) return value
 
-  // Otherwise if there's not types, then return the default
-  if(!isArr(meta.types)) return meta.default
+  // Otherwise if there's not any allowed, then return the default
+  if(!isArr(meta.allowed)) return meta.default
 
-  // Otherwise loop the types and check if one exists in the options array
-  // If a type if found, it will be used as the value for the argument key
-  const typeMatch = meta.types.reduce((foundVal, type) => {
+  // Otherwise loop the allowed and check if one exists in the options array
+  // If a allowed if found, it will be used as the value for the argument key
+  const allowedMatch = meta.allowed.reduce((foundVal, allowed) => {
     return exists(foundVal)
       ? foundVal
-      : params.options.indexOf(type) !== -1
-        ? type
+      : params.options.indexOf(allowed) !== -1
+        ? allowed
         : foundVal
   }, null)
 
-  // If there's a type match then remove it from the options array
-  params.options = typeMatch
-    ? removeOption(params.options, typeMatch)
+  // If there's a allowed match then remove it from the options array
+  params.options = allowedMatch
+    ? removeOption(params.options, allowedMatch)
     : params.options
 
-  return typeMatch || meta.default
+  return allowedMatch || meta.default
 
 }
 

@@ -9,8 +9,8 @@ const { Logger } = require('KegLog')
  */
 const printInfo = (title, message) => {
   console.log(
-    Logger.colors.brightWhite(title),
-    Logger.colors.cyan(message),
+    Logger.colors.cyan(title),
+    Logger.colors.brightWhite(message),
   )
 }
 

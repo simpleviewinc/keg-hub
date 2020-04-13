@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('./throwRequired')
+  ...require('./throwNoConfigPath'),
+  ...require('./throwRequired'),
 }

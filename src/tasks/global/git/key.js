@@ -86,7 +86,7 @@ module.exports = {
   example: 'keg git key <options>',
   options: {
     action: {
-      types: [ 'add', 'remove' ],
+      allowed: [ 'add', 'remove' ],
       description: "Action to perform on the git key",
       example: 'key git key remove',
       required: true

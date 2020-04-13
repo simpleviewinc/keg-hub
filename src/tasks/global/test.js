@@ -31,7 +31,7 @@ module.exports = {
       required: true
     },
     do: {
-      types: [ 'one', 'two' ],
+      allowed: [ 'one', 'two' ],
       description: 'Things to do!'
     }
   }
