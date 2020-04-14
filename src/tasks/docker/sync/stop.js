@@ -1,6 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils')
-const { Logger } = require('KegLog')
+
 /**
  * Cleans docker-sync containers
  * @function
@@ -9,26 +9,27 @@ const { Logger } = require('KegLog')
  *
  * @returns {void}
  */
-const cleanDockerSync = ({ globalConfig }) => {
+const stopDockerSync = async args => {
+  const { globalConfig } = args
 
   const location = getPathFromConfig(globalConfig, 'docker')
   if(!location) throwNoConfigPath(globalConfig, 'docker')
 
   confirmExec({
-    confirm: `Running this command will remove all docker-sync containers. Are you sure?`,
-    success: `Finished running 'docker-sync clean' command`,
-    cancel: `Command 'keg docker sync clean' has been cancelled!`,
+    confirm: `Running this command will stop all running docker-sync containers. Are you sure?`,
+    success: `Finished running 'docker-sync stop' command`,
+    cancel: `Command 'keg docker sync stop' has been cancelled!`,
     execute: async () => {
-      await spawnCmd(`docker-sync clean`, location)
+      await spawnCmd(`docker-sync stop`, location)
     },
   })
 
 }
 
 module.exports = {
-  name: 'clean',
-  alias: [ 'cl' ],
-  action: cleanDockerSync,
-  description: `Cleans the docker-sync containers`,
-  example: 'keg docker sync clean'
+  name: 'stop',
+  alias: [ 'sp' ],
+  action: stopDockerSync,
+  description: `Stops the docker-sync deamon`,
+  example: 'keg docker sync stop',
 }

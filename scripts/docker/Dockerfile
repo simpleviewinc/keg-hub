@@ -52,7 +52,7 @@ EXPOSE 19006
 EXPOSE 19002
 
 # Switch to the cli directory, to run the docker run script
-WORKDIR /keg/tap/node_modules/keg-core
+WORKDIR /keg/tap
 
 # Run the script
-CMD [ "yarn", "web" ]
+CMD [ "/bin/bash", "/keg/cli/scripts/docker/run.sh" ]

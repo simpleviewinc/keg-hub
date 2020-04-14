@@ -1,4 +1,4 @@
-const { deepClone, get, isArr, mapObj, set } = require('jsutils')
+const { deepClone, get, isArr, reduceObj, set } = require('jsutils')
 
 /**
  * Finds the alias of passed in task, and adds it to the task object with reference to same value
@@ -25,12 +25,10 @@ const buildTaskAlias = task => {
   const subTasks = get(namedTask, `${task.name}.tasks`)
 
   // Build subTask alias by looping over each sub task and calling buildTaskAlias again
-  subTasks && mapObj(subTasks, (key, value) => {
-    set(namedTask, `${task.name}.tasks`, {
-      ...subTasks,
-      ...buildTaskAlias(value)
-    })
-  })
+  set(namedTask, `${task.name}.tasks`, reduceObj(subTasks, (key, value, existingTasks) => ({
+    ...existingTasks,
+    ...buildTaskAlias(value)
+  }), subTasks))
 
   return namedTask
 
