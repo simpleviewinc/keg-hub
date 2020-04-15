@@ -27,6 +27,18 @@ mac_docker_install(){
     brew install docker
   fi
 
+  if [[ -x "$(command -v docker-machine)" ]]; then
+    keg_message "Docker-machine is installed"
+  else
+    brew install docker-machine
+  fi
+
+  if [[ -x "$(command -v docker-compose)" ]]; then
+    keg_message "Docker-compose is installed"
+  else
+    brew install docker-compose
+  fi
+
 }
 
 # Setup docker-machine to use virtualbox
@@ -40,7 +52,7 @@ mac_setup_docker_machine(){
   # Setup docker-machine to use the virtualbox drive
   # docker-machine create --driver virtualbox default
   # Create the docker VM with virtualbox, and force the IP address to be consistent
-  docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.99.100/32" default
+  docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.99.1/24" default
 
   # Save as the default environment
   docker-machine env default
@@ -57,9 +69,9 @@ mac_setup_virtualbox(){
     keg_message "Virtualbox is installed"
   else
     brew cask install virtualbox
-    mac_setup_docker_machine
   fi
 
+  mac_setup_docker_machine
 }
 
 # Check and install nvm and node
@@ -123,17 +135,17 @@ mac_setup_docker_sync(){
       fi
 
     fi
-
-    # Install the docker-sync dep unison
-    if [[ -x "$(command -v unison)" ]]; then
-      keg_message "Installing unison"
-      brew install unison
-      brew tap eugenmayer/dockersync
-      brew install eugenmayer/dockersync/unox
-      # brew install autozimu/homebrew-formulas/unison-fsmonitor
-    fi
-
   fi
+
+  # Install the docker-sync dep unison
+  if [[ -x "$(command -v unison)" ]]; then
+    keg_message "Installing unison"
+    brew install unison
+    brew tap eugenmayer/dockersync
+    brew install eugenmayer/dockersync/unox
+    # brew install autozimu/homebrew-formulas/unison-fsmonitor
+  fi
+
 }
 
 keg_install_cli(){
@@ -221,3 +233,5 @@ keg_setup(){
   keg_message "Keg CLI setup complete!"
 
 }
+
+keg_setup
