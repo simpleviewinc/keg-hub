@@ -5,21 +5,27 @@
 
 # TODO: **IMPORTANT** Need to set this path dyamically some how
 export KEG_CLI_PATH=~/keg/cli
+KEG_DOCKER_NAME=docker-keg
+
+keg_message(){
+  echo "[ KEG CLI ] $@" >&2
+  return
+}
 
 # TODO: **IMPORTANT** Add check for if on mac, and run these docker-machine commands
-# Save as the default environment
-# docker-machine env default
-# Execute the default environment in place for the active terminal
-# eval "$(docker-machine env default)"
+# Save as the $KEG_DOCKER_NAME environment
+# docker-machine env $KEG_DOCKER_NAME
+# Execute the $KEG_DOCKER_NAME environment in place for the active terminal
+# eval "$(docker-machine env $KEG_DOCKER_NAME)"
 
 keg_cli_init_docker_machine(){
   
   if [[ -x "$(command -v VBoxManage)" ]]; then
-    echo "[KEG CLI] Loading docker-machine default env!"
-    docker-machine env default
-    eval "$(docker-machine env default)"
+    keg_message "Loading docker-machine $KEG_DOCKER_NAME env!"
+    docker-machine env $KEG_DOCKER_NAME
+    eval "$(docker-machine env $KEG_DOCKER_NAME)"
   else
-    echo "[KEG CLI] docker-machine not installed!"
+    keg_message "Error loading 'docker-machine' env. VBoxManage not installed!"
   fi
 }
 
@@ -27,7 +33,7 @@ keg_cli_move_directory(){
 
   local CMD_OUTPUT
 
-  # If no arguments, then default to keg path
+  # If no arguments, then $KEG_DOCKER_NAME to keg path
   if [[ "$#" == "0" ]]; then
     CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js keg)"
   else
@@ -61,7 +67,7 @@ keg(){
   if [[ "$1" == "reload" || "$1" == "rl" || "$1" == "src" ]]; then
 
     # Reload this bash script
-    echo "[KEG CLI] Reloading Keg CLI..."
+    keg_message "Reloading Keg CLI..."
     source $KEG_CLI_PATH/keg
     return
 
