@@ -46,7 +46,7 @@ const getPathFromConfig = () => {
   if(foundPath) return logPathResponse(foundPath)
 
   // If more then on argument is passed, then just return
-  if(args.length > 1) return
+  if(!args.length > 1) return
 
   // Otherwise check for a path in the tap links
   const tapPath = get(globalConfig, `${ TAP_LINKS }.${ pathName }`)

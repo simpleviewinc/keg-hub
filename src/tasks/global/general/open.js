@@ -58,5 +58,11 @@ module.exports = {
     action: open,
     description: `Opens the keg || globalConfig in configured IDE`,
     example: 'keg open <options>',
+    options: {
+      name: {
+        description: 'Key name of the path in globalConfig',
+        example: 'keg open core',
+      }
+    }
   }
 }

@@ -1,37 +1,9 @@
-const { get, isFunc, isStr, isObj } = require('jsutils')
-const { getTask, throwNoAction } = require('KegUtils')
-const { executeCmd } = require('KegProc')
-const { handleError, showHelp, showNoTask } = require('KegTerm')
 const Tasks = require('KegTasks')
+const { get, isFunc, isObj } = require('jsutils')
+const { getTask, executeTask } = require('KegUtils/task')
+const { handleError, showHelp, showNoTask } = require('KegTerm')
 const { HELP_ARGS, GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
-
-/**
- * Executes the passed in task.
- * <br/> Checks if a tasks has cmd key as a string, and if so runs it in a child process
- * <br/> Of if the cmd key as a function, it is called
- * <br/> The output of the the child process or function is passed to the task action
- * @function
- * @param {string} command - Name of the Keg CLI command to run
- * @param {Object} task - task object that's being executed
- * @param {Object} Tasks - Global object containing all CLI tasks
- *
- * @returns {Any} - response from the task.action function
- */
-const executeTask = async (args) => {
-  const { command, task, tasks } = args
-
-  const cmdOutput = isStr(task.cmd)
-    ? await executeCmd(task)
-    : isFunc(task.cmd)
-      ? await task.cmd(command, task, tasks)
-      : {}
-
-  return isFunc(task.action)
-    ? task.action({ ...args, cmdOutput })
-    : throwNoAction(args)
-
-}
 
 const hasHelpArg = (arg) => (HELP_ARGS.indexOf(arg) !== -1)
 
@@ -69,14 +41,7 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
  */
 const findTask = (globalConfig, tasks, command, options) => {
   // Get the task from available tasks
-  let task = getTask(tasks, command, ...options)
-
-  // Check if there's not task, and if so is there a global sub-task
-  task = !task && tasks.global.tasks[command]
-    ? tasks.global.tasks[command].tasks
-      ? getTask(tasks.global.tasks[command].tasks, options.shift(), ...options)
-      : tasks.global.tasks[command]
-    : task
+  const task = getTask(tasks, command, ...options)
 
   // If there's a task, just it
   // Otherwise check if the command is for a tap

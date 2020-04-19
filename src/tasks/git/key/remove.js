@@ -14,9 +14,6 @@ const {GLOBAL_CONFIG_PATHS } = require('KegConst')
 const removeGitKey = (args) => {
   const { globalConfig } = args
 
-  console.log(`---------- remove git key ----------`)
-  return
-
   confirmExec({
     confirm: `Remove git key from global config?`,
     success: `Removed git key from global config!`,
