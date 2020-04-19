@@ -69,8 +69,9 @@ const buildAliasTasks = () => {
   return Object.keys(built.tasks)
     .reduce((aliasTasks, key) => {
       const subSubTasks = Object.keys(get(built, `tasks.${key}.tasks`, {}))
-      
-      aliasTasks.alias = [ ...aliasTasks.alias, ...subSubTasks ]
+      const subSubAlias = get(built, `tasks.${key}.alias`, [])
+      aliasTasks.alias = [ ...aliasTasks.alias, key, ...subSubTasks, ...subSubAlias ]
+
       return aliasTasks
     }, built)
 
