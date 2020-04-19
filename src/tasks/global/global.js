@@ -18,6 +18,7 @@ const globalDefCmd = args => {
     ? get(tasks, `global.tasks.${ options[0] }`)
     : get(tasks, `global.tasks.${ command }`)
 
+
   // Check if it's a sub-command, and if so execute it
   if(subCmd)
     return executeTask({

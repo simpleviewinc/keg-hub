@@ -53,11 +53,24 @@ const matchArgType = (taskKeys, matchTypes, option, value) => {
  *
  * @returns {string} - Value of the current search
  */
-const splitEqualsMatch = (option, long, short, argument) => {
-  // Check the long and short version for '=', and split on '=' if found
-  return option.indexOf(`${long}=`) === 0 || option.indexOf(`${short}=`) === 0
-    ? option.split('=')[1]
-    : argument
+const splitEqualsMatch = (option, matchTypes, argument) => {
+  const [ key, value ] = option.split('=')
+  // Check if the key exists in the matchTypes, and return the value if it does
+  return matchTypes.indexOf(key) !== -1 ? value : argument
+}
+
+/**
+ * Builds all possible matches for the passed in argument
+ * @param {string} long - Long form name of the argument to find
+ * @param {string} short - Short form name of the argument to find
+ * @param {Array} [alias=[]] - Other names of the argument to find
+ *
+ * @returns {Array} - All possible argument names
+ */
+const buildMatchTypes = (long, short, alias=[]) => {
+  return alias.reduce((matchTypes, type) => {
+    return matchTypes.concat([ type, `--${type}`, `-${type}` ])
+  }, [ long, `--${long}`, short, `-${short}` ])
 }
 
 /**
@@ -72,9 +85,9 @@ const splitEqualsMatch = (option, long, short, argument) => {
  *
  * @returns {string} - The found value || the passed in default
  */
-const getArgValue = ({ taskKeys, options, long, short }) => {
+const getArgValue = ({ taskKeys, options, long, short, alias }) => {
 
-  const matchTypes = [ long, `--${long}`, short, `-${short}` ]
+  const matchTypes = buildMatchTypes(long, short, alias)
 
   return (isStr(long) || isStr(short)) && isArr(options) &&
     options.reduce((argument, option, index) => {
@@ -96,8 +109,8 @@ const getArgValue = ({ taskKeys, options, long, short }) => {
       )
 
       // If no value if found, then check for a split equals match
-      if(!exists(value))
-        value = splitEqualsMatch(option, long, short, argument)
+      if(!exists(value) && option.indexOf('=') !== -1)
+        value = splitEqualsMatch(option, matchTypes, argument)
 
       // If value is the next option, remove it from the options array
       if(value === nextOpt) options = removeOption(options, value)
@@ -128,7 +141,8 @@ const findArgument = ({ key, meta={}, ...params }) => {
   const value = getArgValue({
     ...params,
     long: key,
-    short: key[0]
+    short: key[0],
+    alias: meta.alias,
   })
 
   // If value exists, then return it

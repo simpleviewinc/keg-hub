@@ -1,23 +1,12 @@
 module.exports = {
   global: {
     name: 'global',
-    alias: [ 
-      'commit',
-      'git',
-      'glob',
-      'gl',
-      'open',
-      'pull',
-      'push',
-      'set',
-      'setup'
-    ],
+    alias: [  'glob', 'gl' ],
     tasks: {
-      test: require('./test'),
       ...require('./config'),
+      ...require('./general'),
       ...require('./git'),
       ...require('./setup'),
-      ...require('./open')
     },
     action: require('./global'),
     description: 'Keg CLI global specific tasks',

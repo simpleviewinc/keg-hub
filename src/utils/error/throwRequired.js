@@ -26,8 +26,9 @@ const throwRequired = (task, key, meta) => {
 
   Logger.error(`\n Task '${task.name}' requires '${key}' argument.`)
 
+  meta.alias && printInfo(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
   meta.description && printInfo(`  * Description:`, meta.description)
-  meta.types && printInfo(`  * Allowed Values:`, meta.types.join(' | '))
+  meta.allowed && printInfo(`  * Allowed Values:`, meta.allowed.join(' | '))
   meta.example && printInfo(`  * Example:`, meta.example)
 
   Logger.empty()

@@ -14,25 +14,28 @@ const testCommand = args => {
 
   const { command, options, tasks, globalConfig } = args
   const data = getArguments(args)
+  console.log(`---------- Global Test CMD ----------`)
 
 }
 
 module.exports = {
-  name: 'test',
-  action: testCommand,
-  description: `Test a cli command`,
-  example: 'keg global test',
-  options: {
-    foo: {
-      description: 'Is foo bar',
-    },
-    boo: {
-      description: 'Sounds from casper',
-      required: true
-    },
-    do: {
-      allowed: [ 'one', 'two' ],
-      description: 'Things to do!'
+  test: {
+    name: 'test',
+    action: testCommand,
+    description: `Test a cli command`,
+    example: 'keg global test',
+    options: {
+      foo: {
+        description: 'Is foo bar',
+      },
+      boo: {
+        description: 'Sounds from casper',
+        required: true
+      },
+      do: {
+        allowed: [ 'one', 'two' ],
+        description: 'Things to do!'
+      }
     }
   }
 }

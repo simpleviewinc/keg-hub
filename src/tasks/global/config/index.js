@@ -1,6 +1,7 @@
 
 module.exports = {
   ...require('./print'),
-  ...require('./syncGlobalConfig'),
   ...require('./setConfigValue'),
+  ...require('./setEditor'),
+  ...require('./syncGlobalConfig'),
 }

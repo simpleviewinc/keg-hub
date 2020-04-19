@@ -18,12 +18,7 @@ const { softFalsy, set } = require('jsutils')
  */
 const setConfigValue = args => {
   const { command, options, globalConfig } = args
-  const [ key, value ] = getArguments(args)
-
-  if(!key || !softFalsy(value) && value !== false)
-    throw new Error(
-      `Can not set global config ${key}:${value}. Both key and value must exist!`
-    )
+  const { key, value } = getArguments(args)
 
   const confirmText = softFalsy(get(globalConfig, key))
     ? `Key already exists in globalConfig. Are you sure you want to overwrite it?`

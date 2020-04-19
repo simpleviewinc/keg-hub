@@ -67,7 +67,7 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
  */
 const findTask = (globalConfig, tasks, command, options) => {
   // Get the task from available tasks
-  const task = getTask(tasks, command, ...options)
+  const task = getTask(tasks, command, ...options) || tasks.global.tasks[command]
 
   // If there's a task, just it
   // Otherwise check if the command is for a tap

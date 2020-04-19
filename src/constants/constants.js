@@ -25,6 +25,9 @@ module.exports = deepFreeze({
     'description'
   ],
 
+  // Path the the git ssh key
+  SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
+
   // Global config settings
   GLOBAL_CONFIG_PATHS: {
     CLI: 'keg.cli',
@@ -34,10 +37,12 @@ module.exports = deepFreeze({
     TAP_LINKS: `keg.cli.taps.links`,
   },
 
-  SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
-
+  // Sets the command to open an IDE
+  GLOBAL_CONFIG_EDITOR_CMD: 'keg.cli.editorCmd',
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
+  
+  // Help options. when one is passed as an option, the help menu is printed
   HELP_ARGS: [
     'help',
     '-help',

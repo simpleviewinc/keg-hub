@@ -1,5 +1,5 @@
 const { executeCmd } = require('KegProc')
-const { getPathFromConfig } = require('KegUtils')
+const { getPathFromConfig, getEditorCmd } = require('KegUtils')
 const { GLOBAL_CONFIG_FOLDER } = require('KegConst')
 const { Logger } = require('KegLog')
 /**
@@ -16,6 +16,8 @@ const open = async args => {
   // get(globalConfig, 'path.to.editor.command')
   const { globalConfig, options } = args
   const toOpen = options[0]
+
+  const editorCmd = getEditorCmd(globalConfig)
   let logText = `Opening keg folder!`
   let openPath = getPathFromConfig(globalConfig, 'keg')
 
@@ -44,7 +46,7 @@ const open = async args => {
   if(!openPath) return Logger.info(`Could not find path for ${ toOpen }`)
 
   Logger.info(logText)
-  await executeCmd(`code ${ openPath }`)
+  await executeCmd(`${ editorCmd } ${ openPath }`)
 
 }
 
