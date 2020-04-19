@@ -1,5 +1,6 @@
 const { executeCmd } = require('KegProc')
 const { getPathFromConfig } = require('KegUtils')
+const { GLOBAL_CONFIG_FOLDER } = require('KegConst')
 const { Logger } = require('KegLog')
 /**
  * Opens the CLI global config in VS Code
@@ -9,15 +10,41 @@ const { Logger } = require('KegLog')
  *
  * @returns {void}
  */
-const openKeg = async args => {
+const open = async args => {
 
   // TODO: Get the command to open users editor from global config
   // get(globalConfig, 'path.to.editor.command')
-  const { globalConfig } = args
-  const kegPath = getPathFromConfig(globalConfig, 'keg')
+  const { globalConfig, options } = args
+  const toOpen = options[0]
+  let logText = `Opening keg folder!`
+  let openPath = getPathFromConfig(globalConfig, 'keg')
 
-  Logger.info(`Opening keg folder!`)
-  await executeCmd(`code ${ kegPath }`)
+  switch(toOpen){
+    case 'config':
+    case 'con':
+    case 'c': {
+      logText = `Opening global config folder!`
+      openPath = GLOBAL_CONFIG_FOLDER
+      break
+    }
+    case 'core':
+    case 'co': {
+      logText = `Opening core folder!`
+      openPath = getPathFromConfig(globalConfig, 'core')
+    }
+    case 'components':
+    case 'comp':
+    case 'cm': {
+      logText = `Opening components folder!`
+      openPath = getPathFromConfig(globalConfig, 'components')
+    }
+    // Add other open cases here
+  }
+
+  if(!openPath) return Logger.info(`Could not find path for ${ toOpen }`)
+
+  Logger.info(logText)
+  await executeCmd(`code ${ openPath }`)
 
 }
 
@@ -25,8 +52,9 @@ const openKeg = async args => {
 module.exports = {
   open: {
     name: 'open',
-    action: openKeg,
-    description: `Opens the keg in configured IDE`,
-    example: 'keg open',
+    alias: [ 'op' ],
+    action: open,
+    description: `Opens the keg || globalConfig in configured IDE`,
+    example: 'keg open <options>',
   }
 }

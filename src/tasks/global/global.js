@@ -14,7 +14,9 @@ const { executeTask } = require('KegRunTask')
 const globalDefCmd = args => {
 
   const { command, options, tasks, globalConfig } = args
-  const subCmd = get(tasks, `global.tasks.${ command }`)
+  const subCmd = options[0] && command === 'global'  || command === 'glob' || command === 'gl'
+    ? get(tasks, `global.tasks.${ options[0] }`)
+    : get(tasks, `global.tasks.${ command }`)
 
   // Check if it's a sub-command, and if so execute it
   if(subCmd)
