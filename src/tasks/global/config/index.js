@@ -1,6 +1,7 @@
 
 module.exports = {
-  open: require('./open'),
-  print: require('./print'),
-  sync: require('./syncGlobalConfig'),
+  ...require('./open'),
+  ...require('./print'),
+  ...require('./syncGlobalConfig'),
+  ...require('./setConfigValue'),
 }

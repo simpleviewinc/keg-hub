@@ -1,19 +1,7 @@
-const { saveGlobalConfig } = require('KegUtils/globalConfig')
+const { addGlobalConfigProp } = require('KegUtils/globalConfig')
 const { confirmExec } = require('KegUtils/helpers')
+const { getArguments } = require('KegUtils')
 const { softFalsy, set } = require('jsutils')
-
-/**
- * Get the key and value from the options
- * If key has an = and not value, split on = and set the value as from that
- * @param {Array} options - options passed from the command line
- *
- * @returns {Array} Contains the key and value to set in the global config
- */
-const getKeyValue = ([ key, value ]) => {
-  return key.indexOf('=') !== -1 && !value
-    ? key.split('=')
-    : [ key, value ]
-}
 
 /**
  * Sets a value in the global config, and then saves it
@@ -28,27 +16,43 @@ const getKeyValue = ([ key, value ]) => {
  *
  * @returns {void}
  */
-const setConfigValue = async args => {
+const setConfigValue = args => {
   const { command, options, globalConfig } = args
-  const [ key, value ] = getKeyValue(options)
+  const [ key, value ] = getArguments(args)
 
   if(!key || !softFalsy(value) && value !== false)
     throw new Error(
       `Can not set global config ${key}:${value}. Both key and value must exist!`
     )
 
+  const confirmText = softFalsy(get(globalConfig, key))
+    ? `Key already exists in globalConfig. Are you sure you want to overwrite it?`
+    : `Are you sure you want to set globalConfig.${key} => ${value}?`
+
   confirmExec({
-    execute: () => saveGlobalConfig(globalConfig, key, value),
-    confirm: `Are you sure you want to set globalConfig.${key} => ${value}?`,
+    execute: () => addGlobalConfigProp(globalConfig, key, value),
+    confirm: confirmText,
     success: `Global Config value set!`,
     cancel: `Set Global config value canceled!`,
   })
- 
+
 }
 
 module.exports = {
-  name: 'sync',
-  action: setConfigValue,
-  description: `Syncs config from this repo with the global config.`,
-  example: 'keg global sync <options>'
+  set: {
+    name: 'set',
+    action: setConfigValue,
+    description: `Adds a keg path and value to the global config.`,
+    example: 'keg global set <options>',
+    options: {
+      key: {
+        description: 'Key added to the globalConfig ( Use dot notation for nested values ).',
+        required: true,
+      },
+      value: {
+        description: 'Value of the key.',
+        required: true,
+      }
+    }
+  }
 }

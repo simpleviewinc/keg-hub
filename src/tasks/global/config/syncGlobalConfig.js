@@ -27,14 +27,16 @@ const syncGlobalConfig = args => {
 }
 
 module.exports = {
-  name: 'sync',
-  action: syncGlobalConfig,
-  description: `Syncs config from this repo with the global config.`,
-  example: 'keg global sync <options>',
-  options: {
-    merge: {
-      description: 'Merge the repos global config with the User global config!',
-      default: true,
+  sync: {
+    name: 'sync',
+    action: syncGlobalConfig,
+    description: `Syncs config from this repo with the global config.`,
+    example: 'keg global sync <options>',
+    options: {
+      merge: {
+        description: 'Merge the repos global config with the User global config!',
+        default: true,
+      }
     }
   }
 }
