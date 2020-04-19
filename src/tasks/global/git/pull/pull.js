@@ -1,7 +1,6 @@
 
-
 /**
- * Git push task
+ * Git pull task
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -10,13 +9,15 @@
  *
  * @returns {void}
  */
-const gitPushRepo = args => {
-  console.log(`--- gitPushRepo ---`)
+const gitPullRepo = args => {
+  console.log(`--- gitPullRepo ---`)
 }
 
 module.exports = {
-  name: 'push',
-  action: gitPushRepo,
-  description: `Push local changes to a remote branch`,
-  example: 'keg push <options>'
+  pull: {
+    name: 'pull',
+    action: gitPullRepo,
+    description: `Pulls a git repository from github!`,
+    example: 'keg pull <options>'
+  }
 }

@@ -1,6 +1,14 @@
 module.exports = {
-  commit: require('./commit'),
-  pull: require('./pull'),
-  push: require('./push'),
-  key: require('./key'),
+  git: {
+    name: 'git',
+    description: 'Run git commands on keg and tap repos!',
+    example: 'keg git <options>',
+    tasks: {
+      ...require('./branch'),
+      ...require('./commit'),
+      ...require('./key'),
+      ...require('./pull'),
+      ...require('./push'),
+    }
+  }
 }

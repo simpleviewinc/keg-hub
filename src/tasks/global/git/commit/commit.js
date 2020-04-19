@@ -1,6 +1,6 @@
 
 /**
- * Git pull task
+ * Git commit task
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -9,13 +9,15 @@
  *
  * @returns {void}
  */
-const gitPullRepo = args => {
-  console.log(`--- gitPullRepo ---`)
+const gitCommitRepo = args => {
+  console.log(`--- gitCommitRepo ---`)
 }
 
 module.exports = {
-  name: 'pull',
-  action: gitPullRepo,
-  description: `Pulls a git repository from github!`,
-  example: 'keg pull <options>'
+  commit: {
+    name: 'commit',
+    action: gitCommitRepo,
+    description: `Commit changes to a repo.`,
+    example: 'keg commit <options>'
+  }
 }

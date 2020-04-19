@@ -1,4 +1,5 @@
 
 module.exports = {
-  ...require('./logVirtualIP')
+  ...require('./logVirtualIP'),
+  ...require('./printInfo')
 }

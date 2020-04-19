@@ -7,4 +7,5 @@ module.exports = {
   ...require('./helpers'),
   ...require('./log'),
   ...require('./template'),
+  ...require('./task'),
 }

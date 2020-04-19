@@ -1,6 +1,7 @@
 
+
 /**
- * Git commit task
+ * Git push task
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -9,13 +10,15 @@
  *
  * @returns {void}
  */
-const gitCommitRepo = args => {
-  console.log(`--- gitCommitRepo ---`)
+const gitPushRepo = args => {
+  console.log(`--- gitPushRepo ---`)
 }
 
 module.exports = {
-  name: 'commit',
-  action: gitCommitRepo,
-  description: `Commit changes to a repo.`,
-  example: 'keg commit <options>'
+  push: {
+    name: 'push',
+    action: gitPushRepo,
+    description: `Push local changes to a remote branch`,
+    example: 'keg push <options>'
+  }
 }

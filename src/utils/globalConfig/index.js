@@ -5,6 +5,7 @@ module.exports = {
   ...require('./getEditorCmd'),
   ...require('./getGlobalConfig'),
   ...require('./getPathFromConfig'),
+  ...require('./getTapPath'),
   ...require('./removeGlobalConfigProp'),
   ...require('./saveGlobalConfig'),
   ...require('./validateGlobalConfig'),
