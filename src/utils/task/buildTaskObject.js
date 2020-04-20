@@ -17,47 +17,44 @@ const checkSubTasks = (tasks, command) => {
 }
 
 /**
- * Finds a parents sub tasks, and runs it
- * @param {*} parentTask - task object of the parent
- *
- * @returns {*} Response from sub-task
- */
-const useSubTasksAction = parentTask => {
+* Default subTask runner
+* @param {Object} args - arguments passed from the runTask method
+* @param {string} args.command - Initial command being run
+* @param {Array} args.options - arguments passed from the command line
+* @param {Object} args.tasks - All registered tasks of the CLI
+* @param {Object} globalConfig - Global config object for the keg-cli
+*
+* @returns {void}
+*/
+const useSubTasksAction = args => {
 
-  /**
-  * Default subTask runner
-  * @param {Object} args - arguments passed from the runTask method
-  * @param {string} args.command - Initial command being run
-  * @param {Array} args.options - arguments passed from the command line
-  * @param {Object} args.tasks - All registered tasks of the CLI
-  * @param {Object} globalConfig - Global config object for the keg-cli
-  *
-  * @returns {void}
-  */
-  return args => {
+  const { command, options, tasks, task, globalConfig } = args
+  const subTasks = get(task, `tasks`, {})
+  const isParent = options[0] && task.name === command || task.parentAlias.indexOf(command) !== -1
+  
+  let useCommand = command
+  let subTask = options[0] && isParent
+    ? get(subTasks, options[0])
+    : (() => {
+        const foundTask = checkSubTasks(subTasks, command)
+        foundTask && options.unshift(command)
+        useCommand = task.name
+        return foundTask
+      })()
 
-    const { command, options, tasks, task, globalConfig } = args
-    const subTasks = get(task, `tasks`, {})
-    const isParent = parentTask.name === command || parentTask.alias.indexOf(command) !== -1
-    
-    let subTask = options[0] && isParent
-      ? get(subTasks, options[0])
-      : checkSubTasks(subTasks, command)
+  // If subTask is a string it's an alias, so get the task object of the alias
+  subTask = isStr(subTask) ? task.tasks[subTask] : subTask
 
-    // If subTask is a string it's an alias, so get the task object of the alias
-    subTask = isStr(subTask) ? task.tasks[subTask] : subTask
-
-    // Check if it's a sub-command, and if so execute it
-    subTask
-      ? executeTask({
-          command,
-          options,
-          task: subTask,
-          tasks,
-          globalConfig
-        })
-      : throwWrap(`Could not find sub-command ${ command } ${ options[0] }!`)
-  }
+  // Check if it's a sub-command, and if so execute it
+  subTask
+    ? executeTask({
+        tasks,
+        options,
+        globalConfig,
+        task: subTask,
+        command: useCommand,
+      })
+    : throwWrap(`Could not find sub-command ${ command } ${ options[0] }!`)
 
 }
 
@@ -69,7 +66,8 @@ const useSubTasksAction = parentTask => {
 const buildTaskObject = (task) => {
   const built = {
     ...task,
-    action: useSubTasksAction(task),
+    parentAlias: task.alias || [],
+    action: useSubTasksAction,
     alias: task.alias || [],
     tasks: task.tasks || {}
   }

@@ -1,3 +1,6 @@
+const { getGit } = require('KegUtils/git')
+const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
+const { getArguments } = require('KegUtils/task')
 
 /**
  * Git commit task
@@ -10,7 +13,19 @@
  * @returns {void}
  */
 const gitBranch = args => {
-  console.log(`--- gitCommitRepo ---`)
+  const { command, options, tasks, globalConfig } = args
+  const params = getArguments(args)
+  const name = params.name || options[1] || 'cli'
+  
+  // TODO: All this can be moved to the getGit helper
+  let gitPath = getPathFromConfig(globalConfig, name)
+  gitPath = gitPath || getTapPath(globalConfig, name)
+  if(!gitPath) throw new Error(`Git path does not exist for ${name}`)
+  
+  git = getGit(gitPath)
+
+  console.log(`--- Run git cmd here ---`)
+
 }
 
 module.exports = {
