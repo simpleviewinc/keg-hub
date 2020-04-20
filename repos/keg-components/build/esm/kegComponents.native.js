@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState, useMemo, useLayoutEffect, isValidElement, forwardRef, useRef } from 'react';
 import { useTheme, helpers as helpers$1, withTheme, useThemeHover, useThemeActive } from 're-theme';
 import { get, logData, deepMerge, reduceObj, jsonEqual, isFunc, isArr, isObj, isStr, validate, flatMap, mapEntries, checkCall, isNum, toBool, pickKeys, trainCase, capitalize } from 'jsutils';
-import { Text as Text$2, Platform, TouchableNativeFeedback, TouchableOpacity, View as View$1, Image as Image$1, TouchableWithoutFeedback, TextInput, Picker, Switch as Switch$1, Linking } from 'react-native';
+import { Text as Text$2, Platform, TouchableNativeFeedback, TouchableOpacity, View as View$1, Image as Image$1, TouchableWithoutFeedback, TextInput, Picker, Switch as Switch$1, Linking, Clipboard } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 function _defineProperty(obj, key, value) {
@@ -1858,6 +1858,41 @@ var CustomIcon = function CustomIcon(props) {
   });
 };
 
+var TextBox = function TextBox(_ref) {
+  var text = _ref.text,
+      _ref$themePath = _ref.themePath,
+      themePath = _ref$themePath === void 0 ? 'textBox.outlined.default' : _ref$themePath,
+      styles = _ref.styles,
+      _ref$useClipboard = _ref.useClipboard,
+      useClipboard = _ref$useClipboard === void 0 ? false : _ref$useClipboard,
+      _ref$maxLines = _ref.maxLines,
+      maxLines = _ref$maxLines === void 0 ? 100 : _ref$maxLines;
+  var theme = useTheme();
+  var _useThemePath = useThemePath(themePath, styles),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      style = _useThemePath2[0];
+  return React.createElement(View$1, {
+    style: theme.join(style.main, styles)
+  }, React.createElement(View$1, {
+    style: get(style, 'content.wrapper')
+  }, React.createElement(Text$2, {
+    numberOfLines: maxLines,
+    style: get(style, 'content.text')
+  }, text || '')), React.createElement(Text$2, null, useClipboard && text && React.createElement(TouchableIcon, {
+    name: 'copy',
+    size: 15,
+    wrapStyle: get(style, 'content.clipboard'),
+    onPress: function onPress(_) {
+      return text && Clipboard.setString(text);
+    }
+  })));
+};
+TextBox.propTypes = {
+  text: PropTypes.string,
+  themePath: PropTypes.string,
+  styles: PropTypes.object
+};
+
 var flex = {
   align: function align(dir) {
     return {
@@ -2969,4 +3004,4 @@ var theme = _objectSpread2({
   typography: typography
 }, components);
 
-export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, TouchableIcon, View, theme };
+export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, Label, Link, Loading, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, TextBox, TouchableIcon, View, theme };

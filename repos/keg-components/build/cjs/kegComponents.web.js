@@ -1989,6 +1989,41 @@ var CustomIcon = function CustomIcon(props) {
   });
 };
 
+var TextBox = function TextBox(_ref) {
+  var text = _ref.text,
+      _ref$themePath = _ref.themePath,
+      themePath = _ref$themePath === void 0 ? 'textBox.outlined.default' : _ref$themePath,
+      styles = _ref.styles,
+      _ref$useClipboard = _ref.useClipboard,
+      useClipboard = _ref$useClipboard === void 0 ? false : _ref$useClipboard,
+      _ref$maxLines = _ref.maxLines,
+      maxLines = _ref$maxLines === void 0 ? 100 : _ref$maxLines;
+  var theme = reTheme.useTheme();
+  var _useThemePath = useThemePath(themePath, styles),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      style = _useThemePath2[0];
+  return React__default.createElement(reactNative.View, {
+    style: theme.join(style.main, styles)
+  }, React__default.createElement(reactNative.View, {
+    style: jsutils.get(style, 'content.wrapper')
+  }, React__default.createElement(reactNative.Text, {
+    numberOfLines: maxLines,
+    style: jsutils.get(style, 'content.text')
+  }, text || '')), React__default.createElement(reactNative.Text, null, useClipboard && text && React__default.createElement(TouchableIcon, {
+    name: 'copy',
+    size: 15,
+    wrapStyle: jsutils.get(style, 'content.clipboard'),
+    onPress: function onPress(_) {
+      return text && reactNative.Clipboard.setString(text);
+    }
+  })));
+};
+TextBox.propTypes = {
+  text: PropTypes.string,
+  themePath: PropTypes.string,
+  styles: PropTypes.object
+};
+
 var flex = {
   align: function align(dir) {
     return {
@@ -3133,6 +3168,7 @@ exports.Select = Select;
 exports.Subtitle = Subtitle;
 exports.Switch = Switch;
 exports.Text = Text$1;
+exports.TextBox = TextBox;
 exports.TouchableIcon = TouchableIcon;
 exports.View = View;
 exports.theme = theme;
