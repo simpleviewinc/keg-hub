@@ -23,13 +23,13 @@ const initialize = (tasks, name, config) => {
 
 module.exports = config => {
   return {
-    // ...initialize(require('./cli'), 'cli', config),
-    // ...initialize(require('./components'), 'components', config),
-    // ...initialize(require('./core'), 'core', config),
-    // ...initialize(require('./docker'), 'docker', config),
+    ...initialize(require('./cli'), 'cli', config),
+    ...initialize(require('./components'), 'components', config),
+    ...initialize(require('./core'), 'core', config),
+    ...initialize(require('./docker'), 'docker', config),
     ...initialize(require('./git'), 'git', config),
     ...initialize(require('./global'), 'global', config),
-    // ...initialize(require('./generate'), 'generate', config),
-    // ...initialize(require('./tap'), 'tap', config),
+    ...initialize(require('./generate'), 'generate', config),
+    ...initialize(require('./tap'), 'tap', config),
   }
 }
