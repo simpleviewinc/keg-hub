@@ -22,7 +22,7 @@ const gitBranch = async args => {
   
   git = getGit(gitPath)
 
-  const [ err, data ] = await git.branch('--all')
+  const [ err, data ] = await git.branch([ '--list', '--all'])
   err ? console.error(err.stack) : gitBranchPrint(data)
 
 }
