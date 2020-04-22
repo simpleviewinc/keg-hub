@@ -99,7 +99,6 @@ const findTask = (globalConfig, tasks, command, options) => {
 }
 
 module.exports = {
-  executeTask,
   runTask,
 }
 
