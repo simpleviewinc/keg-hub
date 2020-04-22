@@ -27,9 +27,9 @@ const createBuildArg = (key, value, dockerCmd) => {
  *
  * @returns {string} - The dockerCmd string with the build args added
  */
-const getBuildArgs = (globalConfig, { name, branch, dockerCmd }) => {
+const getBuildArgs = async (globalConfig, { name, branch, dockerCmd }) => {
   
-  const gitKey = getGitKey(globalConfig)
+  const gitKey = await getGitKey(globalConfig)
   dockerCmd = !gitKey
     ? dockerCmd
     : createBuildArg(

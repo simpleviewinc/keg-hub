@@ -15,7 +15,7 @@ const { exists, mapEnv } = require('KegUtils/helpers')
  * @returns {Void}
  */
 const checkRequired = (task, key, meta) => {
-  (meta.required || meta.enforced) && throwRequired(task, key, meta)
+  meta.required && throwRequired(task, key, meta)
 }
 
 

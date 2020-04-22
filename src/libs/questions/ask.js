@@ -2,6 +2,7 @@ const { isArr } = require('jsutils')
 const inquirer = require('inquirer')
 const { confirm } = require('./confirm')
 const { input } = require('./input')
+const { password } = require('./password')
 
 /**
  * Asks a question or multiple questions to a user from the terminal
@@ -43,6 +44,14 @@ ask.confirm = question => singleQuestion(confirm(question), 'confirm')
  * @returns {*} - Response from the asked question
  */
 ask.input = question => singleQuestion(input(question), 'input')
+
+/**
+ * Helper to ask for a password
+ * @param {Object|string} question - Input question to ask
+ *
+ * @returns {*} - Response from the asked question
+ */
+ask.password = question => singleQuestion(password(question), 'password')
 
 module.exports = {
   ask
