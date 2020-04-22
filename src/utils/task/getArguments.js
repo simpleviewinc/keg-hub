@@ -3,6 +3,22 @@ const { Logger } = require('KegLog')
 const { throwRequired } = require('KegUtils/error')
 const { exists, mapEnv } = require('KegUtils/helpers')
 
+
+/**
+ * Checks for a required option, and throws if it does not exist
+ * @param {string|number|boolean} value
+ * @param {Object} task - Task Model of current task being run
+ * @param {Array} key - Name the argument to find
+ * @param {string} meta - Info about the argument from the task
+ * @param {Array} hasVal - Does the value exist
+ *
+ * @returns {Void}
+ */
+const checkRequired = (task, key, meta) => {
+  (meta.required || meta.enforced) && throwRequired(task, key, meta)
+}
+
+
 /**
  * Removes an option from the options array
  * @function
@@ -136,7 +152,7 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
  *
  * @returns {*} - Value of the search for argument from passed in options
  */
-const findArgument = ({ key, meta={}, ...params }) => {
+const findArgument = ({ key, meta={}, index, ...params }) => {
 
   const value = getArgValue({
     ...params,
@@ -156,7 +172,7 @@ const findArgument = ({ key, meta={}, ...params }) => {
   const allowedMatch = meta.allowed.reduce((foundVal, allowed) => {
     return exists(foundVal)
       ? foundVal
-      : params.options.indexOf(allowed) !== -1
+      : params.options.indexOf(allowed) === index
         ? allowed
         : foundVal
   }, null)
@@ -188,7 +204,7 @@ const getArguments = ({ options=[], task }) => {
   // This is used later to compare the keys with the passed in options
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
-  return taskKeys && taskKeys.reduce((args, key) => {
+  return taskKeys && taskKeys.reduce((args, key, index) => {
 
       // Get the option meta for the key
       const meta = isObj(task.options[key])
@@ -199,15 +215,18 @@ const getArguments = ({ options=[], task }) => {
       const value = findArgument({
         key,
         meta,
+        index,
         taskKeys,
         options: optsCopy,
       })
 
       // If no value exists, and it's required, then throw required error
-      if(!exists(value)) meta.required && throwRequired(task, key, meta)
+      if(!exists(value)) checkRequired(task, key, meta)
 
       // Check if the arg is env, and map it from the env shortcuts
-      else args[key] = key === 'env' ? mapEnv(value) : value
+      else args[key] = key === 'env' || key === 'environment'
+        ? mapEnv(value)
+        : value
 
       return args
     }, {})

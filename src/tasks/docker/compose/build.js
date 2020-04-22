@@ -28,6 +28,10 @@ const upDockerCompose = async args => {
   dockerCmd = addDockerArg(dockerCmd, '--no-cache', !Boolean(cache))
   dockerCmd = addDockerArg(dockerCmd, '--pull', Boolean(pull))
 
+  // TODO: add some type of ENV loading for docker compose up command
+  // Would look something like this => env $(cat local.env) docker-compose up
+  // ENV_FILE=.env.production.local docker-compose -f docker-compose.prod.yml up --build
+  // docker-compose --env-file foo.env up => This should work
   await spawnCmd(`${dockerCmd} tap`, location)
 
 }

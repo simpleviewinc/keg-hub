@@ -12,8 +12,6 @@ const { Logger } = require('KegLog')
  */
 const open = async args => {
 
-  // TODO: Get the command to open users editor from global config
-  // get(globalConfig, 'path.to.editor.command')
   const { globalConfig, options } = args
   const toOpen = options[0]
 

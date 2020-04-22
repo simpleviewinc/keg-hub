@@ -15,12 +15,12 @@ const { getArguments } = require('./getArguments')
  * @returns {Any} - response from the task.action function
  */
 const executeTask = async (args) => {
-  const { command, task, tasks } = args
+  const { command, task, tasks, options } = args
 
   const cmdOutput = isStr(task.cmd)
     ? await executeCmd(task)
     : isFunc(task.cmd)
-      ? await task.cmd(command, task, tasks)
+      ? await task.cmd(command, task, tasks, options)
       : {}
 
   return isFunc(task.action)

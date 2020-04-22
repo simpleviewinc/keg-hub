@@ -4,8 +4,8 @@ const {
   getGitKey,
   gitKeyExists,
   removeGlobalConfigProp,
-  throwRequired
 } = require('KegUtils')
+const { throwRequired } = require('KegUtils/error')
 const { encrypt } = require('KegCrypto')
 const { ask } = require('KegQuestions')
 const {GLOBAL_CONFIG_PATHS } = require('KegConst')

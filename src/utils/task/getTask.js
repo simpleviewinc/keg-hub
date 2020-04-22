@@ -10,11 +10,11 @@ const { get, isStr, isObj } = require('jsutils')
  * <br/> If there are sub tasks, They are recursively compared against the passed in args
  * @function
  * @param {Object} tasks - Object to search for tasks by key
- * @param {Array} args - An array of strings repersenting path to the task
+ * @param {Array} options - All passed in options from the command line
  *
  * @returns {Object} - Found task Object
  */
-const getTask = (tasks, ...options) => {
+const loopTasks = (tasks, options) => {
 
   const taskKey = options.shift()
   const parent = tasks[taskKey]
@@ -23,14 +23,30 @@ const getTask = (tasks, ...options) => {
   // Otherwise use the parent should already be an object for a valid task
   const parentTask = isStr(parent) ? tasks[parent] : parent
 
-  // Just return if no valid task is found
-  if(!isObj(parentTask)) return null
-
   // Check it there's child tasks, and try to find one matching the passed in options
-  const childTask = isObj(parentTask.tasks) && getTask(parentTask.tasks, ...options)
+  const childTask = isObj(parentTask)
+    ? isObj(parentTask.tasks) && loopTasks(parentTask.tasks, options)
+    : false
+
+  // Add the option back when no child task is found
+  if(!childTask && !parentTask && taskKey) options.unshift(taskKey)
 
   // Return the found child task, or parent task
   return childTask || parentTask
+
+}
+
+
+/**
+ * Searches for the task based on the passed in options
+ * @param {Object} tasks - All registered tasks to the KEG-CLI
+ * @param {Array} options - All passed in options from the command line
+ *
+ * @returns {Object} - Found task, with updated options
+ */
+const getTask = (tasks, ...options) => {
+  const task = loopTasks(tasks, options)
+  return task && { task, options }
 }
 
 module.exports = {

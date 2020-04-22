@@ -10,8 +10,9 @@ const { printInfo } = require('../log')
  * @returns {void}
  */
 const throwRequired = (task, key, meta) => {
+  const requireType = meta.required ? 'requires' : 'enforces a'
 
-  Logger.error(`\n Task '${task.name}' requires '${key}' argument.`)
+  Logger.error(`\n Task '${task.name}' ${requireType} '${key}' argument.`)
 
   meta.alias && printInfo(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
   meta.description && printInfo(`  * Description:`, meta.description)
