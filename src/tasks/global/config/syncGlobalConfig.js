@@ -1,6 +1,5 @@
 const { createGlobalConfig } = require('KegUtils/globalConfig')
 const { confirmExec } = require('KegUtils/helpers')
-const { getArguments } = require('KegUtils')
 
 /**
  * Syncs the repos keg cli global config object with the user's ~/.kegConfig/cli.config.json config
@@ -13,9 +12,8 @@ const { getArguments } = require('KegUtils')
  * @returns {void}
  */
 const syncGlobalConfig = args => {
-  
-  const { command, options, globalConfig } = args
-  const { merge } = getArguments(args)
+  const { command, globalConfig, options, params } = args
+  const { merge } = params
 
   confirmExec({
     execute: () => createGlobalConfig(globalConfig, merge),

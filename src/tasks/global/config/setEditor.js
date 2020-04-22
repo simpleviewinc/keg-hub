@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { GLOBAL_CONFIG_EDITOR_CMD } = require('KegConst')
-const { getArguments, confirmExec, addGlobalConfigProp } = require('KegUtils')
+const { confirmExec, addGlobalConfigProp } = require('KegUtils')
 
 /**
  * Opens the CLI global config in VS Code
@@ -12,8 +12,8 @@ const { getArguments, confirmExec, addGlobalConfigProp } = require('KegUtils')
  */
 const setEditor = async args => {
 
-  const { options, globalConfig } = args
-  const { command } = getArguments(args)
+  const { globalConfig, options, params } = args
+  const { command } = params
 
   confirmExec({
     execute: () => addGlobalConfigProp(globalConfig, GLOBAL_CONFIG_EDITOR_CMD, command),

@@ -1,4 +1,3 @@
-const { getArguments } = require('KegUtils')
 
 /**
  * Test task for global commands
@@ -12,8 +11,8 @@ const { getArguments } = require('KegUtils')
  */
 const testCommand = args => {
 
-  const { command, options, tasks, globalConfig } = args
-  const data = getArguments(args)
+  const { command, globalConfig, options, params, tasks } = args
+  const data = params
   console.log(`---------- Global Test CMD ----------`)
 
 }

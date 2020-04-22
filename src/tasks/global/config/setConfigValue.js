@@ -1,6 +1,5 @@
 const { addGlobalConfigProp } = require('KegUtils/globalConfig')
 const { confirmExec } = require('KegUtils/helpers')
-const { getArguments } = require('KegUtils')
 const { softFalsy, set } = require('jsutils')
 
 /**
@@ -17,8 +16,8 @@ const { softFalsy, set } = require('jsutils')
  * @returns {void}
  */
 const setConfigValue = args => {
-  const { command, options, globalConfig } = args
-  const { key, value } = getArguments(args)
+  const { command, globalConfig, options, params } = args
+  const { key, value } = params
 
   const confirmText = softFalsy(get(globalConfig, key))
     ? `Key already exists in globalConfig. Are you sure you want to overwrite it?`

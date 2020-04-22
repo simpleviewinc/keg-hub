@@ -1,7 +1,6 @@
 const {
   addGlobalConfigProp,
   confirmExec,
-  getArguments,
   getGitKey,
   gitKeyExists,
   removeGlobalConfigProp,
@@ -19,8 +18,8 @@ const {GLOBAL_CONFIG_PATHS } = require('KegConst')
  * @returns {void}
  */
 const addGitKey = (args) => {
-  const { globalConfig, task } = args
-  const { value } = getArguments(args)
+  const { globalConfig, params, task } = args
+  const { value } = params
 
   // Ensure we have a value for the git key, or throw error
   if(!value) throwRequired(task, key, task.options.value)

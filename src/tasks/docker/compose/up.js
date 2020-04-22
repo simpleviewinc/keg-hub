@@ -1,7 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils')
 const { Logger } = require('KegLog')
-const { getArguments } = require('KegUtils')
 const { addValueFiles, addDockerArg } = require('KegDocker')
 
 /**
@@ -13,12 +12,12 @@ const { addValueFiles, addDockerArg } = require('KegDocker')
  * @returns {void}
  */
 const upDockerCompose = async args => {
-  const { globalConfig } = args
+  const { globalConfig, params } = args
 
   const location = getPathFromConfig(globalConfig, 'docker')
   if(!location) throwNoConfigPath(globalConfig, 'docker')
 
-  const { detached, build } = getArguments(args)
+  const { detached, build } = params
 
   let dockerCmd = `docker-compose`
   dockerCmd = addValueFiles(dockerCmd)

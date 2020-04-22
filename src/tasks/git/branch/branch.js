@@ -1,6 +1,5 @@
 const { getGit, gitBranchPrint } = require('KegLibs/git')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
-const { getArguments } = require('KegUtils/task')
 
 /**
  * Git commit task
@@ -13,8 +12,7 @@ const { getArguments } = require('KegUtils/task')
  * @returns {void}
  */
 const gitBranch = async args => {
-  const { command, options, tasks, globalConfig } = args
-  const params = getArguments(args)
+  const { command, options, params, tasks, globalConfig } = args
   const name = params.name || options[1] || 'cli'
   
   // TODO: All this can be moved to the getGit helper

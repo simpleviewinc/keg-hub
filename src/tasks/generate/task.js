@@ -1,5 +1,5 @@
 const { get, mapObj } = require('jsutils')
-const { getArguments, fillTemplate, getRootDir } = require('KegUtils')
+const { fillTemplate, getRootDir } = require('KegUtils')
 const { readFile, writeFile, pathExists, mkDir } = require('KegFileSys')
 const { ask, input } = require('KegQuestions')
 const { Logger } = require('KegLog')
@@ -60,10 +60,9 @@ const saveTask = async (content, { parent, name }) => {
  * @returns {void}
  */
 const generateTask = async args => {
-  const { command, options, globalConfig } = args
-  const defaults = getArguments(args)
+  const { command, options, globalConfig, params } = args
 
-  const answers = await ask(buildQuestions(taskQuestions, defaults))
+  const answers = await ask(buildQuestions(taskQuestions, params))
 
   const filled = await fillTemplate({
     loc: path.join(__dirname, './templates/task.template.js'),

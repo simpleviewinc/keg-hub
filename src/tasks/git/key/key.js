@@ -1,4 +1,4 @@
-const { getArguments, executeTask } = require('KegUtils/task')
+const { executeTask } = require('KegUtils/task')
 const { throwWrap } = require('KegUtils/error')
 const { isStr } = require('jsutils')
 
@@ -13,8 +13,8 @@ const { isStr } = require('jsutils')
  * @returns {void}
  */
 const gitKey = args => {
-  const { globalConfig, task, tasks, options } = args
-  const { action, value } = getArguments(args)
+  const { globalConfig, options, params, task, tasks } = args
+  const { action, value } = params
 
   let subTask = task.tasks[action]
   subTask = isStr(subTask) ? task.tasks[subTask] : subTask

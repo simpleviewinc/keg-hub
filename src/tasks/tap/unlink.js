@@ -3,7 +3,7 @@ const inquirer = require('inquirer')
 const { get, set, isObj } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')
-const { getArguments, removeGlobalConfigProp, getTapPath } = require('KegUtils')
+const { removeGlobalConfigProp, getTapPath } = require('KegUtils')
 
 /**
  * Confirms removing the tap link from the global config
@@ -50,9 +50,8 @@ const removeTapLink = (globalConfig, linkPath, tapName, tapPath) => {
  * @returns {void}
  */
 const unlinkTap = async args => {
-  const { command, options, tasks, globalConfig } = args
-
-  const { name } = getArguments(args)
+  const { command, globalConfig, options, params, tasks } = args
+  const { name } = params
 
   // Check if the link alread exists, and if we should overwrite it
   const removeLink = await ensureRemoveLink(globalConfig, name)

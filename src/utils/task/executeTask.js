@@ -1,7 +1,7 @@
 const { get, isFunc, isStr } = require('jsutils')
 const { throwNoAction } = require('KegUtils/error')
 const { executeCmd } = require('KegProc')
-
+const { getArguments } = require('./getArguments')
 /**
  * Executes the passed in task.
  * <br/> Checks if a tasks has cmd key as a string, and if so runs it in a child process
@@ -24,7 +24,7 @@ const executeTask = async (args) => {
       : {}
 
   return isFunc(task.action)
-    ? task.action({ ...args, cmdOutput })
+    ? task.action({ ...args, cmdOutput, params: getArguments(args) })
     : throwNoAction(args)
 
 }

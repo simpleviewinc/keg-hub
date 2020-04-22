@@ -2,7 +2,7 @@ const { Logger } = require('KegLog')
 const { get, set, isObj } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')
-const { getArguments, addGlobalConfigProp, getTapPath } = require('KegUtils')
+const { addGlobalConfigProp, getTapPath } = require('KegUtils')
 
 /**
  * Checks if the link already exists, and if it does asks if the user wants to overwrite
@@ -58,10 +58,8 @@ const addTapLink = (globalConfig, name, path) => {
  * @returns {void}
  */
 const linkTap = async args => {
-  const { command, options, tasks, globalConfig } = args
-
-  // Get the args needed to link the tap
-  const { name, path } = getArguments(args)
+  const { command, globalConfig, options, params, tasks } = args
+  const { name, path } = params
 
   // Check if the link alread exists, and if we should overwrite it
   const addLink = await ensureAddLink(globalConfig, name)

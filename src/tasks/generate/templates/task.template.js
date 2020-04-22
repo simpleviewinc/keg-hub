@@ -1,5 +1,3 @@
-const { get } = require('jsutils')
-const { getArguments } = require('KegUtils')
 
 /**
  * {{description}}
@@ -12,8 +10,7 @@ const { getArguments } = require('KegUtils')
  * @returns {void}
  */
 const {{name}} = args => {
-  const { command, options, globalConfig } = args
-  const data = getArguments(args)
+  const { command, options, globalConfig, params } = args
 
 }
 

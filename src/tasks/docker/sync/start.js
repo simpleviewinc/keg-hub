@@ -1,7 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils')
 const { Logger } = require('KegLog')
-const { getArguments } = require('KegUtils')
 
 /**
  * Cleans docker-sync containers
@@ -12,12 +11,12 @@ const { getArguments } = require('KegUtils')
  * @returns {void}
  */
 const startDockerSync = async args => {
-  const { globalConfig } = args
+  const { globalConfig, params } = args
 
   const location = getPathFromConfig(globalConfig, 'docker')
   if(!location) throwNoConfigPath(globalConfig, 'docker')
 
-  const { detached } = getArguments(args)
+  const { detached } = params
 
   Boolean(detached)
     ? await spawnCmd(`docker-sync start`, location)
