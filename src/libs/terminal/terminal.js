@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const { isStr, isObj } = require('jsutils')
-const { printHeader } = require('./printHeader')
 const { showHelp } = require('./showHelp')
 const { Logger } = require('./logger')
 
@@ -28,7 +27,7 @@ const showNoTask = (command, unknown=true) => {
  * @returns {void}
  */
 const handleError = err => {
-  printHeader(`Keg-CLI Error:`)
+  Logger.header(`Keg-CLI Error:`)
   Logger.error(`  ${err.stack}`)
   console.log('')
   process.exit(1)

@@ -3,4 +3,5 @@ module.exports = {
   ...require('./throwNoConfigPath'),
   ...require('./throwRequired'),
   ...require('./throwWrap'),
+  ...require('./throwGitCmd'),
 }

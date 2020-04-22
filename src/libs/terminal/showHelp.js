@@ -1,5 +1,5 @@
 const { get, isStr, isObj, mapObj } = require('jsutils')
-const { printHeader } = require('./printHeader')
+const { Logger } = require('./logger')
 const colors = require('colors/safe')
 
 /**
@@ -31,7 +31,7 @@ const showHelpHeader = (header, subHeader) => {
 
   if(!header) return
 
-  printHeader(header)
+  Logger.header(header)
   subHeader && console.log(colors.brightBlue(subHeader))
   console.log(``)
 }

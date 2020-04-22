@@ -1,4 +1,4 @@
-const { getGit } = require('KegUtils/git')
+const { getGit, gitBranchPrint } = require('KegLibs/git')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { getArguments } = require('KegUtils/task')
 
@@ -12,7 +12,7 @@ const { getArguments } = require('KegUtils/task')
  *
  * @returns {void}
  */
-const gitBranch = args => {
+const gitBranch = async args => {
   const { command, options, tasks, globalConfig } = args
   const params = getArguments(args)
   const name = params.name || options[1] || 'cli'
@@ -24,7 +24,8 @@ const gitBranch = args => {
   
   git = getGit(gitPath)
 
-  console.log(`--- Run git cmd here ---`)
+  const [ err, data ] = await git.branch('--all')
+  err ? console.error(err.stack) : gitBranchPrint(data)
 
 }
 

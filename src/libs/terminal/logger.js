@@ -65,12 +65,50 @@ class Log {
 
   }
 
-  // Helper to change the default colors
+  color = (colorName, data) => {
+    return colors[this.colorMap[colorName] || colorName](data)
+  }
+
+  print = (...data) => {
+    console.log(...data)
+  }
+
+  /**
+  * Helper to change the default colors
+  * @returns {void}
+  */
   setColors(colorMap){
     isObj(colorMap) && (this.colorMap = { ...this.colorMap, ...colorMap })
   }
 
+  /**
+  * Helper to log an empty line
+  * @returns {void}
+  */
   empty = () => console.log('')
+
+  /**
+  * Helper to log out CLI message header
+  * @param {string} title
+  *
+  * @returns {void}
+  */
+  header = title => {
+    const middle = `              ${title}              `
+
+    const line = middle.split('').reduce((line, item, index) => {
+      line+=' '
+
+      return line
+    })
+
+    console.log(``)
+    console.log(colors.underline.brightGreen(line))
+    console.log(line)
+    console.log(colors.brightGreen(middle))
+    console.log(colors.underline.brightGreen(line))
+    console.log(``)
+  }
 
 }
 
