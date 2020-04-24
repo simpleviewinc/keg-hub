@@ -4,4 +4,6 @@ module.exports = {
   ...require('./throwRequired'),
   ...require('./throwWrap'),
   ...require('./throwGitCmd'),
+  ...require('./throwNoFileExists'),
+  ...require('./generalError'),
 }

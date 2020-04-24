@@ -5,6 +5,7 @@ const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants')
 const { ensureDirSync } = require('tap-resolver/src/helpers')
 const { validateGlobalConfig } = require('./validateGlobalConfig')
 const { writeFile } = require('KegFileSys')
+const { __updateGlobalConfig } = require('./getGlobalConfig')
 
 /**
  * Validate the config is the global config and that then global config path exists
@@ -25,6 +26,9 @@ const saveGlobalConfig = async config => {
       path.join(GLOBAL_CONFIG_FOLDER, `${GLOBAL_CONFIG_FILE}.json`),
       JSON.stringify(config, null, 2),
     )
+
+  // Update the cached version for getGlobalConfig calls
+  __updateGlobalConfig(config)
 
   return config
 

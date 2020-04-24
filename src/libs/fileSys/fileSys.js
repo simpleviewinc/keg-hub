@@ -50,6 +50,14 @@ const pathExists = checkPath => {
 }
 
 /**
+ * Checks if a file path exists on the local HHD
+ * @param {string} checkPath - Path to check if exists
+ *
+ * @returns {Promise|boolean} - True if the path exists, false if not
+ */
+const pathExistsSync = checkPath => fs.existsSync(checkPath)
+
+/**
  * Reads a file from local HHD, and returns the contents
  * @param {string} filePath - Path of the file to read
  * @param {string} [format=utf8] - Format of the file
@@ -68,6 +76,7 @@ module.exports = {
   mkDir,
   movePath,
   pathExists,
+  pathExistsSync,
   writeFile,
   readFile,
 }

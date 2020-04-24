@@ -25,8 +25,7 @@ module.exports = deepFreeze({
     'description'
   ],
 
-  // Path the the git ssh key
-  SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
+ 
 
   // Global config settings
   GLOBAL_CONFIG_PATHS: {
@@ -51,7 +50,16 @@ module.exports = deepFreeze({
     '-h',
     '--h',
   ],
-  
-  GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no",
 
+  
+  // --- GIT Constants --- //
+  // Path the the git ssh key
+  GIT_SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
+  GIT_SSH_COMMAND: "ssh",
+  GIT_SSH_KEY: '-i {{ GIT_KEY_PATH }}',
+  GIT_SSH_PARAMS: [
+    '-o BatchMode=yes',
+    '-o UserKnownHostsFile=/dev/null',
+    '-o StrictHostKeyChecking=no'
+  ]
 })
