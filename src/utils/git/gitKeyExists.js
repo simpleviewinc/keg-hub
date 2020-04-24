@@ -11,7 +11,7 @@ const { decrypt } = require('KegCrypto')
  */
 const gitKeyExists = globalConfig => {
   return Boolean(
-    process.env[ DOCKER.BUILD.ARGS.GIT_KEY ] ||
+    process.env[ DOCKER.BUILD.BASE.ARGS.GIT_KEY ] ||
       get(globalConfig, `${GLOBAL_CONFIG_PATHS.GIT}.key`)
   )
 }

@@ -2,6 +2,7 @@ const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount } = require('./getDirsToMount')
 const { getVolumeMounts } = require('./getVolumeMounts')
 const { getBuildArgs } = require('./getBuildArgs')
+const { getDockerImg } = require('./getDockerImg')
 const {
   addContainerName,
   addContainerEnv,
@@ -19,14 +20,15 @@ const {
  *
  * @returns {string} - Built docker build command
  */
-const createBuildCmd = (globalConfig, dockerCmd, params) => {
-  const { location, name, branch, tags, version } = params
-
+const createBuildCmd = async (globalConfig, dockerCmd, params) => {
+  const { container, img, location, name, branch, tags=[], version } = params
+  const image = getDockerImg(img, container)
+  
   // Add any tags if needed
-  dockerCmd = getBuildTags({ name, tags, version, dockerCmd })
+  dockerCmd = getBuildTags({ image, name, tags, version, dockerCmd })
 
   // Add the build args for the github key and tap git url
-  dockerCmd = getBuildArgs(globalConfig, { name, branch, dockerCmd })
+  dockerCmd = await getBuildArgs(globalConfig, { name, branch, dockerCmd, container })
 
   // Add the location last. This is the location the container will be built from
   return location
@@ -70,7 +72,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
 
   // Add the location last. This is the location the container will be built from
   return img
-    ? `${dockerCmd} ${img}`
+    ? `${dockerCmd} ${getDockerImg(img, container)}`
     : dockerCmd
 }
 

@@ -1,10 +1,9 @@
 const path = require('path')
-const packageJson = require('../../../package.json')
-const cliJson = require('../../../cli.json')
-const { deepMerge } = require('jsutils') 
-
-const cliRoot = path.join(__dirname, '../../../')
-const cliParent = path.join(__dirname, '../../../../')
+const { CLI_ROOT } = require('KegConst/constants')
+const packageJson = require('KegRoot/package.json')
+const cliJson = require('KegRoot/cli.json')
+const { deepMerge } = require('jsutils')
+const cliParent = path.join(CLI_ROOT, '../')
 
 /**
  * Builds the default global config from the package.json and the cli.json
@@ -19,7 +18,7 @@ const defaultConfig = () => {
   config.keg = {
     cli: {
       paths: {
-        cli: cliRoot,
+        cli: CLI_ROOT,
         keg: cliParent,
         core: path.join(cliParent, 'keg-core'),
         components: path.join(cliParent, 'keg-components'),

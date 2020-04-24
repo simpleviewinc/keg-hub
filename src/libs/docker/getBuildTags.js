@@ -9,7 +9,9 @@ const { isArr } = require('jsutils')
  *
  * @returns {string} - Formatted string of tags for docker
  */
-const getBuildTags = ({ name, options, version, dockerCmd='' }) => {
+const getBuildTags = ({ image, name, options, version, dockerCmd='' }) => {
+
+  const nameTag = image ? image : version  ? `${name}:${version}` : name
 
   const tags = isArr(options) && options
     .reduce((tags, option, index) => {
@@ -30,8 +32,8 @@ const getBuildTags = ({ name, options, version, dockerCmd='' }) => {
     }, [])
 
   return tags && tags.length
-    ? `${dockerCmd} -t ${name} -t ${name}:` + tags.join(` -t ${name}:`).trim()
-    : `${dockerCmd} -t ${name} -t ${name}:${version}`
+    ? `${dockerCmd} -t ${nameTag} -t ${name}:` + tags.join(` -t ${name}:`).trim()
+    : `${dockerCmd} -t ${nameTag}`
 
 }
 

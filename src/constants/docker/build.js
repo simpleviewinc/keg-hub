@@ -19,13 +19,16 @@ const DEFAULT = {
     'GIT_KEY',
     'GIT_CLI_URL',
   ], true),
+  CONFIG: {}
 }
 
 module.exports = deepFreeze({
   CONTAINERS_PATH: containersPath,
   DOCKER_CONFIG_PATH: path.join(containersPath, 'config'),
   BUILD: {
-    BASE: deepMerge(DEFAULT, {}),
+    BASE: deepMerge(DEFAULT, {
+      CONFIG: require(path.join(containersPath, 'base/config.json'))
+    }),
     TAP: deepMerge(DEFAULT, {
       VALUES: {
         file: `-f ${tapDockerFile}`,
@@ -33,6 +36,7 @@ module.exports = deepFreeze({
       ARGS: keyMap([
         'GIT_TAP_URL',
       ], true),
+      CONFIG: require(path.join(containersPath, 'tap/config.json'))
     })
   },
 })
