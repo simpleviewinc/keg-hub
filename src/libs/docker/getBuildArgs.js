@@ -29,14 +29,23 @@ const createBuildArg = (key, value, dockerCmd) => {
  */
 const getBuildArgs = async (globalConfig, { cmd, container, name, branch, dockerCmd }) => {
   
-  const buildOpts = get(DOCKER, [ cmd.toUpperCase(), container.toUpperCase() ])
+  const buildOpts = get(DOCKER, [ 'BUILD', container.toUpperCase() ])
   const gitKey = await getGitKey(globalConfig)
 
   dockerCmd = !gitKey
     ? dockerCmd
     : createBuildArg(
-        get(buildOpts, 'ARGS.GIT_KEY', 'GIT_KEY')
+        get(buildOpts, 'ARGS.GIT_KEY', 'GIT_KEY'),
         gitKey,
+        dockerCmd
+      )
+
+  const gitCliUrl = getGitUrl(globalConfig, 'cli')
+  dockerCmd = !gitCliUrl
+    ? dockerCmd
+    : createBuildArg(
+        get(buildOpts, 'ARGS.GIT_CLI_URL', 'GIT_CLI_URL'),
+        gitCliUrl,
         dockerCmd
       )
 

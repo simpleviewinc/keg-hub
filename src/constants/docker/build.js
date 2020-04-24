@@ -2,7 +2,7 @@ const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
 
 const cliRootDir = path.join(__dirname, '../../../')
-const containersPath = path.join(cliRootDir, 'containers'),
+const containersPath = path.join(cliRootDir, 'containers')
 const baseDockerFile = path.join(containersPath, 'base/Dockerfile')
 const tapDockerFile = path.join(containersPath, 'tap/Dockerfile')
 
@@ -27,14 +27,12 @@ module.exports = deepFreeze({
   BUILD: {
     BASE: deepMerge(DEFAULT, {}),
     TAP: deepMerge(DEFAULT, {
-      {
-        VALUES: {
-          file: `-f ${tapDockerFile}`,
-        },
-        ARGS: keyMap([
-          'GIT_TAP_URL',
-        ], true),
+      VALUES: {
+        file: `-f ${tapDockerFile}`,
       },
+      ARGS: keyMap([
+        'GIT_TAP_URL',
+      ], true),
     })
   },
 })
