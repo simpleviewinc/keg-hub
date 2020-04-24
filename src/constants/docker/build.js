@@ -1,10 +1,17 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
+const { loadENV } = require('KegFileSys')
 
 const cliRootDir = path.join(__dirname, '../../../')
 const containersPath = path.join(cliRootDir, 'containers')
 const baseDockerFile = path.join(containersPath, 'base/Dockerfile')
 const tapDockerFile = path.join(containersPath, 'tap/Dockerfile')
+
+const configEnv = process.env.NODE_ENV
+  ? process.env.NODE_ENV === 'development'
+    ? 'local'
+    : process.env.NODE_ENV
+  : 'local'
 
 const DEFAULT = {
   VALUES: {
@@ -19,7 +26,10 @@ const DEFAULT = {
     'GIT_KEY',
     'GIT_CLI_URL',
   ], true),
-  CONFIG: {}
+  ENV: deepMerge(
+    loadENV(path.join(containersPath, 'config/.env')) || {},
+    loadENV(path.join(containersPath, `config/${ configEnv }.env`)) || {},
+  )
 }
 
 module.exports = deepFreeze({
@@ -27,7 +37,7 @@ module.exports = deepFreeze({
   DOCKER_CONFIG_PATH: path.join(containersPath, 'config'),
   BUILD: {
     BASE: deepMerge(DEFAULT, {
-      CONFIG: require(path.join(containersPath, 'base/config.json'))
+      ENV: loadENV(path.join(containersPath, 'base/.env'))
     }),
     TAP: deepMerge(DEFAULT, {
       VALUES: {
@@ -36,7 +46,7 @@ module.exports = deepFreeze({
       ARGS: keyMap([
         'GIT_TAP_URL',
       ], true),
-      CONFIG: require(path.join(containersPath, 'tap/config.json'))
+      ENV: loadENV(path.join(containersPath, 'tap/.env'))
     })
   },
 })

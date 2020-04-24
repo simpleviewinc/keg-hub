@@ -12,8 +12,8 @@ const getDockerImg = (img, container='') => {
   if(img) return img
 
   const cont = container.toUpperCase()
-  const image = get(BUILD, `${cont}.CONFIG.image`)
-  const version = get(BUILD, `${cont}.CONFIG.version`, '')
+  const image = get(BUILD, `${cont}.ENV.image`)
+  const version = get(BUILD, `${cont}.ENV.version`, '')
 
   return `${ image }${ version ? (':' + version) : '' }`
 

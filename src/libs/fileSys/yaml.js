@@ -33,10 +33,15 @@ const writeYml = async (filePath, data) => {
     confirm: `Overwrite YAML file => ${filePath}?`,
     success: `YAML file written successfully!`,
     cancel: `Write YAML file canceled!`,
-    preConfirm: !pathExistsSync(filePath)
+    preConfirm: !pathExistsSync(filePath),
     execute: async () => {
       const [ err, _ ] = await limbo(writeYamlFile(filePath, data))
       return err ? generalError(err.stack) : true
     },
   })
+}
+
+module.exports = {
+  loadYml,
+  writeYml
 }
