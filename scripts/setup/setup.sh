@@ -319,7 +319,7 @@ keg_clean_all(){
   brew uninstall docker
 
   keg_message "Removing virtualbox..."
-  brew cask uninstall virtualbox
+  # brew cask uninstall virtualbox
 
   # Reload users .bashrc and .bash_profile
   keg_src_bash

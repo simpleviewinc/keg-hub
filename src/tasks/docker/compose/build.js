@@ -1,5 +1,5 @@
 const { spawnCmd } = require('KegProc')
-const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils')
+const { getPathFromConfig, throwNoConfigPath } = require('KegUtils')
 const { buildDockerCmd, addDockerArg, addValueFiles, getBuildArgs } = require('KegDocker')
 const { Logger } = require('KegLog')
 
