@@ -1,5 +1,5 @@
 const { DOCKER } = require('KegConst')
-const { reduceObj, softFalsy } = require('jsutils')
+const { reduceObj, softFalsy, get } = require('jsutils')
 
 /**
  * Loops over the passed in args and maps them to the docker constants
@@ -15,9 +15,9 @@ const { reduceObj, softFalsy } = require('jsutils')
  *
  * @returns {string} - Joint docker command arguments
  */
-const getDockerArgs = (cmd, args, dockerCmd='') => {
+const getDockerArgs = (cmd, args, container='base', dockerCmd='') => {
   
-  const cmdOpts = DOCKER[cmd.toUpperCase()]
+  const cmdOpts = get(DOCKER, [ cmd.toUpperCase(), container.toUpperCase() ])
   const checkArgs = { ...cmdOpts.DEFAULTS, ...args }
 
   return reduceObj(cmdOpts.VALUES, (key, value, joinedArgs) => {

@@ -1,8 +1,13 @@
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount } = require('./getDirsToMount')
-const { addContainerName, addContainerEnv, addTapMount, getDockerArgs } = require('./getDockerArgs')
 const { getVolumeMounts } = require('./getVolumeMounts')
 const { getBuildArgs } = require('./getBuildArgs')
+const {
+  addContainerName,
+  addContainerEnv,
+  addTapMount,
+  getDockerArgs
+} = require('./getDockerArgs')
 
 /**
  * Creates a docker run command as a string. Adds any needed volume mounts
@@ -41,7 +46,7 @@ const createBuildCmd = (globalConfig, dockerCmd, params) => {
  * @returns {string} - Built docker run command
  */
 const createRunCmd = (globalConfig, dockerCmd, params) => {
-  const { execCmd, location, name, branch, img, mounts, platform, tap } = params
+  const { container, execCmd, location, name, branch, img, mounts, platform, tap } = params
 
   // Get the name for the docker container
   dockerCmd = addContainerName(name, dockerCmd)
@@ -58,7 +63,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
   dockerCmd = addTapMount(location, dockerCmd)
 
   // First fet the directory paths to mount
-  const toMount = mounts && getDirsToMount(globalConfig, mounts)
+  const toMount = mounts && getDirsToMount(globalConfig, mounts, container)
 
   // Then build the docker volume string for each mount path
   dockerCmd = toMount ? getVolumeMounts(toMount, dockerCmd) : dockerCmd
@@ -90,15 +95,19 @@ const buildDockerCmd = (globalConfig, params) => {
     location,
     mounts,
     name,
+    container=name,
     platform,
     tags,
     tap,
     version,
     ...dockerOpts
   } = params
+  
+  // In no container is set, try to use the name of the docker image to build
+  params.container = params.container || name
 
   // Get the default docker arguments
-  let dockerCmd = getDockerArgs(cmd, dockerOpts, `docker ${cmd} ${docker}`.trim())
+  let dockerCmd = getDockerArgs(cmd, dockerOpts, container, `docker ${cmd} ${docker}`.trim())
 
   // Add any tags if needed
   return cmd === 'build'

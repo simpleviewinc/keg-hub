@@ -3,17 +3,18 @@ const { buildDockerCmd } = require('KegDocker')
 const { getTapPath, logVirtualIP, getCoreVersion } = require('KegUtils')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
-const defMounts = get(DOCKER, 'VOLUMES.DEV_DEFAULTS', {})
 
 /**
  * Gets the folders to mount from the passed in mounts argument
  * @param {string} mounts - Comma separated Folders to mount
  * @param {string} env - Environment to run the container in
+ * @param {string} container - Name of container to get the default mounts for
  *
  * @returns {Array} - Groups of name repos or folder paths to mount into the container
  */
-const getMounts = (mounts, env) => {
+const getMounts = ({ mounts, env, container='' }) => {
   const custom = mounts ? mounts.split(',') : []
+  const defMounts = get(DOCKER, `VOLUMES.${container.toUpperCase()}.DEV_DEFAULTS`, {})
 
   return !env || env === 'development'
     ? defMounts.concat(custom)
@@ -65,7 +66,7 @@ const startTap = async (args) => {
     name: 'tap',
     cmd: `run`,
     img: image || 'tap',
-    mounts: getMounts(mounts, env),
+    mounts: getMounts({ mounts, env, container: 'TAP' }),
     tap: name,
   })
 

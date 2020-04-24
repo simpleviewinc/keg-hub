@@ -1,4 +1,4 @@
-const { isArr } = require('jsutils')
+const { isArr, get } = require('jsutils')
 const { getGitUrl, getGitKey } = require('KegUtils')
 const { DOCKER } = require('KegConst')
 const { BUILD } = DOCKER
@@ -27,13 +27,15 @@ const createBuildArg = (key, value, dockerCmd) => {
  *
  * @returns {string} - The dockerCmd string with the build args added
  */
-const getBuildArgs = async (globalConfig, { name, branch, dockerCmd }) => {
+const getBuildArgs = async (globalConfig, { cmd, container, name, branch, dockerCmd }) => {
   
+  const buildOpts = get(DOCKER, [ cmd.toUpperCase(), container.toUpperCase() ])
   const gitKey = await getGitKey(globalConfig)
+
   dockerCmd = !gitKey
     ? dockerCmd
     : createBuildArg(
-        BUILD.ARGS.GIT_KEY,
+        get(buildOpts, 'ARGS.GIT_KEY', 'GIT_KEY')
         gitKey,
         dockerCmd
       )
@@ -42,7 +44,7 @@ const getBuildArgs = async (globalConfig, { name, branch, dockerCmd }) => {
   dockerCmd = !gitUrl
     ? dockerCmd
     : createBuildArg(
-        BUILD.ARGS.GIT_TAP_URL,
+        get(buildOpts, 'ARGS.GIT_TAP_URL', 'GIT_TAP_URL'),
         gitUrl,
         dockerCmd
       )
