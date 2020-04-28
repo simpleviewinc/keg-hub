@@ -26,7 +26,8 @@
     "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
     "sb:web": "RE_PLATFORM=web start-storybook -p 60710",
     "sb:native": "RE_PLATFORM=native start-storybook -p 60710",
-    "sb:server": "npx http-server docs"
+    "sb:server": "npx http-server docs",
+    "jsconfig": "cd scripts && node jsconfig.js web"
   },
   "dependencies": {
     "@expo/vector-icons": "10.0.6",
