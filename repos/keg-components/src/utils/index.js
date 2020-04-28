@@ -1,4 +1,5 @@
 export * from './components'
+export * from './events'
 export * from './helpers'
 export * from './styles'
 export * from './validate'

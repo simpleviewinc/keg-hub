@@ -3,27 +3,21 @@ import { get } from 'jsutils'
 import { colors } from '../colors'
 import { padding } from '../padding'
 import { typography } from '../typography'
+import { sharedForm } from './sharedForm'
 
 export const select = {
   default: {
     $all: {
-      backgroundColor: colors.palette.white01,
-      outline: 'none',
-      minWidth: 100,
+      ...sharedForm.border,
+      ...sharedForm.inputs,
     },
     $web: {
       ...typography.font.family,
-      border: `1px solid ${colors.palette.gray01}`,
-      borderBottom: `1px solid ${colors.palette.gray03}`,
+      outline: 'none',
       boxSizing: 'border-box',
-      height: get(defaults, 'form.input.height', 35),
-      fontSize: 14,
-      padding: padding.size / 2,
     },
     $native: {
-      borderBottomColor: colors.palette.gray02,
-      borderStyle: 'solid',
-      borderWidth: 2,
+      width: '100%',
     }
   }
 }

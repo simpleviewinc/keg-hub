@@ -19,6 +19,7 @@ import { View } from 'KegView'
  *
  */
 const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
+
   return (
     <View style={ styles.wrapper }>
       <View style={ styles.area }></View>
@@ -47,6 +48,7 @@ const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
 export const Switch = props => (
   <SwitchWrapper
     { ...props }
+    elType={ 'switch' }
     Element={ Element }
     isWeb={ true }
   />

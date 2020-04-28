@@ -1,5 +1,7 @@
 export const loading = {
-  default: {},
-  wrapper: {},
-  progress: {},
+  default: {
+    container: {},
+    progress: {},
+    text: {},
+  },
 }

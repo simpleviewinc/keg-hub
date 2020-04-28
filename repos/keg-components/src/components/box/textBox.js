@@ -19,7 +19,15 @@ import PropTypes from 'prop-types'
  * @param {Boolean} props.useClipboard - if true, renders a copy button for copying text to clipboard
  * @param {Number} props.maxLines - maximum number of lines of text. Defaults to 100.
  */
-export const TextBox = ({ text, themePath='textBox.outlined.default', styles, useClipboard=false, maxLines=100 }) => {
+export const TextBox = (props) => {
+  const {
+    text,
+    themePath='textBox.outlined.default',
+    styles,
+    useClipboard=false,
+    maxLines=100
+  } = props
+  
   const theme = useTheme()
 
   const [ style ] = useThemePath(themePath, styles)

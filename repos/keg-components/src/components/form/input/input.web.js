@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { InputWrapper } from './input.wrapper'
 
-const WebInput = React.forwardRef(({ elProps, ...args }, ref) => {
+const Element = React.forwardRef(({ elProps, ...args }, ref) => {
   return (
     <input
       { ...args }
@@ -15,8 +15,8 @@ const WebInput = React.forwardRef(({ elProps, ...args }, ref) => {
 export const Input = props => {
   return (
     <InputWrapper 
-      Element={ WebInput }
-      elType={'web'}
+      Element={ Element }
+      isWeb={ true }
       { ...props }
     />
   )

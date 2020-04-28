@@ -22,12 +22,11 @@ const getValue = ({ children, value }) => {
 
 export const InputWrapper = forwardRef((props, ref) => {
   const theme = useTheme()
-  const { 
+  const {
     children,
     disabled=false,
     editable=true,
     Element,
-    elType,
     onChange,
     onValueChange,
     onChangeText,
@@ -38,13 +37,12 @@ export const InputWrapper = forwardRef((props, ref) => {
     themePath=`form.input.${type}`,
     style,
     value,
+    isWeb,
     ...elProps
   } = props
-  
-  const isWeb = elType === 'web'
 
   const [ inputStyles ] = useThemePath(themePath)
-  
+
   return (
     <Element
       elProps={ elProps }
@@ -66,7 +64,7 @@ InputWrapper.propTypes = {
     PropTypes.string,
     PropTypes.array
   ]),
-  elType: PropTypes.string,
+  isWeb: PropTypes.bool,
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   onChangeText: PropTypes.func,

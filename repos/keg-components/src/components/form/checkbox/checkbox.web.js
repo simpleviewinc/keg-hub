@@ -1,16 +1,24 @@
 import React from 'react'
-import { SwitchWrapper } from '../switch/switch.wrapper'
 import { View } from 'KegView'
 import { Text } from '../../typography'
+import { CheckboxWrapper } from './checkbox.wrapper'
+import { Icon } from 'KegIcon'
 
-const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
+const Element = React.forwardRef(({ elProps, styles, icon, checked, ...props }, ref) => {
+
   return (
     <View style={ styles.wrapper }>
       <View style={ styles.area }></View>
-      <View style={ styles.indicator } ></View>
+      { checked && (
+        <Icon
+          styles={ styles.indicator }
+          name={ icon || 'check' }
+        />
+      )}
       <input
         { ...elProps }
         { ...props }
+        checked={ checked }
         type='checkbox'
         ref={ ref }
         style={{
@@ -29,10 +37,12 @@ const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
 })
 
 export const Checkbox = props => (
-  <SwitchWrapper
+  <CheckboxWrapper
     { ...props }
-    type={ 'checkbox' }
+    elType={ 'checkbox' }
     Element={ Element }
     isWeb={ true }
   />
 )
+
+Checkbox.propTypes = { ...CheckboxWrapper.propTypes }

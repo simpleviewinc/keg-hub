@@ -1,4 +1,4 @@
-import { mapEntries, isFunc } from 'jsutils'
+import { mapEntries, isFunc, isObj } from 'jsutils'
 /**
  * Validates each function in the functionObj
  * @param {Object} functionObj - object with functions as entries
@@ -13,8 +13,8 @@ import { mapEntries, isFunc } from 'jsutils'
  * result.bar // false
  */
 export const validateFunctions = (functionObj) => {
-  return mapEntries(
+  return isObj(functionObj) && mapEntries(
     functionObj,
     (name, func) => [ name, isFunc(func) ]
-  )
+  ) || {}
 }

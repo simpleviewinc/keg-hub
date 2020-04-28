@@ -1,118 +1,72 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 're-theme'
-import { deepMerge, isStr, get } from 'jsutils'
-import { CardImage } from './cardImage'
-import { CardContainer, CardFooter, CardHeader } from './cardContent'
+import { deepMerge, isStr, get, reduceObj } from 'jsutils'
 import { View } from 'KegView'
+import { useThemePath, useMediaProps } from 'KegHooks'
 
-const buildStyles = (styles, theme) => {
-  const cardStyles = {}
-
-  cardStyles.container = theme.join(
-    get(theme, [ 'card', 'container' ]),
-    styles.container
-  )
-
-  cardStyles.wrapper = theme.join(
-    get(theme, [ 'card', 'wrapper' ]),
-    styles.wrapper
-  )
-
-  cardStyles.header = theme.join(
-    theme.get(
-      'typography.h5',
-      'card.header',
-    ),
-    styles.header
-  )
-
-  cardStyles.footer = theme.join(
-    get(theme, [ 'card', 'footer']),
-    styles.footer
-  )
-
-  cardStyles.divider = theme.join(
-    get(theme, [ 'card', 'divider' ]),
-    styles.divider
-  )
-
-  cardStyles.children = theme.join(
-    get(theme, [ 'card', 'children' ]),
-    cardStyles.children
-  )
-
-  return cardStyles
-
-}
-
-const getImgProps = (image, styles) => {
-  return isStr(image)
-    ? { src: image, style: styles.image }
-    : { ...image, style: { ...deepMerge(image.style, styles.image) } }
-}
+// Card children imports
+import { CardBody } from './cardBody'
+import { CardContainer } from './cardContainer'
+import { CardFooter } from './cardFooter'
+import { CardHeader } from './cardHeader'
+import { CardMedia } from './cardMedia'
 
 export const Card = ({ styles, ...props}) => {
 
-  const theme = useTheme()
   styles = styles || {}
 
   const {
     children,
-    footer,
+    Footer,
     footerLines,
-    header,
+    Header,
     headerLines,
     image,
+    Media,
     subtitle,
+    themePath,
     title,
+    type='default',
+    video,
     ...attributes
   } = props
 
-  const hasImage = Boolean(image)
-  const imgProps = hasImage && getImgProps(image, styles)
-  const cardStyles = buildStyles(styles, theme)
-  
+  const [ cardStyles ] = useThemePath(themePath || `card.${type}`, styles)
+  const mediaProps = useMediaProps({ Media, image, video, styles: cardStyles })
+
   return (
     <CardContainer
-      theme={ theme }
       attributes={ attributes }
       styles={ cardStyles }
     >
 
-      <CardHeader
-        header={ header }
-        theme={ theme }
-        numberOfLines={ headerLines }
-        styles={ cardStyles }
-      />
-
-      { hasImage && (
-        <CardImage
-          title={ title }
-          subtitle={ subtitle }
-          image={ imgProps }
-          children={ children }
-          styles={{
-            children: cardStyles.children,
-            image: imgProps.style,
-            loading: styles.loading,
-            overlay: styles.overlay,
-            subtitle: styles.subtitle,
-            title: styles.title,
-            wrapper: styles.imageWrapper,
-          }}
+      { Header && (
+        <CardHeader
+          Header={ Header }
+          numberOfLines={ headerLines }
+          styles={ cardStyles }
         />
       )}
 
-      <View style={ cardStyles.children } >
-        { children }
-      </View>
-      
-      { footer && (
+      { (Media || mediaProps) && (
+        <CardMedia
+          title={ title }
+          subtitle={ subtitle }
+          mediaProps={ mediaProps }
+          styles={ cardStyles }
+        />
+      )}
+
+      { children && (
+        <CardBody
+          style={ cardStyles.body }
+          children={ children }
+        />
+      )}
+
+      { Footer && (
         <CardFooter
-          footer={ footer }
-          theme={ theme }
+          footer={ Footer }
           numberOfLines={ footerLines }
           styles={ cardStyles }
         />
@@ -122,14 +76,24 @@ export const Card = ({ styles, ...props}) => {
   )
 }
 
+Card.Body = CardBody
+Card.Container = CardContainer
+Card.Header = CardHeader
+Card.Footer = CardFooter
+Card.Media = CardMedia
+
 Card.propTypes = {
+  footerLines: PropTypes.number,
   header: PropTypes.string,
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  headerNumberOfLines: PropTypes.number,
-  image: PropTypes.oneOfType([
+  headerLines: PropTypes.number,
+  Media: PropTypes.oneOfType([
     PropTypes.object,
+    PropTypes.array,
     PropTypes.string,
+    PropTypes.func,
+    PropTypes.element,
   ]),
   styles: PropTypes.object,
+  subtitle: PropTypes.string,
+  title: PropTypes.string,
 }

@@ -16,7 +16,7 @@ import { SelectWrapper } from './select.wrapper'
  * @property {Object} props.ref - reference to native element
  *
  */
-const Slt = React.forwardRef(({ elProps, children, readOnly, ...props }, ref) => (
+const Element = React.forwardRef(({ elProps, children, readOnly, ...props }, ref) => (
   <select
     { ...elProps }
     { ...props }
@@ -29,19 +29,9 @@ const Slt = React.forwardRef(({ elProps, children, readOnly, ...props }, ref) =>
 export const Select = props => (
   <SelectWrapper
     { ...props }
-    Element={ Slt }
+    Element={ Element }
     isWeb={ true }
   />
 )
 
-Select.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array
-  ]),
-  disabled: PropTypes.bool,
-  onChange: PropTypes.func,
-  onValueChange: PropTypes.func,
-  style: PropTypes.object,
-}
+Select.propTypes = { ...SelectWrapper.propTypes }

@@ -3,24 +3,7 @@ import { useTheme } from 're-theme'
 import { indicatorUri } from '../../assets/spinners/moderate'
 import { getImgSrc } from '../../utils'
 import { View } from 'KegView'
-
-const buildStyles = (theme, style, styles, isWeb) => {
-  const built = {}
-
-  built.img = theme.get(
-    'components.indicator.image',
-    styles.image,
-    style,
-  )
-
-  built.wrapper = theme.get(
-    'components.indicator.wrapper',
-    styles.wrapper,
-  )
-
-  return built
-}
-
+import { useThemePath } from 'KegHooks'
 
 export const IndicatorWrapper = props => {
   const {
@@ -30,18 +13,19 @@ export const IndicatorWrapper = props => {
     resizeMode,
     src,
     source,
-    style,
     styles,
+    type='default',
+    themePath,
   } = props
 
   const theme = useTheme()
-  const builtStyles = buildStyles(theme, style, styles || {}, isWeb)
+  const [ builtStyles ] = useThemePath(themePath || `indicator.${type}`, styles)
 
   return (
-    <View style={ builtStyles.wrapper } >
+    <View style={ builtStyles.container } >
       <Element
         alt={ alt || 'Loading' }
-        style={ builtStyles.img }
+        style={ builtStyles.icon }
         resizeMode={ resizeMode || 'contain' }
         { ...getImgSrc(isWeb, src, source, indicatorUri) }
       />

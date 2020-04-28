@@ -4,6 +4,7 @@ import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { isValidComponent } from '../../utils'
+import { useThemePath, useStyle } from 'KegHooks'
 
 /**
  * IconWrapper
@@ -15,7 +16,7 @@ import { isValidComponent } from '../../utils'
  * @property {Function} props.onPress - function to do when image is pressed
  * @property {Object} props.ref - reference to native element
  * @property {String|Number} props.size - size of the Icon
- * @property {Object} props.style - custom style
+ * @property {Object} props.styles - custom styles
  * @property {string} props.type - Type of icons to use
  *
  */
@@ -29,33 +30,35 @@ export const IconWrapper = React.forwardRef((props, ref) => {
     isWeb,
     name,
     size,
-    style,
     styles,
-    type,
+    themePath,
+    type='default',
     ...attrs
   } = props
 
-  const containerStyle = theme.get(
-    'components.icon.container',
-    get(styles, 'container'),
-    styles
-  )
+  if(!isValidComponent(Element))
+    return console.error(`Invalid Element passed to Icon component!`, Element) || null
 
-  const iconProps = { ref, name }
-  iconProps.style = theme.get(
-    'components.icon.icon',
-    get(styles, 'icon'),
-    styles
-  )
+  const [ builtStyles ] = useThemePath(themePath || `icon.${type}`, styles)
 
-  iconProps.color = color || get(iconProps.style, 'color', get(theme, 'typography.default.color'))
-  iconProps.size = size || get(iconProps.style, 'fontSize', (get(theme, 'typography.default.fontSize', 15) * 2))
-
-  const Icon = isValidComponent(Element) ? Element : false
+  const iconProps = {
+    ref,
+    name,
+    style: builtStyles.icon,
+    color: color ||
+      builtStyles.color ||
+      get(builtStyles, 'icon.color') ||
+      get(theme, 'typography.default.color'),
+    size: parseInt((
+      size ||
+      get(builtStyles, 'icon.fontSize') ||
+      (get(theme, 'typography.default.fontSize', 15) * 2)
+    ), 10)
+  }
 
   return (
-    <View style={ containerStyle } >
-      { Icon && <Icon { ...iconProps } />}
+    <View style={ builtStyles.container } >
+      <Element { ...iconProps } />
     </View>
   )
 

@@ -25,13 +25,16 @@ const hasWidth = style => (
  *
  */
 export const Container = ({ onPress, onClick, children, flexDir, size, style, ...props }) => {
+  
   // Get flex type based on size or style
-  const flex = size ? 0 : hasWidth(style) ? 0 : 1
+  const flexStyle = flexDir === 'row'
+    ? { flexDirection: flexDir, flex: size ? size : hasWidth(style) ? 0 : 1 }
+    : {}
 
   return (
     <View
       { ...props }
-      style={{ flex, flexDirection: flex && flexDir, ...style }}
+      style={{  ...flexStyle, ...style }}
       { ...getPressHandler(getPlatform(), onClick || onPress)  }
     >
       { children }

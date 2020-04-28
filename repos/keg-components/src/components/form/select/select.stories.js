@@ -41,3 +41,25 @@ storiesOf('Form | Select', module)
 
     </StoryWrap>
   )
+  .add('Value Change', () =>
+    <StoryWrap>
+
+      <Select onValueChange={ action("Value Change!") } >
+        <Option label='red' value={ "red" } />
+        <Option label='blue' value={ "blue" } />
+        <Option label='green' value={ "green" } />
+        <Option label='yellow' value={ "yellow" } />
+      </Select>
+
+    </StoryWrap>
+  )
+  .add('Disabled', () =>
+    <StoryWrap>
+
+      <Select onValueChange={ action("Value Change!") } disabled>
+        <Option label='red' value={ "red" } />
+        <Option label='blue' value={ "blue" } />
+      </Select>
+
+    </StoryWrap>
+  )

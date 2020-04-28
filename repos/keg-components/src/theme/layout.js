@@ -16,9 +16,12 @@ export const layout = {
       minWidth: '100%',
     },
     row: {
+      flexWrap: 'wrap',
       minWidth: '100%',
     },
-    column: {},
+    column: {
+      flexWrap: 'wrap'
+    },
     columns: 12,
-  },
+  }
 }

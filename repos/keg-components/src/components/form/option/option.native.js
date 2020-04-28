@@ -25,5 +25,8 @@ Option.propTypes = {
   children: PropTypes.string,
   label: PropTypes.string,
   text: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ])
 }

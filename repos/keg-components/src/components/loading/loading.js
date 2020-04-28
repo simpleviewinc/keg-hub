@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 're-theme'
 import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
 import { isValidComponent } from '../../utils'
+import { useThemePath } from 'KegHooks'
 
 /**
  * Progress
@@ -21,22 +21,15 @@ const Progress = (props) => {
   const LoadingIndicator = loadIndicator || Indicator
 
   return (
-    <View
-      style={theme.get(
-        'components.loading.progress',
-        styles.progress
-      )}
-    >
-      { isValidComponent(LoadingIndicator) ? (<LoadingIndicator />) : text && (
-        <Text
-          style={theme.get(
-            'components.loading.text',
-            styles.text
-          )}
-        >
-        { text }
-        </Text>
-      )}
+    <View style={ styles.progress } >
+      { isValidComponent(LoadingIndicator)
+        ? (<LoadingIndicator styles={ styles.indicator } />)
+        : text && (
+            <Text style={ styles.text } >
+            { text }
+            </Text>
+          )
+      }
     </View>
   )
 }
@@ -53,21 +46,22 @@ const Progress = (props) => {
  *
  */
 export const Loading = props => {
-  const theme = useTheme()
-  const { children, text, indicator } = props
-  const styles = props.styles || {}
+  const {
+    children,
+    text="Loading",
+    indicator,
+    styles={},
+    themePath,
+    type='default'
+  } = props
+
+  const [ builtStyles ] = useThemePath(themePath || `loading.${type}`, styles)
 
   return (
-    <View
-      style={theme.get(
-        'components.loading.wrapper',
-        styles.wrapper
-      )}
-    >
+    <View style={ builtStyles.container } >
       { children || (
         <Progress
           styles={ styles }
-          theme={ theme }
           text={ text }
           loadIndicator={ indicator }
         />

@@ -1,21 +1,22 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { useTheme } from 're-theme'
+import { get } from 'jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
 
-export const Row = withTheme(({ children, ...props }) => {
-  const theme = props.theme || { layout: {} }
+export const Row = ({ children, style, ...props }) => {
+  const theme = useTheme()
 
   return (
     <Container
       {...props}
-      style={{ ...theme.layout.grid.row, ...props.style }}
+      style={{ ...get(theme, 'layout.grid.row'), ...style }}
       flexDir='row'
     >
       { children }
     </Container>
   )
-})
+}
 
 Row.propTypes = {
   center: PropTypes.string,

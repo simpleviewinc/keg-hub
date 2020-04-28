@@ -2,17 +2,25 @@ import { transition } from '../transition'
 
 export const image = {
   default: {
-    $web: {
-      ...transition('opacity', 0.8),
-    }
+    container: {
+      $all: {
+        display: 'flex',
+      },
+    },
+    loadingComp: {
+      
+    },
+    loading: {
+      opacity: 0,
+    },
+    loaded: {
+      opacity: 1,
+    },
+    image: {
+      $web: {
+        ...transition('opacity', 0.8),
+      },
+    },
+    hover: {},
   },
-  wrapper: {
-    display: 'inline-flex',
-  },
-  loading: {
-    opacity: 0
-  },
-  loaded: {
-    opacity: 1
-  }
 }

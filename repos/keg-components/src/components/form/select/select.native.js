@@ -17,7 +17,7 @@ import { SelectWrapper } from './select.wrapper'
  * @property {Object} props.ref - reference to native element
  *
  */
-const Slt = React.forwardRef(({ elProps, children, editable, ...props }, ref) => (
+const Element = React.forwardRef(({ elProps, children, editable, ...props }, ref) => (
   <Picker
     { ...elProps }
     { ...props }
@@ -31,7 +31,7 @@ const Slt = React.forwardRef(({ elProps, children, editable, ...props }, ref) =>
 export const Select = props => (
   <SelectWrapper
     { ...props }
-    Element={ Slt }
+    Element={ Element }
   />
 )
 

@@ -4,12 +4,12 @@ import { TextInput } from 'react-native'
 import { InputWrapper } from './input.wrapper'
 import { withTouch } from '../../../hocs'
 
-const NativeInput = forwardRef(({ elProps, ...args }, ref) => {
+const Element = forwardRef(({ elProps, ...args }, ref) => {
   return (
     <TextInput
       { ...args }
       { ...elProps }
-      ref={ref}
+      ref={ ref }
     />
   )
 })
@@ -17,14 +17,13 @@ const NativeInput = forwardRef(({ elProps, ...args }, ref) => {
 /**
  * React native's TextInput does not accept onPress, so this fixes that
  */
-const TouchableNativeInput = withTouch(NativeInput, { showFeedback: false })
+const TouchableElement = withTouch(Element, { showFeedback: false })
 
 export const Input = forwardRef((props, ref) => {
   return (
-    <InputWrapper 
-      Element={ TouchableNativeInput }
-      elType={'native'}
-      ref={ref}
+    <InputWrapper
+      Element={ TouchableElement }
+      ref={ ref }
       { ...props }
     />
   )

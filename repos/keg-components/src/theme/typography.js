@@ -53,7 +53,7 @@ export const typography = {
     fontWeight: '500'
   },
   label: {
-    flexBasis: '100%',
+    minWidth: '100%',
     fontSize: 11,
     letterSpacing: 0.15,
     fontWeight: '700',

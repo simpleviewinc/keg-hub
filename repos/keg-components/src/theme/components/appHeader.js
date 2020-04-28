@@ -3,7 +3,7 @@ import { colors } from '../colors'
 import { get } from 'jsutils'
 
 const defaultSectionStyle = {
-  height: '100%', 
+  height: '100%',
   backgroundColor: 'transparent'
 }
 
@@ -18,12 +18,13 @@ const defaultSideSectionStyle = {
       ...defaultSectionStyle,
     },
     icon: {
-      style: {  
-        alignSelf: 'center', 
-        padding: 5   
-       },
-      color: '#111111',
-      size: 30
+      container: {},
+      icon: {
+        alignSelf: 'center',
+        padding: 10,
+        color: '#111111',
+        fontSize: 30
+      },
     }
   },
   native: {
@@ -33,15 +34,14 @@ const defaultSideSectionStyle = {
         flex: 0
       },
     }
-  }
-
+  },
 }
 export const appHeader = {
   default: {
     container: {
       $native: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        ...flex.justify.center,
+        ...flex.align.left,
         flex: 0,
         shadow: {
           shadowColor: '#000',
@@ -49,7 +49,6 @@ export const appHeader = {
           shadowOpacity: 0.5,
           shadowRadius: 1
         },
-        title: {}
       },
       $web: {
         shadow: {
@@ -61,7 +60,7 @@ export const appHeader = {
         height: 70,
         width: '100%',
         ...flex.left,
-        flexDirection: 'row',
+        ...flex.row,
       }
     },
     side: {
@@ -69,7 +68,8 @@ export const appHeader = {
         $all: {
           main: {
             ...flex.left,
-            ...defaultSideSectionStyle.main
+            ...defaultSideSectionStyle.main,
+            ...flex.align.center,
           },
           content: {
             ...defaultSideSectionStyle.content
@@ -90,7 +90,8 @@ export const appHeader = {
         $all: {
           main: {
             ...flex.right,
-            ...defaultSideSectionStyle.main
+            ...defaultSideSectionStyle.main,
+            ...flex.align.center,
           },
           content: {
             ...defaultSideSectionStyle.content

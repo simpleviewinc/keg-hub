@@ -11,12 +11,14 @@ const outlineStyles = (state, colorType) => {
     main: {
       $all: {
         padding: 8,
-        outline: 'none',
         borderWidth: 1,
         borderColor: activeColor,
         backgroundColor: state === 'hover'
           ? colors.opacity(10, activeColor) 
           : get(colors, 'palette.white01'),
+      },
+      $web: {
+        outline: 'none',
       }
     },
     content: {

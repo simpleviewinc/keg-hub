@@ -1,5 +1,6 @@
 import defaults from '../defaults.json'
 import { margin } from '../margin'
+import { flex } from '../flex'
 import { get } from 'jsutils'
 
 const space = get(defaults, 'form.checkbox.space', 15)
@@ -8,20 +9,25 @@ const width = get(defaults, 'form.switch.width', 20)
 
 export const sharedToggle = {
   container: {
-    width: '100%',
-    display: 'flex',
+    ...flex.display,
+    ...flex.row,
+    flexWrap: 'nowrap',
   },
   text: {
-    outline: 'none',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: height + space,
+    $all: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: height + space,
+    },
+    $web: {
+      outline: 'none',
+    }
   },
-  leftText: {
+  left: {
     marginRight: margin.size,
   },
-  rightText: {
+  right: {
     marginLeft: margin.size,
   },
 }

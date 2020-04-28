@@ -20,6 +20,24 @@ const runCmd = async (cmd) => {
   }
 }
 
+const doBuildCopy = async (toLoc, rootLoc, rerun) => {
+
+  const fromLoc = path.join(__dirname, '../build')
+
+  console.log(`Removing files at \n ${toLoc}`)
+  await runCmd(`rm -rf ${toLoc}`)
+
+  console.log(`Copy keg-components build to \n ${toLoc}`)
+  await runCmd(`cp -Rf ${fromLoc} ${toLoc}`)
+
+  console.log(`Force refresh...`)
+  await runCmd(`touch ${rootLoc}/kc-touch.js`)
+
+  console.log(`Finished build copy!`)
+
+  return true
+}
+
 /**
  * Copies the build into keg-core
  * Assumes keg-core is 2 directories back
@@ -27,7 +45,7 @@ const runCmd = async (cmd) => {
  * - repos folder
  *   - tap-demo
  *     - node_modules
- *       - sv-keg
+ *       - keg-core
  *         - node_modules
  *           - keg-components
  *             - build ( copies build to here )
@@ -39,21 +57,13 @@ const copyToTap = async tapName => {
 
   // Change this line if you tap is in a different location
   const tapLoc = path.join(__dirname, '../../', tapName)
-  
-  const fromLoc = path.join(__dirname, '../build')
+
   // Change this line if the taps -> keg is installed in a different location
-  const toLoc = path.join(tapLoc, 'node_modules/sv-keg/node_modules/keg-components/build')
+  const toLoc = path.join(tapLoc, 'node_modules/keg-core/node_modules/keg-components/build')
 
-  console.log(`Removing files at \n ${toLoc}`)
-  await runCmd(`rm -rf ${toLoc}`)
-  
-  console.log(`Copy keg-components build to \n ${toLoc}`)
-  await runCmd(`cp -Rf ${fromLoc} ${toLoc}`)
-  
-  console.log(`Force refresh...`)
-  await runCmd(`touch ${tapLoc}/kc-touch.js`)
+  await doBuildCopy(toLoc, tapLoc, true)
 
-  console.log(`Finished build copy!`)
+  return true
 }
 
 /**
@@ -72,21 +82,11 @@ const copyToTap = async tapName => {
 const copyToKeg = async () => {
   // Change this line if the keg is installed in a different location
   const tapLoc = path.join(__dirname, '../../keg-core')
-  
-  const fromLoc = path.join(__dirname, '../build')
-  
   const toLoc = path.join(tapLoc, 'node_modules/keg-components/build')
-
-  console.log(`Removing files at \n ${toLoc}`)
-  await runCmd(`rm -rf ${toLoc}`)
   
-  console.log(`Copy keg-components build to \n ${toLoc}`)
-  await runCmd(`cp -Rf ${fromLoc} ${toLoc}`)
-  
-  console.log(`Force refresh...`)
-  await runCmd(`touch ${tapLoc}/kc-touch.js`)
+  await doBuildCopy(toLoc, tapLoc, true)
 
-  console.log(`Finished build copy!`)
+  return true
 }
 
 /**
@@ -102,11 +102,12 @@ export default function buildHook(devMode){
   return {
     name: 'buildHook',
     buildEnd: async () => {
-
       if(!devMode) return
       
-      if(devMode.indexOf('tap-') !== -1) return copyToTap(devMode)
-      else if(devMode === 'keg') return copyToKeg(devMode)
+      let callFunc
+      if(devMode.indexOf('tap-') !== -1) callFunc = copyToTap(devMode)
+      else if(devMode === 'keg') callFunc = copyToKeg(devMode)
+      else return
 
     }
   }

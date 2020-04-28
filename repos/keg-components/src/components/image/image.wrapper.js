@@ -1,10 +1,11 @@
 import React, { useState, forwardRef } from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useThemeHover } from 're-theme'
 import { get, checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'
 import { View } from 'KegView'
-import { getImgSrc, getPressHandler, getOnLoad } from '../../utils'
+import { getImgSrc, getPressHandler, getOnLoad } from 'KegUtils'
+import { useThemePath, useStyle } from 'KegHooks'
 
 const onLoadEvent = (setLoading, props, setStyle, loadedStyle) => {
   return event => {
@@ -12,49 +13,6 @@ const onLoadEvent = (setLoading, props, setStyle, loadedStyle) => {
     checkCall(setStyle, loadedStyle)
     checkCall(props.onLoad, event, props)
   }
-}
-
-const buildStyles = (style, styles, theme, type) => {
-
-  const defStyle = theme.get(
-    checkCall(get(theme, 'transition.opacity')),
-    `components.image.${type}`,
-  )
-
-  const imgStyle = theme.get(
-    styles.image,
-    style
-  )
-
-  const loading = theme.get(
-    defStyle,
-    'components.image.loading',
-    imgStyle,
-    { width: 0, height: 0 }
-  )
-
-  const loaded = theme.get(
-    defStyle,
-    'components.image.loaded',
-    imgStyle,
-  )
-
-  const loadingComp = theme.get(
-    { width: loaded.width, height: loaded.height },
-    styles.loading,
-  )
-
-  const hover = theme.get(
-    'components.image.hover',
-    styles.hover,
-  )
-
-  const wrapper = theme.get(
-    'components.image.wrapper',
-    styles.wrapper,
-  )
-
-  return { hover, loading, loadingComp, loaded, wrapper }
 }
 
 /**
@@ -71,9 +29,9 @@ const buildStyles = (style, styles, theme, type) => {
  *
  */
 export const ImageWrapper = forwardRef((props, ref) => {
-  const theme = useTheme()
+
   const [ loading, setLoading ] = useState(true)
-  
+
   const {
     alt,
     children,
@@ -83,44 +41,38 @@ export const ImageWrapper = forwardRef((props, ref) => {
     onPress,
     src,
     source,
-    style,
-    styles,
-    type,
+    styles={},
+    type='default',
+    themePath,
     useLoading=true,
     ...attrs
   } = props
 
-  const builtStyles = buildStyles(
-    style,
-    styles || {},
-    theme,
-    type || 'default'
-  )
+  const [ builtStyles ] = useThemePath(themePath || `image.${type}`, styles)
+  const loadingStyles = useStyle(builtStyles.loading, builtStyles.image)
+  const loadedStyles = useStyle(loadingStyles, builtStyles.loaded)
 
-  const [ useRef, useStyle, setStyle ] = useThemeHover(
-    builtStyles.loaded,
+  const [ useRef, elementStyle, setStyle ] = useThemeHover(
+    loadedStyles,
     builtStyles.hover,
     { ref }
   )
 
   return (
-    <View style={ builtStyles.wrapper }>
+    <View style={ builtStyles.container }>
 
       { loading && useLoading &&
-          <Loading
-            type={ 'image' }
-            style={ builtStyles.loadingComp }
-          />
+        <Loading styles={ builtStyles.loadingComp } />
       }
 
       <Element
-        ref={ useRef }
+        ref={ ref }
         attrs={ attrs }
         alt={ alt }
-        style={ loading ? builtStyles.loading : useStyle }
+        style={ loading ? loadingStyles : builtStyles.image }
         { ...getPressHandler(isWeb, onClick, onPress) }
         { ...getImgSrc(isWeb, src, source) }
-        { ...getOnLoad(isWeb, onLoadEvent(setLoading, props, setStyle, builtStyles.loaded)) }
+        { ...getOnLoad(isWeb, onLoadEvent(setLoading, props, setStyle, elementStyle)) }
       />
 
     </View>

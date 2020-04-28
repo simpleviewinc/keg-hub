@@ -3,16 +3,23 @@ import { withTheme } from 're-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography/text'
+import { CheckboxWrapper } from './checkbox.wrapper'
 
-export const Checkbox = withTheme(props => {
-  const { theme, style, children, onClick, onPress, text, ...args } = props
-  const checkboxStyle = theme.join(get(theme, ['form', 'checkbox' ]), style)
+const Element = withTheme(props => {
+  const { theme, style, wrapper, children, onClick, onPress, text, ...args } = props
 
-  return (<Text { ...args } style={ checkboxStyle } >{ text }</Text>)
+  return (<Text { ...args } style={{}} >{ text }</Text>)
 
 })
 
-Checkbox.propTypes = {
-  style: PropTypes.object,
-  text: PropTypes.string,
-}
+export const Checkbox = props => (
+  <CheckboxWrapper
+    { ...props }
+    elType={ 'checkbox' }
+    Element={ Element }
+    isWeb={ true }
+  />
+)
+
+
+Checkbox.propTypes = { ...CheckboxWrapper.propTypes }

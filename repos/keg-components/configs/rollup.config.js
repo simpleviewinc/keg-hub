@@ -9,7 +9,7 @@ import alias from '@rollup/plugin-alias'
 import pathAlias from './aliases.json'
 import buildHook from './buildHook'
 
-const { DEV_MODE } = process.env
+const { DEV_MODE, BUILD_HOOK } = process.env
 const babelConfig = require('./babel.config.js')
 
 const getAliases = platform => Object
@@ -36,7 +36,7 @@ const shared = {
     clearScreen: false
   },
   plugins: platform => ([
-   DEV_MODE && buildHook(DEV_MODE),
+   BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
     replace({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
       "process.env.RE_PLATFORM": JSON.stringify(platform),

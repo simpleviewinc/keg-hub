@@ -81,7 +81,7 @@ export const useThemePath = (path, styles) => {
   const theme = useTheme()
 
   // Get the styles from the passed in path on the theme
-  let foundStyles = getStylesFromPath(theme, path)
+  const foundStyles = getStylesFromPath(theme, path)
 
   // Add the found path styles to the state, so we can compare it later
   const [ pathStyles, setPathStyles ] = useState(foundStyles)

@@ -1,15 +1,25 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { useTheme } from 're-theme'
 import { get } from 'jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
 
-export const Column = withTheme(({ children, size, center, theme, ...props }) => {
-
+const widthFromSize = (size, theme) => {
   const total = get(theme, [ 'layout', 'columns' ], 12)
-
   size = size > total ? total : size
   const colWidth = parseFloat(size * (100 / total)).toFixed(4)
+
+  return { minWidth: `${colWidth}%`, maxWidth: `${colWidth}%` }
+}
+
+const getColumnWidth = (size, theme) => {
+  return size
+    ? widthFromSize(size, theme)
+    : { flexGrow: 1 }
+}
+
+export const Column = ({ children, size, center, ...props }) => {
+  const theme = useTheme()
 
   return (
     <Container
@@ -19,13 +29,13 @@ export const Column = withTheme(({ children, size, center, theme, ...props }) =>
       style={ theme.join(
         get(theme, [ 'layout', 'grid', 'column' ]),
         props.style,
-        { minWidth: `${colWidth}%`, maxWidth: `${colWidth}%` },
+        getColumnWidth(size, theme),
       )}
     >
       { children }
     </Container>
   )
-})
+}
 
 Column.propTypes = {
   size: PropTypes.number,

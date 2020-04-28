@@ -16,7 +16,6 @@ const containedStyles = (state, colorType) => {
         backgroundColor: activeColor,
         padding: 9,
         minHeight: 35,
-        outline: 'none',
         textAlign: 'center',
         opacity, 
       },
@@ -25,6 +24,7 @@ const containedStyles = (state, colorType) => {
           ? 'not-allowed' 
           : 'pointer',
         pointerEvents: (state === 'disabled') && 'not-allowed' ,
+        outline: 'none',
         boxShadow: 'none',
         ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
       },
