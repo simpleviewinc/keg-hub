@@ -1,8 +1,7 @@
-const { getGit, gitBranchPrint } = require('KegLibs/git')
-const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
+const { branchList } = require('./branchList')
 
 /**
- * Git commit task
+ * Git branch task
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -11,19 +10,17 @@ const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
  *
  * @returns {void}
  */
-const gitBranch = async args => {
+const gitBranch = args => {
   const { command, options, params, tasks, globalConfig } = args
-  const name = params.name || options[1] || 'cli'
+  const name = params.name || options[1]
+  const action = params.action || options[2]
   
-  // TODO: All this can be moved to the getGit helper
-  let gitPath = getPathFromConfig(globalConfig, name)
-  gitPath = gitPath || getTapPath(globalConfig, name)
-  if(!gitPath) throw new Error(`Git path does not exist for ${name}`)
-  
-  git = getGit(gitPath)
-
-  const [ err, data ] = await git.branch([ '--list', '--all'])
-  err ? console.error(err.stack) : gitBranchPrint(data)
+  switch(action){
+    // Other branch commands here
+    default: {
+      branchList(name)
+    }
+  }
 
 }
 

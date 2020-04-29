@@ -44,7 +44,7 @@ const storybook = async args => {
 
 module.exports = {
   name: 'storybook',
-  alias: [ 'sb' ],
+  alias: [ 'sb', 'start' ],
   action: storybook,
   description: `Run storybook in development mode`,
   example: 'keg component storybook <options>',
