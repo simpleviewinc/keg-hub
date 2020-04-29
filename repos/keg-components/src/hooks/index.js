@@ -1,4 +1,4 @@
-export * from './useAnimate'
+export * from 'KegAnimateHook'
 export * from './useChildren'
 export * from './useInputHandlers'
 export * from './useMediaProps'

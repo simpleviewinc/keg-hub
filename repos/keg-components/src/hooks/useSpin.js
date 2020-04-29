@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react'
-import { useAnimate } from './useAnimate'
+import { useAnimate } from 'KegAnimateHook'
 
 const defAnimation = [
   { transform: 'rotate(0)' }, 

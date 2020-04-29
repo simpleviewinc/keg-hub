@@ -16,10 +16,11 @@
   "KegText": "src/components/typography/kegtext.${platform}.js",
   "KegView": "src/components/view/view.${platform}.js",
   "KegGetPlatform": "src/utils/helpers/getPlatform.${platform}.js",
-  "KegAssets": "src/assets",
-  "KegTheme": "src/theme",
-  "KegHocs": "src/hocs",
-  "KegHooks": "src/hooks",
-  "KegUtils": "src/utils",
+  "KegAnimateHook": "src/hooks/useAnimate.${platform}.js",
+  "KegAssets": "src/assets/index.js",
+  "KegTheme": "src/theme/index.js",
+  "KegHocs": "src/hocs/index.js",
+  "KegHooks": "src/hooks/index.js",
+  "KegUtils": "src/utils/index.js",
   "StoryWrap": ".storybook/storyWrap.js"
 }

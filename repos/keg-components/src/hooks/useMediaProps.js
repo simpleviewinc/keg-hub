@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { isValidComponent } from 'KegUtils/validate'
+import { isValidComponent } from 'KegUtils'
 import { get, reduceObj, isStr, deepMerge, isObj } from 'jsutils'
 
 const getMediaType = (mediaTypes, styles) => {
