@@ -2,9 +2,9 @@
 
 # Docker IP Address setup
 KEG_DOCKER_IP=192.168.99.100
-KEG_DOCKER_BROADCAST=192.168.50.255
+KEG_DOCKER_BROADCAST=192.168.100.255
 KEG_DOCKER_SUBNET_MASK=255.255.255.0
-KEG_DOCKER_NAME=docker-keg
+KEG_DOCKER_NAME=keg
 
 # Github Repos
 KEG_CLI_URL=github.com/lancetipton/keg-cli.git
@@ -111,15 +111,18 @@ keg_setup_docker_machine(){
   docker-machine create --driver virtualbox $KEG_DOCKER_NAME
 
   keg_message "Updating docker-machine environment..."
-  docker-machine env $KEG_DOCKER_NAME
+  eval $(docker-machine env $KEG_DOCKER_NAME)
 
-  echo "ifconfig eth1 $KEG_DOCKER_IP netmask $KEG_DOCKER_SUBNET_MASK broadcast $KEG_DOCKER_BROADCAST up" | docker-machine ssh $KEG_DOCKER_NAME sudo tee /var/lib/boot2docker/bootsync.sh > /dev/null
+  echo "ifconfig eth1 $KEG_DOCKER_IP inet static netmask $KEG_DOCKER_SUBNET_MASK network 192.168.99.0 broadcast $KEG_DOCKER_BROADCAST up" | docker-machine ssh $KEG_DOCKER_NAME sudo tee /var/lib/boot2docker/bootsync.sh > /dev/null
+
 
   keg_message "Stoping $KEG_DOCKER_NAME to set static ip address..."
   docker-machine stop $KEG_DOCKER_NAME
 
   keg_message "Starting $KEG_DOCKER_NAME with ip address => $KEG_DOCKER_IP"
   docker-machine start $KEG_DOCKER_NAME
+
+  eval $(docker-machine env $KEG_DOCKER_NAME)
 
   keg_message "Regenerating $KEG_DOCKER_NAME certs..."
   docker-machine regenerate-certs $KEG_DOCKER_NAME

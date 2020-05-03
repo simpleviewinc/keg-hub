@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# TODO: **IMPORTANT** figure out how to add to active terminal session
-# Need to `source ~/keg/cli/keg` add to .bashrc or .bash_profile
-
 # TODO: **IMPORTANT** Need to set this path dyamically some how
+# Need to `source ~/keg/cli/keg` add to .bashrc or .bash_profile
 export KEG_CLI_PATH=~/keg/cli
-KEG_DOCKER_NAME=docker-keg
+KEG_DOCKER_NAME=keg
 
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
@@ -19,7 +17,6 @@ keg_message(){
 # eval "$(docker-machine env $KEG_DOCKER_NAME)"
 
 keg_cli_init_docker_machine(){
-  
   if [[ -x "$(command -v VBoxManage)" ]]; then
     keg_message "Loading docker-machine $KEG_DOCKER_NAME env!"
     docker-machine env $KEG_DOCKER_NAME
@@ -78,7 +75,7 @@ keg(){
     return
 
   # Ensure docker machine is loaded
-  elif [[ "$1" == "docker_machine" || "$1" == "docm" ]]; then
+  elif [[ "$1" == "docker_machine" || "$1" == "docm"  || "$1" == "dcm" ]]; then
     keg_cli_init_docker_machine
     return
 
