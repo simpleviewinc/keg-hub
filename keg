@@ -3,7 +3,7 @@
 # TODO: **IMPORTANT** Need to set this path dyamically some how
 # Need to `source ~/keg/cli/keg` add to .bashrc or .bash_profile
 export KEG_CLI_PATH=~/keg/cli
-KEG_DOCKER_NAME=keg
+KEG_DOCKER_NAME=docker-keg
 
 keg_message(){
   echo "[ KEG CLI ] $@" >&2

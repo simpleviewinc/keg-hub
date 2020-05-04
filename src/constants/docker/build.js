@@ -1,6 +1,6 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { loadENV } = require('KegFileSys')
+const { loadENV } = require('KegFileSys/env')
 
 const cliRootDir = path.join(__dirname, '../../../')
 const containersPath = path.join(cliRootDir, 'containers')
