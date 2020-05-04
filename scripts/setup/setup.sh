@@ -2,7 +2,7 @@
 
 # Docker IP Address setup
 KEG_DOCKER_IP=192.168.99.100
-KEG_DOCKER_BROADCAST=192.168.100.255
+KEG_DOCKER_BROADCAST=192.168.50.255
 KEG_DOCKER_SUBNET_MASK=255.255.255.0
 KEG_DOCKER_NAME=docker-keg
 
@@ -111,18 +111,15 @@ keg_setup_docker_machine(){
   docker-machine create --driver virtualbox $KEG_DOCKER_NAME
 
   keg_message "Updating docker-machine environment..."
-  eval $(docker-machine env $KEG_DOCKER_NAME)
+  docker-machine env $KEG_DOCKER_NAME
 
-  echo "ifconfig eth1 $KEG_DOCKER_IP inet static netmask $KEG_DOCKER_SUBNET_MASK network 192.168.99.0 broadcast $KEG_DOCKER_BROADCAST up" | docker-machine ssh $KEG_DOCKER_NAME sudo tee /var/lib/boot2docker/bootsync.sh > /dev/null
-
+  echo "ifconfig eth1 $KEG_DOCKER_IP netmask $KEG_DOCKER_SUBNET_MASK broadcast $KEG_DOCKER_BROADCAST up" | docker-machine ssh $KEG_DOCKER_NAME sudo tee /var/lib/boot2docker/bootsync.sh > /dev/null
 
   keg_message "Stoping $KEG_DOCKER_NAME to set static ip address..."
   docker-machine stop $KEG_DOCKER_NAME
 
   keg_message "Starting $KEG_DOCKER_NAME with ip address => $KEG_DOCKER_IP"
   docker-machine start $KEG_DOCKER_NAME
-
-  eval $(docker-machine env $KEG_DOCKER_NAME)
 
   keg_message "Regenerating $KEG_DOCKER_NAME certs..."
   docker-machine regenerate-certs $KEG_DOCKER_NAME
@@ -382,7 +379,7 @@ keg_setup(){
   # To run:
   # bash setup.sh docker-reset
   #  * Runs only the docker-reset portion of this script
-  if [[ "$SETUP_TYPE" == "docker-reset" ]]; then
+  if [[ "$SETUP_TYPE" == "docker-reset" || "$SETUP_TYPE" == "docre" ]]; then
     keg_message "Reseting docker-machine..."
     keg_reset_docker_machine "${@:2}"
     return

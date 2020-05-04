@@ -7,11 +7,7 @@ const containersPath = path.join(cliRootDir, 'containers')
 const baseDockerFile = path.join(containersPath, 'base/Dockerfile')
 const tapDockerFile = path.join(containersPath, 'tap/Dockerfile')
 
-const configEnv = process.env.NODE_ENV
-  ? process.env.NODE_ENV === 'development'
-    ? 'local'
-    : process.env.NODE_ENV
-  : 'local'
+const configEnv = process.env.NODE_ENV || 'local'
 
 const DEFAULT = {
   VALUES: {
@@ -35,6 +31,7 @@ const DEFAULT = {
 module.exports = deepFreeze({
   CONTAINERS_PATH: containersPath,
   DOCKER_CONFIG_PATH: path.join(containersPath, 'config'),
+  NODE_ENV: configEnv,
   BUILD: {
     BASE: deepMerge(DEFAULT, {
       ENV: loadENV(path.join(containersPath, 'base/.env'))

@@ -1,7 +1,7 @@
-const { isArr, get } = require('jsutils')
-const { getGitUrl, getGitKey } = require('KegUtils')
+const { isArr, get, reduceObj, isObj, softFalsy } = require('jsutils')
+const { getGitUrl, getGitKey, exists } = require('KegUtils')
 const { DOCKER } = require('KegConst')
-const { BUILD } = DOCKER
+const { BUILD, NODE_ENV } = DOCKER
 
 /**
  * Formats a build-arg string to match the docker cli api
@@ -30,35 +30,30 @@ const createBuildArg = (key, value, dockerCmd) => {
 const getBuildArgs = async (globalConfig, { container, name, branch, dockerCmd }) => {
   
   const buildOpts = get(DOCKER, [ 'BUILD', (container || name).toUpperCase() ])
+  if(!isObj(buildOpts.ARGS)) return dockerCmd
+  
   const gitKey = await getGitKey(globalConfig)
+  
+  return reduceObj(buildOpts.ARGS, (key, value, dockerCmd) => {
+    let useVal
+    switch(key){
+      case 'GIT_KEY':{
+        useVal = gitKey
+        break
+      }
+      case 'GIT_CLI_URL':{
+        NODE_ENV !== 'local' && ( useVal = getGitUrl(globalConfig, 'cli') )
+        break
+      }
+      case 'GIT_TAP_URL':{
+        useVal = getGitUrl(globalConfig, name, branch)
+        break
+      }
+    }
 
-  dockerCmd = !gitKey
-    ? dockerCmd
-    : createBuildArg(
-        get(buildOpts, 'ARGS.GIT_KEY', 'GIT_KEY'),
-        gitKey,
-        dockerCmd
-      )
+    return exists(useVal) ? createBuildArg(key, useVal, dockerCmd) : dockerCmd
 
-  // const gitCliUrl = getGitUrl(globalConfig, 'cli')
-  // dockerCmd = !gitCliUrl
-  //   ? dockerCmd
-  //   : createBuildArg(
-  //       get(buildOpts, 'ARGS.GIT_CLI_URL', 'GIT_CLI_URL'),
-  //       gitCliUrl,
-  //       dockerCmd
-  //     )
-
-  const gitUrl = getGitUrl(globalConfig, name, branch)
-  dockerCmd = !gitUrl
-    ? dockerCmd
-    : createBuildArg(
-        get(buildOpts, 'ARGS.GIT_TAP_URL', 'GIT_TAP_URL'),
-        gitUrl,
-        dockerCmd
-      )
-
-  return dockerCmd
+  }, dockerCmd)
 
 }
 

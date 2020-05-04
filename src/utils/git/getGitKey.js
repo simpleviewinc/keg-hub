@@ -2,8 +2,7 @@ const { get } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
-const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
-
+const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst')
 const gitKey = get(DOCKER, 'BUILD.BASE.ARGS.GIT_KEY', 'GIT_KEY')
 
 /**
