@@ -8,7 +8,7 @@ const {
   GIT_SSH_PARAMS,
   GIT_SSH_KEY_PATH,
   GLOBAL_CONFIG_PATHS
-} = require('KegConst')
+} = require('KegConst/constants')
 
 /**
  * Tries to load a git ssh key from the save globalConfig path, or the default

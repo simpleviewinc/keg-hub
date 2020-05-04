@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { get } = require('jsutils')
-const { GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 const throwNoConfigPath = (globalConfig, pathName) => {
   

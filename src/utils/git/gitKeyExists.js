@@ -1,5 +1,5 @@
 const { get } = require('jsutils')
-const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { decrypt } = require('KegCrypto')
 
 /**

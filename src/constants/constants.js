@@ -25,8 +25,6 @@ module.exports = deepFreeze({
     'description'
   ],
 
- 
-
   // Global config settings
   GLOBAL_CONFIG_PATHS: {
     CLI: 'keg.cli',

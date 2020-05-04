@@ -1,4 +1,4 @@
-const { GLOBAL_CONFIG_EDITOR_CMD } = require('KegConst')
+const { GLOBAL_CONFIG_EDITOR_CMD } = require('KegConst/constants')
 const { get } = require('jsutils')
 
 const getEditorCmd = globalConfig => {

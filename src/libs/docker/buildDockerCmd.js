@@ -21,11 +21,11 @@ const {
  * @returns {string} - Built docker build command
  */
 const createBuildCmd = async (globalConfig, dockerCmd, params) => {
-  const { container, img, location, name, branch, tags=[], version } = params
+  const { container, img, location, name, branch, options=[], version } = params
   const image = getDockerImg(img, container)
   
-  // Add any tags if needed
-  dockerCmd = getBuildTags({ image, name, tags, version, dockerCmd })
+  // Add any options if needed
+  dockerCmd = getBuildTags({ img, name, options, version, dockerCmd })
 
   // Add the build args for the github key and tap git url
   dockerCmd = await getBuildArgs(globalConfig, { name, branch, dockerCmd, container })

@@ -1,5 +1,5 @@
 const { get, isUrl } = require('jsutils')
-const { GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 /**
  * Builds the git url to clone the repo

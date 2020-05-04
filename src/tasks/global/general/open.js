@@ -1,6 +1,9 @@
 const { executeCmd } = require('KegProc')
-const { getPathFromConfig, getEditorCmd } = require('KegUtils')
-const { GLOBAL_CONFIG_FOLDER } = require('KegConst')
+const { getPathFromConfig, getEditorCmd, generalError } = require('KegUtils')
+const {
+  GLOBAL_CONFIG_FOLDER,
+  GLOBAL_CONFIG_EDITOR_CMD
+} = require('KegConst/constants')
 const { Logger } = require('KegLog')
 /**
  * Opens the CLI global config in VS Code
@@ -16,6 +19,12 @@ const open = async args => {
   const toOpen = options[0]
 
   const editorCmd = getEditorCmd(globalConfig)
+
+  if(!editorCmd)
+    return generalError(
+      `Keg Global Config path "${GLOBAL_CONFIG_EDITOR_CMD}" does not exist!`
+    )
+
   let logText = `Opening keg folder!`
   let openPath = getPathFromConfig(globalConfig, 'keg')
 
@@ -44,6 +53,7 @@ const open = async args => {
   if(!openPath) return Logger.info(`Could not find path for ${ toOpen }`)
 
   Logger.info(logText)
+
   await executeCmd(`${ editorCmd } ${ openPath }`)
 
 }
