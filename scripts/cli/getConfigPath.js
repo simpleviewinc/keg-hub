@@ -30,7 +30,7 @@ const logPathResponse = foundPath => {
  *
  * @returns {void}
  */
-const getPathFromConfig = () => {
+const getConfigPath = () => {
 
   const args = process.argv.slice(2)
   const pathName = args[0]
@@ -55,4 +55,4 @@ const getPathFromConfig = () => {
 
 }
 
-getPathFromConfig()
+getConfigPath()

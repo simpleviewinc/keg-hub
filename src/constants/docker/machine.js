@@ -1,10 +1,8 @@
-const { deepFreeze, deepMerge, keyMap } = require('jsutils')
+const path = require('path')
+const { deepFreeze } = require('jsutils')
+const { loadENV } = require('KegFileSys/env')
+const cliRootDir = path.join(__dirname, '../../../')
 
 module.exports = deepFreeze({
-  MACHINE: {
-    NAME: 'docker-keg',
-    IP: '192.168.99.101',
-    BROADCAST: '192.168.99.255',
-    SUBNET_MASK: '255.255.255.0'
-  }
+  MACHINE: loadENV(path.join(cliRootDir, 'configs/docker-keg.env'))
 })

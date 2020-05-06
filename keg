@@ -32,9 +32,9 @@ keg_cli_move_directory(){
 
   # If no arguments, then $KEG_DOCKER_NAME to keg path
   if [[ "$#" == "0" ]]; then
-    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js keg)"
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getConfigPath.js keg)"
   else
-    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js $@)"
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getConfigPath.js $@)"
   fi
 
   # Convert the ouput to an array
