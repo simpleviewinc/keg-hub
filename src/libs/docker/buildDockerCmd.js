@@ -21,8 +21,17 @@ const {
  * @returns {string} - Built docker build command
  */
 const createBuildCmd = async (globalConfig, dockerCmd, params) => {
-  const { container, image, location, name, branch, options=[], version } = params
-  const image = getDockerImg(image, container)
+  const {
+    container,
+    location,
+    name,
+    branch,
+    options=[],
+    version
+  } = params
+
+  // Ensure we have an image name to build
+  const image = getDockerImg(params.image, container)
   
   // Add any options if needed
   dockerCmd = getBuildTags({ image, name, options, version, dockerCmd })
@@ -34,7 +43,6 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   return location
     ? `${dockerCmd} ${location}`
     : dockerCmd
-
 }
 
 /**
@@ -48,7 +56,17 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
  * @returns {string} - Built docker run command
  */
 const createRunCmd = (globalConfig, dockerCmd, params) => {
-  const { container, execCmd, location, name, branch, image, mounts, platform, tap } = params
+  const {
+    container,
+    execCmd,
+    location,
+    name,
+    branch,
+    image,
+    mounts,
+    platform,
+    tap
+  } = params
 
   // Get the name for the docker container
   dockerCmd = addContainerName(name, dockerCmd)
@@ -109,7 +127,12 @@ const buildDockerCmd = (globalConfig, params) => {
   params.container = params.container || name
 
   // Get the default docker arguments
-  let dockerCmd = getDockerArgs(cmd, dockerOpts, container, `docker ${cmd} ${docker}`.trim())
+  let dockerCmd = getDockerArgs(
+    cmd,
+    dockerOpts,
+    container,
+    `docker ${cmd} ${docker}`.trim()
+  )
 
   // Add any tags if needed
   return cmd === 'build'

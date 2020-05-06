@@ -1,5 +1,6 @@
 const { DOCKER } = require('KegConst')
-const { reduceObj, softFalsy, get } = require('jsutils')
+const { reduceObj, get } = require('jsutils')
+const { exists } = require('KegUtils/helpers/exists')
 
 /**
  * Loops over the passed in args and maps them to the docker constants
@@ -30,11 +31,7 @@ const getDockerArgs = (cmd, args, container='core', dockerCmd='') => {
     const argVal = checkArgs[key]
 
     // Ensure if the key exists in the args object, otherwise set to empty string
-    const addArg = !softFalsy(argVal)
-      ? ''
-      : argVal === true
-        ? value
-        : argVal
+    const addArg = exists(argVal) ? argVal === true ? value : argVal : ''
 
     // Join and return the args
     return `${joinedArgs} ${addArg}`.trim()
@@ -68,7 +65,7 @@ const addTapMount = (location, dockerCmd) => {
 const addContainerEnv = (dockerCmd='', options={}) => {
   return Object.keys(options)
     .reduce((cmd, key) => {
-        return options[key]
+        return exists(options[key])
           ? `${cmd} -e ${key.toUpperCase()}=${options[key]}`
           : cmd
       }, dockerCmd)

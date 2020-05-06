@@ -9,14 +9,12 @@ const { DOCKER: { BUILD } } = require('KegConst')
  * @returns {string} - Name of the image
  */
 const getDockerImg = (image, container='') => {
-  if(image) return image
 
   const cont = container.toUpperCase()
-  const image = get(BUILD, `${cont}.ENV.image`)
-  const version = get(BUILD, `${cont}.ENV.version`, '')
+  const version = get(BUILD, `${cont}.ENV.VERSION`, '')
+  image = image || get(BUILD, `${cont}.ENV.IMAGE`)
 
   return `${ image }${ version ? (':' + version) : '' }`
-
 }
 
 module.exports = {
