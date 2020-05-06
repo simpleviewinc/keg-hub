@@ -61,12 +61,14 @@ const startTap = async (args) => {
   const version = getCoreVersion(globalConfig)
 
   const dockerCmd = buildDockerCmd(globalConfig, {
+    env,
+    mounts,
     location,
     docker,
     name: 'tap',
     cmd: `run`,
     image: image || 'tap',
-    mounts: getMounts({ mounts, env, container: 'TAP' }),
+    container: 'TAP',
     tap: name,
   })
 

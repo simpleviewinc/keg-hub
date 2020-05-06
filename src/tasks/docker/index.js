@@ -6,6 +6,7 @@ module.exports = {
       ...require('./build'),
       ...require('./compose'),
       ...require('./machine'),
+      ...require('./run'),
       ...require('./sync'),
     },
     description: 'Keg Docker specific tasks',

@@ -1,6 +1,6 @@
+const { isObj } = require('jsutils')
 const { getBuildTags } = require('./getBuildTags')
-const { getDirsToMount } = require('./getDirsToMount')
-const { getVolumeMounts } = require('./getVolumeMounts')
+const { getDirsToMount, getVolumeMounts } = require('./buildDockerMounts')
 const { getBuildArgs } = require('./getBuildArgs')
 const { getDockerImg } = require('./getDockerImg')
 const {
@@ -58,6 +58,8 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
 const createRunCmd = (globalConfig, dockerCmd, params) => {
   const {
     container,
+    env,
+    envs={},
     execCmd,
     location,
     name,
@@ -69,7 +71,10 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
   } = params
 
   // Get the name for the docker container
-  dockerCmd = addContainerName(name, dockerCmd)
+  dockerCmd = addContainerName(
+    tap ? `${name}-${tap}` : name,
+    dockerCmd
+  )
 
   // Add the env to the docker command
   dockerCmd = addContainerEnv(dockerCmd, {
@@ -77,21 +82,28 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     GIT_BRANCH: branch,
     PLATFORM: platform,
     EXEC_CMD: execCmd,
+    NODE_ENV: env,
+    ENV: env,
+    // Join the envs object to be added as envs to the docker container
+    ...(isObj(envs) && envs || {}),
   })
 
   // Mount the tap location by default
   dockerCmd = addTapMount(location, dockerCmd)
 
   // First fet the directory paths to mount
-  const toMount = mounts && getDirsToMount(globalConfig, mounts, container)
+  const toMount = getDirsToMount(
+    globalConfig,
+    mounts,
+    env,
+    container
+  )
 
   // Then build the docker volume string for each mount path
   dockerCmd = toMount ? getVolumeMounts(toMount, dockerCmd) : dockerCmd
 
   // Add the location last. This is the location the container will be built from
-  return image
-    ? `${dockerCmd} ${getDockerImg(image, container)}`
-    : dockerCmd
+  return `${ dockerCmd } ${ getDockerImg(image, container, tap) }`
 }
 
 /**
@@ -100,6 +112,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
  * @param {Object} params - Data to build the docker command
  * @param {Object} params.cmd - The docker command to run
  * @param {Object} params.name - Name of the docker container to run
+ * @param {Object} params.env - Environment to run the container in
  * @param {Object} params.envs - Environment Vars to pass to the docker command
  *
  * @returns {string} - Built docker command
@@ -109,13 +122,14 @@ const buildDockerCmd = (globalConfig, params) => {
     branch,
     cmd,
     docker='',
+    env,
     envs,
     execCmd,
     image,
     location,
     mounts,
     name,
-    container=name,
+    container,
     platform,
     tags,
     tap,
@@ -124,13 +138,13 @@ const buildDockerCmd = (globalConfig, params) => {
   } = params
   
   // In no container is set, try to use the name of the docker image to build
-  params.container = params.container || name
+  params.container = (container || name).toUpperCase()
 
   // Get the default docker arguments
   let dockerCmd = getDockerArgs(
     cmd,
     dockerOpts,
-    container,
+    params.container,
     `docker ${cmd} ${docker}`.trim()
   )
 

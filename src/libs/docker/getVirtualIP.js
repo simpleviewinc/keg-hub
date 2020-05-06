@@ -1,5 +1,7 @@
 const { executeCmd } = require('KegProc')
 const { isStr } = require('jsutils')
+const { DOCKER } = require('KegConst')
+const { NAME } = DOCKER.MACHINE
 
 /**
  * Gets the Ip address of the virtual machine running the docker contianer
@@ -9,7 +11,7 @@ const { isStr } = require('jsutils')
  * @returns {string} - IP address of the virtual machine
  */
 const getVirtualIP = async () => {
-  const { error, data } = await executeCmd(`docker-machine ip`)
+  const { error, data } = await executeCmd(`docker-machine ip ${ NAME }`)
   if(error) throw new Error(error)
 
   return data && data.trim()

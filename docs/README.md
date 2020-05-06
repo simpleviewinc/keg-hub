@@ -6,6 +6,16 @@
     * Example `keg tap -h`
   * To see help for all tasks, run `keg -h`,
 
+
+## Tasks
+  * Tasks are work that can be done through the keg-cli
+  * Execute a task by running `keg <name of task> <options>` 
+  * Most tasks take options that affect how the task is run
+    * Some tasks have **REQUIRED** options
+    * Some options only allow **SPECIFIC** values
+    * Use the help command for more information about a task and its options
+      * `keg <name of task> -h` 
+
 ## Core Repos
   * [keg-cli]() - Commands to run the keg, and taps
   * [keg-components]() - A cross-platform component library for React / React-Native

@@ -5,7 +5,6 @@ module.exports = {
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getDockerArgs'),
-  ...require('./getDirsToMount'),
-  ...require('./getVolumeMounts'),
+  ...require('./buildDockerMounts'),
   ...require('./getVirtualIP'),
 }
