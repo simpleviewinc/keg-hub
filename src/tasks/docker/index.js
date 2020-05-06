@@ -5,6 +5,7 @@ module.exports = {
     tasks: {
       ...require('./build'),
       ...require('./compose'),
+      ...require('./container'),
       ...require('./machine'),
       ...require('./run'),
       ...require('./sync'),
