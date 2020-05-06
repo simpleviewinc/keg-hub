@@ -65,7 +65,7 @@ const startTap = async (args) => {
     docker,
     name: 'tap',
     cmd: `run`,
-    img: image || 'tap',
+    image: image || 'tap',
     mounts: getMounts({ mounts, env, container: 'TAP' }),
     tap: name,
   })

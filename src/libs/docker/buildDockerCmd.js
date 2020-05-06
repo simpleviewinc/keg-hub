@@ -21,11 +21,11 @@ const {
  * @returns {string} - Built docker build command
  */
 const createBuildCmd = async (globalConfig, dockerCmd, params) => {
-  const { container, img, location, name, branch, options=[], version } = params
-  const image = getDockerImg(img, container)
+  const { container, image, location, name, branch, options=[], version } = params
+  const image = getDockerImg(image, container)
   
   // Add any options if needed
-  dockerCmd = getBuildTags({ img, name, options, version, dockerCmd })
+  dockerCmd = getBuildTags({ image, name, options, version, dockerCmd })
 
   // Add the build args for the github key and tap git url
   dockerCmd = await getBuildArgs(globalConfig, { name, branch, dockerCmd, container })
@@ -42,13 +42,13 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
  * @param {Object} globalConfig - Global config object for the keg-cli
  * @param {Object} params - Data to build the docker command
  * @param {string} params.dockerCmd - docker command being built
- * @param {string} params.img - docker image to use when running the container
+ * @param {string} params.image - docker image to use when running the container
  * @param {Array} params.mounts - Key names of repos to be mounted
  *
  * @returns {string} - Built docker run command
  */
 const createRunCmd = (globalConfig, dockerCmd, params) => {
-  const { container, execCmd, location, name, branch, img, mounts, platform, tap } = params
+  const { container, execCmd, location, name, branch, image, mounts, platform, tap } = params
 
   // Get the name for the docker container
   dockerCmd = addContainerName(name, dockerCmd)
@@ -71,8 +71,8 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
   dockerCmd = toMount ? getVolumeMounts(toMount, dockerCmd) : dockerCmd
 
   // Add the location last. This is the location the container will be built from
-  return img
-    ? `${dockerCmd} ${getDockerImg(img, container)}`
+  return image
+    ? `${dockerCmd} ${getDockerImg(image, container)}`
     : dockerCmd
 }
 
@@ -93,7 +93,7 @@ const buildDockerCmd = (globalConfig, params) => {
     docker='',
     envs,
     execCmd,
-    img,
+    image,
     location,
     mounts,
     name,
