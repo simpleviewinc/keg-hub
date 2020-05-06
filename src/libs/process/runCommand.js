@@ -28,8 +28,10 @@ const doSpawnCmd = (...args) => {
     Logger.colors.brightCyan(`Running command:`),
     Logger.colors.brightWhite(`${args[0]}${extra}`)
   )
-
-  return spawnCmd(...args)
+  
+  return args.length > 1
+    ? spawnCmd(...args)
+    : spawnCmd(...args, process.cwd())
 }
 
 module.exports = {
