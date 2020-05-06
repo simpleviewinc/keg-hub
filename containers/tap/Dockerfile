@@ -1,4 +1,4 @@
-FROM keg:base:v1
+FROM kegbase:0.0.1
 
 RUN apt-get install git openssh-client
 WORKDIR /keg
