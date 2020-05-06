@@ -19,7 +19,7 @@ const buildTap = async (args) => {
   const location = getTapPath(globalConfig, name)
   const version = getCoreVersion(globalConfig)
 
-  const dockerCmd = buildDockerCmd(globalConfig, {
+  const dockerCmd = await buildDockerCmd(globalConfig, {
     location,
     version,
     name: 'tap',

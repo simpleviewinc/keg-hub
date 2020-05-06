@@ -21,7 +21,7 @@ const DEFAULT = {
 
 module.exports = deepFreeze({
   VOLUMES: {
-    BASE: deepMerge(DEFAULT, {}),
+    CORE: deepMerge(DEFAULT, {}),
     TAP: deepMerge(DEFAULT, {}),
   }
 })

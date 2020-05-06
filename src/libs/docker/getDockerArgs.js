@@ -15,7 +15,7 @@ const { reduceObj, softFalsy, get } = require('jsutils')
  *
  * @returns {string} - Joint docker command arguments
  */
-const getDockerArgs = (cmd, args, container='base', dockerCmd='') => {
+const getDockerArgs = (cmd, args, container='core', dockerCmd='') => {
   
   const cmdOpts = get(DOCKER, [ cmd.toUpperCase(), container.toUpperCase() ])
   const checkArgs = { ...cmdOpts.DEFAULTS, ...args }

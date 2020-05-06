@@ -32,8 +32,8 @@
     * [virtualbox]() - Run by docker-machine
 
 ### Docker Containers
-  * Build base container
-    * `keg doc build base`
+  * Build core container
+    * `keg doc build core`
   * Build tap container
     * `keg tap build name=<name of linked tap>`
-    * **IMPORTANT** - base container should be built before building a tap container
+    * **IMPORTANT** - core container should be built before building a tap container

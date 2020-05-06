@@ -4,14 +4,14 @@ const { loadENV } = require('KegFileSys/env')
 
 const cliRootDir = path.join(__dirname, '../../../')
 const containersPath = path.join(cliRootDir, 'containers')
-const baseDockerFile = path.join(containersPath, 'base/Dockerfile')
+const coreDockerFile = path.join(containersPath, 'core/Dockerfile')
 const tapDockerFile = path.join(containersPath, 'tap/Dockerfile')
 
 const configEnv = process.env.NODE_ENV || 'local'
 
 const DEFAULT = {
   VALUES: {
-    file: `-f ${baseDockerFile}`,
+    file: `-f ${coreDockerFile}`,
     clean: '--rm',
   },
   DEFAULTS: {
@@ -33,8 +33,8 @@ module.exports = deepFreeze({
   DOCKER_CONFIG_PATH: path.join(containersPath, 'config'),
   NODE_ENV: configEnv,
   BUILD: {
-    BASE: deepMerge(DEFAULT, {
-      ENV: loadENV(path.join(containersPath, 'base/.env'))
+    CORE: deepMerge(DEFAULT, {
+      ENV: loadENV(path.join(containersPath, 'core/.env'))
     }),
     TAP: deepMerge(DEFAULT, {
       VALUES: {

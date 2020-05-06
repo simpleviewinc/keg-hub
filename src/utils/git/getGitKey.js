@@ -3,7 +3,7 @@ const { ask } = require('KegQuestions')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
 const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst')
-const gitKey = get(DOCKER, 'BUILD.BASE.ARGS.GIT_KEY', 'GIT_KEY')
+const gitKey = get(DOCKER, 'BUILD.CORE.ARGS.GIT_KEY', 'GIT_KEY')
 
 /**
  * Gets the git key to allow cloning private repos

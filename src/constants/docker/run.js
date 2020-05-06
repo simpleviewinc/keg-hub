@@ -17,7 +17,7 @@ const DEFAULT = {
 
 module.exports = deepFreeze({
   RUN: {
-    BASE: deepMerge(DEFAULT, {}),
+    CORE: deepMerge(DEFAULT, {}),
     TAP: deepMerge(DEFAULT, {
       VALUES: {
         port: '-p 80:19006 -p 19002:19002',
