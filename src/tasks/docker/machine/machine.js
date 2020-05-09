@@ -15,9 +15,9 @@ const { NAME } = DOCKER.MACHINE
  */
 const dockerMachine = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
-  
-  const toRun = params.cmd || 'ls'
-  const dmCmd = `docker-machine ${params.cmd || 'ls'} ${NAME}`
+  const toRun = params.cmd || options[0] || 'ls'
+
+  const dmCmd = `docker-machine ${ toRun } ${NAME}`
 
   return spawnCmd(dmCmd)
 
@@ -33,6 +33,7 @@ module.exports = {
     options: {
       cmd: {
         description: 'The docker-machine command to run. Default ( ls )',
+        enforced: true,
       }
     }
   }

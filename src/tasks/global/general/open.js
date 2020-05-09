@@ -1,10 +1,8 @@
 const { executeCmd } = require('KegProc')
-const { getPathFromConfig, getEditorCmd, generalError } = require('KegUtils')
-const {
-  GLOBAL_CONFIG_FOLDER,
-  GLOBAL_CONFIG_EDITOR_CMD
-} = require('KegConst/constants')
 const { Logger } = require('KegLog')
+const { getPathFromConfig, getEditorCmd, generalError, getTapPath } = require('KegUtils')
+const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_EDITOR_CMD } = require('KegConst/constants')
+
 /**
  * Opens the CLI global config in VS Code
  * @function
@@ -15,8 +13,9 @@ const { Logger } = require('KegLog')
  */
 const open = async args => {
 
-  const { globalConfig, options } = args
-  const toOpen = options[0]
+  const { globalConfig, options, params } = args
+  const { name } = params
+  const toOpen = name || options[0]
 
   const editorCmd = getEditorCmd(globalConfig)
 
@@ -40,12 +39,18 @@ const open = async args => {
     case 'co': {
       logText = `Opening core folder!`
       openPath = getPathFromConfig(globalConfig, 'core')
+      break
     }
     case 'components':
     case 'comp':
     case 'cm': {
       logText = `Opening components folder!`
       openPath = getPathFromConfig(globalConfig, 'components')
+    }
+    default: {
+      logText = `Opening ${ toOpen } folder!`
+      openPath = getPathFromConfig(globalConfig, toOpen) || getTapPath(globalConfig, toOpen)
+      break
     }
     // Add other open cases here
   }
@@ -68,8 +73,9 @@ module.exports = {
     example: 'keg open <options>',
     options: {
       name: {
-        description: 'Key name of the path in globalConfig',
+        description: 'Key name of the path or tap in globalConfig',
         example: 'keg open core',
+        enforced: true
       }
     }
   }

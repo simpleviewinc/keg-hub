@@ -49,10 +49,10 @@ const useSubTasksAction = args => {
   subTask
     ? executeTask({
         tasks,
-        options,
         globalConfig,
         task: subTask,
         command: useCommand,
+        options: options.slice(1),
       })
     : throwWrap(`Could not find sub-command ${ command } ${ options[0] }!`)
 
