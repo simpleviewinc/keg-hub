@@ -27,10 +27,5 @@ COPY yarn.lock /keg/tap/yarn.lock
 # Install the dependecies
 RUN yarn setup
 
-# Expose the container ports to allow connecting to it externally
-EXPOSE 873
-EXPOSE 19006
-EXPOSE 19002
-
 # Run the script
-CMD [ "/bin/bash", "/keg/cli/scripts/docker/run.sh" ]
+CMD [ "/bin/bash", "/keg/cli/containers/tap/run.sh" ]

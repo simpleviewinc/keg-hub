@@ -1,7 +1,15 @@
-const { spawnCmd } = require('KegProc')
-const { getPathFromConfig, throwNoConfigPath } = require('KegUtils')
-const { buildDockerCmd, addDockerArg, addComposeFiles, getBuildArgs } = require('KegDocker')
+const { get } = require('jsutils')
 const { Logger } = require('KegLog')
+const { spawnCmd } = require('KegProc')
+const { DOCKER } = require('KegConst/docker')
+const { getPathFromConfig, throwNoConfigPath } = require('KegUtils')
+const {
+  addDockerArg,
+  addComposeFiles,
+  buildDockerCmd,
+  getContext,
+  getBuildArgs,
+} = require('KegDocker')
 
 /**
  * Cleans docker-sync containers
@@ -17,22 +25,24 @@ const buildDockerCompose = async args => {
   const location = getPathFromConfig(globalConfig, 'docker')
   if(!location) throwNoConfigPath(globalConfig, 'docker')
 
-  const { cache, remove, pull } = params
+  const { cache, remove, pull, context } = params
 
-  let dockerCmd = `docker-compose`
-  dockerCmd = addComposeFiles(dockerCmd)
-  dockerCmd = `${dockerCmd} build`
-  dockerCmd = await getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
+  const cmdContext = getContext(
+    globalConfig,
+    context || get(args, task.options.context.default, 'core')
+  )
   
-  dockerCmd = addDockerArg(dockerCmd, '--force-rm', Boolean(remove))
-  dockerCmd = addDockerArg(dockerCmd, '--no-cache', !Boolean(cache))
-  dockerCmd = addDockerArg(dockerCmd, '--pull', Boolean(pull))
+  // let dockerCmd = `docker-compose`
+  // dockerCmd = addComposeFiles(dockerCmd)
+  // dockerCmd = `${dockerCmd} build`
+  // dockerCmd = await getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
+  
+  // dockerCmd = addDockerArg(dockerCmd, '--force-rm', Boolean(remove))
+  // dockerCmd = addDockerArg(dockerCmd, '--no-cache', !Boolean(cache))
+  // dockerCmd = addDockerArg(dockerCmd, '--pull', Boolean(pull))
 
-  
-  console.log(`---------- dockerCmd ----------`)
-  console.log(dockerCmd)
-  console.log(`---------- location ----------`)
-  console.log(location)
+  // console.log(`---------- dockerCmd ----------`)
+  // console.log(dockerCmd)
 
   // TODO: add some type of ENV loading for docker compose up command
   // Would look something like this => env $(cat local.env) docker-compose up
@@ -49,6 +59,12 @@ module.exports = {
   description: `Run docker-compose build command`,
   example: 'keg docker compose build <options>',
   options: {
+    context: {
+      allowed: [ 'tap', 'core' ],
+      description: 'Context of docker compose build command (tap || core)',
+      example: 'keg docker compose build --context core',
+      default: 'core'
+    },
     remove: {
       description: 'Always remove intermediate containers',
       example: 'keg docker compose build --remove',

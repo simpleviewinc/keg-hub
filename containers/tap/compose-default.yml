@@ -2,8 +2,8 @@ version: "2"
 services:
   tap:
     build:
-      context: ${TAP_PATH}
-      dockerfile: ${DOCKER_PATH}/Dockerfile
+      context: ${CONTEXT_PATH}
+      dockerfile: ${CONTEXT_DOCKER_FILE}
       args:
         GIT_KEY: ${GIT_KEY}
         GIT_TAP_URL: ${GIT_TAP_URL}

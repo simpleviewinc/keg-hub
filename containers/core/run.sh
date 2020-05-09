@@ -2,7 +2,6 @@
 
 TAP_PATH=/keg/tap
 CLI_PATH=/keg/cli
-DOCKER_PATH=/keg/cli/scripts/docker
 CORE_PATH=/keg/tap/node_modules/keg-core
 
 

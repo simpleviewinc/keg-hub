@@ -26,6 +26,13 @@ RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
       git clone $GIT_CLI_URL ./cli; \
     fi
 
+# Pull down the tap locally
+RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
+      git clone $GIT_CORE_URL ./keg-core; \
+      cd ./keg-core; \
+      yarn install; \
+    fi
+
 # Expose the container ports to allow connecting to it externally
 EXPOSE 873
 EXPOSE 8080
@@ -34,3 +41,6 @@ EXPOSE 8082
 EXPOSE 19006
 EXPOSE 19002
 EXPOSE 60710
+
+# Run the script
+CMD [ "/bin/bash", "/keg/cli/containers/core/run.sh" ]
