@@ -1,6 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { getPathFromConfig, throwNoConfigPath } = require('KegUtils')
-const { buildDockerCmd, addDockerArg, addValueFiles, getBuildArgs } = require('KegDocker')
+const { buildDockerCmd, addDockerArg, addComposeFiles, getBuildArgs } = require('KegDocker')
 const { Logger } = require('KegLog')
 
 /**
@@ -20,19 +20,23 @@ const upDockerCompose = async args => {
   const { cache, remove, pull } = params
 
   let dockerCmd = `docker-compose`
-  dockerCmd = addValueFiles(dockerCmd)
+  dockerCmd = addComposeFiles(dockerCmd)
   dockerCmd = `${dockerCmd} build`
-  dockerCmd = getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
+  dockerCmd = await getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
   
   dockerCmd = addDockerArg(dockerCmd, '--force-rm', Boolean(remove))
   dockerCmd = addDockerArg(dockerCmd, '--no-cache', !Boolean(cache))
   dockerCmd = addDockerArg(dockerCmd, '--pull', Boolean(pull))
 
+  
+  console.log(`---------- dockerCmd ----------`)
+  console.log(dockerCmd)
+
   // TODO: add some type of ENV loading for docker compose up command
   // Would look something like this => env $(cat local.env) docker-compose up
   // ENV_FILE=.env.production.local docker-compose -f docker-compose.prod.yml up --build
   // docker-compose --env-file foo.env up => This should work
-  await spawnCmd(`${dockerCmd} tap`, location)
+  // await spawnCmd(`${dockerCmd} tap`, location)
 
 }
 

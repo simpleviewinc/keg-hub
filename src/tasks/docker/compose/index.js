@@ -1,7 +1,7 @@
 module.exports = {
   compose: {
     name: 'compose',
-    alias: [ 'comp', 'cmp' ],
+    alias: [ 'comp', 'cmp', 'cm' ],
     tasks: {
       build: require('./build'),
       up: require('./up'),

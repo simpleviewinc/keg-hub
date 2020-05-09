@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./addValueFiles'),
+  ...require('./addComposeFiles'),
   ...require('./buildDockerCmd'),
   ...require('./dockerError'),
   ...require('./getBuildArgs'),
