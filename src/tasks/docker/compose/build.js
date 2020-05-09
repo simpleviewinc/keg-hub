@@ -11,7 +11,7 @@ const { Logger } = require('KegLog')
  *
  * @returns {void}
  */
-const upDockerCompose = async args => {
+const buildDockerCompose = async args => {
   const { globalConfig, params } = args
 
   const location = getPathFromConfig(globalConfig, 'docker')
@@ -31,6 +31,8 @@ const upDockerCompose = async args => {
   
   console.log(`---------- dockerCmd ----------`)
   console.log(dockerCmd)
+  console.log(`---------- location ----------`)
+  console.log(location)
 
   // TODO: add some type of ENV loading for docker compose up command
   // Would look something like this => env $(cat local.env) docker-compose up
@@ -43,7 +45,7 @@ const upDockerCompose = async args => {
 module.exports = {
   name: 'build',
   alias: [ 'b' ],
-  action: upDockerCompose,
+  action: buildDockerCompose,
   description: `Run docker-compose build command`,
   example: 'keg docker compose build <options>',
   options: {

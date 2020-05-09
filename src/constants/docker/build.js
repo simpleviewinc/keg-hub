@@ -4,6 +4,7 @@ const { loadENV } = require('KegFileSys/env')
 
 const cliRootDir = path.join(__dirname, '../../../')
 const containersPath = path.join(cliRootDir, 'containers')
+const composePath = path.join(containersPath, 'compose')
 const coreDockerFile = path.join(containersPath, 'core/Dockerfile')
 const tapDockerFile = path.join(containersPath, 'tap/Dockerfile')
 
@@ -23,14 +24,14 @@ const DEFAULT = {
     'GIT_CLI_URL',
   ], true),
   ENV: deepMerge(
-    loadENV(path.join(containersPath, 'config/.env')) || {},
-    loadENV(path.join(containersPath, `config/${ configEnv }.env`)) || {},
+    loadENV(path.join(composePath, '.env')) || {},
+    loadENV(path.join(composePath, `${ configEnv }.env`)) || {},
   )
 }
 
 module.exports = deepFreeze({
   CONTAINERS_PATH: containersPath,
-  DOCKER_CONFIG_PATH: path.join(containersPath, 'config'),
+  COMPOSE_PATH: composePath,
   NODE_ENV: configEnv,
   BUILD: {
     CORE: deepMerge(DEFAULT, {
