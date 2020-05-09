@@ -1,7 +1,7 @@
 const { isArr, get, reduceObj, isObj, softFalsy } = require('jsutils')
 const { getGitUrl, getGitKey, exists } = require('KegUtils')
 const { DOCKER } = require('KegConst')
-const { BUILD, NODE_ENV } = DOCKER
+const { BUILD, DOCKER_ENV } = DOCKER
 
 /**
  * Formats a build-arg string to match the docker cli api
@@ -42,7 +42,7 @@ const getBuildArgs = async (globalConfig, { container, name, branch, dockerCmd }
         break
       }
       case 'GIT_CLI_URL':{
-        NODE_ENV !== 'local' && ( useVal = getGitUrl(globalConfig, 'cli') )
+        DOCKER_ENV !== 'local' && ( useVal = getGitUrl(globalConfig, 'cli') )
         break
       }
       case 'GIT_TAP_URL':{

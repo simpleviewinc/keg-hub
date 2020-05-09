@@ -2,7 +2,7 @@ const { deepFreeze, deepMerge, keyMap } = require('jsutils')
 
 const DEFAULT = {
   VALUES: {
-    port: '-p 80:80',
+    port: '-p 80:19006 -p 19002:19002',
     clean: '--rm',
     attached: '-it',
     detached: '-d',
@@ -18,10 +18,6 @@ const DEFAULT = {
 module.exports = deepFreeze({
   RUN: {
     CORE: deepMerge(DEFAULT, {}),
-    TAP: deepMerge(DEFAULT, {
-      VALUES: {
-        port: '-p 80:19006 -p 19002:19002',
-      },
-    }),
+    TAP: deepMerge(DEFAULT, {}),
   }
 })

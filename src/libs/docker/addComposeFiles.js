@@ -1,9 +1,10 @@
 const { DOCKER } = require('KegConst/docker')
+const { get } = require('jsutils')
 
-const addComposeFiles = (dockerCmd) => {
-  const defCompose = `-f ${DOCKER.COMPOSE_PATH}/compose-default.yml`
-  const envCompose = DOCKER.NODE_ENV
-    ? `-f ${DOCKER.COMPOSE_PATH}/docker-compose-${DOCKER.NODE_ENV}.yml`
+const addComposeFiles = (dockerCmd, context) => {
+  const defCompose = `-f ${DOCKER.ENV.COMPOSE_DEFAULT}`
+  const envCompose = DOCKER.DOCKER_ENV
+    ? `-f ${DOCKER.CONTAINERS_PATH}/${context}/compose-${DOCKER.DOCKER_ENV}.yml`
     : ''
 
   return `${dockerCmd} ${defCompose} ${envCompose}`

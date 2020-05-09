@@ -26,14 +26,12 @@ const buildDockerCompose = async args => {
   if(!location) throwNoConfigPath(globalConfig, 'docker')
 
   const { cache, remove, pull, context } = params
-
-  const cmdContext = getContext(
-    globalConfig,
-    context || get(args, task.options.context.default, 'core')
-  )
   
-  // let dockerCmd = `docker-compose`
-  // dockerCmd = addComposeFiles(dockerCmd)
+  const cmdContext = context || get(args, task.options.context.default, 'core')
+  const composeContext = getContext(globalConfig, cmdContext)
+  
+  let dockerCmd = `docker-compose`
+  dockerCmd = addComposeFiles(dockerCmd, cmdContext)
   // dockerCmd = `${dockerCmd} build`
   // dockerCmd = await getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
   

@@ -1,13 +1,12 @@
 const { DOCKER } = require('KegConst/docker')
+const { get } = require('jsutils')
 
 const getContext = (globalConfig, context) => {
-  const cmdContext = DOCKER.BUILD[context.toUpperCase()]
-  
-  console.log(`---------- cmdContext ----------`)
-  console.log(cmdContext)
-  
-  // CONTEXT_PATH,
-  // CONTEXT_DOCKER_FILE
+  const cmdContext = get(DOCKER, `BUILD.${ context.toUpperCase() }`, {})
+  return {
+    path: get(context, 'ENV.CONTEXT_PATH', ''),
+    dockerFile: get(context, 'ENV.CONTEXT_DOCKER_FILE', '')
+  }
 }
 
 
