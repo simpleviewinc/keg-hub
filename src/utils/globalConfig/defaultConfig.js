@@ -15,16 +15,27 @@ const defaultConfig = () => {
   const config = {}
   config.version = packageJson.version
   config.name = packageJson.name
+  config.displayName = "Keg CLI"
   config.keg = {
     cli: {
       paths: {
         cli: CLI_ROOT,
-        keg: cliParent,
+        containers: path.join(CLI_ROOT, 'containers'),
         core: path.join(cliParent, 'keg-core'),
         components: path.join(cliParent, 'keg-components'),
-        taps: path.join(cliParent, 'taps'),
+        keg: cliParent,
       },
-      taps: { links: {} }
+      taps: { links: {} },
+      git: {
+        orgUrl: "https://github.com/simpleviewinc",
+        repos: {
+          cli: "keg-cli",
+          core: "keg-core",
+          components: "keg-components",
+          're-theme': "re-theme"
+        },
+        secure: false
+      },
     }
   }
 

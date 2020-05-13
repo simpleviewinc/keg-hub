@@ -70,24 +70,24 @@ const createDockerCmd = async (globalConfig, cmdContext, params) => {
  */
 const buildDockerCompose = async args => {
   const { globalConfig, params } = args
-
   const { cache, remove, pull, context } = params
-  
+
   // Get the folder location the image should built from
   const containers = getPathFromConfig(globalConfig, 'containers')
+
+  // If no containers path is set, then throw
   !containers && throwNoConfigPath(globalConfig, 'containers')
 
+  // Get the context the command should be run in
   const cmdContext = context || get(args, task.options.context.default, 'core')
-  const { path, dockerFile } = getContext(globalConfig, cmdContext)
 
+  // Build the docker compose command
   const dockerCmd = await createDockerCmd(globalConfig, cmdContext, params)
+
+  // Get the docker-machine env to add to the running process
   const machineEnv = await getDockerMachineEnv()
-  
-  await spawnCmd(
-    `${dockerCmd} ${cmdContext}`,
-    machineEnv,
-    `${ containers }/${ cmdContext }`
-  )
+
+  await spawnCmd(`${dockerCmd} ${cmdContext}`, machineEnv, `${ containers }/${ cmdContext }`)
 
 }
 
