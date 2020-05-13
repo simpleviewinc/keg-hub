@@ -1,6 +1,6 @@
 version: "2"
 services:
-  tap:
+  core:
     volumes:
       - core-sync:/keg/keg-core:nocopy
       - cli-sync:/keg/cli:nocopy

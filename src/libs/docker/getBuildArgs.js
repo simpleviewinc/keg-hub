@@ -12,7 +12,7 @@ const { BUILD, DOCKER_ENV } = DOCKER
  * @returns {string} - The dockerCmd string with a build arg added
  */
 const createBuildArg = (key, value, dockerCmd) => {
-  return `${dockerCmd} --build-arg ${ key }=${ value }`
+  return `${dockerCmd} --build-arg ${ key }=${ value }`.trim()
 }
 
 /**
@@ -53,7 +53,7 @@ const getBuildArgs = async (globalConfig, { container, name, branch, dockerCmd }
 
     return exists(useVal) ? createBuildArg(key, useVal, dockerCmd) : dockerCmd
 
-  }, dockerCmd)
+  }, dockerCmd).trim()
 
 }
 

@@ -13,11 +13,14 @@ const { addComposeFiles, addDockerArg } = require('KegDocker')
  */
 const upDockerCompose = async args => {
   const { globalConfig, params } = args
+  const { detached, build, context } = params
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
 
-  const { detached, build } = params
+  const containers = getPathFromConfig(globalConfig, 'containers')
+  !containers && throwNoConfigPath(globalConfig, 'containers')
+  const cmdContext = context || get(args, task.options.context.default, 'core')
+
+  const location = `${ containers }/${ cmdContext }`
 
   let dockerCmd = `docker-compose`
   dockerCmd = addComposeFiles(dockerCmd)

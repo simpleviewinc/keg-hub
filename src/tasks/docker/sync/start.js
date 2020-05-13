@@ -13,8 +13,8 @@ const { Logger } = require('KegLog')
 const startDockerSync = async args => {
   const { globalConfig, params } = args
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
+  const location = getPathFromConfig(globalConfig, 'containers')
+  if(!location) throwNoConfigPath(globalConfig, 'containers')
 
   const { detached } = params
 

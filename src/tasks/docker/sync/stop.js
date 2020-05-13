@@ -12,8 +12,8 @@ const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils'
 const stopDockerSync = async args => {
   const { globalConfig } = args
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
+  const location = getPathFromConfig(globalConfig, 'containers')
+  if(!location) throwNoConfigPath(globalConfig, 'containers')
 
   confirmExec({
     confirm: `Running this command will stop all running docker-sync containers. Are you sure?`,

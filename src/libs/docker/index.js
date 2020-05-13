@@ -8,4 +8,5 @@ module.exports = {
   ...require('./getContext'),
   ...require('./getDockerArgs'),
   ...require('./getVirtualIP'),
+  ...require('./getDockerMachineEnv')
 }

@@ -11,8 +11,8 @@ const { Logger } = require('KegLog')
  */
 const cleanDockerSync = ({ globalConfig }) => {
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
+  const location = getPathFromConfig(globalConfig, 'containers')
+  if(!location) throwNoConfigPath(globalConfig, 'containers')
 
   confirmExec({
     confirm: `Running this command will remove all docker-sync containers. Are you sure?`,

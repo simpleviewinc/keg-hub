@@ -1,15 +1,64 @@
-const { get } = require('jsutils')
+const { get, reduceObj } = require('jsutils')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
-const { getPathFromConfig, throwNoConfigPath } = require('KegUtils')
+const {
+  getPathFromConfig,
+  getTapPath,
+  throwNoConfigPath
+} = require('KegUtils')
 const {
   addDockerArg,
   addComposeFiles,
   buildDockerCmd,
-  getContext,
   getBuildArgs,
+  getContext,
+  getDockerMachineEnv
 } = require('KegDocker')
+
+const buildArgs = {
+  remove: '--force-rm',
+  cache: '--no-cache',
+  pull: '--pull'
+}
+
+/**
+ * Converts the passed in docker-compose params to to string format
+ * @function
+ * @param {string} dockerCmd - docker-compose command to add params to
+ * @param {Object} params - Parse params passed from the command line
+ *
+ * @returns {string} - docker command with params added
+ */
+const addBuildOpts = (dockerCmd, params) => {
+  return reduceObj(params, (key, value, added) => {
+    return !buildArgs[key]
+      ? added
+      : addDockerArg(
+          added,
+          buildArgs[key],
+          key === 'cache' ? !Boolean(value) : Boolean(value)
+        )
+  }, dockerCmd)
+}
+
+/**
+ * Creates the docker-compose build command
+ * @function
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {string} cmdContext - Context the command is being run in ( core | tap )
+ * @param {Object} params - Parse params passed from the command line
+ *
+ * @returns {string} - Built docker command
+ */
+const createDockerCmd = async (globalConfig, cmdContext, params) => {
+  let dockerCmd = `docker-compose`
+  dockerCmd = addComposeFiles(dockerCmd, cmdContext)
+  dockerCmd = `${dockerCmd} build`
+  dockerCmd = await getBuildArgs(globalConfig, { name: cmdContext, dockerCmd })
+
+  return addBuildOpts(dockerCmd, params)
+}
 
 /**
  * Cleans docker-sync containers
@@ -22,31 +71,23 @@ const {
 const buildDockerCompose = async args => {
   const { globalConfig, params } = args
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
-
   const { cache, remove, pull, context } = params
   
+  // Get the folder location the image should built from
+  const containers = getPathFromConfig(globalConfig, 'containers')
+  !containers && throwNoConfigPath(globalConfig, 'containers')
+
   const cmdContext = context || get(args, task.options.context.default, 'core')
-  const composeContext = getContext(globalConfig, cmdContext)
-  
-  let dockerCmd = `docker-compose`
-  dockerCmd = addComposeFiles(dockerCmd, cmdContext)
-  // dockerCmd = `${dockerCmd} build`
-  // dockerCmd = await getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
-  
-  // dockerCmd = addDockerArg(dockerCmd, '--force-rm', Boolean(remove))
-  // dockerCmd = addDockerArg(dockerCmd, '--no-cache', !Boolean(cache))
-  // dockerCmd = addDockerArg(dockerCmd, '--pull', Boolean(pull))
+  const { path, dockerFile } = getContext(globalConfig, cmdContext)
 
-  // console.log(`---------- dockerCmd ----------`)
-  // console.log(dockerCmd)
-
-  // TODO: add some type of ENV loading for docker compose up command
-  // Would look something like this => env $(cat local.env) docker-compose up
-  // ENV_FILE=.env.production.local docker-compose -f docker-compose.prod.yml up --build
-  // docker-compose --env-file foo.env up => This should work
-  // await spawnCmd(`${dockerCmd} tap`, location)
+  const dockerCmd = await createDockerCmd(globalConfig, cmdContext, params)
+  const machineEnv = await getDockerMachineEnv()
+  
+  await spawnCmd(
+    `${dockerCmd} ${cmdContext}`,
+    machineEnv,
+    `${ containers }/${ cmdContext }`
+  )
 
 }
 
@@ -58,7 +99,7 @@ module.exports = {
   example: 'keg docker compose build <options>',
   options: {
     context: {
-      allowed: [ 'tap', 'core' ],
+      allowed: [ 'base', 'core', 'tap' ],
       description: 'Context of docker compose build command (tap || core)',
       example: 'keg docker compose build --context core',
       default: 'core'
