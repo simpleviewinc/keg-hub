@@ -5,10 +5,9 @@ services:
       context: ${CONTEXT_PATH}
       dockerfile: ${CONTEXT_DOCKER_FILE}
       args:
-        GIT_KEY: ${GIT_KEY}
         GIT_CORE_URL: ${GIT_CORE_URL}
     container_name: ${CONTAINER_NAME}
-    env_file: .env
+    env_file: ${CONTEXT_ENV_FILE}
     environment:
       - TAP=${TAP}
     ports: 

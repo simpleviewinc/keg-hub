@@ -21,10 +21,10 @@ const  getDockerMachineEnv = async () => {
 
       const dockerEnv = item.replace('export', '').trim()
       const envSplit = dockerEnv.split('=')
-      config.env[envSplit[0]] = envSplit[1]
+      config[envSplit[0]] = envSplit[1]
 
       return config
-    }, { env: {} })
+    }, {})
 
 }
 

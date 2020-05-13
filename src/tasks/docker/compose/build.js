@@ -11,8 +11,8 @@ const {
   addDockerArg,
   addComposeFiles,
   buildDockerCmd,
+  getEnvContext,
   getBuildArgs,
-  getContext,
   getDockerMachineEnv
 } = require('KegDocker')
 
@@ -85,9 +85,14 @@ const buildDockerCompose = async args => {
   const dockerCmd = await createDockerCmd(globalConfig, cmdContext, params)
 
   // Get the docker-machine env to add to the running process
-  const machineEnv = await getDockerMachineEnv()
+  // const machineEnv = await getDockerMachineEnv()
+  const contextEnvs = getEnvContext(cmdContext)
 
-  await spawnCmd(`${dockerCmd} ${cmdContext}`, machineEnv, `${ containers }/${ cmdContext }`)
+  await spawnCmd(
+    `${dockerCmd} ${cmdContext}`,
+    { options: { env: contextEnvs }},
+    `${ containers }/${ cmdContext }`
+  )
 
 }
 
@@ -102,7 +107,7 @@ module.exports = {
       allowed: [ 'base', 'core', 'tap' ],
       description: 'Context of docker compose build command (tap || core)',
       example: 'keg docker compose build --context core',
-      default: 'core'
+      default: 'base'
     },
     remove: {
       description: 'Always remove intermediate containers',

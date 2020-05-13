@@ -1,4 +1,5 @@
-const { deepFreeze, deepMerge, keyMap } = require('jsutils')
+const { deepFreeze, deepMerge } = require('jsutils')
+const { containers } = require('./values')
 
 const DEFAULT = {
   VALUES: {
@@ -16,8 +17,9 @@ const DEFAULT = {
 }
 
 module.exports = deepFreeze({
-  RUN: {
-    CORE: deepMerge(DEFAULT, {}),
-    TAP: deepMerge(DEFAULT, {}),
-  }
+  RUN: containers.reduce((data, container) => {
+    data[container.toUpperCase()] = deepMerge(DEFAULT, {})
+
+    return data
+  }, {})
 })

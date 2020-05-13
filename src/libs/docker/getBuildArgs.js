@@ -45,6 +45,10 @@ const getBuildArgs = async (globalConfig, { container, name, branch, dockerCmd }
         DOCKER_ENV !== 'local' && ( useVal = getGitUrl(globalConfig, 'cli') )
         break
       }
+      case 'GIT_CORE_URL':{
+        useVal = getGitUrl(globalConfig, 'core')
+        break
+      }
       case 'GIT_TAP_URL':{
         useVal = getGitUrl(globalConfig, name, branch)
         break

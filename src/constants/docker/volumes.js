@@ -1,12 +1,9 @@
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-
-const cliPath = '/keg/cli'
-const coreInTap = '/keg/tap/node_modules/keg-core'
-const coreAsRoot = '/keg/keg-core'
+const { containers, mountPaths } = require('./values')
 
 const DEFAULT = {
   PATHS: {
-    cli: cliPath,
+    cli: mountPaths.cliPath,
   },
   DEV_DEFAULTS: [
     'cli',
@@ -17,22 +14,22 @@ const DEFAULT = {
 }
 
 module.exports = deepFreeze({
-  VOLUMES: {
-    CORE: deepMerge(DEFAULT, {
+  VOLUMES: containers.reduce((data, container) => {
+
+    if(!mountPaths[container] || !mountPaths[container].core)
+      return data
+    
+    const corePath = mountPaths[container].core
+    data[container.toUpperCase()] = deepMerge(DEFAULT, {
       PATHS: {
-        core: coreAsRoot,
-        components: `${coreAsRoot}/node_modules/keg-components`,
-        resolver: `${coreAsRoot}/node_modules/tap-resolver`,
-        're-theme': `${coreAsRoot}/node_modules/re-theme`,
+        core: corePath,
+        components: `${corePath}/node_modules/keg-components`,
+        resolver: `${corePath}/node_modules/tap-resolver`,
+        're-theme': `${corePath}/node_modules/re-theme`,
       },
-    }),
-    TAP: deepMerge(DEFAULT, {
-      PATHS: {
-        core: coreInTap,
-        components: `${coreInTap}/node_modules/keg-components`,
-        resolver: `${coreInTap}/node_modules/tap-resolver`,
-        're-theme': `${coreInTap}/node_modules/re-theme`,
-      }
-    }),
-  }
+    })
+
+    return data
+  }, {})
+
 })

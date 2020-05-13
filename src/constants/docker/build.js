@@ -1,20 +1,11 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
 const { loadENV } = require('KegFileSys/env')
+const { cliRootDir, containersPath, configEnv, containers } = require('./values')
 
-const cliRootDir = path.join(__dirname, '../../../')
-const containersPath = path.join(cliRootDir, 'containers')
-
-const corePath = path.join(containersPath, 'core')
-const tapPath = path.join(containersPath, 'tap')
-const coreDockerFile = path.join(containersPath, 'core/Dockerfile')
-const tapDockerFile = path.join(containersPath, 'tap/Dockerfile')
-
-const configEnv = process.env.NODE_ENV || 'local'
-
+// Default config for all containers
 const DEFAULT = {
   VALUES: {
-    file: `-f ${coreDockerFile}`,
     clean: '--rm',
   },
   DEFAULTS: {
@@ -28,27 +19,46 @@ const DEFAULT = {
   ENV: {}
 }
 
+/*
+ * Builds a config for a container from the containers array
+ * @param {string} container - Name of the container to build the config for
+ * @param {Array} args - Extra data to be added to the ARGS key
+ *
+ * @returns {Object} - Built container config
+*/
+const containerConfig = (container, args=[]) => {
+  const upperCase = container.toUpperCase()
+
+  const dockerFile = path.join(containersPath, container, `Dockerfile`)
+
+  // Build config ENVs
+  // Always load the default local env
+  const localEnv = loadENV(path.join(containersPath, container, 'local.env'))
+
+  // If the configEnv is not local, then load the configEnv, and merge with local
+  const currentEnv = configEnv !== 'local'
+    ? loadENV(path.join(containersPath, container, `${ configEnv }.env`))
+    : {}
+
+  // Merge the contianer config with the default config and return
+  return deepMerge(DEFAULT, {
+    VALUES: { file: `-f ${ dockerFile }` },
+    ARGS: keyMap(args, true),
+    ENV: deepMerge(localEnv, currentEnv),
+  })
+}
+
+// Builds the docker locations for the container and Dockerfile
+const dockerData = containers.reduce((data, container) => {
+  const upperCase = container.toUpperCase()
+  data[upperCase] = containerConfig(container, [ `GIT_${upperCase}_URL` ])
+
+  return data
+}, {})
+
+
 module.exports = deepFreeze({
   CONTAINERS_PATH: containersPath,
   DOCKER_ENV: configEnv,
-  BUILD: {
-    CORE: deepMerge(DEFAULT, {
-      ENV: deepMerge(
-        loadENV(path.join(corePath, '.env')),
-        loadENV(path.join(corePath, `${ configEnv }.env`)) || {},
-      )
-    }),
-    TAP: deepMerge(DEFAULT, {
-      VALUES: {
-        file: `-f ${tapDockerFile}`,
-      },
-      ARGS: keyMap([
-        'GIT_TAP_URL',
-      ], true),
-      ENV: deepMerge(
-        loadENV(path.join(tapPath, '.env')),
-        loadENV(path.join(tapPath, `${ configEnv }.env`)) || {},
-      )
-    })
-  },
+  BUILD: dockerData,
 })

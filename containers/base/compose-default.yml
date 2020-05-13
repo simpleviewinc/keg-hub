@@ -1,0 +1,30 @@
+version: "2"
+services:
+  base:
+    build:
+      context: ${CONTEXT_PATH}
+      dockerfile: ${CONTEXT_DOCKER_FILE}
+      args:
+        GIT_KEY: ${GIT_KEY}
+        GIT_CLI_URL: ${GIT_CLI_URL}
+    container_name: ${CONTAINER_NAME}
+    env_file: ${CONTEXT_ENV_FILE}
+    environment:
+      - KEG_PATH=${KEG_PATH}
+      - CLI_PATH=${CLI_PATH}
+      - CORE_PATH=${CORE_PATH}
+      - COMPONENTS_PATH=${COMPONENTS_PATH}
+      - RE_THEME_PATH=${RE_THEME_PATH}
+      - TAP_RESOLVER_PATH=${TAP_RESOLVER_PATH}
+      - EXPO_DEBUG_PORT=${EXPO_DEBUG_PORT}
+      - EXPO_APP_PORT=${EXPO_APP_PORT}
+      - GIT_KEY=${GIT_KEY}
+    ports: 
+      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
+      - ${EXPO_APP_PORT}:${EXPO_APP_PORT}
+      - 873:873
+      - 8080:8080
+      - 8081:8081
+      - 8082:8082
+      - 8083:8083
+      - 60710:60710
