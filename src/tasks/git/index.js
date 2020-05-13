@@ -10,6 +10,7 @@ module.exports = {
       ...require('./branch'),
       ...require('./commit'),
       ...require('./key'),
+      ...require('./log'),
       ...require('./pull'),
       ...require('./push'),
     }
