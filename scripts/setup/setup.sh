@@ -42,7 +42,7 @@ keg_src_bash(){
 # Check and install homebrew
 keg_brew_install(){
   # Check for brew install
-  if [[ -x "$(command -v brew)" ]]; then
+  if [[ -x "$(command -v brew 2>/dev/null)" ]]; then
     keg_message "Brew is installed"
   else
     #  Install brew
@@ -53,19 +53,19 @@ keg_brew_install(){
 # Checks and install docker / docker-machine / docker-compose
 keg_docker_install(){
 
-  if [[ -x "$(command -v docker)" ]]; then
+  if [[ -x "$(command -v docker 2>/dev/null)" ]]; then
     keg_message "Docker is installed"
   else
     brew install docker
   fi
 
-  if [[ -x "$(command -v docker-machine)" ]]; then
+  if [[ -x "$(command -v docker-machine 2>/dev/null)" ]]; then
     keg_message "Docker-machine is installed"
   else
     brew install docker-machine
   fi
 
-  if [[ -x "$(command -v docker-compose)" ]]; then
+  if [[ -x "$(command -v docker-compose 2>/dev/null)" ]]; then
     keg_message "Docker-compose is installed"
   else
     brew install docker-compose
@@ -142,7 +142,7 @@ keg_setup_static_ip(){
 keg_setup_virtualbox(){
 
   # Check for virtualbox install
-  if [[ -x "$(command -v VBoxManage)" ]] && [[ -d "/Applications/VirtualBox.app" ]]; then
+  if [[ -x "$(command -v VBoxManage 2>/dev/null)" ]] && [[ -d "/Applications/VirtualBox.app" ]]; then
     keg_message "Virtualbox is installed"
   else
     brew cask install virtualbox
@@ -176,7 +176,7 @@ keg_setup_nvm_node(){
 keg_setup_yarn(){
 
   # Check for yarn install
-  if [[ -x "$(command -v yarn)" ]]; then
+  if [[ -x "$(command -v yarn 2>/dev/null)" ]]; then
     keg_message "yarn is installed"
   else
     curl -sL https://dl.yarnpkg.com/rpm/yarn.repo -o /etc/yum.repos.d/yarn.repo
