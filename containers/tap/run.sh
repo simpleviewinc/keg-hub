@@ -11,7 +11,6 @@ keg_message(){
 }
 
 keg_run_tap_yarn_setup(){
-
   keg_message "Running yarn setup for tap..."
   keg_message "Switching to tap directory..."
   cd $TAP_PATH
@@ -33,7 +32,7 @@ keg_run_from_core(){
 }
 
 # Run yarn setup for any extra node_modules to be installed form the mounted tap
-keg_run_tap_yarn_setup
+# keg_run_tap_yarn_setup
 
 # Start the keg core instance
 keg_run_from_core

@@ -6,6 +6,7 @@ module.exports = {
       ...require('./build'),
       ...require('./compose'),
       ...require('./container'),
+      ...require('./image'),
       ...require('./machine'),
       ...require('./run'),
       ...require('./sync'),

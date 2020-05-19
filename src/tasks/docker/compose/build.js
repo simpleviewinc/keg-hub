@@ -104,7 +104,7 @@ module.exports = {
   example: 'keg docker compose build <options>',
   options: {
     context: {
-      allowed: [ 'base', 'core', 'tap' ],
+      allowed: [ 'components', 'core', 'tap' ],
       description: 'Context of docker compose build command (tap || core)',
       example: 'keg docker compose build --context core',
       default: 'base'
