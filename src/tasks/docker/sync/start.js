@@ -1,6 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
-const { Logger } = require('KegLog')
+const { logVirtualIP } = require('KegUtils/log')
 
 /**
  * Starts docker-sync for the passed in context
@@ -34,6 +34,9 @@ const startDockerSync = async args => {
 
   // Check if sync should run in detached mode 
   const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
+
+  // Log the ip address so we know how to hit it in the browser
+  await logVirtualIP()
 
   // Run docker-sync
   await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
