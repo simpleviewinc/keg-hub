@@ -26,6 +26,7 @@ const stopDockerSync = async args => {
     confirm: `Running this command will stop all running docker-sync containers. Are you sure?`,
     success: `Finished running 'docker-sync stop' command`,
     cancel: `Command 'keg docker sync stop' has been cancelled!`,
+    preConfirm: true,
     execute: async () => {
       await spawnCmd(`docker-sync stop`, { options: { env: contextEnvs }}, location)
     },

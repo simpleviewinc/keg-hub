@@ -13,7 +13,7 @@ const { Logger } = require('KegLog')
 const startDockerSync = async args => {
 
   const { globalConfig, params, options, task } = args
-  const { detached, clean, context } = params
+  const { detached, clean, context, install } = params
 
   // Get the context data for the command to be run
   const { location, cmdContext, contextEnvs } = buildLocationContext(
@@ -21,7 +21,10 @@ const startDockerSync = async args => {
     task,
     context,
     task.options.context.default,
+    install && { NM_INSTALL: true }
   )
+
+console.log(contextEnvs)
 
   // Check if docker-sync should be cleaned first
   clean && await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
@@ -52,8 +55,22 @@ module.exports = {
       example: 'keg docker sync start --clean',
       default: false
     },
+    command: {
+      alias: [ 'cmd' ],
+      description: 'The command to run within the docker container. Overwrites the default (yarn web)',
+      example: 'keg docker sync start --command ios',
+      default: 'web'
+    },
     detached: {
       description: 'Runs the docker-sync process in the background',
+      default: false
+    },
+    env: {
+      description: 'Environment to start the Docker containers in',
+      default: 'development',
+    },
+    install: {
+      description: 'Install packages ( yarn install ) within the container before starting the application',
       default: false
     }
   }

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Default path ENVs
 CLI_PATH=/keg/cli
 CORE_PATH=/keg/tap/node_modules/keg-core
 
@@ -8,6 +9,7 @@ keg_message(){
   return
 }
 
+# Overwrite the default cli and core paths with passed in ENVs
 keg_set_container_paths(){
   if [[ "$DOC_CLI_PATH" ]]; then
     CLI_PATH="$DOC_CLI_PATH"
@@ -18,24 +20,31 @@ keg_set_container_paths(){
   fi
 }
 
+# Runs yarn install at run time
+# Use when adding extra node_modules to keg-core without rebuilding
+keg_run_yarn_install(){
 
-keg_run_yarn_setup(){
-
-  if [[ "$KEG_INSTALL" ]]; then
-    keg_message "Running yarn setup for keg-core..."
-    keg_message "Switching to keg-core directory..."
-    cd $CORE_PATH
-    yarn setup
+  # Check if we should run yarn install
+  # Is $NM_INSTALL doesn't exist, just return
+  if [[ -z "$NM_INSTALL" ]]; then
+    return
   fi
+
+  keg_message "Running yarn setup for keg-core..."
+  keg_message "Switching to keg-core directory..."
+  cd $CORE_PATH
+  yarn install
 }
 
+# Runs keg-core application without a tap
 keg_run_from_core(){
 
   cd $CORE_PATH
 
+  # Default to running keg-core in a web-browser
   local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="web"
+    KEG_EXEC_CMD="start"
   fi
 
   keg_message "Running command yarn $KEG_EXEC_CMD"
@@ -47,7 +56,7 @@ keg_run_from_core(){
 keg_set_container_paths
 
 # Run yarn setup for any extra node_modules to be installed form the mounted volume
-keg_run_yarn_setup
+keg_run_yarn_install
 
 # Start the keg core instance
 keg_run_from_core
