@@ -1,4 +1,10 @@
 
+# See this website for more info
+# https://github.com/Magnitus-/DockerFiles/tree/master/electron-app
+# https://sourabhbajaj.com/blog/2017/02/07/gui-applications-docker-mac/
+# https://gist.github.com/cschiewek/246a244ba23da8b9f0e7b11a68bf3285
+# https://medium.com/@SaravSun/running-gui-applications-inside-docker-containers-83d65c0db110
+
 # Prints a message to the terminal through stderr
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
@@ -40,7 +46,7 @@ keg_setup_xquartx(){
   # Add this, if it's not => usr/X11/bin/xhost
 
   # Then add mounted volume in the docker run cmd
-  # docker run -d --name firefox -e DISPLAY=$IP:0 -v /tmp/.X11-unix:/tmp/.X11-unix
+  # docker run -d -e DISPLAY=$IP:0 -v /tmp/.X11-unix:/tmp/.X11-unix
   
   # This may also need to be added to the Dockerfile
   # RUN apt-get update -y && \
