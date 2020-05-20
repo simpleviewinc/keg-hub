@@ -1,6 +1,8 @@
+const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
+const { BUILD } = require('KegConst/docker/build')
 
 /**
  * Run a docker image command
@@ -14,9 +16,25 @@ const { spawnCmd } = require('KegProc')
  */
 const dockerImage = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
-  const { cmd } = params
+  const { cmd, name, force } = params
+  const image = name && get(BUILD, `${name.toUpperCase()}.ENV.IMAGE`)
 
-  spawnCmd(`docker image ${ cmd || options.join(' ').trim() || 'ls' }`)
+  let runCmd
+  switch(cmd){
+    case 'remove':
+    case 'rmi':
+    case 'rm': {
+      !image && generalError(`The docker ${cmd} command requires a name argument!`)
+      runCmd = `rm ${image}`
+      break
+    }
+    default: {
+      runCmd = cmd || options.join(' ').trim() || 'ls'
+    }
+  }
+
+  force && (runCmd += ` --force`)
+  spawnCmd(`docker image ${ runCmd }`)
 
 }
 
@@ -31,6 +49,14 @@ module.exports = {
       cmd: {
         description: 'Docker image command to run. Default ( ls )',
         example: 'keg docker image ls',
+      },
+      name: {
+        description: 'Name of the container to run the command on',
+        example: 'keg docker image --name core',
+      },
+      force: {
+        description: 'Add the force argument to the docker command',
+        example: 'keg docker image --force ',
       },
     },
   }

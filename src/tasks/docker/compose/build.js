@@ -73,12 +73,13 @@ const buildDockerCompose = async args => {
   const { cache, remove, pull, context } = params
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = buildLocationContext(
+  const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
     context,
-    task.options.context.default,
-  )
+    envs: {},
+    defContext: task.options.context.default,
+  })
 
   // Build the docker compose command
   const dockerCmd = await createDockerCmd(globalConfig, cmdContext, params)

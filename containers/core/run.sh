@@ -34,6 +34,7 @@ keg_run_yarn_install(){
   keg_message "Switching to keg-core directory..."
   cd $CORE_PATH
   yarn install
+
 }
 
 # Runs keg-core application without a tap
@@ -43,6 +44,8 @@ keg_run_from_core(){
 
   # Default to running keg-core in a web-browser
   local KEG_EXEC_CMD="$EXEC_CMD"
+
+  # Set the default yarn command to start
   if [[ -z "$KEG_EXEC_CMD" ]]; then
     KEG_EXEC_CMD="start"
   fi

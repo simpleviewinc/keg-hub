@@ -1,6 +1,8 @@
 FROM kegbase:latest
 
-WORKDIR /keg/tap/node_modules
+WORKDIR /keg
+
+RUN yarn global add ansi-html html-entities loglevel --dev;
 
 # Add the GIT_CORE_URL arg, and set value to initial
 # This expects --build-arg GIT_CORE_URL=key_value to be set
@@ -9,8 +11,9 @@ ARG GIT_CORE_URL=INITIAL
 
 # Pull down the tap locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
-      git clone $GIT_CORE_URL ./keg-core; \
-      cd ./keg-core; \
+      echo "Cloneing keg-core repo from github..."; \
+      git clone $GIT_CORE_URL ./tap; \
+      cd $DOC_CORE_PATH; \
       yarn install; \
     fi
 

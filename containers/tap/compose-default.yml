@@ -9,6 +9,10 @@ services:
     container_name: ${CONTAINER_NAME}
     env_file: ${CONTEXT_ENV_FILE}
     environment:
-      - TAP=${TAP}
+      - ENV
+      - EXEC_CMD
+      - NM_INSTALL
+      - NODE_ENV
+      - TAP
     ports: 
       - ${TAP_PORT}:${TAP_PORT}

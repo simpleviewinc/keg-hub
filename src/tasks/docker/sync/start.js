@@ -13,20 +13,23 @@ const { Logger } = require('KegLog')
 const startDockerSync = async args => {
 
   const { globalConfig, params, options, task } = args
-  const { detached, clean, context, install } = params
+  const { detached, clean, context, install, env, command } = params
+
+  const extraENVs = { ENV: env, NODE_ENV: env, EXEC_CMD: command }
+  install && ( extraENVs.NM_INSTALL = true )
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = buildLocationContext(
+  const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
     context,
-    task.options.context.default,
-    install && { NM_INSTALL: true }
-  )
-
-console.log(contextEnvs)
+    envs: extraENVs,
+    defContext: task.options.context.default,
+  })
 
   // Check if docker-sync should be cleaned first
+  // TODO: ensure the docker container is removed before running the clean command
+  // Need to add `docker rm <container>` command
   clean && await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
 
   // Check if sync should run in detached mode 

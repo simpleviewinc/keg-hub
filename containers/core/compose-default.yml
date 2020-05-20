@@ -1,6 +1,6 @@
 version: "2"
 services:
-  core:
+  kegcore:
     build:
       context: ${CONTEXT_PATH}
       dockerfile: ${CONTEXT_DOCKER_FILE}
@@ -9,6 +9,9 @@ services:
     container_name: ${CONTAINER_NAME}
     env_file: ${CONTEXT_ENV_FILE}
     environment:
-      - TAP=${TAP}
-    ports: 
+      - ENV
+      - EXEC_CMD
+      - NM_INSTALL
+      - NODE_ENV
+    ports:
       - ${TAP_PORT}:${TAP_PORT}

@@ -9,10 +9,10 @@ syncs:
     src: '${CONTEXT_PATH}'
     sync_strategy: 'unison'
     max_inotify_watches: 200000
-    sync_excludes: [ 'node_modules', '.gitignore', '.git' ]
+    sync_excludes: [ '*/.expo', "*/temp", "yarn.lock", "package.lock" ]
   cli-unison-sync:
     src: '${CLI_PATH}'
     sync_strategy: 'unison'
     max_inotify_watches: 200000
-    sync_excludes: [ '.gitignore', '.git' ]
+    sync_excludes: [ 'node_modules' ]
 

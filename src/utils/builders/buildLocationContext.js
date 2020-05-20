@@ -25,7 +25,7 @@ const getEnvContext = (context) => {
  *
  * @returns {Object} - The location, context, and envs for the context
  */
-const buildLocationContext = (globalConfig, task, context, defContext) => {
+const buildLocationContext = ({ context, defContext, envs={}, globalConfig, task }) => {
   // Get the folder location of where the docker containers are stored
   const containers = getPathFromConfig(globalConfig, 'containers')
 
@@ -40,8 +40,9 @@ const buildLocationContext = (globalConfig, task, context, defContext) => {
   const location = `${ containers }/${ cmdContext }`
   
   // Get the ENV vars for the command context
-  const contextEnvs = getEnvContext(cmdContext)
-  
+  // Merge with any passed in envs
+  const contextEnvs = { ...getEnvContext(cmdContext), ...envs }
+
   return { location, cmdContext, contextEnvs }
 }
 

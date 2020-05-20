@@ -15,12 +15,13 @@ const stopDockerSync = async args => {
   const { detached, context } = params
 
   // Get the context data for the command to be run
-  const { location, contextEnvs } = buildLocationContext(
+  const { location, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
     context,
-    task.options.context.default,
-  )
+    envs: {},
+    defContext: task.options.context.default,
+  })
 
   confirmExec({
     confirm: `Running this command will stop all running docker-sync containers. Are you sure?`,

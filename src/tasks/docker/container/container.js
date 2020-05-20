@@ -1,8 +1,8 @@
-// docker container ls -a
-
+const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
+const { BUILD } = require('KegConst/docker/build')
 
 /**
  * Run a docker container command
@@ -16,9 +16,30 @@ const { spawnCmd } = require('KegProc')
  */
 const dockerContainer = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
-  const { cmd } = params
+  const { cmd, name, force } = params
+  const container = name && get(BUILD, `${name.toUpperCase()}.ENV.CONTAINER_NAME`)
 
-  spawnCmd(`docker container ${ cmd || options.join(' ').trim() || 'ls -a' }`)
+  let runCmd
+
+  switch(cmd){
+    case 'kill': {
+      !container && generalError(`The docker ${cmd} command requires a name argument!`)
+      runCmd = `kill ${container}`
+      break
+    }
+    case 'remove':
+    case 'rm': {
+      !container && generalError(`The docker ${cmd} command requires a name argument!`)
+      runCmd = `rm ${container}`
+      break
+    }
+    default: {
+      runCmd = cmd || options.join(' ').trim() || 'ls -a'
+    }
+  }
+
+  force && (runCmd += ` --force`)
+  spawnCmd(`docker container ${ runCmd }`)
 
 }
 
@@ -33,6 +54,14 @@ module.exports = {
       cmd: {
         description: 'Docker container command to run. Default ( ls )',
         example: 'keg docker container ls',
+      },
+      name: {
+        description: 'Name of the container to run the command on',
+        example: 'keg docker container --name core',
+      },
+      force: {
+        description: 'Add the force argument to the docker command',
+        example: 'keg docker image --force ',
       },
     },
   }
