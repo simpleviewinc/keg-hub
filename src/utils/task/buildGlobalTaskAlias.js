@@ -63,7 +63,7 @@ const useSubTasksAction = args => {
  *
  * @returns {Object} - Contains global alias and tasks
  */
-const buildTaskObject = (task) => {
+const buildGlobalTaskAlias = (task) => {
   const built = {
     ...task,
     parentAlias: task.alias || [],
@@ -86,5 +86,5 @@ const buildTaskObject = (task) => {
 
 
 module.exports = {
-  buildTaskObject
+  buildGlobalTaskAlias
 }

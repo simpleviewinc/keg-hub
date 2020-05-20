@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./buildTaskObject'),
+  ...require('./buildGlobalTaskAlias'),
   ...require('./executeTask'),
   ...require('./getArguments'),
   ...require('./getTask'),

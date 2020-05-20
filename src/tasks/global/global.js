@@ -1,7 +1,7 @@
-const { buildTaskObject } = require('KegUtils/task/buildTaskObject')
+const { buildGlobalTaskAlias } = require('KegUtils/task/buildGlobalTaskAlias')
 
 module.exports = {
-  global: buildTaskObject({
+  global: buildGlobalTaskAlias({
     name: 'global',
     alias: [ 'glob', 'gl' ],
     description: 'Keg CLI global specific tasks',
