@@ -4,6 +4,7 @@ module.exports = {
     alias: [ 'sy' ],
     tasks: {
       clean: require('./clean'),
+      destroy: require('./destroy'),
       start: require('./start'),
       stop: require('./stop'),
     },

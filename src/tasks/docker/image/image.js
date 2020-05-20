@@ -25,6 +25,8 @@ const dockerImage = async args => {
     case 'rmi':
     case 'rm': {
       !image && generalError(`The docker ${cmd} command requires a name argument!`)
+      // TODO: would be better to get the image ID
+      // Need to add a helper to pull the image ID based on name
       runCmd = `rm ${image}`
       break
     }

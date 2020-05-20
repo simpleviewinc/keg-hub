@@ -1,6 +1,9 @@
+const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
 const { buildLocationContext } = require('KegUtils/builders')
+const { BUILD } = require('KegConst/docker/build')
+
 /**
  * Cleans docker-sync containers
  * @function
@@ -14,7 +17,7 @@ const cleanDockerSync = async args => {
   const { detached, context } = params
   
   // Get the context data for the command to be run
-  const { location, contextEnvs } = buildLocationContext({
+  const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
     context,
@@ -28,9 +31,9 @@ const cleanDockerSync = async args => {
     cancel: `Command 'keg docker sync clean' has been cancelled!`,
     preConfirm: true,
     execute: async () => {
-      // TODO: ensure the docker container is removed before running the clean command
-      // Need to add `docker rm <container>` command
-
+      // Remove the container
+      const container = cmdContext && get(BUILD, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
+      container && await spawnCmd(`docker container rm ${ container }`)
       await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
     },
   })
