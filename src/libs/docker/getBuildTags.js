@@ -1,4 +1,5 @@
-const { isArr } = require('jsutils')
+const { isArr, get } = require('jsutils')
+const { DOCKER: { BUILD } } = require('KegConst')
 
 /**
  * Finds the tag option in the passed in options array
@@ -9,10 +10,15 @@ const { isArr } = require('jsutils')
  *
  * @returns {string} - Formatted string of tags for docker
  */
-const getBuildTags = ({ image, name, options, version, dockerCmd='' }) => {
+const getBuildTags = ({ dockerCmd='', container, image, name, options, version='' }) => {
 
-  const nameTag = image ? image : version ? `${name}:${version}` : name
+  // Try to ensure we have a version for the build
+  version = version || container && get(BUILD, `${ container.toUpperCase() }.ENV.VERSION`, '')
 
+  // try to ensure we have an image name for the build
+  const nameTag = image || name
+
+  // Loop the options and look for any tags
   const tags = isArr(options) && options
     .reduce((tags, option, index) => {
 
@@ -31,9 +37,15 @@ const getBuildTags = ({ image, name, options, version, dockerCmd='' }) => {
       return tags
     }, [])
 
+  // Build the default tags
+  let cmdWithDefTags = `${dockerCmd} -t ${nameTag} -t ${nameTag}:latest`
+
+  // If there's is a version add it as a tag
+  if(version) cmdWithDefTags += ` -t ${nameTag}:${version}`
+
   return tags && tags.length
-    ? `${dockerCmd} -t ${nameTag} -t ${name}:` + tags.join(` -t ${name}:`).trim()
-    : `${dockerCmd} -t ${nameTag}`
+    ? `${ cmdWithDefTags } -t ${nameTag}:${ tags.join(` -t ${nameTag}:`).trim() }`
+    : cmdWithDefTags
 
 }
 

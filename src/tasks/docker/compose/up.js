@@ -1,10 +1,32 @@
+const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
-const { getPathFromConfig, throwNoConfigPath } = require('KegUtils')
 const { Logger } = require('KegLog')
-const { addComposeFiles, addDockerArg } = require('KegDocker')
+const { addComposeFiles, addDockerArg, getEnvContext } = require('KegDocker')
 
 /**
- * Runs docker-compose up
+ * Creates the docker-compose up command
+ * @function
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {string} cmdContext - Context the command is being run in ( core | tap )
+ * @param {Object} params - Parse params passed from the command line
+ *
+ * @returns {string} - Built docker command
+ */
+const createDockerCmd = async (globalConfig, cmdContext, params) => {
+  const { detached, build } = params
+
+  let dockerCmd = `docker-compose`
+  dockerCmd = addComposeFiles(dockerCmd, cmdContext)
+  dockerCmd = `${dockerCmd} up`
+
+  dockerCmd = addDockerArg(dockerCmd, '--detach', Boolean(detached))
+  dockerCmd = addDockerArg(dockerCmd, '--build', build === false ? build : true)
+
+  return dockerCmd
+}
+
+/**
+ * Runs docker-compose up command for (components | core | tap)
  * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
@@ -12,31 +34,32 @@ const { addComposeFiles, addDockerArg } = require('KegDocker')
  * @returns {void}
  */
 const upDockerCompose = async args => {
-  const { globalConfig, params } = args
+  const { globalConfig, params, options, task } = args
   const { detached, build, context } = params
 
+  // Get the context data for the command to be run
+  const { location, cmdContext, contextEnvs } = buildLocationContext(
+    globalConfig,
+    task,
+    context,
+    task.options.context.default,
+  )
 
-  const containers = getPathFromConfig(globalConfig, 'containers')
-  !containers && throwNoConfigPath(globalConfig, 'containers')
-  const cmdContext = context || get(args, task.options.context.default, 'core')
+  // Build the docker compose command
+  const dockerCmd = await createDockerCmd(globalConfig, cmdContext, params)
 
-  const location = `${ containers }/${ cmdContext }`
+  const buildName = contextEnvs.IMAGE
+    ? contextEnvs.VERSION
+      ? `${contextEnvs.IMAGE}:${contextEnvs.VERSION}`
+      : `${contextEnvs.IMAGE}:latest`
+    : cmdContext
 
-  let dockerCmd = `docker-compose`
-  dockerCmd = addComposeFiles(dockerCmd)
-  dockerCmd = `${dockerCmd} up`
-  
-  dockerCmd = addDockerArg(dockerCmd, '--detach', Boolean(detached))
-  dockerCmd = addDockerArg(dockerCmd, '--build', build === false ? build : true)
+  await spawnCmd(
+    `${dockerCmd} ${ buildName }`,
+    { options: { env: contextEnvs }},
+    location
+  )
 
-  console.log(`---------- dockerCmd ----------`)
-  console.log(dockerCmd)
-
-  // TODO: add some type of ENV loading for docker compose up command
-  // Would look something like this => env $(cat local.env) docker-compose up
-  // ENV_FILE=.env.production.local docker-compose -f docker-compose.prod.yml up --build
-  // docker-compose --env-file foo.env up => This should work
-  // await spawnCmd(dockerCmd, location)
 
 }
 
@@ -50,7 +73,13 @@ module.exports = {
     build: {
       description: 'Build the docker containers before starting',
       example: 'keg docker compose up --build',
-      default: true
+      default: false
+    },
+    context: {
+      allowed: [ 'components', 'core', 'tap' ],
+      description: 'Context of docker compose up command (components || core || tap)',
+      example: 'keg docker compose up --context core',
+      default: 'core'
     },
     detached: {
       description: 'Runs the docker-sync process in the background',

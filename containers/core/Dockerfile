@@ -1,6 +1,6 @@
-FROM base_base:latest
+FROM kegbase:latest
 
-WORKDIR /keg
+WORKDIR /keg/tap/node_modules
 
 # Add the GIT_CORE_URL arg, and set value to initial
 # This expects --build-arg GIT_CORE_URL=key_value to be set

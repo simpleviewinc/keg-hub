@@ -4,7 +4,6 @@ services:
     volumes:
       - tap-sync:/keg/tap:nocopy
       - cli-sync:/keg/cli:nocopy
-      - core-sync:/keg/tap/node_modules/keg-core:nocopy
 volumes:
   tap-sync:
     external:
@@ -12,6 +11,3 @@ volumes:
   cli-sync:
     external:
       name: "cli-unison-sync"
-  core-sync:
-    external:
-      name: "core-unison-sync"

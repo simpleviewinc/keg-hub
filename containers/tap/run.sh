@@ -17,22 +17,22 @@ keg_run_tap_yarn_setup(){
   yarn setup
 }
 
-keg_run_from_core(){
+keg_run_the_tap(){
 
   cd $TAP_PATH
-  
+
   local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
     KEG_EXEC_CMD="web"
   fi
 
-  keg_message "Running command yarn $KEG_EXEC_CMD"
+  keg_message "Running command 'yarn $KEG_EXEC_CMD'"
   yarn $KEG_EXEC_CMD
 
 }
 
-# Run yarn setup for any extra node_modules to be installed form the mounted tap
-# keg_run_tap_yarn_setup
+# Run yarn setup for any extra node_modules to be installed from the mounted tap's package.json
+keg_run_tap_yarn_setup
 
 # Start the keg core instance
-keg_run_from_core
+keg_run_the_tap

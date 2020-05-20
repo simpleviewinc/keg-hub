@@ -10,12 +10,6 @@ services:
     container_name: ${CONTAINER_NAME}
     env_file: ${CONTEXT_ENV_FILE}
     environment:
-      - KEG_PATH=${KEG_PATH}
-      - CLI_PATH=${CLI_PATH}
-      - CORE_PATH=${CORE_PATH}
-      - COMPONENTS_PATH=${COMPONENTS_PATH}
-      - RE_THEME_PATH=${RE_THEME_PATH}
-      - TAP_RESOLVER_PATH=${TAP_RESOLVER_PATH}
       - EXPO_DEBUG_PORT=${EXPO_DEBUG_PORT}
       - EXPO_APP_PORT=${EXPO_APP_PORT}
       - GIT_KEY=${GIT_KEY}

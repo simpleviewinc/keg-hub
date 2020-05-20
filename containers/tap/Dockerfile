@@ -1,4 +1,4 @@
-FROM kegcore:0.0.1
+FROM kegbase:latest
 
 WORKDIR /keg
 

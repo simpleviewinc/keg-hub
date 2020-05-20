@@ -6,7 +6,6 @@ module.exports = {
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getDockerArgs'),
-  ...require('./getEnvContext'),
   ...require('./getVirtualIP'),
   ...require('./getDockerMachineEnv'),
 }

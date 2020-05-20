@@ -2,7 +2,7 @@ version: "2"
 services:
   core:
     volumes:
-      - core-sync:/keg/keg-core:nocopy
+      - core-sync:/keg/tap/node_modules/keg-core:nocopy
       - cli-sync:/keg/cli:nocopy
 volumes:
   core-sync:
