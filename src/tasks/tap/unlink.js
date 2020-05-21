@@ -1,5 +1,4 @@
 const { Logger } = require('KegLog')
-const inquirer = require('inquirer')
 const { get, set, isObj } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')

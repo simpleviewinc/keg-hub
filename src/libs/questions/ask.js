@@ -5,6 +5,12 @@ const { input } = require('./input')
 const { password } = require('./password')
 
 /**
+ * Creates a separator from inquire
+ * @returns {*} - inquirer separator
+ */
+const separator = () => new inquirer.Separator()
+
+/**
  * Asks a question or multiple questions to a user from the terminal
  * @param {Object|Array} questions - Questions to ask the user in the inquirer question format
  *
@@ -54,5 +60,6 @@ ask.input = question => singleQuestion(input(question), 'input')
 ask.password = question => singleQuestion(password(question), 'password')
 
 module.exports = {
-  ask
+  ask,
+  separator
 }

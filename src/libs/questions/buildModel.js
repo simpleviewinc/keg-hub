@@ -1,15 +1,14 @@
 const { isStr, isObj } = require('jsutils')
-
-const defModel = {
-  name: 'question',
-}
+const models = require('./models')
 
 const buildModel = (model, question) => {
+  model = isObj(model) ? model : (isStr(model) && questionModels[model]) || {}
+
   return isStr(question)
-    ? { ...defModel, ...model, message: question }
+    ? { ...models.defaultModel, ...model, message: question }
     : isObj(question)
-      ? { ...defModel, ...model, ...question }
-      : { ...defModel, ...model }
+      ? { ...models.defaultModel, ...model, ...question }
+      : { ...models.defaultModel, ...model }
 }
 
 module.exports = {

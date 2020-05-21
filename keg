@@ -17,12 +17,22 @@ keg_message(){
 # eval "$(docker-machine env $KEG_DOCKER_NAME)"
 keg_cli_init_docker_machine(){
   if [[ -x "$(command -v VBoxManage)" ]]; then
+
+    # Ensure docker-machine is running
+    local DOCKER_STATE=$(docker info >/dev/null 2>&1)
+    if [[ $? -ne 0 ]]; then
+      keg_message "Starting docker-machine $KEG_DOCKER_NAME"
+      docker-machine start $KEG_DOCKER_NAME
+    fi
+
     keg_message "Loading docker-machine $KEG_DOCKER_NAME env!"
     docker-machine env $KEG_DOCKER_NAME
     eval "$(docker-machine env $KEG_DOCKER_NAME)"
   else
     keg_message "Error loading 'docker-machine' env. VBoxManage not installed!"
+
   fi
+
 }
 
 # Checks if were running a docker command, and initalizes docker-machine
