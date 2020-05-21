@@ -4,7 +4,7 @@ const { isObj } = require('jsutils')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants')
 const { ensureDirSync } = require('tap-resolver/src/helpers')
 const { validateGlobalConfig } = require('./validateGlobalConfig')
-const { writeFile } = require('KegFileSys')
+const { writeFile } = require('KegFileSys/fileSys')
 const { __updateGlobalConfig } = require('./getGlobalConfig')
 
 /**

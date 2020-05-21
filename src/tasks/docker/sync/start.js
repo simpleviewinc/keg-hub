@@ -37,11 +37,8 @@ const startDockerSync = async args => {
   // Log the ip address so we know how to hit it in the browser
   await logVirtualIP()
 
-  console.log(`---------- contextEnvs ----------`)
-  console.log(contextEnvs)
-
   // Run docker-sync
-  // await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
+  await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
 
 }
 
@@ -60,8 +57,8 @@ module.exports = {
     },
     clean: {
       description: 'Cleans docker-sync before running the docker-sync command',
-      example: 'keg docker sync start --clean',
-      default: false
+      example: 'keg docker sync start --clean false',
+      default: true
     },
     command: {
       alias: [ 'cmd' ],
