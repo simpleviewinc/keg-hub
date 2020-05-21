@@ -21,8 +21,7 @@ const destroyDockerSync = async args => {
   const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    context,
-    defContext: task.options.context.default,
+    params
   })
 
   // Remove the container

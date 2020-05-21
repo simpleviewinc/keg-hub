@@ -4,7 +4,6 @@ const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
 const {
   getPathFromConfig,
-  getTapPath,
   throwNoConfigPath
 } = require('KegUtils')
 const {
@@ -76,9 +75,7 @@ const buildDockerCompose = async args => {
   const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    context,
-    envs: {},
-    defContext: task.options.context.default,
+    params
   })
 
   // Build the docker compose command

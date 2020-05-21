@@ -12,15 +12,12 @@ const { buildLocationContext } = require('KegUtils/builders')
  */
 const stopDockerSync = async args => {
   const { globalConfig, task, params } = args
-  const { detached, context } = params
 
   // Get the context data for the command to be run
   const { location, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    context,
-    envs: {},
-    defContext: task.options.context.default,
+    params
   })
 
   confirmExec({

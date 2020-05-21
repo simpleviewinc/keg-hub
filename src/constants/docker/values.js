@@ -1,7 +1,6 @@
 const path = require('path')
 const { deepFreeze, keyMap } = require('jsutils')
 const cliRootDir = path.join(__dirname, '../../../')
-const containers = [ 'base', 'core', 'tap' ]
 
 // Locations where local folders get mounted
 const mountPaths = {
@@ -14,12 +13,15 @@ const mountPaths = {
   tap: {
     core: '/keg/tap/node_modules/keg-core',
     tap: '/keg/tap',
+  },
+  components: {
+    tap: '/keg/keg-components',
   }
 }
 
 module.exports = deepFreeze({
-  containers,
   cliRootDir,
+  containers: Object.keys(mountPaths),
   configEnv: process.env.NODE_ENV || 'local',
   containersPath: path.join(cliRootDir, 'containers'),
   mountPaths

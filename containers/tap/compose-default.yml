@@ -15,4 +15,5 @@ services:
       - NODE_ENV
       - TAP
     ports: 
-      - ${TAP_PORT}:${TAP_PORT}
+      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
+      - ${EXPO_APP_PORT}:${EXPO_APP_PORT}

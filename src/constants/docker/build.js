@@ -58,6 +58,7 @@ const dockerData = containers.reduce((data, container) => {
 
 
 module.exports = deepFreeze({
+  CONTAINERS: containers,
   CONTAINERS_PATH: containersPath,
   DOCKER_ENV: configEnv,
   BUILD: dockerData,

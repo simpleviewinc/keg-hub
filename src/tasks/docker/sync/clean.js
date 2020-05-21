@@ -20,9 +20,7 @@ const cleanDockerSync = async args => {
   const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    context,
-    envs: {},
-    defContext: task.options.context.default,
+    params
   })
 
   confirmExec({

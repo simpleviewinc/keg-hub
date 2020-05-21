@@ -41,9 +41,7 @@ const upDockerCompose = async args => {
   const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    context,
-    envs: {},
-    defContext: task.options.context.default,
+    params
   })
 
   // Build the docker compose command

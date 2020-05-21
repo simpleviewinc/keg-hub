@@ -6,5 +6,6 @@ module.exports = {
   ...require('./throwWrap'),
   ...require('./throwGitCmd'),
   ...require('./throwNoFileExists'),
+  ...require('./throwNoTapLink'),
   ...require('./throwWrongPassword'),
 }

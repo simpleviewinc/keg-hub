@@ -13,7 +13,7 @@ const { logVirtualIP } = require('KegUtils/log')
 const startDockerSync = async args => {
 
   const { globalConfig, params, options, task } = args
-  const { detached, clean, context, install, env, command } = params
+  const { detached, clean, context, install, env, command, tap } = params
 
   const extraENVs = { ENV: env, NODE_ENV: env, EXEC_CMD: command }
   install && ( extraENVs.NM_INSTALL = true )
@@ -22,9 +22,8 @@ const startDockerSync = async args => {
   const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    context,
-    envs: extraENVs,
-    defContext: task.options.context.default,
+    params,
+    envs: extraENVs
   })
 
   // Check if docker-sync should be cleaned first
@@ -38,8 +37,11 @@ const startDockerSync = async args => {
   // Log the ip address so we know how to hit it in the browser
   await logVirtualIP()
 
+  console.log(`---------- contextEnvs ----------`)
+  console.log(contextEnvs)
+
   // Run docker-sync
-  await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
+  // await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
 
 }
 
@@ -77,6 +79,10 @@ module.exports = {
     },
     install: {
       description: 'Install packages ( yarn install ) within the container before starting the application',
+      default: false
+    },
+    tap: {
+      description: 'Name of the linked tap to run. Overrides the context option!',
       default: false
     }
   }
