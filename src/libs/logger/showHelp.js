@@ -179,7 +179,5 @@ const showHelp = (tasks, task=false) => {
 }
 
 module.exports = {
-  showAllHelp,
-  showTaskHelp,
   showHelp
 }

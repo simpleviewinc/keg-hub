@@ -47,7 +47,7 @@
     "KegDocker": "src/libs/docker",
     "KegFileSys": "src/libs/fileSys",
     "KegLibs": "src/libs",
-    "KegLog": "src/libs/terminal/logger",
+    "KegLog": "src/libs/logger",
     "KegProc": "src/libs/process",
     "KegPackage": "package.json",
     "KegQuestions": "src/libs/questions",
@@ -55,7 +55,6 @@
     "KegRunTask": "src/runTask",
     "KegScripts": "scripts",
     "KegSrc": "src",
-    "KegTerm": "src/libs/terminal",
     "KegTasks": "src/tasks",
     "KegUtils": "src/utils/"
   }

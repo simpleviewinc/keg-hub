@@ -1,4 +1,4 @@
-const { handleError } = require('../libs/terminal')
+const { throwExitError } = require('KegUtils/error/throwExitError')
 const { getConfig } = require('../utils')
 const { TASK_REQURIED } = require('../constants')
 const { get, reduceObj, isObj } = require('jsutils')
@@ -61,7 +61,7 @@ const loadCustomTasks = () => {
 
   }
   catch(err){
-    handleError(err)
+    throwExitError(err)
   }
   
   // Return the custom tasks object that should contain any defined custom tasks

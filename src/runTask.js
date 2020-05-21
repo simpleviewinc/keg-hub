@@ -1,8 +1,8 @@
 const Tasks = require('KegTasks')
 const { get, isFunc, isObj } = require('jsutils')
 const { getTask, executeTask } = require('KegUtils/task')
-const { throwNoTask } = require('KegUtils/error/throwNoTask')
-const { handleError, showHelp } = require('KegTerm')
+const { throwNoTask, throwExitError } = require('KegUtils/error')
+const { showHelp } = require('KegLog')
 const { HELP_ARGS, GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 
@@ -95,7 +95,7 @@ const findTask = (globalConfig, tasks, command, options) => {
 
   }
   catch(err){
-    handleError(err)
+    throwExitError(err)
   }
 }
 

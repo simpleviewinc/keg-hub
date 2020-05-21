@@ -1,12 +1,13 @@
 module.exports = {
   ...require('./generalError'),
+  ...require('./throwExitError'),
+  ...require('./throwGitCmd'),
   ...require('./throwNoAction'),
   ...require('./throwNoConfigPath'),
-  ...require('./throwRequired'),
-  ...require('./throwWrap'),
-  ...require('./throwGitCmd'),
   ...require('./throwNoFileExists'),
   ...require('./throwNoTask'),
   ...require('./throwNoTapLink'),
+  ...require('./throwRequired'),
+  ...require('./throwWrap'),
   ...require('./throwWrongPassword'),
 }

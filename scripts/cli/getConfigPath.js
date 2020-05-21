@@ -2,7 +2,7 @@ require('module-alias/register')
 
 const { get } = require('jsutils')
 const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
-const { Logger } = require('KegTerm/logger')
+const { Logger } = require('KegLog')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { CLI_PATHS, TAP_LINKS } = GLOBAL_CONFIG_PATHS
 
