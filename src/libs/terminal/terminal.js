@@ -4,20 +4,6 @@ const { isStr, isObj } = require('jsutils')
 const { showHelp } = require('./showHelp')
 const { Logger } = require('./logger')
 
-/**
- * Prints CLI unknown command when invalid command is used
- * @param {string} command - Invalid passed in command
- * @param {boolean} unknown - If it's an unknown command
- *
- * @returns {void}
- */
-const showNoTask = (command, unknown=true) => {
-  console.log(``)
-  Logger.error(`Unknown command => ${command}`)
-  Logger.green(`Type "keg help' to see all known commands.`)
-  console.log(``)
-}
-
 
 /**
  * Helper to print an error

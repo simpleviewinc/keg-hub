@@ -1,7 +1,8 @@
 const Tasks = require('KegTasks')
 const { get, isFunc, isObj } = require('jsutils')
 const { getTask, executeTask } = require('KegUtils/task')
-const { handleError, showHelp, showNoTask } = require('KegTerm')
+const { throwNoTask } = require('KegUtils/error/throwNoTask')
+const { handleError, showHelp } = require('KegTerm')
 const { HELP_ARGS, GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 
@@ -80,10 +81,10 @@ const findTask = (globalConfig, tasks, command, options) => {
 
     // Ensure a task exists
     return !isObj(task) || !isFunc(task.action)
-      // TODO: update showNoTask accept the task and not command
+      // TODO: update throwNoTask accept the task and not command
       // Because the found task could be a sub-task of the command
-      // So right now it's showing the wrong text when showNoTask prints to terminal
-      ? showNoTask(command) 
+      // So right now it's showing the wrong text when throwNoTask prints to terminal
+      ? throwNoTask(command) 
       : executeTask({
           command,
           options,
