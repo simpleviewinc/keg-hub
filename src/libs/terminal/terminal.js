@@ -42,6 +42,5 @@ const spacer = () => `\n\t   `
 module.exports = {
   handleError,
   handleInput,
-  showNoTask,
   spacer
 }

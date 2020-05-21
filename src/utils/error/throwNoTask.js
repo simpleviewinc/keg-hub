@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { isStr, isObj } = require('jsutils')
-const { showHelp } = require('./showHelp')
-const { Logger } = require('./logger')
+const { Logger } = require('KegLog')
 
 /**
  * Prints CLI unknown task when task can not be found
