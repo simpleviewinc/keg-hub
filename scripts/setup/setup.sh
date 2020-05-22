@@ -13,7 +13,7 @@ KEG_COMPONENTS_URL=github.com/simpleviewinc/keg-components.git
 
 # Install location
 KEG_INSTALL_DIR=~/keg
-KEG_CLI_PATH=$KEG_INSTALL_DIR/cli
+KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
 
 # Prints a message to the terminal through stderr
 keg_message(){

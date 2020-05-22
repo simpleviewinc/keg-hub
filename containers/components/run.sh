@@ -1,7 +1,7 @@
 #!/bin/bash
 
 COMPONENTS_PATH=/keg/keg-components
-CLI_PATH=/keg/cli
+CLI_PATH=/keg/keg-cli
 
 keg_message(){
   echo $"[ KEG-CLI ] $1" >&2

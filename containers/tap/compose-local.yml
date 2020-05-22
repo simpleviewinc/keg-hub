@@ -3,7 +3,7 @@ services:
   tap:
     volumes:
       - tap-sync:/keg/tap:nocopy
-      - cli-sync:/keg/cli:nocopy
+      - cli-sync:/keg/keg-cli:nocopy
 volumes:
   tap-sync:
     external:

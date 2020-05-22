@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default path ENVs
-CLI_PATH=/keg/cli
+CLI_PATH=/keg/keg-cli
 CORE_PATH=/keg/tap/node_modules/keg-core
 
 keg_message(){

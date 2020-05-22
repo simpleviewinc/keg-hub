@@ -2,11 +2,6 @@ FROM kegbase:latest
 
 WORKDIR /keg
 
-# Add the GIT_KEY arg, and set value to initial
-# This expects --build-arg GIT_KEY=key_value to be set
-# Which will override the default initial value, and allow updating git
-ARG GIT_KEY=INITIAL
-
 # Add the GIT_TAP_URL arg, and set value to initial
 # This expects --build-arg GIT_TAP_URL=key_value to be set
 # URL of the tap to clone from github
@@ -30,4 +25,4 @@ RUN yarn setup
 EXPOSE 80
 
 # Run the script
-CMD [ "/bin/bash", "/keg/cli/containers/tap/run.sh" ]
+CMD [ "/bin/bash", "/keg/keg-cli/containers/tap/run.sh" ]

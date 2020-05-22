@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TAP_PATH=/keg/tap
-CLI_PATH=/keg/cli
+CLI_PATH=/keg/keg-cli
 CORE_PATH=/keg/tap/node_modules/keg-core
 
 keg_message(){

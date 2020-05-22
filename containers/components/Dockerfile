@@ -7,13 +7,13 @@ WORKDIR /keg
 # Which will override the default initial value, and allow updating git
 ARG GIT_KEY=INITIAL
 
-# Add the GIT_TAP_URL arg, and set value to initial
-# This expects --build-arg GIT_TAP_URL=key_value to be set
+# Add the GIT_COMPONENTS_URL arg, and set value to initial
+# This expects --build-arg GIT_COMPONENTS_URL=key_value to be set
 # URL of the tap to clone from github
-ARG GIT_TAP_URL=INITIAL
+ARG GIT_COMPONENTS_URL=INITIAL
 
 # Pull down the tap locally
-RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_TAP_URL" != "INITIAL" ]; then \
+RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_COMPONENTS_URL" != "INITIAL" ]; then \
       git clone $GIT_COMPONENTS_URL ./tap; \
     fi
 
@@ -30,4 +30,4 @@ RUN yarn install
 EXPOSE 80
 
 # Run the script
-CMD [ "/bin/bash", "/keg/cli/containers/components/run.sh" ]
+CMD [ "/bin/bash", "/keg/keg-cli/containers/components/run.sh" ]

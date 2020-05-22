@@ -5,10 +5,10 @@ const cliRootDir = path.join(__dirname, '../../../')
 // Locations where local folders get mounted
 const mountPaths = {
   base: {
-    cli: '/keg/cli'
+    cli: '/keg/keg-cli'
   },
   core: {
-    core: '/keg/keg-core'
+    core: '/keg/tap'
   },
   tap: {
     core: '/keg/tap/node_modules/keg-core',
@@ -16,6 +16,9 @@ const mountPaths = {
   },
   components: {
     tap: '/keg/keg-components',
+  },
+  proxy: {
+    proxy: '/keg/keg-proxy',
   }
 }
 

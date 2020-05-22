@@ -10,12 +10,12 @@ ARG GIT_CORE_URL=INITIAL
 # Pull down the tap locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
       echo "Cloneing keg-core repo from github..."; \
-      git clone $GIT_CORE_URL ./tap; \
-      cd $DOC_CORE_PATH; \
+      git clone $GIT_CORE_URL ./$DOC_TAP_PATH; \
+      cd $DOC_TAP_PATH; \
       yarn install; \
     fi
 
 EXPOSE 80
 
 # Run the script
-CMD [ "/bin/bash", "/keg/cli/containers/core/run.sh" ]
+CMD [ "/bin/bash", "/keg/keg-cli/containers/core/run.sh" ]

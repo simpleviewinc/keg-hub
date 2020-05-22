@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const { isArr } = require('jsutils')
+const { getGlobalConfig } = require('../../utils/globalConfig/getGlobalConfig')
+const { fillTemplate } = require('../../utils/template/fillTemplate')
 
 const NEWLINE = '\n'
 const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
@@ -15,7 +17,7 @@ const NEWLINES_MATCH = /\n|\r|\r\n/
  * @returns {Object} - Parse .env file content
  */
 const parseContent = src => {
-  return src.toString()
+  return fillTemplate({ template: src.toString(), data: getGlobalConfig() })
     .split(NEWLINES_MATCH)
     .reduce((obj, line, idx) => {
       const keyValueArr = line.match(RE_INI_KEY_VAL)

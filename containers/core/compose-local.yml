@@ -3,7 +3,7 @@ services:
   kegcore:
     volumes:
       - core-sync:/keg/keg-core:nocopy
-      - cli-sync:/keg/cli:nocopy
+      - cli-sync:/keg/keg-cli:nocopy
 volumes:
   core-sync:
     external:

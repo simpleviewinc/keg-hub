@@ -23,7 +23,7 @@ RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
 
 # Pull down the cli locallay
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
-      git clone $GIT_CLI_URL ./cli; \
+      git clone $GIT_CLI_URL ./keg-cli; \
     fi
 
 # Expose the container ports to allow connecting to it externally
