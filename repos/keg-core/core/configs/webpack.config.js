@@ -4,6 +4,7 @@ const path = require('path')
 const tapPath = require('app-root-path').path
 const kegPath = path.join(__dirname, '../../')
 const getExpoConfig = require('@expo/webpack-config')
+const babelConfig = require(path.join(kegPath, './babel.config'))()
 const { NODE_ENV } = process.env
 
 module.exports = rootDir => {
@@ -27,8 +28,9 @@ module.exports = rootDir => {
       include: [
         path.resolve(tapPath),
       ],
-      exclude: /node_modules\/(?!(sv-keg)\/).*/,
-      loader: require.resolve('babel-loader')
+      exclude: /node_modules\/(?!(keg-core)\/).*/,
+      loader: require.resolve('babel-loader'),
+      options: { ...babelConfig },
     })
 
     // necessary to provide web workers access to the window object and 
