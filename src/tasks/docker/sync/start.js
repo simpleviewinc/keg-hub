@@ -72,14 +72,17 @@ module.exports = {
     },
     env: {
       description: 'Environment to start the Docker containers in',
+      example: 'keg docker sync start --env=staging ...',
       default: 'development',
     },
     install: {
       description: 'Install packages ( yarn install ) within the container before starting the application',
+      example: 'keg docker sync start --install ...',
       default: false
     },
     tap: {
       description: 'Name of the linked tap to run. Overrides the context option!',
+      example: 'keg docker sync start --tap name-of-tap',
       default: false
     }
   }

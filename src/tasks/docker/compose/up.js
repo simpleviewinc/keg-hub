@@ -71,8 +71,8 @@ module.exports = {
   options: {
     build: {
       description: 'Build the docker containers before starting',
-      example: 'keg docker compose up --build',
-      default: false
+      example: 'keg docker compose up --build false',
+      default: true
     },
     context: {
       allowed: [ 'components', 'core', 'tap' ],
