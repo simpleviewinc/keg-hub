@@ -28,6 +28,7 @@ keg_cli_init_docker_machine(){
     keg_message "Loading docker-machine $KEG_DOCKER_NAME env!"
     docker-machine env $KEG_DOCKER_NAME
     eval "$(docker-machine env $KEG_DOCKER_NAME)"
+    echo ""
   else
     keg_message "Error loading 'docker-machine' env. VBoxManage not installed!"
 
@@ -42,7 +43,7 @@ keg_check_for_docker_cmd(){
   # DOCKER_MACHINE_NAME gets defined by running the keg_cli_init_docker_machine
   # So check to see if it's already defined before re-calling the function
   if [[ "$DOCKER_MACHINE_NAME" != "$KEG_DOCKER_NAME" ]]; then
-    if [[ "$1" == "docker" || "$1" == "doc" || "$1" == "d" ]]; then
+    if [[ "$1" == "docker" || "$1" == "doc" || "$1" == "d" || "$1" == "dc" || "$1" == "di" ]]; then
       keg_cli_init_docker_machine
     fi
   fi

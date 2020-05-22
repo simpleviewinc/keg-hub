@@ -2,8 +2,6 @@ FROM kegbase:latest
 
 WORKDIR /keg
 
-RUN yarn global add ansi-html html-entities loglevel --dev;
-
 # Add the GIT_CORE_URL arg, and set value to initial
 # This expects --build-arg GIT_CORE_URL=key_value to be set
 # URL of the keg-core to clone from github

@@ -1,6 +1,7 @@
 version: "2"
 services:
   tap:
+    image: ${IMAGE}
     build:
       context: ${CONTEXT_PATH}
       dockerfile: ${CONTEXT_DOCKER_FILE}
