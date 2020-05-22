@@ -6,7 +6,7 @@ const { cliRootDir, containersPath, configEnv, containers } = require('./values'
 // Default config for all containers
 const DEFAULT = {
   VALUES: {
-    clean: '--rm',
+    clean: '--force-rm',
   },
   DEFAULTS: {
     clean: true,

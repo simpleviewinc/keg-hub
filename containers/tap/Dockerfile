@@ -27,5 +27,7 @@ COPY yarn.lock /keg/tap/yarn.lock
 # Install the dependecies
 RUN yarn setup
 
+EXPOSE 80
+
 # Run the script
 CMD [ "/bin/bash", "/keg/cli/containers/tap/run.sh" ]

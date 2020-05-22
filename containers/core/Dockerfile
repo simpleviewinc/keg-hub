@@ -17,5 +17,7 @@ RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
       yarn install; \
     fi
 
+EXPOSE 80
+
 # Run the script
 CMD [ "/bin/bash", "/keg/cli/containers/core/run.sh" ]

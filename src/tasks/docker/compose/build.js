@@ -9,7 +9,6 @@ const {
 const {
   addDockerArg,
   addComposeFiles,
-  buildDockerCmd,
   getEnvContext,
   getBuildArgs,
   getDockerMachineEnv

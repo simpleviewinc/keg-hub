@@ -27,5 +27,7 @@ COPY yarn.lock /keg/keg-components/yarn.lock
 # Install the dependecies
 RUN yarn install
 
+EXPOSE 80
+
 # Run the script
 CMD [ "/bin/bash", "/keg/cli/containers/components/run.sh" ]
