@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules ",
-    "test": "NODE_ENV=resolver-test jest"
+    "test": "NODE_ENV=resolver-test jest",
+    "test:reports": "yarn test --coverage && yarn view:reports",
+    "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
@@ -44,8 +46,10 @@
       "<rootDir>/src/**/__tests__/**/*.js?(x)"
     ],
     "collectCoverageFrom": [
-      "<rootDir>/src/index.js"
+      "src/**/*.{js,jsx}",
+      "!**/mocks/**/*.{js,jsx}"
     ],
+    "coverageDirectory": "reports/coverage",
     "moduleFileExtensions": [
       "js",
       "json",
