@@ -10,8 +10,7 @@ npm-debug.*
 web-build/
 web-report/
 yarn-error.log
-jest_html_reporters.html
-test-report.xml
+reports/
 core/base/assets/index.js
 # macOS
 .DS_Store

@@ -19,14 +19,18 @@ const buildTestPaths = () => {
       `${rootDir}/**/__tests__/**/*.js?(x)`,
       `${rootDir}/**/?(*.)(test).js?(x)`,
     ],
-    collectCoverageFrom: [ `${rootDir}/*.{js,jsx}`, ]
+    collectCoverageFrom: [ 
+      'App.js',
+      'core/base/**/*.{js,jsx}',
+    ],
+    coverageDirectory: 'reports/coverage'
   }
 }
 
 /**
  * Setup keg paths
  */
-const { collectCoverageFrom, moduleDirectories, testMatch, rootDir } = buildTestPaths()
+const { collectCoverageFrom, coverageDirectory, moduleDirectories, testMatch, rootDir } = buildTestPaths()
 
 /**
  * Modules that should be transpiled before the tests are run
@@ -73,6 +77,7 @@ module.exports = {
   rootDir,
   testMatch,
   collectCoverageFrom,
+  coverageDirectory,
   moduleDirectories,
   preset: 'jest-expo',
   transform: {
@@ -89,9 +94,11 @@ module.exports = {
   ],
   reporters: [
     'default',
-    'jest-html-reporters'
+    [ './node_modules/jest-html-reporter', {
+      'pageTitle': 'Keg Test Results',
+      'outputPath': '<rootDir>/reports/test-results.html',
+    }]
   ],
-  testResultsProcessor: 'jest-sonar-reporter',
   testURL: 'http://localhost/',
   globals: {
     __DEV__: true
