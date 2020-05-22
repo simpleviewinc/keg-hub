@@ -1,13 +1,54 @@
 const fs = require('fs')
 const path = require('path')
-const { isArr } = require('jsutils')
-const { getGlobalConfig } = require('../../utils/globalConfig/getGlobalConfig')
-const { fillTemplate } = require('../../utils/template/fillTemplate')
+const { isArr, isStrBool, toBool } = require('jsutils')
 
 const NEWLINE = '\n'
 const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
 const RE_NEWLINES = /\\n/g
 const NEWLINES_MATCH = /\n|\r|\r\n/
+
+// Holds past parsed files so we don't re-parse them
+const parseENVCache = {}
+
+/**
+ * Parse each line into a s
+ * @function
+ * @param {string} line - Single line from the loaded env file
+ *
+ * @returns {Array} - Parse key/value pair
+ */
+const getParsedEntry = line => {
+  // Check if line is valid key=value pair that can be split into an array
+  const keyValueArr = line.match(RE_INI_KEY_VAL)
+
+  // Return the parsed array content if it's valid
+  return isArr(keyValueArr) && keyValueArr.length && keyValueArr
+}
+
+/**
+ * Parses the value, by removing quoats and checking for string bools
+ * @function
+ * @param {string} value - Value to be parsed
+ *
+ * @returns {string|Array|boolean} - Parse .env file content
+ */
+const parseValue = toParse => {
+  let value = toParse
+
+  // Get the last char of the value
+  const end = value.length - 1
+  const isDoubleQuoted = value[0] === '"' && value[end] === '"'
+  const isSingleQuoted = value[0] === "'" && value[end] === "'"
+
+  // Check if it has quoates, and if so remove them out of the value
+  value = (isSingleQuoted || isDoubleQuoted)
+    ? value.substring(1, end).trim().replace(RE_NEWLINES, NEWLINE)
+    : value.trim()
+
+  // Check if it's a string boolean and convert or just return the value
+  return isStrBool(value) ? toBool(value) : value
+
+}
 
 /**
  * Parse .env file converts the content into an object
@@ -16,30 +57,29 @@ const NEWLINES_MATCH = /\n|\r|\r\n/
  *
  * @returns {Object} - Parse .env file content
  */
-const parseContent = src => {
-  return fillTemplate({ template: src.toString(), data: getGlobalConfig() })
+const parseContent = (envPath, encoding) => {
+  // Load at run time to speed up other cli calls
+  const { getGlobalConfig } = require('../../utils/globalConfig/getGlobalConfig')
+  const { fillTemplate } = require('../../utils/template/fillTemplate')
+
+  return fillTemplate({
+    template: fs.readFileSync(envPath, { encoding }),
+    data: getGlobalConfig()
+  })
+    // Split each line to isolate the keg value pair
     .split(NEWLINES_MATCH)
+    // Loop over each line an parse the key value pair
     .reduce((obj, line, idx) => {
-      const keyValueArr = line.match(RE_INI_KEY_VAL)
-      if(!isArr(keyValueArr) || !keyValueArr.length) return obj
+      
+      // Check if line is valid key=value pair that can be split into an array
+      const parsed = getParsedEntry(line)
+      // If we don't get an array back, just return the object
+      // Otherwise, add the key to the object and parse the value
+      return !parsed
+        ? obj
+        : Object.assign(obj, { [ parsed[1] ]: parseValue(parsed[2] || '') })
 
-      const key = keyValueArr[1]
-      let val = (keyValueArr[2] || '')
-
-      const end = val.length - 1
-      const isDoubleQuoted = val[0] === '"' && val[end] === '"'
-      const isSingleQuoted = val[0] === "'" && val[end] === "'"
-
-      obj[key] = isSingleQuoted || isDoubleQuoted
-        ? (() => {
-            val = val.substring(1, end)
-            return isDoubleQuoted ? val.replace(RE_NEWLINES, NEWLINE) : val
-          })()
-        : (val = val.trim())
-
-      return obj
     }, {})
-
 }
 
 /**
@@ -51,7 +91,12 @@ const parseContent = src => {
  * @returns {Object} - response from the parseContent method
  */
 const loadENV = (envPath, encoding='utf8') => {
-  return parseContent(fs.readFileSync(envPath, { encoding }))
+  // If the file has not been parsed already, load it and parse it
+  !parseENVCache[envPath] &&
+    ( parseENVCache[envPath] = parseContent(envPath, encoding) )
+
+  // Return the parsed data
+  return parseENVCache[envPath]
 }
 
 module.exports = {
