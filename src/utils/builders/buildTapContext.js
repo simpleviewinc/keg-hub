@@ -6,12 +6,15 @@ const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 /**
  * Checks if the context is tap, and gets the Tap path if needed
  * @function
- * @param {string} context - Context to run the docker container in
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {string} cmdContext - Context to run the docker container in
+ * @param {string} tap - Name of the tap to execute task on
  * @param {Object} envs - Group envs passed to docker command being run
+ * @param {Object} task - Current task being run
  *
  * @returns {Object} - ENVs for the context, with the CONTEXT_PATH added if needed
  */
-const buildTapContext = (globalConfig, cmdContext, tap, envs) => {
+const buildTapContext = ({ globalConfig, cmdContext, tap, envs }) => {
   // If the context is not a tap, or the CONTEXT_PATH is already set, just return
   if(cmdContext !== 'tap' || envs.CONTEXT_PATH) return envs
 

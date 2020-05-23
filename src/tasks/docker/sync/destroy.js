@@ -1,7 +1,6 @@
 const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
-const { Logger } = require('KegLog')
 const { BUILD } = require('KegConst/docker/build')
 
 /**
@@ -21,7 +20,10 @@ const destroyDockerSync = async args => {
   const { location, cmdContext, contextEnvs } = buildLocationContext({
     globalConfig,
     task,
-    params
+    params,
+    // Set a default context path as it's not needed for cleaning up a tap container
+    // And it will throw if not set for a tap
+    envs: { CONTEXT_PATH: 'PLACEHOLDER' }
   })
 
   // Remove the container
@@ -56,5 +58,10 @@ module.exports = {
       example: 'keg docker sync start --context core',
       required: true
     },
+    tap: {
+      description: 'Name of the linked tap to run. Overrides the context option!',
+      example: 'keg docker sync start --tap name-of-tap',
+      default: false
+    }
   }
 }

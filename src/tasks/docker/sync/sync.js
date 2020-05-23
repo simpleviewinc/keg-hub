@@ -1,5 +1,5 @@
 const dockerSync = args => {
-  
+  console.log(`---------- docker sync task ----------`)
 }
 
 module.exports = {
@@ -10,6 +10,7 @@ module.exports = {
     tasks: {
       clean: require('./clean'),
       destroy: require('./destroy'),
+      list: require('./list'),
       start: require('./start'),
       stop: require('./stop'),
     },

@@ -20,10 +20,10 @@ const getEnvContext = (context) => {
  * Gets the location and the context to run a docker container in
  * @function
  * @param {Object} globalConfig - Global config object for the keg-cli
- * @param {Object} task - Current task being run
  * @param {string} context - Context to run the docker container in
  * @param {string} defContext - default Context to use if context does not exist
  * @param {Object} [envs={}] - Group envs passed to docker command being run
+ * @param {Object} task - Current task being run
  *
  * @returns {Object} - The location, context, and envs for the context
  */
@@ -54,7 +54,7 @@ const buildLocationContext = ({ envs={}, globalConfig, params, task }) => {
   // Merge with any passed in envs
   const contextEnvs = {
     ...getEnvContext(cmdContext),
-    ...buildTapContext(globalConfig, cmdContext, tap, envs)
+    ...buildTapContext({ globalConfig, cmdContext, tap, envs })
   }
 
   return { location, cmdContext, contextEnvs }
