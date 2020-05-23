@@ -16,7 +16,7 @@ const docker = require('KegDocApi')
  * @returns {void}
  */
 const removeDockerImage = async args => {
-  const { params } = args
+  const { params, skipThrow } = args
   const { name, force } = params
 
   // Ensure we have an image to remove by checking for a mapped name, or use original
@@ -28,7 +28,7 @@ const removeDockerImage = async args => {
 
   // Ensure we have the image meta data, and try to remove by imageId
   ;!image || !image.imageId
-    ? generalError(`The docker image "${ imgName }" does not exist!`)
+    ? skipThrow !== true && generalError(`The docker image "${ imgName }" does not exist!`)
     : await docker.image.remove(`${ image.imageId } ${ force ? `--force` : '' }`.trim())
 
 }

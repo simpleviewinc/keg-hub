@@ -19,7 +19,7 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
   if(!tapPath) return {}
 
   // Update the options to include the name argument
-  options = [ ...options, `name=${command}` ]
+  options = [ ...options, `tap=${command}` ]
 
   // Call getTask, and set the command to be tap
   return getTask(tasks, 'tap', ...options)

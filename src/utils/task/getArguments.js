@@ -249,7 +249,6 @@ const loopTaskOptions = (task, taskKeys, options) => {
  * @returns {Object} - Mapped arguments object
  */
 const getArguments = ({ options=[], task }) => {
-
   // If no options to parse, just return empty object
   if(!options.length) return {}
 

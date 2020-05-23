@@ -19,6 +19,41 @@ const list = (params={}) => {
   })
 }
 
+/**
+ * Removes a docker container based on passed in toRemove argument
+ * @function
+ * @param {string} toRemove - Docker container to be removed
+ *
+ * @returns {string} - Response from the docker cli command
+ */
+const remove = (toRemove, skipError=true, errResponse=false) => {
+  return dockerCmd({
+    skipError,
+    errResponse,
+    asStr: true,
+    opts: ['container', 'rm'].concat([ toRemove ])
+  })
+} 
+
+/**
+ * Checks if an container already exists ( is built )
+ * @function
+ * @param {string} compare - Value to compare each container with
+ * @param {string|function} doCompare - How to compare each container
+ *
+ * @returns {boolean} - Based on if the container exists
+ */
+const exists = async (compare, doCompare) => {
+  // Get all current containers
+  const containers = await list({ errResponse: [] })
+  // If we have containers, try to find the one matching the passed in argument
+  return containers &&
+    containers.length &&
+    containers.some(container => compareItems(container, compare, doCompare, [ 'containerId', 'names' ]))
+}
+
 module.exports = {
-  list 
+  exists,
+  list,
+  remove,
 }

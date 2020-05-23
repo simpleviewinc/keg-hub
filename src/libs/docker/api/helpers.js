@@ -1,4 +1,4 @@
-const { isArr, toStr, isStr, camelCase } = require('jsutils')
+const { camelCase, isArr, isFunc, isStr, toStr } = require('jsutils')
 const { executeCmd } = require('KegProc')
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
@@ -11,18 +11,23 @@ const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
  *
  * @returns {*} - Passed in errResponse
  */
-const apiError = (error, errResponse) => {
-  const toLog = isStr(error)
-    ? error
-    : isObj(error) && error.stack
-      ? error.stack
-      : toStr(error)
+const apiError = (error, errResponse, skipError) => {
 
-  Logger.empty()
-  Logger.error(`  Docker Api Error:`)
-  Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
-  Logger.empty()
+  // Check if we should skip logging the error
+  if(!skipError){
+    const toLog = isStr(error)
+      ? error
+      : isObj(error) && error.stack
+        ? error.stack
+        : toStr(error)
 
+    Logger.empty()
+    Logger.error(`  Docker Api Error:`)
+    Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
+    Logger.empty()
+  }
+
+  // If the errResponse is not undefined, return it... otherwise exit the process!
   return errResponse !== undefined ? errResponse : process.exit(1)
 }
 
@@ -54,6 +59,24 @@ const itemHeaderMap = data => {
 }
 
 /**
+ * Compares the passed in item's keys with the compare argument
+ * @function
+ * @param {Object} item - Item to compare
+ * @param {string} compare - Value to compare each item with
+ * @param {string|function} doCompare - How to compare each container
+ * @param {Array} defCompareKeys - If no doCompare is passed, use the default keys for compare
+ *
+ * @returns {Boolean} - If the compare values match
+ */
+const compareItems = (item, compare, doCompare, defCompareKeys=[]) => {
+  return isStr(doCompare)
+    ? item[doCompare] === compare
+    : isFunc(doCompare)
+      ? doCompare(item, toCompare)
+      : defCompareKeys.some(key => item[key] === compare)
+}
+
+/**
  * Calls the docker cli from the command line and returns the response
  * @function
  * @param {Object} params - arguments used to modify the docker api call
@@ -64,13 +87,13 @@ const itemHeaderMap = data => {
  *
  * @returns {Array|string} - JSON array of items || stdout from docker cli call
  */
-const dockerCmd = async ({ opts, asStr, errResponse }) => {
+const dockerCmd = async ({ opts, asStr, errResponse, skipError }) => {
   const { error, data } = await executeCmd(
     `docker ${ isArr(opts) ? opts.join(' ') : toStr(opts) }`.trim()
   )
 
   return error
-    ? apiError(error, errResponse)
+    ? apiError(error, errResponse, skipError)
     : asStr
       ? data
       : itemHeaderMap(data)
@@ -78,5 +101,6 @@ const dockerCmd = async ({ opts, asStr, errResponse }) => {
 
 
 module.exports = {
-  dockerCmd
+  dockerCmd,
+  compareItems
 }
