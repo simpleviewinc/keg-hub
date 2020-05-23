@@ -18,6 +18,32 @@ const checkRequired = (task, key, meta) => {
   meta.required && throwRequired(task, key, meta)
 }
 
+/**
+ * Checks if the value is a string bool, and auto-converts it
+ * @function
+ * @param {*} value - Value to check for string bool
+ *
+ * @returns {*} - Boolean or original value
+ */
+const checkBoolValue = value => {
+  // If the value is 'true' || 'false', convert it to a true boolean
+  return isStrBool(value) ? toBool(value) : value
+}
+
+/**
+ * Checks if the key is an env, and maps the value for shortcuts
+ * @function
+ * @param {*} key - Key to check for environment
+ * @param {*} value - Value to check for string bool
+ *
+ * @returns {*} - The original value or mapped environment value
+ */
+const checkEnvKeyValue = (key, value) => {
+  // Check if the arg is env, and map it from the env shortcuts
+  return key === 'env' || key === 'environment'
+    ? mapEnv(value)
+    : value
+}
 
 /**
  * Removes an option from the options array
@@ -132,9 +158,7 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
       if(value === nextOpt) options = removeOption(options, value)
 
       // If the value is 'true' || 'false', convert it to a true boolean
-      return isStrBool(value)
-        ? toBool(value)
-        : value
+      return checkBoolValue(value)
 
     }, null)
 }
@@ -186,6 +210,35 @@ const findArgument = ({ key, meta={}, index, ...params }) => {
 
 }
 
+
+const loopTaskOptions = (task, taskKeys, options) => {
+  return taskKeys.reduce((args, key, index) => {
+
+    // Get the option meta for the key
+    const meta = isObj(task.options[key])
+      ? task.options[key]
+      : { description: task.options[key] }
+
+    // Find the value of the argument from the passed in options
+    const value = findArgument({
+      key,
+      meta,
+      index,
+      taskKeys,
+      options,
+    })
+
+    // If no value exists, and it's required, then throw required error
+    if(!exists(value)) checkRequired(task, key, meta)
+
+    // Check if the arg is env, and map it from the env shortcuts
+    else args[key] = checkEnvKeyValue(key, value)
+
+    return args
+
+  }, {})
+}
+
 /**
  * Maps all passed in options to the cmdOpts based on keys
  * @function
@@ -197,6 +250,9 @@ const findArgument = ({ key, meta={}, index, ...params }) => {
  */
 const getArguments = ({ options=[], task }) => {
 
+  // If no options to parse, just return empty object
+  if(!options.length) return {}
+
   // Make copy of options, so we don't affect the original
   const optsCopy = Array.from(options)
 
@@ -204,32 +260,18 @@ const getArguments = ({ options=[], task }) => {
   // This is used later to compare the keys with the passed in options
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
-  return taskKeys && taskKeys.reduce((args, key, index) => {
+  // If not task keys to loop, just return empty
+  if(!taskKeys || !taskKeys.length) return {}
 
-      // Get the option meta for the key
-      const meta = isObj(task.options[key])
-        ? task.options[key]
-        : { description: task.options[key] }
+  // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
+  return options.length === 1 && options[0].indexOf('=') === -1
 
-      // Find the value of the argument from the passed in options
-      const value = findArgument({
-        key,
-        meta,
-        index,
-        taskKeys,
-        options: optsCopy,
-      })
+    // Set it as the first key in the task options object
+    ? { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
 
-      // If no value exists, and it's required, then throw required error
-      if(!exists(value)) checkRequired(task, key, meta)
+    // Otherwise loop over the task keys and map the task options to the passed in options
+    : taskKeys && loopTaskOptions(task, taskKeys, options)
 
-      // Check if the arg is env, and map it from the env shortcuts
-      else args[key] = key === 'env' || key === 'environment'
-        ? mapEnv(value)
-        : value
-
-      return args
-    }, {})
 }
 
 module.exports = {

@@ -1,4 +1,5 @@
 module.exports = {
+  ...require('./api'),
   ...require('./addComposeFiles'),
   ...require('./buildDockerCmd'),
   ...require('./buildDockerMounts'),

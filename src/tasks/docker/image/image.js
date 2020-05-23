@@ -24,11 +24,9 @@ const dockerImage = async args => {
     case 'remove':
     case 'rmi':
     case 'rm': {
-      !image && generalError(`The docker ${cmd} command requires a name argument!`)
-      // TODO: would be better to get the image ID
-      // Need to add a helper to pull the image ID based on name
-      runCmd = `rm ${image}`
-      break
+      return generalError(
+        `The docker image remove command should not be called from the base image action!`
+      )
     }
     default: {
       runCmd = cmd || options.join(' ').trim() || 'ls'
@@ -45,6 +43,9 @@ module.exports = {
     name: 'image',
     alias: [ 'img', 'i' ],
     action: dockerImage,
+    tasks: {
+      ...require('./remove'),
+    },
     description: `Runs docker image command`,
     example: 'keg docker image <options>',
     options: {

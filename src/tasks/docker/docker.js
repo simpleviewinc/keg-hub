@@ -1,6 +1,6 @@
 const { generalError } = require('KegUtils/error')
 const { isStr, get } = require('jsutils')
-const { executeTask } = require('KegUtils/task')
+const { findTask, executeTask } = require('KegUtils/task')
 
 /**
  * Docker sub task alias map
@@ -20,8 +20,7 @@ const dockerSubTasks = {
  */
 const getDockerSubTask = (task, command) => {
   // Get the subTask if it exists
-  const subTask = isStr(dockerSubTasks[command]) &&
-    get(task, `tasks.${ dockerSubTasks[command] }`)
+  const subTask = isStr(dockerSubTasks[command]) && dockerSubTasks[command]
 
   return subTask || generalError(`Unknown docker sub-task: '${command}'`)
 }
@@ -36,13 +35,23 @@ const getDockerSubTask = (task, command) => {
  * @returns {void}
  */
 const dockerTask = args => {
-  const { command, task } = args
+  const { globalConfig, command, task, tasks, options } = args
 
   // Find the docker sub-task
-  const subTask = getDockerSubTask(task, command)
+  const taskData = findTask(
+    globalConfig,
+    task.tasks,
+    getDockerSubTask(task, command),
+    options
+  )
 
   // Execute the found sub-task
-  return executeTask({ ...args, task: subTask, command: subTask.name })
+  return executeTask({
+    ...args,
+    task: taskData.task,
+    command: taskData.task.name,
+    options: taskData.options
+  })
 
 }
 

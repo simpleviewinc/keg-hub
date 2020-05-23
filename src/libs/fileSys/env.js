@@ -1,17 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const { isArr, isStrBool, toBool } = require('jsutils')
-
-const NEWLINE = '\n'
-const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
-const RE_NEWLINES = /\\n/g
-const NEWLINES_MATCH = /\n|\r|\r\n/
+const { KEY_VAL_MATCH, NEWLINE, NEWLINES_MATCH, NEWLINES_ESC } = require('KegConst/patterns')
 
 // Holds past parsed files so we don't re-parse them
 const parseENVCache = {}
 
 /**
- * Parse each line into a s
+ * Parse each line into an array to extract the key value pair
  * @function
  * @param {string} line - Single line from the loaded env file
  *
@@ -19,7 +15,7 @@ const parseENVCache = {}
  */
 const getParsedEntry = line => {
   // Check if line is valid key=value pair that can be split into an array
-  const keyValueArr = line.match(RE_INI_KEY_VAL)
+  const keyValueArr = line.match(KEY_VAL_MATCH)
 
   // Return the parsed array content if it's valid
   return isArr(keyValueArr) && keyValueArr.length && keyValueArr
@@ -42,7 +38,7 @@ const parseValue = toParse => {
 
   // Check if it has quoates, and if so remove them out of the value
   value = (isSingleQuoted || isDoubleQuoted)
-    ? value.substring(1, end).trim().replace(RE_NEWLINES, NEWLINE)
+    ? value.substring(1, end).trim().replace(NEWLINES_ESC, NEWLINE)
     : value.trim()
 
   // Check if it's a string boolean and convert or just return the value
