@@ -35,4 +35,4 @@ RUN yarn setup
 EXPOSE 80
 
 # Run the script
-CMD [ "/bin/bash", "/keg/cli/containers/tap/run.sh" ]
+CMD [ "/bin/bash", "/keg/keg-cli/containers/tap/run.sh" ]

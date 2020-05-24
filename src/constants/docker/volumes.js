@@ -1,15 +1,16 @@
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { containers, mountPaths } = require('./values')
+const { cliRootDir, containers, mountPaths } = require('./values')
 
 const DEFAULT = {
   PATHS: {
-    cli: mountPaths.cliPath,
+    cli: mountPaths.base.cli,
   },
   DEV_DEFAULTS: [
     'cli',
-    'core',
+    // 'core',
+    'resolver',
     'components',
-    're-theme'
+    'retheme'
   ]
 }
 
@@ -22,10 +23,10 @@ module.exports = deepFreeze({
     const corePath = mountPaths[container].core
     data[container.toUpperCase()] = deepMerge(DEFAULT, {
       PATHS: {
-        core: corePath,
+        // core: corePath,
         components: `${corePath}/node_modules/keg-components`,
         resolver: `${corePath}/node_modules/tap-resolver`,
-        're-theme': `${corePath}/node_modules/re-theme`,
+        retheme: `${corePath}/node_modules/re-theme`,
       },
     })
 

@@ -1,3 +1,4 @@
+const { buildLocationContext } = require('KegUtils/builders')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { logVirtualIP } = require('KegUtils/log')
@@ -17,35 +18,40 @@ const { DOCKER } = require('KegConst/docker')
  */
 const dockerBuild = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
-  const { name, tap, mounts, image, docker, env } = params
+  const { context } = params
 
-  // If the name is tap, then set the name argument to the value of the tap argument
-  !name && throwRequired(task, 'name', task.options.name)
+  // Ensure we have a content to build the container
+  !context && throwRequired(task, 'context', task.options.context)
 
-  // Get the folder location the image should built from
-  const location = getPathFromConfig(globalConfig, name) || getTapPath(globalConfig, tap)
-  !location && generalError(
-    `Location could not be found on disk for ${ tap || name}!`,
-    `Please ensure the path exists in the global config!`
+  // Get the context data for the command to be run
+  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+    globalConfig,
+    task,
+    params,
+  })
+
+   // If using a tap, and no location is found, throw an error
+  cmdContext === 'tap' && tap && !location && generalError(
+    `Tap location could not be found for ${ tap }!`,
+    `Please ensure the tap path is linked in the global config!`
   )
 
   // Build the docker run command with options
   const dockerCmd = buildDockerCmd(globalConfig, {
-    env,
-    tap,
-    name,
-    image,
-    docker,
-    mounts,
-    location,
+    ...params,
     cmd: `run`,
+    options: options,
+    envs: contextEnvs,
+    location: location,
+    context: cmdContext,
+    ...(tap && { tap }),
   })
 
   // Log out the containers ip, so we know how to connect to it in the browser
   await logVirtualIP()
 
   // Run the container
-  await spawnCmd(dockerCmd, location)
+  await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
 
 }
 
@@ -58,6 +64,11 @@ module.exports = {
     example: 'keg docker build <options>',
     location_context: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
+      context: {
+        allowed: [ 'components', 'core', 'tap' ],
+        description: 'Name of the docker container to run',
+        enforced: true,
+      },
       env: {
         description: 'Environment to start the Docker container in',
         default: 'development',
@@ -66,18 +77,18 @@ module.exports = {
         description: `Extra docker arguments to pass to the 'docker run command'`
       },
       image: {
-        description: `Name of the docker image to use. Defaults to tap-name:tap-version.`
+        description: `Name of the docker image to use. Defaults to context:latest`
+      },
+      install: {
+        description: `Run yarn install before starting the application`,
+        example: 'keg docker run --install'
       },
       mounts: {
-        description: `List of key names or folder paths to mount into the docker container`
-      },
-      name: {
-        allowed: [ 'components', 'core', 'tap' ],
-        description: 'Name of the docker container to run',
-        enforced: true,
+        description: `List of key names or folder paths to mount into the docker container, separated by (,)`,
+        example: 'keg docker run mounts=tap,cli,core'
       },
       tap: {
-        description: 'Name of the tap to build. Only needed if "name" argument is "tap"',
+        description: 'Name of the tap to build. Required when "context" argument is "tap"',
       },
     },
   }

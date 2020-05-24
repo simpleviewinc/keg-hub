@@ -12,7 +12,7 @@ const { DOCKER: { BUILD } } = require('KegConst')
 const getDockerImg = (image, container='', ext='') => {
   image = image || get(BUILD, `${container.toUpperCase()}.ENV.IMAGE`)
 
-  return `${ image }${ ext ? (':' + ext) : '' }`
+  return ext && image.indexOf(':') !== -1 ? `${ image }:${ext}` : image
 }
 
 module.exports = {

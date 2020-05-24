@@ -69,7 +69,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     envs={},
     execCmd,
     location,
-    name,
+    context,
     branch,
     image,
     mounts,
@@ -79,7 +79,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
 
   // Get the name for the docker container
   dockerCmd = addContainerName(
-    tap ? `${name}-${tap}` : name,
+    tap ? `${context}-${tap}` : context,
     dockerCmd
   )
 
@@ -92,7 +92,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     NODE_ENV: env,
     ENV: env,
     // Join the envs object to be added as envs to the docker container
-    ...(isObj(envs) && envs || {}),
+    ...(isObj(envs) && envs),
   })
 
   // Mount the tap location by default
@@ -110,7 +110,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
   dockerCmd = toMount ? getVolumeMounts(toMount, dockerCmd) : dockerCmd
 
   // Add the location last. This is the location the container will be built from
-  return `${ dockerCmd } ${ getDockerImg(image, container, tap) }`
+  return `${ dockerCmd } ${ getDockerImg(image, container, 'latest') }`
 }
 
 /**
@@ -118,7 +118,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
  * @param {Object} globalConfig - Global config object for the keg-cli
  * @param {Object} params - Data to build the docker command
  * @param {Object} params.cmd - The docker command to run
- * @param {Object} params.name - Name of the docker container to run
+ * @param {Object} params.context - Name of the docker container to run
  * @param {Object} params.env - Environment to run the container in
  * @param {Object} params.envs - Environment Vars to pass to the docker command
  *
@@ -145,7 +145,7 @@ const buildDockerCmd = (globalConfig, params) => {
   } = params
   
   // In no container is set, try to use the context of the docker image to build
-  params.container = (context || container).toUpperCase()
+  params.container = (container || context).toUpperCase()
 
   // Get the default docker arguments
   let dockerCmd = getDockerArgs({
