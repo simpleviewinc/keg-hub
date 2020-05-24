@@ -1,11 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const { isObj } = require('jsutils')
-const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants')
+const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants/constants')
 const { ensureDirSync } = require('tap-resolver/src/helpers')
 const { validateGlobalConfig } = require('./validateGlobalConfig')
 const { writeFile } = require('KegFileSys/fileSys')
 const { __updateGlobalConfig } = require('./getGlobalConfig')
+const { throwExitError } = require('../error/throwExitError')
 
 /**
  * Validate the config is the global config and that then global config path exists
@@ -17,8 +18,10 @@ const { __updateGlobalConfig } = require('./getGlobalConfig')
 const saveGlobalConfig = async config => {
 
   const globalPath = ensureDirSync(GLOBAL_CONFIG_FOLDER)
-  if(!globalPath)
-    throw new Error(`Could not validate global config folder at ${globalPath}!`)
+
+  !globalPath && throwExitError(
+    new Error(`Could not validate global config folder at ${globalPath}!`)
+  )
 
   // Write the temp config file
   validateGlobalConfig(config) &&

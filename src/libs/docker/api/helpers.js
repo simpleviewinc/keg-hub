@@ -101,6 +101,7 @@ const dockerCmd = async ({ opts, asStr, errResponse, skipError }) => {
 
 
 module.exports = {
+  apiError,
   dockerCmd,
   compareItems
 }

@@ -92,7 +92,7 @@ const startDockerSync = async args => {
   const { build, clean, context, detached, tap } = params
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location } = buildLocationContext({
+  const { cmdContext, contextEnvs, location } = await buildLocationContext({
     globalConfig,
     task,
     params,

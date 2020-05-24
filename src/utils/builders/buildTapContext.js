@@ -2,6 +2,9 @@ const { get } = require('jsutils')
 const { generalError, throwNoTapLink } = require('../error')
 const { CONTAINERS } = require('KegConst/docker/build')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
+const { spawnCmd, executeCmd } = require('KegProc')
+const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
+const { getRemoteUrl } = require('KegLibs/git/getRemoteUrl')
 
 /**
  * Checks if the context is tap, and gets the Tap path if needed
@@ -14,7 +17,7 @@ const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
  *
  * @returns {Object} - ENVs for the context, with the CONTEXT_PATH added if needed
  */
-const buildTapContext = ({ globalConfig, cmdContext, tap, envs }) => {
+const buildTapContext = async ({ globalConfig, cmdContext, tap, envs }) => {
   // If the context is not a tap, or the CONTEXT_PATH is already set, just return
   if(cmdContext !== 'tap' || envs.CONTEXT_PATH) return envs
 
@@ -26,12 +29,14 @@ const buildTapContext = ({ globalConfig, cmdContext, tap, envs }) => {
   )
 
   const tapPath = getTapPath(globalConfig, tap)
+  const tapUrl = tapPath && await getRemoteUrl('origin', tapPath)
 
   return !tapPath
     ? throwNoTapLink(globalConfig, tap)
     : {
         ...envs,
-        CONTEXT_PATH: tapPath
+        CONTEXT_PATH: tapPath,
+        ...(tapUrl && { GIT_TAP_URL: tapUrl }),
         // May want to override the container name here
         // This way we can have more then one tap docker container running at a time
         // CONTAINER_NAME: tap

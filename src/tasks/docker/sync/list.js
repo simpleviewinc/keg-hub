@@ -14,7 +14,7 @@ const listDockerSync = async args => {
   const { globalConfig, params, options, task } = args
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = buildLocationContext({
+  const { location, cmdContext, contextEnvs } = await buildLocationContext({
     globalConfig,
     task,
     params,

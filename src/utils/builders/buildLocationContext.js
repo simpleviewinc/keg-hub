@@ -3,37 +3,9 @@ const { getPathFromConfig } = require('../globalConfig')
 const { generalError, throwNoTapLink, throwNoConfigPath } = require('../error')
 const { BUILD, CONTAINERS } = require('KegConst/docker/build')
 const { getTapPath } = require('../globalConfig/getTapPath')
+const { buildCmdContext } = require('./buildCmdContext')
 const { buildTapContext } = require('./buildTapContext')
-
-/**
- * Gets the cmdContext for the task based on the passed in params
- * @function
- * @param {string} context - Context to run the docker container in
- *
- * @returns {Object} - ENVs for the context
- */
-const getCmdContext = ({ globalConfig, params, allowed, defContext }) => {
-  const { context, tap } = params
-
-  // If context is in the allowed, and it's not a tap, then just return the cmdContext
-  if(allowed.indexOf(context) !== -1 && context !== 'tap' && !tap)
-    return { cmdContext: context }
-
-  // Check if the context or the tap, has a tap path
-  // This allow passing the tap in as the context
-  const hasTapPath = getTapPath(globalConfig, context) || (tap && getTapPath(globalConfig, tap))
-
-  // Get the context the command should be run in
-  // If there is a tap path, then use the tap, else use the context || defContext
-  const cmdContext = hasTapPath ? 'tap' : context || defContext
-
-  // Ensure we have a valid context to run the command in
-  !cmdContext &&
-    allowed.indexOf(cmdContext) === -1 &&
-    generalError(`The 'context' argument is required to run this task!`)
-
-  return { cmdContext, tap: tap || context }
-}
+const { getGitKey } = require('../git/getGitKey')
 
 /**
  * Gets the ENVs for a context from the constants
@@ -57,13 +29,13 @@ const getEnvContext = (context) => {
  *
  * @returns {Object} - The location, context, and envs for the context
  */
-const buildLocationContext = ({ envs={}, globalConfig, params, task }) => {
+const buildLocationContext = async ({ envs={}, globalConfig, params, task }) => {
   // Get the folder location of where the docker containers are stored
   const containers = getPathFromConfig(globalConfig, 'containers')
   // If no containers path is set, then throw
   !containers && throwNoConfigPath(globalConfig, 'containers')
 
-  const { cmdContext, tap } = getCmdContext({
+  const { cmdContext, tap } = buildCmdContext({
     params,
     globalConfig,
     allowed: get(task, 'options.context.allowed', CONTAINERS),
@@ -77,7 +49,9 @@ const buildLocationContext = ({ envs={}, globalConfig, params, task }) => {
   // Merge with any passed in envs
   const contextEnvs = {
     ...getEnvContext(cmdContext),
-    ...buildTapContext({ globalConfig, cmdContext, tap, envs })
+    ...( await buildTapContext({ globalConfig, cmdContext, tap, envs })),
+    // Add the git key so we can call github within the image / container
+    GIT_KEY: await getGitKey(globalConfig),
   }
 
   return { location, cmdContext, contextEnvs }

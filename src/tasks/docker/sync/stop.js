@@ -14,7 +14,7 @@ const stopDockerSync = async args => {
   const { globalConfig, task, params } = args
 
   // Get the context data for the command to be run
-  const { location, contextEnvs } = buildLocationContext({
+  const { location, contextEnvs } = await buildLocationContext({
     globalConfig,
     task,
     params

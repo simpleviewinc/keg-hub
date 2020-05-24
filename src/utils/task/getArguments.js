@@ -1,8 +1,16 @@
-const { isArr, isStr, isObj, softFalsy, wordCaps, isStrBool, toBool } = require('jsutils')
 const { Logger } = require('KegLog')
 const { throwRequired } = require('KegUtils/error')
 const { exists, mapEnv } = require('KegUtils/helpers')
-
+const {
+  isArr,
+  isStr,
+  isObj,
+  softFalsy,
+  wordCaps,
+  isStrBool,
+  toBool,
+  reduceObj
+} = require('jsutils')
 
 /**
  * Checks for a required option, and throws if it does not exist
@@ -240,6 +248,24 @@ const loopTaskOptions = (task, taskKeys, options) => {
 }
 
 /**
+ * Adds default values when task is short-circuited
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} mappedArgs - Currently mapped args
+ *
+ * @returns {Object} - Mapped arguments object
+ */
+const addDefaults = (task, mappedArgs) => {
+  return reduceObj(task.options, (name, option, mapped) => {
+    !mapped[name] &&
+      option.default &&
+      ( mapped[name] = option.default )
+
+    return mapped
+  }, mappedArgs)
+}
+
+/**
  * Maps all passed in options to the cmdOpts based on keys
  * @function
  * @param {Array} params.options - items passed from the command line
@@ -260,16 +286,19 @@ const getArguments = ({ options=[], task }) => {
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
   // If not task keys to loop, just return empty
-  if(!taskKeys || !taskKeys.length) return {}
+  if(!taskKeys || !taskKeys.length) return addDefaults(task, {})
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
-  return options.length === 1 && options[0].indexOf('=') === -1
+  return options.length !== 1 || options[0].indexOf('=') !== -1
 
-    // Set it as the first key in the task options object
-    ? { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
-
-    // Otherwise loop over the task keys and map the task options to the passed in options
-    : taskKeys && loopTaskOptions(task, taskKeys, options)
+    // Loop over the task keys and map the task options to the passed in options
+    ? taskKeys && loopTaskOptions(task, taskKeys, options)
+    
+    // Otherwise set it as the first key in the task options object
+    : addDefaults(
+        task,
+        { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
+      )
 
 }
 

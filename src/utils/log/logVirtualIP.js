@@ -1,12 +1,11 @@
-const { getVirtualIP } = require('KegDocker/getVirtualIP')
+const docker = require('KegDocApi')
 const { Logger } = require('KegLog')
 
 /**
  * Helper that Gets and logs the Virtual Machines IP address
  */
 const logVirtualIP = async () => {
-  const vmIP = await getVirtualIP()
-
+  const vmIP = await docker.machine.getIP()
   Logger.empty()
   console.log(
     Logger.colors.cyan(` Application is being served at: `),

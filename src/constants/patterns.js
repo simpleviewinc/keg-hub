@@ -1,10 +1,11 @@
 const { deepFreeze, keyMap } = require('jsutils')
 
+// Pattern matching (RegEx)
 module.exports = deepFreeze({
-  // Pattern matching
-  SPACE_MATCH: / [ ]+/,
-  NEWLINE: '\n',
-  NEWLINES_MATCH: /\n|\r|\r\n/,
-  NEWLINES_ESC: /\\n/g,
   KEY_VAL_MATCH: /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/,
+  NEWLINE: '\n',
+  NEWLINES_ESC: /\\n/g,
+  NEWLINES_MATCH: /\n|\r|\r\n/,
+  SPACE_MATCH: / [ ]+/,
+  WHITESPACE_MATCH: /[\s]+/,
 })

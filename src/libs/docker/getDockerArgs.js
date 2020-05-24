@@ -16,11 +16,14 @@ const { exists } = require('KegUtils/helpers/exists')
  *
  * @returns {string} - Joint docker command arguments
  */
-const getDockerArgs = (cmd, args, container='core', dockerCmd='') => {
-  
-  const cmdOpts = get(DOCKER, [ cmd.toUpperCase(), container.toUpperCase() ])
+const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
+
+  const cmdOpts = get(DOCKER, [ cmd.toUpperCase(), context.toUpperCase() ])
   const checkArgs = { ...cmdOpts.DEFAULTS, ...args }
 
+  // Loop the cmdOpts.Value object and check for any extra arguments to add
+  // Get All values get compared against the checkArgs array
+  // If set to true, then the value from cmdOpts.VALUES is added to the cmd
   return reduceObj(cmdOpts.VALUES, (key, value, joinedArgs) => {
 
     // Ensure both detached and attached are not added to the docker args

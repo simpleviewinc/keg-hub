@@ -1,7 +1,6 @@
 const { isObj } = require('jsutils')
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount, getVolumeMounts } = require('./buildDockerMounts')
-const { getBuildArgs } = require('./getBuildArgs')
 const { getDockerImg } = require('./getDockerImg')
 const {
   addContainerName,
@@ -15,7 +14,7 @@ const {
  * @param {Object} globalConfig - Global config object for the keg-cli
  * @param {Object} params - Data to build the docker command
  * @param {string} params.dockerCmd - docker command being built
- * @param {string} params.name - Name of the image to be built
+ * @param {string} params.context - Name of the image to be built
  * @param {Array} params.tags - Tag names for the image being built
  *
  * @returns {string} - Built docker build command
@@ -24,7 +23,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   const {
     container,
     location,
-    name,
+    context,
     branch,
     options=[],
     version
@@ -34,10 +33,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   const image = getDockerImg(params.image, container)
   
   // Add any options if needed
-  dockerCmd = getBuildTags({ dockerCmd, container, image, name, options, version })
-
-  // Add the build args for the github key and tap git url
-  dockerCmd = await getBuildArgs(globalConfig, { name, branch, dockerCmd, container })
+  dockerCmd = getBuildTags({ dockerCmd, container, image, context, options, version })
 
   // Add the location last. This is the location the container will be built from
   return location
@@ -128,7 +124,7 @@ const buildDockerCmd = (globalConfig, params) => {
     image,
     location,
     mounts,
-    name,
+    context,
     container,
     platform,
     tags,
@@ -137,16 +133,16 @@ const buildDockerCmd = (globalConfig, params) => {
     ...dockerOpts
   } = params
   
-  // In no container is set, try to use the name of the docker image to build
-  params.container = (container || name).toUpperCase()
+  // In no container is set, try to use the context of the docker image to build
+  params.container = (context || container).toUpperCase()
 
   // Get the default docker arguments
-  let dockerCmd = getDockerArgs(
+  let dockerCmd = getDockerArgs({
     cmd,
-    dockerOpts,
-    params.container,
-    `docker ${cmd} ${docker}`.trim()
-  )
+    context,
+    args: dockerOpts,
+    dockerCmd: `docker ${cmd} ${docker}`.trim()
+  })
 
   // Add any tags if needed
   return cmd === 'build'

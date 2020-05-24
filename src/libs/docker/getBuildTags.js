@@ -10,13 +10,15 @@ const { DOCKER: { BUILD } } = require('KegConst')
  *
  * @returns {string} - Formatted string of tags for docker
  */
-const getBuildTags = ({ dockerCmd='', container, image, name, options, version='' }) => {
+const getBuildTags = ({ dockerCmd='', version='', ...params }) => {
+  const { container, context, image, options, } = params
 
   // Try to ensure we have a version for the build
-  version = version || container && get(BUILD, `${ container.toUpperCase() }.ENV.VERSION`, '')
+  version = version ||
+    ( container && get(BUILD, `${ context.toUpperCase() }.ENV.VERSION`, '') )
 
   // try to ensure we have an image name for the build
-  const nameTag = image || name
+  const nameTag = image || context
 
   // Loop the options and look for any tags
   const tags = isArr(options) && options
