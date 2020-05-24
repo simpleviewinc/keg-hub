@@ -22,11 +22,17 @@ const mountPaths = {
   }
 }
 
+const locationContext = keyMap([
+  'repo',
+  'containers'
+], true)
+
 module.exports = deepFreeze({
   cliRootDir,
   containers: Object.keys(mountPaths),
   configEnv: process.env.NODE_ENV || 'local',
   containersPath: path.join(cliRootDir, 'containers'),
+  locationContext,
   mountPaths
 })
 

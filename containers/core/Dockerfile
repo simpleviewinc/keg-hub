@@ -7,7 +7,13 @@ WORKDIR /keg
 # URL of the keg-core to clone from github
 ARG GIT_CORE_URL=INITIAL
 
-# Pull down the tap locally
+# Update git calls to github to include the key so private repos can be pulled
+RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
+      git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+    fi
+
+
+# Pull down keg-core locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
       echo "Cloneing keg-core repo from github..."; \
       git clone $GIT_CORE_URL ./$DOC_TAP_PATH; \

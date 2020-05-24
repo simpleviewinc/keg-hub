@@ -3,6 +3,7 @@ const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { logVirtualIP } = require('KegUtils/log')
 const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd, executeCmd } = require('KegProc')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Builds a docker container so it can be run
@@ -55,6 +56,7 @@ module.exports = {
     action: dockerBuild,
     description: `Runs docker build command for a container`,
     example: 'keg docker build <options>',
+    location_context: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
       env: {
         description: 'Environment to start the Docker container in',

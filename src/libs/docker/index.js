@@ -3,6 +3,8 @@ module.exports = {
   ...require('./compose'),
   ...require('./buildDockerCmd'),
   ...require('./buildDockerMounts'),
+  ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getDockerArgs')
+  
 }

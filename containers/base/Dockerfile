@@ -11,15 +11,15 @@ RUN yarn global add expo-cli
 # Which will override the default initial value, and allow updating git
 ARG GIT_KEY=INITIAL
 
-# Add the GIT_CLI_URL arg, and set value to initial
-# This expects --build-arg GIT_CLI_URL=key_value to be set
-# URL of the tap to clone from github
-ARG GIT_CLI_URL=INITIAL
-
 # Update git calls to github to include the key so private repos can be pulled
 RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
       git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
     fi
+
+# Add the GIT_CLI_URL arg, and set value to initial
+# This expects --build-arg GIT_CLI_URL=key_value to be set
+# URL of the tap to clone from github
+ARG GIT_CLI_URL=INITIAL
 
 # Pull down the cli locallay
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \

@@ -2,6 +2,7 @@ const { isObj } = require('jsutils')
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount, getVolumeMounts } = require('./buildDockerMounts')
 const { getDockerImg } = require('./getDockerImg')
+const { getBuildArgs } = require('./getBuildArgs')
 const {
   addContainerName,
   addContainerEnv,
@@ -26,6 +27,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
     context,
     branch,
     options=[],
+    tap,
     version
   } = params
 
@@ -34,6 +36,15 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   
   // Add any options if needed
   dockerCmd = getBuildTags({ dockerCmd, container, image, context, options, version })
+
+  // Add the build args for the github key and tap git url
+  dockerCmd = await getBuildArgs(globalConfig, {
+    branch,
+    context,
+    dockerCmd,
+    location,
+    tap
+  })
 
   // Add the location last. This is the location the container will be built from
   return location

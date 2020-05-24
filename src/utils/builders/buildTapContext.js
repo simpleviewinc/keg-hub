@@ -19,7 +19,7 @@ const { getRemoteUrl } = require('KegLibs/git/getRemoteUrl')
  */
 const buildTapContext = async ({ globalConfig, cmdContext, tap, envs }) => {
   // If the context is not a tap, or the CONTEXT_PATH is already set, just return
-  if(cmdContext !== 'tap' || envs.CONTEXT_PATH) return envs
+  if(cmdContext !== 'tap') return envs
 
   // Should only get here if we are trying to run a tap in docker
   // So at this point tap should be the name of the linked tap to run
@@ -29,7 +29,7 @@ const buildTapContext = async ({ globalConfig, cmdContext, tap, envs }) => {
   )
 
   const tapPath = getTapPath(globalConfig, tap)
-  const tapUrl = tapPath && await getRemoteUrl('origin', tapPath)
+  const tapUrl = tapPath && await getRemoteUrl(tapPath)
 
   return !tapPath
     ? throwNoTapLink(globalConfig, tap)
