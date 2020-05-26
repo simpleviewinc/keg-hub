@@ -207,7 +207,6 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
     }, null)
 }
 
-
 /**
  * Finds the value to the passed in keg argument
  * @function
@@ -254,7 +253,15 @@ const findArgument = ({ key, meta={}, index, ...params }) => {
 
 }
 
-
+/**
+ * Loops the task options looking to a match in the passed in options array
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} taskKeys - Keg names of the task options
+ * @param {Array} options - items passed from the command line
+ *
+ * @returns {Object} - Mapped arguments object
+ */
 const loopTaskOptions = (task, taskKeys, options) => {
   return taskKeys.reduce((args, key, index) => {
 
@@ -291,7 +298,7 @@ const loopTaskOptions = (task, taskKeys, options) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const addDefaults = (task, mappedArgs) => {
+const addDefaults = (task, mappedArgs={}) => {
   return reduceObj(task.options, (name, option, mapped) => {
     !mapped[name] &&
       option.default &&
@@ -306,13 +313,14 @@ const addDefaults = (task, mappedArgs) => {
  * @function
  * @param {Array} params.options - items passed from the command line
  * @param {Object} params.task - Task Model of current task being run
- * @param {Object} params.task.options - Options accepted by the command being run
+ * @param {Object} params.task.options - Options accepted by the task being run
  *
  * @returns {Object} - Mapped arguments object
  */
 const getArguments = ({ options=[], task }) => {
-  // If no options to parse, just return empty object
-  if(!options.length) return {}
+
+  // If no options to parse, Add the defaults and return it
+  if(!options.length) return addDefaults(task)
 
   // Make copy of options, so we don't affect the original
   const optsCopy = Array.from(options)
@@ -322,7 +330,7 @@ const getArguments = ({ options=[], task }) => {
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
   // If not task keys to loop, just return empty
-  if(!taskKeys || !taskKeys.length) return addDefaults(task, {})
+  if(!taskKeys || !taskKeys.length) return addDefaults(task)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
   return options.length !== 1 || options[0].indexOf('=') !== -1

@@ -33,7 +33,7 @@ const logData = (logger, type) => {
 }
 
 class Log {
-  
+
   constructor(props){
 
     this.colorMap = {
@@ -65,21 +65,26 @@ class Log {
 
   }
 
-  color = (colorName, data) => {
-    return colors[this.colorMap[colorName] || colorName](data)
-  }
+  /**
+  * Helper create string in the passed in color
+  * @returns {string} colorName - name of the color to use
+  * @returns {string} data - data to set color for
+  */
+  color = (colorName, data) => (colors[this.colorMap[colorName] || colorName](data))
 
-  print = (...data) => {
-    console.log(...data)
-  }
+  /**
+  * Helper to print the passed in data
+  * @returns {void}
+  */
+  print = (...data) => console.log(...data)
 
   /**
   * Helper to change the default colors
   * @returns {void}
   */
-  setColors(colorMap){
+  setColors = colorMap => (
     isObj(colorMap) && (this.colorMap = { ...this.colorMap, ...colorMap })
-  }
+  )
 
   /**
   * Helper to log an empty line
@@ -96,24 +101,44 @@ class Log {
   header = title => {
     const middle = `              ${title}              `
 
-    const line = middle.split('').reduce((line, item, index) => {
-      line+=' '
+    const line = middle.split('')
+      .reduce((line, item, index) => (line+=' '))
 
-      return line
-    })
+    this.empty(``)
+    this.print(colors.underline.brightGreen(line))
+    this.print(line)
+    this.print(colors.brightGreen(middle))
+    this.print(colors.underline.brightGreen(line))
+    this.empty(``)
+  }
 
-    console.log(``)
-    console.log(colors.underline.brightGreen(line))
-    console.log(line)
-    console.log(colors.brightGreen(middle))
-    console.log(colors.underline.brightGreen(line))
-    console.log(``)
+  /**
+  * Helper to log a title and message in separate colors
+  * @param {string} title - Prints the string in cyan
+  * @param {string} message - Prints the string in white
+  *
+  * @returns {void}
+  */
+  message = (title, message) => {
+    const toLog = []
+    // Check that the title and message exist, then add to the toLog array
+    title && toLog.push(Logger.colors.brightCyan(title))
+    message && toLog.push(Logger.colors.brightWhite(message))
+
+    toLog.length && this.print(...toLog)
   }
 
 }
 
-// Create a Log instance, so we have a singleton through out the application
+/**
+* Create a Log instance, so we have a singleton through out the application
+*/
 const Logger = new Log()
+
+/**
+* Helper to log the passed in data
+*/
+Logger.log = Logger.print
 
 module.exports = {
   Logger

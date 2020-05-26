@@ -47,7 +47,7 @@ keg_run_from_core(){
 
   # Set the default yarn command to start
   if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="start"
+    KEG_EXEC_CMD="web"
   fi
 
   keg_message "Running command yarn $KEG_EXEC_CMD"

@@ -1,6 +1,7 @@
 const { get, checkCall } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
+const { confirmExec } = require('KegUtils/helpers')
 const { BUILD } = require('KegConst/docker/build')
 
 /**
@@ -16,37 +17,51 @@ const destroyDockerSync = async args => {
   const { globalConfig, params, options, task, tasks } = args
   const { context } = params
 
-  // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = await buildLocationContext({
-    globalConfig,
-    task,
-    params,
-    // Set a default context path as it's not needed for cleaning up a tap container
-    // And it will throw if not set for a tap
-    envs: { CONTEXT_PATH: 'INITIAL' }
+  confirmExec({
+    confirm: `This will remove all docker items related to ${ context }. Are you sure?`,
+    success: `Finished running 'docker-sync ' command`,
+    cancel: `Command 'keg docker sync stop' has been cancelled!`,
+    preConfirm: get(globalConfig, 'settings.docker.preConfirm') === false ? false : true,
+    execute: async () => {
+
+      // Get the context data for the command to be run
+      const { location, cmdContext, contextEnvs } = await buildLocationContext({
+        globalConfig,
+        task,
+        params,
+        // Set a default context path as it's not needed for cleaning up a tap container
+        // And it will throw if not set for a tap
+        envs: { CONTEXT_PATH: 'INITIAL' }
+      })
+
+      // Remove the container
+      // TODO: Update to use the docker API lib
+      const container = cmdContext && get(BUILD, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
+      container && await spawnCmd(`docker container rm ${ container }`)
+
+      // Remove the docker-sync container volumes
+      // Must come after removing the container
+      await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
+
+      // Get the image remove task action and call it
+      // Helpful because it contains the logic to pull the image id by name
+      // TODO: Update to use the docker API lib
+      const removeImgTask = get(tasks, 'docker.tasks.image.tasks.remove.action')
+      await checkCall(removeImgTask, {
+        skipThrow: true,
+        params: {
+          name: cmdContext && get(BUILD, `${cmdContext.toUpperCase()}.ENV.IMAGE`),
+          force: true
+        }
+      })
+
+      // Stop the docker-sync daemon
+      await spawnCmd(`docker-sync stop`, { options: { env: contextEnvs }}, location)
+
+    },
   })
 
-  // Remove the container
-  const container = cmdContext && get(BUILD, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
-  container && await spawnCmd(`docker container rm ${ container }`)
 
-  // Remove the docker-sync container volumes
-  // Must come after removing the container
-  await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
-
-  // Get the image remove task action and call it
-  // Helpful because it contains the logic to pull the image id by name
-  const removeImgTask = get(tasks, 'docker.tasks.image.tasks.remove.action')
-  await checkCall(removeImgTask, {
-    skipThrow: true,
-    params: {
-      name: cmdContext && get(BUILD, `${cmdContext.toUpperCase()}.ENV.IMAGE`),
-      force: true
-    }
-  })
-
-  // Stop the docker-sync daemon
-  await spawnCmd(`docker-sync stop`, { options: { env: contextEnvs }}, location)
 
 }
 

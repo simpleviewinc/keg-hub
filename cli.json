@@ -20,5 +20,10 @@
         }
       }
     }
+  },
+  "settings": {
+    "docker": {
+      "preConfirm": true
+    }
   }
 }

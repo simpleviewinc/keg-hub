@@ -3,11 +3,12 @@ const { getCoreVersion } = require('KegUtils/getters')
 const { logVirtualIP } = require('KegUtils/log')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { throwNoAction, throwNoTask } = require('KegUtils/error')
+const { buildLocationContext } = require('KegUtils/builders')
 const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
 
-/**
+/** --- TODO: Update this to use the docker API lib ---
  * Starts a docker container for a tap
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
@@ -15,27 +16,22 @@ const { DOCKER } = require('KegConst')
  *
  * @returns {void}
  */
-const startContainer = async ({ globalConfig, params }) => {
-  const { tap, env, docker, mounts } = params
+const destroyContainer = async ({ globalConfig, params, task }) => {
 
-  const location = getTapPath(globalConfig, tap)
-  // TODO: update version to come from docker BUILD constants
-  const version = getCoreVersion(globalConfig)
-
-  const dockerCmd = buildDockerCmd(globalConfig, {
-    tap,
-    env,
-    mounts,
-    location,
-    docker,
-    name: 'tap',
-    cmd: `run`,
-    container: 'TAP',
+  // Get the context data for the command to be run
+  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+    globalConfig,
+    task,
+    params,
+    // Set a default context path as it's not needed for cleaning up a tap container
+    // And it will throw if not set for a tap
+    envs: { CONTEXT_PATH: 'INITIAL' }
   })
 
-  await logVirtualIP()
+  // Remove the container
+  const container = cmdContext && get(DOCKER, `BUILD.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
+  container && await spawnCmd(`docker container rm ${ container }`)
 
-  await spawnCmd(dockerCmd, location)
 }
 
 /**
@@ -48,65 +44,46 @@ const startContainer = async ({ globalConfig, params }) => {
  *
  * @returns {void}
  */
-const startTap = async (args) => {
+const destroyTap = async (args) => {
   // Check if we are running the container with just docker
-  if(get(args, 'params.service') === 'container') return startContainer(args)
+  if(get(args, 'params.service') === 'container') return destroyContainer(args)
   
   const { command, globalConfig, options, params, tasks } = args
   const { tap } = params
 
   // Get the docker-sync start tasks
-  const syncStartTask = get(tasks, 'docker.tasks.sync.tasks.start')
+  const destroyTask = get(tasks, 'docker.tasks.sync.tasks.destroy')
 
   // Check that the sync start task exists
-  return !isObj(syncStartTask)
+  return !isObj(destroyTask)
     ? throwNoTask(args)
     // Check the action for the sync start exists
-    : !isFunc(syncStartTask.action)
+    : !isFunc(destroyTask.action)
       ? throwNoAction(args)
       // Run the docker-sync start task for the tap
-      : checkCall(syncStartTask.action, {
+      : checkCall(destroyTask.action, {
           ...args,
           command: 'docker',
           params: { ...args.params, tap, context: 'tap' },
-          task: syncStartTask,
+          task: destroyTask,
         })
 
 }
 
 module.exports = {
-  name: 'start',
-  alias: [ 'st', 'run' ],
-  action: startTap,
-  description: `Runs a tap in a docker container`,
-  example: 'keg tap start <options>',
+  name: 'destroy',
+  alias: [ 'dest', 'des' ],
+  action: destroyTap,
+  description: `Destroys the docker items for a tap`,
+  example: 'keg tap destroy <options>',
   options: {
     tap: { 
-      description: 'Name of the tap to run. Must be a tap linked in the global config',
+      description: 'Name of the tap to destroy. Must be a tap linked in the global config',
       required: true,
-    },
-    build: {
-      description: 'Removes and rebuilds the docker container before running the tap',
-      default: true
-    },
-    clean: {
-      description: 'Cleans docker-sync before running the tap',
-      example: 'keg tap --clean false',
-      default: true
-    },
-    env: {
-      description: 'Environment to start the Docker service in',
-      default: 'development',
-    },
-    docker: {
-      description: `Extra docker arguments to pass to the 'docker run command'`
-    },
-    mounts: {
-      description: `List of key names or folder paths to mount into the docker container`
     },
     service: {
       allowed: [ 'sync', 'container' ],
-      description: 'What docker service to build the tap with. Must be on of ( sync || container )',
+      description: 'What docker service to destroy. Must be on of ( sync || container )',
       default: 'sync'
     },
   }

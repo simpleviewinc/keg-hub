@@ -24,11 +24,8 @@ const getExtraArgs = extra => {
  */
 const doSpawnCmd = (...args) => {
   const extra = getExtraArgs(args[1])
-  console.log(
-    Logger.colors.brightCyan(`Running command:`),
-    Logger.colors.brightWhite(`${args[0]}${extra}`)
-  )
-  
+  Logger.message(`Running command: `, `${args[0]}${extra}`)
+
   return args.length > 1
     ? spawnCmd(...args)
     : spawnCmd(...args, process.cwd())

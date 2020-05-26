@@ -1,5 +1,4 @@
 const { Logger } = require('KegLog')
-const { printInfo } = require('../log')
 
 /**
  * Formats and throws an error when a required argument is not included
@@ -14,10 +13,10 @@ const throwRequired = (task, key, meta) => {
 
   Logger.error(`\n Task '${task.name}' ${requireType} '${key}' argument.`)
 
-  meta.alias && printInfo(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
-  meta.description && printInfo(`  * Description:`, meta.description)
-  meta.allowed && printInfo(`  * Allowed Values:`, meta.allowed.join(' | '))
-  meta.example && printInfo(`  * Example:`, meta.example)
+  meta.alias && Logger.message(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
+  meta.description && Logger.message(`  * Description:`, meta.description)
+  meta.allowed && Logger.message(`  * Allowed Values:`, meta.allowed.join(' | '))
+  meta.example && Logger.message(`  * Example:`, meta.example)
 
   Logger.empty()
 

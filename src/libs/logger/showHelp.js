@@ -33,7 +33,7 @@ const showHelpHeader = (header, subHeader) => {
 
   Logger.header(header)
   subHeader && console.log(colors.brightBlue(subHeader))
-  console.log(``)
+  Logger.empty()
 }
 
 /**
@@ -66,7 +66,7 @@ const showSubTasks = (task, dblSpacer) => {
   if(!isObj(task) || !isObj(task.tasks) || !Object.keys(task.tasks).length)
     return console.log(``)
 
-  console.log(``)
+  Logger.empty()
   console.log(colors.brightBlue(`${dblSpacer}  Sub Commands:`))
   showAllHelp(task.tasks, false, `${dblSpacer}`)
 
@@ -94,16 +94,13 @@ const showTaskInfo = (task, infoSpacer) => {
  * @returns {void}
  */
 const showTaskInfoItem = (name, desc, infoSpacer) => {
-  desc && console.log(
-    colors.brightCyan(`${infoSpacer}${name}:`),
-    colors.brightWhite(desc)
-  )
+  desc && Logger.message(`${infoSpacer}${name}:`, desc)
 }
 
 const showTaskOptions = (task, infoSpacer, dblSpacer) => {
   if(!task.options) return
 
-  console.log('')
+  Logger.empty()
   console.log(colors.brightBlue(`${infoSpacer}Options:`))
   mapObj(task.options, (name, meta) => {
     const { description, enforced, required, alts } = isStr(meta)
@@ -143,7 +140,7 @@ const showAllHelp = (tasks, header, space) => {
         )
     )
 
-  console.log(``)
+  Logger.empty()
 }
 
 
@@ -175,7 +172,7 @@ const showTaskHelp = (task, header, space) => {
 const showHelp = (tasks, task=false) => {
   task ? showTaskHelp(task) : showAllHelp(tasks)
 
-  console.log(``)
+  Logger.empty()
 }
 
 module.exports = {
