@@ -29,7 +29,7 @@ const getLocation = (globalConfig, task, context, tap) => {
   let locContext = 'containers'
 
   // Check if context is a Tap
-  if(context === 'tap' && tap){
+  if(repoContext && context === 'tap' && tap){
     locContext = tap
     pathMethod = getTapPath
   }
