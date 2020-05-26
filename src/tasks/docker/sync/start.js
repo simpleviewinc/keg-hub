@@ -136,12 +136,12 @@ module.exports = {
     },
     build: {
       description: 'Rebuilds the docker container for the passed in context!',
-      default: true
+      default: false
     },
     clean: {
       description: 'Cleans docker-sync before running the docker-sync command',
       example: 'keg docker sync start --clean false',
-      default: true
+      default: false
     },
     command: {
       alias: [ 'cmd' ],

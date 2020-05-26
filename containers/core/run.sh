@@ -2,7 +2,7 @@
 
 # Default path ENVs
 CLI_PATH=/keg/keg-cli
-CORE_PATH=/keg/tap/node_modules/keg-core
+CORE_PATH=/keg/keg-core
 
 keg_message(){
   echo $"[ KEG-CLI ] $1" >&2

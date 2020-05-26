@@ -8,7 +8,8 @@ const { findTask, executeTask } = require('KegUtils/task')
  */
 const dockerSubTasks = {
   dc: 'container',
-  di: 'image'
+  di: 'image',
+  ds: 'sync'
 }
 
 /**
@@ -58,7 +59,7 @@ const dockerTask = args => {
 module.exports = {
   docker: {
     name: 'docker',
-    alias: [ 'doc', 'd', 'dc', 'di' ],
+    alias: [ 'doc', 'd', 'dc', 'di', 'ds' ],
     tasks: {
       ...require('./build'),
       ...require('./compose'),

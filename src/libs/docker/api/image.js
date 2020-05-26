@@ -69,7 +69,35 @@ const exists = async (compare, doCompare) => {
     images.some(image => compareItems(image, compare, doCompare, [ 'imageId', 'repository' ]))
 }
 
+/**
+ * Removes all un-tagged and un-named images
+ * @function
+ * @param {string} opts - Extra options to pass to the docker image rm command
+ *
+ * @returns {boolean} - If the images can be removed
+ */
+const clean = async (opts='') => {
+  const IMG_NONE = `<none>`
+  
+    // Get all current images
+  const images = await list({ errResponse: [] })
+
+  const toRemove = images.reduce((toRemove, image) => {
+    (image.repository === IMG_NONE || image.tag === IMG_NONE) &&
+      ( toRemove += ` ${ image.imageId }`)
+
+    return toRemove
+  }, '').trim()
+  
+  return toRemove && dockerCmd({
+    asStr: true,
+    opts: ['image', 'rm'].concat([ toRemove, opts ])
+  })
+
+}
+
 module.exports = {
+  clean,
   exists,
   get,
   list,

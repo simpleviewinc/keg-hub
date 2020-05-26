@@ -19,40 +19,34 @@ const getEnvContext = (context) => {
   return get(BUILD, `${ context.toUpperCase() }.ENV`, {})
 }
 
-
-/**
- * Finds the location to be used when running the docker command
- * If using a tap, it uses the taps local repo; otherwise the containers folder
- * docker-sync / docker-compose command
- *    Need their context to be in the "keg-cli/containers" folder
- * docker build / docker run
- *    Need their context to be in the "local tap folder"
- * @function
- * @param {Object} globalConfig - Global config object for the keg-cli
- * @param {Object} task - Current task being run
- * @param {string} context - Context to run the docker container in
- * @param {Object} tap - Name of the linked tap to be used as the context
- *
- * @returns {Object} - The location, context, and envs for the context
- */
 const getLocation = (globalConfig, task, context, tap) => {
-  const hasTap = Boolean(context === 'tap' && tap)
-  const repoContext = Boolean(task.location_context === LOCATION_CONTEXT.REPO)
 
-  // Check if using a tap, and if the command requires a repo context
-  if(repoContext && hasTap) return getTapPath(globalConfig, tap)
+  const hasTap = Boolean(context === 'tap' && tap)
+  const isCore = Boolean(context === 'core' && task.name === 'build')
+  const repoContext = Boolean(task.location_context === LOCATION_CONTEXT.REPO)
   
+  let pathMethod = getPathFromConfig
+  let locContext = 'containers'
+
+  // Check if context is a Tap
+  if(context === 'tap' && tap){
+    locContext = tap
+    pathMethod = getTapPath
+  }
+  // Check if we are building keg-core
+  else if(context === 'core' && task.name === 'build') locContext = 'core'
+
+  // Get the location based on the pathMethod && locContext
+  let location = pathMethod(globalConfig, locContext)
+
   // For the docker-sync / docker-compose command
   // Need their context to be in the keg-cli/containers folder
-  
-  // Get the folder location of where the docker containers are stored
-  const containers = getPathFromConfig(globalConfig, 'containers')
+  locContext === 'containers' &&
+    location &&
+    ( location = `${ location }/${ context }` )
 
-  // If no containers path is set, then throw
-  !containers && throwNoConfigPath(globalConfig, 'containers')
-
-  // Return the path from containers  and context
-  return  `${ containers }/${ context }`
+  // Return the location, or throw cause now path could be found
+  return location || throwNoConfigPath(globalConfig, locContext)
 
 }
 

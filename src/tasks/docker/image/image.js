@@ -44,6 +44,7 @@ module.exports = {
     alias: [ 'img', 'i' ],
     action: dockerImage,
     tasks: {
+      ...require('./clean'),
       ...require('./remove'),
     },
     description: `Runs docker image command`,
