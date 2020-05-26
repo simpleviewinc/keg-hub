@@ -46,6 +46,7 @@ module.exports = {
     tasks: {
       ...require('./clean'),
       ...require('./remove'),
+      ...require('./run'),
     },
     description: `Runs docker image command`,
     example: 'keg docker image <options>',
