@@ -29,7 +29,8 @@ COPY package.json /keg/keg-core/package.json
 COPY yarn.lock /keg/keg-core/yarn.lock
 
 # Install the dependecies
-RUN yarn install
+RUN yarn install --frozen-lockfile --no-cache
+RUN yarn add ansi-html
 
 EXPOSE 80
 
