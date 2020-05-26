@@ -42,7 +42,7 @@ module.exports = {
     example: 'keg docker image remove <options>',
     options: {
       name: {
-        description: 'Name of the container to run the command on',
+        description: 'Name of the image to remove',
         example: 'keg docker image remove --name core',
       },
       force: {
