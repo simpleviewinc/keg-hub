@@ -30,6 +30,11 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
     if(key === 'detached' && args.attached) return joinedArgs
     if(key === 'attached' && args.detached) return joinedArgs
     
+    // Check if cache is explicitly set to false
+    // And if so, turn off caching for builds
+    if(key === 'nocache' && args.cache === false)
+      return `${joinedArgs} ${ value }`.trim()
+
     // Get the key value from the args object
     const argVal = checkArgs[key]
 

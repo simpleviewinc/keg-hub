@@ -7,9 +7,11 @@ const { loadENV } = require('KegFileSys/env')
 const DEFAULT = {
   VALUES: {
     clean: '--force-rm',
+    nocache: '--no-cache'
   },
   DEFAULTS: {
     clean: true,
+    nocache: false,
     file: true,
   },
   ARGS: keyMap([

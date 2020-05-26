@@ -1,4 +1,4 @@
-const { camelCase, isArr, isFunc, isStr, toStr } = require('jsutils')
+const { camelCase, snakeCase, isArr, isFunc, isStr, toStr } = require('jsutils')
 const { executeCmd } = require('KegProc')
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
@@ -38,12 +38,31 @@ const apiError = (error, errResponse, skipError) => {
  *
  * @returns {Array} - JSON array of items
  */
-const itemHeaderMap = data => {
+const itemHeaderMap = (data, format) => {
+  
+  if(format === 'json'){
+    return data.split('\n')
+      .reduce((items, item) => {
+        if(!item.trim()) return items
+
+        try {
+          const parsed = JSON.parse(item.replace(/\\"/g, ''))
+          const built = {}
+          Object.keys(parsed).map(key => built[camelCase(snakeCase(key))] = parsed[key])
+          return items.concat([ built ])
+        }
+        catch(e){
+          return items
+        }
+
+      }, [])
+  }
+
   const lines = data.toLowerCase().split(NEWLINES_MATCH)
   const headers = lines.shift().split(SPACE_MATCH)
 
-  return lines.reduce((mapped, line) => (
-    !line.trim()
+  return lines.reduce((mapped, line) => {
+    return !line.trim()
       ? mapped
       : mapped.concat([
           line
@@ -54,7 +73,8 @@ const itemHeaderMap = data => {
               return item
             }, {})
         ])
-  ), [])
+
+  }, [])
 
 }
 
@@ -72,7 +92,7 @@ const compareItems = (item, compare, doCompare, defCompareKeys=[]) => {
   return isStr(doCompare)
     ? item[doCompare] === compare
     : isFunc(doCompare)
-      ? doCompare(item, toCompare)
+      ? doCompare(item, compare)
       : defCompareKeys.some(key => item[key] === compare)
 }
 
@@ -87,16 +107,18 @@ const compareItems = (item, compare, doCompare, defCompareKeys=[]) => {
  *
  * @returns {Array|string} - JSON array of items || stdout from docker cli call
  */
-const dockerCmd = async ({ opts, asStr, errResponse, skipError }) => {
+const dockerCmd = async ({ opts, asStr, errResponse, skipError, format='' }) => {
+  const useFormat = format === 'json' ? `--format "{{json . }}"` : format
+
   const { error, data } = await executeCmd(
-    `docker ${ isArr(opts) ? opts.join(' ') : toStr(opts) }`.trim()
+    `docker ${ isArr(opts) ? opts.join(' ') : toStr(opts) } ${ useFormat }`.trim()
   )
 
   return error
     ? apiError(error, errResponse, skipError)
     : asStr
       ? data
-      : itemHeaderMap(data)
+      : itemHeaderMap(data, format)
 }
 
 

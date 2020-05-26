@@ -1,4 +1,4 @@
-const { dockerCmd} = require('./helpers')
+const { dockerCmd, compareItems } = require('./helpers')
 const { isArr, toStr, isStr } = require('jsutils')
 
 /**
@@ -43,13 +43,19 @@ const remove = (toRemove, skipError=true, errResponse=false) => {
  *
  * @returns {boolean} - Based on if the container exists
  */
-const exists = async (compare, doCompare) => {
+const exists = async (compare, doCompare, format) => {
   // Get all current containers
-  const containers = await list({ errResponse: [] })
+  const containers = await list({ errResponse: [], format })
+
   // If we have containers, try to find the one matching the passed in argument
   return containers &&
     containers.length &&
-    containers.some(container => compareItems(container, compare, doCompare, [ 'containerId', 'names' ]))
+    containers.some(container => compareItems(
+      container,
+      compare,
+      doCompare,
+      [ 'containerId', 'names' ]
+    ))
 }
 
 module.exports = {

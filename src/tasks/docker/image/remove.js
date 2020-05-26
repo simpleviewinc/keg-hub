@@ -4,6 +4,7 @@ const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { BUILD } = require('KegConst/docker/build')
 const docker = require('KegDocApi')
+const { Logger } = require('KegLog')
 
 /**
  * Run a docker image command
@@ -27,9 +28,13 @@ const removeDockerImage = async args => {
   const image = await docker.image.get(imgName)
 
   // Ensure we have the image meta data, and try to remove by imageId
-  ;!image || !image.imageId
-    ? skipThrow !== true && generalError(`The docker image "${ imgName }" does not exist!`)
-    : await docker.image.remove(`${ image.imageId } ${ force ? `--force` : '' }`.trim())
+  if(!image || !image.imageId){
+    skipThrow !== true && generalError(`The docker image "${ imgName }" does not exist!`)
+    return Logger.error(`Docker image ${imgName} could not be removed!`)
+  }
+
+  const res = await docker.image.remove(`${ image.imageId } ${ force ? `--force` : '' }`.trim())
+  // TODO: Check image remove response and show / log outcome of remove command
 
 }
 

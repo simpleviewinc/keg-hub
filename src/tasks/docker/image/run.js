@@ -31,8 +31,16 @@ const runDockerImage = async args => {
     params,
   })
 
+  // TODO: IF exists, then ask user to either remove running container or rename the new container
+  const imgContainer = `img-${imgName}`
+  const exists = await docker.container.exists(
+    imgContainer,
+    container => container.names === imgContainer,
+    'json'
+  )
+
   await spawnCmd(
-    `docker run -it ${imgName} ${entry}`,
+    `docker run --name img-${imgName} -it ${imgName} ${entry}`,
     { options: { env: contextEnvs }},
     location
   )

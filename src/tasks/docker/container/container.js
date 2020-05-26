@@ -22,6 +22,18 @@ const dockerContainer = async args => {
   let runCmd
 
   switch(cmd){
+    case 'purge':
+    case 'prune': {
+      runCmd = `prune`
+      break
+    }
+    // Kill, then remove the container
+    case 'destroy':
+    case 'des': {
+      !container && generalError(`The docker ${cmd} command requires a name argument!`)
+      runCmd = `kill ${container}; docker container rm ${container}`
+      break
+    }
     case 'kill': {
       !container && generalError(`The docker ${cmd} command requires a name argument!`)
       runCmd = `kill ${container}`
@@ -39,7 +51,7 @@ const dockerContainer = async args => {
   }
 
   force && (runCmd += ` --force`)
-  spawnCmd(`docker container ${ runCmd }`)
+  await spawnCmd(`docker container ${ runCmd }`)
 
 }
 
