@@ -32,6 +32,7 @@ module.exports = deepFreeze({
   cliRootDir,
   images: Object.keys(mountPaths),
   configEnv: process.env.NODE_ENV || 'local',
+  // TODO: This should from from loaded default ENV
   containersPath: path.join(cliRootDir, 'containers'),
   defaultEnv: getDefaultEnv(cliRootDir),
   locationContext,

@@ -1,5 +1,5 @@
 const { deepFreeze, deepMerge } = require('jsutils')
-const { containers } = require('./values')
+const { images } = require('./values')
 
 const DEFAULT = {
   VALUES: {
@@ -17,8 +17,8 @@ const DEFAULT = {
 }
 
 module.exports = deepFreeze({
-  RUN: containers.reduce((data, container) => {
-    data[container.toUpperCase()] = deepMerge(DEFAULT, {})
+  RUN: images.reduce((data, image) => {
+    data[image.toUpperCase()] = deepMerge(DEFAULT, {})
 
     return data
   }, {})

@@ -1,5 +1,5 @@
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { cliRootDir, containers, mountPaths } = require('./values')
+const { cliRootDir, images, mountPaths } = require('./values')
 
 const DEFAULT = {
   PATHS: {
@@ -15,13 +15,13 @@ const DEFAULT = {
 }
 
 module.exports = deepFreeze({
-  VOLUMES: containers.reduce((data, container) => {
+  VOLUMES: images.reduce((data, image) => {
 
-    if(!mountPaths[container] || !mountPaths[container].core)
+    if(!mountPaths[image] || !mountPaths[image].core)
       return data
     
-    const corePath = mountPaths[container].core
-    data[container.toUpperCase()] = deepMerge(DEFAULT, {
+    const corePath = mountPaths[image].core
+    data[image.toUpperCase()] = deepMerge(DEFAULT, {
       PATHS: {
         // core: corePath,
         components: `${corePath}/node_modules/keg-components`,

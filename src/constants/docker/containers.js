@@ -1,6 +1,6 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { cliRootDir, containersPath, configEnv, containers, defaultEnv } = require('./values')
+const { cliRootDir, containersPath, configEnv, images, defaultEnv } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 
 let __CONTAINERS
@@ -42,7 +42,7 @@ const getCurrentEnvFile = (container) => {
 }
 
 /*
- * Builds a config for a container from the containers array
+ * Builds a config for a container from the images array
  * @param {string} container - Name of the container to build the config for
  *
  * @returns {Object} - Built container config
@@ -67,13 +67,13 @@ const containerConfig = (container) => {
 }
 
 /*
- * Builds the config for each container in the values containers array
+ * Builds the config for each container in the values images array
  *
  * @returns {Object} - Built container config
 */
 const buildContainers = () => {
   // Builds the docker locations for the container and Dockerfile
-  __CONTAINERS = __CONTAINERS || containers.reduce((data, container) => {
+  __CONTAINERS = __CONTAINERS || images.reduce((data, container) => {
     data[ container.toUpperCase() ] = containerConfig(container)
 
     return data
