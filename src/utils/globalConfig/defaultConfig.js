@@ -1,9 +1,11 @@
 const path = require('path')
 const { CLI_ROOT } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
-const cliJson = require('KegRoot/cli.json')
 const { deepMerge } = require('jsutils')
 const cliParent = path.join(CLI_ROOT, '../')
+
+// TODO: Move this to configs folder, and update all references to it
+const cliJson = require('KegRoot/cli.json')
 
 /**
  * Builds the default global config from the package.json and the cli.json

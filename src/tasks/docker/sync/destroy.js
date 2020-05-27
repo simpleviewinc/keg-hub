@@ -3,6 +3,7 @@ const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
 const { confirmExec } = require('KegUtils/helpers')
 const { BUILD } = require('KegConst/docker/build')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 
 /**
  * Destroys all docker-sync artifacts for the passed in context
@@ -31,7 +32,7 @@ const destroyDockerSync = async args => {
     confirm: `This will remove all docker items related to ${ cmdContext }. Are you sure?`,
     success: `Finished running 'docker-sync destroy' command`,
     cancel: `Command 'keg docker sync destroy' has been cancelled!`,
-    preConfirm: get(globalConfig, 'settings.docker.preConfirm') === false ? false : true,
+    preConfirm: getSetting('docker.preConfirm') === false ? false : true,
     execute: async () => {
 
       // Remove the container

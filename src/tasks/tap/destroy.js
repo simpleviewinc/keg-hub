@@ -3,6 +3,7 @@ const { buildLocationContext } = require('KegUtils/builders')
 const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /** --- TODO: Update this to use the docker API lib ---
  * Starts a docker container for a tap

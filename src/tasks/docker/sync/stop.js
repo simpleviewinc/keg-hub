@@ -2,6 +2,7 @@ const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
 const { buildLocationContext } = require('KegUtils/builders')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 
 /**
  * Cleans docker-sync containers
@@ -25,7 +26,7 @@ const stopDockerSync = async args => {
     confirm: `Running this command will stop all running docker-sync ${ cmdContext } containers. Are you sure?`,
     success: `Finished running 'docker-sync stop' command`,
     cancel: `Command 'keg docker sync stop' has been cancelled!`,
-    preConfirm: get(globalConfig, 'settings.docker.preConfirm') === false ? false : true,
+    preConfirm: getSetting('docker.preConfirm') === false ? false : true,
     execute: async () => {
       await spawnCmd(`docker-sync stop`, { options: { env: contextEnvs }}, location)
     },

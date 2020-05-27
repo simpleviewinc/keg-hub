@@ -2,6 +2,11 @@ const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
 const { cliRootDir, containersPath, configEnv, containers } = require('./values')
 const { loadENV } = require('KegFileSys/env')
+const { GLOBAL_CONFIG_FOLDER } = require('../constants')
+const { Logger } = require('KegLog')
+
+
+let __DEFAULT_ENV
 
 // Default config for all containers
 const DEFAULT = {
@@ -19,6 +24,32 @@ const DEFAULT = {
     'GIT_CLI_URL',
   ], true),
   ENV: {}
+}
+
+// TODO: Add helper to write defaults.env to global config folder
+/*
+ * Tries to load a defaults.env config from the global config folder
+ * If not found, loads the defaults from the cli root directory
+ *
+ * @returns {Object} - Loaded ENVs for the default environment
+*/
+const getDefaultEnvFile = () => {
+  const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/defaults.env')
+
+  try {
+    __DEFAULT_ENV = loadENV(globalDefEnv)
+  }
+  catch(e){
+    Logger.empty()
+    Logger.warn(`  Could not find global "default.env" file at ${globalDefEnv}`)
+    Logger.info(`  Using keg-cli "default.env" instead`)
+    Logger.empty()
+
+    __DEFAULT_ENV = loadENV(path.join(cliRootDir, 'configs/defaults.env'))
+  }
+
+  return __DEFAULT_ENV
+
 }
 
 /*
@@ -73,7 +104,7 @@ const containerConfig = (container, defaultEnv) => {
 const buildDockerData = () => {
 
   // Get the defaultEnv for all containers
-  const defaultEnv = loadENV(path.join(cliRootDir, 'configs/defaults.env'))
+  const defaultEnv = __DEFAULT_ENV || getDefaultEnvFile()
   
   // Builds the docker locations for the container and Dockerfile
   return containers.reduce((data, container) => {
