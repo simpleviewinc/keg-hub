@@ -3,6 +3,7 @@ const { deepFreeze, keyMap } = require('jsutils')
 const cliRootDir = path.join(__dirname, '../../../')
 const { getDefaultENVs } = require('./getDefaultENVs')
 
+// TODO: Updated this to use DefaultENVs object
 // Locations where local folders get mounted
 // Also uses the mountPaths object keys to get image names array
 const mountPaths = {

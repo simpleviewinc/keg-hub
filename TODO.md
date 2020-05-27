@@ -13,6 +13,6 @@
     * This will allow use the Core docker image
     * This way when building a Tap docker image, we don't have to install all the core items
 
-Move the `default.env` to the users home folder
-  * This way they can make changes, and not have them saved in the cli
-  * Might want to install the cli there as well / or the containers folder
+
+**Options**
+  * Required option not throwing when no options exists

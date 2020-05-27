@@ -1,5 +1,6 @@
 const { get } = require('jsutils')
-const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
+const { DOCKER } = require('KegConst/docker')
 const { decrypt } = require('KegCrypto')
 
 /**
@@ -11,7 +12,7 @@ const { decrypt } = require('KegCrypto')
  */
 const gitKeyExists = globalConfig => {
   return Boolean(
-    process.env[ DOCKER.CONTAINERS.CORE.ARGS.GIT_KEY ] ||
+    process.env[ get(DOCKER, 'CONTAINERS.CORE.ARGS.GIT_KEY') ] ||
       get(globalConfig, `${GLOBAL_CONFIG_PATHS.GIT}.key`)
   )
 }
