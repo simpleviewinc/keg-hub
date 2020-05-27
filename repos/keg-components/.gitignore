@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+/reports
 
 # misc
 .DS_Store

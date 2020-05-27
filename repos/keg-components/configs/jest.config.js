@@ -32,11 +32,13 @@ const assetStubs = [
  */
 const transpileForTests = [
   'react-native',
+  '@expo/vector-icons',
+  'expo-font'
 ].join('|')
 
 module.exports = {
   rootDir: '../',
-  preset: "rollup-jest",
+  preset: "jest-expo",
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
     [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1',
@@ -52,8 +54,10 @@ module.exports = {
     `${ROOT_DIR}/src/**/__tests__/**/*.js?(x)`
   ],
   collectCoverageFrom: [
-    `${ROOT_DIR}/src/index.js`
+    'src/**/*{js,jsx}',
+    '!src/assets/**/*'
   ],
+  coverageDirectory: 'reports/coverage',
   moduleFileExtensions: [
     `${platform}.js`,
     "js",
