@@ -16,7 +16,7 @@ const syncGlobalConfig = args => {
   const { merge } = params
 
   confirmExec({
-    execute: () => createGlobalConfig(globalConfig, merge),
+    execute: () => createGlobalConfig(globalConfig, params),
     confirm: `Are you sure you want to sync${ merge ? '-merge ' : ' ' }global configs?`,
     success: `Global config synced!`,
     cancel: `Global config sync canceled!`,
@@ -28,12 +28,17 @@ module.exports = {
   sync: {
     name: 'sync',
     action: syncGlobalConfig,
-    description: `Syncs config from this repo with the global config.`,
+    description: `Syncs config from keg-core with the global config.`,
     example: 'keg global sync <options>',
     options: {
       merge: {
-        description: 'Merge the repos global config with the User global config!',
+        description: 'Merge the repos global config with the User global config ( true )',
         default: true,
+      },
+      conflict: {
+        allowed: [ 'global', 'local' ],
+        description: 'Which config should be used when in conflict ( global )',
+        default: 'global',
       }
     }
   }

@@ -1,12 +1,7 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { cliRootDir, containersPath, configEnv, containers } = require('./values')
+const { cliRootDir, containersPath, configEnv, containers, defaultEnv } = require('./values')
 const { loadENV } = require('KegFileSys/env')
-const { GLOBAL_CONFIG_FOLDER } = require('../constants')
-const { Logger } = require('KegLog')
-
-
-let __DEFAULT_ENV
 
 // Default config for all containers
 const DEFAULT = {
@@ -24,32 +19,6 @@ const DEFAULT = {
     'GIT_CLI_URL',
   ], true),
   ENV: {}
-}
-
-// TODO: Add helper to write defaults.env to global config folder
-/*
- * Tries to load a defaults.env config from the global config folder
- * If not found, loads the defaults from the cli root directory
- *
- * @returns {Object} - Loaded ENVs for the default environment
-*/
-const getDefaultEnvFile = () => {
-  const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/defaults.env')
-
-  try {
-    __DEFAULT_ENV = loadENV(globalDefEnv)
-  }
-  catch(e){
-    Logger.empty()
-    Logger.warn(`  Could not find global "default.env" file at ${globalDefEnv}`)
-    Logger.info(`  Using keg-cli "default.env" instead`)
-    Logger.empty()
-
-    __DEFAULT_ENV = loadENV(path.join(cliRootDir, 'configs/defaults.env'))
-  }
-
-  return __DEFAULT_ENV
-
 }
 
 /*
@@ -73,11 +42,10 @@ const getCurrentEnvFile = (container) => {
 /*
  * Builds a config for a container from the containers array
  * @param {string} container - Name of the container to build the config for
- * @param {Array} args - Extra data to be added to the ARGS key
  *
  * @returns {Object} - Built container config
 */
-const containerConfig = (container, defaultEnv) => {
+const containerConfig = (container) => {
   const upperCase = container.toUpperCase()
 
   const dockerFile = path.join(containersPath, container, `Dockerfile`)
@@ -102,13 +70,9 @@ const containerConfig = (container, defaultEnv) => {
  * @returns {Object} - Built container config
 */
 const buildDockerData = () => {
-
-  // Get the defaultEnv for all containers
-  const defaultEnv = __DEFAULT_ENV || getDefaultEnvFile()
-  
   // Builds the docker locations for the container and Dockerfile
   return containers.reduce((data, container) => {
-    data[ container.toUpperCase() ] = containerConfig(container, defaultEnv)
+    data[ container.toUpperCase() ] = containerConfig(container)
 
     return data
   }, {})

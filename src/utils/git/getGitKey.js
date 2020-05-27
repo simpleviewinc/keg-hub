@@ -2,6 +2,7 @@ const { get } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
+const { getSetting } = require('../globalConfig/getSetting')
 const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst')
 const gitKey = get(DOCKER, 'BUILD.CORE.ARGS.GIT_KEY', 'GIT_KEY')
 
@@ -15,7 +16,7 @@ const gitKey = get(DOCKER, 'BUILD.CORE.ARGS.GIT_KEY', 'GIT_KEY')
 const getGitKey = async globalConfig => {
   if(process.env[ gitKey ]) return process.env[ gitKey ]
 
-  const password = get(globalConfig, `${GLOBAL_CONFIG_PATHS.GIT}.secure`)
+  const password = getSetting(`git.secure`)
     ? await ask.password('Please enter your password')
     : false
 

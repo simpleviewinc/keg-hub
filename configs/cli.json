@@ -1,0 +1,31 @@
+{
+  "name": "keg-cli",
+  "displayName": "Keg CLI",
+  "cli": {
+    "paths": {
+      "customTasks": ""
+    },
+    "git": {
+      "orgUrl": "https://github.com/simpleviewinc",
+      "repos": {
+        "cli": "keg-cli",
+        "core": "keg-core",
+        "components": "keg-components",
+        "retheme": "re-theme"
+      }
+    },
+    "taps": {
+      "links": {
+      }
+    },
+    "settings": {
+      "docker": {
+        "preConfirm": true
+      },
+      "git": {
+        "secure": false
+      },
+      "editorCmd": false
+    }
+  }
+}

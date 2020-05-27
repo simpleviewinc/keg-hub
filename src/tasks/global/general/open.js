@@ -21,7 +21,7 @@ const open = async args => {
 
   if(!editorCmd)
     return generalError(
-      `Keg Global Config path "${GLOBAL_CONFIG_EDITOR_CMD}" does not exist!`
+      `Keg Global Config setting "${GLOBAL_CONFIG_EDITOR_CMD}" is not set!`
     )
 
   let logText = `Opening keg folder!`

@@ -3,9 +3,7 @@ const { CLI_ROOT } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
 const { deepMerge } = require('jsutils')
 const cliParent = path.join(CLI_ROOT, '../')
-
-// TODO: Move this to configs folder, and update all references to it
-const cliJson = require('KegRoot/cli.json')
+const cliJson = require('KegRoot/configs/cli.json')
 
 /**
  * Builds the default global config from the package.json and the cli.json
@@ -18,28 +16,34 @@ const defaultConfig = () => {
   config.version = packageJson.version
   config.name = packageJson.name
   config.displayName = "Keg CLI"
-  config.keg = {
-    cli: {
-      paths: {
-        cli: CLI_ROOT,
-        containers: path.join(CLI_ROOT, 'containers'),
-        core: path.join(cliParent, 'keg-core'),
-        components: path.join(cliParent, 'keg-components'),
-        keg: cliParent,
-      },
-      taps: { links: {} },
-      git: {
-        orgUrl: "https://github.com/simpleviewinc",
-        repos: {
-          cli: "keg-cli",
-          core: "keg-core",
-          components: "keg-components",
-          're-theme': "re-theme"
-        },
-        secure: false
-      },
-    }
+  config.cli = {
+    git: {
+      orgUrl: "https://github.com/simpleviewinc",
+      repos: {
+        cli: "keg-cli",
+        core: "keg-core",
+        components: "keg-components",
+        retheme: "re-theme"
+      }
+    },
+    paths: {
+      cli: CLI_ROOT,
+      components: path.join(cliParent, 'keg-components'),
+      containers: path.join(CLI_ROOT, 'containers'),
+      core: path.join(cliParent, 'keg-core'),
+      keg: cliParent,
+      proxy: path.join(cliParent, 'keg-proxy'),
+      resolver: path.join(cliParent, 'tap-resolver'),
+      retheme: path.join(cliParent, 're-theme'),
+    },
+    settings: {
+      docker: { preConfirm: false },
+      git: { secure: false },
+      editorCmd: "code"
+    },
+    taps: { links: {} },
   }
+
 
   return deepMerge(config, cliJson)
 }

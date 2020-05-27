@@ -6,7 +6,7 @@ const { getGlobalConfig } = require('./getGlobalConfig')
  *
  * @returns {string|number|Object|Array} - Found setting
  */
-const getSetting = setting => get(getGlobalConfig(), 'settings.${ setting }')
+const getSetting = setting => get(getGlobalConfig(), 'cli.settings.${ setting }')
 
 module.exports = {
   getSetting

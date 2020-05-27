@@ -1,6 +1,7 @@
 const path = require('path')
 const { deepFreeze, keyMap } = require('jsutils')
 const cliRootDir = path.join(__dirname, '../../../')
+const { getDefaultEnv } = require('./getDefaultEnv')
 
 // Locations where local folders get mounted
 const mountPaths = {
@@ -32,6 +33,7 @@ module.exports = deepFreeze({
   containers: Object.keys(mountPaths),
   configEnv: process.env.NODE_ENV || 'local',
   containersPath: path.join(cliRootDir, 'containers'),
+  defaultEnv: getDefaultEnv(cliRootDir),
   locationContext,
   mountPaths
 })

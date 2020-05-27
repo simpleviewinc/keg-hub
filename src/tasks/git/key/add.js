@@ -5,6 +5,7 @@ const {
   removeGlobalConfigProp,
 } = require('KegUtils')
 const { throwRequired } = require('KegUtils/error')
+const { getSetting } = require('KegUtils/globalConfig')
 const { encrypt, decrypt } = require('KegCrypto')
 const { ask } = require('KegQuestions')
 const {GLOBAL_CONFIG_PATHS } = require('KegConst')
@@ -29,7 +30,7 @@ const addGitKey = (args) => {
     cancel: `Set git key in global config cancelled!`,
     preConfirm: !Boolean(gitKeyExists(globalConfig)),
     execute: async () => {
-      const password = get(globalConfig, `${GLOBAL_CONFIG_PATHS.GIT}.secure`)
+      const password = getSetting(`git.secure`)
         ? await ask.password('Please enter a password')
         : false
 

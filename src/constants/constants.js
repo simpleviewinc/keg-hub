@@ -27,15 +27,15 @@ module.exports = deepFreeze({
 
   // Global config settings
   GLOBAL_CONFIG_PATHS: {
-    CLI: 'keg.cli',
-    CLI_PATHS: 'keg.cli.paths',
-    GIT: 'keg.cli.git',
-    TAPS: `keg.cli.taps`,
-    TAP_LINKS: `keg.cli.taps.links`,
+    CLI: 'cli',
+    CLI_PATHS: 'cli.paths',
+    GIT: 'cli.git',
+    TAPS: `cli.taps`,
+    TAP_LINKS: `cli.taps.links`,
   },
 
   // Sets the command to open an IDE
-  GLOBAL_CONFIG_EDITOR_CMD: 'keg.cli.editorCmd',
+  GLOBAL_CONFIG_EDITOR_CMD: 'cli.settings.editorCmd',
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
   
