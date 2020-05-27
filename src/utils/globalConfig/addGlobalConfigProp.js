@@ -1,4 +1,5 @@
-const { set, softFalsy } = require('jsutils')
+const { set } = require('jsutils')
+const { exists } = require('../helpers/exists')
 const { saveGlobalConfig } = require('./saveGlobalConfig')
 const { validateGlobalConfig } = require('./validateGlobalConfig')
 
@@ -12,7 +13,7 @@ const { validateGlobalConfig } = require('./validateGlobalConfig')
  */
 const addGlobalConfigProp = (globalConfig, propPath, value, save=true) => {
 
-  if(validateGlobalConfig(globalConfig) && !softFalsy(value))
+  if(validateGlobalConfig(globalConfig) && !exists(value))
     throw new Error(`Can not set ${propPath} on global config object. Value must exist!`)
 
   set(globalConfig, propPath, value)
