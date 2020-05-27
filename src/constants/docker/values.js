@@ -1,9 +1,10 @@
 const path = require('path')
 const { deepFreeze, keyMap } = require('jsutils')
 const cliRootDir = path.join(__dirname, '../../../')
-const { getDefaultEnv } = require('./getDefaultEnv')
+const { getDefaultENVs } = require('./getDefaultENVs')
 
 // Locations where local folders get mounted
+// Also uses the mountPaths object keys to get image names array
 const mountPaths = {
   base: {
     cli: '/keg/keg-cli'
@@ -30,11 +31,9 @@ const locationContext = keyMap([
 
 module.exports = deepFreeze({
   cliRootDir,
+  runtimeEnv: process.env.NODE_ENV || 'local',
+  defaultENVs: getDefaultENVs(cliRootDir),
   images: Object.keys(mountPaths),
-  configEnv: process.env.NODE_ENV || 'local',
-  // TODO: This should from from loaded default ENV
-  containersPath: path.join(cliRootDir, 'containers'),
-  defaultEnv: getDefaultEnv(cliRootDir),
   locationContext,
   mountPaths
 })

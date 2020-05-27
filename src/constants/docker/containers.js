@@ -1,6 +1,6 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { cliRootDir, containersPath, configEnv, images, defaultEnv } = require('./values')
+const { cliRootDir, runtimeEnv, defaultENVs, images } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 
 let __CONTAINERS
@@ -24,16 +24,16 @@ const DEFAULT = {
 }
 
 /*
- * Checks if an ENV file exists for the current configEnv
+ * Checks if an ENV file exists for the current runtimeEnv
  * @param {string} container - Name of the container to build the config for
  *
  * @returns {Object} - Loaded ENVs for the current environment
 */
 const getCurrentEnvFile = (container) => {
-  if(configEnv === 'local') return {}
+  if(runtimeEnv === 'local') return {}
 
-  // If the configEnv is not local, then load the configEnv, and merge with local
-  const currentEnvFile = path.join(containersPath, container, `${ configEnv }.env`)
+  // If the runtimeEnv is not local, then load the runtimeEnv, and merge with local
+  const currentEnvFile = path.join(defaultENVs.CONTAINERS_PATH, container, `${ runtimeEnv }.env`)
 
   // Require at runtime to speed up other cli calls
   const { pathExistsSync } = require('KegFileSys/fileSys')
@@ -50,10 +50,10 @@ const getCurrentEnvFile = (container) => {
 const containerConfig = (container) => {
   const upperCase = container.toUpperCase()
 
-  const dockerFile = path.join(containersPath, container, `Dockerfile`)
+  const dockerFile = path.join(defaultENVs.CONTAINERS_PATH, container, `Dockerfile`)
 
   // Build config ENVs
-  const contextEnv = loadENV(path.join(containersPath, container, 'context.env'))
+  const contextEnv = loadENV(path.join(defaultENVs.CONTAINERS_PATH, container, 'context.env'))
 
   // Merge the container config with the default config and return
   return deepMerge(DEFAULT, {
@@ -61,7 +61,7 @@ const containerConfig = (container) => {
     // Ensures the Git url for the container gets added as a build arg
     ARGS: keyMap([ `GIT_${ container.toUpperCase() }_URL` ], true),
     // Build the ENVs by merging with the default, context, and environment
-    ENV: deepMerge(defaultEnv, contextEnv, getCurrentEnvFile(container)),
+    ENV: deepMerge(defaultENVs, contextEnv, getCurrentEnvFile(container)),
   })
 
 }

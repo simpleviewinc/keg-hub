@@ -1,5 +1,5 @@
 const { deepFreeze } = require('jsutils')
-const { containersPath, configEnv, images, locationContext } = require('./values')
+const { defaultENVs, runtimeEnv, images, locationContext } = require('./values')
 
 module.exports = deepFreeze({
   DOCKER: {
@@ -8,8 +8,8 @@ module.exports = deepFreeze({
     ...require('./run'),
     ...require('./volumes'),
     IMAGES: images,
-    CONTAINERS_PATH: containersPath,
-    DOCKER_ENV: configEnv,
+    CONTAINERS_PATH: defaultENVs.CONTAINERS_PATH,
+    DOCKER_ENV: runtimeEnv,
     LOCATION_CONTEXT: locationContext,
   }
 })

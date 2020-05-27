@@ -13,7 +13,7 @@ let __DEFAULT_ENV
  *
  * @returns {Object} - Loaded default.env file as an object
  **/
-const getDefaultEnv = cliRootDir => {
+const getDefaultENVs = cliRootDir => {
 
   if(__DEFAULT_ENV) return __DEFAULT_ENV
 
@@ -46,5 +46,5 @@ const getDefaultEnv = cliRootDir => {
 }
 
 module.exports = {
-  getDefaultEnv
+  getDefaultENVs
 }
