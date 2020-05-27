@@ -17,22 +17,22 @@ const destroyDockerSync = async args => {
   const { globalConfig, params, options, task, tasks } = args
   const { context } = params
 
+  // Get the context data for the command to be run
+  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+    globalConfig,
+    task,
+    params,
+    // Set a default context path as it's not needed for cleaning up a tap container
+    // And it will throw if not set for a tap
+    envs: { CONTEXT_PATH: 'INITIAL' }
+  })
+
   confirmExec({
-    confirm: `This will remove all docker items related to ${ context }. Are you sure?`,
-    success: `Finished running 'docker-sync ' command`,
-    cancel: `Command 'keg docker sync stop' has been cancelled!`,
+    confirm: `This will remove all docker items related to ${ cmdContext }. Are you sure?`,
+    success: `Finished running 'docker-sync destroy' command`,
+    cancel: `Command 'keg docker sync destroy' has been cancelled!`,
     preConfirm: get(globalConfig, 'settings.docker.preConfirm') === false ? false : true,
     execute: async () => {
-
-      // Get the context data for the command to be run
-      const { location, cmdContext, contextEnvs } = await buildLocationContext({
-        globalConfig,
-        task,
-        params,
-        // Set a default context path as it's not needed for cleaning up a tap container
-        // And it will throw if not set for a tap
-        envs: { CONTEXT_PATH: 'INITIAL' }
-      })
 
       // Remove the container
       // TODO: Update to use the docker API lib

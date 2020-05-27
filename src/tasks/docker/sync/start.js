@@ -159,7 +159,8 @@ module.exports = {
       default: 'development',
     },
     install: {
-      description: 'Install packages ( yarn install ) within the container before starting the application',
+      alias: [ 'in' ],
+      description: 'Install node_modules ( yarn install ) in the container before starting the app',
       example: 'keg docker sync start --install ...',
       default: false
     },

@@ -72,19 +72,21 @@ const linkTap = async args => {
 }
 
 module.exports = {
-  name: 'link',
-  alias: [ 'ln' ],
-  action: linkTap,
-  description: `Links a tap's path to the global config`,
-  example: 'keg tap link <options>',
-  options: {
-    name: {
-      description: 'Name used to access the linked tap',
-      required: true,
-    },
-    path: {
-      description: `Path to the local tap directory. Example => /Users/developer/taps/my-tap`,
-      default: process.cwd(),
+  link: {
+    name: 'link',
+    alias: [ 'ln' ],
+    action: linkTap,
+    description: `Links a tap's path to the global config`,
+    example: 'keg tap link <options>',
+    options: {
+      name: {
+        description: 'Name used to access the linked tap',
+        required: true,
+      },
+      path: {
+        description: `Path to the local tap directory. Example => /Users/developer/taps/my-tap`,
+        default: process.cwd(),
+      }
     }
   }
 }

@@ -23,8 +23,10 @@ const newTap = (args) => {
 }
 
 module.exports = {
-  name: 'new',
-  action: newTap,
-  description: `Creates a new tap based on the passed in options`,
-  example: 'keg tap new <options>'
+  new: {
+    name: 'new',
+    action: newTap,
+    description: `Creates a new tap based on the passed in options`,
+    example: 'keg tap new <options>'
+  }
 }

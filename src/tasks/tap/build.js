@@ -32,19 +32,21 @@ const buildTap = async (args) => {
 }
 
 module.exports = {
-  name: 'build',
-  alias: [ 'bld', 'make' ],
-  action: buildTap,
-  description: `Builds a taps docker container`,
-  example: 'keg tap build <options>',
-  options: {
-    name: {
-      description: 'Name of the tap to build a Docker image for',
-      required: true
-    },
-    env: {
-      description: 'Environment to build the Docker image for. Gets added as a tag to the image.',
-      default: 'development',
+  build: {
+    name: 'build',
+    alias: [ 'bld', 'make' ],
+    action: buildTap,
+    description: `Builds a taps docker container`,
+    example: 'keg tap build <options>',
+    options: {
+      name: {
+        description: 'Name of the tap to build a Docker image for',
+        required: true
+      },
+      env: {
+        description: 'Environment to build the Docker image for. Gets added as a tag to the image.',
+        default: 'development',
+      }
     }
   }
 }

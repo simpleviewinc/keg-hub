@@ -15,14 +15,14 @@ const stopDockerSync = async args => {
   const { globalConfig, task, params } = args
 
   // Get the context data for the command to be run
-  const { location, contextEnvs } = await buildLocationContext({
+  const { location, contextEnvs, cmdContext } = await buildLocationContext({
     globalConfig,
     task,
     params
   })
 
   confirmExec({
-    confirm: `Running this command will stop all running docker-sync containers. Are you sure?`,
+    confirm: `Running this command will stop all running docker-sync ${ cmdContext } containers. Are you sure?`,
     success: `Finished running 'docker-sync stop' command`,
     cancel: `Command 'keg docker sync stop' has been cancelled!`,
     preConfirm: get(globalConfig, 'settings.docker.preConfirm') === false ? false : true,

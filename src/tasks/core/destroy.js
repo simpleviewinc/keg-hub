@@ -1,8 +1,8 @@
 const { get } = require('jsutils')
 const { buildLocationContext } = require('KegUtils/builders')
-const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /** --- TODO: Update this to use the docker API lib ---
  * Starts a docker container for a tap
@@ -31,7 +31,7 @@ const destroyContainer = async ({ globalConfig, params, task }) => {
 }
 
 /**
- * Removes all docker items for a tap based on the passed in service type
+ * Removes all docker items related to keg-core
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -40,34 +40,25 @@ const destroyContainer = async ({ globalConfig, params, task }) => {
  *
  * @returns {void}
  */
-const destroyTap = async (args) => {
+const destroyCore = async (args) => {
   // Check if we are running the container with just docker
   return get(args, 'params.service') === 'container'
     ? destroyContainer(args)
     : runInternalTask('tasks.docker.tasks.sync.tasks.destroy', {
         ...args,
         command: 'docker',
-        params: {
-          ...args.params,
-          context: 'tap',
-          tap: get(args, 'params.tap'),
-        },
+        params: { ...args.params, tap: undefined, context: 'core' },
       })
-
 }
 
 module.exports = {
   destroy: {
     name: 'destroy',
     alias: [ 'dest', 'des' ],
-    action: destroyTap,
-    description: `Destroys the docker items for a tap`,
-    example: 'keg tap destroy <options>',
+    action: destroyCore,
+    description: `Destroys the docker items for keg-core`,
+    example: 'keg core destroy <options>',
     options: {
-      tap: { 
-        description: 'Name of the tap to destroy. Must be a tap linked in the global config',
-        required: true,
-      },
       service: {
         allowed: [ 'sync', 'container' ],
         description: 'What docker service to destroy. Must be on of ( sync || container )',

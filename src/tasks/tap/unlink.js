@@ -66,15 +66,17 @@ const unlinkTap = async args => {
 }
 
 module.exports = {
-  name: 'unlink',
-  alias: [ 'ul' ],
-  action: unlinkTap,
-  description: `Unlinks a tap path in the global config`,
-  example: 'keg tap unlink <options>',
-  options: {
-    name: {
-      description: 'Name used to access the linked tap',
-      required: true,
+  unlink: {
+    name: 'unlink',
+    alias: [ 'ul' ],
+    action: unlinkTap,
+    description: `Unlinks a tap path in the global config`,
+    example: 'keg tap unlink <options>',
+    options: {
+      name: {
+        description: 'Name used to access the linked tap',
+        required: true,
+      }
     }
   }
 }
