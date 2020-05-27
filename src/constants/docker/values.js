@@ -30,7 +30,7 @@ const locationContext = keyMap([
 
 module.exports = deepFreeze({
   cliRootDir,
-  containers: Object.keys(mountPaths),
+  images: Object.keys(mountPaths),
   configEnv: process.env.NODE_ENV || 'local',
   containersPath: path.join(cliRootDir, 'containers'),
   defaultEnv: getDefaultEnv(cliRootDir),

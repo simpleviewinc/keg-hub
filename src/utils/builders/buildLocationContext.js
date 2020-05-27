@@ -6,7 +6,7 @@ const { getTapPath } = require('../globalConfig/getTapPath')
 const { buildCmdContext } = require('./buildCmdContext')
 const { buildTapContext } = require('./buildTapContext')
 const { getGitKey } = require('../git/getGitKey')
-const { BUILD, CONTAINERS, LOCATION_CONTEXT } = DOCKER
+const { BUILD, IMAGES, LOCATION_CONTEXT } = DOCKER
 
 /**
  * Gets the ENVs for a context from the constants
@@ -66,7 +66,7 @@ const buildLocationContext = async ({ envs={}, globalConfig, params, task }) => 
   const { cmdContext, tap } = buildCmdContext({
     params,
     globalConfig,
-    allowed: get(task, 'options.context.allowed', CONTAINERS),
+    allowed: get(task, 'options.context.allowed', IMAGES),
     defContext: get(task, 'options.context.default')
   })
 

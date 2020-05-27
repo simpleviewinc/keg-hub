@@ -1,6 +1,5 @@
 const { get } = require('jsutils')
 const { generalError, throwNoTapLink } = require('../error')
-const { CONTAINERS } = require('KegConst/docker/build')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
