@@ -1,6 +1,14 @@
 {
+  "name": "@simpleviewinc/keg-core",
   "main": "node_modules/expo/AppEntry.js",
   "version": "0.0.1",
+  "publishConfig": { 
+    "registry": "https://npm.pkg.github.com/" 
+  },
+  "repository" : {
+    "url": "ssh://git@github.com/simpleviewinc/keg-core.git",
+    "type": "git"
+  },
   "scripts": {
     "android": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -c --android --dev",
     "build:android": "NODE_ENV=production PLATFORM=native expo build:android",
@@ -75,6 +83,5 @@
     "rimraf": "^3.0.0",
     "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git#master",
     "keg-components": "git+https://github.com/simpleviewinc/keg-components.git#master"
-  },
-  "private": true
+  }
 }
