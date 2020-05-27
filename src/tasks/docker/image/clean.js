@@ -2,7 +2,6 @@ const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd, executeCmd } = require('KegProc')
-const { BUILD } = require('KegConst/docker/build')
 const docker = require('KegDocApi')
 const { Logger } = require('KegLog')
 

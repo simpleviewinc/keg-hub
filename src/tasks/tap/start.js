@@ -20,7 +20,7 @@ const startContainer = async ({ globalConfig, params }) => {
   const { tap, env, docker, mounts } = params
 
   const location = getTapPath(globalConfig, tap)
-  // TODO: update version to come from docker BUILD constants
+  // TODO: update version to come from docker CONTAINERS constants
   const version = getCoreVersion(globalConfig)
 
   const dockerCmd = buildDockerCmd(globalConfig, {

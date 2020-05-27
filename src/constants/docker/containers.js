@@ -3,6 +3,8 @@ const { deepFreeze, deepMerge, keyMap } = require('jsutils')
 const { cliRootDir, containersPath, configEnv, containers, defaultEnv } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 
+let __CONTAINERS
+
 // Default config for all containers
 const DEFAULT = {
   VALUES: {
@@ -69,19 +71,21 @@ const containerConfig = (container) => {
  *
  * @returns {Object} - Built container config
 */
-const buildDockerData = () => {
+const buildContainers = () => {
   // Builds the docker locations for the container and Dockerfile
-  return containers.reduce((data, container) => {
+  __CONTAINERS = __CONTAINERS || containers.reduce((data, container) => {
     data[ container.toUpperCase() ] = containerConfig(container)
 
     return data
   }, {})
 
+  return __CONTAINERS
+
 }
 
 
-const buildObj = {}
-// Add the BUILD property, with a get function do it only get called when referenced
-Object.defineProperty(buildObj, 'BUILD', { get: buildDockerData, enumerable: true })
+const containersObj = {}
+// Add the CONTAINERS property, with a get function do it only get called when referenced
+Object.defineProperty(containersObj, 'CONTAINERS', { get: buildContainers, enumerable: true })
 
-module.exports = buildObj
+module.exports = containersObj

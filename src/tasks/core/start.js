@@ -18,7 +18,7 @@ const startContainer = async ({ globalConfig, params }) => {
   const { env, docker, mounts } = params
 
   const location = getPathFromConfig(globalConfig, 'core')
-  // TODO: update version to come from docker BUILD constants
+  // TODO: update version to come from docker CONTAINERS constants
   const version = getCoreVersion(globalConfig)
 
   const dockerCmd = buildDockerCmd(globalConfig, {

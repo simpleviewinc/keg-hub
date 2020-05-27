@@ -2,7 +2,7 @@ const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
 const { buildLocationContext } = require('KegUtils/builders')
-const { BUILD } = require('KegConst/docker/build')
+const { CONTAINERS } = require('KegConst/docker/containers')
 
 /**
  * Cleans docker-sync containers
@@ -30,7 +30,7 @@ const cleanDockerSync = async args => {
     preConfirm: true,
     execute: async () => {
       // Remove the container
-      const container = cmdContext && get(BUILD, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
+      const container = cmdContext && get(CONTAINERS, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
       container && await spawnCmd(`docker container rm ${ container }`)
       await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
     },

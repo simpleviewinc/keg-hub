@@ -6,7 +6,7 @@ const { getTapPath } = require('../globalConfig/getTapPath')
 const { buildCmdContext } = require('./buildCmdContext')
 const { buildTapContext } = require('./buildTapContext')
 const { getGitKey } = require('../git/getGitKey')
-const { BUILD, IMAGES, LOCATION_CONTEXT } = DOCKER
+const { CONTAINERS, IMAGES, LOCATION_CONTEXT } = DOCKER
 
 /**
  * Gets the ENVs for a context from the constants
@@ -16,7 +16,7 @@ const { BUILD, IMAGES, LOCATION_CONTEXT } = DOCKER
  * @returns {Object} - ENVs for the context
  */
 const getEnvContext = (context) => {
-  return get(BUILD, `${ context.toUpperCase() }.ENV`, {})
+  return get(CONTAINERS, `${ context.toUpperCase() }.ENV`, {})
 }
 
 const getLocation = (globalConfig, task, context, tap) => {

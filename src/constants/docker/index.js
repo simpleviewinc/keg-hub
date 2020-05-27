@@ -3,7 +3,7 @@ const { containersPath, configEnv, images, locationContext } = require('./values
 
 module.exports = deepFreeze({
   DOCKER: {
-    ...require('./build'),
+    ...require('./containers'),
     ...require('./machine'),
     ...require('./run'),
     ...require('./volumes'),

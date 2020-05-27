@@ -2,7 +2,7 @@ const { isArr, get, reduceObj, isObj, softFalsy } = require('jsutils')
 const { getGitUrl, getGitKey, getTapPath, exists } = require('KegUtils')
 const { getRemoteUrl } = require('KegLibs/git/getRemoteUrl')
 const { DOCKER } = require('KegConst')
-const { BUILD, DOCKER_ENV } = DOCKER
+const { DOCKER_ENV } = DOCKER
 
 /**
  * Formats a build-arg string to match the docker cli api
@@ -31,13 +31,13 @@ const createBuildArg = (key, value, dockerCmd) => {
 const getBuildArgs = async (globalConfig, params) => {
   const { context, branch, dockerCmd, location, tap } = params
   
-  const buildOpts = get(DOCKER, [ 'BUILD', context.toUpperCase() ])
-  if(!isObj(buildOpts.ARGS)) return dockerCmd
+  const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
+  if(!isObj(containerOpts.ARGS)) return dockerCmd
   
   const gitKey = await getGitKey(globalConfig)
   const tapUrl = context ==='tap' && tap && await getRemoteUrl(getTapPath(globalConfig, tap))
 
-  return reduceObj(buildOpts.ARGS, (key, value, dockerCmd) => {
+  return reduceObj(containerOpts.ARGS, (key, value, dockerCmd) => {
     let useVal
     switch(key){
       case 'GIT_KEY':{

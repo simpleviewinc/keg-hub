@@ -1,5 +1,5 @@
 const { get } = require('jsutils')
-const { DOCKER: { BUILD } } = require('KegConst')
+const { DOCKER } = require('KegConst')
 
 /**
  * Gets the docker image from the passed in image param or the docker build constants
@@ -10,7 +10,7 @@ const { DOCKER: { BUILD } } = require('KegConst')
  * @returns {string} - Name of the image
  */
 const getDockerImg = (image, container='', ext='') => {
-  image = image || get(BUILD, `${container.toUpperCase()}.ENV.IMAGE`)
+  image = image || get(DOCKER, `CONTAINERS.${container.toUpperCase()}.ENV.IMAGE`)
 
   return ext && image.indexOf(':') !== -1 ? `${ image }:${ext}` : image
 }

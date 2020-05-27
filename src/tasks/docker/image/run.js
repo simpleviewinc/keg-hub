@@ -2,7 +2,7 @@
 const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
-const { BUILD } = require('KegConst/docker/build')
+const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
 
 /**
@@ -22,7 +22,7 @@ const runDockerImage = async args => {
   // Set the context as the name, becuase it's needed in buildLocationContext helper
   params.context = params.context || name
 
-  const imgName = get(BUILD, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
+  const imgName = get(CONTAINERS, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({

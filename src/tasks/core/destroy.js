@@ -25,7 +25,7 @@ const destroyContainer = async ({ globalConfig, params, task }) => {
   })
 
   // Remove the container
-  const container = cmdContext && get(DOCKER, `BUILD.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
+  const container = cmdContext && get(DOCKER, `CONTAINERS.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
   container && await spawnCmd(`docker container rm ${ container }`)
 
 }

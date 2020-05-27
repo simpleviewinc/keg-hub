@@ -1,5 +1,5 @@
 const { isArr, get } = require('jsutils')
-const { DOCKER: { BUILD } } = require('KegConst')
+const { DOCKER } = require('KegConst')
 
 /**
  * Finds the tag option in the passed in options array
@@ -15,7 +15,7 @@ const getBuildTags = ({ dockerCmd='', version='', ...params }) => {
 
   // Try to ensure we have a version for the build
   version = version ||
-    ( container && get(BUILD, `${ context.toUpperCase() }.ENV.VERSION`, '') )
+    ( container && get(DOCKER, `CONTAINERS.${ context.toUpperCase() }.ENV.VERSION`, '') )
 
   // try to ensure we have an image name for the build
   const nameTag = image || context

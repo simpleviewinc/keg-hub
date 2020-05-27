@@ -1,6 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
-const { BUILD } = require('KegConst/docker/build')
+const { CONTAINERS } = require('KegConst/docker/containers')
 
 /**
  * List all the docker-sync points based on context

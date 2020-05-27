@@ -3,7 +3,7 @@ const { get, checkCall } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
 const { logVirtualIP } = require('KegUtils/log')
-const { BUILD } = require('KegConst/docker/build')
+const { CONTAINERS } = require('KegConst/docker/containers')
 const { Logger } = require('KegLog')
 const docker = require('KegDocApi')
 
@@ -14,7 +14,7 @@ const docker = require('KegDocApi')
  * @returns {void}
  */
 const checkBaseImage = async args => {
-  const baseName = get(BUILD, `BASE.ENV.IMAGE`)
+  const baseName = get(CONTAINERS, `BASE.ENV.IMAGE`)
   const exists = await docker.image.exists(baseName)
   if(exists) return
 
@@ -42,7 +42,7 @@ const removeCurrent = async context => {
   Logger.info(`Removing docker container "${context}"...`)
   Logger.empty()
 
-  const containerName = get(BUILD, `${context.toUpperCase()}.ENV.CONTAINER_NAME`)
+  const containerName = get(CONTAINERS, `${context.toUpperCase()}.ENV.CONTAINER_NAME`)
   await containerName && docker.container.remove(containerName)
 }
 

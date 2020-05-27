@@ -11,7 +11,7 @@ const { get } = require('jsutils')
  */
 const addComposeFiles = (dockerCmd, context='') => {
 
-  const compDefPath = get(DOCKER, `BUILD.${ context.toUpperCase() }.ENV.COMPOSE_DEFAULT`)
+  const compDefPath = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }.ENV.COMPOSE_DEFAULT`)
   const defCompose = compDefPath ? `-f ${ compDefPath }` : ''
 
   const envCompose = DOCKER.DOCKER_ENV

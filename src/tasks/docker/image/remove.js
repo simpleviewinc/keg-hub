@@ -2,7 +2,7 @@ const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd, executeCmd } = require('KegProc')
-const { BUILD } = require('KegConst/docker/build')
+const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
 const { Logger } = require('KegLog')
 
@@ -21,7 +21,7 @@ const removeDockerImage = async args => {
   const { name, force } = params
 
   // Ensure we have an image to remove by checking for a mapped name, or use original
-  const imgName = get(BUILD, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
+  const imgName = get(CONTAINERS, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
   !imgName && generalError(`The docker "image remove" command requires a name argument!`)
 
   // Get the image meta data

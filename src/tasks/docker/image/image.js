@@ -2,7 +2,7 @@ const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
-const { BUILD } = require('KegConst/docker/build')
+const { CONTAINERS } = require('KegConst/docker/containers')
 
 /**
  * Run a docker image command
@@ -17,7 +17,7 @@ const { BUILD } = require('KegConst/docker/build')
 const dockerImage = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
   const { cmd, name, force } = params
-  const image = name && get(BUILD, `${name.toUpperCase()}.ENV.IMAGE`)
+  const image = name && get(CONTAINERS, `${name.toUpperCase()}.ENV.IMAGE`)
 
   let runCmd
   switch(cmd){
