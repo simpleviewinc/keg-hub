@@ -1,4 +1,5 @@
-const { dockerCmd, compareItems, noItemError } = require('./helpers')
+const { dockerCmd, compareItems, noItemError, cmdSuccess } = require('./helpers')
+const { remove } = require('./commands')
 const { isArr, toStr, isStr } = require('jsutils')
 
 // Container commands the require an item argument of the container id or name
@@ -27,6 +28,7 @@ const containerItemCmds = [
 const runDockerCmd = (args={}, opts) => {
   opts = opts || args.opts
   return dockerCmd({
+    asStr: true,
     ...args,
     opts: [ 'container' ].concat( isArr(opts) ? opts : isStr(opts) ? opts.split(' ') : [])
   })
@@ -51,9 +53,11 @@ const list = (args={}) => {
  *
  * @returns {*} - Response from the docker command
  */
-const runCmdForItem = (args, cmd) => {
+const runCmdForItem = async (args, cmd) => {
   if(!args.item) return noItemError(`docker.container.${ cmd }`, true)
-  return runDockerCmd(args, [ cmd, args.item ])
+  const res = await runDockerCmd(args, [ cmd, args.item ])
+
+  return res && cmdSuccess(cmd)
 }
 
 /**
@@ -70,11 +74,13 @@ const containerCmds = containerItemCmds.reduce((commands, command) => {
  * @function
  * @param {string} args - Arguments used to kill and remove a container
  *
- * @returns {string} - Response from the docker cli command
+ * @returns {boolean} - If the Docker command successfully ran
  */
 const destroy = async args => {
-  await containerCmds.kill(args)
-  return removeContainer(args)
+  await containerCmds.kill({ ...args, skipError: true, errResponse: false })
+  const res = await removeContainer({ ...args, skipError: true, errResponse: false })
+
+  return res && cmdSuccess('destroy')
 }
 
 /**

@@ -15,6 +15,14 @@ const noItemError = (cmd, shouldThrow=false) => {
   throw new Error(`Docker API command Failed!`)
 }
 
+const cmdSuccess = (cmd, message) => {
+  Logger.empty()
+  Logger.success(message || `Docker ${cmd} command succeeded!`)
+  Logger.empty()
+
+  return true
+}
+
 /**
  * Error logger for docker commands. Logs the passed in error, then exits
  * @param {string} error - The error to be logged
@@ -125,9 +133,12 @@ const dockerCmd = async ({ opts, asStr, errResponse, skipError, format='', force
   const useFormat = format === 'json' ? `--format "{{json . }}"` : format
   const useForce = force ? '--force' : ''
 
-  const { error, data } = await executeCmd(
-    `docker ${ options } ${ useForce } ${ useFormat }`.trim()
-  )
+  const cmdToRun = `docker ${ options } ${ useForce } ${ useFormat }`.trim()
+
+  Logger.empty()
+  Logger.message(`Running command: `, cmdToRun)
+
+  const { error, data } = await executeCmd(cmdToRun)
 
   return error
     ? apiError(error, errResponse, skipError)
@@ -139,6 +150,8 @@ const dockerCmd = async ({ opts, asStr, errResponse, skipError, format='', force
 
 module.exports = {
   apiError,
+  compareItems,
+  cmdSuccess,
   dockerCmd,
-  compareItems
+  noItemError,
 }

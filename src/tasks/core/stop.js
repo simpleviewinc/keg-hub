@@ -3,21 +3,21 @@ const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
 const { spawnCmd } = require('KegProc')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { DOCKER } = require('KegConst/docker')
+const docker = require('KegDocApi')
 
 /**
- * Starts a docker container for a tap
+ * Stops the docker kegcore container
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {Object} args.params - Formatted object of the passed in options 
  *
  * @returns {void}
  */
-const stopContainer = async ({ globalConfig, params }) => {
-
-  const location = getPathFromConfig(globalConfig, 'core')
-  console.log(`---------- TODO: STOP keg-core container ----------`)
-  // TODO: Update to kill core docker container
-  // await spawnCmd(dockerCmd, location)
+const stopContainer = async ({ params={} }) => {
+  await docker.container.stop({
+    item: get(DOCKER, `CONTAINERS.CORE.ENV.CONTAINER_NAME`),
+    force: params.force,
+  })
 }
 
 /**

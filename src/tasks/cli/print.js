@@ -51,6 +51,15 @@ const printData = async args => {
       toPrint = PATTERNS
       break
     }
+    case 'base':
+    case 'core':
+    case 'proxy':
+    case 'tap': {
+      toPrint = get(DOCKER, `CONTAINERS.${context.toUpperCase()}`)
+      // Throw early so we get the correct error
+      !toPrint && generalError(`Could not find container data for "${ context }"`)
+      break
+    }
     case 'tasks': {
       toPrint = tasks
       break
@@ -68,7 +77,7 @@ const printData = async args => {
       }
 
       // Throw early so we get the correct error
-      !toPrint && generalError(`Could not find task for path "${withTasks}"`)
+      !toPrint && generalError(`Could not find task for path "${ withTasks }"`)
       break
     }
   }
@@ -91,10 +100,12 @@ module.exports = {
     options: {
       context: {
         allowed: [
+          'base',
           'constants',
           'const',
           'containers',
           'cont',
+          'core',
           'docker',
           'doc',
           'env',
@@ -103,6 +114,8 @@ module.exports = {
           'patterns',
           'pattern',
           'pat',
+          'proxy',
+          'tap',
           'tasks',
           'task',
         ],

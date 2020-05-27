@@ -18,18 +18,16 @@ const startContainer = async ({ globalConfig, params }) => {
   const { env, docker, mounts } = params
 
   const location = getPathFromConfig(globalConfig, 'core')
-  // TODO: update version to come from docker CONTAINERS constants
-  const version = getCoreVersion(globalConfig)
-
   const dockerCmd = buildDockerCmd(globalConfig, {
     tap,
-    env,
     mounts,
-    location,
     docker,
-    name: 'tap',
+    location,
     cmd: `run`,
-    container: 'TAP',
+    env: env || get(DOCKER, `DOCKER_ENV`),
+    name: get(DOCKER, `CONTAINERS.CORE.ENV.IMAGE`),
+    container: get(DOCKER, `CONTAINERS.CORE.ENV.CONTAINER_NAME`),
+    version: get(DOCKER, `CONTAINERS.CORE.ENV.VERSION`),
   })
 
   await logVirtualIP()

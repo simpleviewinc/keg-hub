@@ -50,10 +50,6 @@ const startContainer = async ({ globalConfig, params }) => {
  * @returns {void}
  */
 const startTap = async (args) => {
-
-  console.log(`---------- args ----------`)
-  console.log(args)
-
   // Check if we are running the container with just docker
   return get(args, 'params.service') === 'container'
     ? startContainer(args)

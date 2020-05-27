@@ -3,31 +3,22 @@ const { buildLocationContext } = require('KegUtils/builders')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const docker = require('KegDocApi')
 
-/** --- TODO: Update this to use the docker API lib ---
- * Starts a docker container for a tap
+/**
+ * Destroys a docker container for keg-core
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {Object} args.params - Formatted object of the passed in options 
  *
  * @returns {void}
  */
-const destroyContainer = async ({ globalConfig, params, task }) => {
-
-  // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = await buildLocationContext({
-    globalConfig,
-    task,
-    params,
-    // Set a default context path as it's not needed for cleaning up a tap container
-    // And it will throw if not set for a tap
-    envs: { CONTEXT_PATH: 'INITIAL' }
+const destroyContainer = async ({ params={} }) => {
+  // Destroy the container
+  await docker.container.destroy({
+    item: get(DOCKER, `CONTAINERS.CORE.ENV.CONTAINER_NAME`),
+    force: params.force
   })
-
-  // Remove the container
-  const container = cmdContext && get(DOCKER, `CONTAINERS.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
-  container && await spawnCmd(`docker container rm ${ container }`)
-
 }
 
 /**
