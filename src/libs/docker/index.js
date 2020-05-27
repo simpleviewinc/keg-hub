@@ -6,5 +6,4 @@ module.exports = {
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getDockerArgs')
-  
 }

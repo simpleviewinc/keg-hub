@@ -12,19 +12,20 @@ const { exists } = require('KegUtils/helpers/exists')
  * @param {string|boolean} args.network - Type of docker network setup to use
  * @param {string|boolean} args.attached - Docker container interactive mode
  * @param {string|boolean} args.detached - Docker container detached mode
+ * @param {string|boolean} args.nocache - Build docker container without using cache
  * @param {string} [dockerCmd=''] - Docker command to add args to
  *
  * @returns {string} - Joint docker command arguments
  */
 const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
 
-  const cmdOpts = get(DOCKER, [ cmd.toUpperCase(), context.toUpperCase() ])
-  const checkArgs = { ...cmdOpts.DEFAULTS, ...args }
+  const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
+  const checkArgs = { ...containerOpts.DEFAULTS, ...args }
 
-  // Loop the cmdOpts.Value object and check for any extra arguments to add
+  // Loop the containerOpts.Value object and check for any extra arguments to add
   // Get All values get compared against the checkArgs array
-  // If set to true, then the value from cmdOpts.VALUES is added to the cmd
-  return reduceObj(cmdOpts.VALUES, (key, value, joinedArgs) => {
+  // If set to true, then the value from containerOpts.VALUES is added to the cmd
+  return reduceObj(containerOpts.VALUES, (key, value, joinedArgs) => {
 
     // Ensure both detached and attached are not added to the docker args
     if(key === 'detached' && args.attached) return joinedArgs
