@@ -1,6 +1,7 @@
 const { generalError } = require('KegUtils/error')
 const { isStr, get } = require('jsutils')
 const { findTask, executeTask } = require('KegUtils/task')
+const docker = require('KegDocApi')
 
 /**
  * Docker sub task alias map
@@ -36,7 +37,11 @@ const getDockerSubTask = (task, command) => {
  * @returns {void}
  */
 const dockerTask = args => {
-  const { globalConfig, command, task, tasks, options } = args
+  const { globalConfig, command, task, tasks, options, params } = args
+  const { remove, force } = params
+
+  // If the remove param is set, then try to remove it's value
+  if(remove) return docker.remove({ item: remove, force })
 
   // Find the docker sub-task
   const taskData = findTask(
@@ -71,6 +76,16 @@ module.exports = {
     },
     action: dockerTask,
     description: 'Keg Docker specific tasks',
-    example: 'keg docker <command> <options>'
+    example: 'keg docker <command> <options>',
+    options: {
+      remove: {
+        alias: [ 'rm' ],
+        description: 'Remove a docker image or container base on name. Value should be the name of item to be removed',
+      },
+      force: {
+        alias: [ 'f' ],
+        description: 'Force remove the image or container, when remove option is set'
+      }
+    }
   }
 }

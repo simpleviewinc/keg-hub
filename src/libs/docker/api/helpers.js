@@ -3,6 +3,18 @@ const { executeCmd } = require('KegProc')
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
 
+
+const noItemError = (cmd, shouldThrow=false) => {
+  Logger.empty()
+  Logger.error(`Docker API command Failed`)
+  Logger.info(`The "${ cmd }" command requires an object argument with an item key to run!`)
+  Logger.empty()
+
+  if(!shouldThrow) return false
+  
+  throw new Error(`Docker API command Failed!`)
+}
+
 /**
  * Error logger for docker commands. Logs the passed in error, then exits
  * @param {string} error - The error to be logged
@@ -14,21 +26,22 @@ const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
 const apiError = (error, errResponse, skipError) => {
 
   // Check if we should skip logging the error
-  if(!skipError){
-    const toLog = isStr(error)
-      ? error
-      : isObj(error) && error.stack
-        ? error.stack
-        : toStr(error)
+  if(skipError) return errResponse
 
-    Logger.empty()
-    Logger.error(`  Docker Api Error:`)
-    Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
-    Logger.empty()
-  }
+  const toLog = isStr(error)
+    ? error
+    : isObj(error) && error.stack
+      ? error.stack
+      : toStr(error)
+
+  Logger.empty()
+  Logger.error(`  Docker Api Error:`)
+  Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
+  Logger.empty()
+
 
   // If the errResponse is not undefined, return it... otherwise exit the process!
-  return errResponse !== undefined ? errResponse : process.exit(1)
+  return errResponse !== undefined  ? errResponse : process.exit(1)
 }
 
 /**
@@ -107,11 +120,13 @@ const compareItems = (item, compare, doCompare, defCompareKeys=[]) => {
  *
  * @returns {Array|string} - JSON array of items || stdout from docker cli call
  */
-const dockerCmd = async ({ opts, asStr, errResponse, skipError, format='' }) => {
+const dockerCmd = async ({ opts, asStr, errResponse, skipError, format='', force }) => {
+  const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
   const useFormat = format === 'json' ? `--format "{{json . }}"` : format
+  const useForce = force ? '--force' : ''
 
   const { error, data } = await executeCmd(
-    `docker ${ isArr(opts) ? opts.join(' ') : toStr(opts) } ${ useFormat }`.trim()
+    `docker ${ options } ${ useForce } ${ useFormat }`.trim()
   )
 
   return error

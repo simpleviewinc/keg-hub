@@ -1,7 +1,5 @@
 const { get } = require('jsutils')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
-const { spawnCmd, executeCmd } = require('KegProc')
+const { generalError } = require('KegUtils/error')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
 const { Logger } = require('KegLog')
@@ -17,7 +15,7 @@ const { Logger } = require('KegLog')
  * @returns {void}
  */
 const removeDockerImage = async args => {
-  const { params, skipThrow } = args
+  const { params, __skipThrow } = args
   const { name, force } = params
 
   // Ensure we have an image to remove by checking for a mapped name, or use original
@@ -28,13 +26,13 @@ const removeDockerImage = async args => {
   const image = await docker.image.get(imgName)
 
   // Ensure we have the image meta data, and try to remove by imageId
-  if(!image || !image.imageId){
-    skipThrow !== true && generalError(`The docker image "${ imgName }" does not exist!`)
-    return Logger.error(`Docker image ${imgName} could not be removed!`)
-  }
+  // __skipThrow is an internal argument, so it's not documented
+  ;(!image || !image.imageId) &&
+    __skipThrow !== true &&
+    generalError(`The docker image "${ imgName }" does not exist!`)
+  
 
-  const res = await docker.image.remove(`${ image.imageId } ${ force ? `--force` : '' }`.trim())
-  // TODO: Check image remove response and show / log outcome of remove command
+  return docker.image.remove({ item: image.imageId, force })
 
 }
 

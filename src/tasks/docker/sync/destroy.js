@@ -4,6 +4,7 @@ const { buildLocationContext } = require('KegUtils/builders')
 const { confirmExec } = require('KegUtils/helpers')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const docker = require('KegDocApi')
 
 /**
  * Destroys all docker-sync artifacts for the passed in context
@@ -36,9 +37,17 @@ const destroyDockerSync = async args => {
     execute: async () => {
 
       // Remove the container
-      // TODO: Update to use the docker API lib
-      const container = cmdContext && get(CONTAINERS, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
-      container && await spawnCmd(`docker container rm ${ container }`)
+      const container = cmdContext && get(
+        CONTAINERS,
+        `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`
+      )
+
+      container && await docker.remove({
+        item: container,
+        force: true,
+        skipError: true,
+        type: 'container',
+      })
 
       // Remove the docker-sync container volumes
       // Must come after removing the container
@@ -49,11 +58,8 @@ const destroyDockerSync = async args => {
       // TODO: Update to use the docker API lib
       const removeImgTask = get(tasks, 'docker.tasks.image.tasks.remove.action')
       await checkCall(removeImgTask, {
-        skipThrow: true,
-        params: {
-          name: cmdContext && get(CONTAINERS, `${cmdContext.toUpperCase()}.ENV.IMAGE`),
-          force: true
-        }
+        __skipThrow: true,
+        params: { name: cmdContext, force: true }
       })
 
       // Stop the docker-sync daemon

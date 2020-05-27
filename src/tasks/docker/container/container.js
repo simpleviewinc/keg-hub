@@ -3,6 +3,7 @@ const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
 const { CONTAINERS } = require('KegConst/docker/containers')
+const docker = require('KegDocApi')
 
 /**
  * Run a docker container command
@@ -19,39 +20,13 @@ const dockerContainer = async args => {
   const { cmd, name, force } = params
   const container = name && get(CONTAINERS, `${name.toUpperCase()}.ENV.CONTAINER_NAME`)
 
-  let runCmd
+  const apiMethod = docker.container[cmd]
+  if(apiMethod) return apiMethod({ item: container, force })
 
-  switch(cmd){
-    case 'purge':
-    case 'prune': {
-      runCmd = `prune`
-      break
-    }
-    // Kill, then remove the container
-    case 'destroy':
-    case 'des': {
-      !container && generalError(`The docker ${cmd} command requires a name argument!`)
-      runCmd = `kill ${container}; docker container rm ${container}`
-      break
-    }
-    case 'kill': {
-      !container && generalError(`The docker ${cmd} command requires a name argument!`)
-      runCmd = `kill ${container}`
-      break
-    }
-    case 'remove':
-    case 'rm': {
-      !container && generalError(`The docker ${cmd} command requires a name argument!`)
-      runCmd = `rm ${container}`
-      break
-    }
-    default: {
-      runCmd = cmd || options.join(' ').trim() || 'ls -a'
-    }
-  }
-
+  let runCmd = cmd || options.join(' ').trim() || 'ls -a'
   force && (runCmd += ` --force`)
-  await spawnCmd(`docker container ${ runCmd }`)
+
+  return spawnCmd(`docker container ${ runCmd }`)
 
 }
 

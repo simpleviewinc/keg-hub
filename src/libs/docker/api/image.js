@@ -1,4 +1,5 @@
 const { dockerCmd, compareItems } = require('./helpers')
+const { remove } = require('./commands')
 const { isArr, toStr, isStr } = require('jsutils')
 
 /**
@@ -39,17 +40,12 @@ const get = async nameOrId => {
 /**
  * Removes a docker image based on passed in toRemove argument
  * @function
- * @param {string} toRemove - Docker image to be removed
+* @param {string} args - Arguments used in the docker remove command
  *
  * @returns {string} - Response from the docker cli command
  */
-const remove = (toRemove, skipError, errResponse=false) => {
-  return dockerCmd({
-    skipError,
-    errResponse,
-    asStr: true,
-    opts: ['image', 'rm'].concat([ toRemove ])
-  })
+const removeImage = args => {
+  return remove({ ...args, type: 'image' })
 } 
 
 /**
@@ -101,5 +97,5 @@ module.exports = {
   exists,
   get,
   list,
-  remove
+  remove: removeImage,
 }
