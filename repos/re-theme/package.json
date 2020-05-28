@@ -27,7 +27,9 @@
     "dev": "yarn clean:build; rollup -c rollup.config.js -w",
     "app": "cd app; yarn start",
     "start": "yarn dev",
-    "test": "NODE_ENV=test jest --no-cache --verbose"
+    "test": "NODE_ENV=test jest --no-cache --verbose",
+    "test:reports": "yarn test --coverage && yarn view:reports",
+    "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
@@ -72,8 +74,9 @@
       "<rootDir>/src/**/__tests__/**/*.js?(x)"
     ],
     "collectCoverageFrom": [
-      "<rootDir>/src/index.js"
+      "src/**/*.{js,jsx,ts,tsx}"
     ],
+    "coverageDirectory": "reports/coverage",
     "moduleFileExtensions": [
       "js",
       "json",

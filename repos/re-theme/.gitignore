@@ -10,6 +10,7 @@ ios/platform.sqlite
 
 # code coverage
 coverage/
+reports/
 
 # OSX
 #
