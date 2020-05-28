@@ -35,19 +35,19 @@
   * For Example => defining custom redux actions or default data of the redux store
 
 ## Keg Components
-* Defines a universal definition of how content is consumed
+* Defines a universal definition of how content is displayed or consumed
 * Cross platform components
   * Mostly Javascript
   * Some components have platform specific code
   * Can be rendered anywhere
-* Consume the theme from Re-theme
-* Is Consume by a Tap
+* Consumes the theme from Re-theme
+* Is Consumed by a Tap
   * Used to define the views / layouts specific to the Tap
   * Tap defined theme passed to the Components
-    * Tells them how to render based on the Platform
+    * Tells theme how to render based on the Platform
 
 ## Re-Theme
-* Custom theme / Style render based on the platform
+* Custom theme / style renderer based on the platform
 * Theme passed in from the Tap
   * Defines the supported platforms
   * Defines platform specific styles and shared styles
@@ -57,7 +57,7 @@
 ## Tap
 * Code **SPECIFIC** to the client
 * Just javascript
-  * No native code required to build content of the tap
+  * No native code requirements
 * Defines supported platforms
 * Consumes Keg Components through Keg-Core
   * Custom layouts / designs
@@ -78,7 +78,7 @@
 * Firebase / Firestore
 
 ### Analytics
-* Firebase / Google
+* Firebase / Google / Pendo
 
 ### Authentication
 * Firebase - Provides auth through these providers
@@ -97,6 +97,7 @@
 * Docker-Sync
 * Docker-Composer
 * Docker-Machine
+* Github Packages - ( Docker Repository )
 
 ### 3rd Party
 **Custom Content Render**
