@@ -38,6 +38,43 @@ const loopTasks = (tasks, options) => {
 
 
 /**
+ * Searches for sub tasks of a task when a sub task is a string alias
+ * <br/> This will call getTask recursively
+ * @param {Object} task - All registered tasks to the KEG-CLI
+ * @param {Array} command - Name of the parent task to be run
+ * @param {Array} options - All passed in options from the command line
+ *
+ * @returns {Object} - Found task, with updated options
+ */
+const checkSubTask = (task, command, options) => {
+
+  // Check if the command is the same as the task
+  // If it's not, then check if it's an alias to a sub task
+  let subTask = task.name !== command && get(task, `tasks.${ command }`)
+
+  // If a subTask exists, check if it's an alias string, and get the real task object
+  subTask = isStr(subTask) && get(task, `tasks.${ subTask }`) || subTask
+
+  // If no subtask is found, then return the original task
+  if(!subTask) return task
+
+  // Now we have the subTask, but we need to check the tasks again
+  // The next option might also be an aliased subtask, so call getTask again
+  // With the next options argument, using the subTask's tasks 
+  const nextOpt = options.shift()
+
+  // This starts the whole getTask process all over again
+  // But with the sub tasks, and next item in the options array
+  const nextSubTask = getTask(subTask.tasks, nextOpt, ...options)
+
+  // If no lower sub task exists, then add the nextOpt back to the opts array
+  if(!nextSubTask) options.unshift(nextOpt)
+
+  return { task: nextSubTask || subTask, options }
+
+}
+
+/**
  * Searches for the task based on the passed in options
  * @param {Object} tasks - All registered tasks to the KEG-CLI
  * @param {Array} command - Name of the parent task to be run
@@ -48,20 +85,9 @@ const loopTasks = (tasks, options) => {
 const getTask = (tasks, command, ...options) => {
   let task = loopTasks(tasks, [ command, ...options ])
 
-  // If no task is found, just return
-  if(!task) return
-
-  // Check if the command is the same as the task
-  // If it's not, then check if it's an alias to a sub task
-  let subTask = task.name !== command && get(task, `tasks.${ command }`)
-
-  // If a subTask exists, check if it's an alias string, then set that as the task
-  // Otherwise just set the task
-  task = subTask
-    ? isStr(subTask) && get(task, `tasks.${ subTask }`) || subTask
-    : task
-
-  return task && { task, options }
+  // Need to check if an aliased subTask is being used
+  // Example => `keg dc <options> === keg docker container`
+  return task ? checkSubTask(task, command, options) : undefined
 }
 
 module.exports = {

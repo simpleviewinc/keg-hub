@@ -38,6 +38,7 @@ const getDockerSubTask = (task, command) => {
  * @returns {void}
  */
 const dockerTask = args => {
+
   const { globalConfig, command, task, tasks, options, params } = args
 
   // Find the docker sub-task
