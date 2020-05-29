@@ -1,5 +1,6 @@
 const { get } = require('jsutils')
 const { getTask } = require('./getTask')
+const { validateTask } = require('./validateTask')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 
@@ -37,13 +38,16 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
  */
 const findTask = (globalConfig, tasks, command, options) => {
   // Get the task from available tasks
-  const taskData = getTask(tasks, command, ...options)
+  const foundTask = getTask(tasks, command, ...options)
 
-  // If there's a task, just it
-  // Otherwise check if the command is for a tap
-  return taskData && taskData.task
-    ? taskData
+  // Ensure we have the taskData
+  // If not, check linked Taps for a tap task
+  const taskData = foundTask && foundTask.task
+    ? foundTask
     : checkLinkedTaps(globalConfig, tasks, command, options)
+
+  // Validate the task, and return the taskData
+  return validateTask(taskData.task) && taskData
 
 }
 

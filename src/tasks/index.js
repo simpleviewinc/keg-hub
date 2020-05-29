@@ -25,6 +25,7 @@ module.exports = config => {
   return {
     ...initialize(require('./cli'), 'cli', config),
     ...initialize(require('./components'), 'components', config),
+    ...initialize(require('./config'), 'config', config),
     ...initialize(require('./core'), 'core', config),
     ...initialize(require('./docker'), 'docker', config),
     ...initialize(require('./git'), 'git', config),

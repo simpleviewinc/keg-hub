@@ -30,11 +30,11 @@ module.exports = {
     alias: [ 'ide' ],
     action: setEditor,
     description: `Sets the IDE used to open folders and files through the Keg-Cli.`,
-    example: 'keg global editor <options>',
+    example: 'keg config editor <options>',
     options: {
       command: {
         description: 'command that is executed to open the editor!',
-        example: 'keg global editor command=code',
+        example: 'keg config editor command=code',
         alias: [ 'cmd' ],
         required: true
       }

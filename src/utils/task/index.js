@@ -4,4 +4,5 @@ module.exports = {
   ...require('./getTask'),
   ...require('./findTask'),
   ...require('./runInternalTask'),
+  ...require('./validateTask'),
 }

@@ -19,6 +19,6 @@ module.exports = {
     name: 'print',
     action: printConfig,
     description: `Print the global config to the terminal`,
-    example: 'keg global print'
+    example: 'keg config print'
   }
 }

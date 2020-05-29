@@ -1,5 +1,5 @@
-const { throwWrap } = require('KegUtils')
-const { executeTask } = require('./executeTask')
+const { throwWrap } = require('../error/throwWrap')
+const { executeTask } = require('../task/executeTask')
 const { get, isFunc, isStr } = require('jsutils')
 
 /**

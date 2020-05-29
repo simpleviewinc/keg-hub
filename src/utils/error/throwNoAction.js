@@ -1,8 +1,7 @@
 const { Logger } = require('KegLog')
 
-const throwNoAction = (args) => {
-  const { command, task, tasks } = args
-  Logger.error(`\n Task '${task.name}' requires a valid sub-task command. No action exists for this task!`)
+const throwNoAction = task => {
+  Logger.error(`\n Task '${task.name}' requires a valid sub-task. No action exists for this task!`)
 
   task.alias && Logger.message(`  * Alias:`, task.alias.join(' | '))
   task.description && Logger.message(`  * Description:`, task.description)

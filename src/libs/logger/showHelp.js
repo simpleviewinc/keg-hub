@@ -173,6 +173,9 @@ const showHelp = (tasks, task=false) => {
   task ? showTaskHelp(task) : showAllHelp(tasks)
 
   Logger.empty()
+
+  // Return true, so we know showHelp executed
+  return true
 }
 
 module.exports = {

@@ -20,6 +20,7 @@ const testCommand = args => {
 module.exports = {
   test: {
     name: 'test',
+    alias: [ 'tst' ],
     action: testCommand,
     description: `Test a cli command`,
     example: 'keg global test',

@@ -1,5 +1,6 @@
-const { checkCall, get, isObj, isFunc } = require('jsutils')
-const { throwNoAction, throwNoTask } = require('KegUtils/error')
+const { checkCall, get, isObj, isFunc, isStr } = require('jsutils')
+const { throwNoAction, throwNoTask } = require('../error')
+const { validateTask } = require('./validateTask')
 
 /**
  * Runs an internal task based on passed in arguments
@@ -8,22 +9,16 @@ const { throwNoAction, throwNoTask } = require('KegUtils/error')
  *
  * @returns {*} - Response from the task to be run
  */
-const runInternalTask = async (taskPath, args) => {
+const runInternalTask = async (taskPath, args, task) => {
 
-  // Get the docker-sync start tasks
-  const internalTask = get(args, taskPath)
+  // // Get the docker-sync start tasks
+  task = task || get(args, taskPath)
 
-  // Check that the sync task exists
-  return !isObj(internalTask)
-    ? throwNoTask(args)
-    // Check the action for the docker-sync exists
-    : !isFunc(internalTask.action)
-      ? throwNoAction(args)
-      // Run the docker-sync task for the tap
-      : checkCall(internalTask.action, {
-          ...args,
-          task: internalTask,
-        })
+  // If task a string, then it's  an alias, so get the real task
+  task = isStr(task) && get(args, `tasks.${ task }.${taskPath}`) || task
+
+  // Validate the task, then call it's action
+  return validateTask(task, taskPath).action({ ...args, task: task })
 
 }
 

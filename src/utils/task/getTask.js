@@ -24,8 +24,8 @@ const loopTasks = (tasks, options) => {
   const parentTask = isStr(parent) ? tasks[parent] : parent
 
   // Check it there's child tasks, and try to find one matching the passed in options
-  const childTask = isObj(parentTask)
-    ? isObj(parentTask.tasks) && loopTasks(parentTask.tasks, options)
+  const childTask = isObj(parentTask) && isObj(parentTask.tasks)
+    ? loopTasks(parentTask.tasks, options)
     : false
 
   // Add the option back when no child task is found
@@ -40,12 +40,27 @@ const loopTasks = (tasks, options) => {
 /**
  * Searches for the task based on the passed in options
  * @param {Object} tasks - All registered tasks to the KEG-CLI
+ * @param {Array} command - Name of the parent task to be run
  * @param {Array} options - All passed in options from the command line
  *
  * @returns {Object} - Found task, with updated options
  */
-const getTask = (tasks, ...options) => {
-  const task = loopTasks(tasks, options)
+const getTask = (tasks, command, ...options) => {
+  let task = loopTasks(tasks, [ command, ...options ])
+
+  // If no task is found, just return
+  if(!task) return
+  
+  // Check if the command is the same as the task
+  // If it's not, then check if it's an alias to a sub task
+  let subTask = task.name !== command && get(task, `tasks.${ command }`)
+
+  // If a subTask exists, check if it's an alias string, then set that as the task
+  // Otherwise just set the task
+  task = subTask
+    ? isStr(subTask) && get(task, `tasks.${ subTask }`) || subTask
+    : task
+
   return task && { task, options }
 }
 
