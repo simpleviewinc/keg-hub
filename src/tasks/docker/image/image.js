@@ -52,7 +52,7 @@ const dockerImage = async args => {
 module.exports = {
   image: {
     name: 'image',
-    alias: [ 'img', 'i' ],
+    alias: [ 'img', 'i', 'di' ],
     action: dockerImage,
     tasks: {
       ...require('./clean'),

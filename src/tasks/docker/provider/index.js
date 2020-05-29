@@ -9,7 +9,7 @@ const providerAction = ({ task }) => {
 module.exports = {
   provider: {
     name: 'provider',
-    alias: [ 'prov', 'pro', 'pr', 'p' ],
+    alias: [ 'prov', 'pro', 'pr', 'p', 'dp' ],
     action: providerAction,
     tasks: {
       ...require('./login'),

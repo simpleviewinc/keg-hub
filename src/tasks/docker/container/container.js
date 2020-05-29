@@ -43,7 +43,7 @@ const dockerContainer = async args => {
 module.exports = {
   container: {
     name: 'container',
-    alias: [ 'cont', 'c' ],
+    alias: [ 'cont', 'c', 'dc' ],
     action: dockerContainer,
     description: `Runs docker container command`,
     example: 'keg docker container <options>',

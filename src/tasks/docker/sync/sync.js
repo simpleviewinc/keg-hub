@@ -5,7 +5,7 @@ const dockerSync = args => {
 module.exports = {
   sync: {
     name: 'sync',
-    alias: [ 'sy' ],
+    alias: [ 'sy', 'ds' ],
     action: dockerSync,
     tasks: {
       clean: require('./clean'),

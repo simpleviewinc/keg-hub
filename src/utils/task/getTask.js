@@ -50,7 +50,7 @@ const getTask = (tasks, command, ...options) => {
 
   // If no task is found, just return
   if(!task) return
-  
+
   // Check if the command is the same as the task
   // If it's not, then check if it's an alias to a sub task
   let subTask = task.name !== command && get(task, `tasks.${ command }`)
