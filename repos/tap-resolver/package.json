@@ -1,5 +1,5 @@
 {
-  "name": "tap-resolver",
+  "name": "@simpleviewinc/tap-resolver",
   "version": "1.0.0",
   "description": "Resolves tap files within the SV-Keg",
   "main": "babel.config.js",
@@ -10,6 +10,13 @@
     "test": "NODE_ENV=resolver-test jest",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html"
+  },
+  "publishConfig": { 
+    "registry": "https://npm.pkg.github.com/" 
+  },
+  "repository" : {
+    "url": "ssh://git@github.com/simpleviewinc/tap-resolver.git",
+    "type": "git"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
