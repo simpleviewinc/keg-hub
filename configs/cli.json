@@ -2,7 +2,7 @@
   "name": "keg-cli",
   "displayName": "Keg CLI",
   "docker": {
-    "provider": "docker.pkg.github.com",
+    "providerUrl": "docker.pkg.github.com",
     "user": "",
     "token": ""
   },

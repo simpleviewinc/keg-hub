@@ -37,7 +37,7 @@ const noLoginError = (providerUrl, user, token) => {
   const missing = !providerUrl ? 'providerUrl' : !user ? `user` : `token`
 
   Logger.empty()
-  Logger.error(`  Docker login failed:`)
+  Logger.error(`  Docker login failed!`)
   Logger.info(`  Docker login requires a ${ missing } argument!`)
   Logger.empty()
 

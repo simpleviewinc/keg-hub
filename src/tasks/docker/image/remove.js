@@ -15,6 +15,7 @@ const { Logger } = require('KegLog')
  * @returns {void}
  */
 const removeDockerImage = async args => {
+
   const { params, __skipThrow } = args
   const { name, force } = params
 

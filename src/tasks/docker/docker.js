@@ -41,9 +41,6 @@ const dockerTask = args => {
   const { globalConfig, command, task, tasks, options, params } = args
   const { remove, force } = params
 
-  // If the remove param is set, then try to remove it's value
-  if(remove) return docker.remove({ item: remove, force })
-
   // Find the docker sub-task
   const taskData = findTask(
     globalConfig,

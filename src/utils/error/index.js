@@ -1,5 +1,6 @@
 module.exports = {
   ...require('./generalError'),
+  ...require('./throwDockerCreds'),
   ...require('./throwExitError'),
   ...require('./throwGitCmd'),
   ...require('./throwNoAction'),

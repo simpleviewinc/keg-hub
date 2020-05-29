@@ -21,7 +21,7 @@ const defaultConfig = () => {
     name: packageJson.name,
     displayName: "Keg CLI",
     docker: {
-      provider: "docker.pkg.github.com",
+      providerUrl: "docker.pkg.github.com",
       user: "",
       token: ""
     },

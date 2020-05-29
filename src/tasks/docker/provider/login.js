@@ -1,9 +1,9 @@
 const { spawnCmd } = require('KegProc')
-const { getGitKey, getGitConfigItem } = require('KegUtils/git')
+const { buildDockerLogin } = require('KegUtils/builders/buildDockerLogin')
 const docker = require('KegDocApi')
 
 /**
- * Logs into a configured registry provider
+ * Logs into a configured docker registry provider
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -15,31 +15,36 @@ const docker = require('KegDocApi')
  * @returns {void}
  */
 const providerLogin = async args => {
-  const { globalConfig, options, params, task, tasks } = args
-  const { user, token } = params
-  const gitKey = token || await getGitKey(globalConfig)
-  const gitUser = user || await getGitConfigItem('user.name')
 
+  const creds = await buildDockerLogin(args.params)
 
-  // const dockerRegUrl = `docker.pkg.github.com`
-  // spawnCmd(`docker login ${ dockerRegUrl } -u ${ gitUser } -p ${ gitKey }`)
+  await docker.login(creds)
 
 }
 
 module.exports = {
   login: {
     name: 'login',
-    alias: [ 'lgn' ],
+    alias: [ 'lgn', 'lg' ],
     action: providerLogin,
     description: 'Log into the Docker registry provider',
     example: 'keg docker provider login <options>',
     options: {
       user: {
-        description: 'User to use when logging into the registry provider'
+        description: 'User to use when logging into the registry provider',
+        example: 'keg docker provider login --user foobar',
+        enforced: true
+      },
+      provider: {
+        description: 'Url of the docker registry provider',
+        example: 'keg docker provider login --provider docker.pkg.github.com',
+        enforced: true
       },
       token: {
-        description: 'API Token for registry provider to allow logging in'
-      }
+        description: 'API Token for registry provider to allow logging in',
+        example: 'keg docker provider login --token 12345',
+        enforced: true
+      },
     }
   }
 }
