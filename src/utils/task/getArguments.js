@@ -298,11 +298,12 @@ const loopTaskOptions = (task, taskKeys, options) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const addDefaults = (task, mappedArgs={}) => {
-  return reduceObj(task.options, (name, option, mapped) => {
-    !mapped[name] &&
-      option.default &&
-      ( mapped[name] = option.default )
+const ensureArguments = (task, mappedArgs={}) => {
+  return reduceObj(task.options, (key, meta, mapped) => {
+    !mapped[key] &&
+      !checkRequired(task, key, meta)
+      meta.default &&
+      ( mapped[key] = meta.default )
 
     return mapped
   }, mappedArgs)
@@ -320,7 +321,7 @@ const addDefaults = (task, mappedArgs={}) => {
 const getArguments = ({ options=[], task }) => {
 
   // If no options to parse, Add the defaults and return it
-  if(!options.length) return addDefaults(task)
+  if(!options.length) return ensureArguments(task)
 
   // Make copy of options, so we don't affect the original
   const optsCopy = Array.from(options)
@@ -330,7 +331,7 @@ const getArguments = ({ options=[], task }) => {
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
   // If not task keys to loop, just return empty
-  if(!taskKeys || !taskKeys.length) return addDefaults(task)
+  if(!taskKeys || !taskKeys.length) return ensureArguments(task)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
   return options.length !== 1 || options[0].indexOf('=') !== -1
@@ -339,7 +340,7 @@ const getArguments = ({ options=[], task }) => {
     ? taskKeys && loopTaskOptions(task, taskKeys, options)
     
     // Otherwise set it as the first key in the task options object
-    : addDefaults(
+    : ensureArguments(
         task,
         { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
       )
