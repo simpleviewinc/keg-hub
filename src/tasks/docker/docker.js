@@ -39,7 +39,6 @@ const getDockerSubTask = (task, command) => {
  */
 const dockerTask = args => {
   const { globalConfig, command, task, tasks, options, params } = args
-  const { remove, force } = params
 
   // Find the docker sub-task
   const taskData = findTask(
@@ -77,14 +76,23 @@ module.exports = {
     description: 'Keg Docker specific tasks',
     example: 'keg docker <command> <options>',
     options: {
-      remove: {
-        alias: [ 'rm' ],
-        description: 'Remove a docker image or container base on name. Value should be the name of item to be removed',
+      cmd: {
+        description: 'Docker container command to run. Default ( ls )',
+        example: 'keg docker container ls',
+      },
+      name: {
+        description: 'Name of the container to run the command on',
+        example: 'keg docker container --name core',
       },
       force: {
         alias: [ 'f' ],
         description: 'Force remove the image or container, when remove option is set'
-      }
+      },
+      format: {
+        allowed: [ 'json' ],
+        description: 'Output format of the docker command',
+        example: 'keg docker container --format json',
+      },
     }
   }
 }
