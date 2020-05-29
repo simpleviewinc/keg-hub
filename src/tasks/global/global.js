@@ -1,4 +1,4 @@
-const { buildGlobalTaskAlias } = require('KegUtils/task/buildGlobalTaskAlias')
+const { buildGlobalTaskAlias } = require('KegUtils/builders/buildGlobalTaskAlias')
 
 module.exports = {
   global: buildGlobalTaskAlias({
