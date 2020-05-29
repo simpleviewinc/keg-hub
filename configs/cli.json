@@ -1,6 +1,11 @@
 {
   "name": "keg-cli",
   "displayName": "Keg CLI",
+  "docker": {
+    "provider": "docker.pkg.github.com",
+    "user": "",
+    "token": ""
+  },
   "cli": {
     "paths": {
       "customTasks": ""

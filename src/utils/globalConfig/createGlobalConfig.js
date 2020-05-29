@@ -24,8 +24,8 @@ const createGlobalConfig = (oldConfig={}, params={}) => {
 
   // Save or merge the config object
   return saveGlobalConfig(
-  // Create new config by merge old config with new default config if flag set,
-  // or just build new config
+    // Create new config by merge old config with new default config if flag set,
+    // or just build new config
     merge ? deepMerge(...configs) : defConfig
   )
 }

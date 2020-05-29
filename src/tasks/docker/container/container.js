@@ -4,6 +4,7 @@ const { getPathFromConfig } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
+const { Logger } = require('KegLog')
 
 /**
  * Run a docker container command
@@ -17,16 +18,25 @@ const docker = require('KegDocApi')
  */
 const dockerContainer = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
-  const { cmd, name, force } = params
+  const { cmd, name, force, format } = params
   const container = name && get(CONTAINERS, `${name.toUpperCase()}.ENV.CONTAINER_NAME`, name)
 
   const apiMethod = docker.container[cmd]
-  if(apiMethod) return apiMethod({ item: container, force })
+  if(apiMethod) return apiMethod({ item: container, force, format })
 
-  let runCmd = cmd || options.join(' ').trim() || 'ls -a'
-  force && (runCmd += ` --force`)
+  const cmdArgs = { ...params }
 
-  return spawnCmd(`docker container ${ runCmd }`)
+  if(!cmd){
+    docker.logOutput(true)
+  }
+  
+  cmdArgs.opts = cmd
+    ? container
+      ? [ cmd, container ]
+      : [ cmd ]
+    : [ 'ls -a' ]
+
+  await docker.container(cmdArgs)
 
 }
 
@@ -48,7 +58,12 @@ module.exports = {
       },
       force: {
         description: 'Add the force argument to the docker command',
-        example: 'keg docker image --force ',
+        example: 'keg docker container --force',
+      },
+      format: {
+        allowed: [ 'json' ],
+        description: 'Output format of the docker command',
+        example: 'keg docker container --format json',
       },
     },
   }

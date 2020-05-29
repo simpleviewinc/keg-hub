@@ -1,3 +1,6 @@
+const { spawnCmd } = require('KegProc')
+const { getGitKey, getGitConfigItem } = require('KegUtils/git')
+const docker = require('KegDocApi')
 
 /**
  * Logs into a configured registry provider
@@ -11,8 +14,16 @@
  *
  * @returns {void}
  */
-const providerLogin = (args) => {
-  console.log(`---------- provider login ----------`)
+const providerLogin = async args => {
+  const { globalConfig, options, params, task, tasks } = args
+  const { user, token } = params
+  const gitKey = token || await getGitKey(globalConfig)
+  const gitUser = user || await getGitConfigItem('user.name')
+
+
+  // const dockerRegUrl = `docker.pkg.github.com`
+  // spawnCmd(`docker login ${ dockerRegUrl } -u ${ gitUser } -p ${ gitKey }`)
+
 }
 
 module.exports = {

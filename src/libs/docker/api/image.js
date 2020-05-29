@@ -1,21 +1,28 @@
-const { dockerCmd, compareItems } = require('./helpers')
-const { remove } = require('./commands')
+const { compareItems } = require('./helpers')
+const { remove, dockerCli, dynamicCmd } = require('./commands')
 const { isArr, toStr, isStr } = require('jsutils')
 
 /**
  * Calls the docker api and gets a list of current images
  * @function
- * @param {Object} params - arguments used to modify the docker api call
+ * @param {Object} args - arguments used to modify the docker api call
+ * @param {string} args.opts - Options used to build the docker command
+ * @param {string} args.format - Format of the docker command output
  *
  * @returns {Array} - JSON array of all images
  */
-const list = (params={}) => {
-  const { opts } = params
+const list = (args={}) => {
+  const { opts } = args
 
-  return dockerCmd({
-    ...params,
+  return dockerCli({
+    format: 'json',
+    ...args,
     opts: ['image', 'ls'].concat(
-      isArr(opts) ? opts : isStr(opts) ? opts.split(' ') : []
+      isArr(opts)
+        ? opts
+        : isStr(opts)
+          ? opts.split(' ')
+          : []
     )
   })
 }
@@ -29,7 +36,7 @@ const list = (params={}) => {
  */
 const get = async nameOrId => {
   // Get all current images
-  const images = await list({ errResponse: [] })
+  const images = await list({ errResponse: [], format: 'json' })
 
   // If we have images, try to find the one matching the passed in argument
   return images &&
@@ -53,12 +60,13 @@ const removeImage = args => {
  * @function
  * @param {string} compare - Value to compare each container with
  * @param {string|function} doCompare - How to compare each container
+ * @param {string|function} format - Format of the docker command output
  *
  * @returns {boolean} - Based on if the image exists
  */
 const exists = async (compare, doCompare) => {
   // Get all current images
-  const images = await list({ errResponse: [] })
+  const images = await list({ errResponse: [], format: 'json' })
   // If we have images, try to find the one matching the passed in argument
   return images &&
     images.length &&
@@ -68,15 +76,17 @@ const exists = async (compare, doCompare) => {
 /**
  * Removes all un-tagged and un-named images
  * @function
- * @param {string} opts - Extra options to pass to the docker image rm command
+ * @param {string} args - Arguments to pass to the docker image command
+ * @param {string} args.opts - Options used to build the docker command
  *
  * @returns {boolean} - If the images can be removed
  */
-const clean = async (opts='') => {
-  const IMG_NONE = `<none>`
+const clean = async ({ opts='' }) => {
   
-    // Get all current images
-  const images = await list({ errResponse: [] })
+  const IMG_NONE = `<none>`
+
+  // Get all current images
+  const images = await list({ errResponse: [], format: 'json' })
 
   const toRemove = images.reduce((toRemove, image) => {
     (image.repository === IMG_NONE || image.tag === IMG_NONE) &&
@@ -84,18 +94,27 @@ const clean = async (opts='') => {
 
     return toRemove
   }, '').trim()
-  
-  return toRemove && dockerCmd({
-    asStr: true,
-    opts: ['image', 'rm'].concat([ toRemove, opts ])
-  })
+
+  return toRemove && dockerCli({ opts: ['image', 'rm'].concat([ toRemove, opts ]) })
 
 }
 
-module.exports = {
+/**
+ * Root docker image method to run docker image commands
+ * @function
+ * @param {string} args - Arguments to pass to the docker image command
+ *
+ * @returns {string|Array} - Response from docker cli
+ */
+const image = (args={}) => dynamicCmd(args, 'image')
+
+// Add the sub-methods to the root docker image method
+Object.assign(image, {
   clean,
   exists,
   get,
   list,
   remove: removeImage,
-}
+})
+
+module.exports = image

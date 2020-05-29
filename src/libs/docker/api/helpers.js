@@ -1,13 +1,22 @@
 const { camelCase, snakeCase, isArr, isFunc, isStr, toStr } = require('jsutils')
-const { executeCmd } = require('KegProc')
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
 
+let __logOutput = false
+const logOutput = (shouldLog) => __logOutput = shouldLog
 
+/**
+ * Throws an error when no item argument is passed to a docker command
+ * @function
+ * @param {string} cmd - Docker command that requires an item argument
+ * @param {boolean} [shouldThrow=false] - Should an error be throw
+ *
+ * @returns {boolean} If shouldThrow is false, then return false.
+ */
 const noItemError = (cmd, shouldThrow=false) => {
   Logger.empty()
-  Logger.error(`Docker API command Failed`)
-  Logger.info(`The "${ cmd }" command requires an object argument with an item key to run!`)
+  Logger.error(`  Docker API command failed:`)
+  Logger.info(`  The "${ cmd }" command requires an object argument with an item key to run!`)
   Logger.empty()
 
   if(!shouldThrow) return false
@@ -15,12 +24,51 @@ const noItemError = (cmd, shouldThrow=false) => {
   throw new Error(`Docker API command Failed!`)
 }
 
-const cmdSuccess = (cmd, message) => {
+/**
+ * Throws an error when invalid arguments are passed to the docker login command
+ * @function
+ * @param {string} providerUrl - Url to log into
+ * @param {string} user - User name to login with
+ * @param {string} token - API token to access the providers API
+ *
+ * @returns {void}
+ */
+const noLoginError = (providerUrl, user, token) => {
+  const missing = !providerUrl ? 'providerUrl' : !user ? `user` : `token`
+
   Logger.empty()
-  Logger.success(message || `Docker ${cmd} command succeeded!`)
+  Logger.error(`  Docker login failed:`)
+  Logger.info(`  Docker login requires a ${ missing } argument!`)
   Logger.empty()
 
-  return true
+  throw new Error(`Docker login Failed!`)
+
+}
+
+/**
+ * Logs message when a docker command completes successfully
+ * @function
+ * @param {string} cmd - Docker command that was run
+ * @param {string} message - Overrides the default message to log
+ *
+ * @returns {boolean} - true
+ */
+const cmdSuccess = (cmd, res, message) => {
+
+  if(!__logOutput) return res
+
+  else if(cmd && !res){
+    Logger.empty()
+    Logger.success(`Docker command "${cmd}" success!`)
+    Logger.empty()
+  }
+  else if(res){
+    Logger.empty()
+    Logger.data(res)
+    Logger.empty()
+  }
+
+  return res
 }
 
 /**
@@ -53,32 +101,53 @@ const apiError = (error, errResponse, skipError) => {
 }
 
 /**
- * Formats the docker cli response into an array of items
+ * Formats the docker cli response into an array of items based on the format
  * @function
  * @param {string} data - response data from the docker CLI
+ * @param {string} format - Output format of the data
  *
  * @returns {Array} - JSON array of items
  */
-const itemHeaderMap = (data, format) => {
-  
-  if(format === 'json'){
-    return data.split('\n')
-      .reduce((items, item) => {
-        if(!item.trim()) return items
+const apiSuccess = (data, format) => {
+  return format === 'json' ? jsonOutput(data) : data
+}
 
-        try {
-          const parsed = JSON.parse(item.replace(/\\"/g, ''))
-          const built = {}
-          Object.keys(parsed).map(key => built[camelCase(snakeCase(key))] = parsed[key])
-          return items.concat([ built ])
-        }
-        catch(e){
-          return items
-        }
+/**
+ * Formats the docker json output into an object
+ * Docker `--format json` flag gives a weird string json output
+ * This helper cleans up the output, so it can be properly parsed as JSON
+ * @function
+ * @param {string} data - Output of a docker command in table format 
+ *
+ * @returns {Object} - Formatted docker output as an object
+ */
+const jsonOutput = (data) => {
+  return data.split('\n')
+    .reduce((items, item) => {
+      if(!item.trim()) return items
 
-      }, [])
-  }
+      try {
+        const parsed = JSON.parse(item.replace(/\\"/g, ''))
+        const built = {}
+        Object.keys(parsed).map(key => built[camelCase(snakeCase(key))] = parsed[key])
 
+        return items.concat([ built ])
+      }
+      catch(e){
+        return items
+      }
+
+    }, [])
+}
+
+/**
+ * Formats the docker table output into an object
+ * @function
+ * @param {string} data - Output of a docker command in table format 
+ *
+ * @returns {Object} - Formatted docker output as an object
+ */
+const tableOutput = (data) => {
   const lines = data.toLowerCase().split(NEWLINES_MATCH)
   const headers = lines.shift().split(SPACE_MATCH)
 
@@ -91,12 +160,12 @@ const itemHeaderMap = (data, format) => {
             .reduce((item, content, index) => {
               const key = headers[index]
               item[camelCase(key)] = content
+
               return item
             }, {})
         ])
 
   }, [])
-
 }
 
 /**
@@ -117,41 +186,11 @@ const compareItems = (item, compare, doCompare, defCompareKeys=[]) => {
       : defCompareKeys.some(key => item[key] === compare)
 }
 
-/**
- * Calls the docker cli from the command line and returns the response
- * @function
- * @param {Object} params - arguments used to modify the docker api call
- * @param {Object} params.opts - optional arguments to pass to the docker command
- * @param {Object} params.asStr - Return the response as an unformatted string
- * @param {Object} params.errResponse - On an error calling docker, this will be returned.
- *                                      If errResponse is undefined, the current process will exit
- *
- * @returns {Array|string} - JSON array of items || stdout from docker cli call
- */
-const dockerCmd = async ({ opts, asStr, errResponse, skipError, format='', force }) => {
-  const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
-  const useFormat = format === 'json' ? `--format "{{json . }}"` : format
-  const useForce = force ? '--force' : ''
-
-  const cmdToRun = `docker ${ options } ${ useForce } ${ useFormat }`.trim()
-
-  Logger.empty()
-  Logger.message(`Running command: `, cmdToRun)
-
-  const { error, data } = await executeCmd(cmdToRun)
-
-  return error
-    ? apiError(error, errResponse, skipError)
-    : asStr
-      ? data
-      : itemHeaderMap(data, format)
-}
-
-
 module.exports = {
   apiError,
+  apiSuccess,
   compareItems,
   cmdSuccess,
-  dockerCmd,
   noItemError,
+  logOutput,
 }
