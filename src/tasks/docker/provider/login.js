@@ -17,7 +17,6 @@ const docker = require('KegDocApi')
 const providerLogin = async args => {
 
   const creds = await buildDockerLogin(args.params)
-
   await docker.login(creds)
 
 }
