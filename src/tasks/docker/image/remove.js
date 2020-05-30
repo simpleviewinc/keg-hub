@@ -3,6 +3,7 @@ const { generalError } = require('KegUtils/error')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
 const { Logger } = require('KegLog')
+const { dockerLog } = require('KegUtils/log/dockerLog')
 
 /**
  * Run a docker image command
@@ -17,23 +18,25 @@ const { Logger } = require('KegLog')
 const removeDockerImage = async args => {
 
   const { params, __skipThrow } = args
-  const { name, force } = params
+  const { name, force, tag } = params
 
   // Ensure we have an image to remove by checking for a mapped name, or use original
-  const imgName = get(CONTAINERS, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
-  !imgName && generalError(`The docker "image remove" command requires a name argument!`)
+  const imgRef = tag || get(CONTAINERS, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
+  !imgRef && generalError(`The docker "image remove" command requires a name or tag argument!`)
 
   // Get the image meta data
-  const image = await docker.image.get(imgName)
+  const image = await docker.image[ tag ? 'getByTag' : 'get' ](imgRef)
 
   // Ensure we have the image meta data, and try to remove by imageId
   // __skipThrow is an internal argument, so it's not documented
-  ;(!image || !image.imageId) &&
+  ;(!image || !image.id) &&
     __skipThrow !== true &&
-    generalError(`The docker image "${ imgName }" does not exist!`)
-  
+    generalError(`The docker image "${ imgRef }" does not exist!`)
 
-  return docker.image.remove({ item: image.imageId, force })
+  const res = await docker.image.remove({ item: image.id, force })
+
+  // Log the output of the command
+  dockerLog(res, 'image remove')
 
 }
 
@@ -48,6 +51,10 @@ module.exports = {
       name: {
         description: 'Name of the image to remove',
         example: 'keg docker image remove --name core',
+      },
+      tag: {
+        description: 'Tag name of the image to remove',
+        example: 'keg docker image remove --tag <tag name>',
       },
       force: {
         description: 'Add the force argument to the docker command',

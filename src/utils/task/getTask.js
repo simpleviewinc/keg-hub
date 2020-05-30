@@ -65,10 +65,10 @@ const checkSubTask = (task, command, options) => {
 
   // This starts the whole getTask process all over again
   // But with the sub tasks, and next item in the options array
-  const nextSubTask = getTask(subTask.tasks, nextOpt, ...options)
+  const nextSubTask = nextOpt && getTask(subTask.tasks, nextOpt, ...options)
 
   // If no lower sub task exists, then add the nextOpt back to the opts array
-  if(!nextSubTask) options.unshift(nextOpt)
+  if(!nextSubTask && nextOpt) options.unshift(nextOpt)
 
   return { task: nextSubTask || subTask, options }
 
@@ -83,11 +83,13 @@ const checkSubTask = (task, command, options) => {
  * @returns {Object} - Found task, with updated options
  */
 const getTask = (tasks, command, ...options) => {
+
   let task = loopTasks(tasks, [ command, ...options ])
 
   // Need to check if an aliased subTask is being used
   // Example => `keg dc <options> === keg docker container`
   return task ? checkSubTask(task, command, options) : undefined
+
 }
 
 module.exports = {

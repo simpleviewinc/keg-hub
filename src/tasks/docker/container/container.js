@@ -1,10 +1,10 @@
 const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig')
+const { dockerLog } = require('KegUtils/log/dockerLog')
 const { spawnCmd } = require('KegProc')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
-const { Logger } = require('KegLog')
 
 /**
  * Run a docker container command
@@ -26,17 +26,16 @@ const dockerContainer = async args => {
 
   const cmdArgs = { ...params }
 
-  if(!cmd){
-    docker.logOutput(true)
-  }
-  
   cmdArgs.opts = cmd
     ? container
       ? [ cmd, container ]
       : [ cmd ]
     : [ 'ls -a' ]
 
-  await docker.container(cmdArgs)
+  const res = await docker.container(cmdArgs)
+
+  // Log the output of the command
+  dockerLog(res, cmd)
 
 }
 

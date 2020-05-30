@@ -3,7 +3,7 @@ const { get, checkCall } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
 const { logVirtualIP } = require('KegUtils/log')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { DOCKER } = require('KegConst/docker')
 const { Logger } = require('KegLog')
 const docker = require('KegDocApi')
 
@@ -14,7 +14,7 @@ const docker = require('KegDocApi')
  * @returns {void}
  */
 const checkBaseImage = async args => {
-  const baseName = get(CONTAINERS, `BASE.ENV.IMAGE`)
+  const baseName = get(DOCKER, `CONTAINERS.BASE.ENV.IMAGE`)
   const exists = await docker.image.exists(baseName)
   if(exists) return
 
@@ -42,7 +42,7 @@ const removeCurrent = async context => {
   Logger.info(`Removing docker container "${context}"...`)
   Logger.empty()
 
-  const containerName = get(CONTAINERS, `${context.toUpperCase()}.ENV.CONTAINER_NAME`)
+  const containerName = get(DOCKER, `CONTAINERS.${context.toUpperCase()}.ENV.CONTAINER_NAME`)
   await containerName && docker.container.remove(containerName)
 }
 
@@ -129,7 +129,7 @@ module.exports = {
   example: 'keg docker sync start',
   options: {
     context: {
-      allowed: [ 'components', 'core', 'tap' ],
+      allowed: DOCKER.IMAGES,
       description: 'Context of docker compose up command (components || core || tap)',
       example: 'keg docker sync start --context core',
       default: 'core'

@@ -2,7 +2,7 @@ const { get, checkCall } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
 const { confirmExec } = require('KegUtils/helpers')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { DOCKER } = require('KegConst/docker')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const docker = require('KegDocApi')
 
@@ -38,8 +38,8 @@ const destroyDockerSync = async args => {
 
       // Remove the container
       const container = cmdContext && get(
-        CONTAINERS,
-        `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`
+        DOCKER,
+        `CONTAINERS.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`
       )
 
       container && await docker.remove({
@@ -80,7 +80,7 @@ module.exports = {
   example: 'keg docker sync destroy <options>',
   options: {
     context: {
-      allowed: [ 'components', 'core', 'tap' ],
+      allowed: DOCKER.IMAGES,
       description: 'Context of docker compose up command (components || core || tap)',
       example: 'keg docker sync start --context core',
       required: true

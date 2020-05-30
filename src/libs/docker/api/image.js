@@ -1,4 +1,4 @@
-const { compareItems } = require('./helpers')
+const { compareItems, noItemFoundError } = require('./helpers')
 const { remove, dockerCli, dynamicCmd } = require('./commands')
 const { isArr, toStr, isStr } = require('jsutils')
 
@@ -27,6 +27,23 @@ const list = (args={}) => {
   })
 }
 
+const tag = async ({ image, nameOrId, tag, log }) => {
+  // Get the image as an object
+  image = image || await get(nameOrId, log)
+
+  return !image
+    ? noItemFoundError('image', nameOrId)
+    : dockerCli({
+        ...args,
+        format: 'json',
+        opts: [
+          'tag',
+          `${ image.repository }:${ image.tag }`,
+          `${ image.repository }:${ tag }`
+        ]
+      })
+}
+
 /**
  * Searches current images for a name or id match
  * @function
@@ -34,14 +51,40 @@ const list = (args={}) => {
  *
  * @returns {Object} - Found image match
  */
-const get = async nameOrId => {
+const get = async (image, log=false) => {
+
+  // Split the image and tag if : exits in the image name
+  const [ imgRef, tag ] = image.indexOf(':') !== -1
+    ? image.split(':')
+    : [ image ]
+  
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json' })
+  const images = await list({ errResponse: [], format: 'json', log })
 
   // If we have images, try to find the one matching the passed in argument
   return images &&
     images.length &&
-    images.find(image => image.imageId === nameOrId || image.repository === nameOrId)
+    images.find(image => {
+      const hasMatch = image.id === imgRef || image.repository === imgRef
+      return hasMatch && tag  ? image.tag === tag : hasMatch
+    })
+}
+
+/**
+ * Searches current images for a tag match
+ * @function
+ * @param {string} tag - Tag of the image to get
+ *
+ * @returns {Object} - Found image match
+ */
+const getByTag = async (imgRef, log=false) => {
+  // Get all current images
+  const images = await list({ errResponse: [], format: 'json', log })
+
+  // If we have images, try to find the one matching the passed in argument
+  return images &&
+    images.length &&
+    images.find(image => image.tag === imgRef)
 }
 
 /**
@@ -64,9 +107,9 @@ const removeImage = args => {
  *
  * @returns {boolean} - Based on if the image exists
  */
-const exists = async (compare, doCompare) => {
+const exists = async (compare, doCompare, log) => {
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json' })
+  const images = await list({ errResponse: [], format: 'json', log })
   // If we have images, try to find the one matching the passed in argument
   return images &&
     images.length &&
@@ -81,12 +124,12 @@ const exists = async (compare, doCompare) => {
  *
  * @returns {boolean} - If the images can be removed
  */
-const clean = async ({ opts='' }) => {
+const clean = async ({ opts='', log=false }) => {
   
   const IMG_NONE = `<none>`
 
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json' })
+  const images = await list({ errResponse: [], format: 'json', log })
 
   const toRemove = images.reduce((toRemove, image) => {
     (image.repository === IMG_NONE || image.tag === IMG_NONE) &&
@@ -113,6 +156,7 @@ Object.assign(image, {
   clean,
   exists,
   get,
+  getByTag,
   list,
   remove: removeImage,
 })

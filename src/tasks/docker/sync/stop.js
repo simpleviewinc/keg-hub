@@ -3,6 +3,7 @@ const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
 const { buildLocationContext } = require('KegUtils/builders')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Cleans docker-sync containers
@@ -42,7 +43,7 @@ module.exports = {
   example: 'keg docker sync stop',
   options: {
     context: {
-      allowed: [ 'components', 'core', 'tap' ],
+      allowed: DOCKER.IMAGES,
       description: 'Context of docker compose up command (components || core || tap)',
       example: 'keg docker sync start --context core',
       required: true

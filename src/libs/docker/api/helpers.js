@@ -2,8 +2,32 @@ const { camelCase, snakeCase, isArr, isFunc, isStr, toStr } = require('jsutils')
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
 
-let __logOutput = false
-const logOutput = (shouldLog) => __logOutput = shouldLog
+/**
+ * Throws an error with the passed in message
+ * @function
+ * @param {string} message - Message for the thrown error
+ *
+ * @returns {void}
+ */
+const throwFailedCmd = (message=`Docker API command Failed!`) => {
+  throw new Error(message)
+}
+
+/**
+ * Throws an error when a docker type can not be found
+ * @function
+ * @param {string} message - Message for the thrown error
+ *
+ * @returns {void}
+ */
+const noItemFoundError = (type, name) => {
+  Logger.empty()
+  Logger.error(`  Docker API command failed:`)
+  Logger.info(`  Could not find docker ${type} from ${ name }!`)
+  Logger.empty()
+
+  throwFailedCmd()
+}
 
 /**
  * Throws an error when no item argument is passed to a docker command
@@ -21,7 +45,7 @@ const noItemError = (cmd, shouldThrow=false) => {
 
   if(!shouldThrow) return false
   
-  throw new Error(`Docker API command Failed!`)
+  throwFailedCmd()
 }
 
 /**
@@ -41,7 +65,7 @@ const noLoginError = (providerUrl, user, token) => {
   Logger.info(`  Docker login requires a ${ missing } argument!`)
   Logger.empty()
 
-  throw new Error(`Docker login Failed!`)
+  throwFailedCmd(`Docker login Failed!`)
 
 }
 
@@ -54,20 +78,6 @@ const noLoginError = (providerUrl, user, token) => {
  * @returns {boolean} - true
  */
 const cmdSuccess = (cmd, res, message) => {
-
-  if(!__logOutput) return res
-
-  else if(cmd && !res){
-    Logger.empty()
-    Logger.success(`Docker command "${cmd}" success!`)
-    Logger.empty()
-  }
-  else if(res){
-    Logger.empty()
-    Logger.data(res)
-    Logger.empty()
-  }
-
   return res
 }
 
@@ -192,5 +202,5 @@ module.exports = {
   compareItems,
   cmdSuccess,
   noItemError,
-  logOutput,
+  noItemFoundError,
 }

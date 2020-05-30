@@ -155,7 +155,7 @@ const buildDockerCmd = (globalConfig, params) => {
     dockerCmd: `docker ${cmd} ${docker}`.trim()
   })
 
-  // Add any tags if needed
+  // Figure out which docker command to run
   return cmd === 'build'
     ? createBuildCmd(globalConfig, dockerCmd, params)
     : createRunCmd(globalConfig, dockerCmd, params)

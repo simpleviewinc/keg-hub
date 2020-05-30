@@ -2,6 +2,7 @@ const { get } = require('jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
+const { dockerLog } = require('KegUtils/log/dockerLog')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocApi')
 
@@ -20,32 +21,20 @@ const dockerImage = async args => {
   const { cmd, name, force, format } = params
   const image = name && get(CONTAINERS, `${name.toUpperCase()}.ENV.IMAGE`)
 
-  let runCmd
-  switch(cmd){
-    case 'remove':
-    case 'rmi':
-    case 'rm': {
-      return generalError(
-        `The docker image remove command should not be called from the base image action!`
-      )
-    }
-    default: {
-      runCmd = cmd || options.join(' ').trim() || 'ls'
-    }
-  }
-
   const cmdArgs = { ...params }
-  if(!cmd){
-    docker.logOutput(true)
-  }
-  
+
   cmdArgs.opts = cmd
     ? image
       ? [ cmd, image ]
       : [ cmd ]
     : [ 'ls' ]
 
-  await docker.image(cmdArgs)
+  const res = await docker.image(cmdArgs)
+
+  // Log the output of the command
+  dockerLog(res, cmd)
+
+  return res
 
 }
 
@@ -56,6 +45,7 @@ module.exports = {
     action: dockerImage,
     tasks: {
       ...require('./clean'),
+      ...require('./get'),
       ...require('./remove'),
       ...require('./run'),
     },

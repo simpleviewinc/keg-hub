@@ -65,7 +65,7 @@ module.exports = {
     location_context: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
       context: {
-        allowed: [ 'components', 'core', 'tap' ],
+        allowed: DOCKER.IMAGES,
         description: 'Name of the docker container to run',
         enforced: true,
       },

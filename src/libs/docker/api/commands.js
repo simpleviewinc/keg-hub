@@ -1,4 +1,12 @@
-const { apiError, apiSuccess, noItemError, noLoginError, cmdSuccess } = require('./helpers')
+const {
+  apiError,
+  apiSuccess,
+  noItemError,
+  noLoginError,
+  cmdSuccess,
+  shouldLog
+} = require('./helpers')
+
 const { isArr, toStr } = require('jsutils')
 const { Logger } = require('KegLog')
 const { executeCmd } = require('KegProc')
@@ -14,16 +22,18 @@ const { executeCmd } = require('KegProc')
  *
  * @returns {Array|string} - JSON array of items || stdout from docker cli call
  */
-const dockerCli = async ({ opts, errResponse, skipError, format='', force }) => {
+const dockerCli = async ({ opts, errResponse, log, skipError, format='', force }) => {
   const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
   const useFormat = format === 'json' ? `--format "{{json .}}"` : format
   const useForce = force ? '--force' : ''
 
   const cmdToRun = `docker ${ options } ${ useForce } ${ useFormat }`.trim()
 
-  Logger.empty()
-  Logger.message(`  Running command: `, cmdToRun)
-  Logger.empty()
+  if(log){
+    Logger.empty()
+    Logger.message(`  Running command: `, cmdToRun)
+    Logger.empty()
+  }
 
   const { error, data } = await executeCmd(cmdToRun)
 

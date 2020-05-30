@@ -1,6 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * List all the docker-sync points based on context
@@ -36,7 +36,7 @@ module.exports = {
   example: 'keg docker sync list',
   options: {
     context: {
-      allowed: [ 'components', 'core', 'tap' ],
+      allowed: DOCKER.IMAGES,
       description: 'Context of docker compose up command (components || core || tap)',
       example: 'keg docker sync list --context core',
       required: true

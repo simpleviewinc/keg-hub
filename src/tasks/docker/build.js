@@ -48,6 +48,8 @@ const dockerBuild = async args => {
 
   await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
 
+  return docker.image.get(cmdContext)
+
 }
 
 module.exports = {
@@ -60,7 +62,7 @@ module.exports = {
     location_context: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
       context: {
-        allowed: [ 'base', 'components', 'core', 'tap' ],
+        allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
         enforced: true,
       },

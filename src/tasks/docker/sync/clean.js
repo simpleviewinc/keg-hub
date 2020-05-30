@@ -2,7 +2,7 @@ const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
 const { buildLocationContext } = require('KegUtils/builders')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Cleans docker-sync containers
@@ -30,7 +30,7 @@ const cleanDockerSync = async args => {
     preConfirm: true,
     execute: async () => {
       // Remove the container
-      const container = cmdContext && get(CONTAINERS, `${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
+      const container = cmdContext && get(DOCKER, `CONTAINERS.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)
       container && await spawnCmd(`docker container rm ${ container }`)
       await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
     },
@@ -46,7 +46,7 @@ module.exports = {
   example: 'keg docker sync clean <options>',
   options: {
     context: {
-      allowed: [ 'components', 'core', 'tap' ],
+      allowed: DOCKER.IMAGES,
       description: 'Context of docker compose up command (components || core || tap)',
       example: 'keg docker sync start --context core',
       required: true
