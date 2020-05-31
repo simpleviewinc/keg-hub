@@ -1,6 +1,6 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
-const { cliRootDir, runtimeEnv, defaultENVs, images } = require('./values')
+const { cliRootDir, dockerEnv, defaultENVs, images } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 
 let __CONTAINERS
@@ -24,16 +24,16 @@ const DEFAULT = {
 }
 
 /*
- * Checks if an ENV file exists for the current runtimeEnv
+ * Checks if an ENV file exists for the current dockerEnv
  * @param {string} container - Name of the container to build the config for
  *
  * @returns {Object} - Loaded ENVs for the current environment
 */
 const getCurrentEnvFile = (container) => {
-  if(runtimeEnv === 'local') return {}
+  if(dockerEnv === 'local') return {}
 
-  // If the runtimeEnv is not local, then load the runtimeEnv, and merge with local
-  const currentEnvFile = path.join(defaultENVs.CONTAINERS_PATH, container, `${ runtimeEnv }.env`)
+  // If the dockerEnv is not local, then load the dockerEnv, and merge with local
+  const currentEnvFile = path.join(defaultENVs.CONTAINERS_PATH, container, `${ dockerEnv }.env`)
 
   // Require at runtime to speed up other cli calls
   const { pathExistsSync } = require('KegFileSys/fileSys')
