@@ -42,15 +42,15 @@ RUN if [ "$FROM_LOCAL" != "INITIAL" ] then \
       cp ./proxy/src/config/nginx.conf /etc/nginx/nginx.conf; \
     fi
 
-# Add the GIT_SV_LETS_ENCRYPT_URL arg, and set value to initial
-# This expects --build-arg GIT_SV_LETS_ENCRYPT_URL=key_value to be set
+# Add the GIT_LETS_ENCRYPT_URL arg, and set value to initial
+# This expects --build-arg GIT_LETS_ENCRYPT_URL=key_value to be set
 # URL of the lets encrypt repo to clone from github
-ARG GIT_SV_LETS_ENCRYPT_URL=INITIAL
+ARG GIT_LETS_ENCRYPT_URL=INITIAL
 
 # Pull down the sv lets-encrypt locally
 # Then copy over the certs
-RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_SV_LETS_ENCRYPT_URL" != "INITIAL" ]; then \
-      git clone $GIT_SV_LETS_ENCRYPT_URL ./svle; \
+RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_LETS_ENCRYPT_URL" != "INITIAL" ]; then \
+      git clone $GIT_LETS_ENCRYPT_URL ./svle; \
       cp ./svle/src/certs/keg.pem ./proxy/src/certs/keg.pem; \
       cp ./svle/src/certs/keg.key ./proxy/src/certs/keg.key; \
     fi

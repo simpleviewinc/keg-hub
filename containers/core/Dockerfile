@@ -30,8 +30,7 @@ COPY package.json $DOC_APP_PATH/package.json
 COPY yarn.lock $DOC_APP_PATH/yarn.lock
 
 # Install the dependecies
-RUN cd $DOC_APP_PATH; yarn install --frozen-lockfile --no-cache
-RUN cd $DOC_APP_PATH; yarn global add ansi-html html-entities loglevel
+RUN cd $DOC_APP_PATH; yarn install
 
 EXPOSE 80
 

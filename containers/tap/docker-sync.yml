@@ -9,12 +9,12 @@ syncs:
     src: '${CONTEXT_PATH}'
     sync_strategy: 'unison'
     max_inotify_watches: 200000
-    sync_excludes: [ '*/.expo', '*/.expo-shared', "*/temp", "yarn.lock", "package.lock", './node_modules', '.git', '.github' ]
+    sync_excludes: [ '.expo', '.expo-shared', "temp", "yarn.lock", "package.lock", 'node_modules', '.git', '.github' ]
     sync_args: '-force ${CONTEXT_PATH} -nodeletion ${CONTEXT_PATH}'
   cli-unison-sync:
     src: '${CLI_PATH}'
     sync_strategy: 'unison'
     max_inotify_watches: 200000
-    sync_excludes: [ "./yarn.lock", "./package.lock", './node_modules', '.git', '.github' ]
+    sync_excludes: [ "yarn.lock", "package.lock", 'node_modules', '.git', '.github' ]
     sync_args: '-force ${CLI_PATH} -nodeletion ${CLI_PATH}'
 

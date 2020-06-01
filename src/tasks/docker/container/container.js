@@ -18,13 +18,16 @@ const docker = require('KegDocApi')
  */
 const dockerContainer = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
-  const { cmd, name, force, format } = params
-  const container = name && get(CONTAINERS, `${name.toUpperCase()}.ENV.CONTAINER_NAME`, name)
+  let { cmd, name, force, format } = params
+  let container = name && get(CONTAINERS, `${name.toUpperCase()}.ENV.CONTAINER_NAME`, name)
 
   const apiMethod = docker.container[cmd]
   if(apiMethod) return apiMethod({ item: container, force, format })
 
   const cmdArgs = { ...params }
+
+  if(!cmd && options[0]) cmd = options[0]
+  if(!container && options[1]) container = options[1]
 
   cmdArgs.opts = cmd
     ? container
