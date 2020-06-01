@@ -83,7 +83,6 @@ const remove = ({ item, force, skipError, type='' }) => {
     : noItemError(`docker.remove`)
 }
 
-
 /**
  * Calls the docker login command to log into the passed int providerUrl
  * @function

@@ -22,6 +22,7 @@ const {
  */
 const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   const {
+    buildEnvs,
     container,
     location,
     context,
@@ -39,6 +40,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
 
   // Add the build args for the github key and tap git url
   dockerCmd = await getBuildArgs(globalConfig, {
+    buildEnvs,
     branch,
     context,
     dockerCmd,

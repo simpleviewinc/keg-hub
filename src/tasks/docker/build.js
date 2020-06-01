@@ -20,7 +20,7 @@ const docker = require('KegDocApi')
  */
 const dockerBuild = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { context } = params
+  const { context, envs } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
@@ -46,6 +46,7 @@ const dockerBuild = async args => {
     options: options,
     context: cmdContext,
     ...(tap && { tap }),
+    ...(envs && { buildEnvs: contextEnvs }),
   })
 
   await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
@@ -67,6 +68,10 @@ module.exports = {
         allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
         enforced: true,
+      },
+      envs: {
+        description: 'Add build args from container env files',
+        default: false
       },
       cache: {
         description: 'Docker will use build cache when building the image',

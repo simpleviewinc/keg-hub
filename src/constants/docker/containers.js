@@ -2,6 +2,8 @@ const path = require('path')
 const { deepFreeze, deepMerge, keyMap } = require('jsutils')
 const { cliRootDir, dockerEnv, defaultENVs, images } = require('./values')
 const { loadENV } = require('KegFileSys/env')
+const { pathExistsSync } = require('KegFileSys/fileSys')
+const { GLOBAL_CONFIG_FOLDER } = require('../constants')
 
 let __CONTAINERS
 
@@ -25,24 +27,33 @@ const DEFAULT = {
 
 /*
  * Checks if an ENV file exists for the current dockerEnv
+ * @function
  * @param {string} container - Name of the container to build the config for
  *
  * @returns {Object} - Loaded ENVs for the current environment
 */
 const getCurrentEnvFile = (container) => {
-  if(dockerEnv === 'local') return {}
 
-  // If the dockerEnv is not local, then load the dockerEnv, and merge with local
+  // Check for a global current env file
+  const globalCurrentEnv = path.join(GLOBAL_CONFIG_FOLDER, `${ dockerEnv }.env`)
+
+  // Try to load the file if it exists
+  const globalEnvs = pathExistsSync(globalCurrentEnv) ? loadENV(globalCurrentEnv) : {}
+
+  // Build path for keg-cli current env file
   const currentEnvFile = path.join(defaultENVs.CONTAINERS_PATH, container, `${ dockerEnv }.env`)
 
-  // Require at runtime to speed up other cli calls
-  const { pathExistsSync } = require('KegFileSys/fileSys')
-  return pathExistsSync(currentEnvFile) ? loadENV(currentEnvFile) : {}
+  // Try to load the file if it exists
+  const localCurrentEnvs = pathExistsSync(currentEnvFile) ? loadENV(currentEnvFile) : {}
+
+  // Merge and return the loaded env files
+  return deepMerge(localCurrentEnvs, globalEnvs)
 
 }
 
 /*
  * Builds a config for a container from the images array
+ * @function
  * @param {string} container - Name of the container to build the config for
  *
  * @returns {Object} - Built container config
@@ -68,6 +79,7 @@ const containerConfig = (container) => {
 
 /*
  * Builds the config for each container in the values images array
+ * @function
  *
  * @returns {Object} - Built container config
 */

@@ -6,14 +6,37 @@ services:
       context: ${CONTEXT_PATH}
       dockerfile: ${CONTEXT_DOCKER_FILE}
       args:
-        GIT_KEY: ${GIT_KEY}
-        GIT_CLI_URL: ${GIT_CLI_URL}
+        - GIT_KEY
+        - GIT_CLI_URL
+        - GIT_CORE_URL
+        - GIT_COMPONENTS_URL
+        - GIT_RETHEME_URL
+        - GIT_RESOLVER_URL
+        - GIT_PROXY_URL
+        - DOC_CLI_PATH
+        - DOC_CORE_PATH
+        - DOC_COMPONENTS_PATH
+        - DOC_RETHEME_PATH
+        - DOC_RESOLVER_PATH
+        - DOC_PROXY_PATH
     container_name: ${CONTAINER_NAME}
     env_file: ${CONTEXT_ENV_FILE}
     environment:
-      - EXPO_DEBUG_PORT=${EXPO_DEBUG_PORT}
-      - EXPO_APP_PORT=${EXPO_APP_PORT}
-      - GIT_KEY=${GIT_KEY}
+      - EXPO_DEBUG_PORT
+      - EXPO_APP_PORT
+      - GIT_KEY
+      - GIT_CLI_URL
+      - GIT_CORE_URL
+      - GIT_COMPONENTS_URL
+      - GIT_RETHEME_URL
+      - GIT_RESOLVER_URL
+      - GIT_PROXY_URL
+      - DOC_CLI_PATH
+      - DOC_CORE_PATH
+      - DOC_COMPONENTS_PATH
+      - DOC_RETHEME_PATH
+      - DOC_RESOLVER_PATH
+      - DOC_PROXY_PATH
     ports: 
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
       - ${EXPO_APP_PORT}:${EXPO_APP_PORT}

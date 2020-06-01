@@ -17,6 +17,20 @@ const createBuildArg = (key, value, dockerCmd) => {
 }
 
 /**
+ * Add the ENV's from the context.env files as build args
+ * @param {*} buildEnvs - ENVs to be added as build args
+ * @param {*} dockerCmd - The docker command being built
+ *
+ * @returns {string} - The dockerCmd string with a build args added
+ */
+const addContextBuildENVs = (buildEnvs, dockerCmd) => {
+  return isObj(buildEnvs) &&
+    reduceObj(buildEnvs, (key, value, dockerCmd) => {
+      return value && createBuildArg(key, value, dockerCmd) || dockerCmd
+    }, dockerCmd).trim() || dockerCmd
+}
+
+/**
  * Adds build args to the a docker the build command
  *
  * @param {Object} globalConfig - Global config object for the Keg CLI
@@ -29,13 +43,17 @@ const createBuildArg = (key, value, dockerCmd) => {
  * @returns {string} - The dockerCmd string with the build args added
  */
 const getBuildArgs = async (globalConfig, params) => {
-  const { context, branch, dockerCmd, location, tap } = params
+  const { buildEnvs, context, branch, location, tap } = params
+  let dockerCmd = params.dockerCmd || ''
   
   const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
   if(!isObj(containerOpts.ARGS)) return dockerCmd
   
   const gitKey = await getGitKey(globalConfig)
   const tapUrl = context ==='tap' && tap && await getRemoteUrl(getTapPath(globalConfig, tap))
+
+  // Add the context build ENVs to the command
+  dockerCmd = addContextBuildENVs(buildEnvs, dockerCmd)
 
   return reduceObj(containerOpts.ARGS, (key, value, dockerCmd) => {
     let useVal

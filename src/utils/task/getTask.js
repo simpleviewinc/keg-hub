@@ -16,61 +16,32 @@ const { get, isStr, isObj } = require('jsutils')
  */
 const loopTasks = (tasks, options) => {
 
-  const taskKey = options.shift()
-  const parent = tasks[taskKey]
+  // Remove the first option from the array
+  // It's then used to check if it's the key in the Tasks object
+  const taskKey = options.length && options.shift()
 
-  // Check if the parent is a string ( alias ), and use that to find the task
-  // Otherwise use the parent should already be an object for a valid task
-  const parentTask = isStr(parent) ? tasks[parent] : parent
+  // If there's no task key, then just return empty
+  if(taskKey === undefined || taskKey === null) return {}
+
+  // Get the task from the tasks object by taskKey reference
+  const task = tasks[taskKey]
+
+  // Check if the task is a string ( alias ), and use that to find the task
+  // Otherwise use the task should already be an object for a valid task
+  const parentTask = isStr(task) ? tasks[task] : task
 
   // Check it there's child tasks, and try to find one matching the passed in options
-  const childTask = isObj(parentTask) && isObj(parentTask.tasks)
+  // Calls loopTasks again with parentTask's subTasks
+  // Looks for a child task based on the options array
+  const { task: childTask } = isObj(parentTask) && isObj(parentTask.tasks)
     ? loopTasks(parentTask.tasks, options)
     : false
 
   // Add the option back when no child task is found
   if(!childTask && !parentTask && taskKey) options.unshift(taskKey)
 
-  // Return the found child task, or parent task
-  return childTask || parentTask
-
-}
-
-
-/**
- * Searches for sub tasks of a task when a sub task is a string alias
- * <br/> This will call getTask recursively
- * @param {Object} task - All registered tasks to the KEG-CLI
- * @param {Array} command - Name of the parent task to be run
- * @param {Array} options - All passed in options from the command line
- *
- * @returns {Object} - Found task, with updated options
- */
-const checkSubTask = (task, command, options) => {
-
-  // Check if the command is the same as the task
-  // If it's not, then check if it's an alias to a sub task
-  let subTask = task.name !== command && get(task, `tasks.${ command }`)
-
-  // If a subTask exists, check if it's an alias string, and get the real task object
-  subTask = isStr(subTask) && get(task, `tasks.${ subTask }`) || subTask
-
-  // If no subtask is found, then return the original task
-  if(!subTask) return { task, options }
-
-  // Now we have the subTask, but we need to check the tasks again
-  // The next option might also be an aliased subtask, so call getTask again
-  // With the next options argument, using the subTask's tasks 
-  const nextOpt = options.shift()
-
-  // This starts the whole getTask process all over again
-  // But with the sub tasks, and next item in the options array
-  const nextSubTask = nextOpt && getTask(subTask.tasks, nextOpt, ...options)
-
-  // If no lower sub task exists, then add the nextOpt back to the opts array
-  if(!nextSubTask && nextOpt) options.unshift(nextOpt)
-
-  return { task: nextSubTask || subTask, options }
+  // Return the found child task, or parent task with the update options
+  return { task: childTask || parentTask, options }
 
 }
 
@@ -83,13 +54,7 @@ const checkSubTask = (task, command, options) => {
  * @returns {Object} - Found task, with updated options
  */
 const getTask = (tasks, command, ...options) => {
-
-  let task = loopTasks(tasks, [ command, ...options ])
-
-  // Need to check if an aliased subTask is being used
-  // Example => `keg dc <options> === keg docker container`
-  return task ? checkSubTask(task, command, options) : undefined
-
+  return loopTasks(tasks, [ command, ...options ])
 }
 
 module.exports = {
