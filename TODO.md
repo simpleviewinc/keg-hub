@@ -49,3 +49,8 @@
         * Could pull from users fork || simpleviewinc
     * Save install locations to `cli.config.json` => Under the `paths` key
     * Stored in `cli.config.json`
+
+
+### Docker Sync w/ unison
+* Set one way sync, with no deletion
+  * unison /src/dir /dest/dir -force /src/dir -nodeletion /dest/dir

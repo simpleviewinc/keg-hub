@@ -3,9 +3,11 @@ const { throwRequired, generalError } = require('KegUtils/error')
 const { buildDockerCmd } = require('KegDocker')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
+const docker = require('KegDocApi')
 
 /**
  * Builds a docker container so it can be run
+ * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line

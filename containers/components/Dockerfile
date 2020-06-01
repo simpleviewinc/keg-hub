@@ -14,15 +14,15 @@ ARG GIT_COMPONENTS_URL=INITIAL
 
 # Pull down the tap locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_COMPONENTS_URL" != "INITIAL" ]; then \
-      git clone $GIT_COMPONENTS_URL ./tap; \
+      git clone $GIT_COMPONENTS_URL $DOC_APP_PATH; \
     fi
 
 # Navigate to the taps directory
-WORKDIR /keg/tap
+WORKDIR $DOC_APP_PATH
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json /keg/keg-components/package.json
-COPY yarn.lock /keg/keg-components/yarn.lock
+COPY package.json $DOC_APP_PATH/package.json
+COPY yarn.lock $DOC_APP_PATH/yarn.lock
 
 # Install the dependecies
 RUN yarn install

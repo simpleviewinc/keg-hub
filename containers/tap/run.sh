@@ -20,8 +20,8 @@ keg_set_container_paths(){
     CORE_PATH="$DOC_CORE_PATH"
   fi
 
-  if [[ "$DOC_TAP_PATH" ]]; then
-    TAP_PATH="$DOC_TAP_PATH"
+  if [[ "$DOC_APP_PATH" ]]; then
+    TAP_PATH="$DOC_APP_PATH"
   fi
 
 }

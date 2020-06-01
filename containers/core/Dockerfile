@@ -17,20 +17,21 @@ RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
 # URL of the keg-core to clone from github
 ARG GIT_CORE_URL=INITIAL
 
+ARG DOC_APP_PATH=/keg/keg-core
+
 # Pull down keg-core locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
-      git clone $GIT_CORE_URL keg-core; \
+      git clone $GIT_CORE_URL $DOC_APP_PATH; \
     fi
 
-WORKDIR /keg/keg-core
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json /keg/keg-core/package.json
-COPY yarn.lock /keg/keg-core/yarn.lock
+COPY package.json $DOC_APP_PATH/package.json
+COPY yarn.lock $DOC_APP_PATH/yarn.lock
 
 # Install the dependecies
-RUN yarn install --frozen-lockfile --no-cache
-RUN yarn add ansi-html
+RUN cd $DOC_APP_PATH; yarn install --frozen-lockfile --no-cache
+RUN cd $DOC_APP_PATH; yarn global add ansi-html html-entities loglevel
 
 EXPOSE 80
 

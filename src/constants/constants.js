@@ -60,5 +60,15 @@ module.exports = deepFreeze({
     '-o BatchMode=yes',
     '-o UserKnownHostsFile=/dev/null',
     '-o StrictHostKeyChecking=no'
-  ]
+  ],
+
+  // Shortcuts to map env to real environment
+  ENV_MAP: {
+    PRODUCTION: [ 'production', 'prod', 'p' ],
+    QA: [ 'qa', 'q' ],
+    STAGING: [ 'staging', 'st', 's' ],
+    DEVELOPMENT: [ 'development', 'dev', 'd' ],
+    LOCAL: [ 'local', 'loc', 'l' ]
+  }
+  
 })

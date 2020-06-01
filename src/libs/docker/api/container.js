@@ -51,7 +51,8 @@ const runDockerCmd = (args={}, opts) => {
  * @returns {Array} - JSON array of containers
  */
 const list = (args={}) => {
-  return runDockerCmd({ format: 'json', ...args }, [ 'ls', '-a' ])
+  const opts = isStr(args) ? { item: args, type: 'container' } : args
+  return runDockerCmd({ format: 'json', ...opts }, [ 'ls', '-a' ])
 }
 
 /**
@@ -83,16 +84,17 @@ const containerCmds = containerItemCmds.reduce((commands, command) => {
 /**
  * Kills, then removes a docker container based on passed in arguments
  * @function
- * @param {Object} args - Arguments used to kill and remove a container
+ * @param {Object|string} [args={}] - Arguments to kill and remove a container || container name
  * @param {string} args.opts - Options used to build the docker command
  * @param {string} args.format - Format of the docker command output
  *
  * @returns {boolean} - If the Docker command successfully ran
  */
-const destroy = async args => {
-  await containerCmds.kill({ ...args, skipError: true, errResponse: false })
+const destroy = async (arg={}) => {
+  const opts = isStr(args) ? { item: args, type: 'container' } : args
+  await containerCmds.kill({ ...opts, skipError: true, errResponse: false })
   const res = await removeContainer({
-    ...args,
+    ...opts,
     skipError: true,
     errResponse: false
   })
@@ -103,16 +105,21 @@ const destroy = async args => {
 /**
  * Removes a docker image based on passed in toRemove argument
  * @function
- * @param {Object} args - Arguments used in the docker remove command
+ * @param {Object|string} [args={}] - Arguments used in the docker remove command || Name of container
  * @param {string} args.opts - Options used to build the docker command
  * @param {string} args.format - Format of the docker command output
+ * @param {boolean} [shouldThrow=true] - Should an error be throw if the command fails
  *
  * @returns {string} - Response from the docker cli command
  */
-const removeContainer = args => {
-  return args.item
-    ? remove({ ...args, type: 'container' })
-    : noItemError(`docker.container.remove`, true)
+const removeContainer = (args={}, shouldThrow=true) => {
+  const opts = isStr(args)
+    ? { item: args, type: 'container', skipError: !shouldThrow, shouldThrow }
+    : args
+
+  return opts.item
+      ? remove({ ...opts, type: 'container' })
+      : noItemError(`docker.container.remove`, opts.shouldThrow || shouldThrow)
 } 
 
 /**
@@ -147,7 +154,10 @@ const exists = async (compare, doCompare, format) => {
  *
  * @returns {string|Array} - Response from docker cli
  */
-const container = (args={}) => dynamicCmd(args, 'container')
+const container = (args={}) => dynamicCmd(
+  { type: 'container', ...(isStr(args) ? { item: args } : args) },
+  'container'
+)
 
 // Add the sub-methods to the root docker image method
 Object.assign(container, {

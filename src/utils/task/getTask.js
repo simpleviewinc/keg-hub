@@ -56,7 +56,7 @@ const checkSubTask = (task, command, options) => {
   subTask = isStr(subTask) && get(task, `tasks.${ subTask }`) || subTask
 
   // If no subtask is found, then return the original task
-  if(!subTask) return task
+  if(!subTask) return { task, options }
 
   // Now we have the subTask, but we need to check the tasks again
   // The next option might also be an aliased subtask, so call getTask again

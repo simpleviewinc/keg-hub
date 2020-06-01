@@ -21,7 +21,7 @@ const executeTask = async (args) => {
   const { command, task, tasks, options } = args
 
     // Check is the help should be printed
-  if(hasHelpArg(options[ options.length -1 ])) return showHelp(false, task)
+  if(hasHelpArg(options[ options.length -1 ])) return showHelp({ task, options })
 
   return isFunc(task.action)
     ? task.action({ ...args, params: getArguments(args) })

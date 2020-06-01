@@ -6,6 +6,7 @@ const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 
 /**
  * Checks if the command is a linked tap, and if so, calls the tap command on that tap
+ * @function
  * @param {Object} globalConfig - Global CLI config
  * @param {Object} tasks - All CLI registered tasks
  * @param {string} command - Command to run
@@ -23,12 +24,16 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
   options = [ ...options, `tap=${command}` ]
 
   // Call getTask, and set the command to be tap
-  return getTask(tasks, 'tap', ...options)
+  const task = getTask(tasks, 'tap', ...options)
+
+  // Return task data with the task and updated options
+  return { task, options }
 
 }
 
 /**
  * Gets the task from available tasks, If no task is found, checks if command is a tap
+ * @function
  * @param {Object} globalConfig - Global CLI config
  * @param {Object} tasks - All CLI registered tasks
  * @param {string} command - Command to run

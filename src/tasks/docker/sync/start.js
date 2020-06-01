@@ -43,7 +43,9 @@ const removeCurrent = async context => {
   Logger.empty()
 
   const containerName = get(DOCKER, `CONTAINERS.${context.toUpperCase()}.ENV.CONTAINER_NAME`)
-  await containerName && docker.container.remove(containerName)
+  
+  containerName && await docker.container.remove(containerName, false)
+
 }
 
 /**

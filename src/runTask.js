@@ -21,7 +21,7 @@ const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
     const tasks = Tasks(globalConfig)
 
     // If no command, or if the command is global help, then show help
-    if(!command || hasHelpArg(command)) return showHelp(tasks)
+    if(!command || hasHelpArg(command)) return showHelp({ tasks })
 
     // Get the task from available tasks
     const { task, options } = findTask(globalConfig, tasks, command, args)

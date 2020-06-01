@@ -2,7 +2,7 @@ version: "2"
 services:
   tap:
     volumes:
-      - tap-sync:/keg/tap:nocopy
+      - tap-sync:${DOC_APP_PATH}:nocopy
       - cli-sync:/keg/keg-cli:nocopy
 volumes:
   tap-sync:

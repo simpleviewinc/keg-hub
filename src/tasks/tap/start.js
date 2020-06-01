@@ -78,7 +78,7 @@ module.exports = {
       },
       clean: {
         description: 'Cleans docker-sync before running the tap',
-        example: 'keg tap --clean false',
+        example: 'keg tap --clean true',
         default: false
       },
       command: {

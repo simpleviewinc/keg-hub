@@ -17,20 +17,19 @@ RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
 # URL of the tap to clone from github
 ARG GIT_TAP_URL=INITIAL
 
+ARG DOC_APP_PATH=/keg/tap
+
 # Pull down the tap locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_TAP_URL" != "INITIAL" ]; then \
-      git clone $GIT_TAP_URL ./tap; \
+      git clone $GIT_TAP_URL $DOC_APP_PATH; \
     fi
 
-# Navigate to the taps directory
-WORKDIR /keg/tap
-
 # Copy over the package.json, and yarn.lock files
-COPY package.json /keg/tap/package.json
-COPY yarn.lock /keg/tap/yarn.lock
+COPY package.json $DOC_APP_PATH/package.json
+COPY yarn.lock $DOC_APP_PATH/yarn.lock
 
 # Install the dependecies
-RUN yarn setup
+RUN cd $DOC_APP_PATH; yarn setup
 
 EXPOSE 80
 

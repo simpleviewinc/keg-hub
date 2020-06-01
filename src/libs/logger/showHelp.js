@@ -61,14 +61,22 @@ const showTaskHeader = (key, header, spacer, dblSpacer) => {
  *
  * @returns {void}
  */
-const showSubTasks = (task, dblSpacer) => {
-
-  if(!isObj(task) || !isObj(task.tasks) || !Object.keys(task.tasks).length)
-    return console.log(``)
+const showSubTasks = (task, opts={}) => {
 
   Logger.empty()
-  console.log(colors.brightBlue(`${dblSpacer}  Sub Commands:`))
-  showAllHelp(task.tasks, false, `${dblSpacer}`)
+
+  // If not a valid task, just return
+  if(!isObj(task) || !isObj(task.tasks) || !Object.keys(task.tasks).length)
+    return
+
+  const { dblSpacer } = opts
+  Logger.log(colors.brightBlue(`${dblSpacer}  Sub Commands:`))
+
+  // Print the help for sub-tasks
+  showAllHelp(
+    task.tasks,
+    { ...opts, header: false, space: `${dblSpacer}` }
+  )
 
 }
 
@@ -120,12 +128,14 @@ const showTaskOptions = (task, infoSpacer, dblSpacer) => {
 /**
  * Prints CLI help message with tasks and their description
  * @param {Object} tasks - All possible CLI tasks to run
- * @param {boolean} header - Should print the help header
- * @param {string} spacer - Extra space added to the beginning of the line
+ * @param {Object} [opts={}] - Options for printing help
+ * @param {boolean} opts.header - Should print the help header
+ * @param {string} opts.space - Extra space added to the beginning of the line
  *
  * @returns {void}
  */
-const showAllHelp = (tasks, header, space) => {
+const showAllHelp = (tasks, opts={}) => {
+  const { header, space } = opts
 
   showHelpHeader(header, `Available Commands: `)
   const { spacer } = getSpacers(space, header)
@@ -135,8 +145,7 @@ const showAllHelp = (tasks, header, space) => {
       !isStr(tasks[key]) &&
         showTaskHelp(
           tasks[key],
-          false,
-          spacer
+          { ...opts, spacer, header: false }
         )
     )
 
@@ -147,30 +156,34 @@ const showAllHelp = (tasks, header, space) => {
 /**
  * Prints information about a single task 
  *
- * @param {*} task - Task to print formation about
- * @param {*} header - Should print the help header
- * @param {*} space - space from start of line
+ * @param {Object} task - Task to print formation about
+ * @param {Object} [opts={}] - Options for printing help
+ * @param {boolean} opts.header - Should print the help header
+ * @param {string} opts.space - space from start of line
  */
-const showTaskHelp = (task, header, space) => {
+const showTaskHelp = (task, opts={}) => {
+  const { header, space } = opts
 
-  const { spacer, dblSpacer, infoSpacer } = getSpacers(space)
+  const { spacer, dblSpacer, infoSpacer, subTasks } = getSpacers(space)
 
   showHelpHeader(header)
   showTaskHeader(task.name, header, spacer, dblSpacer)
   showTaskInfo(task, infoSpacer)
   showTaskOptions(task, infoSpacer, dblSpacer)
-  showSubTasks(task, dblSpacer)
+  subTasks && showSubTasks(task, { ...opts, subTasks: false, dblSpacer })
 
 }
 
 /**
  * Prints CLI help message with tasks and their description
  * @param {Object} tasks - All possible CLI tasks to run
+ * @param {Object} task - Single task to show help for
+ * @param {Object} opts - Options for the show help output
  *
  * @returns {void}
  */
-const showHelp = (tasks, task=false) => {
-  task ? showTaskHelp(task) : showAllHelp(tasks)
+const showHelp = ({ tasks, task=false, options={} }) => {
+  task ? showTaskHelp(task, options) : showAllHelp(tasks, options)
 
   Logger.empty()
 

@@ -1,5 +1,6 @@
 # Keg CLI
-Commands for running the Keg
+Commands for running taps, and other keg related tasks
+
 
 ### Setup
 

@@ -3,7 +3,9 @@ const { throwNoAction, throwNoTask } = require('../error')
 
 /**
  * Validates a task to ensure it can be run
- * @param {Object} task - Path within the tasks object where the internal task exists
+ * @function
+ * @param {Object} task - Task object to validate that an action exists
+ * @param {string} taskPath - Path where the passed in task argument exists
  *
  * @returns {Object} - Task if it's valid
  */
