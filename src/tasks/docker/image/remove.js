@@ -29,9 +29,9 @@ const removeDockerImage = async args => {
 
   // Ensure we have the image meta data, and try to remove by imageId
   // __skipThrow is an internal argument, so it's not documented
-  ;(!image || !image.id) &&
-    __skipThrow !== true &&
-    generalError(`The docker image "${ imgRef }" does not exist!`)
+  if(!image || !image.id)
+    return __skipThrow !== true &&
+      generalError(`The docker image "${ imgRef }" does not exist!`)
 
   const res = await docker.image.remove({ item: image.id, force })
 
