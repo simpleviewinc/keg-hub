@@ -3,7 +3,10 @@ const { GLOBAL_CONFIG_FOLDER } = require('../constants')
 const { copyStream, loadENV } = require('../../libs/fileSys')
 const { Logger } = require('../../libs/logger')
 
-// Holds the loaded env file, so we don't keep reloading it
+/**
+ * Holds the loaded env file, so we don't keep reloading it
+ * @object
+ **/
 let __DEFAULT_ENV
 
 /**
@@ -15,11 +18,16 @@ let __DEFAULT_ENV
  **/
 const getDefaultENVs = cliRootDir => {
 
+  // If the default envs have already been loaded, then return the cached object
   if(__DEFAULT_ENV) return __DEFAULT_ENV
 
+  // Build the path to the global defaults env
   const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/defaults.env')
 
-  try { __DEFAULT_ENV = loadENV(globalDefEnv) }
+  // Try to load the default envs
+  try {
+    __DEFAULT_ENV = loadENV(globalDefEnv)
+  }
   catch(e){
 
     Logger.empty()
@@ -28,16 +36,19 @@ const getDefaultENVs = cliRootDir => {
       Logger.colors[Logger.colorMap.error](`  Could not find global`),
       Logger.colors[Logger.colorMap.data](`default.env`),
     )
+
     Logger.log(
       Logger.colors[Logger.colorMap.info](`  Creating from path`),
-      Logger.colors[Logger.colorMap.data](`configs/default.env`),
+      Logger.colors[Logger.colorMap.data](`scripts/setup/default.env`),
     )
-
-    copyStream(path.join(cliRootDir, 'configs/defaults.env'), globalDefEnv)
 
     Logger.empty()
 
-    __DEFAULT_ENV = loadENV(path.join(cliRootDir, 'configs/defaults.env'))
+    // Copy the local default.env file to the global defaults env directory
+    copyStream(path.join(cliRootDir, 'scripts/setup/defaults.env'), globalDefEnv)
+
+    // Load the default envs
+    __DEFAULT_ENV = loadENV(globalDefEnv)
 
   }
 

@@ -3,7 +3,7 @@ const { CLI_ROOT } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
 const { deepMerge } = require('jsutils')
 const cliParent = path.join(CLI_ROOT, '../')
-const cliJson = require('KegRoot/configs/cli.json')
+const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 
 // TODO: Add script to ask user for values when first setting up cli.config.json
 //  - Need git user name

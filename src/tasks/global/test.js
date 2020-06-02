@@ -10,10 +10,8 @@
  * @returns {void}
  */
 const testCommand = args => {
-
   const { command, globalConfig, options, params, tasks } = args
-  const data = params
-  console.log(`---------- Global Test CMD ----------`)
+  console.log(`---------- Keg CLI Global Test ----------`)
 
 }
 

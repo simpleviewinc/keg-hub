@@ -1,15 +1,7 @@
 #!/bin/bash
 
-# Docker IP Address setup
-KEG_DOCKER_IP=192.168.99.101
-KEG_DOCKER_BROADCAST=192.168.99.255
-KEG_DOCKER_SUBNET_MASK=255.255.255.0
-KEG_DOCKER_NAME=docker-keg
-
 # Github Repos
 KEG_CLI_URL=github.com/lancetipton/keg-cli.git
-KEG_CORE_URL=github.com/simpleviewinc/keg-core.git
-KEG_COMPONENTS_URL=github.com/simpleviewinc/keg-components.git
 
 # Install location
 KEG_INSTALL_DIR=~/keg
@@ -19,6 +11,42 @@ KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
   return
+}
+
+# Loads the ENVs needed to setup the local machine
+keg_load_setup_envs(){
+
+  # Get the current directory of the script
+  # local CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="${BASH_SOURCE[0]}"
+
+  # Resolve $SOURCE until the file is no longer a symlink
+  while [ -h "$SOURCE" ]; do 
+
+    # Get the directory of the bash source
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+    SOURCE="$(readlink "$SOURCE")"
+
+    # If $SOURCE was a relative symlink, we need to resolve it 
+    # relative to the path where the symlink file was located
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+
+  done
+
+  local CUR_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+  # Ensure the env file exists
+  if [[ -f "$CUR_DIR/docker-machine.env" ]]; then
+    eval $(cat $CUR_DIR/docker-machine.env)
+    echo 0
+  else
+    keg_message "Missing ENV file as $CUR_DIR/docker-machine.env"
+    keg_message "Can not run setup script"
+    echo 1
+    return
+  fi
+
 }
 
 # Reloads the .bash_profile and .bashrc if the exist
@@ -265,21 +293,17 @@ keg_check_bash_file(){
   fi
 
   # Check if the keg cli is installed, and if not, add it to bash file
-  local REGEX="\s+source $KEG_CLI_PATH/keg\s+"
-  local BASH_FILE_CONTENT=$( cat $BASH_FILE )
-
-  if [[ " $(cat $BASH_FILE) " =~ $REGEX ]]; then
+  if grep -Fq $KEG_CLI_PATH/keg "$BASH_FILE"; then
     keg_message "keg-cli already added to $BASH_FILE"
   else
     keg_message "Adding keg-cli to $BASH_FILE"
-    echo "" >> $BASH_FILE
     echo "" >> $BASH_FILE
     echo "source $KEG_CLI_PATH/keg" >> $BASH_FILE
   fi
 
   # Re-Souce bash to include the cli script
   source $BASH_FILE
-  
+
 }
 
 # Installs the keg-cli, and clones the keg-core / keg-componets repos locally
@@ -299,9 +323,7 @@ keg_install_cli(){
   cd $KEG_INSTALL_DIR
 
   # Clone the needed key repos
-  keg_install_repo $KEG_CLI_URL cli
-  keg_install_repo $KEG_CORE_URL keg-core
-  keg_install_repo $KEG_COMPONENTS_URL keg-components
+  keg_install_repo $KEG_CLI_URL keg-cli
 
   # Update the bash profile to include the keg-cli bash commands
   keg_check_bash_file
@@ -478,4 +500,27 @@ keg_setup(){
 
 }
 
-keg_setup "$@"
+# Unset these envs so we can validate that the current envs get loaded
+unset KEG_DOCKER_IP
+unset KEG_DOCKER_NAME
+
+# Only run the setup scirpt if the ENVs are unset from above
+if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
+
+  # Load the Setup ENVs, but route the output to dev/null
+  # This way nothing is printed to the terminal
+  keg_load_setup_envs >/dev/null 2>&1
+
+  # Ensure the ENVs were reset, so we can properly setup the keg-cli
+  if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
+    keg_setup "$@"
+
+  # Show message if setup ENVs could not be set
+  else
+    keg_message "Error running keg-cli setup. Could not set keg-cli setup ENVs!"
+  fi
+
+# Show message if setup ENVs could not be unset
+else
+  keg_message "Error running keg-cli setup. Could not unset keg-cli setup ENVs!"
+fi

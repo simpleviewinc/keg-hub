@@ -1,7 +1,10 @@
 const path = require('path')
-const { deepFreeze } = require('jsutils')
+const { deepFreeze, reduceObj } = require('jsutils')
 const { cliRootDir } = require('./values')
 const { loadENV } = require('KegFileSys/env')
+
+// Load the docker-machine ENVs from same file as setup script
+const machineEnvs = loadENV(path.join(cliRootDir, 'scripts/setup/docker-machine.env'))
 
 /*
  * Builds the docker machine config
@@ -9,5 +12,10 @@ const { loadENV } = require('KegFileSys/env')
  * @returns {Object} - Built machine config
 */
 module.exports = deepFreeze({
-  MACHINE: loadENV(path.join(cliRootDir, 'configs/docker-keg.env'))
+  // Use the same ENV file as the setup script, but remove the KEG_DOCKER_ prefix
+  MACHINE: reduceObj(machineEnvs, (key, value, cleaned) => {
+    cleaned[key.replace('KEG_DOCKER_', '')] = value
+
+    return cleaned
+  }, {})
 })
