@@ -1,10 +1,10 @@
+const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
-const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils')
 const { Logger } = require('KegLog')
-const { addValueFiles, addDockerArg } = require('KegDocker')
+const {buildComposeCmd, buildComposeName } = require('KegUtils/docker')
 
 /**
- * Runs docker-compose up
+ * Runs docker-compose up command for (components | core | tap)
  * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
@@ -12,21 +12,32 @@ const { addValueFiles, addDockerArg } = require('KegDocker')
  * @returns {void}
  */
 const upDockerCompose = async args => {
-  const { globalConfig, params } = args
+  const { globalConfig, params, options, task } = args
+  const { detached, build, context } = params
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
+  // Get the context data for the command to be run
+  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+    globalConfig,
+    task,
+    params
+  })
 
-  const { detached, build } = params
+  // Build the docker compose command
+  const dockerCmd = await buildComposeCmd(
+    globalConfig,
+    'up',
+    cmdContext,
+    params
+  )
 
-  let dockerCmd = `docker-compose`
-  dockerCmd = addValueFiles(dockerCmd)
-  dockerCmd = `${dockerCmd} up`
-  
-  dockerCmd = addDockerArg(dockerCmd, '--detach', Boolean(detached))
-  dockerCmd = addDockerArg(dockerCmd, '--build', Boolean(build))
+  // Build the name of the composer service
+  const buildName = buildComposeName(cmdContext, contextEnvs)
 
-  await spawnCmd(dockerCmd, location)
+  await spawnCmd(
+    `${dockerCmd} ${ buildName }`,
+    { options: { env: contextEnvs }},
+    location
+  )
 
 }
 
@@ -39,8 +50,14 @@ module.exports = {
   options: {
     build: {
       description: 'Build the docker containers before starting',
-      example: 'keg docker compose up --build',
-      default: false
+      example: 'keg docker compose up --build false',
+      default: true
+    },
+    context: {
+      allowed: [ 'components', 'core', 'tap' ],
+      description: 'Context of docker compose up command (components || core || tap)',
+      example: 'keg docker compose up --context core',
+      default: 'core'
     },
     detached: {
       description: 'Runs the docker-sync process in the background',

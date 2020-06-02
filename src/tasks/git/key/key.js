@@ -38,13 +38,14 @@ module.exports = {
     action: gitKey,
     tasks: {
       ...require('./add'),
+      ...require('./print'),
       ...require('./remove'),
     },
     description: `Updates github key in the global config`,
     example: 'keg git key <options>',
     options: {
       action: {
-        allowed: [ 'add', 'remove', 'rm' ],
+        allowed: [ 'add', 'remove', 'rm', 'print' ],
         description: "Action to perform on the git key",
         example: 'key git key remove',
         required: true

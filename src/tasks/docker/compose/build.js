@@ -1,7 +1,7 @@
-const { spawnCmd } = require('KegProc')
-const { confirmExec, getPathFromConfig, throwNoConfigPath } = require('KegUtils')
-const { buildDockerCmd, addDockerArg, addValueFiles, getBuildArgs } = require('KegDocker')
+const { get, reduceObj } = require('jsutils')
 const { Logger } = require('KegLog')
+const { spawnCmd } = require('KegProc')
+const { buildComposeCmd, buildComposeName } = require('KegUtils/docker')
 
 /**
  * Cleans docker-sync containers
@@ -11,34 +11,50 @@ const { Logger } = require('KegLog')
  *
  * @returns {void}
  */
-const upDockerCompose = async args => {
+const buildDockerCompose = async args => {
   const { globalConfig, params } = args
+  const { cache, remove, pull, context } = params
 
-  const location = getPathFromConfig(globalConfig, 'docker')
-  if(!location) throwNoConfigPath(globalConfig, 'docker')
+  // Get the context data for the command to be run
+  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+    globalConfig,
+    task,
+    params
+  })
 
-  const { cache, remove, pull } = params
+  // Build the docker compose command
+  const dockerCmd = await buildComposeCmd(
+    globalConfig,
+    'build',
+    cmdContext,
+    params
+  )
 
-  let dockerCmd = `docker-compose`
-  dockerCmd = addValueFiles(dockerCmd)
-  dockerCmd = `${dockerCmd} build`
-  dockerCmd = getBuildArgs(globalConfig, { name: 'tap', dockerCmd })
-  
-  dockerCmd = addDockerArg(dockerCmd, '--force-rm', Boolean(remove))
-  dockerCmd = addDockerArg(dockerCmd, '--no-cache', !Boolean(cache))
-  dockerCmd = addDockerArg(dockerCmd, '--pull', Boolean(pull))
+  // Build the name of the composer service
+  const buildName = buildComposeName(cmdContext, contextEnvs)
 
-  await spawnCmd(`${dockerCmd} tap`, location)
+  // Run the docker compose build command
+  await spawnCmd(
+    `${dockerCmd} ${ buildName }`,
+    { options: { env: contextEnvs }},
+    location
+  )
 
 }
 
 module.exports = {
   name: 'build',
   alias: [ 'b' ],
-  action: upDockerCompose,
+  action: buildDockerCompose,
   description: `Run docker-compose build command`,
   example: 'keg docker compose build <options>',
   options: {
+    context: {
+      allowed: [ 'components', 'core', 'tap' ],
+      description: 'Context of docker compose build command (tap || core)',
+      example: 'keg docker compose build --context core',
+      default: 'base'
+    },
     remove: {
       description: 'Always remove intermediate containers',
       example: 'keg docker compose build --remove',

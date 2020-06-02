@@ -1,11 +1,12 @@
+const { asBuildArg, asContainerEnv, toContainerEnvs, toBuildArgs } = require('./helpers')
+
 module.exports = {
-  ...require('./addValueFiles'),
-  ...require('./buildDockerCmd'),
-  ...require('./dockerError'),
-  ...require('./getBuildArgs'),
-  ...require('./getBuildTags'),
-  ...require('./getDockerArgs'),
-  ...require('./getDirsToMount'),
-  ...require('./getVolumeMounts'),
-  ...require('./getVirtualIP'),
+  asBuildArg,
+  asContainerEnv,
+  toBuildArgs,
+  toContainerEnvs,
+  ...require('./commands'),
+  image: require('./image'),
+  container: require('./container'),
+  machine: require('./machine'),
 }

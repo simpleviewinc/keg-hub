@@ -1,3 +1,5 @@
+const { reduceObj } = require('jsutils')
+const { ENV_MAP } = require('KegConst/constants')
 
 /**
  * Maps the env arg value shortcut to it's actual value
@@ -7,12 +9,11 @@
  * @returns {string} - Full env value if found or the original value
  */
 const mapEnv = value => {
-  if(!value || value === 'dev' || value === 'd') return 'development'
-  if(value === 'qa' || value === 'q') return 'qa'
-  if(value === 'st' || value === 's') return 'staging'
-  if(value === 'prod' || value === 'p') return 'production'
-
-  return value
+  return reduceObj(ENV_MAP, (environment, shortcuts, foundEnv) => {
+    return !foundEnv && shortcuts.indexOf(value) !== -1
+      ? environment
+      : foundEnv
+  }, value)
 }
 
 

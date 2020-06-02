@@ -15,10 +15,16 @@ const getTemplate = async (filePath, fromRoot=false) => {
   return readFile(location)
 }
 
-const fillTemplate = async ({ loc, data={}, root }) => {
+const fillFromPath = async (loc, data, root) => {
   const content = await getTemplate(loc, root)
 
   return template(content, data)
+}
+
+const fillTemplate = ({ template:tmp, loc, data={}, root }) => {
+  return !tmp && loc
+    ? fillFromPath(loc, data, root)
+    : tmp && template(tmp, data)
 }
 
 module.exports = {

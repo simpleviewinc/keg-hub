@@ -1,24 +1,52 @@
 #!/bin/bash
 
-# Docker IP Address setup
-KEG_DOCKER_IP=192.168.99.100
-KEG_DOCKER_BROADCAST=192.168.50.255
-KEG_DOCKER_SUBNET_MASK=255.255.255.0
-KEG_DOCKER_NAME=docker-keg
-
 # Github Repos
 KEG_CLI_URL=github.com/lancetipton/keg-cli.git
-KEG_CORE_URL=github.com/simpleviewinc/keg-core.git
-KEG_COMPONENTS_URL=github.com/simpleviewinc/keg-components.git
 
 # Install location
 KEG_INSTALL_DIR=~/keg
-KEG_CLI_PATH=$KEG_INSTALL_DIR/cli
+KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
 
 # Prints a message to the terminal through stderr
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
   return
+}
+
+# Loads the ENVs needed to setup the local machine
+keg_load_setup_envs(){
+
+  # Get the current directory of the script
+  # local CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="${BASH_SOURCE[0]}"
+
+  # Resolve $SOURCE until the file is no longer a symlink
+  while [ -h "$SOURCE" ]; do 
+
+    # Get the directory of the bash source
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+    SOURCE="$(readlink "$SOURCE")"
+
+    # If $SOURCE was a relative symlink, we need to resolve it 
+    # relative to the path where the symlink file was located
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+
+  done
+
+  local CUR_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+  # Ensure the env file exists
+  if [[ -f "$CUR_DIR/docker-machine.env" ]]; then
+    eval $(cat $CUR_DIR/docker-machine.env)
+    echo 0
+  else
+    keg_message "Missing ENV file as $CUR_DIR/docker-machine.env"
+    keg_message "Can not run setup script"
+    echo 1
+    return
+  fi
+
 }
 
 # Reloads the .bash_profile and .bashrc if the exist
@@ -42,7 +70,7 @@ keg_src_bash(){
 # Check and install homebrew
 keg_brew_install(){
   # Check for brew install
-  if [[ -x "$(command -v brew)" ]]; then
+  if [[ -x "$(command -v brew 2>/dev/null)" ]]; then
     keg_message "Brew is installed"
   else
     #  Install brew
@@ -53,19 +81,19 @@ keg_brew_install(){
 # Checks and install docker / docker-machine / docker-compose
 keg_docker_install(){
 
-  if [[ -x "$(command -v docker)" ]]; then
+  if [[ -x "$(command -v docker 2>/dev/null)" ]]; then
     keg_message "Docker is installed"
   else
     brew install docker
   fi
 
-  if [[ -x "$(command -v docker-machine)" ]]; then
+  if [[ -x "$(command -v docker-machine 2>/dev/null)" ]]; then
     keg_message "Docker-machine is installed"
   else
     brew install docker-machine
   fi
 
-  if [[ -x "$(command -v docker-compose)" ]]; then
+  if [[ -x "$(command -v docker-compose 2>/dev/null)" ]]; then
     keg_message "Docker-compose is installed"
   else
     brew install docker-compose
@@ -75,7 +103,6 @@ keg_docker_install(){
 
 # Setup docker-machine to use virtualbox
 # Create a new docker-machine instance
-# Update it's ip-address to be static, so it's the same every time the instance boots
 keg_setup_docker_machine(){
 
   keg_message "Setting up docker-machine..."
@@ -113,7 +140,17 @@ keg_setup_docker_machine(){
   keg_message "Updating docker-machine environment..."
   docker-machine env $KEG_DOCKER_NAME
 
-  echo "ifconfig eth1 $KEG_DOCKER_IP netmask $KEG_DOCKER_SUBNET_MASK broadcast $KEG_DOCKER_BROADCAST up" | docker-machine ssh $KEG_DOCKER_NAME sudo tee /var/lib/boot2docker/bootsync.sh > /dev/null
+  keg_setup_static_ip
+
+}
+
+# Update docker-machines ip-address to be static
+# So it's the same every time the instance boots
+keg_setup_static_ip(){
+  # Add this to the bootup script
+  # Will kill the dhcp server for eth1,
+  # Then sets a static ip address for the machine everytime it boots up
+  echo "kill \$(more /var/run/udhcpc.eth1.pid); ifconfig eth1 $KEG_DOCKER_IP netmask $KEG_DOCKER_SUBNET_MASK broadcast $KEG_DOCKER_BROADCAST up" | docker-machine ssh $KEG_DOCKER_NAME sudo tee /var/lib/boot2docker/bootsync.sh > /dev/null
 
   keg_message "Stoping $KEG_DOCKER_NAME to set static ip address..."
   docker-machine stop $KEG_DOCKER_NAME
@@ -127,14 +164,13 @@ keg_setup_docker_machine(){
   keg_message "Docker IP Address: $(docker-machine ip $KEG_DOCKER_NAME)"
   
   eval $(docker-machine env $KEG_DOCKER_NAME)
-
 }
 
 # Check and install virtualbox
 keg_setup_virtualbox(){
 
   # Check for virtualbox install
-  if [[ -x "$(command -v VBoxManage)" ]]; then
+  if [[ -x "$(command -v VBoxManage 2>/dev/null)" ]] && [[ -d "/Applications/VirtualBox.app" ]]; then
     keg_message "Virtualbox is installed"
   else
     brew cask install virtualbox
@@ -168,7 +204,7 @@ keg_setup_nvm_node(){
 keg_setup_yarn(){
 
   # Check for yarn install
-  if [[ -x "$(command -v yarn)" ]]; then
+  if [[ -x "$(command -v yarn 2>/dev/null)" ]]; then
     keg_message "yarn is installed"
   else
     curl -sL https://dl.yarnpkg.com/rpm/yarn.repo -o /etc/yum.repos.d/yarn.repo
@@ -257,21 +293,17 @@ keg_check_bash_file(){
   fi
 
   # Check if the keg cli is installed, and if not, add it to bash file
-  local REGEX="\s+source $KEG_CLI_PATH/keg\s+"
-  local BASH_FILE_CONTENT=$( cat $BASH_FILE )
-
-  if [[ " $(cat $BASH_FILE) " =~ $REGEX ]]; then
+  if grep -Fq $KEG_CLI_PATH/keg "$BASH_FILE"; then
     keg_message "keg-cli already added to $BASH_FILE"
   else
     keg_message "Adding keg-cli to $BASH_FILE"
-    echo "" >> $BASH_FILE
     echo "" >> $BASH_FILE
     echo "source $KEG_CLI_PATH/keg" >> $BASH_FILE
   fi
 
   # Re-Souce bash to include the cli script
   source $BASH_FILE
-  
+
 }
 
 # Installs the keg-cli, and clones the keg-core / keg-componets repos locally
@@ -291,9 +323,7 @@ keg_install_cli(){
   cd $KEG_INSTALL_DIR
 
   # Clone the needed key repos
-  keg_install_repo $KEG_CLI_URL cli
-  keg_install_repo $KEG_CORE_URL keg-core
-  keg_install_repo $KEG_COMPONENTS_URL keg-components
+  keg_install_repo $KEG_CLI_URL keg-cli
 
   # Update the bash profile to include the keg-cli bash commands
   keg_check_bash_file
@@ -319,7 +349,7 @@ keg_clean_all(){
   brew uninstall docker
 
   keg_message "Removing virtualbox..."
-  brew cask uninstall virtualbox
+  # brew cask uninstall virtualbox
 
   # Reload users .bashrc and .bash_profile
   keg_src_bash
@@ -379,7 +409,7 @@ keg_setup(){
   # To run:
   # bash setup.sh docker-reset
   #  * Runs only the docker-reset portion of this script
-  if [[ "$SETUP_TYPE" == "docker-reset" ]]; then
+  if [[ "$SETUP_TYPE" == "docker-reset" || "$SETUP_TYPE" == "docre" ]]; then
     keg_message "Reseting docker-machine..."
     keg_reset_docker_machine "${@:2}"
     return
@@ -470,4 +500,27 @@ keg_setup(){
 
 }
 
-keg_setup "$@"
+# Unset these envs so we can validate that the current envs get loaded
+unset KEG_DOCKER_IP
+unset KEG_DOCKER_NAME
+
+# Only run the setup scirpt if the ENVs are unset from above
+if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
+
+  # Load the Setup ENVs, but route the output to dev/null
+  # This way nothing is printed to the terminal
+  keg_load_setup_envs >/dev/null 2>&1
+
+  # Ensure the ENVs were reset, so we can properly setup the keg-cli
+  if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
+    keg_setup "$@"
+
+  # Show message if setup ENVs could not be set
+  else
+    keg_message "Error running keg-cli setup. Could not set keg-cli setup ENVs!"
+  fi
+
+# Show message if setup ENVs could not be unset
+else
+  keg_message "Error running keg-cli setup. Could not unset keg-cli setup ENVs!"
+fi

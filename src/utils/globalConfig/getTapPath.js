@@ -1,5 +1,5 @@
 const { get } = require('jsutils')
-const { GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 /**
  * Gets a path from the stored paths in the globalConfig object

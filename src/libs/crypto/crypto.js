@@ -3,11 +3,13 @@ const crypto = require('crypto')
 const algorithm = 'aes-128-cbc'
 const secretFormat = 'hex'
 const iv = crypto.randomBytes(16)
-const hash = crypto.createHash("sha1")
 const salt = 'a4E36cDq'
 
-hash.update(salt)
-const key = hash.digest().slice(0, 16)
+const getKey = (password) => {
+  const hash = crypto.createHash("sha1")
+  hash.update(password)
+  return hash.digest().slice(0, 16)
+}
 
 /**
  * Encrypts the passed in string
@@ -15,7 +17,8 @@ const key = hash.digest().slice(0, 16)
  *
  * @returns {string} - Encrypted string
  */
-const encrypt = str => {
+const encrypt = (str, password) => {
+  const key = getKey(password || salt)
   const cipher = crypto.createCipheriv(algorithm, key, iv);
   const encrypted = cipher.update(str)
   const encryptedBuffer = Buffer.concat([encrypted, cipher.final()])
@@ -29,12 +32,13 @@ const encrypt = str => {
  *
  * @returns {string} - Decrypted string
  */
-const decrypt = str => {
+const decrypt = (str, password) => {
 
   const strSplit = str.split(':')
   const ivFromKey = Buffer.from(strSplit.shift(), secretFormat);
   const encryptedText = Buffer.from(strSplit.join(':'), secretFormat)
 
+  const key = getKey(password || salt)
   const decipher = crypto.createDecipheriv(algorithm, key, ivFromKey)
   const decrypted = decipher.update(encryptedText)
 

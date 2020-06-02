@@ -1,5 +1,8 @@
-const { buildTaskAlias } = require('./buildTaskAlias')
 
 module.exports = {
-  buildTaskAlias,
+  ...require('./buildGlobalTaskAlias'),
+  ...require('./buildDockerLogin'),
+  ...require('./buildLocationContext'),
+  ...require('./buildTaskAlias'),
+  ...require('./buildTapContext'),
 }

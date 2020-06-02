@@ -1,49 +1,45 @@
-const { reduceObj, get } = require('jsutils')
-const { buildDockerCmd } = require('KegDocker')
-const { getTapPath, logVirtualIP, getCoreVersion } = require('KegUtils')
-const { spawnCmd, executeCmd } = require('KegProc')
+const { checkCall, get, reduceObj, isObj, isFunc } = require('jsutils')
+const { getCoreVersion } = require('KegUtils/getters')
+const { logVirtualIP } = require('KegUtils/log')
+const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
+const { buildDockerCmd } = require('KegUtils/docker')
+const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
-const defMounts = get(DOCKER, 'VOLUMES.DEV_DEFAULTS', {})
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
- * Gets the folders to mount from the passed in mounts argument
- * @param {string} mounts - Comma separated Folders to mount
- * @param {string} env - Environment to run the container in
+ * Starts a docker container for a tap
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {Object} args.globalConfig - Global config object for the keg-cli
+ * @param {Object} args.params - Formatted object of the passed in options 
  *
- * @returns {Array} - Groups of name repos or folder paths to mount into the container
+ * @returns {void}
  */
-const getMounts = (mounts, env) => {
-  const custom = mounts ? mounts.split(',') : []
+const startContainer = async ({ globalConfig, params }) => {
+  const { tap, env, docker, mounts } = params
 
-  return !env || env === 'development'
-    ? defMounts.concat(custom)
-    : custom
+  const location = getTapPath(globalConfig, tap)
+  // TODO: update version to come from docker CONTAINERS constants
+  const version = getCoreVersion(globalConfig)
+
+  const dockerCmd = buildDockerCmd(globalConfig, {
+    tap,
+    env,
+    mounts,
+    location,
+    docker,
+    name: 'tap',
+    cmd: `run`,
+    container: 'TAP',
+  })
+
+  await logVirtualIP()
+
+  await spawnCmd(dockerCmd, location)
 }
 
 /**
- * Start a docker container for the tap
- * Mount the tap into the docker container at a consistent location
- *   - Gets tap location from global config
- * Mount keg-core into node_modules of tap
- *   - tap/node_modules/keg-core
- *   - Get hosts keg-core location from global config
- * Mount re-theme / tap-resolver into keg-core node_modules
- *   - tap/node_modules/keg-core/node_modules/*
- *   - Get hosts re-theme / tap-resolver location from global config
- * Start the expo server type based on params
- *   - Native || Web
- * Expose the ports to allow host machine to access the server in the container
- *
- * Default Folder Path mounts:
- * Tap Mount
- * -v ${dirs.tap}/:/keg/tap 
- * Core Mount
- * -v ${dirs.core}/:/keg/tap/node_modules/keg-core
- * ReTheme Mount
- * -v ${reThemeDir}/:/keg/tap/node_modules/keg-core/node_modules/re-theme
- * Components Mount
- * -v ${keg-components}/:/keg/tap/node_modules/keg-core/node_modules/keg-components
- *
+ * Start a docker-sync or docker container for a tap
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -53,51 +49,68 @@ const getMounts = (mounts, env) => {
  * @returns {void}
  */
 const startTap = async (args) => {
-  const { command, globalConfig, options, params, tasks } = args
-  const { name, env, docker, mounts, image } = params
-
-  const location = getTapPath(globalConfig, name)
-  const version = getCoreVersion(globalConfig)
-
-  const dockerCmd = buildDockerCmd(globalConfig, {
-    location,
-    docker,
-    name: 'tap',
-    cmd: `run`,
-    img: image || 'tap',
-    mounts: getMounts(mounts, env),
-    tap: name,
-  })
-
-  await logVirtualIP()
-
-  await spawnCmd(dockerCmd, location)
+  // Check if we are running the container with just docker
+  return get(args, 'params.service') === 'container'
+    ? startContainer(args)
+    : runInternalTask('tasks.docker.tasks.sync.tasks.start', {
+        ...args,
+        command: 'docker',
+        params: { ...args.params, context: 'tap' },
+      })
 
 }
 
 module.exports = {
-  name: 'start',
-  alias: [ 'st', 'run' ],
-  action: startTap,
-  description: `Runs a tap in a docker container`,
-  example: 'keg tap start <options>',
-  options: {
-    name: { 
-      description: 'Name of the tap to run. Must be a tap linked in the global config',
-      required: true,
-    },
-    env: {
-      description: 'Environment to start the Docker container in',
-      default: 'development',
-    },
-    docker: {
-      description: `Extra docker arguments to pass to the 'docker run command'`
-    },
-    mounts: {
-      description: `List of key names or folder paths to mount into the docker container`
-    },
-    image: {
-      description: `Name of the docker image to use. Defaults to tap-name:tap-version.`
-    },
+  start: {
+    name: 'start',
+    alias: [ 'st', 'run' ],
+    action: startTap,
+    description: `Runs a tap in a docker container`,
+    example: 'keg tap start <options>',
+    options: {
+      tap: { 
+        description: 'Name of the tap to run. Must be a tap linked in the global config',
+        required: true,
+      },
+      build: {
+        description: 'Removes and rebuilds the docker container before running the tap',
+        default: false
+      },
+      clean: {
+        description: 'Cleans docker-sync before running the tap',
+        example: 'keg tap --clean true',
+        default: false
+      },
+      command: {
+        alias: [ 'cmd' ],
+        description: 'The command to run when the container starts. Overwrites the default (yarn web)',
+        example: 'keg tap start --command ios',
+        default: 'web'
+      },
+      env: {
+        alias: [ 'environment' ],
+        description: 'Environment to start the Docker service in',
+        default: 'development',
+      },
+      install: {
+        alias: [ 'in' ],
+        description: 'Install node_modules ( yarn install ) in the container before starting the app',
+        example: 'keg tap start --install',
+        default: false
+      },
+      docker: {
+        alias: [ 'doc' ],
+        description: `Extra docker arguments to pass to the 'docker run command'`
+      },
+      mounts: {
+        alias: [ 'mount' ],
+        description: `List of key names or folder paths to mount into the docker container`
+      },
+      service: {
+        allowed: [ 'sync', 'container' ],
+        description: 'What docker service to build the tap with. Must be on of ( sync || container )',
+        default: 'sync'
+      },
+    }
   }
 }

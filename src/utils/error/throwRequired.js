@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { printInfo } = require('../log')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /**
  * Formats and throws an error when a required argument is not included
@@ -10,17 +10,18 @@ const { printInfo } = require('../log')
  * @returns {void}
  */
 const throwRequired = (task, key, meta) => {
+  const requireType = meta.required ? 'requires' : 'enforces a'
 
-  Logger.error(`\n Task '${task.name}' requires '${key}' argument.`)
+  Logger.error(`\n Task '${task.name}' ${requireType} '${key}' argument.`)
 
-  meta.alias && printInfo(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
-  meta.description && printInfo(`  * Description:`, meta.description)
-  meta.allowed && printInfo(`  * Allowed Values:`, meta.allowed.join(' | '))
-  meta.example && printInfo(`  * Example:`, meta.example)
+  meta.alias && Logger.message(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
+  meta.description && Logger.message(`  * Description:`, meta.description)
+  meta.allowed && Logger.message(`  * Allowed Values:`, meta.allowed.join(' | '))
+  meta.example && Logger.message(`  * Example:`, meta.example)
 
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 }
 
 module.exports = {

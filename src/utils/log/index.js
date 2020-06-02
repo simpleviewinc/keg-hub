@@ -1,5 +1,5 @@
 
 module.exports = {
+  ...require('./dockerLog'),
   ...require('./logVirtualIP'),
-  ...require('./printInfo')
 }

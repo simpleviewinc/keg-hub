@@ -1,7 +1,57 @@
-const { isArr, isStr, isObj, softFalsy, wordCaps, isStrBool, toBool } = require('jsutils')
 const { Logger } = require('KegLog')
 const { throwRequired } = require('KegUtils/error')
 const { exists, mapEnv } = require('KegUtils/helpers')
+const {
+  isArr,
+  isStr,
+  isObj,
+  softFalsy,
+  wordCaps,
+  isStrBool,
+  toBool,
+  reduceObj
+} = require('jsutils')
+
+/**
+ * Checks for a required option, and throws if it does not exist
+ * @param {string|number|boolean} value
+ * @param {Object} task - Task Model of current task being run
+ * @param {Array} key - Name the argument to find
+ * @param {string} meta - Info about the argument from the task
+ * @param {Array} hasVal - Does the value exist
+ *
+ * @returns {Void}
+ */
+const checkRequired = (task, key, meta) => {
+  meta.required && throwRequired(task, key, meta)
+}
+
+/**
+ * Checks if the value is a string bool, and auto-converts it
+ * @function
+ * @param {*} value - Value to check for string bool
+ *
+ * @returns {*} - Boolean or original value
+ */
+const checkBoolValue = value => {
+  // If the value is 'true' || 'false', convert it to a true boolean
+  return isStrBool(value) ? toBool(value) : value
+}
+
+/**
+ * Checks if the key is an env, and maps the value for shortcuts
+ * @function
+ * @param {*} key - Key to check for environment
+ * @param {*} value - Value to check for string bool
+ *
+ * @returns {*} - The original value or mapped environment value
+ */
+const checkEnvKeyValue = (key, value) => {
+  // Check if the arg is env, and map it from the env shortcuts
+  return key === 'env' || key === 'environment'
+    ? mapEnv(value)
+    : value
+}
 
 /**
  * Removes an option from the options array
@@ -73,6 +123,42 @@ const buildMatchTypes = (long, short, alias=[]) => {
   }, [ long, `--${long}`, short, `-${short}` ])
 }
 
+
+/**
+ * Checks the current argument for a starting "
+ * If found, adds all other options until and end " is found
+ * @param {string} argument - Found argument to check for starting "
+ * @param {Array} options - Items to search for the end "
+ * @param {number} index - Location in the options array to start looking for an end "
+ *
+ * @returns {string} - Built quoted string
+ */
+const checkQuotedOptions = (argument, options, index) => {
+  // Check if the current option has a quote
+  if(argument[0] !== '"') return argument
+
+  // flag for when then end quote is found
+  let foundEnd
+
+  // Get all passed in options after the current option
+  const slicedOpts = options.slice(index)
+  return slicedOpts.reduce((joined, opt) => {
+    // If foundEnd is true, just return and don't add anymore options,
+    if(foundEnd) return joined
+
+    // Remove the current option from the options array
+    options = removeOption(options, opt)
+
+    if(opt[opt.length -1] === '"'){
+      foundEnd = true
+      return `${joined.substring(1)} ${opt.slice(0, -1)}`
+    }
+
+    return `${joined} ${opt}`
+
+  }, argument)
+}
+
 /**
  * Searches for a argument in the options array, and gets it's value
  * @function
@@ -92,11 +178,11 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
   return (isStr(long) || isStr(short)) && isArr(options) &&
     options.reduce((argument, option, index) => {
 
-      // If the value was already found return it
-      if(exists(argument)) return argument
-      
+      // If the value was already found, check for quoted string and return it 
+      if(exists(argument)) return checkQuotedOptions(argument, options, index)
+
       const nextOpt = options[ index + 1 ]
-      
+
       // Check if the current option matches any in the matchTypes array
       // Pass along the next option, so we can also set the value
       // Pass the taskKeys, to ensure the next option is not a task key option
@@ -116,13 +202,10 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
       if(value === nextOpt) options = removeOption(options, value)
 
       // If the value is 'true' || 'false', convert it to a true boolean
-      return isStrBool(value)
-        ? toBool(value)
-        : value
+      return checkBoolValue(value)
 
     }, null)
 }
-
 
 /**
  * Finds the value to the passed in keg argument
@@ -136,7 +219,7 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
  *
  * @returns {*} - Value of the search for argument from passed in options
  */
-const findArgument = ({ key, meta={}, ...params }) => {
+const findArgument = ({ key, meta={}, index, ...params }) => {
 
   const value = getArgValue({
     ...params,
@@ -156,7 +239,7 @@ const findArgument = ({ key, meta={}, ...params }) => {
   const allowedMatch = meta.allowed.reduce((foundVal, allowed) => {
     return exists(foundVal)
       ? foundVal
-      : params.options.indexOf(allowed) !== -1
+      : params.options.indexOf(allowed) === index
         ? allowed
         : foundVal
   }, null)
@@ -171,15 +254,74 @@ const findArgument = ({ key, meta={}, ...params }) => {
 }
 
 /**
+ * Loops the task options looking to a match in the passed in options array
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} taskKeys - Keg names of the task options
+ * @param {Array} options - items passed from the command line
+ *
+ * @returns {Object} - Mapped arguments object
+ */
+const loopTaskOptions = (task, taskKeys, options) => {
+  return taskKeys.reduce((args, key, index) => {
+
+    // Get the option meta for the key
+    const meta = isObj(task.options[key])
+      ? task.options[key]
+      : { description: task.options[key] }
+
+    // Find the value of the argument from the passed in options
+    const value = findArgument({
+      key,
+      meta,
+      index,
+      taskKeys,
+      options,
+    })
+
+    // If no value exists, and it's required, then throw required error
+    if(!exists(value)) checkRequired(task, key, meta)
+
+    // Check if the arg is env, and map it from the env shortcuts
+    else args[key] = checkEnvKeyValue(key, value)
+
+    return args
+
+  }, {})
+}
+
+/**
+ * Adds default values when task is short-circuited
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} mappedArgs - Currently mapped args
+ *
+ * @returns {Object} - Mapped arguments object
+ */
+const ensureArguments = (task, mappedArgs={}) => {
+  return reduceObj(task.options, (key, meta, mapped) => {
+    !mapped[key] &&
+      !checkRequired(task, key, meta)
+      meta.default &&
+      ( mapped[key] = meta.default )
+
+    return mapped
+  }, mappedArgs)
+}
+
+/**
  * Maps all passed in options to the cmdOpts based on keys
  * @function
  * @param {Array} params.options - items passed from the command line
  * @param {Object} params.task - Task Model of current task being run
- * @param {Object} params.task.options - Options accepted by the command being run
+ * @param {Object} params.task.options - Options accepted by the task being run
  *
  * @returns {Object} - Mapped arguments object
  */
 const getArguments = ({ options=[], task }) => {
+
+  // If no options to parse, Add the defaults and return it
+  if(!options.length) return ensureArguments(task)
 
   // Make copy of options, so we don't affect the original
   const optsCopy = Array.from(options)
@@ -188,29 +330,21 @@ const getArguments = ({ options=[], task }) => {
   // This is used later to compare the keys with the passed in options
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
-  return taskKeys && taskKeys.reduce((args, key) => {
+  // If not task keys to loop, just return empty
+  if(!taskKeys || !taskKeys.length) return ensureArguments(task)
 
-      // Get the option meta for the key
-      const meta = isObj(task.options[key])
-        ? task.options[key]
-        : { description: task.options[key] }
+  // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
+  return options.length !== 1 || options[0].indexOf('=') !== -1
 
-      // Find the value of the argument from the passed in options
-      const value = findArgument({
-        key,
-        meta,
-        taskKeys,
-        options: optsCopy,
-      })
+    // Loop over the task keys and map the task options to the passed in options
+    ? taskKeys && loopTaskOptions(task, taskKeys, options)
+    
+    // Otherwise set it as the first key in the task options object
+    : ensureArguments(
+        task,
+        { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
+      )
 
-      // If no value exists, and it's required, then throw required error
-      if(!exists(value)) meta.required && throwRequired(task, key, meta)
-
-      // Check if the arg is env, and map it from the env shortcuts
-      else args[key] = key === 'env' ? mapEnv(value) : value
-
-      return args
-    }, {})
 }
 
 module.exports = {

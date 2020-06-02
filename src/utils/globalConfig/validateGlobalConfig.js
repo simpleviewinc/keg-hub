@@ -1,28 +1,53 @@
 const { isObj, get } = require('jsutils')
+const { defaultConfig } = require('./defaultConfig')
+const { generalError } = require('../error/generalError')
 
 /**
  * Validates the passed in config object is a global config object
+ * If it's invalid, an error is throw, which gets caught an returns false
+ * But it still logs the error message by using generalError helper
+ * @param {Object} config - Object to check if is a valid global config object
  *
- * @param {Object} config - Object to check if is a valid config object
- * @returns {Boolean} - If is a valid global config object
+ * @returns {Boolean} - If its a valid global config object
  */
 const validateGlobalConfig = config => {
-  if(!isObj(config))
-    return new Error(`Can not save a non-object as the global config!`)
+  try {
 
-  // TODO: Move these validations to separate method
-  // Update to iterate over an array of props that should exist
-  if(!isObj(get(config, 'keg.cli.paths')))
-    return new Error(`Global Config missing required property => keg.cli.paths`)
+    if(!isObj(config))
+      generalError(`Can not save a non-object as the global config!`)
 
-  if(!isObj(get(config, 'keg.cli.taps')))
-    return new Error(`Global Config missing required property => keg.cli.taps`)
+    // Loop over the global config keys and ensure they are of the proper type
+    // Use the default config to compare against
+    Object.keys(defaultConfig).map(key => {
+      const defType = typeof defaultConfig[key]
 
-  // TODO: add better check here to ensure is a global config object
-  if(config.name !== "keg-cli")
-    return new Error(`Can not save a non global config object!`)
+      // Ensures the types match
+      Boolean(defType !== typeof config[key]) && 
+        generalError(`Global Config missing required property "${key}" of type "${defType}"`)
 
-  return true
+      // Ensure the config name is correct
+      if(key === 'name' && config.name !== "keg-cli")
+        generalError(`Can not save a global config with invalid name => "${ config.name }"!`)
+
+      // If not on the cli key, just return
+      if(key !== 'cli') return
+
+      // Loop over the cli property keys, and ensure they are all valid objects
+      Object.keys(defaultConfig[key]).map(subKey => {
+        !isObj(config.cli[subKey]) &&
+          generalError(`Global Config missing required object property "${key}" of type "${defType}"`)
+      })
+
+    })
+
+    // If we made it to the end, return true
+    return true
+  }
+  catch(e){
+    // If an error was thrown, return false
+    return false
+  }
+
 }
 
 

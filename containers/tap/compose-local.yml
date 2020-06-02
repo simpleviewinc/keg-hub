@@ -1,0 +1,13 @@
+version: "2"
+services:
+  tap:
+    volumes:
+      - tap-sync:${DOC_APP_PATH}:nocopy
+      - cli-sync:/keg/keg-cli:nocopy
+volumes:
+  tap-sync:
+    external:
+      name: "tap-unison-sync"
+  cli-sync:
+    external:
+      name: "cli-unison-sync"

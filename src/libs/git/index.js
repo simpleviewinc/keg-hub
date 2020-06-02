@@ -1,4 +1,6 @@
 module.exports = {
+  ...require('./getGitPath'),
   ...require('./getGit'),
-  ...require('./gitBranchPrint'),
+  ...require('./gitBranch'),
+  ...require('./getRemoteUrl'),
 }

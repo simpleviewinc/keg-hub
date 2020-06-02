@@ -17,22 +17,32 @@ const getExtraArgs = extra => {
 }
 
 /**
- * Logs the command to be run, the spawns a new process to run the command
+ * Logs the command to be run, then calls spawnProc to run the passed in command
  * @param {Array} args - Arguments to run a command
  *
  * @returns {*} - Response from spawned process
  */
 const doSpawnCmd = (...args) => {
   const extra = getExtraArgs(args[1])
-  console.log(
-    Logger.colors.brightCyan(`Running command:`),
-    Logger.colors.brightWhite(`${args[0]}${extra}`)
-  )
+  Logger.message(`Running command: `, `${args[0]}${extra}`)
+  return spawnProc(...args)
+}
 
-  return spawnCmd(...args)
+
+/**
+ * Spawns a new process to run a passed in cmd
+ * @param {Array} args - Arguments to run a command
+ *
+ * @returns {*} - Response from spawned process
+ */
+const spawnProc = (...args) => {
+  return args.length > 1
+    ? spawnCmd(...args)
+    : spawnCmd(...args, process.cwd())
 }
 
 module.exports = {
+  spawnProc,
   executeCmd: asyncCmd,
   spawnCmd: doSpawnCmd,
 }

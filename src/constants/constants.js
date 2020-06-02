@@ -25,22 +25,23 @@ module.exports = deepFreeze({
     'description'
   ],
 
-  // Path the the git ssh key
-  SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
-
   // Global config settings
   GLOBAL_CONFIG_PATHS: {
-    CLI: 'keg.cli',
-    CLI_PATHS: 'keg.cli.paths',
-    GIT: 'keg.cli.git',
-    TAPS: `keg.cli.taps`,
-    TAP_LINKS: `keg.cli.taps.links`,
+    CLI: 'cli',
+    CLI_PATHS: 'cli.paths',
+    GIT: 'cli.git',
+    TAPS: `cli.taps`,
+    TAP_LINKS: `cli.taps.links`,
   },
 
   // Sets the command to open an IDE
-  GLOBAL_CONFIG_EDITOR_CMD: 'keg.cli.editorCmd',
+  GLOBAL_CONFIG_EDITOR_CMD: 'cli.settings.editorCmd',
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
+  
+  // Check if the command should be logged
+  // Passed as the last argument to the spawnCmd method
+  NO_CMD_LOG: `NO_CMD_LOG`,
   
   // Help options. when one is passed as an option, the help menu is printed
   HELP_ARGS: [
@@ -51,7 +52,31 @@ module.exports = deepFreeze({
     '-h',
     '--h',
   ],
-  
-  GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no",
+
+  CLI_ROOT: path.join(__dirname, '../../../'),
+
+  // --- GIT Constants --- //
+  // Path the the git ssh key
+  GIT_SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
+  GIT_SSH_COMMAND: "ssh",
+  GIT_SSH_KEY: '-i {{ GIT_KEY_PATH }}',
+  GIT_SSH_PARAMS: [
+    '-o BatchMode=yes',
+    '-o UserKnownHostsFile=/dev/null',
+    '-o StrictHostKeyChecking=no'
+  ],
+
+  // Shortcuts to map env to real environment
+  ENV_MAP: {
+    PRODUCTION: [ 'production', 'prod', 'p' ],
+    QA: [ 'qa', 'q' ],
+    STAGING: [ 'staging', 'st', 's' ],
+    DEVELOPMENT: [ 'development', 'dev', 'd' ],
+    LOCAL: [ 'local', 'loc', 'l' ]
+  },
+
+
+  // URLs for navigating to the application
+  TAP_URL: `http://tap.kegdev.xyz/`,
 
 })

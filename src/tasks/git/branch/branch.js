@@ -1,8 +1,9 @@
-const { getGit, gitBranchPrint } = require('KegLibs/git')
-const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
+const { throwWrap } = require('KegUtils/error/throwWrap')
+const { list } = require('./list')
+const { get, isFunc } = require('jsutils')
 
 /**
- * Git commit task
+ * Git branch task
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -11,19 +12,11 @@ const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
  *
  * @returns {void}
  */
-const gitBranch = async args => {
-  const { command, options, params, tasks, globalConfig } = args
-  const name = params.name || options[1] || 'cli'
-  
-  // TODO: All this can be moved to the getGit helper
-  let gitPath = getPathFromConfig(globalConfig, name)
-  gitPath = gitPath || getTapPath(globalConfig, name)
-  if(!gitPath) throw new Error(`Git path does not exist for ${name}`)
-  
-  git = getGit(gitPath)
+const gitBranch = args => {
 
-  const [ err, data ] = await git.branch([ '--list', '--all'])
-  err ? console.error(err.stack) : gitBranchPrint(data)
+  // Auto call the list task if we reach the gitBranch root task
+  const list = get(args, `task.tasks.list.action`)
+  const res = isFunc(list) ? list(args) : throwWrap(`Git branch "list" task not found!`)
 
 }
 
@@ -34,13 +27,12 @@ module.exports = {
     action: gitBranch,
     description: `Run git branch commands on a repo.`,
     example: 'keg branch <options>',
+    tasks: {
+      list,
+      ...require('./current'),
+    },
     options: {
-      name: {
-        description: 'Name of the repository to run the branch command on'
-      },
-      action: {
-        description: 'git branch action to run on the repo'
-      }
+      ...list.options
     }
   }
 }

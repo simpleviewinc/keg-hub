@@ -1,5 +1,12 @@
-const { limbo, reduceObj, isFunc } = require('jsutils')
-const { GIT_SSH_COMMAND } = require('KegConst')
+const { deepMerge } = require('jsutils')
+const { buildGitSSH } = require('KegUtils/git')
+const { getGlobalConfig } = require('KegUtils/globalConfig')
+const { limboify } = require('KegUtils/helpers')
+
+const defGitOpts = {
+  log: false,
+  ssh: true,
+}
 
 /**
  * Pipes the git command output to stdout/stderr
@@ -20,8 +27,9 @@ const gitOutputHandler = git => {
  *
  * @returns {void}
  */
-const setupGitSSH = (git) => {
-  git.env('GIT_SSH_COMMAND', GIT_SSH_COMMAND)
+const setupGitSSH = git => {
+  const sshCmd = buildGitSSH(getGlobalConfig())
+  git.env('GIT_SSH_COMMAND', sshCmd)
 }
 
 /**
@@ -31,30 +39,14 @@ const setupGitSSH = (git) => {
  *
  * @returns {Object} - Loads simple-git module
  */
-const loadSimpleGit = (gitRepoDir, log) => {
+const loadSimpleGit = (gitRepoDir, { log, ssh }) => {
   const git = require('simple-git/promise')(gitRepoDir)
-  setupGitSSH(git)
+  ssh && setupGitSSH(git)
   log && gitOutputHandler(git)
 
   return git
 }
 
-/**
- * Converts all simple-git functions into a limbo function from jsutils
- * @param {Object} obj - object to add limbo to child functions
- *
- * @returns {Object} - Object with all functions wrapped with limbo
- */
-const limboify = obj => {
-  return reduceObj(obj, (key, val, updated) => {
-    if(!isFunc(val)) return updated
-
-    function withLimbo(...args){ return limbo(val.apply(obj, args)) }
-    updated[key] = withLimbo.bind(obj)
-
-    return updated
-  }, {})
-}
 
 /**
  * Loads the simple-git module, then wraps all functions of simple-git with limbo
@@ -63,8 +55,8 @@ const limboify = obj => {
  *
  * @returns Object with all simple-git functions wrapped with limbo
  */
-const getGit = (gitRepoDir, log) => {
-  return limboify(loadSimpleGit(gitRepoDir, log))
+const getGit = (gitRepoDir, options={}) => {
+  return limboify(loadSimpleGit(gitRepoDir, deepMerge(defGitOpts, options)))
 }
 
 module.exports = {

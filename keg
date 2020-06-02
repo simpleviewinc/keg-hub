@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# TODO: **IMPORTANT** figure out how to add to active terminal session
-# Need to `source ~/keg/cli/keg` add to .bashrc or .bash_profile
-
 # TODO: **IMPORTANT** Need to set this path dyamically some how
-export KEG_CLI_PATH=~/keg/cli
+# Need to `source ~/keg/keg-cli/keg` add to .bashrc or .bash_profile
+export KEG_CLI_PATH=~/keg/keg-cli
 KEG_DOCKER_NAME=docker-keg
 
 keg_message(){
@@ -17,27 +15,51 @@ keg_message(){
 # docker-machine env $KEG_DOCKER_NAME
 # Execute the $KEG_DOCKER_NAME environment in place for the active terminal
 # eval "$(docker-machine env $KEG_DOCKER_NAME)"
-
 keg_cli_init_docker_machine(){
-  
+
   if [[ -x "$(command -v VBoxManage)" ]]; then
+
+    local KEG_STATUS="$(docker-machine status $KEG_DOCKER_NAME)"
+
+    # Ensure docker-machine is running
+    if [[ "$KEG_STATUS" != "Running" ]]; then
+      keg_message "Starting docker-machine $KEG_DOCKER_NAME"
+      docker-machine start $KEG_DOCKER_NAME
+    fi
+
     keg_message "Loading docker-machine $KEG_DOCKER_NAME env!"
     docker-machine env $KEG_DOCKER_NAME
     eval "$(docker-machine env $KEG_DOCKER_NAME)"
+    echo ""
   else
     keg_message "Error loading 'docker-machine' env. VBoxManage not installed!"
+
   fi
 }
 
+# Checks if were running a docker command, and initalizes docker-machine
+#   Prams
+#     $1 - keg cli task to be run
+keg_check_for_docker_cmd(){
+  # DOCKER_MACHINE_NAME gets defined by running the keg_cli_init_docker_machine
+  # So check to see if it's already defined before re-calling the function
+  if [[ "$DOCKER_MACHINE_NAME" != "$KEG_DOCKER_NAME" ]]; then
+    if [[ "$1" == "docker" || "$1" == "doc" || "$1" == "d" || "$1" == "dc" || "$1" == "di" ]]; then
+      keg_cli_init_docker_machine
+    fi
+  fi
+}
+
+# Navigates to a directory based on the passed in params
 keg_cli_move_directory(){
 
   local CMD_OUTPUT
 
   # If no arguments, then $KEG_DOCKER_NAME to keg path
   if [[ "$#" == "0" ]]; then
-    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js keg)"
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getConfigPath.js keg)"
   else
-    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/setup/getConfigPath.js $@)"
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getConfigPath.js $@)"
   fi
 
   # Convert the ouput to an array
@@ -58,6 +80,7 @@ keg_cli_move_directory(){
   return 1
 }
 
+
 # Opening to the keg cli
 # For navigation commands, calls keg_cli_move_directory
 # All other commands call keg-cli node script
@@ -71,8 +94,14 @@ keg(){
     source $KEG_CLI_PATH/keg
     return
 
+  # Run the keg-cli bash script
+  elif [[ "$1" == "cli-setup" ]]; then
+    cd 
+    bash $KEG_CLI_PATH/scripts/setup/setup.sh "${@:2}"
+    return
+
   # Ensure docker machine is loaded
-  elif [[ "$1" == "docker_machine" || "$1" == "docm" ]]; then
+  elif [[ "$1" == "docker_machine" || "$1" == "docm" || "$1" == "dcm" ]]; then
     keg_cli_init_docker_machine
     return
 
@@ -90,7 +119,18 @@ keg(){
     fi
   fi
 
+  # Checks if were running a docker command, and initalizes docker-machine
+  keg_check_for_docker_cmd $1
+
   # All other commands get passed on to the node keg-cli script
   node $KEG_CLI_PATH/keg-cli $@
 
 }
+
+# Check that docker-machine is loaded
+keg_check_docker_loaded(){
+  keg_check_for_docker_cmd "docker" >/dev/null 2>&1
+  keg_message "Loaded!"
+}
+# Auto call on start
+keg_check_docker_loaded

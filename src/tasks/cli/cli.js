@@ -1,4 +1,3 @@
-
 const cliCommand = args => {
   const { command, options, tasks, globalConfig } = args
 

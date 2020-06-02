@@ -1,10 +1,13 @@
 const path = require('path')
-const packageJson = require('../../../package.json')
-const cliJson = require('../../../cli.json')
-const { deepMerge } = require('jsutils') 
+const { CLI_ROOT } = require('KegConst/constants')
+const packageJson = require('KegRoot/package.json')
+const { deepMerge } = require('jsutils')
+const cliParent = path.join(CLI_ROOT, '../')
+const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 
-const cliRoot = path.join(__dirname, '../../../')
-const cliParent = path.join(__dirname, '../../../../')
+// TODO: Add script to ask user for values when first setting up cli.config.json
+//  - Need git user name
+//  - Could also set git token at this point
 
 /**
  * Builds the default global config from the package.json and the cli.json
@@ -13,19 +16,41 @@ const cliParent = path.join(__dirname, '../../../../')
  * @returns {Object} - Default global config
  */
 const defaultConfig = () => {
-  const config = {}
-  config.version = packageJson.version
-  config.name = packageJson.name
-  config.keg = {
+  const config = {
+    version: packageJson.version,
+    name: packageJson.name,
+    displayName: "Keg CLI",
+    docker: {
+      providerUrl: "docker.pkg.github.com",
+      user: "",
+      token: ""
+    },
     cli: {
-      paths: {
-        cli: cliRoot,
-        keg: cliParent,
-        core: path.join(cliParent, 'keg-core'),
-        components: path.join(cliParent, 'keg-components'),
-        taps: path.join(cliParent, 'taps'),
+      git: {
+        orgUrl: "https://github.com/simpleviewinc",
+        repos: {
+          cli: "keg-cli",
+          core: "keg-core",
+          components: "keg-components",
+          retheme: "re-theme"
+        }
       },
-      taps: { links: {} }
+      paths: {
+        cli: CLI_ROOT,
+        components: path.join(cliParent, 'keg-components'),
+        containers: path.join(CLI_ROOT, 'containers'),
+        core: path.join(cliParent, 'keg-core'),
+        keg: cliParent,
+        proxy: path.join(cliParent, 'keg-proxy'),
+        resolver: path.join(cliParent, 'tap-resolver'),
+        retheme: path.join(cliParent, 're-theme'),
+      },
+      settings: {
+        docker: { preConfirm: false },
+        git: { secure: false },
+        editorCmd: "code"
+      },
+      taps: { links: {} },
     }
   }
 

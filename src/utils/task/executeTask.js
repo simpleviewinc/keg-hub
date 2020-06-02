@@ -2,6 +2,9 @@ const { get, isFunc, isStr } = require('jsutils')
 const { throwNoAction } = require('KegUtils/error')
 const { executeCmd } = require('KegProc')
 const { getArguments } = require('./getArguments')
+const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
+const { showHelp } = require('KegLog')
+
 /**
  * Executes the passed in task.
  * <br/> Checks if a tasks has cmd key as a string, and if so runs it in a child process
@@ -15,17 +18,14 @@ const { getArguments } = require('./getArguments')
  * @returns {Any} - response from the task.action function
  */
 const executeTask = async (args) => {
-  const { command, task, tasks } = args
+  const { command, task, tasks, options } = args
 
-  const cmdOutput = isStr(task.cmd)
-    ? await executeCmd(task)
-    : isFunc(task.cmd)
-      ? await task.cmd(command, task, tasks)
-      : {}
+    // Check is the help should be printed
+  if(hasHelpArg(options[ options.length -1 ])) return showHelp({ task, options })
 
   return isFunc(task.action)
-    ? task.action({ ...args, cmdOutput, params: getArguments(args) })
-    : throwNoAction(args)
+    ? task.action({ ...args, params: getArguments(args) })
+    : throwNoAction(task)
 
 }
 

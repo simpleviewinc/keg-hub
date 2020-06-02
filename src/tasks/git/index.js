@@ -1,7 +1,7 @@
-const { buildTaskObject } = require('KegUtils/task/buildTaskObject')
+const { buildGlobalTaskAlias } = require('KegUtils/builders/buildGlobalTaskAlias')
 
 module.exports = {
-  git: buildTaskObject({
+  git: buildGlobalTaskAlias({
     name: 'git',
     alias: [],
     description: 'Run git commands on keg and tap repos!',
@@ -9,7 +9,9 @@ module.exports = {
     tasks: {
       ...require('./branch'),
       ...require('./commit'),
+      ...require('./clone'),
       ...require('./key'),
+      ...require('./log'),
       ...require('./pull'),
       ...require('./push'),
     }

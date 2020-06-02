@@ -1,0 +1,22 @@
+version: "2"
+services:
+  kegcore:
+    image: ${IMAGE}
+    build:
+      context: ${CONTEXT_PATH}
+      dockerfile: ${CONTEXT_DOCKER_FILE}
+      args:
+        GIT_CORE_URL: ${GIT_CORE_URL}
+        GIT_KEY: ${GIT_KEY}
+        DOC_APP_PATH: ${DOC_APP_PATH}
+    container_name: ${CONTAINER_NAME}
+    env_file: ${CONTEXT_ENV_FILE}
+    environment:
+      - ENV
+      - EXEC_CMD
+      - NM_INSTALL
+      - NODE_ENV
+      - DOC_APP_PATH
+    ports:
+      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
+      - 80:${EXPO_APP_PORT}
