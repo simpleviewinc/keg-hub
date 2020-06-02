@@ -65,13 +65,15 @@ const validateProviderTag = args => {
  *
  * @returns {string} - Name if the remote git repo
  */
-const buildVersionTag = async (image, context, url, name, tag) => {
+const buildVersionTag = async (image, context, url, name, tag, branch) => {
 
   // Use the passed in tag if it's not latest
   // Otherwise get the container version to build the docker url tag
   const version = tag && tag !== 'latest'
     ? tag
-    : getContainerConst(context, `ENV.VERSION`)
+    : branch.name === 'master'
+      ? getContainerConst(context, `ENV.VERSION`)
+      : branch.name
 
 
   // Ensure we have a version to tag the image with
@@ -96,7 +98,7 @@ const buildVersionTag = async (image, context, url, name, tag) => {
  *
  * @returns {string} - Name if the remote git repo
  */
-const buildLatestTag = async (image, url, tag, branch) => {
+const buildLatestTag = async (image, url, tag, branch, name) => {
 
   // Check if the latest tag should be added to the image
   // Should only be added when the branch is master
@@ -127,10 +129,10 @@ const addProviderTags = async (image, url, args) => {
   const { name, branch } = await getImageName(image, args)
 
   // Build the version tag, and add it to the docker image
-  const tagVersion = await buildVersionTag(image, context, url, name, tag)
+  const tagVersion = await buildVersionTag(image, context, url, name, tag, branch)
 
   // Build the latest tag
-  await buildLatestTag(image, url, tag, branch)
+  await buildLatestTag(image, url, tag, branch, name)
 
   // If we don't throw, then the tag was successful
   Logger.success(`  Tagged "${context}" image successfully!`)
