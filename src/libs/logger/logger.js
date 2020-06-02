@@ -128,6 +128,19 @@ class Log {
     toLog.length && this.print(...toLog)
   }
 
+  /**
+  * Helper to log a spaced title and message in separate colors
+  * @param {string} title - Prints the string in cyan
+  * @param {string} message - Prints the string in white
+  *
+  * @returns {void}
+  */
+  spacedMsg = (title, message) => {
+    this.empty()
+    this.message(title, message)
+    this.empty()
+  }
+
 }
 
 /**

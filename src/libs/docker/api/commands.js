@@ -29,11 +29,7 @@ const dockerCli = async ({ opts, errResponse, log, skipError, format='', force }
 
   const cmdToRun = `docker ${ options } ${ useForce } ${ useFormat }`.trim()
 
-  if(log){
-    Logger.empty()
-    Logger.message(`  Running command: `, cmdToRun)
-    Logger.empty()
-  }
+  log && Logger.spacedMsg(`  Running command: `, cmdToRun)
 
   const { error, data } = await executeCmd(cmdToRun)
 
@@ -112,24 +108,48 @@ const login = async ({ providerUrl, user, token }) => {
 
 }
 
+/**
+ * Pushes a local docker image to the docker provider base on the url
+ * @function
+ * @param {string} url - Url to push the image to
+ *
+ * @returns {void}
+ */
+const push = async url => {
 
-const push = async (url) => {
-
-  Logger.empty()
-  Logger.message(`  Pushing docker image to url`, url)
-  Logger.empty()
+  Logger.spacedMsg(`  Pushing docker image to url`, url)
 
   const { error, data } = await spawnProc(`docker push ${ url }`)
 
   return error && !data
     ? apiError(error)
-    : Logger.success(`  Finished pusher Docker image to provider!`)
+    : Logger.success(`  Finished pushing Docker image to provider!`)
+}
+
+/**
+ * Pulls a docker image from a provider to the local machine
+ * @function
+ * @param {string} url - Url to pull the image from
+ *
+ * @returns {void}
+ */
+const pull = async url => {
+
+  Logger.spacedMsg(`  Pulling docker image from url`, url)
+
+  const { error, data } = await spawnProc(`docker pull ${ url }`)
+
+  return error && !data
+    ? apiError(error)
+    : Logger.success(`  Finished pulling Docker image from provider!`)
+
 }
 
 module.exports = {
   dockerCli,
   dynamicCmd,
   login,
+  pull,
   push,
   remove
 }

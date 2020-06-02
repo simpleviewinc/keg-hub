@@ -3,12 +3,6 @@ const { Logger } = require('KegLog')
 const { throwNoGitBranch } = require('KegUtils/error/throwNoGitBranch')
 const { DOCKER } = require('KegConst/docker')
 
-const logBranch = branch => {
-  Logger.empty()
-  Logger.message(`Current Branch:`, branch)
-  Logger.empty()
-}
-
 /**
  * Git branch task
  * @param {Object} args - arguments passed from the runTask method
@@ -43,7 +37,7 @@ const currentBranch = async args => {
   // Otherwise log the current branch
   !branchData.current
     ? generalError(`Could not get the current branch for ${ context || repoPath }`)
-    : !__skipLog && logBranch(branchData.current)
+    : !__skipLog && Logger.spacedMsg(`Current Branch:`, branchData.current)
 
   // Get the current branch as an object
   const branchObj = gitCurrentBranch(branchData)

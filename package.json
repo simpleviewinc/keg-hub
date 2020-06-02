@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "app-root-path": "2.2.1",
+    "axios": "^0.19.2",
     "colors": "1.4.0",
     "inquirer": "7.0.6",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
@@ -49,6 +50,7 @@
     "KegFileSys": "src/libs/fileSys",
     "KegLibs": "src/libs",
     "KegLog": "src/libs/logger",
+    "KegMocks": "__mocks__",
     "KegProc": "src/libs/process",
     "KegPackage": "package.json",
     "KegQuestions": "src/libs/questions",
