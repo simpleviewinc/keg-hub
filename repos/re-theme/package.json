@@ -19,6 +19,7 @@
     "build/esm/*"
   ],
   "scripts": {
+    "postinstall": "cd scripts && node postinstall.js",
     "build": "yarn clean:build; rollup -c rollup.config.js",
     "build:app": "cd app; yarn build",
     "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
@@ -32,6 +33,7 @@
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "devDependencies": {
+    "app-root-path": "3.0.0",
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/preset-env": "7.5.5",
