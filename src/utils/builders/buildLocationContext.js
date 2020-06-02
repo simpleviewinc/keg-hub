@@ -83,7 +83,7 @@ const buildLocationContext = async ({ envs={}, globalConfig, params, task }) => 
   // Merge with any passed in envs
   const contextEnvs = {
     // Experimental docker builds. Makes docker faster and cleaner
-    ...(getSetting('docker.buildkit') ? { DOCKER_BUILDKIT: 1 } : {}),
+    ...(getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1 } : {}),
 
     // Get the ENV context for the command
     ...getEnvContext(cmdContext),

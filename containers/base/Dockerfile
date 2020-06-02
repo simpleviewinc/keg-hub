@@ -23,7 +23,7 @@ RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
 # URL of the tap to clone from github
 ARG GIT_CLI_URL=INITIAL
 
-# Pull down the cli locallay
+# Pull down the cli locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
       git clone $GIT_CLI_URL $DOC_CLI_PATH; \
     fi
@@ -38,7 +38,7 @@ ARG GIT_CORE_URL=INITIAL
 
 ARG DOC_CORE_PATH=/keg/keg-core
 
-# Pull down the cli locallay
+# Pull down the cli locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
       git clone $GIT_CORE_URL $DOC_CORE_PATH; \
     fi
@@ -53,7 +53,7 @@ ARG GIT_COMPONENTS_URL=INITIAL
 
 ARG DOC_COMPONENTS_PATH=/keg/keg-components
 
-# Pull down the cli locallay
+# Pull down the cli locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_COMPONENTS_URL" != "INITIAL" ]; then \
       git clone $GIT_COMPONENTS_URL $DOC_COMPONENTS_PATH; \
     fi
@@ -68,7 +68,7 @@ ARG GIT_RETHEME_URL=INITIAL
 
 ARG DOC_RETHEME_PATH=/keg/re-theme
 
-# Pull down the cli locallay
+# Pull down the cli locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_RETHEME_URL" != "INITIAL" ]; then \
       git clone $GIT_RETHEME_URL $DOC_RETHEME_PATH; \
     fi
@@ -82,7 +82,7 @@ ARG GIT_RESOLVER_URL=INITIAL
 
 ARG DOC_RESOLVER_PATH=/keg/tap-resolver
 
-# Pull down the cli locallay
+# Pull down the cli locally
 RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_RESOLVER_URL" != "INITIAL" ]; then \
       git clone $GIT_RESOLVER_URL $DOC_RESOLVER_PATH; \
     fi

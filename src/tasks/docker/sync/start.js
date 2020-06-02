@@ -1,11 +1,12 @@
 
-const { get, checkCall } = require('jsutils')
-const { spawnCmd } = require('KegProc')
-const { buildLocationContext } = require('KegUtils/builders')
-const { logVirtualIP } = require('KegUtils/log')
-const { DOCKER } = require('KegConst/docker')
-const { Logger } = require('KegLog')
 const docker = require('KegDocCli')
+const { Logger } = require('KegLog')
+const { spawnCmd } = require('KegProc')
+const { DOCKER } = require('KegConst/docker')
+const { get, checkCall } = require('jsutils')
+const { logVirtualIP } = require('KegUtils/log')
+const { buildLocationContext } = require('KegUtils/builders')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Checks if the base image exists, and it not builds it
@@ -20,6 +21,12 @@ const checkBaseImage = async args => {
 
   Logger.info(`Keg base image does not exist, building now...`)
   Logger.empty()
+  
+  return runInternalTask(`tasks.docker.tasks.build`, {
+    ...args,
+    task: buildTask,
+    params: { ...args.params, context: 'base' },
+  })
 
   const buildTask = get(args, `tasks.docker.tasks.build`)
   return checkCall(buildTask.action, {
