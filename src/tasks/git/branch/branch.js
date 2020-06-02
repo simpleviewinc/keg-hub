@@ -1,4 +1,6 @@
-const { branchList } = require('./branchList')
+const { throwWrap } = require('KegUtils/error/throwWrap')
+const { list } = require('./list')
+const { get, isFunc } = require('jsutils')
 
 /**
  * Git branch task
@@ -11,10 +13,10 @@ const { branchList } = require('./branchList')
  * @returns {void}
  */
 const gitBranch = args => {
-  const { command, options, params, tasks, globalConfig } = args
-  const name = params.name || options[1]
 
-  return branchList(name)
+  // Auto call the list task if we reach the gitBranch root task
+  const list = get(args, `task.tasks.list.action`)
+  const res = isFunc(list) ? list(args) : throwWrap(`Git branch "list" task not found!`)
 
 }
 
@@ -26,12 +28,11 @@ module.exports = {
     description: `Run git branch commands on a repo.`,
     example: 'keg branch <options>',
     tasks: {
+      list,
       ...require('./current'),
     },
     options: {
-      name: {
-        description: 'Name of the repository to run the branch command on'
-      }
+      ...list.options
     }
   }
 }
