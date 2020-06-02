@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 const throwNoAction = task => {
   Logger.error(`\n Task '${task.name}' requires a valid sub-task. No action exists for this task!`)
@@ -10,7 +11,7 @@ const throwNoAction = task => {
 
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 
 }
 

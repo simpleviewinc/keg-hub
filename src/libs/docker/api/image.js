@@ -11,7 +11,7 @@ const { isArr, toStr, isStr } = require('jsutils')
  *
  * @returns {Array} - JSON array of all images
  */
-const list = (args={}) => {
+const listImages = (args={}) => {
   const { opts } = args
 
   return dockerCli({
@@ -27,20 +27,24 @@ const list = (args={}) => {
   })
 }
 
-const tag = async ({ image, nameOrId, tag, log }) => {
-  // Get the image as an object
-  image = image || await get(nameOrId, log)
+const tagImage = async (args, imgTag) => {
 
+  // Allow calling the tagImage with a string image name and string imgTag
+  args = isStr(args) ? { item: args, tag: imgTag } : args
+
+  // Pull the needed params from the args object
+  const { item, tag, log } = args
+
+  // Get the image as an object
+  let image = args.image || await getImage(item, log)
+
+  // If no image, then just throw, otherwise add the tag to the image
   return !image
-    ? noItemFoundError('image', nameOrId)
+    ? noItemFoundError('image', image)
     : dockerCli({
         ...args,
-        format: 'json',
-        opts: [
-          'tag',
-          `${ image.repository }:${ image.tag }`,
-          `${ image.repository }:${ tag }`
-        ]
+        format: '',
+        opts: [ 'tag', image.id, tag ]
       })
 }
 
@@ -51,7 +55,7 @@ const tag = async ({ image, nameOrId, tag, log }) => {
  *
  * @returns {Object} - Found image match
  */
-const get = async (image, log=false) => {
+const getImage = async (image, log=false) => {
 
   // Split the image and tag if : exits in the image name
   const [ imgRef, tag ] = image.indexOf(':') !== -1
@@ -59,7 +63,7 @@ const get = async (image, log=false) => {
     : [ image ]
   
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json', log })
+  const images = await listImages({ errResponse: [], format: 'json', log })
 
   // If we have images, try to find the one matching the passed in argument
   return images &&
@@ -79,7 +83,7 @@ const get = async (image, log=false) => {
  */
 const getByTag = async (imgRef, log=false) => {
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json', log })
+  const images = await listImages({ errResponse: [], format: 'json', log })
 
   // If we have images, try to find the one matching the passed in argument
   return images &&
@@ -109,7 +113,7 @@ const removeImage = args => {
  */
 const exists = async (compare, doCompare, log) => {
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json', log })
+  const images = await listImages({ errResponse: [], format: 'json', log })
   // If we have images, try to find the one matching the passed in argument
   return images &&
     images.length &&
@@ -129,7 +133,7 @@ const clean = async ({ opts='', log=false }) => {
   const IMG_NONE = `<none>`
 
   // Get all current images
-  const images = await list({ errResponse: [], format: 'json', log })
+  const images = await listImages({ errResponse: [], format: 'json', log })
 
   const toRemove = images.reduce((toRemove, image) => {
     (image.repository === IMG_NONE || image.tag === IMG_NONE) &&
@@ -155,10 +159,11 @@ const image = (args={}) => dynamicCmd(args, 'image')
 Object.assign(image, {
   clean,
   exists,
-  get,
+  get: getImage,
   getByTag,
-  list,
+  list: listImages,
   remove: removeImage,
+  tag: tagImage,
 })
 
 module.exports = image

@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /**
  * Error helper to log and throw an error on invalid docker login creds
@@ -18,7 +19,7 @@ const throwDockerCreds = (creds, missing) => {
   Logger.info(`  Invalid login credentials. Could not find ${missing}!`)
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 }
 
 module.exports = {

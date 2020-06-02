@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /*
  * Helper to log an error message
@@ -9,7 +10,8 @@ const { Logger } = require('KegLog')
 */
 const generalError = (...message) => {
   Logger.error(`\n ${message.join('\n ')}\n`)
-  throw new Error(`Task failed!`)
+
+  throwTaskFailed()
 }
 
 module.exports = {

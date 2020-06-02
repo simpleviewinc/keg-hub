@@ -9,7 +9,7 @@ const {
 
 const { isArr, toStr } = require('jsutils')
 const { Logger } = require('KegLog')
-const { executeCmd } = require('KegProc')
+const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 
 /**
  * Calls the docker cli from the command line and returns the response
@@ -112,9 +112,24 @@ const login = async ({ providerUrl, user, token }) => {
 
 }
 
+
+const push = async (url) => {
+
+  Logger.empty()
+  Logger.message(`  Pushing docker image to url`, url)
+  Logger.empty()
+
+  const { error, data } = await spawnProc(`docker push ${ url }`)
+
+  return error && !data
+    ? apiError(error)
+    : Logger.success(`  Finished pusher Docker image to provider!`)
+}
+
 module.exports = {
   dockerCli,
   dynamicCmd,
   login,
+  push,
   remove
 }

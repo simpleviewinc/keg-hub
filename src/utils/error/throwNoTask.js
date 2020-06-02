@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-const { isStr, isObj } = require('jsutils')
 const { Logger } = require('KegLog')
 
 /**

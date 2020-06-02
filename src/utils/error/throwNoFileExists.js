@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /*
  * Helper to log an error message when a a file path does not exist locally
@@ -14,7 +15,7 @@ const throwNoFileExists = (filePath, extraMessage) => {
   Logger.error(`\n File path does not exist at ${filePath}.\n`)
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 }
 
 module.exports = {

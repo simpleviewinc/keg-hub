@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 const throwWrongPassword = (extraMessage) => {
 
@@ -6,7 +7,7 @@ const throwWrongPassword = (extraMessage) => {
   Logger.error(`\n You entered an invalid password!`)
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 
 }
 

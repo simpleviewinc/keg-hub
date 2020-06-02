@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /**
  * Formats and throws an error when a required argument is not included
@@ -20,7 +21,7 @@ const throwRequired = (task, key, meta) => {
 
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 }
 
 module.exports = {

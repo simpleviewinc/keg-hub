@@ -1,11 +1,11 @@
 const { Logger } = require('KegLog')
 
 
-const throwWrap = (message) => {
+const throwWrap = (...message) => {
   (() => {
 
     Logger.empty()
-    Logger.error(message)
+    Logger.error(`\n ${message.join('\n ')}\n`)
     Logger.empty()
 
     throw new Error(`Task failed!`)

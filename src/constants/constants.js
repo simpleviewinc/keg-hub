@@ -39,6 +39,10 @@ module.exports = deepFreeze({
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
   
+  // Check if the command should be logged
+  // Passed as the last argument to the spawnCmd method
+  NO_CMD_LOG: `NO_CMD_LOG`,
+  
   // Help options. when one is passed as an option, the help menu is printed
   HELP_ARGS: [
     'help',
@@ -69,6 +73,6 @@ module.exports = deepFreeze({
     STAGING: [ 'staging', 'st', 's' ],
     DEVELOPMENT: [ 'development', 'dev', 'd' ],
     LOCAL: [ 'local', 'loc', 'l' ]
-  }
-  
+  },
+
 })

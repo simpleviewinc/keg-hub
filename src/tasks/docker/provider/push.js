@@ -1,52 +1,10 @@
-const { get } = require('jsutils')
 const docker = require('KegDocApi')
 const { Logger } = require('KegLog')
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { buildDockerLogin } = require('KegUtils/builders/buildDockerLogin')
-const { getRepoName } = require('KegUtils/globalConfig/getRepoName')
+const { get, mapObj } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
-
-/**
- * Builds or gets the image if args.params.build is false
- * @param {Object} args - arguments passed from the runTask method
- *
- * @returns {Object} - Docker API image object
- */
-const buildImage = async args => {
-  return get(args, 'params.build')
-    ? runInternalTask('tasks.docker.tasks.build', { ...args, command: 'build' })
-    : runInternalTask('tasks.docker.tasks.image.tasks.get', {
-        ...args,
-        __skipLog: true,
-        params: { ...args.params, name: args.params.context },
-        command: 'get'
-      })
-}
-
-/**
- * Builds the required provider tag and adds it to the image
- * @param {string} image - Docker API image object
- *
- * @returns {string} - Name if the remote git repo
- */
-const addProviderTag = async (image, args) => {
-
-  const { context } = args.params
-  const { providerUrl, user } = await buildDockerLogin(args.params)
-
-  // Get the repo name, if the image is base, then use keg-core
-  const repo = getRepoName(image.repository)
-  // TODO: if no repo found, then throw an error
-
-  // TODO: get the version for the image
-  // Use the context and pull in the DOCKER constants to find the version
-  // const tag = `${ providerUrl }/${ user }/${ repo }/${ image.repository }:${ version }`
-  
-  // Then call command to add the tag to the image
-  // return docker.image.tag({image, tag })
-
-}
-
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { generalError, throwRequired, throwNoRepo, throwWrap } = require('KegUtils/error')
+const { getOrBuildImage, buildProviderUrl, addProviderTags } = require('KegUtils/docker')
 
 /**
  * Pushes a local image registry provider in the cloud
@@ -61,12 +19,26 @@ const addProviderTag = async (image, args) => {
  * @returns {void}
  */
 const providerPush = async (args) => {
+  const { params, task } = args
+  const { context } = params
+
+  // Ensure we have the context of the image to be pushed
+  !context && throwRequired(task, 'context', get(task, `options.context`))
 
   // 1. Build the image
-  const image = await buildImage(args)
+  const image = await getOrBuildImage(args)
 
-  // 2. Add the provider tag
-  await addProviderTag(image, args)
+  // 2. Build the provider url
+  const url = await buildProviderUrl(image, args)
+  
+  // 3. Add the provider tags
+  const taggedUrl = await addProviderTags(image, url, args)
+
+  // If we couldn't tag the image properly, just return
+  !taggedUrl && generalError(`Failed to tag ${context} image!`)
+
+  // Finally push the image to docker using the tagged url
+  await docker.push(taggedUrl)
 
 }
 

@@ -1,6 +1,7 @@
 const { Logger } = require('KegLog')
 const { get } = require('jsutils')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /*
  * Helper to log an error message when a tap link can not be found in the global config
@@ -21,7 +22,7 @@ const throwNoTapLink = (globalConfig, tapName) => {
 
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 
 }
 

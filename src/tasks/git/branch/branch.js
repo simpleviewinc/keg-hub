@@ -13,14 +13,8 @@ const { branchList } = require('./branchList')
 const gitBranch = args => {
   const { command, options, params, tasks, globalConfig } = args
   const name = params.name || options[1]
-  const action = params.action || options[2]
-  
-  switch(action){
-    // Other branch commands here
-    default: {
-      branchList(name)
-    }
-  }
+
+  return branchList(name)
 
 }
 
@@ -31,12 +25,12 @@ module.exports = {
     action: gitBranch,
     description: `Run git branch commands on a repo.`,
     example: 'keg branch <options>',
+    tasks: {
+      ...require('./current'),
+    },
     options: {
       name: {
         description: 'Name of the repository to run the branch command on'
-      },
-      action: {
-        description: 'git branch action to run on the repo'
       }
     }
   }
