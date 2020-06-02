@@ -3,8 +3,8 @@ const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { logVirtualIP } = require('KegUtils/log')
 const { buildDockerCmd } = require('KegUtils/docker')
-const { spawnCmd, executeCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
+const docker = require('KegDocCli')
 
 /**
  * Builds a docker container so it can be run
@@ -51,7 +51,7 @@ const dockerBuild = async args => {
   await logVirtualIP()
 
   // Run the container
-  await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
+  await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)
 
 }
 

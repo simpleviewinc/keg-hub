@@ -1,6 +1,7 @@
 const { DOCKER } = require('KegConst')
 const { reduceObj, get } = require('jsutils')
 const { exists } = require('KegUtils/helpers/exists')
+const docker = require('KegDocCli')
 
 /**
  * Loops over the passed in args and maps them to the docker constants
@@ -73,14 +74,21 @@ const addTapMount = (location, dockerCmd) => {
   return `${dockerCmd} -v ${location}:/keg/tap`
 }
 
-
+/**
+ * Adds Envs to the passed in dockerCmd ( -e key=value )
+ * @param {string} [dockerCmd=''] - Command to add the envs to
+ * @param {Object} [options={}] - Items to add as Envs
+ *
+ * @returns {string} - dockerCmd with envs added
+ */
 const addContainerEnv = (dockerCmd='', options={}) => {
-  return Object.keys(options)
-    .reduce((cmd, key) => {
-        return exists(options[key])
-          ? `${cmd} -e ${key.toUpperCase()}=${options[key]}`
-          : cmd
-      }, dockerCmd)
+  return reduceObj(options, (key, value, cmd) => {
+    return docker.asContainerEnv(
+      key.toUpperCase(),
+      value,
+      cmd
+    )
+  }, dockerCmd)
 }
 
 

@@ -2,6 +2,7 @@ const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
 const { buildLocationContext } = require('KegUtils/builders')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { DOCKER } = require('KegConst/docker')
 
 /**
@@ -27,7 +28,7 @@ const cleanDockerSync = async args => {
     confirm: `Running this command will remove all docker-sync containers. Are you sure?`,
     success: `Finished running 'docker-sync clean' command`,
     cancel: `Command 'keg docker sync clean' has been cancelled!`,
-    preConfirm: true,
+    preConfirm: getSetting('docker.preConfirm') === false ? false : true,
     execute: async () => {
       // Remove the container
       const container = cmdContext && get(DOCKER, `CONTAINERS.${cmdContext.toUpperCase()}.ENV.CONTAINER_NAME`)

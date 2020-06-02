@@ -1,7 +1,9 @@
 
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { NAME } = DOCKER.MACHINE
+const docker = require('KegDocCli')
 
 /**
  * Runs a docker-machine command
@@ -16,10 +18,10 @@ const { NAME } = DOCKER.MACHINE
 const dockerMachine = async args => {
   const { command, globalConfig, options, params, task, tasks } = args
   const toRun = params.cmd || options[0] || 'ls'
+  
+  const env = getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1 } : {}
 
-  const dmCmd = `docker-machine ${ toRun } ${NAME}`
-
-  return spawnCmd(dmCmd)
+  return docker.raw(`docker-machine ${ toRun } ${ NAME }`, { options: { env }})
 
 }
 

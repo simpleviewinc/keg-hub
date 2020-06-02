@@ -3,6 +3,7 @@ const { getPathFromConfig } = require('../globalConfig')
 const { generalError, throwNoTapLink, throwNoConfigPath } = require('../error')
 const { DOCKER } = require('KegConst/docker')
 const { getTapPath } = require('../globalConfig/getTapPath')
+const { getSetting } = require('../globalConfig/getSetting')
 const { buildCmdContext } = require('./buildCmdContext')
 const { buildTapContext } = require('./buildTapContext')
 const { getGitKey } = require('../git/getGitKey')
@@ -81,8 +82,15 @@ const buildLocationContext = async ({ envs={}, globalConfig, params, task }) => 
   // Get the ENV vars for the command context
   // Merge with any passed in envs
   const contextEnvs = {
+    // Experimental docker builds. Makes docker faster and cleaner
+    ...(getSetting('docker.buildkit') ? { DOCKER_BUILDKIT: 1 } : {}),
+
+    // Get the ENV context for the command
     ...getEnvContext(cmdContext),
+
+    // Get the ENVs for the Tap context if it exists
     ...( await buildTapContext({ globalConfig, cmdContext, tap, envs }) ),
+
     // Add the git key so we can call github within the image / container
     GIT_KEY: await getGitKey(globalConfig),
   }

@@ -1,6 +1,15 @@
-const { camelCase, snakeCase, isArr, isFunc, isStr, toStr } = require('jsutils')
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
+const {
+  camelCase,
+  isArr,
+  isFunc,
+  isObj,
+  isStr,
+  snakeCase,
+  toStr,
+  reduceObj
+} = require('jsutils')
 
 /**
  * Throws an error with the passed in message
@@ -196,11 +205,66 @@ const compareItems = (item, compare, doCompare, defCompareKeys=[]) => {
       : defCompareKeys.some(key => item[key] === compare)
 }
 
+/**
+ * Converts a key and value into docker env ( -e key=value )
+ * @function
+ * @param {Object} key - Name of the env
+ * @param {Object} value - value of the env
+ * @param {string} [cmd=''] - Cmd to add the env to
+ *
+ * @returns {string} - Passed in cmd, with the key/value converted to docker env
+ */
+const asContainerEnv = (key, value, cmd='') => {
+  return value && `${cmd} -e ${ key }=${ value }`.trim() || cmd
+}
+
+/**
+ * Converts an object into docker run envs ( -e key=value )
+ * @function
+ * @param {Object} [envs={}] - Envs to be converted
+ * @param {string} [cmd=''] - Cmd to add the Envs to
+ *
+ * @returns {string} - Passed in cmd, with the envs converted to docker envs
+ */
+const toContainerEnvs = (envs={}, cmd='') => {
+  return reduceObj(envs, asContainerEnv, cmd).trim()
+}
+
+/**
+ * Converts a key and value into docker build-args ( --build-arg key=value )
+ * @function
+ * @param {Object} key - Name of the build-arg
+ * @param {Object} value - value of the build-arg
+ * @param {string} [cmd=''] - Cmd to add the build-args to
+ *
+ * @returns {string} - Passed in cmd, with the key/value converted to docker build-args
+ */
+const asBuildArg = (key, value, cmd='') => {
+  return value && `${cmd} --build-arg ${ key }=${ value }`.trim() || cmd
+}
+
+
+/**
+ * Converts an object into docker build-args ( --build-arg key=value )
+ * @function
+ * @param {Object} [envs={}] - Envs to be converted
+ * @param {string} [cmd=''] - Cmd to add the build-args to
+ *
+ * @returns {string} - Passed in cmd, with the envs converted to docker build-args
+ */
+const toBuildArgs = (envs={}, cmd='') => {
+  return isObj(envs) ? reduceObj(envs, asBuildArg, cmd).trim() : cmd
+}
+
 module.exports = {
+  asBuildArg,
+  asContainerEnv,
   apiError,
   apiSuccess,
   compareItems,
   cmdSuccess,
   noItemError,
   noItemFoundError,
+  toBuildArgs,
+  toContainerEnvs,
 }

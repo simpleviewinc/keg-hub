@@ -39,11 +39,13 @@ const runDockerImage = async args => {
     'json'
   )
 
-  await spawnCmd(
-    `docker run --name img-${imgName} -it ${imgName} ${entry}`,
-    { options: { env: contextEnvs }},
-    location
-  )
+  await docker.image.run({
+    entry,
+    location,
+    envs: contextEnvs,
+    image: `img-${imgName}`,
+    options: [ `-it ${imgName}` ],
+  })
 
 }
 

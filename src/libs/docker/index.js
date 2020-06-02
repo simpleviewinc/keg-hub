@@ -1,4 +1,10 @@
+const { asBuildArg, toContainerEnvs, toBuildArgs } = require('./helpers')
+
 module.exports = {
+  asBuildArg,
+  asContainerEnv,
+  toBuildArgs,
+  toContainerEnvs,
   ...require('./commands'),
   image: require('./image'),
   container: require('./container'),

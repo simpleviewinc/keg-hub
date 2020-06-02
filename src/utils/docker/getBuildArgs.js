@@ -1,34 +1,9 @@
 const { isArr, get, reduceObj, isObj, softFalsy } = require('jsutils')
 const { getGitUrl, getGitKey, getTapPath, exists } = require('KegUtils')
 const { getRemoteUrl } = require('KegLibs/git/getRemoteUrl')
+const docker = require('KegDocCli')
 const { DOCKER } = require('KegConst')
 const { DOCKER_ENV } = DOCKER
-
-/**
- * Formats a build-arg string to match the docker cli api
- * @param {*} key - ENV context of the build arg
- * @param {*} value - ENV value of the build arg
- * @param {*} dockerCmd - The docker command being built
- *
- * @returns {string} - The dockerCmd string with a build arg added
- */
-const createBuildArg = (key, value, dockerCmd) => {
-  return `${dockerCmd} --build-arg ${ key }=${ value }`.trim()
-}
-
-/**
- * Add the ENV's from the context.env files as build args
- * @param {*} buildEnvs - ENVs to be added as build args
- * @param {*} dockerCmd - The docker command being built
- *
- * @returns {string} - The dockerCmd string with a build args added
- */
-const addContextBuildENVs = (buildEnvs, dockerCmd) => {
-  return isObj(buildEnvs) &&
-    reduceObj(buildEnvs, (key, value, dockerCmd) => {
-      return value && createBuildArg(key, value, dockerCmd) || dockerCmd
-    }, dockerCmd).trim() || dockerCmd
-}
 
 /**
  * Adds build args to the a docker the build command
@@ -53,7 +28,7 @@ const getBuildArgs = async (globalConfig, params) => {
   const tapUrl = context ==='tap' && tap && await getRemoteUrl(getTapPath(globalConfig, tap))
 
   // Add the context build ENVs to the command
-  dockerCmd = addContextBuildENVs(buildEnvs, dockerCmd)
+  dockerCmd = docker.toBuildArgs(buildEnvs, dockerCmd)
 
   return reduceObj(containerOpts.ARGS, (key, value, dockerCmd) => {
     let useVal
@@ -76,7 +51,7 @@ const getBuildArgs = async (globalConfig, params) => {
       }
     }
 
-    return exists(useVal) ? createBuildArg(key, useVal, dockerCmd) : dockerCmd
+    return exists(useVal) ? docker.asBuildArg(key, useVal, dockerCmd) : dockerCmd
 
   }, dockerCmd).trim()
 

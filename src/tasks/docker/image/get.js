@@ -33,7 +33,7 @@ const getImage = async args => {
   const image = await docker.image.get(imgRef)
 
   // Log the output of the command
-  __skipLog !== true && console.log(image)
+  __skipLog !== true && Logger.data(image)
 
   return image
 

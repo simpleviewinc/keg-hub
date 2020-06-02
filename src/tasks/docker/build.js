@@ -49,7 +49,7 @@ const dockerBuild = async args => {
     ...(envs && { buildEnvs: contextEnvs }),
   })
 
-  await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
+  await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)
 
   return docker.image.get(cmdContext)
 

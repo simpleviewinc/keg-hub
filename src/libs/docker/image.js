@@ -1,5 +1,5 @@
-const { compareItems, noItemFoundError } = require('./helpers')
-const { remove, dockerCli, dynamicCmd } = require('./commands')
+const { compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
+const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { isArr, toStr, isStr } = require('jsutils')
 
 /**
@@ -137,12 +137,33 @@ const clean = async ({ opts='', log=false }) => {
 
   const toRemove = images.reduce((toRemove, image) => {
     (image.repository === IMG_NONE || image.tag === IMG_NONE) &&
-      ( toRemove += ` ${ image.imageId }`)
+      ( toRemove += ` ${ image.id }`)
 
     return toRemove
   }, '').trim()
 
   return toRemove && dockerCli({ opts: ['image', 'rm'].concat([ toRemove, opts ]) })
+
+}
+
+
+// `docker run --name img-${imgName} -it ${imgName} ${entry}`
+const runImage = async ({ entry, envs, image, location, options=[] }) => {
+
+  // Set the name of the container based off the image name
+  let cmd = `run --name ${ isStr(image) ? image : image.name }`.trim()
+
+  // Add any passed in docker cli options 
+  cmd = `${ cmd } ${isArr(options) ? options.join(' ') : options}`.trim()
+
+  // Convert the passed in envs to envs that can be passed to the container
+  cmd = toContainerEnvs(envs, cmd)
+
+  // Set / overwrite the entry for the container
+  cmd = `${ cmd } ${ entry || '/bin/bash' }`.trim()
+
+  // Run the command
+  return raw(cmd, { options: { env: envs }}, location)
 
 }
 
@@ -162,6 +183,7 @@ Object.assign(image, {
   get: getImage,
   getByTag,
   list: listImages,
+  run: runImage,
   remove: removeImage,
   tag: tagImage,
 })

@@ -145,11 +145,37 @@ const pull = async url => {
 
 }
 
+/**
+ * Runs a raw docker cli command by spawning a child process
+ * <br/> Auto adds docker to the front of the cmd if it does not exist
+ * @function
+ * @param {string} cmd - Docker command to be run
+ * @param {string} args - Arguments to pass to the child process
+ * @param {string} loc - Location where the cmd should be run
+ *
+ * @returns {*} - Response from the docker cli command
+ */
+const raw = async (cmd, args, loc) => {
+
+  const { error, data } = await spawnProc(
+    cmd.trim().indexOf('docker') === 0 ? cmd : `docker ${cmd}`,
+    args,
+    loc
+  )
+
+  error && !data
+    ? apiError(error)
+    : Logger.success(`  Finished running Docker CLI command!`)
+  
+  return data
+}
+
 module.exports = {
   dockerCli,
   dynamicCmd,
   login,
   pull,
   push,
+  raw,
   remove
 }
