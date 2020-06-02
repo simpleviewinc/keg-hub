@@ -1,4 +1,4 @@
-const { asBuildArg, toContainerEnvs, toBuildArgs } = require('./helpers')
+const { asBuildArg, asContainerEnv, toContainerEnvs, toBuildArgs } = require('./helpers')
 
 module.exports = {
   asBuildArg,
