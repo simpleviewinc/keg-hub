@@ -9,6 +9,7 @@ module.exports = {
     tasks: {
       ...require('./branch'),
       ...require('./commit'),
+      ...require('./clone'),
       ...require('./key'),
       ...require('./log'),
       ...require('./pull'),

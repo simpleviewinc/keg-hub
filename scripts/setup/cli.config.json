@@ -30,7 +30,8 @@
       "git": {
         "secure": false
       },
-      "editorCmd": false
+      "editorCmd": false,
+      "errorStack": false
     }
   }
 }

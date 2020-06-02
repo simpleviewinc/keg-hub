@@ -49,7 +49,7 @@
     "KegFileSys": "src/libs/fileSys",
     "KegLibs": "src/libs",
     "KegLog": "src/libs/logger",
-    "KegMocks": "__mocks__",
+    "KegMocks": "src/__mocks__",
     "KegProc": "src/libs/process",
     "KegPackage": "package.json",
     "KegQuestions": "src/libs/questions",
