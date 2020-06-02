@@ -27,6 +27,17 @@ const listImages = (args={}) => {
   })
 }
 
+/**
+ * Tags an image with the passed in imgTag
+ * @function
+ * @param {Object|string} args - Arguments to tag an image || an Image identifier
+ * @param {string} args.item - Image identifier; either name or id
+ * @param {string} args.tag - Tag to add to the image
+ * @param {string} args.log - Log the output of the docker image tag command
+ * @param {string} imgTag - Tag to add to the image. Used when args is a string
+ *
+ * @returns {*} - Output of the docker image tag command
+ */
 const tagImage = async (args, imgTag) => {
 
   // Allow calling the tagImage with a string image name and string imgTag
@@ -114,10 +125,11 @@ const removeImage = args => {
 const exists = async (compare, doCompare, log) => {
   // Get all current images
   const images = await listImages({ errResponse: [], format: 'json', log })
+
   // If we have images, try to find the one matching the passed in argument
   return images &&
     images.length &&
-    images.some(image => compareItems(image, compare, doCompare, [ 'imageId', 'repository' ]))
+    images.some(image => compareItems(image, compare, doCompare, [ 'id', 'repository' ]))
 }
 
 /**

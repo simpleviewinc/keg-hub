@@ -62,3 +62,13 @@
 ### Docker Sync w/ unison
 * Set one way sync, with no deletion
   * unison /src/dir /dest/dir -force /src/dir -nodeletion /dest/dir
+
+
+
+### Setup Scripts
+  * Added check machine type
+    * Install yarn based on machine type
+    * right now uses yum, which does not work on mac
+  * Run yarn install after cloning CLI repo / validating it exists
+  * Creating cli.config.json is missing one folder in the path
+  

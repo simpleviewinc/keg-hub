@@ -1,4 +1,11 @@
-FROM kegbase:latest
+# Allows overwriting where the base image is pulled from
+ARG IMAGE_FROM=kegbase:latest
+FROM $IMAGE_FROM
+
+# Pull from kegbase => /usr/local/share/.config/yarn/global
+# This will pull in the expo-cli
+# Pull from kegbase => /keg
+# This will pull in the keg-cli
 
 WORKDIR /keg
 

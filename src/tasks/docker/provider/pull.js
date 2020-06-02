@@ -32,18 +32,17 @@ const providerPull = async args => {
   const packages = await getAllPackages({ ...args, __TEST__: true })
   
   // TODO: Move this to own method
+  let imgName
   const packageName = packages.reduce((found, pkg) => {
     if(found) return found
 
     const nameSplit = pkg.nameWithOwner.split('/')
-    const name = nameSplit[ nameSplit.length -1 ]
+    imgName = nameSplit[ nameSplit.length -1 ]
     nameSplit.splice(1, 0, cmdContext)
 
-    return !branch && `keg${context}` === name
+    return `keg${context}` === imgName
       ? nameSplit.join('/')
-      : branch && `keg${context}-${branch}` === name
-        ? nameSplit.join('/')
-        : found
+      : found
 
   }, null)
 
@@ -53,11 +52,23 @@ const providerPull = async args => {
   const url = `${ providerUrl }/${ packageName }:${version}`
   
   // TODO: Find way to add version, or do it without the version
-  // console.log(url)
-  // console.log(`docker.pkg.github.com/lancetipton/keg-core/kegbase-add-templateing-to-envs:0.0.1`)
-  // docker pull docker.pkg.github.com/lancetipton/keg-core/kegbase-add-templateing-to-envs:0.0.1
+  // The url need to look like this =>
+  // docker.pkg.github.com/lancetipton/keg-core/kegbase:<version>
 
+  // console.log(url)
+  // console.log(`docker.pkg.github.com/lancetipton/keg-core/kegbase:0.0.1`)
   await docker.pull(url)
+
+  // TODO: Pull the "version" from the package returned from the "getAllPackages" call
+  // Then use that to tag the image. This should only be done for non-master branches
+  // So the tag will look like kegbase:my-feature-brance 
+
+  // Tag the image with local tag so we can use it with the local context names I.E. base | core | tap
+  // version should be a branch name or the actual version when branch is master 
+  await docker.image.tag(url, `${imgName}:${version}`)
+
+  // TODO: add check if the image is from the master branch. If it is, then add the latest tag
+  // await docker.image.tag(url, `${imgName}:latest`)
 
   Logger.empty()
 

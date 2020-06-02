@@ -149,6 +149,13 @@ const jsonOutput = (data) => {
         const parsed = JSON.parse(item.replace(/\\"/g, ''))
         const built = {}
         Object.keys(parsed).map(key => built[camelCase(snakeCase(key))] = parsed[key])
+        
+      // Adds rootId key, which removes and docker repository content
+      // This allows us to pull from a remote provider, and compare just the original image name
+        if(built.repository)
+          built.rootId = built.repository.indexOf('/') !== -1
+            ? built.repository.split('/').pop()
+            : built.repository
 
         return items.concat([ built ])
       }

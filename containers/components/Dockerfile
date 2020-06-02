@@ -1,4 +1,6 @@
-FROM kegbase:latest
+# Allows overwriting where the base image is pulled from
+ARG IMAGE_FROM=kegbase:latest
+FROM $IMAGE_FROM
 
 WORKDIR /keg
 
