@@ -47,6 +47,7 @@
     "KegCrypto": "src/libs/crypto",
     "KegDocCli": "src/libs/docker",
     "KegFileSys": "src/libs/fileSys",
+    "KegGit": "src/libs/git",
     "KegLibs": "src/libs",
     "KegLog": "src/libs/logger",
     "KegMocks": "src/__mocks__",
