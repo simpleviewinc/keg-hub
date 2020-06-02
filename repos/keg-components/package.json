@@ -3,10 +3,13 @@
   "version": "0.3.0",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
-  "publishConfig": { 
-    "registry": "https://npm.pkg.github.com/" 
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
-  "repository" : {
+  "files": [
+    "build"
+  ],
+  "repository": {
     "url": "ssh://git@github.com/simpleviewinc/keg-components.git",
     "type": "git"
   },
@@ -38,18 +41,14 @@
     "sb:server": "npx http-server docs",
     "jsconfig": "cd scripts && node jsconfig.js web"
   },
-  "dependencies": {
-    "@expo/vector-icons": "10.0.6",
-    "expo": "36.0.0",
-    "expo-font": "8.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-class-properties": "7.8.3",
     "@babel/plugin-transform-object-assign": "7.7.4",
     "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.6.3",
-    "@expo/vector-icons": "10.0.6",
+    "@expo/vector-icons": "10.2.0",
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-json": "4.0.1",
     "@rollup/plugin-replace": "2.3.0",
@@ -67,6 +66,8 @@
     "babel-plugin-module-resolver": "4.0.0",
     "babel-plugin-react-native-web": "0.11.5",
     "babel-preset-react-native": "4.0.1",
+    "expo": "36.0.0",
+    "expo-font": "8.0.0",
     "jest": "24.7.1",
     "jest-expo": "^37.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git#3.2.1",
@@ -90,6 +91,9 @@
     "rollup-plugin-terser": "5.1.2"
   },
   "peerDependencies": {
+    "@expo/vector-icons": "^10.2.0",
+    "expo": "^36.0.0",
+    "expo-font": "^8.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "@simpleviewinc/re-theme": "1.1.0",
     "react": "^16.9.0"
