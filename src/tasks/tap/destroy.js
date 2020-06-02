@@ -2,7 +2,7 @@ const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Destroys a docker container for a tap

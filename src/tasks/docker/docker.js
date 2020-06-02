@@ -1,7 +1,7 @@
 const { generalError } = require('KegUtils/error')
 const { isStr, get } = require('jsutils')
 const { findTask, executeTask } = require('KegUtils/task')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Docker sub task alias map

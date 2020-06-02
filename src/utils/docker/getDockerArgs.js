@@ -83,14 +83,9 @@ const addContainerEnv = (dockerCmd='', options={}) => {
       }, dockerCmd)
 }
 
-const addDockerArg = (dockerCmd, toAdd, condition) => {
-  return condition
-    ? `${dockerCmd} ${toAdd}`
-    : dockerCmd
-}
+
 
 module.exports = {
-  addDockerArg,
   addContainerEnv,
   addContainerName,
   addTapMount,

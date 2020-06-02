@@ -1,9 +1,9 @@
 const { buildLocationContext } = require('KegUtils/builders')
 const { throwRequired, generalError } = require('KegUtils/error')
-const { buildDockerCmd } = require('KegDocker')
+const { buildDockerCmd } = require('KegUtils/docker')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Builds a docker container so it can be run

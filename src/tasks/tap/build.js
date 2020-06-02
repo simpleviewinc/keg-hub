@@ -1,5 +1,6 @@
-const { getTapPath, getCoreVersion } = require('KegUtils')
-const { buildDockerCmd } = require('KegDocker')
+const { getCoreVersion } = require('KegUtils/getters')
+const { getTapPath } = require('KegUtils/globalConfig')
+const { buildDockerCmd } = require('KegUtils/docker')
 const { spawnCmd, executeCmd } = require('KegProc')
 
 /**

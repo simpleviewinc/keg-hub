@@ -1,6 +1,6 @@
 const { spawnCmd } = require('KegProc')
 const { buildDockerLogin } = require('KegUtils/builders/buildDockerLogin')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Logs into a configured docker registry provider

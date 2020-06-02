@@ -5,7 +5,7 @@ const { buildLocationContext } = require('KegUtils/builders')
 const { logVirtualIP } = require('KegUtils/log')
 const { DOCKER } = require('KegConst/docker')
 const { Logger } = require('KegLog')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Checks if the base image exists, and it not builds it

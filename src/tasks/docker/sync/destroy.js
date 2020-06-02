@@ -4,7 +4,7 @@ const { buildLocationContext } = require('KegUtils/builders')
 const { confirmExec } = require('KegUtils/helpers')
 const { DOCKER } = require('KegConst/docker')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Destroys all docker-sync artifacts for the passed in context

@@ -4,7 +4,7 @@ const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { spawnCmd } = require('KegProc')
 const { dockerLog } = require('KegUtils/log/dockerLog')
 const { CONTAINERS } = require('KegConst/docker/containers')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Run a docker image command

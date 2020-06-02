@@ -1,7 +1,7 @@
 const { get, reduceObj } = require('jsutils')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
-const { buildComposeCmd, buildComposeName } = require('KegDocker')
+const { buildComposeCmd, buildComposeName } = require('KegUtils/docker')
 
 /**
  * Cleans docker-sync containers

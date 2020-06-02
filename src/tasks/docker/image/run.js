@@ -3,7 +3,7 @@ const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
 const { CONTAINERS } = require('KegConst/docker/containers')
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 
 /**
  * Run a docker image command

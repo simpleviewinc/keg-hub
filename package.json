@@ -45,8 +45,7 @@
   "_moduleAliases": {
     "KegConst": "src/constants",
     "KegCrypto": "src/libs/crypto",
-    "KegDocker": "src/libs/docker",
-    "KegDocApi": "src/libs/docker/api",
+    "KegDocCli": "src/libs/docker",
     "KegFileSys": "src/libs/fileSys",
     "KegLibs": "src/libs",
     "KegLog": "src/libs/logger",

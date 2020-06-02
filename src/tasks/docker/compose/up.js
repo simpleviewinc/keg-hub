@@ -1,7 +1,7 @@
 const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { Logger } = require('KegLog')
-const {buildComposeCmd, buildComposeName } = require('KegDocker')
+const {buildComposeCmd, buildComposeName } = require('KegUtils/docker')
 
 /**
  * Runs docker-compose up command for (components | core | tap)

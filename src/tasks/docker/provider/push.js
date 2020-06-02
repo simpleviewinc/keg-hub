@@ -1,4 +1,4 @@
-const docker = require('KegDocApi')
+const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { get, mapObj } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
@@ -37,7 +37,7 @@ const providerPush = async (args) => {
   // If we couldn't tag the image properly, just return
   !taggedUrl && generalError(`Failed to tag ${context} image!`)
 
-  // Finally push the image to docker using the tagged url
+  // 4. Finally push the image to docker using the tagged url
   await docker.push(taggedUrl)
 
 }

@@ -1,9 +1,6 @@
 module.exports = {
-  ...require('./api'),
-  ...require('./compose'),
-  ...require('./buildDockerCmd'),
-  ...require('./buildDockerMounts'),
-  ...require('./getBuildArgs'),
-  ...require('./getBuildTags'),
-  ...require('./getDockerArgs')
+  ...require('./commands'),
+  image: require('./image'),
+  container: require('./container'),
+  machine: require('./machine'),
 }

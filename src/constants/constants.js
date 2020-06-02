@@ -75,4 +75,8 @@ module.exports = deepFreeze({
     LOCAL: [ 'local', 'loc', 'l' ]
   },
 
+
+  // URLs for navigating to the application
+  TAP_URL: `http://tap.kegdev.xyz/`,
+
 })

@@ -1,9 +1,45 @@
-const { addComposeFiles, addDockerArg } = require('KegDocker')
+const { DOCKER } = require('KegConst/docker')
+const { get } = require('jsutils')
 
 const composeArgs = {
   remove: '--force-rm',
   cache: '--no-cache',
   pull: '--pull'
+}
+
+/**
+ * Adds the paths to the docker compose file for the env
+ * @function
+ * @param {string} dockerCmd - Docker command to add the compile file paths to
+ * @param {string} context - Context the docker command is being run in ( core / tap )
+ *
+ * @returns {string} - dockerCmd string with the file paths added
+ */
+const addComposeFiles = (dockerCmd, context='') => {
+
+  const compDefPath = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }.ENV.COMPOSE_DEFAULT`)
+  const defCompose = compDefPath ? `-f ${ compDefPath }` : ''
+
+  const envCompose = DOCKER.DOCKER_ENV
+    ? `-f ${DOCKER.CONTAINERS_PATH}/${context}/compose-${DOCKER.DOCKER_ENV}.yml`
+    : ''
+
+  return `${dockerCmd} ${defCompose} ${envCompose}`.trim()
+}
+
+/**
+ * Conditionally adds a docker argument based on the passed in arguments
+ * @function
+ * @param {string} dockerCmd - Docker command to add the compile file paths to
+ * @param {string} toAdd - The arguments to be added to the docker command
+ * @param {boolean} condition - If the argument should be added to the dockerCmd
+ *
+ * @returns {string} - dockerCmd string with the file paths added
+ */
+const addDockerArg = (dockerCmd, toAdd, condition) => {
+  return condition
+    ? `${dockerCmd} ${toAdd}`
+    : dockerCmd
 }
 
 /**
