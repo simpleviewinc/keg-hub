@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeHover, useThemeActive } from 're-theme'
+import { useThemeHover, useThemeActive } from '@simpleviewinc/re-theme'
 import { useThemePath } from '../../hooks'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'

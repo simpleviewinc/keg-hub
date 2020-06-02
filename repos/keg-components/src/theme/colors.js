@@ -1,6 +1,6 @@
 import { get, isObj, isArr, isStr, reduceObj } from 'jsutils'
 import defaults from './defaults.json'
-import { helpers } from 're-theme'
+import { helpers } from '@simpleviewinc/re-theme'
 
 const defPalette = get(defaults, 'colors.palette', {})
 const defTypes = get(defaults, 'colors.types', {})

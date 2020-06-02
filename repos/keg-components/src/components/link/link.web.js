@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
 import { LinkWrapper } from './link.wrapper'
 import PropTypes from 'prop-types'
 import { KegText } from 'KegText'

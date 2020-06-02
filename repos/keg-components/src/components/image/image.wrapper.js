@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from 'react'
-import { useThemeHover } from 're-theme'
+import { useThemeHover } from '@simpleviewinc/re-theme'
 import { get, checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'

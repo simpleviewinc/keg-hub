@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import { get } from 'jsutils'
 import { View } from 'KegView'
 import { Button } from 'KegButton'

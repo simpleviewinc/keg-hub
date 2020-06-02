@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import { useThemePath } from '../../hooks'
 import { Clipboard, Text, View } from 'react-native'
 import { TouchableIcon } from '../icon'

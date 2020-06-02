@@ -1,7 +1,7 @@
 import React from 'react'
 import { Platform, TouchableOpacity, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native'
 import { useThemePath } from '../hooks'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import PropTypes from 'prop-types'
 
 const TouchableWithFeedback = Platform.OS === 'android' 

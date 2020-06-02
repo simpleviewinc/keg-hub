@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import { useThemePath } from '../../hooks'
 import PropTypes from 'prop-types'
 import { P } from '../typography'

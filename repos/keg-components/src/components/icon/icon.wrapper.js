@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'

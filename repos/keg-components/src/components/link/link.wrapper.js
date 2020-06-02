@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
 import { getPressHandler, getTarget } from '../../utils'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'

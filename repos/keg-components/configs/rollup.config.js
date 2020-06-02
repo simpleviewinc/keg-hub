@@ -27,7 +27,7 @@ const shared = {
     'react-dom',
     'react-native',
     'jsutils',
-    're-theme',
+    '@simpleviewinc/re-theme',
     'prop-types',
     '@expo/vector-icons',
     'expo-fonts'

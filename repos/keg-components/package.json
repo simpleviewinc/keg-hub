@@ -70,7 +70,7 @@
     "jest": "24.7.1",
     "jest-expo": "^37.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git#3.2.1",
-    "re-theme": "git+https://github.com/simpleviewinc/re-theme.git#master",
+    "@simpleviewinc/re-theme": "1.1.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-is": "16.12.0",
@@ -91,7 +91,7 @@
   },
   "peerDependencies": {
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
-    "re-theme": "git+https://github.com/simpleviewinc/re-theme.git",
+    "@simpleviewinc/re-theme": "1.1.0",
     "react": "^16.9.0"
   },
   "eslintConfig": {

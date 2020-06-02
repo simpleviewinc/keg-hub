@@ -1,7 +1,7 @@
 import React from 'react'
 import { addDecorator } from '@storybook/react'
 import { View } from 'KegView'
-import { ReThemeProvider } from 're-theme'
+import { ReThemeProvider } from '@simpleviewinc/re-theme'
 import { theme } from '../src/theme'
 import { isStr } from 'jsutils'
 

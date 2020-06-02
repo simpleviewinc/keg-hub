@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState, useMemo } from 'react'
 import { get, deepMerge, reduceObj, logData, jsonEqual } from 'jsutils'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 
 /**
  * Checks it two passed in objects are equal pointers or equal as json strings

@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from '@simpleviewinc/re-theme'
 import { Text as RNText } from 'react-native'
 
 const ellipsisProps = {

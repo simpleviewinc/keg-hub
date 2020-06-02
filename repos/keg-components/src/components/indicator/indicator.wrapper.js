@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import { indicatorUri } from '../../assets/spinners/moderate'
 import { getImgSrc } from '../../utils'
 import { View } from 'KegView'

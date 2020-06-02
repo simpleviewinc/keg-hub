@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { useTheme, useThemeHover } from 're-theme'
+import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
 import { Text } from '../../typography'
 import { View } from 'KegView'
 import { useThemePath } from '../../../hooks'

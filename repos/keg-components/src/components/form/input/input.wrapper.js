@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import { getValueFromChildren, getReadOnly } from '../../../utils'
 import { useThemePath, useInputHandlers, usePressHandlers } from '../../../hooks'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import PropTypes from 'prop-types'
 
 /**

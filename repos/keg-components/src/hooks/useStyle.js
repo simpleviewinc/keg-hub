@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { reduceObj } from 'jsutils'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 
 export const useStyle = (...styles) => {
   const theme = useTheme()
