@@ -42,6 +42,7 @@ module.exports = rootDir => {
      */
     config.resolve.modules = [
       ...(config.resolve.modules || []),
+      'node_modules',
       path.resolve(tapPath, 'node_modules'),
       path.resolve(kegPath, 'node_modules')
     ]
