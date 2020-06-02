@@ -53,7 +53,7 @@ module.exports = deepFreeze({
     '--h',
   ],
 
-  CLI_ROOT: path.join(__dirname, '../../../'),
+  CLI_ROOT: path.join(__dirname, '../../'),
 
   // --- GIT Constants --- //
   // Path the the git ssh key

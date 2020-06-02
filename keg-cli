@@ -4,8 +4,8 @@ require('module-alias/register')
 
 ;(() => {
   try {
+    const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
     const { runTask } = require('KegRunTask')
-    const { getGlobalConfig } = require('KegUtils/globalConfig')
 
     // Load the users global config, or create it on the fly
     // Pull in the runTask method, and call it immediately
