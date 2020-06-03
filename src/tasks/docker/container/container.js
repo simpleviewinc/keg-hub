@@ -49,6 +49,10 @@ module.exports = {
     action: dockerContainer,
     description: `Runs docker container command`,
     example: 'keg docker container <options>',
+    tasks: {
+      ...require('./clean'),
+      ...require('./commit'),
+    },
     options: {
       cmd: {
         description: 'Docker container command to run. Default ( ls )',

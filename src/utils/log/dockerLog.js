@@ -13,8 +13,8 @@ const dockerLog = (res, cmd) => {
   res
     ? Logger.data(res)
     : cmd
-      ? Logger.success(`  Docker command "${cmd}" success!`)
-      : Logger.success(`  Docker finished successfully!`)
+      ? Logger.success(`  Docker command "${cmd}" finished successfully!`)
+      : Logger.success(`  Docker command finished successfully!`)
   Logger.empty()
 
 }

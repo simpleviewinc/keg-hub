@@ -3,7 +3,7 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
-const { get, checkCall } = require('jsutils')
+const { get, checkCall, limbo } = require('jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
 const { buildLocationContext } = require('KegUtils/builders')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
@@ -21,18 +21,10 @@ const checkBaseImage = async args => {
 
   Logger.info(`Keg base image does not exist, building now...`)
   Logger.empty()
-  
+
   return runInternalTask(`tasks.docker.tasks.build`, {
     ...args,
-    task: buildTask,
     params: { ...args.params, context: 'base' },
-  })
-
-  const buildTask = get(args, `tasks.docker.tasks.build`)
-  return checkCall(buildTask.action, {
-    ...args,
-    task: buildTask,
-    params: { context: 'base' },
   })
 
 }
@@ -98,7 +90,7 @@ const buildExtraEnvs = ({ env, command, install }) => {
 const startDockerSync = async args => {
 
   const { globalConfig, params, options, task, tasks } = args
-  const { build, clean, context, detached, tap } = params
+  const { build, clean, context, detached, tap, destroy } = params
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location } = await buildLocationContext({
@@ -125,8 +117,28 @@ const startDockerSync = async args => {
   // Log the ip address so we know how to hit it in the browser
   logVirtualUrl()
 
-  // Run docker-sync
-  await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)
+  try {
+
+    // TODO: Figure out why this is not throwing on error
+    // If the spawnCmd throws an error
+    // Then the whole process exist, not just the spawned process
+    // Run docker-sync
+    const [ err, data ] = await limbo(spawnCmd(
+      dockerCmd,
+      { options: { env: contextEnvs }},
+      location
+    ))
+
+    if(err) throw new Error(err)
+
+  }
+  catch(err){
+    // Log the error message
+    Logger.error(`\n ${ err.message }\n`)
+
+    // Clean up the docker sync items
+    err && destroy && runInternalTask(`tasks.docker.tasks.sync.tasks.destroy`, args)
+  }
 
 }
 
@@ -157,6 +169,10 @@ module.exports = {
       description: 'The command to run within the docker container. Overwrites the default (yarn web)',
       example: 'keg docker sync start --command ios',
       default: 'web'
+    },
+    destroy: {
+      description: 'All collateral items will be destoryed if the sync task fails ( true )',
+      default: true
     },
     detached: {
       description: 'Runs the docker-sync process in the background',

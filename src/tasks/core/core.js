@@ -17,4 +17,18 @@ const coreCommand = args => {
 
 }
 
-module.exports = coreCommand
+module.exports = {
+  core: {
+    name: 'core',
+    alias: [ 'cor', 'cr' ],
+    tasks: {
+      ...require('./build'),
+      ...require('./destroy'),
+      ...require('./start'),
+      ...require('./stop'),
+    },
+    action: coreCommand,
+    description: 'Keg CLI core specific tasks',
+    example: 'keg core <command> <options>'
+  }
+}

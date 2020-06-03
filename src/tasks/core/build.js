@@ -1,4 +1,4 @@
-
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Build the keg-core in docker, without a tap
@@ -10,15 +10,33 @@
  *
  * @returns {void}
  */
-const buildCore = args => {
-  const { command, options, tasks, globalConfig } = args
-  
+const buildCore = async args => {
+  return runInternalTask('tasks.docker.tasks.build', {
+    ...args,
+    params: { ...args.params, tap: undefined, context: 'core' },
+  })
 }
 
 module.exports = {
-  name: 'build',
-  alias: [ 'bld', 'make' ],
-  action: buildCore,
-  description: `Builds the keg-core docker container`,
-  example: 'keg core build <options>'
+  build: {
+    name: 'build',
+    alias: [ 'bld', 'make' ],
+    action: buildCore,
+    description: `Builds the keg-core docker container`,
+    example: 'keg core build <options>',
+    options: {
+      envs: {
+        description: 'Add build args from container env files',
+        default: false
+      },
+      cache: {
+        description: 'Docker will use build cache when building the image',
+        default: true
+      },
+      tags: {
+        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
+        example: 'keg docker build tags=my-tag,local,development'
+      }
+    }
+  }
 }

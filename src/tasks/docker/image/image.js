@@ -66,7 +66,7 @@ module.exports = {
       },
       format: {
         allowed: [ 'json' ],
-        description: 'Add the force argument to the docker command',
+        description: 'Change output format of docker cli commands',
         example: 'keg docker image --format json ',
       },
     },

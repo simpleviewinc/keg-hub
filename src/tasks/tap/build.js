@@ -14,22 +14,10 @@ const { spawnCmd, executeCmd } = require('KegProc')
  * @returns {void}
  */
 const buildTap = async (args) => {
-  const { command, globalConfig, options, params, tasks } = args
-
-  const { name, env } = params
-  const location = getTapPath(globalConfig, name)
-  const version = getCoreVersion(globalConfig)
-
-  const dockerCmd = await buildDockerCmd(globalConfig, {
-    location,
-    version,
-    name: 'tap',
-    cmd: `build`,
-    tags: options,
+  return runInternalTask('tasks.docker.tasks.build', {
+    ...args,
+    params: { ...args.params, tap: args.params.tap, context: 'tap' },
   })
-
-  await spawnCmd(dockerCmd, location)
-
 }
 
 module.exports = {

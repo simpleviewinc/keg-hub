@@ -18,7 +18,7 @@ const runInternalTask = async (taskPath, args, task) => {
   task = isStr(task) && get(args, `tasks.${ task }.${taskPath}`) || task
 
   // Validate the task, then call it's action
-  return validateTask(task, taskPath).action({ ...args, task: task })
+  return validateTask(task, taskPath).action({ ...args, task: task, command: task.name })
 
 }
 

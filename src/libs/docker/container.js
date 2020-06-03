@@ -4,7 +4,6 @@ const { isArr, toStr, isStr } = require('jsutils')
 
 // Container commands the require an item argument of the container id or name
 const containerItemCmds = [
-  'commit',
   'inspect',
   'kill',
   'logs',
@@ -53,6 +52,58 @@ const runDockerCmd = (args={}, opts) => {
 const list = (args={}) => {
   const opts = isStr(args) ? { item: args, type: 'container' } : args
   return runDockerCmd({ format: 'json', ...opts }, [ 'ls', '-a' ])
+}
+
+/**
+ * Removes all stopped containers
+ * @function
+ * @param {Object} args - Arguments used to modify the docker api call
+ * @param {string} args.opts - Options used to build the docker command
+ * @param {string} args.format - Format of the docker command output
+ *
+ * @returns {*} - Response from the docker cli command
+ */
+const clean = async args => {
+
+  // Get all built containers
+  const containers = await list()
+
+  // Get all stopped containers
+  const stopped = containers.reduce((ids, container) => {
+    return container.status.indexOf('Exited') === 0
+      ? ids.concat(container.id)
+      : ids
+  }, [])
+
+  // If there are any stopped, then removed them
+  return stopped.length && runDockerCmd(
+    { ...args, format: null },
+    [ 'rm' ].concat(stopped)
+  )
+
+}
+
+/**
+ * Creates an image from the state of a currently running container
+ * @function
+ * @example
+ * docker container commit kegbase
+ * @param {Object} args - Arguments used to modify the docker api call
+ * @param {string} args.container - Name of the container to commit
+ * @param {string} args.item - Same as args.container
+ * @param {string} args.author - The author of the new docker image
+ * @param {string} args.message - Message for the commit
+ *
+ * @returns {Array} - JSON array of containers
+ */
+const commit = async ({ container, item, author, message }) => {
+  const cont = container || item
+
+  const options = [ 'commit' ]
+  message && options.concat([ '--message', message ])
+  author && options.concat([ '--author', author ])
+
+  return runDockerCmd({}, options)
 }
 
 /**
@@ -183,6 +234,8 @@ const container = (args={}) => dynamicCmd(
 // Add the sub-methods to the root docker image method
 Object.assign(container, {
   ...containerCmds,
+  clean,
+  commit,
   destroy,
   exec,
   exists,

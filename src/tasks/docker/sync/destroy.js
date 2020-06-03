@@ -15,7 +15,6 @@ const docker = require('KegDocCli')
  * @returns {void}
  */
 const destroyDockerSync = async args => {
-
   const { globalConfig, params, options, task, tasks } = args
   const { context } = params
 
