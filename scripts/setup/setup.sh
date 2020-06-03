@@ -159,7 +159,7 @@ keg_setup_static_ip(){
   docker-machine start $KEG_DOCKER_NAME
 
   keg_message "Regenerating $KEG_DOCKER_NAME certs..."
-  docker-machine regenerate-certs $KEG_DOCKER_NAME
+  docker-machine regenerate-certs --force $KEG_DOCKER_NAME
   
   keg_message "Docker IP Address: $(docker-machine ip $KEG_DOCKER_NAME)"
   
