@@ -28,7 +28,7 @@ const dockerMachine = async args => {
 module.exports = {
   machine: {
     name: 'machine',
-    alias: [ 'mach', 'm' ],
+    alias: [ 'mach', 'm', 'dm' ],
     action: dockerMachine,
     description: `Runs docker-machine command`,
     example: 'keg docker machine <options>',

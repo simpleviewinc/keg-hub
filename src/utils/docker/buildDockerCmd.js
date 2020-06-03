@@ -81,8 +81,8 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
 
   // Get the name for the docker container
   dockerCmd = addContainerName(
+    dockerCmd,
     tap ? `${context}-${tap}` : context,
-    dockerCmd
   )
 
   // Add the env to the docker command
@@ -98,7 +98,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
   })
 
   // Mount the tap location by default
-  dockerCmd = addTapMount(location, dockerCmd)
+  dockerCmd = addTapMount(dockerCmd, context, location)
 
   // First fet the directory paths to mount
   const toMount = getDirsToMount(

@@ -69,6 +69,10 @@ module.exports = {
         description: 'Name of the docker container to run',
         enforced: true,
       },
+      entrypoint: {
+        alias: [ 'entry', 'ep' ],
+        description: 'Override the default entry point of the container',
+      },
       env: {
         description: 'Environment to start the Docker container in',
         default: 'development',

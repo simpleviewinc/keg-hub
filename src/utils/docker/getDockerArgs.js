@@ -1,7 +1,8 @@
 const { DOCKER } = require('KegConst')
-const { reduceObj, get } = require('jsutils')
+const { reduceObj, get, isStr } = require('jsutils')
 const { exists } = require('KegUtils/helpers/exists')
 const docker = require('KegDocCli')
+const { getContainerConst } = require('./getContainerConst')
 
 /**
  * Loops over the passed in args and maps them to the docker constants
@@ -21,6 +22,8 @@ const docker = require('KegDocCli')
 const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
 
   const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
+
+  // Override the default docker arguments with passed in arguments
   const checkArgs = { ...containerOpts.DEFAULTS, ...args }
 
   // Loop the containerOpts.Value object and check for any extra arguments to add
@@ -36,12 +39,19 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
     // And if so, turn off caching for builds
     if(key === 'nocache')
       return args.cache === false
-        ? `${joinedArgs} ${ value }`.trim()
+        ? `${ joinedArgs } ${ value }`.trim()
         : joinedArgs
 
-
     // Get the key value from the args object
+    // This will be either a passed in value from the command line
+    // Or the key value from DOCKER.CONTAINERS.DEFAULTS constants ( boolean )
     const argVal = checkArgs[key]
+
+    // Special handling for the container entrypoint override
+    // We need both the key and the value
+    // So check if the value exists, and is the correct type
+    if(key === 'entrypoint' && exists(argVal) && isStr(argVal))
+       return `${ joinedArgs } ${ value } ${ argVal }`.trim()
 
     // Ensure if the key exists in the args object, otherwise set to empty string
     const addArg = exists(argVal) ? argVal === true ? value : argVal : ''
@@ -59,7 +69,7 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
  *
  * @returns {string} - dockerCmd with the name arg added
  */
-const addContainerName = (name, dockerCmd='') => {
+const addContainerName = (dockerCmd='', name) => {
   return `${dockerCmd} --name ${name}`
 }
 
@@ -70,8 +80,13 @@ const addContainerName = (name, dockerCmd='') => {
  *
  * @returns {string} - dockerCmd with the mounted tap arg added
  */
-const addTapMount = (location, dockerCmd) => {
-  return `${dockerCmd} -v ${location}:/keg/tap`
+const addTapMount = (dockerCmd, context, location) => {
+  const mountPath = getContainerConst(context, `ENV.DOC_APP_PATH`)
+
+  return mountPath
+    ? `${dockerCmd} -v ${location}:${ mountPath }`
+    : dockerCmd
+
 }
 
 /**

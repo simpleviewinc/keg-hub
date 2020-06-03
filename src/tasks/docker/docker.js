@@ -10,8 +10,9 @@ const docker = require('KegDocCli')
 const dockerSubTasks = {
   dc: 'container',
   di: 'image',
+  dm: 'machine',
+  dp: 'provider',
   ds: 'sync',
-  dp: 'provider'
 }
 
 /**
@@ -62,7 +63,7 @@ const dockerTask = args => {
 module.exports = {
   docker: {
     name: 'docker',
-    alias: [ 'doc', 'd', 'dc', 'di', 'ds', 'dp' ],
+    alias: [ 'doc', 'd', 'dc', 'di', 'dm', 'dp', 'ds' ],
     tasks: {
       ...require('./build'),
       ...require('./compose'),

@@ -11,12 +11,14 @@ let __CONTAINERS
 const DEFAULT = {
   VALUES: {
     clean: '--force-rm',
-    nocache: '--no-cache'
+    nocache: '--no-cache',
+    entrypoint: '--entrypoint',
   },
   DEFAULTS: {
     clean: true,
-    nocache: false,
+    entrypoint: false,
     file: true,
+    nocache: false,
   },
   ARGS: keyMap([
     'GIT_KEY',

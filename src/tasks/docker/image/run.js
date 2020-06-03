@@ -44,7 +44,7 @@ const runDockerImage = async args => {
     location,
     envs: contextEnvs,
     image: `img-${imgName}`,
-    options: [ `-it ${imgName}` ],
+    options: [ `-it`, imgName ],
   })
 
 }
