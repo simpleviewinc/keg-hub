@@ -1,4 +1,7 @@
 
 module.exports = {
-  ...require('./github')
+  ...require('./github'),
+  ...require('./libs'),
+  ...require('./logger'),
+  ...require('./node'),
 }

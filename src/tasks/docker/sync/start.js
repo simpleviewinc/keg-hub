@@ -4,7 +4,7 @@ const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
 const { get, checkCall } = require('jsutils')
-const { logVirtualIP } = require('KegUtils/log')
+const { logVirtualUrl } = require('KegUtils/log')
 const { buildLocationContext } = require('KegUtils/builders')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
@@ -123,7 +123,7 @@ const startDockerSync = async args => {
   const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
 
   // Log the ip address so we know how to hit it in the browser
-  await logVirtualIP()
+  logVirtualUrl()
 
   // Run docker-sync
   await spawnCmd(dockerCmd, { options: { env: contextEnvs }}, location)

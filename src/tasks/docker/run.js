@@ -1,7 +1,7 @@
 const { buildLocationContext } = require('KegUtils/builders')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
-const { logVirtualIP } = require('KegUtils/log')
+const { logVirtualUrl } = require('KegUtils/log')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
@@ -48,7 +48,7 @@ const dockerBuild = async args => {
   })
 
   // Log out the containers ip, so we know how to connect to it in the browser
-  await logVirtualIP()
+  logVirtualUrl()
 
   // Run the container
   await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)

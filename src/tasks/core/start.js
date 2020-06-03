@@ -1,6 +1,6 @@
 const { get } = require('jsutils')
 const { getCoreVersion } = require('KegUtils/getters')
-const { logVirtualIP } = require('KegUtils/log')
+const { logVirtualUrl } = require('KegUtils/log')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { spawnCmd } = require('KegProc')
@@ -30,7 +30,7 @@ const startContainer = async ({ globalConfig, params }) => {
     version: get(DOCKER, `CONTAINERS.CORE.ENV.VERSION`),
   })
 
-  await logVirtualIP()
+  logVirtualUrl()
 
   await spawnCmd(dockerCmd, location)
 }

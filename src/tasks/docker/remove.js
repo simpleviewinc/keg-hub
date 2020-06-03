@@ -1,7 +1,6 @@
 const { buildLocationContext } = require('KegUtils/builders')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
-const { logVirtualIP } = require('KegUtils/log')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')

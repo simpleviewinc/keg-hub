@@ -1,6 +1,6 @@
 const { checkCall, get, reduceObj, isObj, isFunc } = require('jsutils')
 const { getCoreVersion } = require('KegUtils/getters')
-const { logVirtualIP } = require('KegUtils/log')
+const { logVirtualUrl } = require('KegUtils/log')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { spawnCmd } = require('KegProc')
@@ -33,7 +33,7 @@ const startContainer = async ({ globalConfig, params }) => {
     container: 'TAP',
   })
 
-  await logVirtualIP()
+  logVirtualUrl()
 
   await spawnCmd(dockerCmd, location)
 }
