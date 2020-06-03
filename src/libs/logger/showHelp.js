@@ -142,10 +142,10 @@ const showAllHelp = (tasks, opts={}) => {
 
   Object.keys(tasks)
     .map(key => 
-      !isStr(tasks[key]) &&
+      !isStr(tasks[key]) && 
         showTaskHelp(
           tasks[key],
-          { ...opts, spacer, header: false }
+          { ...opts, spacer, header: false, subtasks: false }
         )
     )
 
@@ -160,18 +160,19 @@ const showAllHelp = (tasks, opts={}) => {
  * @param {Object} [opts={}] - Options for printing help
  * @param {boolean} opts.header - Should print the help header
  * @param {string} opts.space - space from start of line
+ * @param {boolean} opts.subtasks - prints task's subtasks if true
  */
 const showTaskHelp = (task, opts={}) => {
-  const { header, space } = opts
+  const { header, space, subtasks=true } = opts
 
-  const { spacer, dblSpacer, infoSpacer, subTasks } = getSpacers(space)
+  const { spacer, dblSpacer, infoSpacer } = getSpacers(space)
 
   showHelpHeader(header)
   showTaskHeader(task.name, header, spacer, dblSpacer)
   showTaskInfo(task, infoSpacer)
   showTaskOptions(task, infoSpacer, dblSpacer)
-  subTasks && showSubTasks(task, { ...opts, subTasks: false, dblSpacer })
 
+  subtasks && showSubTasks(task, { ...opts, dblSpacer })
 }
 
 /**
