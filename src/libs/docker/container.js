@@ -141,8 +141,29 @@ const exists = async (compare, doCompare, format) => {
       container,
       compare,
       doCompare,
-      [ 'containerId', 'names' ]
+      [ 'id', 'names' ]
     ))
+}
+
+/**
+ * Connects to a running container, and runs a command
+ * @function
+ * @example
+ * docker exec -it app /bin/bash
+ * @param {string} args - Arguments used to connect to the container
+ *
+ * @returns {void}
+ */
+const exec = async ({ container, item, opts, cmd }) => {
+
+  const options = isArr(opts) ? opts.join(' ') : opts
+  let cont = container || item
+  cont = isStr(cont) ? cont : cont
+  
+  const { error, data } = await spawnProc(`docker exec ${ options.trim() } ${ cont } ${ cmd }`)
+
+  return error && !data ? apiError(error) : data
+
 }
 
 /**
@@ -163,6 +184,7 @@ const container = (args={}) => dynamicCmd(
 Object.assign(container, {
   ...containerCmds,
   destroy,
+  exec,
   exists,
   list,
   remove: removeContainer,

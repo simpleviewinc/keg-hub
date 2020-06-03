@@ -15,14 +15,14 @@ const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
  * Calls the docker cli from the command line and returns the response
  * @function
  * @param {Object} params - arguments used to modify the docker api call
- * @param {Object} params.opts - optional arguments to pass to the docker command
+ * @param {Object} params.opts, cmd - optional arguments to pass to the docker command
  * @param {Object} params.asObj - Return the response as an unformatted string
  * @param {Object} params.errResponse - On an error calling docker, this will be returned.
  *                                      If errResponse is undefined, the current process will exit
  *
  * @returns {Array|string} - JSON array of items || stdout from docker cli call
  */
-const dockerCli = async ({ opts, errResponse, log, skipError, format='', force }) => {
+const dockerCli = async ({ opts, cmd, errResponse, log, skipError, format='', force }) => {
   const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
   const useFormat = format === 'json' ? `--format "{{json .}}"` : format
   const useForce = force ? '--force' : ''
