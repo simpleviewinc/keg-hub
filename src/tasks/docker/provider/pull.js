@@ -1,9 +1,51 @@
+const path = require('path')
 const { get } = require('jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { throwRequired } = require('KegUtils/error')
 const { getAllPackages } = require('KegUtils/docker')
+
+/**
+ * Builds the url used to pull the docker image from the provider/registry
+ * @param {Object} options 
+ * @param {string} options.account
+ * @param {string} options.provider - registry url, defaults to github docker packages
+ * @param {string} options.repo - name of repo
+ * @param {string} options.container - name of container/image to pull (e.g kegbase)
+ * @param {string} options.version - used if defined, otherwise uses branch
+ * @param {string} options.branch - name of branch. used only if version is undefined. 
+ */
+const buildPackageURL = (options={}) => {
+  const {
+    account, 
+    provider='docker.pkg.github.com', 
+    repo, 
+    container,
+    version=null,
+    branch='master',
+  } = options
+
+  // create a url like: docker.pkg.github.com/lancetipton/keg-core/kegbase:1.3.2
+  return path.join(provider, account, repo, container, version || branch)
+}
+
+const getPackageName = (packages, context) => {
+  let imgName
+  return packages.reduce((found, pkg) => {
+    if(found) return found
+
+    const nameSplit = pkg.nameWithOwner.split('/')
+    imgName = nameSplit[ nameSplit.length -1 ]
+    nameSplit.splice(1, 0, cmdContext)
+
+    return `keg${context}` === imgName
+      ? nameSplit.join('/')
+      : found
+
+  }, null)
+}
+
 
 /**
  * Pulls an image locally from a configured registry provider in the cloud
@@ -30,22 +72,9 @@ const providerPull = async args => {
   const version = `0.0.1`
   
   const packages = await getAllPackages({ ...args, __TEST__: true })
-  
-  // TODO: Move this to own method
-  let imgName
-  const packageName = packages.reduce((found, pkg) => {
-    if(found) return found
 
-    const nameSplit = pkg.nameWithOwner.split('/')
-    imgName = nameSplit[ nameSplit.length -1 ]
-    nameSplit.splice(1, 0, cmdContext)
-
-    return `keg${context}` === imgName
-      ? nameSplit.join('/')
-      : found
-
-  }, null)
-
+  // current way of getting package name
+  const packageName = getPackageName(packages, context)
   const providerUrl = get(globalConfig, 'docker.providerUrl')
 
   // TODO: Validate the arguments of the url
