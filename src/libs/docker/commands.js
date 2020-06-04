@@ -170,6 +170,19 @@ const raw = async (cmd, args, loc) => {
   return data
 }
 
+/**
+ * Runs docker system prune command
+ * @function
+ * @param {Array|string} options - Options for the prune command
+ *
+ * @returns {*} - Response from the docker cli command
+ */
+const prune = opts => {
+  return dockerCli({
+    opts: [ 'system', 'prune'].concat(isArr(opts) ? opts : [ opts ]),
+  })
+}
+
 module.exports = {
   dockerCli,
   dynamicCmd,

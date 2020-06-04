@@ -3,6 +3,7 @@
 # Default path ENVs
 CLI_PATH=/keg/keg-cli
 DOC_APP_PATH=/keg/keg-core
+CORE_NM_CACHE=/keg/nm-cache/core
 
 keg_message(){
   echo $"[ KEG-CLI ] $1" >&2
@@ -11,6 +12,7 @@ keg_message(){
 
 # Overwrite the default cli and core paths with passed in ENVs
 keg_set_container_paths(){
+
   if [[ "$DOC_CLI_PATH" ]]; then
     CLI_PATH="$DOC_CLI_PATH"
   fi
@@ -18,6 +20,11 @@ keg_set_container_paths(){
   if [[ "$DOC_CORE_PATH" ]]; then
     DOC_APP_PATH="$DOC_CORE_PATH"
   fi
+  
+  if [[ "$NM_CACHE" ]]; then
+    CORE_NM_CACHE="$NM_CACHE"
+  fi
+
 }
 
 # Runs yarn install at run time
@@ -26,12 +33,12 @@ keg_run_yarn_install(){
 
   # Check if we should run yarn install
   # Is $NM_INSTALL doesn't exist, just return
-  if [[ -z "$NM_INSTALL" || -z "$NM_CACHE" ]]; then
+  if [[ -z "$NM_INSTALL" || -z "$CORE_NM_CACHE" ]]; then
     return
   fi
 
   # Navigate to the cached directory, and run the yarn install here
-  cd $NM_CACHE
+  cd $CORE_NM_CACHE
   keg_message "Running yarn install for keg-core..."
   yarn install
 
@@ -41,12 +48,12 @@ keg_run_yarn_install(){
 keg_copy_node_modules(){
   
   # ensure we know where the node_module cache is
-  if [[ -z "$NM_CACHE" ]]; then
+  if [[ -z "$CORE_NM_CACHE" ]]; then
     return
   fi
   
   # Copy recursivly (-R) and don't overwrite anyfiles (-n)
-  cp -R -n $NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
+  cp -R -n $CORE_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
 
 }
 
@@ -76,7 +83,6 @@ keg_run_yarn_install
 
 # Copies over the locally cached node_modules into the apps node_modules
 keg_copy_node_modules
-
 
 # Start the keg core instance
 keg_run_from_core

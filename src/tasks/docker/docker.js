@@ -72,6 +72,7 @@ module.exports = {
       ...require('./image'),
       ...require('./machine'),
       ...require('./provider'),
+      ...require('./prune'),
       ...require('./run'),
       ...require('./sync'),
     },

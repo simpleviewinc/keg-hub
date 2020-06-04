@@ -17,6 +17,7 @@
   * Allow mounting of sub-repos
     * `re-theme`, `tap-resolver`, `keg-components`
     * Need work out a way some they don't get overwritten from `yarn install`
+  * Add IMAGE_FROM as an ARG and ENV when build docker containers
 
 **Install**
 * Keg cli should be installed through `yarn global` || `npm global`
