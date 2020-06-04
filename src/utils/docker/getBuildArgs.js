@@ -18,7 +18,7 @@ const { DOCKER_ENV } = DOCKER
  * @returns {string} - The dockerCmd string with the build args added
  */
 const getBuildArgs = async (globalConfig, params) => {
-  const { buildEnvs, context, branch, location, tap } = params
+  const { buildArgs, context, branch, location, tap } = params
   let dockerCmd = params.dockerCmd || ''
   
   const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
@@ -28,7 +28,7 @@ const getBuildArgs = async (globalConfig, params) => {
   const tapUrl = context ==='tap' && tap && await getRemoteUrl(getTapPath(globalConfig, tap))
 
   // Add the context build ENVs to the command
-  dockerCmd = docker.toBuildArgs(buildEnvs, dockerCmd)
+  dockerCmd = docker.toBuildArgs(buildArgs, dockerCmd)
 
   return reduceObj(containerOpts.ARGS, (key, value, dockerCmd) => {
     let useVal

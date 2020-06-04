@@ -46,7 +46,7 @@ const dockerBuild = async args => {
     options: options,
     context: cmdContext,
     ...(tap && { tap }),
-    ...(envs && { buildEnvs: contextEnvs }),
+    ...(args && { buildArgs: contextEnvs }),
   })
 
   await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)
@@ -69,9 +69,9 @@ module.exports = {
         description: 'Context of the docker container to build',
         enforced: true,
       },
-      envs: {
+      args: {
         description: 'Add build args from container env files',
-        default: false
+        default: true
       },
       cache: {
         description: 'Docker will use build cache when building the image',

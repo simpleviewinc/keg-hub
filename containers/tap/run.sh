@@ -54,7 +54,7 @@ keg_copy_node_modules(){
   if [[ -z "$TAP_NM_CACHE" ]]; then
     return
   fi
-  
+
   # Copy recursivly (-R) and don't overwrite anyfiles (-n)
   cp -R -n $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
 

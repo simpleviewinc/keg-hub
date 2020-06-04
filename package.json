@@ -1,7 +1,7 @@
 {
   "name": "keg-cli",
   "version": "1.0.0",
-  "description": "Commands when working with the Keg",
+  "description": "Node.js CLI for working with Keg Repos and Taps",
   "main": "./keg",
   "repository": "https://github.com/lancetipton/Keg-CLI",
   "author": "Lance Tipton",

@@ -21,7 +21,7 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 ARG DOC_APP_PATH=/keg/tap
 
 # Path where node_modules will be installed durring docker built
-ARG NM_CACHE=/keg/nm-cache/core
+ARG NM_CACHE=/keg/nm-cache/tap
 
 # Update git calls to github to include the key so private repos can be pulled
 RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
@@ -33,10 +33,6 @@ RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_TAP_URL" != "INITIAL" ]; then \
       git clone $GIT_TAP_URL $DOC_APP_PATH; \
     fi
 
-# Create a fake post install script for after the yarn install
-RUN mkdir -p $NM_CACHE/core/scripts/js; \
-    touch $NM_CACHE/core/scripts/js/postInstall.js
-
 # Copy over the package.json, and yarn.lock files
 COPY package.json $NM_CACHE/package.json
 COPY yarn.lock $NM_CACHE/yarn.lock
@@ -46,5 +42,6 @@ RUN cd $NM_CACHE; yarn setup
 
 EXPOSE 80
 
-# Run the script
-CMD [ "/bin/bash", "$DOC_CLI_PATH/containers/tap/run.sh" ]
+# Run the start script
+# Dont use the array syntax, so we have access to the DOC_CLI_PATH ENV
+CMD /bin/bash $DOC_CLI_PATH/containers/tap/run.sh

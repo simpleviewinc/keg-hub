@@ -2,12 +2,12 @@ version: "3.8"
 services:
   kegcore:
     volumes:
-      - core-sync:${DOC_APP_PATH}:nocopy
       - cli-sync:/${DOC_CLI_PATH}:nocopy
+      - core-sync:${DOC_APP_PATH}:nocopy
 volumes:
-  core-sync:
-    external:
-      name: "core-unison-sync"
   cli-sync:
     external:
       name: "cli-unison-sync"
+  core-sync:
+    external:
+      name: "core-unison-sync"
