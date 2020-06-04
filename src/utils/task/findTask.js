@@ -24,10 +24,7 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
   options = [ ...options, `tap=${command}` ]
 
   // Call getTask, and set the command to be tap
-  const task = getTask(tasks, 'tap', ...options)
-
-  // Return task data with the task and updated options
-  return { task, options }
+  return getTask(tasks, 'tap', ...options)
 
 }
 

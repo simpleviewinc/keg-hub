@@ -1,7 +1,4 @@
-const { getCoreVersion } = require('KegUtils/getters')
-const { getTapPath } = require('KegUtils/globalConfig')
-const { buildDockerCmd } = require('KegUtils/docker')
-const { spawnCmd, executeCmd } = require('KegProc')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Builds a docker container for a tap so it can be run
@@ -28,7 +25,8 @@ module.exports = {
     description: `Builds a taps docker container`,
     example: 'keg tap build <options>',
     options: {
-      name: {
+      tap: {
+        alias: [ 'name' ],
         description: 'Name of the tap to build a Docker image for',
         required: true
       },
