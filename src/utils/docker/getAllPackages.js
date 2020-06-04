@@ -30,11 +30,17 @@ const buildHeaders = (headers={}, token) => {
  */
 const buildQuery = (user, type, amount=20) => {
   const packageTypeQuery = type ? ` packageType: ${ type },` : ''
+
+  // NOTE: this includes preview-stage queries for the github api.  This is bound to change and most of these
+  // are already deprecated. Expect to need to update this soon.
   return {
     query : `{
       user(login: "${ user }") {
         registryPackagesForQuery(first: ${ amount },${packageTypeQuery} query:"is:private") {
           totalCount nodes {
+            repository {
+              name
+            }
             nameWithOwner versions(first: ${ amount }) {
               nodes {
                 id
@@ -70,11 +76,16 @@ const getAllPackages = async args => {
           amount
         )
       }))
-  
+    
+  // even if there wasn't an error thrown by the axios call directly, the api might have reported 
+  // errors related to the graphql query inside resp.data.errors
+  const responseErrors = get(resp, 'data.errors', [])
+
   return err
     ? generalError(err.message)
-    : get(resp, `data.data.user.registryPackagesForQuery.nodes`) || []
-
+    : responseErrors.length
+      ? responseErrors.map(err => generalError(err.message))
+      : get(resp, `data.data.user.registryPackagesForQuery.nodes`) || []
 }
 
 module.exports = {

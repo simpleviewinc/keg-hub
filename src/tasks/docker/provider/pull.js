@@ -3,7 +3,7 @@ const docker = require('KegDocCli')
 const { get, validate, isStr } = require('jsutils')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
-const { ask, input } = require('KegQuestions')
+const { ask } = require('KegQuestions')
 const { PACKAGE_TYPES } = require('KegConst/packages')
 const { throwRequired } = require('KegUtils/error')
 const { getAllPackages } = require('KegUtils/docker')
@@ -39,49 +39,98 @@ const buildPackageURL = (options={}) => {
   return path.join(provider, account, repo, image) + `:${version || branch}`
 }
 
-
 /**
+ * Gets the package that matches the context for hte image name
  * @param {Array<Object>} packages - all packages to choose from
  * @param {String} context - the docker image context
+ * @return {Object} package - an object with keys: image, owner, repo, versions, nameWithOwner
  */
 const getPackage = (packages, context) => {
   const targetImageName = `keg${context}`
 
-  const package = packages.find(p => {
+  return packages.find(p => {
     const [_, imageName] = p.nameWithOwner.split('/') 
     return imageName === targetImageName
   })
+}
 
+/**
+ * @param {Object} package - github package object as returned by the graphql github api
+ * @return {Object} package - an object with keys: image, owner, repo, versions, nameWithOwner
+ *  - image {String}: the name of the docker image 
+ *  - owner {String}: the owner/account of the package
+ *  - repo {String}: the name of the repo the package was submitted to
+ *  - versions {Array}: array of available versions. Each item is an object with { id, version } props
+ */
+const formatPackage = package => {
   const [ owner, image ] = package.nameWithOwner.split('/')
-
   const versions = package.versions.nodes
+  const repo = package.repository.name
+  const packagePath = path.join(owner, repo, image)
 
   return {
     image,
     owner,
+    repo,
     versions,
+    path: packagePath,
     nameWithOwner: package.nameWithOwner,
   }
 }
 
 /**
- * Asks the user which version of the package to use
- * @param {*} package 
+ * Prompts user to select a package
+ * @param {Array} packages - array of packages to select from
+ * @param {String} user - name of user
+ * @returns {Object} the selected package
  */
-const getVersion = async (package) => {
-  if (!package || !package.versions || !package.versions.length) {
-    Logger.print(Logger.color('red', 'No versions are submitted for that package. Exiting...'))
+const askForPackage = async (packages, user) => {
+  // validate the input
+  if (!packages || !packages.length) {
+    Logger.error(`No packages found for user "${user}". Exiting...`)
     process.exit(1)
   }
 
+  // print out the avilable versions
+  Logger.print(Logger.color('green', 'Available Packages:'))
+  packages.map(
+    (p, idx) => Logger.print(`  ${idx} => ${p.path}`)
+  )
+
+  // ask the user to select a version (index)
+  let index = null 
+  while (!index || isNaN(index)) {
+    index = await ask.input(
+      Logger.color('yellow', `Select a package:`)
+    )
+  }
+
+  return packages[index]
+}
+
+/**
+ * Asks the user which version of the package to use
+ * @param {Object} package - the package object returned by getPackage or askForPackage
+ */
+const askForVersion = async (package) => {
+  // validate the input
+  if (!package || !package.versions || !package.versions.length) {
+    Logger.error('No versions have been submitted for this package. Exiting...')
+    process.exit(1)
+  }
+
+  // print out the avilable versions
   Logger.print(Logger.color('green', 'Image Versions:'))
   package.versions.map(
     (v, idx) => Logger.print(`  ${idx} => ${v.version}`)
   )
 
+  // ask the user to select a version (index)
   let selection = null 
   while (!selection || isNaN(selection)) {
-    selection = await ask.input(Logger.color('yellow', `Select a version:`))
+    selection = await ask.input(
+      Logger.color('yellow', `Select a version:`)
+    )
   }
 
   return package
@@ -90,19 +139,19 @@ const getVersion = async (package) => {
 }
 
 /**
- * @param {string} version - version to validate
+ * @param {string} version - version to validate - can be either a branch or a semver string
  * @param {Object} package - the github package containing available versions
- * 
  * @return {boolean} true if the version is an available version for the package
  */
 const validateVersion = (version, package) => {
   const valid = version && package.versions.some(v => v.version === version)
   if (!valid) {
-    Logger.error(`Version "${version}" is not a valid version for this package. Try running this task without the --version flag to see available versions.`)
+    const availableVersions = package.versions.map(v => v.version).join(", ")
+    Logger.error(`Version "${version}" is not a valid version for this package. Available versions: [ ${availableVersions} ]`)
     process.exit(1)
   }
+  return version
 }
-
 
 /**
  * Pulls an image locally from a configured registry provider in the cloud
@@ -118,55 +167,50 @@ const validateVersion = (version, package) => {
  */
 const providerPull = async args => {
   const { globalConfig, params, task } = args
-  const { context, branch, user, version } = params
+  const { context, branch, user, version, repo } = params
 
   // Ensure we have the context of the image to be pushed
-  !context && throwRequired(task, 'context', get(task, `options.context`))
+  // !user && throwRequired(task, 'context', get(task, `options.context`))
 
-  // TODO: get cmdContext
-  // Hardcoded for now
-  const repo = 'keg-core'
+  // get all the docker packages available for the context / user
+  const rawPackages = await getAllPackages({ params, user, packageType: PACKAGE_TYPES.DOCKER, __TEST__: false})
 
-  const packages = await getAllPackages({ 
-    params, 
-    user,
-    packageType: PACKAGE_TYPES.DOCKER,
-    __TEST__: true, 
-  })
+  // format the packages then get all the packages for the repo, if --repo was passed in
+  const packages = rawPackages
+    .map(formatPackage)
+    .filter(package => !repo || package.repo === repo)
 
-  const package = getPackage(packages, context)
-  version && validateVersion(version, package)
+  // get the package that matches the context
+  const package = context 
+    ? getPackage(packages, context)
+    : await askForPackage(packages, user)
+
 
   const provider = get(globalConfig, 'docker.providerUrl')
-  const selectedVersion = !version && await getVersion(package)
 
-  // const url = path.join(providerUrl, package.owner, repoName, package.image) + `:${version || branch}`
+  // if the user passed in a version or branch to use, validate it
+  (version || branch) && validateVersion(version || branch, package)
+
+  // if the user didn't pass in a version, ask the user to select one
+  const selectedVersion = version || branch || await askForVersion(package)
+
   const url = buildPackageURL({
     account: package.owner,
     provider,
-    repo,
+    repo: package.repo,
     image: package.image,
-    version: version || selectedVersion,
+    version: selectedVersion,
     branch
   })
 
-  return console.log(url)
-
   await docker.pull(url)
 
-  // TODO: Pull the "version" from the package returned from the "getAllPackages" call
-  // Then use that to tag the image. This should only be done for non-master branches
-  // So the tag will look like kegbase:my-feature-brance 
-
-  // Tag the image with local tag so we can use it with the local context names I.E. base | core | tap
-  // version should be a branch name or the actual version when branch is master 
-  await docker.image.tag(url, `${package.image}:${selectedVersion}`)
-
-  // TODO: add check if the image is from the master branch. If it is, then add the latest tag
-  // await docker.image.tag(url, `${imgName}:latest`)
+  // tag the image with latest if version is master branch. Otherwise tag with the package version.
+  version === 'master'
+    ? await docker.image.tag(url, `${package.image}:latest`)
+    : await docker.image.tag(url, `${package.image}:${selectedVersion}`)
 
   Logger.empty()
-
 }
 
 module.exports = {
@@ -175,12 +219,11 @@ module.exports = {
     alias: [ 'pl' ],
     action: providerPull,
     description: 'Pulls an image from a Docker registry provider',
-    example: 'keg docker provider pull <options>',
+    example: 'keg docker provider pull --user lancetipton',
     options: {
       context: {
         allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
-        enforced: true,
       },
       branch: {
         description: 'Name of branch name that exists as the image name',
@@ -200,7 +243,6 @@ module.exports = {
       token: {
         description: 'API Token for registry provider to allow logging in',
         example: 'keg docker provider login --token 12345',
-        enforced: true
       },
       user: {
         description: 'User to use when logging into the registry provider',
@@ -210,6 +252,10 @@ module.exports = {
       version: {
         description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
         example: 'keg docker provider pull --context base --version 0.0.1',
+      },
+      repo: {
+        description: 'The name of the repository holding docker images to pull',
+        example: 'keg docker provider pull --user lancetipton --repo keg-core',
       }
     }
   }

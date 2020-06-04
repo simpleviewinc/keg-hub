@@ -1,6 +1,9 @@
 const packages = [
   {
     "nameWithOwner": "lancetipton/foobar",
+    "repository": {
+      "name": "foobar"
+    },
     "versions": {
       "nodes": [
         {
@@ -16,6 +19,9 @@ const packages = [
   },
   {
     "nameWithOwner": "lancetipton/kegbase",
+    "repository": {
+      "name": "fizzbuzz"
+    },
     "versions": {
       "nodes": [
         {
@@ -31,6 +37,9 @@ const packages = [
   },
   {
     "nameWithOwner": "lancetipton/kegbase-add-templateing-to-envs",
+    "repository": {
+      "name": "tastytots"
+    },
     "versions": {
       "nodes": [
         {
