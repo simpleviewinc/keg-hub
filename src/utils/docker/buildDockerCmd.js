@@ -34,7 +34,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
 
   // Ensure we have an image name to build
   const image = getDockerImg(params.image, container)
-  
+
   // Add any options if needed
   dockerCmd = getBuildTags({ dockerCmd, container, image, context, options, version })
 

@@ -6,9 +6,9 @@ services:
       context: ${CONTEXT_PATH}
       dockerfile: ${CONTEXT_DOCKER_FILE}
       args:
-        GIT_CORE_URL: ${GIT_CORE_URL}
-        GIT_KEY: ${GIT_KEY}
-        DOC_APP_PATH: ${DOC_APP_PATH}
+        - GIT_CORE_URL
+        - GIT_KEY
+        - DOC_APP_PATH
     container_name: ${CONTAINER_NAME}
     env_file: ${CONTEXT_ENV_FILE}
     environment:

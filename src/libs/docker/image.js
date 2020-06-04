@@ -140,13 +140,14 @@ const exists = async (compare, doCompare, log) => {
  *
  * @returns {boolean} - If the images can be removed
  */
-const clean = async ({ opts='', log=false }) => {
+const clean = async ({ force, opts='', log=false }) => {
   
   const IMG_NONE = `<none>`
 
   // Get all current images
   const images = await listImages({ errResponse: [], format: 'json', log })
 
+  // Find the images to be removed
   const toRemove = images.reduce((toRemove, image) => {
     (image.repository === IMG_NONE || image.tag === IMG_NONE) &&
       ( toRemove += ` ${ image.id }`)
@@ -154,25 +155,47 @@ const clean = async ({ opts='', log=false }) => {
     return toRemove
   }, '').trim()
 
-  return toRemove && dockerCli({ opts: ['image', 'rm'].concat([ toRemove, opts ]) })
+  return toRemove && dockerCli({
+    force,
+    opts: ['image', 'rm'].concat([ toRemove, opts ]),
+  })
 
 }
 
+/**
+ * Runs a built image as a container
+ * @function
+ * @param {Object} args - Arguments to pass to run the docker run command
+ * @param {string} args.entry - Overwrite the default entry of the image
+ * @param {Object} args.envs - Envs to pass to the container when run
+ * @param {string|Object} args.image - Image object or image name to be run
+ * @param {string} args.location - The location where the docker run command will be executed
+ * @param {string} args.name - Name of the docker container
+ * @param {Array} args.options - Name of the docker container
+ *
+ * @returns {string|Array} - Response from docker cli
+ */
+const runImage = async ({ entry, envs, image, location, name, opts=[] }) => {
 
-// `docker run --name img-${imgName} -it ${imgName} ${entry}`
-const runImage = async ({ entry, envs, image, location, options=[] }) => {
+  const containerName = isStr(name)
+    ? name
+    : isStr(image)
+      ? `img-${image}`
+      : `img-${image.name}`
+
+  const imgName = isStr(image) ? image : image.name
 
   // Set the name of the container based off the image name
-  let cmd = `run --name ${ isStr(image) ? image : image.name }`.trim()
+  let cmd = `run --name ${ containerName }`.trim()
 
-  // Add any passed in docker cli options 
-  cmd = `${ cmd } ${isArr(options) ? options.join(' ') : options}`.trim()
+  // Add any passed in docker cli opts 
+  cmd = `${ cmd } ${ isArr(opts) ? opts.join(' ') : opts }`.trim()
 
   // Convert the passed in envs to envs that can be passed to the container
   cmd = toContainerEnvs(envs, cmd)
 
   // Set / overwrite the entry for the container
-  cmd = `${ cmd } ${ entry || '/bin/bash' }`.trim()
+  cmd = `${ cmd } ${ imgName } ${ entry || '/bin/bash' }`.trim()
 
   // Run the command
   return raw(cmd, { options: { env: envs }}, location)

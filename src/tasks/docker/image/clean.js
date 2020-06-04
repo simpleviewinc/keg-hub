@@ -20,7 +20,7 @@ const cleanDockerImage = async args => {
   const { force } = params
 
   Logger.info(`Removing docker images with a tag or repository of <none>...`)
-  await docker.image.clean(`${ force ? `--force` : '' }`.trim())
+  await docker.image.clean(params)
   Logger.success(`Finished removing docker images!`)
 
 }

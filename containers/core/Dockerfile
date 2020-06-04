@@ -31,13 +31,18 @@ RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
       git clone $GIT_CORE_URL $DOC_APP_PATH; \
     fi
 
+ARG NM_CACHE=/keg/nm-cache/core
+
+# Create a fake post install script for after the yarn install
+RUN mkdir -p /keg/nm-cache/core/core/scripts/js; \
+    touch /keg/nm-cache/core/core/scripts/js/postInstall.js
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json $DOC_APP_PATH/package.json
-COPY yarn.lock $DOC_APP_PATH/yarn.lock
+COPY package.json $NM_CACHE/package.json
+COPY yarn.lock $NM_CACHE/yarn.lock
 
 # Install the dependecies
-RUN cd $DOC_APP_PATH; yarn install
+RUN cd $NM_CACHE; yarn install
 
 EXPOSE 80
 

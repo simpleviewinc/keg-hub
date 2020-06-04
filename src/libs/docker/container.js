@@ -77,7 +77,7 @@ const clean = async args => {
 
   // If there are any stopped, then removed them
   return stopped.length && runDockerCmd(
-    { ...args, format: null },
+    { ...args, format: undefined },
     [ 'rm' ].concat(stopped)
   )
 

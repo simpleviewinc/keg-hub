@@ -50,8 +50,10 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
     // Special handling for the container entrypoint override
     // We need both the key and the value
     // So check if the value exists, and is the correct type
-    if(key === 'entrypoint' && exists(argVal) && isStr(argVal))
-       return `${ joinedArgs } ${ value } ${ argVal }`.trim()
+    if(key === 'entrypoint')
+      return exists(argVal) && isStr(argVal)
+        ? `${ joinedArgs } ${ value } ${ argVal }`.trim()
+        : joinedArgs
 
     // Ensure if the key exists in the args object, otherwise set to empty string
     const addArg = exists(argVal) ? argVal === true ? value : argVal : ''

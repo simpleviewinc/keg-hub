@@ -17,7 +17,7 @@ const docker = require('KegDocCli')
  */
 const runDockerImage = async args => {
   const { globalConfig, params, task } = args
-  const { name, entry } = params
+  const { name, entry, cleanup } = params
 
   // Set the context as the name, becuase it's needed in buildLocationContext helper
   params.context = params.context || name
@@ -39,12 +39,16 @@ const runDockerImage = async args => {
     'json'
   )
 
+  const opts = [ `-it` ]
+  cleanup && opts.push(`--rm`)
+
   await docker.image.run({
+    opts,
     entry,
     location,
     envs: contextEnvs,
-    image: `img-${imgName}`,
-    options: [ `-it`, imgName ],
+    name: `img-${imgName}`,
+    image: imgName,
   })
 
 }
@@ -61,6 +65,11 @@ module.exports = {
         description: 'Name of the image to run',
         example: 'keg docker image run --name core',
         default: 'core'
+      },
+      cleanup: {
+        description: 'Auto remove the docker container after exiting',
+        example: `keg docker image run  --cleanup false`,
+        default: true
       },
       entry: {
         description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bas h)',
