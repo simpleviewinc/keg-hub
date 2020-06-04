@@ -1,5 +1,20 @@
 const packages = [
   {
+    "nameWithOwner": "lancetipton/foobar",
+    "versions": {
+      "nodes": [
+        {
+          "id": "MDE0OlBhY2thZ2VWZXJzaW9uMjA1NjU3OQ==",
+          "version": "1.0.1"
+        },
+        {
+          "id": "MDE0OlBhY2thZ2VWZXJzaW9uMjA1NjI5MQ==",
+          "version": "bazbizz"
+        }
+      ]
+    }
+  },
+  {
     "nameWithOwner": "lancetipton/kegbase",
     "versions": {
       "nodes": [

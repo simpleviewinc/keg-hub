@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { get, limbo } = require('jsutils') 
+const { get, limbo, keyMap } = require('jsutils') 
 const { generalError } = require('KegUtils/error') 
 const { buildDockerLogin } = require('KegUtils/builders/buildDockerLogin')
 const { getRepoName } = require('KegUtils/globalConfig/getRepoName')
@@ -23,15 +23,17 @@ const buildHeaders = (headers={}, token) => {
 /**
  * Builds the query, with the user to make the github API
  * @param {string} user - Github user
+ * @param {string} type - package type (@see constants/packages/types.js
  * @param {number} amount - Amount of packages to return in the reponse
  *
  * @returns {Object} - Built request query
  */
-const buildQuery = (user, amount=20) => {
+const buildQuery = (user, type, amount=20) => {
+  const packageTypeQuery = type ? ` packageType: ${ type },` : ''
   return {
     query : `{
       user(login: "${ user }") {
-        registryPackagesForQuery(first: ${ amount }, query:"is:private") {
+        registryPackagesForQuery(first: ${ amount },${packageTypeQuery} query:"is:private") {
           totalCount nodes {
             nameWithOwner versions(first: ${ amount }) {
               nodes {
@@ -53,8 +55,8 @@ const buildQuery = (user, amount=20) => {
  * @returns {Array} - Found github docker packages
  */
 const getAllPackages = async args => {
-  const { params } = args
-  const { token, user } = await buildDockerLogin(params)
+  const { params, packageType, amount, user } = args
+  const { token, user: localGitUserName } = await buildDockerLogin(params)
 
   const [ err, resp ] = args.__TEST__
     ? await getAllPackagesMock()
@@ -62,7 +64,11 @@ const getAllPackages = async args => {
         url: 'https://api.github.com/graphql',
         method: 'post',
         headers: buildHeaders({}, token),
-        data: buildQuery(user)
+        data: buildQuery(
+          user || localGitUserName, 
+          packageType, 
+          amount
+        )
       }))
   
   return err
@@ -72,7 +78,7 @@ const getAllPackages = async args => {
 }
 
 module.exports = {
-  getAllPackages
+  getAllPackages,
 }
 
 /*
