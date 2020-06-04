@@ -3,7 +3,7 @@ import React from 'react'
 import { Mocks, Store, Redux, Utils } from 'SVMocks'
 import renderer from 'react-test-renderer'
 import { theme } from 'SVTheme'
-import { ReThemeProvider } from 're-theme'
+import { ReThemeProvider } from '@simpleviewinc/re-theme'
 
 Mocks.setMocks({ 
   store: Store, 

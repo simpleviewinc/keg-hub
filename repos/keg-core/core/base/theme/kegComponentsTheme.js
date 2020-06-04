@@ -1,1 +1,1 @@
-export { theme as kegComponentsTheme } from 'keg-components'
+export { theme as kegComponentsTheme } from '@simpleviewinc/keg-components'

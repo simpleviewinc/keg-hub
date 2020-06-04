@@ -46,6 +46,9 @@
     "@babel/core": "^7.0.0",
     "@babel/runtime": "^7.8.3",
     "@expo/webpack-config": "^0.10.11",
+    "@simpleviewinc/keg-components": "0.4.2",
+    "@simpleviewinc/re-theme": "^1.1.0",
+    "@simpleviewinc/tap-resolver": "^1.0.0",
     "@testing-library/react-hooks": "^3.2.1",
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
@@ -65,7 +68,6 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.25",
     "prop-types": "15.7.2",
-    "re-theme": "git+https://github.com/simpleviewinc/re-theme.git#master",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -80,8 +82,6 @@
     "react-test-renderer": "16.9.0",
     "redux": "4.0.1",
     "redux-devtools-extension": "2.13.8",
-    "rimraf": "^3.0.0",
-    "tap-resolver": "git+https://github.com/simpleviewinc/tap-resolver.git#master",
-    "keg-components": "git+https://github.com/simpleviewinc/keg-components.git#master"
+    "rimraf": "^3.0.0"
   }
 }

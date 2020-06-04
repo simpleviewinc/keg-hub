@@ -1,6 +1,6 @@
 const path = require('path')
 const rootDir = require('app-root-path').path
-const appConf = require('tap-resolver/src/getAppConfig')(rootDir, true, false)
+const appConf = require('@simpleviewinc/tap-resolver/src/getAppConfig')(rootDir, true, false)
 const { get, deepMerge } = require('jsutils')
 const { AWS_BUCKET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, NODE_ENV, ENV, TAP, AWS_PROFILE } = process.env
 

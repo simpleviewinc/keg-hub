@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Provider } from 'react-redux'
-import { ReThemeProvider, getDefaultTheme, setDefaultTheme } from 're-theme'
+import { ReThemeProvider, getDefaultTheme, setDefaultTheme } from '@simpleviewinc/re-theme'
 import { getStore } from 'SVStore'
 import { initAppAction } from 'SVActions'
 import { AppContainer } from 'SVContainers'

@@ -45,7 +45,7 @@ const transpileForTests = [
   'expo-asset',
   'expo-constants',
   'expo-font',
-  're-theme',
+  '@simpleviewinc/re-theme',
   'react-clone-referenced-element',
   'react-native',
   'react-navigation',

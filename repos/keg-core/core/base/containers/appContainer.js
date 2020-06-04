@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, H5, Button, Text, Row, AppHeader } from 'SVComponents'
-import { useTheme } from 're-theme'
-import { get }  from 'jsutils'
+import { useTheme } from '@simpleviewinc/re-theme'
+import { get } from 'jsutils'
 import { isNative, isStandalonePWA, isIOSWeb } from 'SVUtils'
 
 

@@ -46,18 +46,18 @@ keg_do_copy_cmd(){
     if [[ "$2" == "full" ]]; then
 
       echo "Copying over full sv-tap-resolver repo...."
-      rm -rf node_modules/sv-keg/node_modules/tap-resolver
-      cp -Rf ~/zerista/repos/sv-tap-resolver node_modules/sv-keg/node_modules/tap-resolver
+      rm -rf node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver
+      cp -Rf ~/zerista/repos/sv-tap-resolver node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver
 
     else
 
       echo "Copying over sv-tap-resolver development files...."
-      rm -rf node_modules/sv-keg/node_modules/tap-resolver/src
-      rm -rf node_modules/sv-keg/node_modules/tap-resolver/babel.config.js
-      rm -rf node_modules/sv-keg/node_modules/tap-resolver/package.json
-      cp -Rf ~/zerista/repos/sv-tap-resolver/src node_modules/sv-keg/node_modules/tap-resolver/src
-      cp -Rf ~/zerista/repos/sv-tap-resolver/babel.config.js node_modules/sv-keg/node_modules/tap-resolver/babel.config.js
-      cp -Rf ~/zerista/repos/sv-tap-resolver/package.json node_modules/sv-keg/node_modules/tap-resolver/package.json
+      rm -rf node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver/src
+      rm -rf node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver/babel.config.js
+      rm -rf node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver/package.json
+      cp -Rf ~/zerista/repos/sv-tap-resolver/src node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver/src
+      cp -Rf ~/zerista/repos/sv-tap-resolver/babel.config.js node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver/babel.config.js
+      cp -Rf ~/zerista/repos/sv-tap-resolver/package.json node_modules/sv-keg/node_modules/@simpleviewinc/tap-resolver/package.json
 
     fi
 
@@ -67,8 +67,8 @@ keg_do_copy_cmd(){
   elif [[ "$1" == "retheme" ]]; then
 
     echo "Copying over sv-re-theme development files...."
-    rm -rf ~/zerista/repos/sv-keg/node_modules/re-theme/build
-    cp -Rf ~/zerista/repos/sv-re-theme/build ~/zerista/repos/sv-keg/node_modules/re-theme/build
+    rm -rf ~/zerista/repos/sv-keg/node_modules/@simpleviewinc/re-theme/build
+    cp -Rf ~/zerista/repos/sv-re-theme/build ~/zerista/repos/sv-keg/node_modules/@simpleviewinc/re-theme/build
 
     echo "Done!"
 
