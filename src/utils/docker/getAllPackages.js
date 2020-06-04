@@ -62,7 +62,7 @@ const buildQuery = (user, type, amount=20) => {
  */
 const getAllPackages = async args => {
   const { params, packageType, amount, user } = args
-  const { token, user: localGitUserName } = await buildDockerLogin(params)
+  const { token, user: localDockerUser } = await buildDockerLogin(params)
 
   const [ err, resp ] = args.__TEST__
     ? await getAllPackagesMock()
@@ -71,7 +71,7 @@ const getAllPackages = async args => {
         method: 'post',
         headers: buildHeaders({}, token),
         data: buildQuery(
-          user || localGitUserName, 
+          user || localDockerUser, 
           packageType, 
           amount
         )

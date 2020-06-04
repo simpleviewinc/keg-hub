@@ -3,7 +3,7 @@ const docker = require('KegDocCli')
 const { get, validate, isStr } = require('jsutils')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
-const { ask } = require('KegQuestions')
+const { promptList } = require('KegQuestions')
 const { PACKAGE_TYPES } = require('KegConst/packages')
 const { throwRequired } = require('KegUtils/error')
 const { getAllPackages } = require('KegUtils/docker')
@@ -31,8 +31,8 @@ const buildPackageURL = (options={}) => {
 
   validate(options, {
     $default: isStr, 
-    version: v => isStr(v) || v === undefined,
-    branch: b => isStr(b) || b === undefined,
+    version: v => !v || isStr(v),
+    branch: b => !b || isStr(b),
   })
 
   // create a url like: docker.pkg.github.com/lancetipton/keg-core/kegbase:1.3.2
@@ -91,20 +91,8 @@ const askForPackage = async (packages, user) => {
     process.exit(1)
   }
 
-  // print out the avilable versions
-  Logger.print(Logger.color('green', 'Available Packages:'))
-  packages.map(
-    (p, idx) => Logger.print(`  ${idx} => ${p.path}`)
-  )
-
-  // ask the user to select a version (index)
-  let index = null 
-  while (!index || isNaN(index)) {
-    index = await ask.input(
-      Logger.color('yellow', `Select a package:`)
-    )
-  }
-
+  const paths = packages.map(p => p.path)
+  const index = await promptList(paths, 'Available Packages:', 'Select a package:')
   return packages[index]
 }
 
@@ -119,23 +107,13 @@ const askForVersion = async (package) => {
     process.exit(1)
   }
 
-  // print out the avilable versions
-  Logger.print(Logger.color('green', 'Image Versions:'))
-  package.versions.map(
-    (v, idx) => Logger.print(`  ${idx} => ${v.version}`)
-  )
+  const versions = package.versions.map(v => v.version)
 
-  // ask the user to select a version (index)
-  let selection = null 
-  while (!selection || isNaN(selection)) {
-    selection = await ask.input(
-      Logger.color('yellow', `Select a version:`)
-    )
-  }
+  const selectedIndex = await promptList(versions, 'Image Versions:', 'Select a version')
 
   return package
-    .versions[selection]
-    .version
+      .versions[selectedIndex]
+      .version
 }
 
 /**
@@ -147,7 +125,9 @@ const validateVersion = (version, package) => {
   const valid = version && package.versions.some(v => v.version === version)
   if (!valid) {
     const availableVersions = package.versions.map(v => v.version).join(", ")
-    Logger.error(`Version "${version}" is not a valid version for this package. Available versions: [ ${availableVersions} ]`)
+    Logger.error(
+      `Version "${version}" is not a valid version for this package. Available versions: [ ${availableVersions} ]`
+    )
     process.exit(1)
   }
   return version
@@ -166,14 +146,17 @@ const validateVersion = (version, package) => {
  * @returns {void}
  */
 const providerPull = async args => {
-  const { globalConfig, params, task } = args
-  const { context, branch, user, version, repo } = params
-
-  // Ensure we have the context of the image to be pushed
-  // !user && throwRequired(task, 'context', get(task, `options.context`))
+  const { globalConfig, params } = args
+  const { 
+    context, 
+    branch, 
+    user=get(globalConfig, 'docker.user'), 
+    version, 
+    repo 
+  } = params
 
   // get all the docker packages available for the context / user
-  const rawPackages = await getAllPackages({ params, user, packageType: PACKAGE_TYPES.DOCKER, __TEST__: false})
+  const rawPackages = await getAllPackages({ params, user, packageType: PACKAGE_TYPES.DOCKER })
 
   // format the packages then get all the packages for the repo, if --repo was passed in
   const packages = rawPackages
@@ -184,15 +167,17 @@ const providerPull = async args => {
   const package = context 
     ? getPackage(packages, context)
     : await askForPackage(packages, user)
+  
+  if (!package) return Logger.error(`No package found that matches context "${context}"`)
 
-
-  const provider = get(globalConfig, 'docker.providerUrl')
+  const provider = get(globalConfig, 'docker.providerUrl');
 
   // if the user passed in a version or branch to use, validate it
-  (version || branch) && validateVersion(version || branch, package)
+  const imageVersionOption = version || branch
+  imageVersionOption && validateVersion(imageVersionOption, package)
 
   // if the user didn't pass in a version, ask the user to select one
-  const selectedVersion = version || branch || await askForVersion(package)
+  const selectedVersion = imageVersionOption || await askForVersion(package)
 
   const url = buildPackageURL({
     account: package.owner,
@@ -206,11 +191,11 @@ const providerPull = async args => {
   await docker.pull(url)
 
   // tag the image with latest if version is master branch. Otherwise tag with the package version.
+  Logger.info('Tagging image...')
   version === 'master'
     ? await docker.image.tag(url, `${package.image}:latest`)
     : await docker.image.tag(url, `${package.image}:${selectedVersion}`)
-
-  Logger.empty()
+  Logger.info('Done.')
 }
 
 module.exports = {
@@ -245,9 +230,8 @@ module.exports = {
         example: 'keg docker provider login --token 12345',
       },
       user: {
-        description: 'User to use when logging into the registry provider',
+        description: 'User to use when logging into the registry provider. Defaults to the docker.user property in your global config.',
         example: 'keg docker provider login --user foobar',
-        enforced: true
       },
       version: {
         description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
