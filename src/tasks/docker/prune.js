@@ -41,13 +41,13 @@ module.exports = {
       all: {
         description: 'Remove all unused images, not just dangling images',
         example: 'keg docker prune --all',
-        default: true
+        default: false
       },
       confirm: {
         alias: [ 'conf' ],
         description: 'Confirm docker prune command',
         example: 'keg docker prune --confirm false',
-        default: false
+        default: true
       }
     }
   }

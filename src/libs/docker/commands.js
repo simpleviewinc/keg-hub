@@ -15,8 +15,12 @@ const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
  * Calls the docker cli from the command line and returns the response
  * @function
  * @param {Object} params - arguments used to modify the docker api call
- * @param {Object} params.opts, cmd - optional arguments to pass to the docker command
+ * @param {Object} params.opts - optional arguments to pass to the docker command
  * @param {Object} params.asObj - Return the response as an unformatted string
+ * @param {Object} params.log - Log the docker command being run before running it
+ * @param {Object} params.skipError - Skip showing an error if the docker command fails
+ * @param {Object} [params.format=''] - Format the output of the docker command
+ * @param {Object} params.force - Pass "--force" to the docker command, to force the operation
  * @param {Object} params.errResponse - On an error calling docker, this will be returned.
  *                                      If errResponse is undefined, the current process will exit
  *
@@ -179,6 +183,7 @@ const raw = async (cmd, args, loc) => {
  */
 const prune = opts => {
   return dockerCli({
+    log: true,
     opts: [ 'system', 'prune'].concat(isArr(opts) ? opts : [ opts ]),
   })
 }
@@ -187,6 +192,7 @@ module.exports = {
   dockerCli,
   dynamicCmd,
   login,
+  prune,
   pull,
   push,
   raw,

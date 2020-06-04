@@ -4,6 +4,9 @@ services:
     volumes:
       - cli-sync:/${DOC_CLI_PATH}:nocopy
       - core-sync:${DOC_APP_PATH}:nocopy
+      - components-sync:${DOC_COMPONENTS_PATH}:nocopy
+      - retheme-sync:${DOC_RETHEME_PATH}:nocopy
+      - resolver-sync:${DOC_RESOLVER_PATH}:nocopy
 volumes:
   cli-sync:
     external:
@@ -11,3 +14,12 @@ volumes:
   core-sync:
     external:
       name: "core-unison-sync"
+  components-sync:
+    external:
+      name: "components-unison-sync"
+  retheme-sync:
+    external:
+      name: "retheme-unison-sync"
+  resolver-sync:
+    external:
+      name: "resolver-unison-sync"
