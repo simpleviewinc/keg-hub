@@ -37,6 +37,16 @@ keg_cli_init_docker_machine(){
   fi
 }
 
+keg_export_git_key(){
+  local CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getGitKey.js)"
+  if [[ "$CMD_OUTPUT" ]]; then
+    keg_message "Setting GIT_KEY env!"
+    export GIT_KEY=$CMD_OUTPUT
+  else
+    keg_message "Could not add GIT_KEY to the current environment!"
+  fi
+}
+
 # Checks if were running a docker command, and initalizes docker-machine
 #   Prams
 #     $1 - keg cli task to be run
@@ -96,8 +106,12 @@ keg(){
 
   # Run the keg-cli bash script
   elif [[ "$1" == "cli-setup" ]]; then
-    cd 
     bash $KEG_CLI_PATH/scripts/setup/setup.sh "${@:2}"
+    return
+
+  # export the git key for the current terminal session
+  elif [[ "$1" == "key" && "$2" == "export" ]]; then
+    keg_export_git_key
     return
 
   # Ensure docker machine is loaded
