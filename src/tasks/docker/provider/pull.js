@@ -1,11 +1,10 @@
+const { get, validate, isStr } = require('jsutils')
 const path = require('path')
 const docker = require('KegDocCli')
-const { get, validate, isStr } = require('jsutils')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { promptList } = require('KegQuestions')
 const { PACKAGE_TYPES } = require('KegConst/packages')
-const { throwRequired } = require('KegUtils/error')
 const { getAllPackages } = require('KegUtils/docker')
 
 /**
