@@ -52,7 +52,7 @@ const buildRoutes = (props) => {
  * 
  * @returns {Component} - wrapper containing route components
  */
-export const ContainerRoutes = props => {
+export const ContainerRoutes = React.memo(props => {
   
   const navigationConfigs = get(props, ['navigationConfigs'])
   if (!navigationConfigs)
@@ -63,4 +63,4 @@ export const ContainerRoutes = props => {
       {buildRoutes(props)}     
     </RouterSwitch>
   )
-}
+})
