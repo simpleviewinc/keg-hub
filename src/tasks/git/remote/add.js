@@ -26,9 +26,8 @@ const buildGitUrl = (user, token, repo) => {
   return `https://${token}@github.com/${user}/${repo}`
 }
 
-
 /**
- * Git remote task
+ * Git remote add task
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -37,7 +36,8 @@ const buildGitUrl = (user, token, repo) => {
  *
  * @returns {void}
  */
-const gitRemote = async args => {
+const remoteAdd =  async args => {
+  console.log(`---------- Remote Add ----------`)
   const { params } = args
   const { remote, url } = params
 
@@ -45,14 +45,16 @@ const gitRemote = async args => {
   // const gitUrl = buildGitUrl(url)
   // const [ err, data ] = await limbo(addRemote(remote, url))
   // return err ? false : true
+
 }
 
 module.exports = {
-  remote: {
-    name: 'remote',
-    action: gitRemote,
-    description: `Modify the remote of a git repo.`,
-    example: 'keg remote <options>',
+  add: {
+    name: 'add',
+    alias: [ 'a' ],
+    action: remoteAdd,
+    description: 'Add a remote from a git',
+    example: 'keg git remote add <options>',
     options: {
       remote: {
         description: 'Name of the git remote. ( origin )',

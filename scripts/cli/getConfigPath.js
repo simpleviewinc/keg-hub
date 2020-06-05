@@ -12,16 +12,20 @@ const { CLI_PATHS, TAP_LINKS } = GLOBAL_CONFIG_PATHS
  *
  */
 const logPathResponse = foundPath => {
-  // **IMPORTANT**
+
+  // -------- **IMPORTANT** -------- //
   // The order of this logging is important
   // The foundPath variable should always be logged second
-  // **IMPORTANT**
+  // -------- **IMPORTANT** -------- //
 
   // Log the move to path, and the path
   Logger.info(`Moving to path ${foundPath}`)
 
-  // Always log this second.
+  // -------- **IMPORTANT** -------- //
+  // ALWAYS LOG THIS SECOND.
+  // -------- **IMPORTANT** -------- //
   console.log(foundPath)
+
 }
 
 /**

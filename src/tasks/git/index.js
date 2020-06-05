@@ -14,6 +14,7 @@ module.exports = {
       ...require('./log'),
       ...require('./pull'),
       ...require('./push'),
+      ...require('./remote'),
     }
   })
 }
