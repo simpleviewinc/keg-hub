@@ -18,9 +18,9 @@ const packages = [
     }
   },
   {
-    "nameWithOwner": "lancetipton/kegbase",
+    "nameWithOwner": "lancetipton/tap",
     "repository": {
-      "name": "fizzbuzz"
+      "name": "tap-events-force"
     },
     "versions": {
       "nodes": [
@@ -36,9 +36,9 @@ const packages = [
     }
   },
   {
-    "nameWithOwner": "lancetipton/kegbase-add-templateing-to-envs",
+    "nameWithOwner": "lancetipton/kegbase",
     "repository": {
-      "name": "tastytots"
+      "name": "keg-core"
     },
     "versions": {
       "nodes": [

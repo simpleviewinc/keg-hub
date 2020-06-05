@@ -1,6 +1,6 @@
-const { keyMap } = require('jsutils') 
+const { deepFreeze, keyMap } = require('jsutils') 
 
-module.exports = {
+module.exports = deepFreeze({
   PACKAGE_TYPES: keyMap([
     'DOCKER',
     'NPM',
@@ -10,4 +10,4 @@ module.exports = {
     'PYTHON',
     'MAVEN'
   ], true)
-}
+})

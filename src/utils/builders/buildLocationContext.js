@@ -1,25 +1,25 @@
 const { get } = require('jsutils')
 const { getPathFromConfig } = require('../globalConfig')
 const { generalError, throwNoTapLink, throwNoConfigPath } = require('../error')
-const { DOCKER } = require('KegConst/docker')
 const { getTapPath } = require('../globalConfig/getTapPath')
 const { getSetting } = require('../globalConfig/getSetting')
 const { buildCmdContext } = require('./buildCmdContext')
 const { buildTapContext } = require('./buildTapContext')
 const { getGitKey } = require('../git/getGitKey')
-const { CONTAINERS, IMAGES, LOCATION_CONTEXT } = DOCKER
+const { getContainerConst } = require('../docker/getContainerConst')
+const { DOCKER } = require('KegConst/docker')
+const { IMAGES, LOCATION_CONTEXT } = DOCKER
 
 /**
- * Gets the ENVs for a context from the constants
+ * Gets the location where a docker command should be executed
  * @function
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {Object} task - Current task being run
  * @param {string} context - Context to run the docker container in
+ * @param {string} tap - Name of a linked tap in the globalConfig
  *
- * @returns {Object} - ENVs for the context
+ * @returns {string} - The location where a command should be executed
  */
-const getEnvContext = (context) => {
-  return get(CONTAINERS, `${ context.toUpperCase() }.ENV`, {})
-}
-
 const getLocation = (globalConfig, task, context, tap) => {
 
   const hasTap = Boolean(context === 'tap' && tap)
@@ -86,7 +86,7 @@ const buildLocationContext = async ({ envs={}, globalConfig, params, task }) => 
     ...(getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1 } : {}),
 
     // Get the ENV context for the command
-    ...getEnvContext(cmdContext),
+    ...getContainerConst(cmdContext, 'env', {}),
 
     // Get the ENVs for the Tap context if it exists
     ...( await buildTapContext({ globalConfig, cmdContext, tap, envs }) ),

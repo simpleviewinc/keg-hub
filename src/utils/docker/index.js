@@ -4,7 +4,6 @@ module.exports = {
   ...require('./buildDockerCmd'),
   ...require('./buildDockerMounts'),
   ...require('./compose'),
-  ...require('./getAllPackages'),
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getDockerArgs'),

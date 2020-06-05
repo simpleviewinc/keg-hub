@@ -73,3 +73,10 @@
   * Run yarn install after cloning CLI repo / validating it exists
   * Creating cli.config.json is missing one folder in the path
   
+
+### Image pull
+  * If a tap is passed in
+    * Get the tap location locally
+    * From the location get the git remote info
+      * This will allow getting the branch / repo name data
+      * Use this find the correct package after the have been pulled from github

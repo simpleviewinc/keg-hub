@@ -1,6 +1,6 @@
 const axios = require('axios')
-const { get, limbo, keyMap } = require('jsutils') 
-const { generalError } = require('KegUtils/error') 
+const { get, limbo, keyMap } = require('jsutils')
+const { generalError } = require('KegUtils/error')
 const { buildDockerLogin } = require('KegUtils/builders/buildDockerLogin')
 const { getRepoName } = require('KegUtils/globalConfig/getRepoName')
 const { getAllPackagesMock } = require('KegMocks/github/api')
@@ -31,8 +31,9 @@ const buildHeaders = (headers={}, token) => {
 const buildQuery = (user, type, amount=20) => {
   const packageTypeQuery = type ? ` packageType: ${ type },` : ''
 
-  // NOTE: this includes preview-stage queries for the github api.  This is bound to change and most of these
-  // are already deprecated. Expect to need to update this soon.
+  // NOTE: this includes preview-stage queries for the github api. 
+  // This is bound to change and most of these are already deprecated.
+  // Expect to need to update this soon.
   return {
     query : `{
       user(login: "${ user }") {
@@ -71,12 +72,12 @@ const getAllPackages = async args => {
         method: 'post',
         headers: buildHeaders({}, token),
         data: buildQuery(
-          user || localDockerUser, 
-          packageType, 
+          user || localDockerUser,
+          packageType,
           amount
         )
       }))
-    
+
   // even if there wasn't an error thrown by the axios call directly, the api might have reported 
   // errors related to the graphql query inside resp.data.errors
   const responseErrors = get(resp, 'data.errors', [])

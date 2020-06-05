@@ -6,6 +6,7 @@ module.exports = {
   ...require('./getters'),
   ...require('./helpers'),
   ...require('./log'),
+  ...require('./package'),
   ...require('./template'),
   ...require('./task'),
 }
