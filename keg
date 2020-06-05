@@ -4,16 +4,14 @@
 # Need to `source ~/keg/keg-cli/keg` add to .bashrc or .bash_profile
 export KEG_CLI_PATH=~/keg/keg-cli
 
+# Prints message to stderr so we can do returns with echo to stdout
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
   return
 }
 
-# TODO: **IMPORTANT** Add check for if on mac, and run these docker-machine commands
-# Save as the $KEG_DOCKER_NAME environment
-# docker-machine env $KEG_DOCKER_NAME
-# Execute the $KEG_DOCKER_NAME environment in place for the active terminal
-# eval "$(docker-machine env $KEG_DOCKER_NAME)"
+# Checks if VBoxManage cli exists, and it so loads docker-machine
+# Otherwise shows warning that virtual-box is not installed
 keg_cli_init_docker_machine(){
 
   if [[ -x "$(command -v VBoxManage)" ]]; then
@@ -36,6 +34,8 @@ keg_cli_init_docker_machine(){
   fi
 }
 
+# Exports the stored GIT_KEY from the globalConfig
+# First calls the getGitKey method then sets as an ENV with export
 keg_export_git_key(){
   local CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getGitKey.js)"
   if [[ "$CMD_OUTPUT" ]]; then
@@ -46,19 +46,6 @@ keg_export_git_key(){
   else
     if [[ -z "$1" ]]; then
       keg_message "Could not add GIT_KEY to the current environment!"
-    fi
-  fi
-}
-
-# Checks if were running a docker command, and initalizes docker-machine
-#   Prams
-#     $1 - keg cli task to be run
-keg_check_for_docker_cmd(){
-  # DOCKER_MACHINE_NAME gets defined by running the keg_cli_init_docker_machine
-  # So check to see if it's already defined before re-calling the function
-  if [[ "$DOCKER_MACHINE_NAME" != "$KEG_DOCKER_NAME" ]]; then
-    if [[ "$1" == "docker" || "$1" == "doc" || "$1" == "d" || "$1" == "dc" || "$1" == "di" ]]; then
-      keg_cli_init_docker_machine
     fi
   fi
 }
@@ -136,9 +123,6 @@ keg(){
     fi
   fi
 
-  # Checks if were running a docker command, and initalizes docker-machine
-  keg_check_for_docker_cmd $1
-
   # All other commands get passed on to the node keg-cli script
   node $KEG_CLI_PATH/keg-cli $@
 
@@ -147,15 +131,24 @@ keg(){
 # Auto loads the GIT_KEY and docker-machine envs
 keg_auto_load_envs(){
 
-  # Auto set the GIT_KEY
-  keg_export_git_key "NO-MESSAGE"
+  # Check if GIT_KEY is already loaded
+  if [[ -z "$GIT_KEY" ]]; then
+    # Auto set the GIT_KEY
+    keg_export_git_key "NO-MESSAGE"
+  fi
 
-  # Load the docker-machine envs
-  # Loads the $KEG_DOCKER_NAME env, so load before we do the docker check
-  source $KEG_CLI_PATH/scripts/setup/dockerMachine.sh >/dev/null 2>&1
+  # Check if $KEG_DOCKER_NAME is already loaded
+  if [[ -z "$KEG_DOCKER_NAME" ]]; then
+    # Load the docker-machine envs
+    # Loads the $KEG_DOCKER_NAME env, so load before we do the DOCKER_MACHINE_NAME check
+    source $KEG_CLI_PATH/scripts/setup/dockerMachine.sh >/dev/null 2>&1
+  fi
 
-  # Check that docker-machine is loaded properly
-  keg_check_for_docker_cmd "docker" >/dev/null 2>&1
+  # DOCKER_MACHINE_NAME gets defined by running the keg_cli_init_docker_machine
+  # So check to see if it's already defined before re-calling the function
+  if [[ "$DOCKER_MACHINE_NAME" != "$KEG_DOCKER_NAME" ]]; then
+    keg_cli_init_docker_machine >/dev/null 2>&1
+  fi
 
 }
 
