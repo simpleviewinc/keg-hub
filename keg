@@ -3,7 +3,6 @@
 # TODO: **IMPORTANT** Need to set this path dyamically some how
 # Need to `source ~/keg/keg-cli/keg` add to .bashrc or .bash_profile
 export KEG_CLI_PATH=~/keg/keg-cli
-KEG_DOCKER_NAME=docker-keg
 
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
@@ -40,10 +39,14 @@ keg_cli_init_docker_machine(){
 keg_export_git_key(){
   local CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getGitKey.js)"
   if [[ "$CMD_OUTPUT" ]]; then
-    keg_message "Setting GIT_KEY env!"
+    if [[ -z "$1" ]]; then
+      keg_message "Setting GIT_KEY env!"
+    fi
     export GIT_KEY=$CMD_OUTPUT
   else
-    keg_message "Could not add GIT_KEY to the current environment!"
+    if [[ -z "$1" ]]; then
+      keg_message "Could not add GIT_KEY to the current environment!"
+    fi
   fi
 }
 
@@ -141,10 +144,20 @@ keg(){
 
 }
 
-# Check that docker-machine is loaded
-keg_check_docker_loaded(){
+# Auto loads the GIT_KEY and docker-machine envs
+keg_auto_load_envs(){
+
+  # Auto set the GIT_KEY
+  keg_export_git_key "NO-MESSAGE"
+
+  # Load the docker-machine envs
+  # Loads the $KEG_DOCKER_NAME env, so load before we do the docker check
+  source $KEG_CLI_PATH/scripts/setup/dockerMachine.sh >/dev/null 2>&1
+
+  # Check that docker-machine is loaded properly
   keg_check_for_docker_cmd "docker" >/dev/null 2>&1
-  keg_message "Loaded!"
+
 }
-# Auto call on start
-keg_check_docker_loaded
+
+# Call the auto load envs so we can use the environment
+keg_auto_load_envs

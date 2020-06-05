@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Github Repos
-KEG_CLI_URL=github.com/lancetipton/keg-cli.git
+KEG_CLI_URL=github.com/simpleviewinc/keg-cli.git
 
 # Install location
 KEG_INSTALL_DIR=~/keg
@@ -13,40 +13,13 @@ keg_message(){
   return
 }
 
-# Loads the ENVs needed to setup the local machine
-keg_load_setup_envs(){
+# Asks a question in the terminal
+keg_ask_question(){
+  keg_message "$1"
+  read -p "" INPUT;
+  local ANSWER="${INPUT:0:1}"
 
-  # Get the current directory of the script
-  # local CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-  SOURCE="${BASH_SOURCE[0]}"
-
-  # Resolve $SOURCE until the file is no longer a symlink
-  while [ -h "$SOURCE" ]; do 
-
-    # Get the directory of the bash source
-    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-
-    SOURCE="$(readlink "$SOURCE")"
-
-    # If $SOURCE was a relative symlink, we need to resolve it 
-    # relative to the path where the symlink file was located
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-
-  done
-
-  local CUR_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-
-  # Ensure the env file exists
-  if [[ -f "$CUR_DIR/docker-machine.env" ]]; then
-    eval $(cat $CUR_DIR/docker-machine.env)
-    echo 0
-  else
-    keg_message "Missing ENV file as $CUR_DIR/docker-machine.env"
-    keg_message "Can not run setup script"
-    echo 1
-    return
-  fi
-
+  echo "$ANSWER"
 }
 
 # Reloads the .bash_profile and .bashrc if the exist
@@ -178,6 +151,12 @@ keg_setup_virtualbox(){
 
 }
 
+# Fixes a bug that leaves some virtual-box processes still running
+keg_virtualbox_process_fix(){
+  local VB_PIDS=$(ps aux | grep VB | | awk '{ print $2 }' | cut -d'/' -f1)
+  # Loop over pids, and kill -9 each one
+}
+
 # Check and install nvm and node
 keg_setup_nvm_node(){
 
@@ -207,8 +186,7 @@ keg_setup_yarn(){
   if [[ -x "$(command -v yarn 2>/dev/null)" ]]; then
     keg_message "yarn is installed"
   else
-    curl -sL https://dl.yarnpkg.com/rpm/yarn.repo -o /etc/yum.repos.d/yarn.repo
-    sudo yum -y install yarn
+    brew install yarn
   fi
   
 }
@@ -348,11 +326,27 @@ keg_clean_all(){
   keg_message "Removing docker..."
   brew uninstall docker
 
-  keg_message "Removing virtualbox..."
-  # brew cask uninstall virtualbox
+  keg_remove_virtual_box
 
   # Reload users .bashrc and .bash_profile
   keg_src_bash
+
+}
+
+# Removes virtual box from the machine
+keg_remove_virtual_box(){
+
+  keg_message "Checking if virtualbox is installed!"
+
+  if [[ -d "/Applications/VirtualBox.app" ]]; then
+    local ANSWER=$(keg_ask_question "Confirm remove Virtual Box? (y/n):")
+    if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+      keg_message "Removing virtualbox..."
+      brew cask uninstall virtualbox
+    else
+      keg_message "Skipping virtualbox removal!"
+    fi
+  fi
 
 }
 
@@ -368,9 +362,7 @@ keg_uninstall_all(){
   keg_clean_all
 
   if [[ -d "$KEG_INSTALL_DIR" ]] && [[ "$KEG_INSTALL_DIR" != "/" ]]; then
-    keg_message "Confirm remove $KEG_INSTALL_DIR? (y/n):"
-    read -p "" INPUT;
-    local ANSWER="${INPUT:0:1}"
+    local ANSWER=$(keg_ask_question "Confirm remove $KEG_INSTALL_DIR? (y/n):")
     if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
       sudo rm -rf $KEG_INSTALL_DIR
     fi
@@ -413,6 +405,26 @@ keg_setup(){
     keg_message "Reseting docker-machine..."
     keg_reset_docker_machine "${@:2}"
     return
+  fi
+
+  # Remove the virtual-box software, and reinstall it
+  # To run:
+  # bash setup.sh vb-reset
+  #  * Runs only the vb-reset portion of this script
+  if [[ "$SETUP_TYPE" == "vb-reset" ]]; then
+    keg_remove_virtual_box
+    INIT_SETUP="true"
+  fi
+
+  # Remove the installed software, and reinstall it
+  # To run:
+  # bash setup.sh reset
+  #  * Runs only the reset portion of this script
+  if [[ "$SETUP_TYPE" == "reset" ]]; then
+    keg_message "Reseting keg-cli..."
+    keg_clean_all
+    # Set INIT_SETUP to true, so all below processes run
+    INIT_SETUP="true"
   fi
 
   # To run:
@@ -507,9 +519,10 @@ unset KEG_DOCKER_NAME
 # Only run the setup scirpt if the ENVs are unset from above
 if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
 
-  # Load the Setup ENVs, but route the output to dev/null
+  # Load the docker-machine ENVs, but route the output to dev/null
   # This way nothing is printed to the terminal
-  keg_load_setup_envs >/dev/null 2>&1
+  keg_message "Loading docker-machine envs"
+  /bin/bash ./dockerMachine.sh >/dev/null 2>&1
 
   # Ensure the ENVs were reset, so we can properly setup the keg-cli
   if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
