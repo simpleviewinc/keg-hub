@@ -1,3 +1,6 @@
+const { deepMerge } = require('jsutils')
+const { defaultConfig } = require('./defaultConfig')
+const { saveGlobalConfig } = require('./saveGlobalConfig')
 
 /**
  * Creates a global config, and saves it to ( ~/.kegConfig/cli.config.json )
@@ -11,12 +14,6 @@
  */
 const createGlobalConfig = (oldConfig={}, params={}) => {
   const { merge, conflict } = params
-
-  // Require the methods at call time to help speed of load times
-  const { deepMerge } = require('jsutils')
-  const { defaultConfig } = require('./defaultConfig')
-  const { saveGlobalConfig } = require('./saveGlobalConfig')
-
   const defConfig = defaultConfig()
   const configs = conflict === 'global'
     ? [ defConfig, oldConfig ]
@@ -24,7 +21,7 @@ const createGlobalConfig = (oldConfig={}, params={}) => {
 
   // Save or merge the config object
   return saveGlobalConfig(
-    // Create new config by merge old config with new default config if flag set,
+    // Create new config by merging the old config and default config,
     // or just build new config
     merge ? deepMerge(...configs) : defConfig
   )

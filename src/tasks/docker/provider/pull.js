@@ -9,8 +9,8 @@ const { getAllPackages } = require('KegUtils/docker')
 
 /**
  * Builds the url used to pull the docker image from the provider/registry
- * @param {Object} options 
- * @param {string} options.account 
+ * @param {Object} options - Items used to build the package Url
+ * @param {string} options.account - provider account ( Organization || User )
  * @param {string} options.provider - registry url, defaults to github docker packages
  * @param {string} options.repo - (required) name of repo
  * @param {string} options.image - (required) name of container/image to pull (e.g kegbase)
@@ -20,9 +20,9 @@ const { getAllPackages } = require('KegUtils/docker')
 const buildPackageURL = (options={}) => {
   // TODO: Validate the arguments of the url
   const {
-    account='simpleviewinc', 
-    provider, 
-    repo, 
+    account='simpleviewinc',
+    provider,
+    repo,
     image,
     version,
     branch='master',
@@ -34,7 +34,7 @@ const buildPackageURL = (options={}) => {
     branch: b => !b || isStr(b),
   })
 
-  // create a url like: docker.pkg.github.com/lancetipton/keg-core/kegbase:1.3.2
+  // create a url like: docker.pkg.github.com/simpleviewinc/keg-core/kegbase:1.3.2
   return path.join(provider, account, repo, image) + `:${version || branch}`
 }
 

@@ -27,6 +27,7 @@ const defaultConfig = () => {
     },
     cli: {
       git: {
+        orgName: 'simpleviewinc',
         orgUrl: "https://github.com/simpleviewinc",
         repos: {
           cli: "keg-cli",

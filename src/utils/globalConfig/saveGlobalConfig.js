@@ -1,11 +1,11 @@
 const path = require('path')
 const fs = require('fs')
-const { isObj } = require('jsutils')
+const { isObj, checkCall } = require('jsutils')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants/constants')
 const { ensureDirSync } = require('tap-resolver/src/helpers')
 const { validateGlobalConfig } = require('./validateGlobalConfig')
 const { writeFile } = require('KegFileSys/fileSys')
-const { __updateGlobalConfig } = require('./getGlobalConfig')
+const { __updateGlobalConfig } = require('./globalConfigCache')
 const { throwExitError } = require('../error/throwExitError')
 
 /**
@@ -31,7 +31,7 @@ const saveGlobalConfig = async config => {
     )
 
   // Update the cached version for getGlobalConfig calls
-  __updateGlobalConfig(config)
+  checkCall(__updateGlobalConfig, config)
 
   return config
 

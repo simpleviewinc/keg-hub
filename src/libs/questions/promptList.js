@@ -3,10 +3,11 @@ const { Logger } = require('KegLog')
 const { validate, isArr, isStr } = require('jsutils')
 
 /**
- * Prompts the user to select an option from a list.
+ * Helper that prompts the user to select an option from a list.
  * @param {Array<string>} options - list of options
  * @param {string} title - Title printed above options list
  * @param {string} selectText - Text printed before user input
+ *
  * @return {Promise<number>} the index of the selected option. Returns -1 if input failed validation
  */
 const promptList = async (options, title='Options:', selectText='Choose an option') => {
@@ -41,5 +42,10 @@ const promptList = async (options, title='Options:', selectText='Choose an optio
 
   return index
 }
+
+/**
+ * Set promptList directly on ask object so we can use it where ever ask is required
+ */
+ask.promptList = promptList
 
 module.exports = { promptList }

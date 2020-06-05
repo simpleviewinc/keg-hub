@@ -1,4 +1,3 @@
-const { saveGlobalConfig } = require('KegUtils/globalConfig')
 const { checkCall } = require('jsutils')
 const { ask } = require('KegQuestions')
 const { Logger } = require('KegLog')
