@@ -5,6 +5,7 @@ const { getAllPackages } = require('./getAllPackages')
 const { PACKAGE_TYPES } = require('KegConst/packages')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { throwPackageError } = require('../error/throwPackageError')
+const TEST_ENV = process.env.NODE_ENV === 'test'
 
 /**
  * Gets the package that matches the context for the image name
@@ -47,7 +48,7 @@ const getPackage = async ({ params, user, type }) => {
   const rawPackages = await getAllPackages({
     user,
     params,
-    __TEST__: true,
+    __TEST__: TEST_ENV,
     packageType: get(PACKAGE_TYPES, `.${ type.toUpperCase() }`, type)
   })
 
