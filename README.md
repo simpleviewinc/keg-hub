@@ -12,7 +12,7 @@
 * Git clone the [keg-cli](https://github.com/simpleviewinc/keg-cli.git) repo locally to `~/keg/keg-cli`
   * `git clone https://github.com/simpleviewinc/keg-cli.git ~/keg/keg-cli`
 * Run the bash setup script
-  * `bash keg-cli/scripts/setup/setup.sh`
+  * `bash keg-cli/scripts/setup/unix-init.sh`
 * It should print `[ KEG CLI ] Keg CLI setup complete!`
   * This message may still print even it an error was thrown
     * Be sure to check the log output

@@ -95,8 +95,9 @@ keg(){
     return
 
   # Run the keg-cli bash script
-  elif [[ "$1" == "cli-setup" ]]; then
-    bash $KEG_CLI_PATH/scripts/setup/setup.sh "${@:2}"
+  elif [[ "$1" == "init" ]]; then
+    keg_message "Running init scrpt"
+    /bin/bash $KEG_CLI_PATH/scripts/setup/unix-init.sh "${@:2}"
     return
 
   # export the git key for the current terminal session
@@ -139,9 +140,19 @@ keg_auto_load_envs(){
 
   # Check if $KEG_DOCKER_NAME is already loaded
   if [[ -z "$KEG_DOCKER_NAME" ]]; then
-    # Load the docker-machine envs
-    # Loads the $KEG_DOCKER_NAME env, so load before we do the DOCKER_MACHINE_NAME check
-    source $KEG_CLI_PATH/scripts/setup/dockerMachine.sh >/dev/null 2>&1
+
+    # Build the path to the docker-machine envs
+    local KEG_DM_ENVS=$KEG_CLI_PATH/scripts/setup/docker-machine.env
+
+    # Ensure the file exists
+    if [[ -f "$KEG_DM_ENVS" ]]; then
+      # Load the docker-machine ENVs, but route the output to dev/null
+      # This way nothing is printed to the terminal
+      set -o allexport
+      source $KEG_DM_ENVS >/dev/null 2>&1
+      set +o allexport
+    fi
+
   fi
 
   # DOCKER_MACHINE_NAME gets defined by running the keg_cli_init_docker_machine

@@ -7,6 +7,9 @@ KEG_CLI_URL=github.com/simpleviewinc/keg-cli.git
 KEG_INSTALL_DIR=~/keg
 KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
 
+# Size of the docker-machien virtual box hhd
+KEG_VB_SIZE=24288
+
 # Prints a message to the terminal through stderr
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
@@ -108,7 +111,7 @@ keg_setup_docker_machine(){
   fi
 
   keg_message "Creating docker-machine instance..."
-  docker-machine create --driver virtualbox $KEG_DOCKER_NAME
+  docker-machine create --driver virtualbox --virtualbox-memory $KEG_VB_SIZE $KEG_DOCKER_NAME
 
   keg_message "Updating docker-machine environment..."
   docker-machine env $KEG_DOCKER_NAME
@@ -376,6 +379,28 @@ keg_uninstall_all(){
 
 }
 
+# Adds the docker machine-envs to the current session
+keg_add_machine_envs(){
+
+  keg_message "Loading docker-machine envs"
+  local KEG_DM_ENVS=$KEG_CLI_PATH/scripts/setup/docker-machine.env
+
+  # Ensure the env file exists
+  if [[ -f "$KEG_DM_ENVS" ]]; then
+    keg_message "setting docker-machine ENVs" >&2
+    # Load the docker-machine ENVs, but route the output to dev/null
+    # This way nothing is printed to the terminal
+    set -o allexport
+    source $KEG_DM_ENVS >/dev/null 2>&1
+    set +o allexport
+  else
+    # Print message, and direct to stderr, so it's not captured in stdout
+    keg_message "Missing ENV file as $KEG_DM_ENVS" >&2
+    keg_message  "Can not run setup script" >&2
+  fi
+
+}
+
 # Runs methods to setup the keg-cli, with docker and vagrant
 # Params
 #   * $1 - (Optional) - Section of the setup script to run
@@ -387,7 +412,7 @@ keg_setup(){
 
   # Uninstalls keg-cli and docker software
   # To run:
-  # bash setup.sh uninstall
+  # bash unix-init.sh uninstall
   #  * Runs only the uninstall portion of this script
   if [[ "$SETUP_TYPE" == "uninstall" ]]; then
     keg_uninstall_all
@@ -396,7 +421,7 @@ keg_setup(){
 
   # Removes all installed docker software, and recreates it
   # To run:
-  # bash setup.sh clean
+  # bash unix-init.sh clean
   #  * Runs only the clean portion of this script
   if [[ "$SETUP_TYPE" == "clean" || "$SETUP_TYPE" == "uninstall" ]]; then
     keg_clean_all
@@ -405,7 +430,7 @@ keg_setup(){
 
   # Remove currently running docker-machine, and remakes it
   # To run:
-  # bash setup.sh docker-reset
+  # bash unix-init.sh docker-reset
   #  * Runs only the docker-reset portion of this script
   if [[ "$SETUP_TYPE" == "docker-reset" || "$SETUP_TYPE" == "docre" ]]; then
     keg_message "Reseting docker-machine..."
@@ -415,7 +440,7 @@ keg_setup(){
 
   # Remove the virtual-box software, and reinstall it
   # To run:
-  # bash setup.sh vb-reset
+  # bash unix-init.sh vb-reset
   #  * Runs only the vb-reset portion of this script
   if [[ "$SETUP_TYPE" == "vb-reset" ]]; then
     keg_remove_virtual_box
@@ -424,7 +449,7 @@ keg_setup(){
 
   # Remove the installed software, and reinstall it
   # To run:
-  # bash setup.sh reset
+  # bash unix-init.sh reset
   #  * Runs only the reset portion of this script
   if [[ "$SETUP_TYPE" == "reset" ]]; then
     keg_message "Reseting keg-cli..."
@@ -434,17 +459,17 @@ keg_setup(){
   fi
 
   # To run:
-  # bash setup.sh
+  # bash unix-init.sh
   #  * Full install
   #  * Should be run when first setting up the machine
-  #  * Running `bash setup.sh init` will do the same thing
+  #  * Running `bash unix-init.sh init` will do the same thing
   if [[ -z "$SETUP_TYPE" || "$SETUP_TYPE" == "init" ]]; then
     INIT_SETUP="true"
   fi
 
   # Setup and install brew
   # To run:
-  # bash setup.sh brew
+  # bash unix-init.sh brew
   #  * Runs only the brew portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "brew" ]]; then
     keg_message "Checking for brew install..."
@@ -453,7 +478,7 @@ keg_setup(){
 
   # Setup and install docker
   # To run:
-  # bash setup.sh docker
+  # bash unix-init.sh docker
   #  * Runs only the docker portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "docker" || "$SETUP_TYPE" == "d" ]]; then
     keg_message "Checking for docker install..."
@@ -462,7 +487,7 @@ keg_setup(){
 
   # Setup and install virtualbox
   # To run:
-  # bash setup.sh virtualbox
+  # bash unix-init.sh virtualbox
   #  * Runs only the virtualbox portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "virtualbox" || "$SETUP_TYPE" == "vb" ]]; then
     keg_message "Checking for virtualbox install..."
@@ -471,7 +496,7 @@ keg_setup(){
 
   # Setup and install machine
   # To run:
-  # bash setup.sh machine
+  # bash unix-init.sh machine
   #  * Runs only the docker-machine portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "machine" || "$SETUP_TYPE" == "dm" ]]; then
     keg_message "Checking if docker-machine is setup..."
@@ -480,7 +505,7 @@ keg_setup(){
 
   # Setup and install node
   # To run:
-  # bash setup.sh node
+  # bash unix-init.sh node
   #  * Runs only the node portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node" ]]; then
     keg_message "Checking for node install..."
@@ -489,7 +514,7 @@ keg_setup(){
 
   # Setup and install yarn
   # To run:
-  # bash setup.sh yarn
+  # bash unix-init.sh yarn
   #  * Runs only the yarn portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "yarn" ]]; then
     keg_message "Checking for yarn install..."
@@ -498,7 +523,7 @@ keg_setup(){
 
   # Setup and install cli
   # To run:
-  # bash setup.sh cli
+  # bash unix-init.sh cli
   #  * Runs only the keg cli portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "cli" ]]; then
     keg_message "Checking keg cli install..."
@@ -507,7 +532,7 @@ keg_setup(){
 
   # Setup and install cli
   # To run:
-  # bash setup.sh cli
+  # bash unix-init.sh cli
   #  * Runs only the keg cli portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "sync" ]]; then
     keg_message "Checking docker-sync install..."
@@ -525,10 +550,8 @@ unset KEG_DOCKER_NAME
 # Only run the setup scirpt if the ENVs are unset from above
 if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
 
-  # Load the docker-machine ENVs, but route the output to dev/null
-  # This way nothing is printed to the terminal
-  keg_message "Loading docker-machine envs"
-  /bin/bash ./dockerMachine.sh >/dev/null 2>&1
+  # Re-add all machine envs
+  keg_add_machine_envs
 
   # Ensure the ENVs were reset, so we can properly setup the keg-cli
   if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
