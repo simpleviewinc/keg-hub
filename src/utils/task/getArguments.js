@@ -348,5 +348,6 @@ const getArguments = ({ options=[], task }) => {
 }
 
 module.exports = {
+  ensureArguments,
   getArguments
 }

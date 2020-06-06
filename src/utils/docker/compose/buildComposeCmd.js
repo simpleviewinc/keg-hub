@@ -81,7 +81,6 @@ const buildComposeCmd = async (globalConfig, cmd, cmdContext, params) => {
   if(cmd === 'build') return addCmdOpts(dockerCmd, params)
 
   dockerCmd = addDockerArg(dockerCmd, '--detach', Boolean(detached))
-  dockerCmd = addDockerArg(dockerCmd, '--build', build === false ? build : true)
 
   return dockerCmd
 }

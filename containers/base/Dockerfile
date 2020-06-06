@@ -1,4 +1,4 @@
-FROM node:12.8-alpine AS build
+FROM node:12.8-alpine AS builder
 
 # These args are expected to be set as --build-arg
 # for the GIT_KEY=key_value AND GIT_CLI_URL=key_value
@@ -8,6 +8,9 @@ ARG GIT_CLI_URL
 
 # Set the default expojs version to it's locked down
 ARG EXPO_CLI_VERSION="3.21.5"
+
+# Default package ip address, should be the same as the docker-keg ip address
+ARG RN_PACKAGER_IP
 
 WORKDIR /keg
 
@@ -46,17 +49,18 @@ WORKDIR /keg
 RUN apk --no-cache add git
 
 # Copy over the globally installed modules from above
-COPY --from=build /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 
 # Copy over keg cli from above
-COPY --from=build $DOC_CLI_PATH $DOC_CLI_PATH
+COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
 
 # Used by react native builder to set the ip address, other wise 
 # Will use the ip address of the docker container.
-ENV REACT_NATIVE_PACKAGER_HOSTNAME="192.168.99.101"
+ENV REACT_NATIVE_PACKAGER_HOSTNAME="$RN_PACKAGER_IP"
 
 # Expose the container ports to allow connecting to it externally
 EXPOSE 80
+EXPOSE 443
 EXPOSE 873
 EXPOSE 8080
 EXPOSE 8081

@@ -1,6 +1,6 @@
 const path = require('path')
 const { GLOBAL_CONFIG_FOLDER } = require('../constants')
-const { copyStream, loadENV } = require('../../libs/fileSys')
+const { copyFileSync, loadENV } = require('../../libs/fileSys')
 const { Logger } = require('../../libs/logger')
 
 /**
@@ -45,7 +45,7 @@ const getDefaultENVs = cliRootDir => {
     Logger.empty()
 
     // Copy the local default.env file to the global defaults env directory
-    copyStream(path.join(cliRootDir, 'scripts/setup/defaults.env'), globalDefEnv)
+    copyFileSync(path.join(cliRootDir, 'scripts/setup/defaults.env'), globalDefEnv)
 
     // Load the default envs
     __DEFAULT_ENV = loadENV(globalDefEnv)

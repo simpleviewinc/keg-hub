@@ -1,6 +1,7 @@
 const { checkCall, get, isObj, isFunc, isStr } = require('jsutils')
 const { throwNoAction, throwNoTask } = require('../error')
 const { validateTask } = require('./validateTask')
+const { ensureArguments } = require('./getArguments')
 
 /**
  * Runs an internal task based on passed in arguments
@@ -18,7 +19,14 @@ const runInternalTask = async (taskPath, args, task) => {
   task = isStr(task) && get(args, `tasks.${ task }.${taskPath}`) || task
 
   // Validate the task, then call it's action
-  return validateTask(task, taskPath).action({ ...args, task: task, command: task.name })
+  return validateTask(task, taskPath)
+    .action({
+      ...args,
+      task,
+      command: task.name,
+      // Ensure the defaults are added, and all required arguments are passed
+      params: ensureArguments(task, args.params)
+    })
 
 }
 

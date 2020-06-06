@@ -52,6 +52,7 @@ module.exports = {
     tasks: {
       ...require('./clean'),
       ...require('./commit'),
+      ...require('./remove'),
     },
     options: {
       cmd: {

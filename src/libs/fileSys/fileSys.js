@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { checkCall } = require('jsutils')
 
 /**
  * Copy a file from one location to another
@@ -201,13 +202,50 @@ const readFileSync = (filePath, format='utf8') => {
  * @param {string} to - Path to copy to
  * @param {string} [format=utf8] - Format of the file
  *
- * @returns {void} - Content of the file
+ * @returns {Object} - Contains the readStream and writeStream
  */
-const copyStream = (from, to, format='utf8') => {
-  return fs.createReadStream(from, { encoding: format }).pipe(fs.createWriteStream(to))
+const copyStream = (from, to, cb, format='utf8') => {
+  const writeStream = fs.createWriteStream(to)
+  const readStream = fs.createReadStream(from, { encoding: format })
+  writeStream.on('finish', () => checkCall(cb))
+
+  readStream.pipe(writeStream)
+
+  return { readStream, writeStream }
 }
 
+/**
+ * Copies from one file path to another
+ * @function
+ * @param {string} from - Path to copy from
+ * @param {string} to - Path to copy to
+ * @param {string} [mode=1] - Copy mode - Should overwrite the file
+ *
+ * @returns {Promise} - Resolves after file has been copied
+ */
+const copyFile = (to, from, mode) => {
+  return new Promise((res, rej) => {
+    fs.copyFile(to, from, mode, (err, copied) => {
+      err ? rej(err) : res(copied)
+    })
+  })
+}
+
+
+/**
+ * Copies from one file path to another synchronously
+ * @function
+ * @param {string} from - Path to copy from
+ * @param {string} to - Path to copy to
+ * @param {string} [mode=1] - Copy mode - Should overwrite the file
+ *
+ * @returns {void}
+ */
+const copyFileSync = (from, to, mode) => fs.copyFileSync(from, to, mode)
+
 module.exports = {
+  copyFile,
+  copyFileSync,
   copyStream,
   getFiles,
   getFilesSync,

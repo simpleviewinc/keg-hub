@@ -10,9 +10,17 @@ keg_message(){
   return
 }
 
+# Add the yarn global bin to the path
+keg_add_yarn_bin_to_path(){
+  # Adds the yarn globaly installed .bin to the $PATH
+  # This allows calling expo-cli
+  export PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:$PATH"
+}
+
+
 # Overwrite the default cli, core, tap paths with passed in ENVs
 keg_set_container_paths(){
-  
+
   if [[ "$DOC_CLI_PATH" ]]; then
     CLI_PATH="$DOC_CLI_PATH"
   fi
@@ -56,7 +64,8 @@ keg_copy_node_modules(){
   fi
 
   # Copy recursivly (-R) and don't overwrite anyfiles (-n)
-  cp -R -n $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
+  # cp -R -n $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
+  false | cp -ir $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
 
 }
 
@@ -74,6 +83,9 @@ keg_run_the_tap(){
   yarn $KEG_EXEC_CMD
 
 }
+
+# Add yarn global bin to the $PATH ENV
+keg_add_yarn_bin_to_path
 
 # Run yarn setup for any extra node_modules to be installed from the mounted tap's package.json
 keg_run_tap_yarn_setup

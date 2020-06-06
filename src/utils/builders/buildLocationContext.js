@@ -11,6 +11,13 @@ const { DOCKER } = require('KegConst/docker')
 const { IMAGES, LOCATION_CONTEXT } = DOCKER
 const { invoke } = require('../helpers/invoke')
 
+const CONTEXT_KEYS = [
+  `cmdContext`,
+  'contextEnvs',
+  'location',
+  'tap'
+]
+
 /**
  * Gets the location where a docker command should be executed
  * @function
@@ -36,6 +43,20 @@ const getLocation = (globalConfig, task, context, tap) => {
 
 }
 
+
+/**
+ * Checks that the __internal object contains all required keys
+ * @function
+ * @param {Object} __internal - Object to validate
+ * @param {Array} keys - Keys that should exist in the __internal Object 
+ *
+ * @returns {boolean} - Does __internal have all required keys
+ */
+const validateInternal = (__internal, keys=[]) => {
+  const internalKeys = Object.keys(__internal)
+  return !Boolean(keys.filter(key => internalKeys.indexOf(key) === -1).length)
+}
+
 /**
  * Gets the location and the context to run a docker container in
  * @function
@@ -47,7 +68,10 @@ const getLocation = (globalConfig, task, context, tap) => {
  *
  * @returns {Object} - The location, context, and envs for the context
  */
-const buildLocationContext = async ({ envs={}, globalConfig, params, task }) => {
+const buildLocationContext = async ({ envs={}, globalConfig, __internal, params, task }) => {
+
+  if(__internal && validateInternal(__internal, CONTEXT_KEYS))
+    return __internal
 
   const { cmdContext, tap } = buildCmdContext({
     params,

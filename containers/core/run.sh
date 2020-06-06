@@ -10,6 +10,13 @@ keg_message(){
   return
 }
 
+# Add the yarn global bin to the path
+keg_add_yarn_bin_to_path(){
+  # Adds the yarn globaly installed .bin to the $PATH
+  # This allows calling expo-cli
+  export PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:$PATH"
+}
+
 # Overwrite the default cli and core paths with passed in ENVs
 keg_set_container_paths(){
 
@@ -52,8 +59,9 @@ keg_copy_node_modules(){
     return
   fi
   
-  # Copy recursivly (-R) and don't overwrite anyfiles (-n)
-  cp -R -n $CORE_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
+  # Copy recursivly (-r) and prompt before overwrite (-i), and pipe false to the prompt
+  false | cp -ir /keg/nm-cache/core/node_modules/. /keg/keg-core/node_modules
+  # 2>/dev/null
 
 }
 
@@ -74,6 +82,9 @@ keg_run_from_core(){
   yarn $KEG_EXEC_CMD
 
 }
+
+# Add yarn global bin to the $PATH ENV
+keg_add_yarn_bin_to_path
 
 # Set the container paths in case they have been overwritten
 keg_set_container_paths

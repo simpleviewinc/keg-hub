@@ -2,9 +2,10 @@ const { get, reduceObj } = require('jsutils')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { buildComposeCmd, buildComposeName } = require('KegUtils/docker')
+const { buildLocationContext } = require('KegUtils/builders')
 
 /**
- * Cleans docker-sync containers
+ * Runs the docker-compose build command
  * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli

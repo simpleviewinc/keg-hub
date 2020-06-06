@@ -17,12 +17,9 @@ const docker = require('KegDocCli')
  */
 const runDockerImage = async args => {
   const { globalConfig, params, task } = args
-  const { name, entry, cleanup } = params
+  const { context, cleanup, entry } = params
 
-  // Set the context as the name, becuase it's needed in buildLocationContext helper
-  params.context = params.context || name
-
-  const imgName = get(CONTAINERS, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
+  const imgName = get(CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`, context)
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
@@ -47,7 +44,7 @@ const runDockerImage = async args => {
     entry,
     location,
     envs: contextEnvs,
-    name: `img-${imgName}`,
+    name: imgContainer,
     image: imgName,
   })
 
@@ -61,10 +58,10 @@ module.exports = {
     description: `Run a docker image as a container and auto-conntect to it`,
     example: 'keg docker image run <options>',
     options: {
-      name: {
+      context: {
+        alias: [ 'name' ],
         description: 'Name of the image to run',
-        example: 'keg docker image run --name core',
-        default: 'core'
+        example: 'keg docker image run --context core'
       },
       cleanup: {
         description: 'Auto remove the docker container after exiting',
@@ -74,7 +71,7 @@ module.exports = {
       entry: {
         description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bas h)',
         example: 'keg docker image run --entry \\"node index.js\\"',
-        default: '/bin/bash'
+        default: '/bin/sh'
       },
     },
   }

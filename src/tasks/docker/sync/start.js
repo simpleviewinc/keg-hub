@@ -7,6 +7,7 @@ const { get, checkCall, limbo } = require('jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
 const { buildLocationContext } = require('KegUtils/builders')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { getContainerConst } = require('KegUtils/docker/getContainerConst')
 
 /**
  * Checks if the base image exists, and it not builds it
@@ -15,9 +16,9 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
  * @returns {void}
  */
 const checkBaseImage = async args => {
-  const baseName = get(DOCKER, `CONTAINERS.BASE.ENV.IMAGE`)
+  const baseName = getContainerConst('base', `env.image`, 'kegbase')
   const exists = await docker.image.exists(baseName)
-  if(exists) return
+  if(exists) return true
 
   Logger.info(`Keg base image does not exist, building now...`)
   Logger.empty()
@@ -89,47 +90,47 @@ const buildExtraEnvs = ({ env, command, install }) => {
  */
 const startDockerSync = async args => {
 
-  const { globalConfig, params, options, task, tasks } = args
-  const { build, clean, context, detached, tap, destroy } = params
-
-  // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location } = await buildLocationContext({
-    globalConfig,
-    task,
-    params,
-    envs: buildExtraEnvs(params)
-  })
-
-  // Check if the base image exists, and if not then build it
-  await checkBaseImage(args)
-
-  // Check if we should rebuild the container
-  if(build || clean) await removeCurrent(cmdContext)
-
-  // Check if docker-sync should be cleaned first
-  if(clean) await checkSyncClean(cmdContext, contextEnvs, location)
-
-  // Check if sync should run in detached mode 
-  // TODO: find way to validate if docker-sync is already running
-  // That way we can either kill it, or just run docker-compare up
-  const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
-
-  // Log the ip address so we know how to hit it in the browser
-  logVirtualUrl()
-
   try {
 
-    // TODO: Figure out why this is not throwing on error
-    // If the spawnCmd throws an error
-    // Then the whole process exist, not just the spawned process
-    // Run docker-sync
-    const [ err, data ] = await limbo(spawnCmd(
-      dockerCmd,
-      { options: { env: contextEnvs }},
-      location
-    ))
+    const { globalConfig, params, options, task, tasks } = args
+    const { build, clean, context, detached, destroy } = params
 
-    if(err) throw new Error(err)
+    // Get the context data for the command to be run
+    const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+      globalConfig,
+      task,
+      params,
+      envs: buildExtraEnvs(params)
+    })
+
+    // Check if the base image exists, and if not then build it
+    await checkBaseImage(args)
+
+    // Check if we should rebuild the container
+    if(build || clean) await removeCurrent(cmdContext)
+
+    // Check if docker-sync should be cleaned first
+    if(clean) await checkSyncClean(cmdContext, contextEnvs, location)
+
+    // Check if sync should run in detached mode 
+    // TODO: find way to validate if docker-sync is already running
+    // That way we can either kill it, or just run docker-compare up
+    const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
+
+    // Log the ip address so we know how to hit it in the browser
+    logVirtualUrl()
+
+    const cmdOpts = [ dockerCmd, { options: { env: contextEnvs }}, location ]
+    detached ? spawnCmd(...cmdOpts) : await spawnCmd(...cmdOpts)
+
+    // Return the built context info, so it can be reused if needed
+    return {
+      tap,
+      params,
+      location,
+      cmdContext,
+      contextEnvs,
+    }
 
   }
   catch(err){
