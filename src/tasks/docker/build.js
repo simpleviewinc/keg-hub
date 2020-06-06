@@ -16,7 +16,7 @@ const docker = require('KegDocCli')
  * @param {Object} args.params - Formatted options as an object
  * @param {Object} globalConfig - Global config object for the keg-cli
  *
- * @returns {void}
+ * @returns {Object} - Build image as a json object
  */
 const dockerBuild = async args => {
   const { globalConfig, options, params, task, tasks } = args

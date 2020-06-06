@@ -149,6 +149,10 @@ module.exports = {
         example: 'keg core start --compose false',
         default: true,
       },
+      cache: {
+        description: 'Docker will use build cache when building the image',
+        default: true
+      },
       detached: {
         description: 'Runs the docker-compose process in the background',
         default: false

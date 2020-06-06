@@ -32,8 +32,9 @@ RUN set -ex; \
     git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/; \
   fi
 
-# Copy over our package json and yarn lock files
-COPY package.json yarn.lock $NM_CACHE/
+# Copy over the package.json, and yarn.lock files
+COPY package.json $NM_CACHE/package.json
+COPY yarn.lock $NM_CACHE/yarn.lock
 
 # Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc

@@ -300,8 +300,8 @@ const loopTaskOptions = (task, taskKeys, options) => {
  */
 const ensureArguments = (task, mappedArgs={}) => {
   return reduceObj(task.options, (key, meta, mapped) => {
-    !mapped[key] &&
-      !checkRequired(task, key, meta)
+    !exists(mapped[key]) &&
+      !checkRequired(task, key, meta) &&
       meta.default &&
       ( mapped[key] = meta.default )
 

@@ -13,7 +13,12 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const buildCore = async args => {
   return runInternalTask('tasks.docker.tasks.build', {
     ...args,
-    params: { ...args.params, tap: undefined, context: 'core' },
+    params: {
+      ...args.params,
+      tap: undefined,
+      context: 'core',
+      cache: args.params.cache,
+    },
   })
 }
 
