@@ -9,6 +9,7 @@ const { getGitKey } = require('../git/getGitKey')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { DOCKER } = require('KegConst/docker')
 const { IMAGES, LOCATION_CONTEXT } = DOCKER
+const { invoke } = require('../helpers/invoke')
 
 /**
  * Gets the location where a docker command should be executed
@@ -22,31 +23,15 @@ const { IMAGES, LOCATION_CONTEXT } = DOCKER
  */
 const getLocation = (globalConfig, task, context, tap) => {
 
-  const hasTap = Boolean(context === 'tap' && tap)
-  const isCore = Boolean(context === 'core' && task.name === 'build')
-  const repoContext = Boolean(task.location_context === LOCATION_CONTEXT.REPO)
-  
-  let pathMethod = getPathFromConfig
-  let locContext = 'containers'
+  let location = Boolean(task.location_context !== LOCATION_CONTEXT.REPO)
+    // For the docker-compose commands, The context to be the keg-cli/containers folder
+    ? `${ getPathFromConfig(globalConfig, 'containers') }/${ context }`
+    // If it's a repoContext, then get the location for the repo from the context
+    : context !== 'tap'
+      ? getContainerConst(context, `env.context_path`)
+      : getTapPath(globalConfig, tap)
 
-  // Check if context is a Tap
-  if(repoContext && context === 'tap' && tap){
-    locContext = tap
-    pathMethod = getTapPath
-  }
-  // Check if we are building keg-core
-  else if(context === 'core' && task.name === 'build') locContext = 'core'
-
-  // Get the location based on the pathMethod && locContext
-  let location = pathMethod(globalConfig, locContext)
-
-  // For the docker-sync / docker-compose command
-  // Need their context to be in the keg-cli/containers folder
-  locContext === 'containers' &&
-    location &&
-    ( location = `${ location }/${ context }` )
-
-  // Return the location, or throw cause now path could be found
+  // Return the location, or throw because no location could be found
   return location || throwNoConfigPath(globalConfig, locContext)
 
 }

@@ -274,9 +274,15 @@ keg_check_bash_file(){
   if grep -Fq $KEG_CLI_PATH/keg "$BASH_FILE"; then
     keg_message "keg-cli already added to $BASH_FILE"
   else
+
+    # TODO: Add check for NVM => export NVM_DIR=
+    # The entry for the keg should come before the NVM entry
+    # We need to load the keg-cli and $GIT_KEY before loading NVM
+
     keg_message "Adding keg-cli to $BASH_FILE"
     echo "" >> $BASH_FILE
     echo "source $KEG_CLI_PATH/keg" >> $BASH_FILE
+
   fi
 
   # Re-Souce bash to include the cli script

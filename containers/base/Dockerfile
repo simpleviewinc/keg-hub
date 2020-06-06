@@ -1,37 +1,59 @@
-FROM node:12.8-buster-slim
+FROM node:12.8-alpine AS build
 
-# Used by react native builder to set the ip address, other wise 
-# Will use the ip address of the docker container.
-ENV REACT_NATIVE_PACKAGER_HOSTNAME="10.0.0.2"
-ARG EXPO_CLI_VERSION="3.21.3"
+# These args are expected to be set as --build-arg
+# for the GIT_KEY=key_value AND GIT_CLI_URL=key_value
+# Which Allow them to be accessed durring build time
+ARG GIT_KEY
+ARG GIT_CLI_URL
+
+# Set the default expojs version to it's locked down
+ARG EXPO_CLI_VERSION="3.21.5"
 
 WORKDIR /keg
 
-# Install our apt depenencies and expo-cli
-RUN apt update && apt install -y \
-    git \
-    procps; \
+# Install git and the expo-cli
+# TODO: Look into adding sharp-cli, to allow smaller bundle sizes
+RUN apk --no-cache add git; \
     yarn global add expo-cli@$EXPO_CLI_VERSION
 
-# Add the GIT_KEY arg, and set value to initial
-# This expects --build-arg GIT_KEY=key_value to be set
-# Which will override the default initial value, and allow updating git
-ARG GIT_KEY=INITIAL
+# Pull down the keg-cli locally
+RUN set -ex; \
+  if [ ! -z "$GIT_CLI_URL" ]; then \
+    git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+    git clone $GIT_CLI_URL $DOC_CLI_PATH; \
+    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/; \
+  fi
 
-# Update git calls to github to include the key so private repos can be pulled
-RUN if [ "$GIT_KEY" != "INITIAL" ]; then \
-      git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    fi
+# Copy over our package json and yarn lock files
+COPY package.json yarn.lock ./
 
-# Add the GIT_CLI_URL arg, and set value to initial
-# This expects --build-arg GIT_CLI_URL=key_value to be set
-# URL of the tap to clone from github
-ARG GIT_CLI_URL=INITIAL
+# Cd into the docker cli path, and run yarn install
+# Then remove the .npmrc
+RUN cd $DOC_CLI_PATH; \
+    echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
+    echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
+    yarn install --frozen-lockfile; \
+    yarn cache clean; \
+    rm -f .npmrc
 
-# Pull down the cli locally
-RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
-      git clone $GIT_CLI_URL $DOC_CLI_PATH; \
-    fi
+# Use a multi stage build for security
+# This is so GIT_KEY is not accessable in the final image
+FROM node:12.8-alpine
+WORKDIR /keg
+
+# Install git for the new stage
+# This is so Dockerfiles that pull from the image, don't have to
+RUN apk --no-cache add git
+
+# Copy over the globally installed modules from above
+COPY --from=build /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+
+# Copy over keg cli from above
+COPY --from=build $DOC_CLI_PATH $DOC_CLI_PATH
+
+# Used by react native builder to set the ip address, other wise 
+# Will use the ip address of the docker container.
+ENV REACT_NATIVE_PACKAGER_HOSTNAME="192.168.99.101"
 
 # Expose the container ports to allow connecting to it externally
 EXPOSE 80

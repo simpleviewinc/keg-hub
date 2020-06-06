@@ -49,8 +49,11 @@ const dockerBuild = async args => {
     ...(args && { buildArgs: contextEnvs }),
   })
 
+  // Run the built docker command
   await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)
 
+  // Return the built image as a json object
+  // This is needed for internal keg-cli calls
   return docker.image.get(cmdContext)
 
 }
