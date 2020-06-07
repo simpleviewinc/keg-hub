@@ -16,8 +16,7 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
  *
  * @returns {Object} - The name of the image and branch of the repo
  */
-const getImageName = async (image, args) => {
-
+const getGitBranch = async (image, args) => {
   const branch = await runInternalTask(
     'tasks.git.tasks.branch.tasks.current',
     { ...args, command: 'current', __skipLog: true },
@@ -26,14 +25,8 @@ const getImageName = async (image, args) => {
   // If no git branch can be found just return
   !isObj(branch) && throwNoGitBranch(args.context)
 
-  // If the current branch is master, then return the image.repository name
-  // Otherwise append the git branch name to the image.repository name
-  const name = branch.name === 'master'
-    ? image.repository
-    : `${ image.repository }-${ branch.name }`
-
   // Return the name and the git branch
-  return { name, branch }
+  return branch
 
 }
 
@@ -126,7 +119,8 @@ const addProviderTags = async (image, url, args) => {
   const { context, tag } = params
 
   // Get the branch name 
-  const { name, branch } = await getImageName(image, args)
+  const branch = await getGitBranch(image, args)
+  const name = image.repository
 
   // Build the version tag, and add it to the docker image
   const tagVersion = await buildVersionTag(image, context, url, name, tag, branch)
