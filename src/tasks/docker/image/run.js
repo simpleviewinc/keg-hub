@@ -71,7 +71,7 @@ module.exports = {
       entry: {
         description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bas h)',
         example: 'keg docker image run --entry \\"node index.js\\"',
-        default: '/bin/bash'
+        default: '/bin/sh'
       },
     },
   }

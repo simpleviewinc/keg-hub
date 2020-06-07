@@ -32,4 +32,4 @@ RUN yarn install
 EXPOSE 80
 
 # Run the script
-CMD [ "/bin/bash", "/keg/keg-cli/containers/components/run.sh" ]
+CMD [ "/bin/sh", "/keg/keg-cli/containers/components/run.sh" ]

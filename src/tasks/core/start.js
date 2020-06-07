@@ -4,6 +4,7 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst')
 const { spawnCmd } = require('KegProc')
 const { logVirtualUrl } = require('KegUtils/log')
+const { isDetached } = require('KegUtils/helpers/isDetached')
 const { buildDockerCmd } = require('KegUtils/docker/buildDockerCmd')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
@@ -77,10 +78,10 @@ const checkBuildImage = async (args, context) => {
  */
 const startCore = async (args) => {
   const { params } = args
-  const { compose, service, sync } = params
+  const { attached, compose, detached, ensure, service, sync } = params
 
   // Check if we should build the container image first
-  await checkBuildImage(args, 'core')
+  ensure && await checkBuildImage(args, 'core')
 
   // Check if we are running the container with just docker
   if(service === 'container') return startContainer(args)
@@ -95,6 +96,7 @@ const startCore = async (args) => {
       command: 'start',
       params: {
         ...args.params,
+        detached: isDetached(`sync`, detached, attached),
         tap: undefined,
         context: 'core'
       },
@@ -112,6 +114,7 @@ const startCore = async (args) => {
         command: 'up',
         params: {
           ...args.params,
+          detached: isDetached(`compose`, detached, attached),
           tap: undefined,
           context: 'core'
         },
@@ -129,14 +132,22 @@ module.exports = {
     description: `Runs keg-core in a docker container`,
     example: 'keg core start <options>',
     options: {
+      attached: {
+        alias: [ 'attach', 'att', 'at' ],
+        allowed: [ true, false, 'sync', 'compose' ],
+        description: 'Attaches to a process in lieu of running in the backgound. Overrides "detached"',
+        example: `keg core start --attach compose ( Runs sync in background and attaches to compose) `,
+        default: 'compose',
+      },
       build: {
         description: 'Removes and rebuilds the docker container before running keg-core',
+        example: 'keg core start --build',
         default: false
       },
       command: {
         alias: [ 'cmd' ],
-        description: 'The command to run when the container starts. Overwrites the default (yarn web)',
-        example: 'keg core start --command ios',
+        description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',
+        example: 'keg core start --command ios ( Runs "yarn ios" )',
         default: 'web'
       },
       clean: {
@@ -154,7 +165,10 @@ module.exports = {
         default: true
       },
       detached: {
-        description: 'Runs the docker-compose process in the background',
+        alias: [ 'detach', 'dt', 'de' ],
+        allowed: [ true, false, 'sync', 'compose' ],
+        description: 'Runs the process in the background. Boolean for sync and compose, define by name.',
+        example: 'keg core start --detached sync ( Runs sync in background and attaches to compose) ',
         default: false
       },
       docker: {
@@ -165,6 +179,11 @@ module.exports = {
         description: 'Environment to start the Docker service in',
         example: 'keg core --env staging',
         default: 'development',
+      },
+      ensure: {
+        description: 'Will check if required images are built, and build them in necessary.',
+        example: "keg core start --ensure false",
+        default: true,
       },
       install: {
         description: 'Install node_modules ( yarn install ) in the container before starting the app',

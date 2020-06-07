@@ -60,6 +60,9 @@ ARG KEG_DOCKER_IP
 # Will use the ip address of the docker container.
 ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
+# Install git for the new stage
+RUN apk add --no-cache git
+
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 
@@ -76,6 +79,9 @@ COPY --from=builder $NM_CACHE $NM_CACHE
 EXPOSE 80
 EXPOSE 443
 
+# Set the current directory to tap repo
+WORKDIR /$DOC_APP_PATH
+
 # Run the start script
 # Dont use the array syntax, so we have access to the DOC_CLI_PATH ENV
-CMD /bin/bash $DOC_CLI_PATH/containers/tap/run.sh
+CMD /bin/sh $DOC_CLI_PATH/containers/tap/run.sh

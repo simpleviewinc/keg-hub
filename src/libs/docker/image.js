@@ -195,7 +195,7 @@ const runImage = async ({ entry, envs, image, location, name, opts=[] }) => {
   cmd = toContainerEnvs(envs, cmd)
 
   // Set / overwrite the entry for the container
-  cmd = `${ cmd } ${ imgName } ${ entry || '/bin/bash' }`.trim()
+  cmd = `${ cmd } ${ imgName } ${ entry || '/bin/sh' }`.trim()
 
   // Run the command
   return raw(cmd, { options: { env: envs }}, location)

@@ -73,7 +73,7 @@ const startDockerSync = async args => {
   try {
 
     const { globalConfig, params, options, task, tasks } = args
-    const { build, clean, context, detached, destroy } = params
+    const { build, clean, context, detached, destroy, ensure } = params
 
     // Get the context data for the command to be run
     const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
@@ -84,7 +84,7 @@ const startDockerSync = async args => {
     })
 
     // Check if the base image exists, and if not then build it
-    await buildBaseImg(args)
+    ensure && await buildBaseImg(args)
 
     // Check if we should rebuild the container
     if(build || clean) await removeCurrent(cmdContext)
@@ -94,7 +94,7 @@ const startDockerSync = async args => {
 
     // Check if sync should run in detached mode 
     // TODO: find way to validate if docker-sync is already running
-    // That way we can either kill it, or just run docker-compare up
+    // That way we can either kill it, or just run docker-compose up
     const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
 
     // Log the ip address so we know how to hit it in the browser
@@ -163,6 +163,11 @@ module.exports = {
       description: 'Environment to start the Docker containers in',
       example: 'keg docker sync start --env=staging ...',
       default: 'development',
+    },
+    ensure: {
+      description: 'Will check if required images are built, and build them in necessary.',
+      example: "keg docker sync start --ensure false",
+      default: true,
     },
     install: {
       alias: [ 'in' ],

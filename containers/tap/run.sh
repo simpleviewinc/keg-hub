@@ -63,8 +63,8 @@ keg_copy_node_modules(){
     return
   fi
 
-  # Copy recursivly (-R) and don't overwrite anyfiles (-n)
-  cp -R -n $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules
+  # Copy recursivly (-r) and prompt before overwrite (-i), and pipe false to the prompt
+  false | cp -ir $CORE_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
 
 }
 

@@ -53,15 +53,14 @@ keg_run_yarn_install(){
 
 # Copies over the locally cached node_modules
 keg_copy_node_modules(){
-  
+
   # ensure we know where the node_module cache is
   if [[ -z "$CORE_NM_CACHE" ]]; then
     return
   fi
-  
+
   # Copy recursivly (-r) and prompt before overwrite (-i), and pipe false to the prompt
-  false | cp -ir /keg/nm-cache/core/node_modules/. /keg/keg-core/node_modules
-  # 2>/dev/null
+  false | cp -ir $CORE_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
 
 }
 

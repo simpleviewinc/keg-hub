@@ -1,9 +1,10 @@
 const { get } = require('jsutils')
-const { generalError } = require('KegUtils/error')
-const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
+const { generalError } = require('KegUtils/error')
 const { dockerLog } = require('KegUtils/log/dockerLog')
+const { CONTAINERS } = require('KegConst/docker/containers')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
 
 /**
@@ -18,7 +19,9 @@ const { getContainerConst } = require('KegUtils/docker/getContainerConst')
  */
 const removeContainer = async args => {
   const { params, __skipThrow } = args
-  const { context, force } = params
+  const { context } = params
+
+  const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
   // Ensure we have an container to remove by checking for a mapped context, or use original
   const containerRef = getContainerConst(context, `env.image`, context)

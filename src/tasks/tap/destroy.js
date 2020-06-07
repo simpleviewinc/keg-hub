@@ -1,8 +1,9 @@
 const { get } = require('jsutils')
-const { spawnCmd } = require('KegProc')
-const { DOCKER } = require('KegConst')
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const docker = require('KegDocCli')
+const { DOCKER } = require('KegConst')
+const { spawnCmd } = require('KegProc')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Destroys a docker container for a tap
@@ -12,11 +13,11 @@ const docker = require('KegDocCli')
  *
  * @returns {void}
  */
-const destroyContainer = async ({ params={} }) => {
+const destroyContainer = async ({ params={} }, force) => {
   // Destroy the container
   await docker.container.destroy({
+    force,
     item: get(DOCKER, `CONTAINERS.TAP.ENV.CONTAINER_NAME`),
-    force: params.force
   })
 }
 
@@ -31,16 +32,20 @@ const destroyContainer = async ({ params={} }) => {
  * @returns {void}
  */
 const destroyTap = async (args) => {
+  const { params } = args
+  const force = exists(params.force) ? params.force : getSetting(`docker.force`)
+
   // Check if we are running the container with just docker
   return get(args, 'params.service') === 'container'
-    ? destroyContainer(args)
+    ? destroyContainer(args, force)
     : runInternalTask('tasks.docker.tasks.sync.tasks.destroy', {
         ...args,
         command: 'docker',
         params: {
           ...args.params,
+          force,
           context: 'tap',
-          tap: get(args, 'params.tap'),
+          tap: params.tap,
         },
       })
 
@@ -57,6 +62,10 @@ module.exports = {
       tap: { 
         description: 'Name of the tap to destroy. Must be a tap linked in the global config',
         required: true,
+      },
+      force: {
+        description: 'Force execute the destroy task',
+        default: false
       },
       service: {
         allowed: [ 'sync', 'container' ],
