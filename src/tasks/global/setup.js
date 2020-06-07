@@ -1,4 +1,7 @@
 
+const { Logger } = require('KegLog')
+const { ask } = require('KegQuestions')
+
 /**
  * Setup task for keg-cli
  * @param {Object} args - arguments passed from the runTask method
@@ -11,7 +14,7 @@
  */
 const setupCli = args => {
   const { command, globalConfig, options, params, tasks } = args
-  console.log(`---------- Keg CLI setup Task ----------`)
+  // TODO:  run script ad keg-cli/scripts/cli/configSetup.js
 
 }
 
