@@ -12,6 +12,9 @@ const { ensureArguments } = require('./getArguments')
  */
 const runInternalTask = async (taskPath, args, task) => {
 
+  // Ensure path starts with a tasks key
+  taskPath = taskPath.indexof(`tasks.`) === 0 ? taskPath : `tasks.${taskPath}`
+
   // // Get the docker-sync start tasks
   task = task || get(args, taskPath)
 

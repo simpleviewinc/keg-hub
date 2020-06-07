@@ -1,10 +1,11 @@
-const { get, checkCall } = require('jsutils')
-const { spawnCmd } = require('KegProc')
-const { buildLocationContext } = require('KegUtils/builders')
-const { confirmExec } = require('KegUtils/helpers')
-const { DOCKER } = require('KegConst/docker')
-const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const docker = require('KegDocCli')
+const { spawnCmd } = require('KegProc')
+const { DOCKER } = require('KegConst/docker')
+const { get, checkCall } = require('jsutils')
+const { confirmExec } = require('KegUtils/helpers')
+const { buildLocationContext } = require('KegUtils/builders')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Destroys all docker-sync artifacts for the passed in context
@@ -16,7 +17,7 @@ const docker = require('KegDocCli')
  */
 const destroyDockerSync = async args => {
   const { globalConfig, params, options, task, tasks } = args
-  const { context } = params
+  const { context, image } = params
 
   // Get the context data for the command to be run
   const { location, cmdContext, contextEnvs } = await buildLocationContext({
@@ -32,7 +33,7 @@ const destroyDockerSync = async args => {
     confirm: `This will remove all docker items related to ${ cmdContext }. Are you sure?`,
     success: `Finished running 'docker-sync destroy' command`,
     cancel: `Command 'keg docker sync destroy' has been cancelled!`,
-    preConfirm: getSetting('docker.preConfirm') === false ? false : true,
+    preConfirm: getSetting('docker.preConfirm') === true,
     execute: async () => {
 
       // Remove the container
@@ -52,13 +53,11 @@ const destroyDockerSync = async args => {
       // Must come after removing the container
       await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
 
-      // Get the image remove task action and call it
-      // Helpful because it contains the logic to pull the image id by name
-      // TODO: Update to use the docker API lib
-      const removeImgTask = get(tasks, 'docker.tasks.image.tasks.remove.action')
-      await checkCall(removeImgTask, {
+      // Remove the docker image as well
+      image && await runInternalTask('docker.tasks.image.tasks.remove', {
+        ...args,
         __skipThrow: true,
-        params: { name: cmdContext, force: true }
+        params: { ...args.params, context: cmdContext, force: true }
       })
 
       // Stop the docker-sync daemon
@@ -81,13 +80,18 @@ module.exports = {
     context: {
       allowed: DOCKER.IMAGES,
       description: 'Context of docker compose up command (components || core || tap)',
-      example: 'keg docker sync start --context core',
+      example: 'keg docker sync destroy --context core',
       required: true
     },
     tap: {
       description: 'Name of the linked tap to run. Overrides the context option!',
-      example: 'keg docker sync start --tap name-of-tap',
+      example: 'keg docker sync destroy --tap name-of-tap',
       default: false
+    },
+    image: {
+      description: 'Remove the image related to the context',
+      example: 'keg docker sync destroy --image false',
+      default: true
     }
   }
 }

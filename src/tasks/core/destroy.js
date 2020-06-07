@@ -5,6 +5,7 @@ const { spawnCmd } = require('KegProc')
 const { buildLocationContext } = require('KegUtils/builders')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { exists } = require('KegUtils/helpers/exists')
 
 /**
  * Destroys a docker container for keg-core
