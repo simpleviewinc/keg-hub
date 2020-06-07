@@ -27,7 +27,8 @@
     "settings": {
       "docker": {
         "preConfirm": true,
-        "buildKit": true
+        "buildKit": true,
+        "force": true
       },
       "git": {
         "secure": false

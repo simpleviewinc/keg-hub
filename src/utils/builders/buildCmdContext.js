@@ -9,7 +9,13 @@ const { generalError } = require('../error')
  * @returns {Object} - ENVs for the context
  */
 const buildCmdContext = ({ globalConfig, params, allowed, defContext }) => {
-  const { context, tap } = params
+  const { tap } = params
+
+  // Check if the context is prefixed with `keg`
+  // If it is, remove it. This allows passing in "kegcore" or just "core"
+  const context = params.context.indexOf('keg') === 0
+    ? params.context.replace(/^keg-/, '').replace(/^keg/, '')
+    : params.context
 
   // If context is in the allowed, and it's not a tap, then just return the cmdContext
   if(allowed.indexOf(context) !== -1 && context !== 'tap' && !tap)

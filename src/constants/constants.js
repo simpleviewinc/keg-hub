@@ -75,6 +75,14 @@ module.exports = deepFreeze({
     LOCAL: [ 'local', 'loc', 'l' ]
   },
 
+  // Keys in the object that should be returned by
+  // the buildLocationContext method
+  CONTEXT_KEYS: [
+    `cmdContext`,
+    'contextEnvs',
+    'location',
+    'tap'
+  ],
 
   // URLs for navigating to the application
   TAP_URL: `http://tap.kegdev.xyz/`,

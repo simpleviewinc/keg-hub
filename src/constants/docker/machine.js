@@ -12,6 +12,7 @@ const machineEnvs = loadENV(path.join(cliRootDir, 'scripts/setup/docker-machine.
  * @returns {Object} - Built machine config
 */
 module.exports = deepFreeze({
+  PREFIXED: machineEnvs,
   // Use the same ENV file as the setup script, but remove the KEG_DOCKER_ prefix
   MACHINE: reduceObj(machineEnvs, (key, value, cleaned) => {
     cleaned[key.replace('KEG_DOCKER_', '')] = value

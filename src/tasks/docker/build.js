@@ -4,6 +4,7 @@ const { buildDockerCmd } = require('KegUtils/docker')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
+const { Logger } = require('KegLog')
 
 /**
  * Builds a docker container so it can be run
@@ -48,6 +49,8 @@ const dockerBuild = async args => {
     ...(tap && { tap }),
     ...(args && { buildArgs: contextEnvs }),
   })
+
+  Logger.info(`  Building docker image "${ cmdContext }" ...`)
 
   // Run the built docker command
   await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)

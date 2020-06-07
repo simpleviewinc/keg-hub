@@ -4,6 +4,7 @@ const { cliRootDir, dockerEnv, defaultENVs, images } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 const { pathExistsSync } = require('KegFileSys/fileSys')
 const { GLOBAL_CONFIG_FOLDER } = require('../constants')
+const { PREFIXED } = require('./machine')
 
 let __CONTAINERS
 
@@ -74,7 +75,12 @@ const containerConfig = (container) => {
     // Ensures the Git url for the container gets added as a build arg
     ARGS: keyMap([ `GIT_${ container.toUpperCase() }_URL` ], true),
     // Build the ENVs by merging with the default, context, and environment
-    ENV: deepMerge(defaultENVs, contextEnv, getCurrentEnvFile(container)),
+    ENV: deepMerge(
+      PREFIXED,
+      defaultENVs,
+      contextEnv,
+      getCurrentEnvFile(container)
+    ),
   })
 
 }

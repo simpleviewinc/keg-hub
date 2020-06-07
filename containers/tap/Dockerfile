@@ -3,11 +3,10 @@
 ARG IMAGE_FROM=kegbase:latest
 FROM $IMAGE_FROM as builder
 
-WORKDIR /keg
+WORKDIR /
 
 # These args are expected to be set as --build-arg
-# for the GIT_KEY=key_value AND GIT_TAP_URL=key_value
-# Which Allow them to be accessed durring build time
+# Which Allow them to be used durring the build
 ARG GIT_KEY
 ARG GIT_TAP_URL
 
@@ -20,21 +19,15 @@ ARG DOC_APP_PATH=/keg/tap
 # Path where node_modules will be installed durring docker built
 ARG NM_CACHE=/keg/nm-cache/tap
 
-# Default package ip address, should be the same as the docker-keg ip address
-ARG RN_PACKAGER_IP
-
 # Update git calls to github to include the key so private repos can be pulled
 # Pull down the keg-core locally
-RUN set -ex; \
-  if [ ! -z "$GIT_TAP_URL" ]; then \
-    git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
     git clone $GIT_TAP_URL $DOC_APP_PATH; \
-    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/; \
-  fi
+    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json $NM_CACHE/package.json
-COPY yarn.lock $NM_CACHE/yarn.lock
+COPY package.json $NM_CACHE/
+COPY yarn.lock $NM_CACHE/
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN cd $NM_CACHE; \
@@ -44,12 +37,28 @@ RUN cd $NM_CACHE; \
     yarn cache clean; \
     rm -f .npmrc
 
+# ------- New Build Stage ------- #
+
+# Use a multi stage build for security
+# This is so GIT_KEY is not accessable in the final image
 FROM node:12.8-alpine
-WORKDIR /keg
+WORKDIR /
+
+# Path of the keg cli within the docker container
+ARG DOC_CLI_PATH=/keg/keg-cli
+
+# Path of the app within the docker container
+ARG DOC_APP_PATH=/keg/tap
+
+# Path where node_modules will be installed durring docker built
+ARG NM_CACHE=/keg/nm-cache/tap
+
+# Get the ip of docker-machine from the ARG, so we can set it as an ENV
+ARG KEG_DOCKER_IP
 
 # Used by react native builder to set the ip address, other wise 
 # Will use the ip address of the docker container.
-ENV REACT_NATIVE_PACKAGER_HOSTNAME="$RN_PACKAGER_IP"
+ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn

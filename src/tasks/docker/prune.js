@@ -35,7 +35,7 @@ module.exports = {
     name: 'prune',
     alias: [ 'clean' ],
     action: dockerPrune,
-    description: 'Clean up unused docker items',
+    description: 'Remove unused docker items',
     example: 'keg docker prune <options>',
     options: {
       all: {

@@ -4,6 +4,8 @@ const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { dockerLog } = require('KegUtils/log/dockerLog')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const { exists } = require('KegUtils/helpers/exists')
 
 /**
  * Run a docker image command
@@ -18,11 +20,12 @@ const { dockerLog } = require('KegUtils/log/dockerLog')
 const removeDockerImage = async args => {
 
   const { params, __skipThrow } = args
-  const { name, force, tag } = params
+  const { context, tag } = params
+  const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
-  // Ensure we have an image to remove by checking for a mapped name, or use original
-  const imgRef = tag || get(CONTAINERS, `${name && name.toUpperCase()}.ENV.IMAGE`, name)
-  !imgRef && generalError(`The docker "image remove" command requires a name or tag argument!`)
+  // Ensure we have an image to remove by checking for a mapped context, or use original
+  const imgRef = tag || get(CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`, context)
+  !imgRef && generalError(`The docker "image remove" requires a context, name or tag argument!`)
 
   // Get the image meta data
   const image = await docker.image[ tag ? 'getByTag' : 'get' ](imgRef)
@@ -48,7 +51,8 @@ module.exports = {
     description: `Remove docker image by name`,
     example: 'keg docker image remove <options>',
     options: {
-      name: {
+      context: {
+        alias: [ 'name' ],
         description: 'Name of the image to remove',
         example: 'keg docker image remove --name core',
       },

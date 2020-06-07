@@ -5,30 +5,10 @@ const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
 const { get, checkCall, limbo } = require('jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
+const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
-
-/**
- * Checks if the base image exists, and it not builds it
- * @function
- *
- * @returns {void}
- */
-const checkBaseImage = async args => {
-  const baseName = getContainerConst('base', `env.image`, 'kegbase')
-  const exists = await docker.image.exists(baseName)
-  if(exists) return true
-
-  Logger.info(`Keg base image does not exist, building now...`)
-  Logger.empty()
-
-  return runInternalTask(`tasks.docker.tasks.build`, {
-    ...args,
-    params: { ...args.params, context: 'base' },
-  })
-
-}
 
 /**
  * Removes the current running container based on the context
@@ -104,7 +84,7 @@ const startDockerSync = async args => {
     })
 
     // Check if the base image exists, and if not then build it
-    await checkBaseImage(args)
+    await buildBaseImg(args)
 
     // Check if we should rebuild the container
     if(build || clean) await removeCurrent(cmdContext)
