@@ -43,8 +43,8 @@ keg_set_container_paths(){
 # Use when adding extra node_modules to keg-core without rebuilding
 keg_run_tap_yarn_setup(){
 
-  # Check if we should run yarn install
-  # Is $NM_INSTALL doesn't exist, just return
+  # Check if $NM_INSTALL exist and that $TAP_NM_CACHE path exists
+  # If either does not, then can't install node_modules, so return
   if [[ -z "$NM_INSTALL" || -z "$TAP_NM_CACHE" ]]; then
     return
   fi
@@ -63,8 +63,9 @@ keg_copy_node_modules(){
     return
   fi
 
-  # Copy recursivly (-r) and prompt before overwrite (-i), and pipe false to the prompt
-  false | cp -ir $CORE_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
+  # Copy recursivly (-r) and prompt before overwrite (-i)
+  # Then pipe to dev/null, so we hide the overwrite prompts
+  false | cp -ir $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
 
 }
 
