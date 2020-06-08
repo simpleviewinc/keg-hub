@@ -3,8 +3,9 @@ module.exports = {
     name: 'compose',
     alias: [ 'comp', 'cmp', 'cm' ],
     tasks: {
-      build: require('./build'),
-      up: require('./up'),
+      ...require('./build'),
+      ...require('./down'),
+      ...require('./up'),
     },
     description: `Runs docker compose command`,
     example: 'keg docker compose <command> <options>'

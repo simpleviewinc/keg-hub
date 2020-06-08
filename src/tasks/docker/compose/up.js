@@ -56,27 +56,29 @@ const upDockerCompose = async args => {
 }
 
 module.exports = {
-  name: 'up',
-  alias: [ 'u' ],
-  action: upDockerCompose,
-  description: `Run docker-compose up command`,
-  example: 'keg docker compose up <options>',
-  options: {
-    build: {
-      description: 'Build the docker containers before starting',
-      example: 'keg docker compose up --build true',
-      default: false
-    },
-    context: {
-      allowed: [ 'components', 'core', 'tap' ],
-      description: 'Context of docker compose up command (components || core || tap)',
-      example: 'keg docker compose up --context core',
-      default: 'core'
-    },
-    detached: {
-      description: 'Runs the docker-sync process in the background',
-      example: 'keg docker compose up --detached',
-      default: false
+  up: {
+    name: 'up',
+    alias: [ 'u' ],
+    action: upDockerCompose,
+    description: `Run docker-compose up command`,
+    example: 'keg docker compose up <options>',
+    options: {
+      build: {
+        description: 'Build the docker containers before starting',
+        example: 'keg docker compose up --build true',
+        default: false
+      },
+      context: {
+        allowed: [ 'components', 'core', 'tap' ],
+        description: 'Context of docker compose up command (components || core || tap)',
+        example: 'keg docker compose up --context core',
+        default: 'core'
+      },
+      detached: {
+        description: 'Runs the docker-sync process in the background',
+        example: 'keg docker compose up --detached',
+        default: false
+      }
     }
   }
 }

@@ -8,7 +8,9 @@ KEG_INSTALL_DIR=~/keg
 KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
 
 # Size of the docker-machien virtual box hhd
-KEG_VB_SIZE=24288
+# KEG_VB_SIZE=24288
+KEG_VB_SIZE=8192
+
 
 # Prints a message to the terminal through stderr
 keg_message(){

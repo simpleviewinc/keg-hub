@@ -80,3 +80,9 @@
     * From the location get the git remote info
       * This will allow getting the branch / repo name data
       * Use this find the correct package after the have been pulled from github
+
+### Add keg missing options
+  * Add `ask` key to option
+  * If it's missing, it will ask the user for the value when the command is run
+  * Add setting for no ask in globalConfig
+  
