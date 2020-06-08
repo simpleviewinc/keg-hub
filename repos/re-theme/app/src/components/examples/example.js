@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from '@simpleviewinc/re-theme'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
 import {

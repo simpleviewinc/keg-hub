@@ -1,6 +1,6 @@
 import React from 'react'
 import { deepMerge } from 'jsutils'
-import { useThemeFocus, useTheme } from 're-theme'
+import { useThemeFocus, useTheme } from '@simpleviewinc/re-theme'
 
 export const UseThemeFocusInput = props => {
   const { components: { customInput } } = useTheme()

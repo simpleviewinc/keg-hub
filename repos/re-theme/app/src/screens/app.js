@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from '@simpleviewinc/re-theme'
 import { get } from 'jsutils'
 import {
   Readme,
@@ -32,7 +32,7 @@ export const AppScreen = withTheme(props => {
     <div style={ appStyle } >
 
       <ForkMeOnGithub
-        repo="https://https://github.com/simpleviewinc/sv-re-theme"
+        repo="https://https://github.com/simpleviewinc/re-theme"
         colorBackground="black"
         colorOctocat="white"
       />

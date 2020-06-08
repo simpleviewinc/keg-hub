@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeFocus, useThemeHover, useTheme } from 're-theme'
+import { useThemeFocus, useThemeHover, useTheme } from '@simpleviewinc/re-theme'
 
 export const ReuseRefInput = props => {
   const { components: { customInput } } = useTheme()

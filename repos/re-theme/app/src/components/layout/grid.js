@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
-import { withTheme } from 're-theme'
+import { withTheme } from '@simpleviewinc/re-theme'
 import { isArr } from 'jsutils'
 
 // alignItems = y-axis

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 're-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 
 export const UseThemeButton = props => {
   const theme = useTheme()

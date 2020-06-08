@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from 're-theme'
+import { withTheme } from '@simpleviewinc/re-theme'
 
 const Link = withTheme(props => {
 

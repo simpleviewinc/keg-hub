@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeHover, useTheme } from 're-theme'
+import { useThemeHover, useTheme } from '@simpleviewinc/re-theme'
 
 export const UseThemeHoverButton = props => {
   const { components: { button } } = useTheme()

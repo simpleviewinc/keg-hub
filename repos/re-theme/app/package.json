@@ -11,7 +11,7 @@
     "core-js": "^3.6.4",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
     "raw-loader": "4.0.0",
-    "re-theme": "file:node_modules/re-theme",
+    "@simpleviewinc/re-theme": "1.1.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-scripts": "3.2.0",
