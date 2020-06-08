@@ -67,6 +67,11 @@ module.exports = {
         description: 'Force execute the destroy task',
         default: false
       },
+      image: {
+        description: 'Remove the image related to the context',
+        example: 'keg tap destroy --image false',
+        default: true
+      },
       service: {
         allowed: [ 'sync', 'container' ],
         description: 'What docker service to destroy. Must be on of ( sync || container )',

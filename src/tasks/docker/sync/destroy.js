@@ -83,15 +83,15 @@ module.exports = {
       example: 'keg docker sync destroy --context core',
       required: true
     },
+    image: {
+      description: 'Remove the image related to the context',
+      example: 'keg docker sync destroy --image false',
+      default: true
+    },
     tap: {
       description: 'Name of the linked tap to run. Overrides the context option!',
       example: 'keg docker sync destroy --tap name-of-tap',
       default: false
     },
-    image: {
-      description: 'Remove the image related to the context',
-      example: 'keg docker sync destroy --image false',
-      default: true
-    }
   }
 }
