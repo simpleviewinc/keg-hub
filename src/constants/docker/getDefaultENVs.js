@@ -2,7 +2,7 @@ const path = require('path')
 const { GLOBAL_CONFIG_FOLDER } = require('../constants')
 const { copyFileSync, loadENV } = require('../../libs/fileSys')
 const { Logger } = require('../../libs/logger')
-const { catchMe } = require('../../utils/helpers/catchMe')
+const { tryCatch } = require('../../utils/helpers/tryCatch')
 
 /**
  * Holds the loaded env file, so we don't keep reloading it
@@ -44,7 +44,7 @@ const getDefaultENVs = cliRootDir => {
   const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/defaults.env')
 
   // Try to load the default envs
-  catchMe(
+  tryCatch(
     () => { __DEFAULT_ENV = loadENV(globalDefEnv) },
     err => {
       // Log the error when no ENVs can be loaded

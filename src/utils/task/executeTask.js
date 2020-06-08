@@ -1,7 +1,7 @@
 const { get, isFunc, isStr } = require('jsutils')
 const { throwNoAction } = require('KegUtils/error')
 const { executeCmd } = require('KegProc')
-const { getArguments } = require('./getArguments')
+const { getParams } = require('./getParams')
 const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
 const { showHelp } = require('KegLog')
 
@@ -20,11 +20,14 @@ const { showHelp } = require('KegLog')
 const executeTask = async (args) => {
   const { command, task, tasks, options } = args
 
-    // Check is the help should be printed
+  // Check is the help should be printed
   if(hasHelpArg(options[ options.length -1 ])) return showHelp({ task, options })
 
+  // get the params for the task
+  const params = await getParams(args)
+
   return isFunc(task.action)
-    ? task.action({ ...args, params: getArguments(args) })
+    ? task.action({ ...args, params })
     : throwNoAction(task)
 
 }

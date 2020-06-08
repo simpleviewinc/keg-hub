@@ -9,6 +9,7 @@ const { buildLocationContext } = require('KegUtils/builders/buildLocationContext
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
+const { tryCatch } = require('KegUtils/helpers/tryCatch')
 
 /**
  * Removes the current running container based on the context
@@ -70,56 +71,60 @@ const buildExtraEnvs = ({ env, command, install }) => {
  */
 const startDockerSync = async args => {
 
-  try {
+  const { globalConfig, params, options, task, tasks } = args
+  const { build, clean, context, detached, destroy, ensure } = params
 
-    const { globalConfig, params, options, task, tasks } = args
-    const { build, clean, context, detached, destroy, ensure } = params
+  return tryCatch(
+    async () => {
 
-    // Get the context data for the command to be run
-    const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
-      globalConfig,
-      task,
-      params,
-      envs: buildExtraEnvs(params)
-    })
+      // Get the context data for the command to be run
+      const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+        globalConfig,
+        task,
+        params,
+        envs: buildExtraEnvs(params)
+      })
 
-    // Check if the base image exists, and if not then build it
-    ensure && await buildBaseImg(args)
+      // Check if the base image exists, and if not then build it
+      ensure && await buildBaseImg(args)
 
-    // Check if we should rebuild the container
-    if(build || clean) await removeCurrent(cmdContext)
+      // Check if we should rebuild the container
+      if(build || clean) await removeCurrent(cmdContext)
 
-    // Check if docker-sync should be cleaned first
-    if(clean) await checkSyncClean(cmdContext, contextEnvs, location)
+      // Check if docker-sync should be cleaned first
+      if(clean) await checkSyncClean(cmdContext, contextEnvs, location)
 
-    // Check if sync should run in detached mode 
-    // TODO: find way to validate if docker-sync is already running
-    // That way we can either kill it, or just run docker-compose up
-    const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
+      // Check if sync should run in detached mode 
+      // TODO: find way to validate if docker-sync is already running
+      // That way we can either kill it, or just run docker-compose up
+      const dockerCmd = `${ Boolean(detached) ? 'docker-sync' : 'docker-sync-stack' } start`
 
-    // Log the ip address so we know how to hit it in the browser
-    logVirtualUrl()
+      // Log the ip address so we know how to hit it in the browser
+      logVirtualUrl()
 
-    const cmdOpts = [ dockerCmd, { options: { env: contextEnvs }}, location ]
-    detached ? spawnCmd(...cmdOpts) : await spawnCmd(...cmdOpts)
+      const cmdOpts = [ dockerCmd, { options: { env: contextEnvs }}, location ]
+      detached ? spawnCmd(...cmdOpts) : await spawnCmd(...cmdOpts)
 
-    // Return the built context info, so it can be reused if needed
-    return {
-      tap,
-      params,
-      location,
-      cmdContext,
-      contextEnvs,
+      // Return the built context info, so it can be reused if needed
+      return {
+        tap,
+        params,
+        location,
+        cmdContext,
+        contextEnvs,
+      }
+
+    },
+    err => {
+      // Log the error message
+      Logger.error(`\n ${ err.message }\n`)
+
+      // Clean up the docker sync items
+      return err &&
+        destroy &&
+        runInternalTask(`tasks.docker.tasks.sync.tasks.destroy`, args)
     }
-
-  }
-  catch(err){
-    // Log the error message
-    Logger.error(`\n ${ err.message }\n`)
-
-    // Clean up the docker sync items
-    err && destroy && runInternalTask(`tasks.docker.tasks.sync.tasks.destroy`, args)
-  }
+  )
 
 }
 

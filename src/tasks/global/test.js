@@ -12,6 +12,7 @@
 const testCommand = args => {
   const { command, globalConfig, options, params, tasks } = args
   console.log(`---------- Keg CLI Global Test ----------`)
+  console.log(params)
 
 }
 
@@ -28,7 +29,12 @@ module.exports = {
       },
       boo: {
         description: 'Sounds from casper',
-        required: true
+        required: true,
+        default: 'Boooooo',
+        ask: {
+          message: 'What sound does casper make?',
+          default: 'OoOoOoO',
+        }
       },
       do: {
         allowed: [ 'one', 'two' ],

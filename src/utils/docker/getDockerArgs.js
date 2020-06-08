@@ -59,7 +59,7 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
     const addArg = exists(argVal) ? argVal === true ? value : argVal : ''
 
     // Join and return the args
-    return `${joinedArgs} ${addArg}`.trim()
+    return `${joinedArgs} ${ addArg || '' }`.trim()
   }, dockerCmd)
 
 }
@@ -107,8 +107,6 @@ const addContainerEnv = (dockerCmd='', options={}) => {
     )
   }, dockerCmd)
 }
-
-
 
 module.exports = {
   addContainerEnv,

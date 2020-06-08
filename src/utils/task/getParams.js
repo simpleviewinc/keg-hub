@@ -1,6 +1,7 @@
 const { Logger } = require('KegLog')
-const { throwRequired } = require('KegUtils/error')
-const { exists, mapEnv } = require('KegUtils/helpers')
+const { throwRequired } = require('../error')
+const { exists, mapEnv } = require('../helpers')
+const { optionsAsk } = require('./optionsAsk')
 const {
   isArr,
   isStr,
@@ -17,7 +18,7 @@ const {
  * @param {string|number|boolean} value
  * @param {Object} task - Task Model of current task being run
  * @param {Array} key - Name the argument to find
- * @param {string} meta - Info about the argument from the task
+ * @param {string} meta - Info about the option from the task
  * @param {Array} hasVal - Does the value exist
  *
  * @returns {Void}
@@ -79,7 +80,7 @@ const removeOption = (options, opt) => {
  *
  * @returns {string|boolean} - Passed in value, or true if taskKey match
  */
-const matchArgType = (taskKeys, matchTypes, option, value) => {
+const matchParamType = (taskKeys, matchTypes, option, value) => {
   // Search for a match between the option and matchTypes
   const match = matchTypes.reduce((matched, type) => matched || option === type, false)
 
@@ -171,7 +172,7 @@ const checkQuotedOptions = (argument, options, index) => {
  *
  * @returns {string} - The found value || the passed in default
  */
-const getArgValue = ({ taskKeys, options, long, short, alias }) => {
+const getParamValue = ({ taskKeys, options, long, short, alias }) => {
 
   const matchTypes = buildMatchTypes(long, short, alias)
 
@@ -187,7 +188,7 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
       // Pass along the next option, so we can also set the value
       // Pass the taskKeys, to ensure the next option is not a task key option
       // This is to ensure the next option is a value, and not a key to a value
-      let value = matchArgType(
+      let value = matchParamType(
         taskKeys,
         matchTypes,
         option,
@@ -211,18 +212,18 @@ const getArgValue = ({ taskKeys, options, long, short, alias }) => {
  * Finds the value to the passed in keg argument
  * @function
  * @param {*} { key, meta={}, ...params }
- * @param {Object} params - Contains the data to be searched
- * @param {Array} params.options - items passed from the command line
- * @param {Object} params.task - Task Model of current task being run
- * @param {Array} params.key - Name the argument to find
- * @param {string} params.meta - Info about the argument from the task
+ * @param {Object} args - Contains the data to be searched
+ * @param {Array} args.options - items passed from the command line
+ * @param {Object} args.task - Task Model of current task being run
+ * @param {Array} args.key - Name the argument to find
+ * @param {string} args.meta - Info about the argument from the task
  *
  * @returns {*} - Value of the search for argument from passed in options
  */
-const findArgument = ({ key, meta={}, index, ...params }) => {
+const findParam = ({ key, meta={}, index, task, ...args }) => {
 
-  const value = getArgValue({
-    ...params,
+  const value = getParamValue({
+    ...args,
     long: key,
     short: key[0],
     alias: meta.alias,
@@ -239,18 +240,58 @@ const findArgument = ({ key, meta={}, index, ...params }) => {
   const allowedMatch = meta.allowed.reduce((foundVal, allowed) => {
     return exists(foundVal)
       ? foundVal
-      : params.options.indexOf(allowed) === index
+      : args.options.indexOf(allowed) === index
         ? allowed
         : foundVal
   }, null)
 
   // If there's a allowed match then remove it from the options array
-  params.options = allowedMatch
-    ? removeOption(params.options, allowedMatch)
-    : params.options
+  args.options = allowedMatch
+    ? removeOption(args.options, allowedMatch)
+    : args.options
 
   return allowedMatch || meta.default
 
+}
+
+/**
+ * Ensures a param value exists as needed
+ * Asks for the value when ask key is defined, otherwise uses the default
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} params - Existing mapped params from options
+ * @param {string} key - Params key the value should be mapped to
+ * @param {Object} meta - Info about the option from the task
+ *
+ * @returns {Object} - Mapped params object
+ */
+const ensureParam = async (task, params, key, meta) => {
+  if(exists(params[key])) return params
+
+  const value = await optionsAsk(key, meta)
+
+  // Treat empty string as no value
+  ;!exists(value) || value === ''
+    ? checkRequired(task, key, meta)
+    : ( params[key] = value )
+
+  return params
+}
+
+/**
+ * Adds default values when task is short-circuited
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} mappedParams - Currently mapped args
+ *
+ * @returns {Object} - Mapped params object
+ */
+const ensureParams = async (task, mappedParams={}) => {
+  return reduceObj(task.options, async (key, meta, toResolve) => {
+    params = await toResolve
+
+    return ensureParam(task, params, key, meta)
+  }, Promise.resolve(mappedParams))
 }
 
 /**
@@ -263,7 +304,8 @@ const findArgument = ({ key, meta={}, index, ...params }) => {
  * @returns {Object} - Mapped arguments object
  */
 const loopTaskOptions = (task, taskKeys, options) => {
-  return taskKeys.reduce((args, key, index) => {
+  return taskKeys.reduce(async (toResolve, key, index) => {
+    const params = await toResolve
 
     // Get the option meta for the key
     const meta = isObj(task.options[key])
@@ -271,57 +313,40 @@ const loopTaskOptions = (task, taskKeys, options) => {
       : { description: task.options[key] }
 
     // Find the value of the argument from the passed in options
-    const value = findArgument({
+    const value = findParam({
       key,
       meta,
+      task,
       index,
       taskKeys,
       options,
     })
 
-    // If no value exists, and it's required, then throw required error
-    if(!exists(value)) checkRequired(task, key, meta)
-
     // Check if the arg is env, and map it from the env shortcuts
-    else args[key] = checkEnvKeyValue(key, value)
+    const val = checkEnvKeyValue(key, value)
+    // If we get a value back, add it to the params object
+    val && ( params[key] = val )
 
-    return args
+    // Ensure the param exists if needed, and return
+    return ensureParam(task, params, key, meta)
 
-  }, {})
+  }, Promise.resolve({}))
 }
 
-/**
- * Adds default values when task is short-circuited
- * @function
- * @param {Object} task - Task Model of current task being run
- * @param {Object} mappedArgs - Currently mapped args
- *
- * @returns {Object} - Mapped arguments object
- */
-const ensureArguments = (task, mappedArgs={}) => {
-  return reduceObj(task.options, (key, meta, mapped) => {
-    !exists(mapped[key]) &&
-      !checkRequired(task, key, meta) &&
-      meta.default &&
-      ( mapped[key] = meta.default )
-
-    return mapped
-  }, mappedArgs)
-}
 
 /**
  * Maps all passed in options to the cmdOpts based on keys
  * @function
- * @param {Array} params.options - items passed from the command line
- * @param {Object} params.task - Task Model of current task being run
- * @param {Object} params.task.options - Options accepted by the task being run
+ * @param {Array} args.options - items passed from the command line
+ * @param {Object} args.task - Task Model of current task being run
+ * @param {Object} args.task.options - Options accepted by the task being run
  *
  * @returns {Object} - Mapped arguments object
  */
-const getArguments = ({ options=[], task }) => {
+const getParams = async ({ options=[], task }) => {
 
   // If no options to parse, Add the defaults and return it
-  if(!options.length) return ensureArguments(task)
+  if(!options.length) return ensureParams(task)
 
   // Make copy of options, so we don't affect the original
   const optsCopy = Array.from(options)
@@ -331,16 +356,16 @@ const getArguments = ({ options=[], task }) => {
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
   // If not task keys to loop, just return empty
-  if(!taskKeys || !taskKeys.length) return ensureArguments(task)
+  if(!taskKeys || !taskKeys.length) return ensureParams(task)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
   return options.length !== 1 || options[0].indexOf('=') !== -1
 
     // Loop over the task keys and map the task options to the passed in options
-    ? taskKeys && loopTaskOptions(task, taskKeys, options)
+    ? taskKeys && await loopTaskOptions(task, taskKeys, options)
     
     // Otherwise set it as the first key in the task options object
-    : ensureArguments(
+    : ensureParams(
         task,
         { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
       )
@@ -348,6 +373,6 @@ const getArguments = ({ options=[], task }) => {
 }
 
 module.exports = {
-  ensureArguments,
-  getArguments
+  ensureParams,
+  getParams
 }

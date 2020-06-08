@@ -1,7 +1,7 @@
 const { isArr } = require('jsutils')
 const inquirer = require('inquirer')
-const { confirm } = require('./confirm')
 const { input } = require('./input')
+const { confirm } = require('./confirm')
 const { password } = require('./password')
 
 /**
@@ -12,6 +12,7 @@ const separator = () => new inquirer.Separator()
 
 /**
  * Asks a question or multiple questions to a user from the terminal
+ * @function
  * @param {Object|Array} questions - Questions to ask the user in the inquirer question format
  *
  * @returns {Object} - Answers to questions as key / value pairs of names and answers

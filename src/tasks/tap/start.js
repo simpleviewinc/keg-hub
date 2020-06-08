@@ -52,20 +52,20 @@ const startContainer = async ({ globalConfig, params }) => {
  * @returns {void}
  */
 const checkBuildImage = async (args, context, tap) => {
-  const tapName = getContainerConst(context, `env.image`, 'tap')
-  const exists = await docker.image.exists(tapName)
+
+  const exists = await docker.image.exists('tap')
 
   // If the image exists, and there's no build param, return
   if(exists && !get(args, 'params.build')) return true
 
   // Other wise print message about the build, then do it
   exists
-    ? Logger.info(`  Force building image ${ tapName }...`)
-    : Logger.info(`  Image ${ tapName } does not exist, building now...`)
+    ? Logger.info(`  Force building image ${ tap }...`)
+    : Logger.info(`  Image ${ tap } does not exist, building now...`)
 
   Logger.empty()
 
-  return buildDockerImage(args, context)
+  return buildDockerImage(args, context, tap)
 
 }
 
@@ -84,7 +84,7 @@ const startTap = async (args) => {
   const { params } = args
   const { attached, compose, detached, ensure, service, sync, tap } = params
 
-    // Check if we should build the container image first
+  // Check if we should build the container image first
   ensure && await checkBuildImage(args, 'tap', tap)
 
   // Check if we are running the container with just docker
@@ -151,7 +151,7 @@ module.exports = {
       },
       clean: {
         description: 'Cleans docker-sync before running the tap',
-        example: 'keg tap --clean true',
+        example: 'keg tap start --clean true',
         default: false
       },
       command: {

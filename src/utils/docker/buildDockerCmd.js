@@ -150,7 +150,7 @@ const buildDockerCmd = (globalConfig, params) => {
   params.container = (container || context).toUpperCase()
 
   // Get the default docker arguments
-  let dockerCmd = getDockerArgs({
+  const dockerCmd = getDockerArgs({
     cmd,
     context,
     args: dockerOpts,

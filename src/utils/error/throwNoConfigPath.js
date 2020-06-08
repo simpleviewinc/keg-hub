@@ -12,14 +12,25 @@ const { throwTaskFailed } = require('./throwTaskFailed')
  * @returns {void}
 */
 const throwNoConfigPath = (globalConfig, pathName) => {
-  
-  Logger.error(`\n Global config path '${pathName}' does on exist in the paths config!`)
 
   Logger.empty()
 
-  Logger.cyan(`Global Config Paths:`)
+  Logger.error(`Global config path '${pathName}' does on exist in the paths config!`)
+
+  Logger.empty()
+  Logger.empty()
+
+  Logger.success(`Global Config:`)
+  Logger.empty()
+
+  Logger.cyan(`Repo Paths:`)
   Logger.data(get(globalConfig, `${ GLOBAL_CONFIG_PATHS.CLI_PATHS }`))
 
+  Logger.empty()
+
+  Logger.cyan(`Linked Taps:`)
+  Logger.data(get(globalConfig, `${ GLOBAL_CONFIG_PATHS.TAP_LINKS }`))
+  
   Logger.empty()
 
   throwTaskFailed()

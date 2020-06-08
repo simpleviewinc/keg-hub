@@ -66,8 +66,6 @@ const destroyDockerSync = async args => {
     },
   })
 
-
-
 }
 
 module.exports = {
@@ -86,6 +84,9 @@ module.exports = {
     image: {
       description: 'Remove the image related to the context',
       example: 'keg docker sync destroy --image false',
+      ask: {
+        message: 'Confirm remove docker image?'
+      },
       default: true
     },
     tap: {

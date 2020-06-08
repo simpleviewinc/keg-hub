@@ -26,7 +26,7 @@ const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
     // Get the task from available tasks
     const { task, options } = findTask(globalConfig, tasks, command, args)
 
-    return executeTask({
+    await executeTask({
       options,
       task,
       tasks,

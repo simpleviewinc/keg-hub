@@ -32,7 +32,7 @@ const getLocation = (globalConfig, task, context, tap) => {
       : getTapPath(globalConfig, tap)
 
   // Return the location, or throw because no location could be found
-  return location || throwNoConfigPath(globalConfig, locContext)
+  return location || throwNoConfigPath(globalConfig, tap || context)
 
 }
 

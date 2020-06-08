@@ -30,11 +30,14 @@
         "buildKit": true,
         "force": true
       },
+      "editorCmd": false,
+      "errorStack": false,
       "git": {
         "secure": false
       },
-      "editorCmd": false,
-      "errorStack": false
+      "task": {
+        "optionsAsk": true
+      }
     }
   }
 }

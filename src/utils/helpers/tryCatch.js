@@ -8,11 +8,11 @@ const { isFunc } = require('jsutils')
  *
  * @returns {*} - Response from toCatch || onCatch, when toCatch throws
  */
-const catchMe = (toCatch, onCatch, ...args) => {
+const tryCatch = (toCatch, onCatch, ...args) => {
   try { return toCatch(...args) }
   catch(err){ return isFunc(onCatch) ? onCatch(err, ...args) : err }
 }
 
 module.exports = {
-  catchMe
+  tryCatch
 }
