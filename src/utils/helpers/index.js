@@ -1,4 +1,5 @@
 module.exports = {
+  ...require('./catchMe'),
   ...require('./confirmExec'),
   ...require('./exists'),
   ...require('./hasHelpArg'),

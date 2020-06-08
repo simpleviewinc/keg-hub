@@ -55,26 +55,31 @@ const parseValue = toParse => {
  */
 const parseContent = (envPath, encoding) => {
   // Load at run time to speed up other cli calls
-  const { getGlobalConfig } = require('../../utils/globalConfig/getGlobalConfig')
-  const { fillTemplate } = require('../../utils/template/fillTemplate')
-
+  const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
+  const { fillTemplate } = require('KegUtils/template/fillTemplate')
+  const globalConfig = getGlobalConfig()
+  
   return fillTemplate({
     template: fs.readFileSync(envPath, { encoding }),
-    data: getGlobalConfig()
+    // Add the globalConfig, and the process.envs as the data objects
+    // This allows values in ENV templates from globalConfig || process.env
+    // In the template example: 
+    //    RN_PACKAGER_IP={{ envs.KEG_DOCKER_IP }}
+    data: { ...globalConfig, envs: { ...globalConfig.envs, ...process.env }
+    }
   })
     // Split each line to isolate the keg value pair
     .split(NEWLINES_MATCH)
     // Loop over each line an parse the key value pair
     .reduce((obj, line, idx) => {
-      
+
       // Check if line is valid key=value pair that can be split into an array
       const parsed = getParsedEntry(line)
-      // If we don't get an array back, just return the object
-      // Otherwise, add the key to the object and parse the value
-      return !parsed
-        ? obj
-        : Object.assign(obj, { [ parsed[1] ]: parseValue(parsed[2] || '') })
 
+      // Add the key to the object and parse the value
+      parsed && (obj[ parsed[1] ] = parseValue(parsed[2] || ''))
+      
+      return obj
     }, {})
 }
 
