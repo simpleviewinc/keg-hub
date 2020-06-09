@@ -27,9 +27,6 @@
     "start": "yarn copy:build; yarn copy:readme; react-scripts start; yarn",
     "test": "yarn copy:build; react-scripts test"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
