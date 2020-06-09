@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 import React from 'react'
 import { View } from 'KegView'
 

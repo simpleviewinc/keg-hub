@@ -1,4 +1,4 @@
-/* eslint-disable import/first */
+
 import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { TextBox } from './textBox'

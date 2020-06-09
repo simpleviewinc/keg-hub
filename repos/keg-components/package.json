@@ -14,6 +14,7 @@
     "url": "ssh://git@github.com/simpleviewinc/keg-components.git",
     "type": "git"
   },
+  "license": "MIT",
   "scripts": {
     "postinstall": "cd scripts && node postinstall.js",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
@@ -40,7 +41,11 @@
     "sb:web": "RE_PLATFORM=web start-storybook -p 60710",
     "sb:native": "RE_PLATFORM=native start-storybook -p 60710",
     "sb:server": "npx http-server docs",
-    "jsconfig": "cd scripts && node jsconfig.js web"
+    "jsconfig": "cd scripts && node jsconfig.js web",
+    "format:eslint": "eslint --config ./configs/eslint.config.js . --fix --quiet",
+    "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
+    "format": "yarn format:prettier && yarn format:eslint",
+    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint {{changed}} --fix"
   },
   "dependencies": {},
   "devDependencies": {
@@ -63,16 +68,23 @@
     "@storybook/react": "5.3.6",
     "@storybook/storybook-deployer": "2.8.1",
     "app-root-path": "3.0.0",
+    "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
     "babel-plugin-module-resolver": "4.0.0",
     "babel-plugin-react-native-web": "0.11.5",
     "babel-preset-react-native": "4.0.1",
+    "eslint": "7.1.0",
+    "eslint-plugin-jest": "23.13.2",
+    "eslint-plugin-react": "7.20.0",
+    "eslint-plugin-react-native": "3.8.1",
     "expo": "36.0.0",
     "expo-font": "8.0.0",
     "jest": "24.7.1",
     "jest-expo": "^37.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git#3.2.1",
+    "onchange": "7.0.2",
+    "prettier": "2.0.5",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-is": "16.12.0",
@@ -98,9 +110,6 @@
     "expo-font": "^8.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "react": "^16.9.0"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
