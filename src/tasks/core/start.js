@@ -10,6 +10,7 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
 const { buildDockerImage } = require('KegUtils/builders/buildDockerImage')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
+const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 
 /**
  * Starts a docker container for a tap
@@ -79,6 +80,9 @@ const checkBuildImage = async (args, context) => {
 const startCore = async (args) => {
   const { params } = args
   const { attached, compose, detached, ensure, service, sync } = params
+
+  // Check if the base image exists, and if not then build it
+  ensure && await buildBaseImg(args)
 
   // Check if we should build the container image first
   ensure && await checkBuildImage(args, 'core')

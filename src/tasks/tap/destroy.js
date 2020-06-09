@@ -69,8 +69,12 @@ module.exports = {
         default: false
       },
       image: {
-        description: 'Remove the image related to the context',
+        description: 'Remove the docker image related to the tap',
         example: 'keg tap destroy --image false',
+        ask: {
+          message: 'Do you also want to delete the docker image?',
+          default: 'Yes'
+        },
         default: true
       },
       service: {

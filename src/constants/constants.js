@@ -53,6 +53,22 @@ module.exports = deepFreeze({
     '--h',
   ],
 
+  // Option values that will be converted into booleans
+  BOOL_VALUES: {
+    truthy: [
+      'true',
+      't',
+      'yes',
+      'y',
+    ],
+    falsy: [
+      'false',
+      'f',
+      'no',
+      'n'
+    ]
+  },
+
   CLI_ROOT: path.join(__dirname, '../../'),
 
   // --- GIT Constants --- //

@@ -4,6 +4,7 @@ const { DOCKER } = require('KegConst')
 const { spawnCmd } = require('KegProc')
 const { logVirtualUrl } = require('KegUtils/log')
 const { isDetached } = require('KegUtils/helpers/isDetached')
+const { waitForIt } = require('KegUtils/helpers/waitForIt')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { getCoreVersion } = require('KegUtils/getters')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
@@ -11,6 +12,7 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { checkCall, get, reduceObj, isObj, isFunc } = require('jsutils')
 const { buildDockerImage } = require('KegUtils/builders/buildDockerImage')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
+const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 
 /**
  * Starts a docker container for a tap
@@ -69,6 +71,24 @@ const checkBuildImage = async (args, context, tap) => {
 
 }
 
+const checkForContainer = async (total) => {
+
+  Logger.info(` Checking for sync containers...`)
+
+  // TODO: need to pull this from globalConfig, or ENVs
+  const containers = [ `tap-unison-sync`, `cli-unison-sync`, `core-unison-sync` ]
+
+  const exists = await docker.container.exists(
+    containers,
+    container => containers.indexOf(container.names) !== -1,
+    'json'
+  )
+
+  exists && Logger.info(` Sync containers found!`)
+
+  return exists
+}
+
 /**
  * Start a docker-sync or docker container for a tap
  * @param {Object} args - arguments passed from the runTask method
@@ -83,6 +103,9 @@ const startTap = async (args) => {
 
   const { params } = args
   const { attached, compose, detached, ensure, service, sync, tap } = params
+
+  // Check if the base image exists, and if not then build it
+  ensure && await buildBaseImg(args)
 
   // Check if we should build the container image first
   ensure && await checkBuildImage(args, 'tap', tap)
@@ -108,21 +131,38 @@ const startTap = async (args) => {
 
   // If sync was started with detached
   // Then we need to start docker-compose manually
-  compose &&
-  get(syncContextData, 'params.detached') &&
-    runInternalTask(
-      'tasks.docker.tasks.compose.tasks.up',
-      {
-        ...args,
-        command: 'up',
-        params: {
-          ...args.params,
-          detached: isDetached(`compose`, detached, attached),
-          context: 'tap'
-        },
-        __internal: syncContextData,
+  const startedTap = compose &&
+    get(syncContextData, 'params.detached') &&
+    await waitForIt({
+      // Check for check for sync ontainers
+      check: checkForContainer,
+      // Check 5 times
+      amount: 2,
+      // Wait 5 second between each check
+      wait: 10000,
+      // It takes some time for the sync containers to boot
+      // So we need to wait a bit until the have started up
+      onFinish: async () => {
+        await runInternalTask(
+          'tasks.docker.tasks.compose.tasks.up',
+          {
+            ...args,
+            command: 'up',
+            params: {
+              ...args.params,
+              detached: isDetached(`compose`, detached, attached),
+              context: 'tap'
+            },
+            __internal: syncContextData,
+          }
+        )
       }
-  )
+    })
+
+
+  ;!startedTap
+    ? Logger.error(`Could not start tap in docker-compose!`)
+    : Logger.success(`Tap is now running in docker-compose!`)
 
 }
 

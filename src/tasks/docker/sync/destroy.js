@@ -82,7 +82,7 @@ module.exports = {
       required: true
     },
     image: {
-      description: 'Remove the image related to the context',
+      description: 'Remove the docker image related to the context',
       example: 'keg docker sync destroy --image false',
       ask: {
         message: 'Confirm remove docker image?'

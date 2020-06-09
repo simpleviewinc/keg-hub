@@ -7,4 +7,5 @@ module.exports = {
   ...require('./isDetached'),
   ...require('./limboify'),
   ...require('./mapEnv'),
+  ...require('./waitForIt'),
 }

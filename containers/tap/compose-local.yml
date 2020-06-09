@@ -4,7 +4,8 @@ services:
     volumes:
       - cli-sync:/${DOC_CLI_PATH}:nocopy
       - tap-sync:${DOC_APP_PATH}:nocopy
-      # - core-sync:${DOC_CORE_PATH}:nocopy
+      - core-sync:${DOC_CORE_PATH}:nocopy
+      - components-sync:${DOC_COMPONENTS_PATH}:nocopy
 volumes:
   cli-sync:
     external:
@@ -12,6 +13,9 @@ volumes:
   tap-sync:
     external:
       name: "tap-unison-sync"
-  # core-sync:
-  #   external:
-  #     name: "core-unison-sync"
+  core-sync:
+    external:
+      name: "core-unison-sync"
+  components-sync:
+    external:
+      name: "components-unison-sync"

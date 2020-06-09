@@ -182,18 +182,24 @@ const removeContainer = (args={}, shouldThrow=true) => {
  * @returns {boolean} - Based on if the container exists
  */
 const exists = async (compare, doCompare, format) => {
+  compare = isArr(compare) ? compare : [ compare ]
+  
   // Get all current containers
   const containers = await list({ errResponse: [], format: 'json' })
 
-  // If we have containers, try to find the one matching the passed in argument
   return containers &&
     containers.length &&
-    containers.some(container => compareItems(
-      container,
-      compare,
-      doCompare,
-      [ 'id', 'names' ]
-    ))
+    compare.map(cont => {
+      // If we have containers, try to find the one matching the passed in argument
+      return containers.some(container => compareItems(
+        container,
+        compare,
+        doCompare,
+        [ 'id', 'names' ]
+      ))
+    })
+    .indexOf(false) === -1
+
 }
 
 /**

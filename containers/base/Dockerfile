@@ -7,7 +7,7 @@ ARG GIT_CLI_URL
 ARG DOC_CLI_PATH=/keg/keg-cli
 
 # Set the default expojs version to it's locked down
-ARG EXPO_CLI_VERSION="3.21.5"
+ARG EXPO_CLI_VERSION="3.21.3"
 
 WORKDIR /
 

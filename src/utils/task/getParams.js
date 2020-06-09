@@ -6,12 +6,16 @@ const {
   isArr,
   isStr,
   isObj,
+  isBool,
   softFalsy,
   wordCaps,
   isStrBool,
   toBool,
   reduceObj
 } = require('jsutils')
+const { BOOL_VALUES } = require('KegConst/constants')
+
+const boolOpts = BOOL_VALUES.truthy.concat(BOOL_VALUES.falsy)
 
 /**
  * Checks for a required option, and throws if it does not exist
@@ -35,8 +39,16 @@ const checkRequired = (task, key, meta) => {
  * @returns {*} - Boolean or original value
  */
 const checkBoolValue = value => {
-  // If the value is 'true' || 'false', convert it to a true boolean
-  return isStrBool(value) ? toBool(value) : value
+  if(!exists(value) || isBool(value)) return value
+
+  const lowerVal = value && value.toLowerCase()
+
+  // Check the value is one of the joined bool options
+  return boolOpts.indexOf(lowerVal) === -1
+    ? value
+    : BOOL_VALUES.truthy.indexOf(lowerVal) !== -1
+      ? true
+      : false
 }
 
 /**
@@ -202,8 +214,7 @@ const getParamValue = ({ taskKeys, options, long, short, alias }) => {
       // If value is the next option, remove it from the options array
       if(value === nextOpt) options = removeOption(options, value)
 
-      // If the value is 'true' || 'false', convert it to a true boolean
-      return checkBoolValue(value)
+      return value
 
     }, null)
 }
@@ -229,17 +240,16 @@ const findParam = ({ key, meta={}, index, task, ...args }) => {
     alias: meta.alias,
   })
 
-  // If value exists, then return it
-  if(exists(value)) return value
-
-  // Otherwise if there's not any allowed, then return the default
-  if(!isArr(meta.allowed)) return meta.default
+  // If value exists or if there's not any allowed, then return it
+  if(exists(value) || !isArr(meta.allowed)) return value
 
   // Otherwise loop the allowed and check if one exists in the options array
   // If a allowed if found, it will be used as the value for the argument key
   const allowedMatch = meta.allowed.reduce((foundVal, allowed) => {
     return exists(foundVal)
       ? foundVal
+      // The index of the found allowed option must match the index of the key
+      // In the tasks options object
       : args.options.indexOf(allowed) === index
         ? allowed
         : foundVal
@@ -250,7 +260,7 @@ const findParam = ({ key, meta={}, index, task, ...args }) => {
     ? removeOption(args.options, allowedMatch)
     : args.options
 
-  return allowedMatch || meta.default
+  return allowedMatch
 
 }
 
@@ -266,14 +276,16 @@ const findParam = ({ key, meta={}, index, task, ...args }) => {
  * @returns {Object} - Mapped params object
  */
 const ensureParam = async (task, params, key, meta) => {
+
+  params[key] = checkBoolValue(params[key])
   if(exists(params[key])) return params
 
-  const value = await optionsAsk(key, meta)
+  let value = await optionsAsk(key, meta)
 
   // Treat empty string as no value
   ;!exists(value) || value === ''
     ? checkRequired(task, key, meta)
-    : ( params[key] = value )
+    : ( params[key] = checkBoolValue(value) )
 
   return params
 }
@@ -324,8 +336,9 @@ const loopTaskOptions = (task, taskKeys, options) => {
 
     // Check if the arg is env, and map it from the env shortcuts
     const val = checkEnvKeyValue(key, value)
+
     // If we get a value back, add it to the params object
-    val && ( params[key] = val )
+    exists(val) && ( params[key] = val )
 
     // Ensure the param exists if needed, and return
     return ensureParam(task, params, key, meta)
@@ -367,7 +380,7 @@ const getParams = async ({ options=[], task }) => {
     // Otherwise set it as the first key in the task options object
     : ensureParams(
         task,
-        { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], checkBoolValue(options[0])) }
+        { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], options[0]) }
       )
 
 }

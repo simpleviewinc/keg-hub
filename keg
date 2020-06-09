@@ -97,7 +97,7 @@ keg(){
   # Run the keg-cli bash script
   elif [[ "$1" == "init" ]]; then
     keg_message "Running init scrpt"
-    /bin/bash $KEG_CLI_PATH/scripts/setup/unix-init.sh "${@:2}"
+    /bin/bash $KEG_CLI_PATH/scripts/setup/mac-init.sh "${@:2}"
     return
 
   # export the git key for the current terminal session

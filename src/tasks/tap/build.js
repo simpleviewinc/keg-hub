@@ -28,12 +28,28 @@ module.exports = {
       tap: {
         alias: [ 'name' ],
         description: 'Name of the tap to build a Docker image for',
+        example: 'keg tap --tap visitapps',
         required: true
+      },
+      args: {
+        description: 'Add docker build arguments from container env files',
+        example: 'keg tap args="--force-rm"',
+        default: true
+      },
+      cache: {
+        description: 'Docker will use build cache when building the image',
+        example: 'keg tap --cache false',
+        default: true
       },
       env: {
         description: 'Environment to build the Docker image for. Gets added as a tag to the image.',
+        example: 'keg tap --env staging',
         default: 'development',
-      }
+      },
+      tags: {
+        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
+        example: 'keg tap build tags=my-tag,local,development'
+      },
     }
   }
 }

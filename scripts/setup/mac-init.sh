@@ -11,7 +11,6 @@ KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
 # KEG_VB_SIZE=24288
 KEG_VB_SIZE=8192
 
-
 # Prints a message to the terminal through stderr
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
@@ -403,6 +402,19 @@ keg_add_machine_envs(){
 
 }
 
+
+# Adds act package, which allows testing github actions locally through docker
+keg_install_github_cli(){
+
+  # Check for yarn install
+  if [[ -x "$(command -v gh 2>/dev/null)" ]]; then
+    keg_message "Github CLI is installed"
+  else
+    brew install github/gh/gh
+  fi
+
+}
+
 # Runs methods to setup the keg-cli, with docker and vagrant
 # Params
 #   * $1 - (Optional) - Section of the setup script to run
@@ -414,7 +426,7 @@ keg_setup(){
 
   # Uninstalls keg-cli and docker software
   # To run:
-  # bash unix-init.sh uninstall
+  # bash mac-init.sh uninstall
   #  * Runs only the uninstall portion of this script
   if [[ "$SETUP_TYPE" == "uninstall" ]]; then
     keg_uninstall_all
@@ -423,7 +435,7 @@ keg_setup(){
 
   # Removes all installed docker software, and recreates it
   # To run:
-  # bash unix-init.sh clean
+  # bash mac-init.sh clean
   #  * Runs only the clean portion of this script
   if [[ "$SETUP_TYPE" == "clean" || "$SETUP_TYPE" == "uninstall" ]]; then
     keg_clean_all
@@ -432,7 +444,7 @@ keg_setup(){
 
   # Remove currently running docker-machine, and remakes it
   # To run:
-  # bash unix-init.sh docker-reset
+  # bash mac-init.sh docker-reset
   #  * Runs only the docker-reset portion of this script
   if [[ "$SETUP_TYPE" == "docker-reset" || "$SETUP_TYPE" == "docre" ]]; then
     keg_message "Reseting docker-machine..."
@@ -442,7 +454,7 @@ keg_setup(){
 
   # Remove the virtual-box software, and reinstall it
   # To run:
-  # bash unix-init.sh vb-reset
+  # bash mac-init.sh vb-reset
   #  * Runs only the vb-reset portion of this script
   if [[ "$SETUP_TYPE" == "vb-reset" ]]; then
     keg_remove_virtual_box
@@ -451,7 +463,7 @@ keg_setup(){
 
   # Remove the installed software, and reinstall it
   # To run:
-  # bash unix-init.sh reset
+  # bash mac-init.sh reset
   #  * Runs only the reset portion of this script
   if [[ "$SETUP_TYPE" == "reset" ]]; then
     keg_message "Reseting keg-cli..."
@@ -461,26 +473,35 @@ keg_setup(){
   fi
 
   # To run:
-  # bash unix-init.sh
+  # bash mac-init.sh
   #  * Full install
   #  * Should be run when first setting up the machine
-  #  * Running `bash unix-init.sh init` will do the same thing
+  #  * Running `bash mac-init.sh init` will do the same thing
   if [[ -z "$SETUP_TYPE" || "$SETUP_TYPE" == "init" ]]; then
     INIT_SETUP="true"
   fi
 
   # Setup and install brew
   # To run:
-  # bash unix-init.sh brew
+  # bash mac-init.sh brew
   #  * Runs only the brew portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "brew" ]]; then
     keg_message "Checking for brew install..."
     keg_brew_install "${@:2}"
   fi
 
+  # Setup and install brew
+  # To run:
+  # bash mac-init.sh brew
+  #  * Runs only the brew portion of this script
+  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "gh" || "$SETUP_TYPE" == "hub" ]]; then
+    keg_message "Checking for github cli install..."
+    keg_install_github_cli
+  fi
+
   # Setup and install docker
   # To run:
-  # bash unix-init.sh docker
+  # bash mac-init.sh docker
   #  * Runs only the docker portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "docker" || "$SETUP_TYPE" == "d" ]]; then
     keg_message "Checking for docker install..."
@@ -489,7 +510,7 @@ keg_setup(){
 
   # Setup and install virtualbox
   # To run:
-  # bash unix-init.sh virtualbox
+  # bash mac-init.sh virtualbox
   #  * Runs only the virtualbox portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "virtualbox" || "$SETUP_TYPE" == "vb" ]]; then
     keg_message "Checking for virtualbox install..."
@@ -498,7 +519,7 @@ keg_setup(){
 
   # Setup and install machine
   # To run:
-  # bash unix-init.sh machine
+  # bash mac-init.sh machine
   #  * Runs only the docker-machine portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "machine" || "$SETUP_TYPE" == "dm" ]]; then
     keg_message "Checking if docker-machine is setup..."
@@ -507,7 +528,7 @@ keg_setup(){
 
   # Setup and install node
   # To run:
-  # bash unix-init.sh node
+  # bash mac-init.sh node
   #  * Runs only the node portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node" ]]; then
     keg_message "Checking for node install..."
@@ -516,7 +537,7 @@ keg_setup(){
 
   # Setup and install yarn
   # To run:
-  # bash unix-init.sh yarn
+  # bash mac-init.sh yarn
   #  * Runs only the yarn portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "yarn" ]]; then
     keg_message "Checking for yarn install..."
@@ -525,7 +546,7 @@ keg_setup(){
 
   # Setup and install cli
   # To run:
-  # bash unix-init.sh cli
+  # bash mac-init.sh cli
   #  * Runs only the keg cli portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "cli" ]]; then
     keg_message "Checking keg cli install..."
@@ -534,7 +555,7 @@ keg_setup(){
 
   # Setup and install cli
   # To run:
-  # bash unix-init.sh cli
+  # bash mac-init.sh cli
   #  * Runs only the keg cli portion of this script
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "sync" ]]; then
     keg_message "Checking docker-sync install..."
