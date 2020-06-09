@@ -187,7 +187,7 @@ const exists = async (compare, doCompare, format) => {
   // Get all current containers
   const containers = await list({ errResponse: [], format: 'json' })
 
-  return containers &&
+  const found = containers &&
     containers.length &&
     compare.map(cont => {
       // If we have containers, try to find the one matching the passed in argument
@@ -198,7 +198,10 @@ const exists = async (compare, doCompare, format) => {
         [ 'id', 'names' ]
       ))
     })
-    .indexOf(false) === -1
+
+  return found.indexOf(false) === -1
+    ? found[0]
+    : false
 
 }
 

@@ -7,6 +7,7 @@ const { isDetached } = require('KegUtils/helpers/isDetached')
 const { waitForIt } = require('KegUtils/helpers/waitForIt')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { getCoreVersion } = require('KegUtils/getters')
+const { generalError } = require('KegUtils/error/generalError')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { checkCall, get, reduceObj, isObj, isFunc } = require('jsutils')
@@ -51,7 +52,7 @@ const startContainer = async ({ globalConfig, params }) => {
  * @param {Object} context - Context for the image
  * @param {Object} tap - Name of the tap to build the image for
  *
- * @returns {void}
+ * @returns {Object} - Build image object from docker CLI
  */
 const checkBuildImage = async (args, context, tap) => {
 
@@ -67,10 +68,19 @@ const checkBuildImage = async (args, context, tap) => {
 
   Logger.empty()
 
-  return buildDockerImage(args, context, tap)
+  const tapImg = await buildDockerImage(args, context, tap)
+
+  // TODO: Add better error message
+  return tapImg || generalError(`Could not build Docker "${tap} Tap" image!`)
 
 }
 
+/**
+ * Checks that the tap container exists
+ * @param {Object} total - Amount of time the container has been checked
+ *
+ * @returns {Object} - Build image object from docker CLI
+ */
 const checkForContainer = async (total) => {
 
   Logger.info(` Checking for sync containers...`)
@@ -90,6 +100,22 @@ const checkForContainer = async (total) => {
 }
 
 /**
+ * Checks that the tap image exists. If it doesn't then build it
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {Object} context - Context for the image
+ * @param {Object} tap - Name of the tap to build the image for
+ *
+ * @returns {void}
+ */
+const checkBuildBase = async args => {
+  // Check if the base image exists, and if not then build it
+  const baseImg = await buildBaseImg(args)
+
+  // TODO: Add better error message
+  return baseImg || generalError(`Could not build Docker "Keg Base" image!`)
+}
+
+/**
  * Start a docker-sync or docker container for a tap
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
@@ -105,7 +131,7 @@ const startTap = async (args) => {
   const { attached, compose, detached, ensure, service, sync, tap } = params
 
   // Check if the base image exists, and if not then build it
-  ensure && await buildBaseImg(args)
+  ensure && await checkBuildBase(args)
 
   // Check if we should build the container image first
   ensure && await checkBuildImage(args, 'tap', tap)
@@ -158,7 +184,6 @@ const startTap = async (args) => {
         )
       }
     })
-
 
   ;!startedTap
     ? Logger.error(`Could not start tap in docker-compose!`)

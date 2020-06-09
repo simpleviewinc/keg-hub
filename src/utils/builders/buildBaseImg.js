@@ -20,7 +20,7 @@ const buildBaseImg = async args => {
 
   return runInternalTask(`tasks.docker.tasks.build`, {
     ...args,
-    params: { ...args.params, context: 'base' },
+    params: { ...args.params, context: 'base', tap: undefined },
   })
 
 }

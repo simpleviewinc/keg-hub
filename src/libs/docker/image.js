@@ -129,7 +129,12 @@ const exists = async (compare, doCompare, log) => {
   // If we have images, try to find the one matching the passed in argument
   return images &&
     images.length &&
-    images.some(image => compareItems(image, compare, doCompare, [ 'id', 'repository' ]))
+    images.reduce((found, image) => {
+      return found ||
+        compareItems(image, compare, doCompare, [ 'id', 'repository' ]) &&
+        image
+    }, false)
+
 }
 
 /**
