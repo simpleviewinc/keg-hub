@@ -6,6 +6,7 @@ services:
       - tap-sync:${DOC_APP_PATH}:nocopy
       - core-sync:${DOC_CORE_PATH}:nocopy
       - components-sync:${DOC_COMPONENTS_PATH}:nocopy
+      - retheme-sync:${DOC_RETHEME_PATH}:nocopy
 volumes:
   cli-sync:
     external:
@@ -19,3 +20,6 @@ volumes:
   components-sync:
     external:
       name: "components-unison-sync"
+  retheme-sync:
+    external:
+      name: "retheme-unison-sync"

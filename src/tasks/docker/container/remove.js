@@ -6,6 +6,7 @@ const { dockerLog } = require('KegUtils/log/dockerLog')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
+const { exists } = require('KegUtils/helpers')
 
 /**
  * Run a docker container command

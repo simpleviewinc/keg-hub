@@ -23,10 +23,14 @@ const dockerSubTasks = {
  * @returns {Object} - Found docker sub-task
  */
 const getDockerSubTask = (task, command) => {
-  // Get the subTask if it exists
-  const subTask = isStr(dockerSubTasks[command]) && dockerSubTasks[command]
 
-  return subTask || generalError(`Unknown docker sub-task: '${command}'`)
+  // Get the subTask if it exists
+  const subTask = isStr(dockerSubTasks[command])
+    ? dockerSubTasks[command]
+    : get(task, `tasks.${ command }`)
+  
+
+  return subTask || generalError(`Can not run docker command. Unknown docker sub-task: '${command}'`)
 }
 
 /**
@@ -40,13 +44,14 @@ const getDockerSubTask = (task, command) => {
  */
 const dockerTask = args => {
 
-  const { globalConfig, command, task, tasks, options, params } = args
+  const { globalConfig, command, task, tasks, options=[], params } = args
+  const cmd = command !== 'd' ? command : options[0]
 
   // Find the docker sub-task
   const taskData = findTask(
     globalConfig,
     task.tasks,
-    getDockerSubTask(task, command),
+    getDockerSubTask(task, cmd),
     options
   )
 

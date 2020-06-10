@@ -27,19 +27,21 @@ const dockerExec = async args => {
     params,
   })
 
+  // docker exec -it tap sh
+
   // Run the command on the container
   await docker.container.exec({
     cmd,
     opts: options,
     container: cmdContext,
-  })
+  }, { options: { shell: true } })
 
 }
 
 module.exports = {
   exec: {
     name: 'exec',
-    alias: [ 'ex', 'att' ],
+    alias: [ 'ex' ],
     action: dockerExec,
     description: 'Execute a command on a running docker container',
     example: 'keg docker exec <options>',
@@ -53,12 +55,12 @@ module.exports = {
       cmd: {
         description: 'Docker container command to run. Default ( /bin/sh )',
         example: 'keg docker exec ls -ls',
-        default: '/bin/sh'
+        default: 'sh'
       },
       options: {
         alias: [ 'opts' ],
         description: 'Extra docker exec command options',
-        default: '-it'
+        default: '-i'
       },
       tap: {
         description: 'Tap name when "context" options is set to "tap"',

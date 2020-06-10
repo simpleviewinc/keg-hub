@@ -1,6 +1,5 @@
 const { get } = require('jsutils')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
-const { spawnCmd } = require('KegProc')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')

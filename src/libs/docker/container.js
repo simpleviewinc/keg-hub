@@ -183,7 +183,7 @@ const removeContainer = (args={}, shouldThrow=true) => {
  */
 const exists = async (compare, doCompare, format) => {
   compare = isArr(compare) ? compare : [ compare ]
-  
+
   // Get all current containers
   const containers = await list({ errResponse: [], format: 'json' })
 
@@ -197,9 +197,10 @@ const exists = async (compare, doCompare, format) => {
         doCompare,
         [ 'id', 'names' ]
       ))
+
     })
 
-  return found.indexOf(false) === -1
+  return found && found.indexOf(false) === -1
     ? found[0]
     : false
 
@@ -214,17 +215,24 @@ const exists = async (compare, doCompare, format) => {
  *
  * @returns {void}
  */
-const exec = async ({ container, item, opts, cmd }) => {
-
+const exec = async (args, cmdOpts) => {
+  const { container, item, opts, cmd, log=true } = args
   const options = isArr(opts) ? opts.join(' ') : opts
   let cont = container || item
   cont = isStr(cont) ? cont : cont
   
-  const { error, data } = await spawnProc(`docker exec ${ options.trim() } ${ cont } ${ cmd }`)
+  // const { error, data } = await spawnProc(`docker exec ${ options.trim() } ${ cont } ${ cmd }`)
+
+  const { error, data } = await dockerCli({
+    ...args,
+    log,
+    opts: `exec ${ options.trim() } ${ cont } ${ cmd }`,
+  }, cmdOpts)
 
   return error && !data ? apiError(error) : data
 
 }
+
 
 /**
  * Root docker container method to run docker container commands
@@ -240,6 +248,18 @@ const container = (args={}) => dynamicCmd(
   'container'
 )
 
+const get = async nameOrId => {
+  // Get all current containers
+  const containers = await list({ errResponse: [], format: 'json' })
+  return containers.reduce((item, container) => {
+    return item 
+      ? item
+      : container.names === nameOrId || container.id === nameOrId
+        ? container
+        : item
+  }, false)
+}
+
 // Add the sub-methods to the root docker image method
 Object.assign(container, {
   ...containerCmds,
@@ -248,6 +268,7 @@ Object.assign(container, {
   destroy,
   exec,
   exists,
+  get,
   list,
   remove: removeContainer,
 })
