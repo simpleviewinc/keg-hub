@@ -21,20 +21,18 @@ const dockerExec = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location, tap, image } = await buildLocationContext({
     globalConfig,
     task,
     params,
   })
 
-  // docker exec -it tap sh
-
   // Run the command on the container
-  await docker.container.exec({
-    cmd,
-    opts: options,
-    container: cmdContext,
-  }, { options: { shell: true } })
+  await docker.container.exec(
+    { container: image, opts: options, cmd },
+    { options: { env: contextEnvs } },
+    location
+  )
 
 }
 
@@ -60,7 +58,7 @@ module.exports = {
       options: {
         alias: [ 'opts' ],
         description: 'Extra docker exec command options',
-        default: '-i'
+        default: '-it'
       },
       tap: {
         description: 'Tap name when "context" options is set to "tap"',

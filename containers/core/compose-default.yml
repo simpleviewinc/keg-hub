@@ -2,6 +2,8 @@ version: "3.8"
 services:
   kegcore:
     image: ${IMAGE}
+    tty: true
+    stdin_open: true
     build:
       context: ${CONTEXT_PATH}
       dockerfile: ${CONTEXT_DOCKER_FILE}

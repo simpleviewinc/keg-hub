@@ -1,6 +1,6 @@
 const { compareItems, noItemError, cmdSuccess } = require('./helpers')
-const { remove, dockerCli, dynamicCmd } = require('./commands')
-const { isArr, toStr, isStr } = require('jsutils')
+const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
+const { isArr, toStr, isStr, deepMerge } = require('jsutils')
 
 // Container commands the require an item argument of the container id or name
 const containerItemCmds = [
@@ -215,21 +215,17 @@ const exists = async (compare, doCompare, format) => {
  *
  * @returns {void}
  */
-const exec = async (args, cmdOpts) => {
-  const { container, item, opts, cmd, log=true } = args
+const exec = async (args, cmdOpts={}) => {
+  const { container, item, opts, cmd, location } = args
   const options = isArr(opts) ? opts.join(' ') : opts
   let cont = container || item
   cont = isStr(cont) ? cont : cont
-  
-  // const { error, data } = await spawnProc(`docker exec ${ options.trim() } ${ cont } ${ cmd }`)
 
-  const { error, data } = await dockerCli({
-    ...args,
-    log,
-    opts: `exec ${ options.trim() } ${ cont } ${ cmd }`,
-  }, cmdOpts)
-
-  return error && !data ? apiError(error) : data
+  return raw(
+    `exec ${ options } ${ cont } ${ cmd }`,
+    cmdOpts,
+    location
+  )
 
 }
 

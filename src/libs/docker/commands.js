@@ -27,7 +27,7 @@ const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
  * @returns {Array|string} - JSON array of items || stdout from docker cli call
  */
 const dockerCli = async (params={}, cmdOpts={}) => {
-  const { opts, cmd, errResponse, log, skipError, format='', force } = params
+  const { opts, errResponse, log, skipError, format='', force } = params
 
   const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
   const useFormat = format === 'json' ? `--format "{{json .}}"` : format

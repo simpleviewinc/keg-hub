@@ -83,6 +83,9 @@ const buildLocationContext = async ({ envs={}, globalConfig, __internal, params,
     tap,
   )
 
+  // Get the image name based on the cmdContext
+  const image = getContainerConst(cmdContext, `env.image`)
+
   // Get the ENV vars for the command context
   // Merge with any passed in envs
   const contextEnvs = {
@@ -99,7 +102,7 @@ const buildLocationContext = async ({ envs={}, globalConfig, __internal, params,
     GIT_KEY: await getGitKey(globalConfig),
   }
 
-  return { cmdContext, contextEnvs, location, tap }
+  return { cmdContext, contextEnvs, location, tap, image }
 }
 
 module.exports = {
