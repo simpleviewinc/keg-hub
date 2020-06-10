@@ -43,6 +43,7 @@ services:
       - GIT_RESOLVER_URL
       - GIT_TAP_URL
       - IMAGE_FROM
+      - KEG_CORE_PROGRESS
       - NM_INSTALL
       - NODE_ENV
     ports:
