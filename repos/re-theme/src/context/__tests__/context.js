@@ -3,8 +3,12 @@ jest.resetAllMocks()
 jest.clearAllMocks()
 
 const defTheme = { test: 'test' }
-const createContext = jest.fn(value => { return value })
-const getDefaultTheme = jest.fn(() => { return defTheme })
+const createContext = jest.fn(value => {
+  return value
+})
+const getDefaultTheme = jest.fn(() => {
+  return defTheme
+})
 
 jest.setMock('react', { createContext })
 jest.setMock('../../theme/default', { getDefaultTheme })
@@ -12,7 +16,6 @@ jest.setMock('../../theme/default', { getDefaultTheme })
 const { ReThemeContext } = require('../context')
 
 describe('ReThemeContext', () => {
-
   it('should return react context object', () => {
     expect(createContext).toHaveBeenCalled()
   })
@@ -24,5 +27,4 @@ describe('ReThemeContext', () => {
   it('should use the correct theme', () => {
     expect(ReThemeContext).toEqual(defTheme)
   })
-
 })

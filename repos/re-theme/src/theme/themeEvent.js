@@ -14,17 +14,16 @@ const listeners = {}
  * @returns {number} - Index of the listener in the events array cache
  */
 const addThemeEvent = (event, listener) => {
-
   // Ensure event and listener are passed in correctly
-  if(!event || !isFunc(listener)) return
-  
+  if (!event || !isFunc(listener)) return
+
   // Create the new event event
   listeners[event] = listeners[event] || []
 
   // Add the listener to the event event
   listeners[event].push(listener)
 
-  // Return the index of the added listener 
+  // Return the index of the added listener
   return listeners[event].length - 1
 }
 
@@ -36,18 +35,20 @@ const addThemeEvent = (event, listener) => {
  * @returns {void}
  */
 const removeThemeEvent = (event, removeListener) => {
-
   // Ensure the proper params are passed in
-  if(!event || !listeners[event] || (!removeListener && removeListener !== 0)) return
+  if (!event || !listeners[event] || (!removeListener && removeListener !== 0))
+    return
 
   // If an index is passed in, use that to remove the listener function
   isNum(removeListener)
-    // Use splice to remove the listener at the correct index
-    ? listeners[event].splice(removeListener, 1)
-    // Otherwise ensure the listener and events exists, then filter out the listener
-    : isFunc(removeListener) &&
+    ? // Use splice to remove the listener at the correct index
+      listeners[event].splice(removeListener, 1)
+    : // Otherwise ensure the listener and events exists, then filter out the listener
+    isFunc(removeListener) &&
       isArr(listeners[event]) &&
-      (listeners[event] = listeners[event].filter(listener => listener !== removeListener))
+      (listeners[event] = listeners[event].filter(
+        listener => listener !== removeListener
+      ))
 }
 
 /**
@@ -69,14 +70,8 @@ const fireThemeEvent = (event, ...params) => {
  *
  * @returns {void}
  */
-const clearThemeEvents = event => {
-  event && listeners[event]
-    ? (listeners[event] = [])
-    : listeners = {}
-}
+// const clearThemeEvents = event => {
+//   event && listeners[event] ? (listeners[event] = []) : (listeners = {})
+// }
 
-export {
-  addThemeEvent,
-  fireThemeEvent,
-  removeThemeEvent
-}
+export { addThemeEvent, fireThemeEvent, removeThemeEvent }

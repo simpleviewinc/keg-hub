@@ -1,6 +1,6 @@
 /** @module hooks */
 
-import React, { useContext } from "react"
+import { useContext } from 'react'
 import { ReThemeContext } from '../context/context'
 import { getTheme } from '../helpers/getTheme'
 

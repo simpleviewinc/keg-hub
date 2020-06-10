@@ -19,19 +19,18 @@ import { restructureTheme } from './restructureTheme'
  *
  * @returns {Object} - Merged theme
  */
-const joinThemeSizes = (theme, sizeKey, extraTheme={}) => {
+const joinThemeSizes = (theme, sizeKey, extraTheme = {}) => {
   return deepMerge(
     // Add the extra theme first, so it has lowest priority
     extraTheme,
     // Get the sizes to merge, and map to the theme
-    ...getMergeSizes(sizeKey)
-      .reduce((themes, key) => {
-        // Check if a theme exists for the passed in key
-        // And add it to the themes array
-        theme[key] && themes.push(theme[key])
+    ...getMergeSizes(sizeKey).reduce((themes, key) => {
+      // Check if a theme exists for the passed in key
+      // And add it to the themes array
+      theme[key] && themes.push(theme[key])
 
-        return themes
-      }, [])
+      return themes
+    }, [])
   )
 }
 
@@ -47,9 +46,10 @@ const joinThemeSizes = (theme, sizeKey, extraTheme={}) => {
  */
 const mergeWithDefault = (theme, defaultTheme, usrPlatform) => {
   // Check if theres a defaultTheme, and it's not equal to the passed in theme
-  const mergedTheme = defaultTheme && theme !== defaultTheme 
-    ? deepMerge(defaultTheme, theme)
-    : deepMerge({}, theme)
+  const mergedTheme =
+    defaultTheme && theme !== defaultTheme
+      ? deepMerge(defaultTheme, theme)
+      : deepMerge({}, theme)
 
   // Build the sizes for the merged theme based on the sizeMap keys
   return restructureTheme(mergedTheme, usrPlatform)
@@ -67,11 +67,10 @@ const mergeWithDefault = (theme, defaultTheme, usrPlatform) => {
  * @returns {Object} Subsection of the theme based on current dimensions if it exists
  */
 export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
-
   // If theres no theme, or not valid curSize, just return the passed in theme
-  if(!isObj(theme)) return theme
+  if (!isObj(theme)) return theme
 
-  if(!isObj(usrPlatform)) usrPlatform = {}
+  if (!isObj(usrPlatform)) usrPlatform = {}
 
   // Pull out the key and the size that matches the width
   const [ key, size ] = getSize(width)
@@ -79,18 +78,9 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
   const mergedTheme = mergeWithDefault(theme, defaultTheme, usrPlatform)
 
   // Extract the sizes from the theme
-  const {
-    xsmall,
-    small,
-    medium,
-    large,
-    xlarge,
-    ...extraTheme
-  } = mergedTheme
+  const { xsmall, small, medium, large, xlarge, ...extraTheme } = mergedTheme
 
-  const builtTheme = size
-    ? joinThemeSizes(theme, key, extraTheme)
-    : extraTheme
+  const builtTheme = size ? joinThemeSizes(theme, key, extraTheme) : extraTheme
 
   builtTheme.RTMeta = { key, size, width, height }
   builtTheme.join = builtTheme.join || joinTheme

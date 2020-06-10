@@ -1,4 +1,3 @@
-
 let RNDimensions
 
 export const setRNDimensions = dims => {
@@ -7,9 +6,7 @@ export const setRNDimensions = dims => {
 
 export const Dimensions = {
   get: (...params) => {
-    return RNDimensions
-      ? RNDimensions.get(...params)
-      : { width: 0, height: 0 }
+    return RNDimensions ? RNDimensions.get(...params) : { width: 0, height: 0 }
   },
   set: (...params) => {
     RNDimensions && RNDimensions.set(...params)
@@ -22,5 +19,5 @@ export const Dimensions = {
   },
   removeEventListener: (...params) => {
     RNDimensions && RNDimensions.removeEventListener(...params)
-  }
+  },
 }

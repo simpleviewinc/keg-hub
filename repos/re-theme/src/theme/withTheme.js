@@ -14,11 +14,12 @@ export const withTheme = Component => {
   return props => {
     return (
       <ReThemeContext.Consumer>
-        {value => {
-          return (
-            <Component theme={ value } { ...props } />
-          )
-        }}
+        { value => {
+          return <Component
+            theme={value}
+            {...props}
+          />
+        } }
       </ReThemeContext.Consumer>
     )
   }

@@ -7,15 +7,13 @@ const updateSizeMap = {
   small: 3,
   medium: 45,
   large: 567,
-  xlarge: 123456
+  xlarge: 123456,
 }
 
 const sizeMap = require('../sizeMap')
 
 describe('sizeMap', () => {
-
   describe('setSizes', () => {
-
     afterEach(() => {
       sizeMap.setSizes({
         xsmall: 1,
@@ -27,16 +25,14 @@ describe('sizeMap', () => {
     })
 
     it('should update the sizes of the sizeMap', () => {
-
       sizeMap.setSizes(updateSizeMap)
       const sizeMapObj = sizeMap.getSizeMap()
       const updateKeys = Object.keys(updateSizeMap)
 
       sizeMapObj.entries.map(entry => {
-        expect( updateKeys.indexOf(entry[0]) ).not.toBe(-1)
-        expect( updateSizeMap[ entry[0] ] ).toBe(entry[1])
+        expect(updateKeys.indexOf(entry[0])).not.toBe(-1)
+        expect(updateSizeMap[entry[0]]).toBe(entry[1])
       })
-
     })
 
     it('should not accept parameters other then an object', () => {
@@ -79,80 +75,61 @@ describe('sizeMap', () => {
       expect(console.error).toHaveBeenCalledTimes(8)
 
       console.error = oldErr
-
     })
 
     it('should return the sizeMap object after its been updated', () => {
-      
       expect(updateSizeMap).not.toBe(sizeMap.getSizeMap())
       expect(sizeMap.setSizes(updateSizeMap)).toBe(sizeMap.getSizeMap())
-
     })
 
     it('should not add sizes other xsmall, small, medium, large, xlarge to the sizeMap', () => {
-
       sizeMap.setSizes({ ...updateSizeMap, NO_ADD: 1337 })
       const sizeMapObj = sizeMap.getSizeMap()
 
       sizeMapObj.entries.map(entry => expect(entry[0]).not.toBe('NO_ADD'))
-
     })
 
     it('should convert size values to a number', () => {
-      
-      const updated = sizeMap.setSizes({ ...updateSizeMap, xsmall: '1337' })
+      sizeMap.setSizes({ ...updateSizeMap, xsmall: '1337' })
       const sizeMapObj = sizeMap.getSizeMap()
 
       sizeMapObj.entries.map(entry => {
-        if(entry[0] !== 'xsmall') return
+        if (entry[0] !== 'xsmall') return
 
         expect(typeof entry[1]).toBe('number')
         expect(entry[1]).toBe(1337)
-
       })
-
     })
 
     it('should update the hash property', () => {
-      
       sizeMap.setSizes(updateSizeMap)
       const sizeMapObj = sizeMap.getSizeMap()
       const updateKeys = Object.keys(updateSizeMap)
 
       Object.keys(sizeMapObj.hash).map(key => {
-
-        expect( updateKeys.indexOf(key) ).not.toBe(-1)
-        expect( updateSizeMap[ key ] ).toBe(sizeMapObj.hash[key])
-
+        expect(updateKeys.indexOf(key)).not.toBe(-1)
+        expect(updateSizeMap[key]).toBe(sizeMapObj.hash[key])
       })
-
     })
-
   })
 
   describe('getSize', () => {
-
     it('should return an entry array', () => {
-
       const size = sizeMap.getSize()
-      
+
       expect(size.length).toBe(2)
       expect(typeof size[0]).toBe('string')
       expect(size[1]).not.toBe(undefined)
-
     })
 
     it('should return the default to xsmall entry when no value is passed in', () => {
-
       const size = sizeMap.getSize()
-      
+
       expect(size[0]).toBe('xsmall')
       expect(size[1]).toBe(1)
-
     })
 
     it('should return the entry closest to the width', () => {
-
       const xsmall = sizeMap.getSize(1)
       expect(xsmall[0]).toBe('xsmall')
       expect(xsmall[1]).toBe(1)
@@ -184,15 +161,11 @@ describe('sizeMap', () => {
       const xlarge = sizeMap.getSize(2000)
       expect(xlarge[0]).toBe('xlarge')
       expect(xlarge[1]).toBe(1366)
-
     })
-
   })
 
   describe('getMergeSizes', () => {
-    
     it('should return an array with the passed in size and all sizes below it', () => {
-
       const xsmallDown = sizeMap.getMergeSizes('xsmall')
       expect(xsmallDown.length).toBe(1)
       expect(xsmallDown[0]).toBe('xsmall')
@@ -222,24 +195,17 @@ describe('sizeMap', () => {
       expect(xlargeDown[2]).toBe('medium')
       expect(xlargeDown[3]).toBe('large')
       expect(xlargeDown[4]).toBe('xlarge')
-
     })
-
   })
 
   describe('getSizeMap', () => {
-
     it('should return the sizeMap object', () => {
-
       const sizeMapObj = sizeMap.getSizeMap()
 
       expect(typeof sizeMapObj).toBe('object')
       expect(Array.isArray(sizeMapObj.entries)).toBe(true)
       expect(typeof sizeMapObj.hash).toBe('object')
       expect(typeof sizeMapObj.indexes).toBe('object')
-
     })
-
   })
-
 })

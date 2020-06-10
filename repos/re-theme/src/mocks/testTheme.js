@@ -1,4 +1,3 @@
-
 /*
 
 * The size keys of sub objects get moved to the root level size keys
@@ -58,26 +57,26 @@ const colors = {
     text: '#2196f3',
     contained: '#2196f3',
     outlined: '#1287ea',
-  }
+  },
 }
 
 export const buttonTheme = {
   small: { components: { button: { width: 30 } } },
   components: {
     button: {
-      default: { small: { fontSize: 12, borderRadius: 10, }, },
+      default: { small: { fontSize: 12, borderRadius: 10 } },
       small: { width: 100 },
-    }
-  }
+    },
+  },
 }
 
 export const testTheme = {
   small: {
     components: {
       button: {
-        width: 30
-      }
-    }
+        width: 30,
+      },
+    },
   },
   components: {
     button: {
@@ -98,15 +97,15 @@ export const testTheme = {
           large: {
             fontSize: 18,
             padding: 20,
-          }
+          },
         },
         $native: {
           padding: 12,
           borderRadius: 5,
           fontSize: 12,
-        }
+        },
       },
-    }
+    },
   },
   colors,
   meeting: {
@@ -115,7 +114,7 @@ export const testTheme = {
         time: {
           font: 'WEB FONT',
         },
-      }
+      },
     },
     large: {
       text: {
@@ -133,7 +132,7 @@ export const testTheme = {
           time: {
             font: 'NATIVE FONT',
           },
-        }
+        },
       },
     },
     medium: {
@@ -165,7 +164,7 @@ export const testTheme = {
           user: {
             width: 75,
           },
-        }
+        },
       },
     },
     small: {
@@ -176,7 +175,7 @@ export const testTheme = {
         time: {
           width: 125,
         },
-      }
+      },
     },
     xsmall: {
       meetingList: {
@@ -185,7 +184,7 @@ export const testTheme = {
         },
         $native: {
           flex: 2,
-        }
+        },
       },
       text: {
         user: {
@@ -195,14 +194,14 @@ export const testTheme = {
           width: 125,
         },
       },
-    }
+    },
   },
   app: {
     container: {
       backgroundColor: '#f7f9fb',
       overflow: 'hidden',
       flex: 1,
-      height: '100vh'
+      height: '100vh',
     },
     text: {
       flex: 1,
@@ -222,6 +221,6 @@ export const testTheme = {
       flexWrap: 'wrap',
       flex: 1,
       padding: 18,
-    }
-  }
+    },
+  },
 }

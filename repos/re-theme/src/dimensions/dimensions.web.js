@@ -8,11 +8,12 @@ const DEBOUNCE_RATE = 100
 /**
  * Checks if there is access to the dom
  */
-const hasDomAccess = () => !!(
-  typeof window !== 'undefined' &&
-  window.document &&
-  window.document.createElement
-)
+const hasDomAccess = () =>
+  !!(
+    typeof window !== 'undefined' &&
+    window.document &&
+    window.document.createElement
+  )
 
 const domAccess = hasDomAccess()
 
@@ -31,10 +32,12 @@ const getWindow = () => {
         innerWidth: undefined,
         screen: {
           height: undefined,
-          width: undefined
-        }
+          width: undefined,
+        },
       }
-    : (() => { return window })()
+    : (() => {
+        return window
+      })()
 }
 
 const winDim = getWindow()
@@ -48,7 +51,8 @@ const winDim = getWindow()
  * @param {Object|boolean} options - Options for eventlisteners on browsers
  */
 const addListener = (element, event, method, options) => {
-  element && checkCall(element.addEventListener, event, method, options || false)
+  element &&
+    checkCall(element.addEventListener, event, method, options || false)
 }
 
 /**
@@ -62,7 +66,7 @@ const setScreen = win => {
     fontScale: 1,
     height: win.screen.height,
     scale: win.devicePixelRatio || 1,
-    width: win.screen.width
+    width: win.screen.width,
   }
 }
 
@@ -77,7 +81,7 @@ const setWin = win => {
     fontScale: 1,
     height: win.innerHeight,
     scale: win.devicePixelRatio || 1,
-    width: win.innerWidth
+    width: win.innerWidth,
   }
 }
 
@@ -106,8 +110,8 @@ const get = key => dimensions[key]
  * @returns {null}
  */
 const set = ({ screen, window: win }) => {
-  screen && ( dimensions.screen = screen )
-  win && ( dimensions.window = win )
+  screen && (dimensions.screen = screen)
+  win && (dimensions.window = win)
 }
 
 /**
@@ -129,7 +133,7 @@ const update = () => {
  *
  */
 const addEventListener = (type, listener) => {
-  if(!type || !isFunc(listener)) return
+  if (!type || !isFunc(listener)) return
 
   listeners[type] = listeners[type] || []
   listeners[type].push(listener)
@@ -145,11 +149,13 @@ const removeEventListener = (type, removeListener) => {
   type &&
     isFunc(removeListener) &&
     isArr(listeners[type]) &&
-    (listeners[type] = listeners[type].filter(listener => listener !== removeListener))
+    (listeners[type] = listeners[type].filter(
+      listener => listener !== removeListener
+    ))
 }
 
-domAccess && addListener(window, Constants.RESIZE_EVENT, debounce(update, DEBOUNCE_RATE))
-
+domAccess &&
+  addListener(window, Constants.RESIZE_EVENT, debounce(update, DEBOUNCE_RATE))
 
 export const setRNDimensions = () => {}
 
@@ -158,5 +164,5 @@ export const Dimensions = {
   set,
   update,
   addEventListener,
-  removeEventListener
+  removeEventListener,
 }

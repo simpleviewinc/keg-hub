@@ -6,9 +6,9 @@ import {
   setSizes,
   useDimensions,
 } from './dimensions'
-import { setRNDimensions } from "ReDimensions"
-import { setRNPlatform } from "RePlatform"
-import { helpers } from "./helpers"
+import { setRNDimensions } from 'ReDimensions'
+import { setRNPlatform } from 'RePlatform'
+import { helpers } from './helpers'
 
 import {
   addThemeEvent,
@@ -19,15 +19,9 @@ import {
   withTheme,
 } from './theme'
 
-import {
-  useTheme,
-  useThemeActive,
-  useThemeFocus,
-  useThemeHover,
-} from 'ReHooks'
+import { useTheme, useThemeActive, useThemeFocus, useThemeHover } from 'ReHooks'
 
 export {
-
   // Dimensions exports
   setRNDimensions,
   setRNPlatform,
@@ -36,7 +30,6 @@ export {
   getMergeSizes,
   setSizes,
   useDimensions,
-
   // Theme exports
   addThemeEvent,
   fireThemeEvent,
@@ -44,18 +37,14 @@ export {
   removeThemeEvent,
   setDefaultTheme,
   withTheme,
-
   // Theme hooks
   useTheme,
   useThemeActive,
   useThemeFocus,
   useThemeHover,
-
   // Context Exports
   ReThemeContext,
   ReThemeProvider,
-
   // Style Helpers
-  helpers
-
+  helpers,
 }

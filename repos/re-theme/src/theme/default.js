@@ -2,7 +2,7 @@
 'use strict'
 
 import { deepMerge, isObj } from 'jsutils'
-import { Dimensions } from "ReDimensions"
+import { Dimensions } from 'ReDimensions'
 import { buildTheme } from './buildTheme'
 
 /**
@@ -19,28 +19,24 @@ let defaultTheme = {}
  *
  * @returns {void}
  */
-export const setDefaultTheme = (theme, merge=false) => {
-
+export const setDefaultTheme = (theme, merge = false) => {
   // Ensure the passed in theme is an object
-  if(!isObj(theme))
+  if (!isObj(theme))
     return console.warn(
       `setDefaultTheme method requires an theme object as the first argument. Received: `,
       theme
     )
-  
+
   // Check if the default theme should be merged, or overwritten
-  defaultTheme = merge
-    ? deepMerge(defaultTheme, theme)
-    : theme
+  defaultTheme = merge ? deepMerge(defaultTheme, theme) : theme
 
   // Get subset theme that matches current dimensions is useDimensions is true
-  const dims = Dimensions.get("window")
+  const dims = Dimensions.get('window')
   const useTheme = buildTheme(defaultTheme, dims.width, dims.height)
 
   // Return the newly set default theme
   return useTheme
 }
-
 
 /**
  * Gets the default theme

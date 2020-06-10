@@ -11,9 +11,4 @@ const setRNPlatform = Plat => {
 
 const RePlatform = Constants.PLATFORM.NATIVE
 
-export {
-  setRNPlatform,
-  getRNPlatform,
-  RePlatform,
-}
-
+export { setRNPlatform, getRNPlatform, RePlatform }

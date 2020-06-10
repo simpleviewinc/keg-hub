@@ -10,7 +10,7 @@ export const Constants = deepFreeze({
   PLATFORM: {
     NATIVE: '$native',
     WEB: '$web',
-    ALL: '$all'
+    ALL: '$all',
   },
   CSS_UNITS: [
     '%',
@@ -27,6 +27,6 @@ export const Constants = deepFreeze({
     'vw',
     'vh',
     'vmin',
-    'vmax'
-  ]
+    'vmax',
+  ],
 })

@@ -10,19 +10,19 @@ import { mapObj, isObj, toNum, isNum, softFalsy, logData } from 'jsutils'
  */
 const sizeMap = {
   /**
-  * Name of the breakpoint
-  * Number for each entry defines the breakpoint
-  *  > The Breakpoint is the screen size where the entries becomes active
-  */
+   * Name of the breakpoint
+   * Number for each entry defines the breakpoint
+   *  > The Breakpoint is the screen size where the entries becomes active
+   */
   entries: [
     [ 'xsmall', 1 ],
     [ 'small', 320 ],
     [ 'medium', 768 ],
     [ 'large', 1024 ],
-    [ 'xlarge', 1366 ]
+    [ 'xlarge', 1366 ],
   ],
   hash: {},
-  indexes: {}
+  indexes: {},
 }
 
 /**
@@ -32,23 +32,21 @@ const sizeMap = {
  * @function
  *
  * @returns {void}
-*/
+ */
 const buildSizeMapParts = () => {
   sizeMap.indexes = sizeMap.entries.reduce((indexes, entry, index) => {
-
     // Add the entry value with the index
-    indexes[ entry[0] ] = index
+    indexes[entry[0]] = index
 
     // Add the index with entry value
-    indexes[ index ] = entry[0]
-    
+    indexes[index] = entry[0]
+
     // Convert the sizeMap.entries into an object of key value pairs
-    sizeMap.hash[ entry[0] ] = entry[1]
+    sizeMap.hash[entry[0]] = entry[1]
 
     return indexes
   }, {})
 }
-
 
 /**
  * Updates the sizeMap.entries with custom values
@@ -60,7 +58,7 @@ const buildSizeMapParts = () => {
  * @returns {Object} - Updated sizeMap object
  */
 export const setSizes = dims => {
-  if(!isObj(dims))
+  if (!isObj(dims))
     return logData(
       `setDimensions method requires an argument of type 'Object'.\nReceived: `,
       dims,
@@ -68,11 +66,10 @@ export const setSizes = dims => {
     )
 
   mapObj(dims, (key, value) => {
-
     // Get the key index from the sizeMap
     const keyIndex = sizeMap.indexes[key]
 
-    if(!softFalsy(keyIndex))
+    if (!softFalsy(keyIndex))
       return logData(
         `Invalid ${key} for theme size! Allowed keys are xsmall | small | medium | large | xlarge`,
         'warn'
@@ -84,7 +81,7 @@ export const setSizes = dims => {
     // Ensure key is a valid key in the sizeMap indexes and the new size is a valid number
     // Also ensure the entry exists based on the keyIndex
     //  * This should never happen, but just incase
-    if(!newSize || !sizeMap.entries[keyIndex])
+    if (!newSize || !sizeMap.entries[keyIndex])
       return logData(
         `Invalid size entry. Size must be a number and the size entry must exist!`,
         `Size: ${newSize}`,
@@ -112,24 +109,22 @@ export const setSizes = dims => {
  */
 export const getSize = width => {
   // Ensure width is a number that can be compared
-  const checkWidth = isNum(width) && width || toNum(width)
+  const checkWidth = (isNum(width) && width) || toNum(width)
 
-  const name = sizeMap.entries
-    .reduce((updateSize, [ key, value ]) => {
+  const name = sizeMap.entries.reduce((updateSize, [ key, value ]) => {
+    checkWidth >= value
+      ? // If it is check if there is an updateSize already sent
+        updateSize
+          ? // If an update size exists, then check if it's value is less then value
+            value > sizeMap.hash[updateSize] && (updateSize = key)
+          : // Otherwise just update the size
+            (updateSize = key)
+      : null
 
-      checkWidth >= value
-        // If it is check if there is an updateSize already sent
-        ? updateSize
-          // If an update size exists, then check if it's value is less then value
-          ? value > sizeMap.hash[updateSize] && (updateSize = key)
-          // Otherwise just update the size
-          : (updateSize = key)
-        : null
-
-      return updateSize
+    return updateSize
 
     // Default to xsmall size
-    }, 'xsmall')
+  }, 'xsmall')
 
   return [ name, sizeMap.hash[name] ]
 }

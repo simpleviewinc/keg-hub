@@ -17,12 +17,9 @@ const { useDimensions } = require('../useDimensions')
 
 const dimKeys = [ 'width', 'height', 'scale', 'fontScale' ]
 
-
 describe('useDimensions', () => {
-
   it('should return the dimensions object when called', () => {
     const dims = useDimensions()
     Object.keys(dims).map(key => expect(dimKeys.indexOf(key)).not.toBe(-1))
   })
-
 })

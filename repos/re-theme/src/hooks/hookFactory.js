@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react'
 import { isFunc, isObj, isColl, deepMerge } from 'jsutils'
 import { Constants } from '../constants'
 
@@ -13,7 +13,7 @@ import { Constants } from '../constants'
  */
 const updateListeners = (element, type, events, methods) => {
   // Just return if no element or event type
-  if(!isObj(element) || !isFunc(element[type])) return null
+  if (!isObj(element) || !isFunc(element[type])) return null
 
   // Set the methods to the event
   element[type](events.on, methods.on)
@@ -31,25 +31,34 @@ const updateListeners = (element, type, events, methods) => {
  */
 const createCBRef = (hookRef, events, methods, ref) => {
   // This keeps track of the hookRef, and the event listeners on the element
-  return useCallback(element => {
+  return useCallback(
+    element => {
+      // Remove any old events if they exist
+      hookRef.current &&
+        updateListeners(
+          hookRef.current,
+          Constants.REMOVE_EVENT,
+          events,
+          methods
+        )
 
-    // Remove any old events if they exist
-    hookRef.current && updateListeners(hookRef.current, Constants.REMOVE_EVENT, events, methods)
+      // Set the new element to the hookRef.current
+      // Because this hookRef is internal, we have to update current manually
+      hookRef.current = element
 
-    // Set the new element to the hookRef.current
-    // Because this hookRef is internal, we have to update current manually
-    hookRef.current = element
+      // Add the new listeners to the updated element
+      hookRef.current &&
+        updateListeners(hookRef.current, Constants.ADD_EVENT, events, methods)
 
-    // Add the new listeners to the updated element
-    hookRef.current && updateListeners(hookRef.current, Constants.ADD_EVENT, events, methods)
+      // If no hookRef, then call the clean up method
+      !hookRef.current && methods.cleanup()
 
-    // If no hookRef, then call the clean up method
-    !hookRef.current && methods.cleanup()
-
-  // Want to update the callback when the methods changes
-  // If the values change, then the method will also change
-  // So this will fire when the values change
-  }, [ methods.on, methods.off ])
+      // Want to update the callback when the methods changes
+      // If the values change, then the method will also change
+      // So this will fire when the values change
+    },
+    [ methods.on, methods.off ]
+  )
 }
 
 /**
@@ -77,7 +86,7 @@ const createMethods = (offValue, onValue, setValue) => {
 
     // Clean up helper to avoid memory leaks
     cleanup: methods => {
-      if(!methods) return
+      if (!methods) return
 
       isFunc(methods.on) && methods.on(undefined)
       isFunc(methods.off) && methods.off(undefined)
@@ -85,13 +94,11 @@ const createMethods = (offValue, onValue, setValue) => {
       offValue = undefined
       setValue = undefined
       methods = undefined
-    }
+    },
   }
-
 }
 
-const getOptions = (options={}) => (options && !isObj(options) ? {} : options)
-
+const getOptions = (options = {}) => (options && !isObj(options) ? {} : options)
 
 /**
  * Checks if the onValue and Off value should be joined
@@ -110,7 +117,6 @@ const checkJoinValues = (offValue, onValue, valueOn, noMerge) => {
     : deepMerge(offValue, onValue)
 }
 
-
 /**
  * Creates a hook that will switch between the passed in values
  * <br/> It switches between values based on the passed in events it's listening to
@@ -118,18 +124,17 @@ const checkJoinValues = (offValue, onValue, valueOn, noMerge) => {
  *
  * @returns {function} - Hook function
  */
-export const hookFactory = (events) => (
+export const hookFactory = events =>
   /**
-  * Hook function called from within a react component
-  * 
-  * @param {Any} offValue - Value to set when not active
-  * @param {Any} onValue - Value to set when active
-  * @param {boolean} noMerge - 
-  *
-  * @returns {Array} - Contains the ref to be added to an element, and the current value
-  */
-  (offValue, onValue, options={}) => {
-    
+   * Hook function called from within a react component
+   *
+   * @param {Any} offValue - Value to set when not active
+   * @param {Any} onValue - Value to set when active
+   * @param {boolean} noMerge -
+   *
+   * @returns {Array} - Contains the ref to be added to an element, and the current value
+   */
+  (offValue, onValue, options = {}) => {
     const { ref, noMerge } = getOptions(options)
 
     // Get the ref object
@@ -138,7 +143,7 @@ export const hookFactory = (events) => (
     const [ value, setValue ] = useState(offValue)
 
     // Set default joinedOnOff, to allow comparing against later
-    const [ activeValue ] = useState(
+    const [activeValue] = useState(
       checkJoinValues(offValue, onValue, onValue, noMerge)
     )
 
@@ -158,33 +163,30 @@ export const hookFactory = (events) => (
 
     // When ref is a function, and there's no change
     // When value is not equal to off value or updated value,
-    // then we want to return the off value, because that has the updated state from the 
+    // then we want to return the off value, because that has the updated state from the
     // Other refs update
-    if(isFunc(ref)){
-
+    if (isFunc(ref)) {
       // Get the value to use based on the current state of the values
       // If the offValue and value are the same then no updated state
-      const useValue = offValue === value
-        ? value
-        // Check if value is equal to the activeValue ( original offValue + onValue merged )
-        : value === activeValue
-          // If value and activeValue are equal, then the State is active either of the refs
-          // The passed in ref or the current ref, so build value to use
-          ? checkJoinValues(offValue, onValue, activeValue, noMerge)
-          : offValue
+      const useValue =
+        offValue === value
+          ? value
+          : // Check if value is equal to the activeValue ( original offValue + onValue merged )
+          value === activeValue
+            ? // If value and activeValue are equal, then the State is active either of the refs
+            // The passed in ref or the current ref, so build value to use
+              checkJoinValues(offValue, onValue, activeValue, noMerge)
+            : offValue
 
       // Wrap the callbacks so we can call the passed in ref, and the new ref
-      const wrapRef = (element) => {
+      const wrapRef = element => {
         ref(element)
         elementRef(element)
       }
 
       return [ wrapRef, useValue ]
-
     }
 
-      // Return the elementRef function and value to the component
+    // Return the elementRef function and value to the component
     return [ elementRef, value, setValue ]
-
   }
-)

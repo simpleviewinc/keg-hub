@@ -8,8 +8,7 @@ import { deepMerge, get, isArr, isObj, isStr } from 'jsutils'
  *
  * @returns {Object} - built theme styles object
  */
-export const getTheme = function (...sources){
-
+export const getTheme = function (...sources) {
   // Build the styles by merging the sources together
   // Check if each source is an id to cache or get the styles from the theme
   return deepMerge(
@@ -25,5 +24,4 @@ export const getTheme = function (...sources){
       return toMerge
     }, [])
   )
-
 }

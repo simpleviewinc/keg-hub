@@ -19,7 +19,6 @@ const checkEqual = (obj1, obj2) => obj1 === obj2 || jsonEqual(obj1, obj2)
  * @returns {Array} - Hook formatted array, same as on web
  */
 export const nativeThemeHook = (offValue, onValue, options) => {
-
   // Get the ref object
   const hookRef = get(options, 'ref', useRef())
 
@@ -27,12 +26,9 @@ export const nativeThemeHook = (offValue, onValue, options) => {
   const [ value, setValue ] = useState(offValue)
 
   useLayoutEffect(() => {
-
     !checkEqual(offValue, value) && setValue(value)
-
   }, [ offValue, onValue ])
 
   // Return an array metching the same format as on web
   return [ hookRef, offValue, setValue ]
 }
-
