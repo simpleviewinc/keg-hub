@@ -96,7 +96,7 @@ const buildLocationContext = async ({ envs={}, globalConfig, __internal, params,
     ...getContainerConst(cmdContext, 'env', {}),
 
     // Get the ENVs for the Tap context if it exists
-    ...( await buildTapContext({ globalConfig, cmdContext, tap, envs }) ),
+    ...( tap && tap !== 'tap' && await buildTapContext({ globalConfig, cmdContext, tap, envs }) ),
 
     // Add the git key so we can call github within the image / container
     GIT_KEY: await getGitKey(globalConfig),

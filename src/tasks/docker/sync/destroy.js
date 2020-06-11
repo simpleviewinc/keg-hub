@@ -87,7 +87,7 @@ module.exports = {
       ask: {
         message: 'Confirm remove docker image?'
       },
-      default: true
+      default: false
     },
     tap: {
       description: 'Name of the linked tap to run. Overrides the context option!',

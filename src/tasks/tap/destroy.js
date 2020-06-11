@@ -73,9 +73,9 @@ module.exports = {
         example: 'keg tap destroy --image false',
         ask: {
           message: 'Do you also want to delete the docker image?',
-          default: 'Yes'
+          default: 'No'
         },
-        default: true
+        default: false
       },
       service: {
         allowed: [ 'sync', 'container' ],

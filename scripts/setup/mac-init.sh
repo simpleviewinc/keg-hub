@@ -415,6 +415,36 @@ keg_install_github_cli(){
 
 }
 
+
+keg_setup_max_watchers(){
+  local SYS_CONF=/etc/sysctl.conf
+
+  # Ensure the sysctl file exists
+  if [[ ! -f "$SYS_CONF" ]]; then
+    sudo touch $SYS_CONF
+  fi
+  
+  # Check if the kern.maxfiles has already been added
+  if grep -Fq kern.maxfiles "$SYS_CONF"; then
+    keg_message "Machine max files listeners already updated!"
+
+  # If not added, add it to the file
+  # Will probably ask for sudo password
+  else
+
+    keg_message "Updating max files listeners..."
+
+    echo "fs.inotify.max_user_watches=524288" >> $SYS_CONF
+    echo "kern.maxfiles=10485760" >> $SYS_CONF
+    echo "kern.maxfilesperproc=1048576" >> $SYS_CONF
+
+    sudo sysctl -w kern.maxfiles=10485760
+    sudo sysctl -w kern.maxfilesperproc=10485760
+
+  fi
+  
+}
+
 # Runs methods to setup the keg-cli, with docker and vagrant
 # Params
 #   * $1 - (Optional) - Section of the setup script to run
@@ -543,6 +573,9 @@ keg_setup(){
     keg_message "Checking for yarn install..."
     keg_setup_yarn "${@:2}"
   fi
+
+
+  # Add yarn install here
 
   # Setup and install cli
   # To run:

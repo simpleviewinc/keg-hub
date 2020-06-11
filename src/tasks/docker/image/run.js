@@ -19,8 +19,6 @@ const runDockerImage = async args => {
   const { globalConfig, params, task } = args
   const { context, cleanup, entry } = params
 
-  const imgName = get(CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`, context)
-
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
     globalConfig,
@@ -28,7 +26,12 @@ const runDockerImage = async args => {
     params,
   })
 
-  // TODO: IF exists, then ask user to either remove running container or rename the new container
+  const imgName = get(
+    CONTAINERS,
+    `${ cmdContext.toUpperCase() }.ENV.IMAGE`,
+    cmdContext
+  )
+
   const imgContainer = `img-${imgName}`
   const exists = await docker.container.exists(
     imgContainer,

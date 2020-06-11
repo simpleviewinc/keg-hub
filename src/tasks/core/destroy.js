@@ -69,7 +69,7 @@ module.exports = {
         ask: {
           message: 'Confirm remove docker image?'
         },
-        default: true
+        default: false
       },
       service: {
         allowed: [ 'sync', 'container' ],

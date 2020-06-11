@@ -86,3 +86,12 @@
   * If it's missing, it will ask the user for the value when the command is run
   * Add setting for no ask in globalConfig
   
+  
+  
+  
+Setup - To Fix
+ * Add `yarn install` to setup script in keg-cli
+ * Add keg install task
+   * Installs repos
+   * Asks for install location
+   * Sets default location to ~/keg

@@ -49,24 +49,36 @@ keg_run_tap_yarn_setup(){
     return
   fi
 
-  # Navigate to the cached directory, and run the yarn install here
-  cd $TAP_NM_CACHE
-  keg_message "Running yarn setup for tap..."
-  yarn setup
+  if [[ "$NM_INSTALL" != "core" ]]; then
+    # Navigate to the cached directory, and run the yarn install here
+    cd $TAP_NM_CACHE
+    keg_message "Running yarn setup for tap..."
+    yarn install
+  fi
+  
+  if [[ "$NM_INSTALL" ]]; then
+    keg_message "Running yarn install for keg-core..."
+    cd $DOC_CORE_PATH
+    yarn install
+  fi
+
 }
 
 # Copies over the locally cached node_modules
 keg_copy_node_modules(){
-  
+
   # ensure we know where the node_module cache is
   if [[ -z "$TAP_NM_CACHE" ]]; then
     return
   fi
 
-  keg_message "Running node_modules copy from cache to tap..."
   # Copy recursivly (-r) and prompt before overwrite (-i)
   # Then pipe to dev/null, so we hide the overwrite prompts
+  keg_message "Running node_modules copy from cache to tap..."
   false | cp -ir $TAP_NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
+
+  keg_message "Running node_modules copy from cache to keg-core..."
+  false | cp -ir $TAP_NM_CACHE/node_modules/keg-core/node_modules/. $DOC_CORE_PATH/node_modules 2>/dev/null
 
 }
 
