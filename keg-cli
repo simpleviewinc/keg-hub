@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 
 require('module-alias/register')
-const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
-const { runTask } = require('KegRunTask')
+const { loadGlobalConfig } = require('KegUtils/globalConfig/loadGlobalConfig')
 
-;(() => {
+;(async () => {
   try {
 
     // Load the users global config, or create it on the fly
+    const globalConfig = await loadGlobalConfig()
+
     // Pull in the runTask method, and call it immediately
-    return runTask(getGlobalConfig())
+    const { runTask } = require('KegRunTask')
+
+    await runTask(globalConfig)
+
   }
   catch(e){
     console.error(e.stack)
