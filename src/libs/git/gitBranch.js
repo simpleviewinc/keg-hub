@@ -41,7 +41,25 @@ const gitCurrentBranch = ({ branches }) => {
   }, null)
 }
 
+class Branch {
+
+  constructor(git){
+    this.git = git
+  }
+
+  current = () => {
+    return gitCurrentBranch(this.git)
+  }
+
+  print = () => {
+    return gitBranchPrint(this.git)
+  }
+
+}
+
+
 module.exports = {
+  Branch,
   gitBranchPrint,
   gitCurrentBranch,
 }

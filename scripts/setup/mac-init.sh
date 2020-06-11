@@ -637,13 +637,22 @@ keg_setup(){
   if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "config" ]]; then
     keg_message "Running KEG-CLI config setup..."
     keg_cli_config_setup "${@:2}"
+
+    if [[ "$SETUP_TYPE" == "config" ]]; then
+      return
+    fi
+
   fi
 
+  echo ""
   keg_message "--------------------------------------------- [ KEG CLI ]"
-  keg_message "                       Keg CLI setup complete!                       "
-  keg_message "                     Run source ~/.bash_profile                      "
-  keg_message "              Open a new terminal window to use the cli!             "
+  echo ""
+  echo "                       Keg CLI setup complete!"
+  echo "                     Run source ~/.bash_profile"
+  echo "              Open a new terminal window to use the cli!"
+  echo ""
   keg_message "--------------------------------------------- [ KEG CLI ]"
+  echo ""
 
 }
 

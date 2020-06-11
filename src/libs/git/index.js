@@ -1,6 +1,8 @@
 module.exports = {
-  ...require('./getGitPath'),
-  ...require('./getGit'),
   ...require('./gitBranch'),
+  ...require('./getGit'),
+  ...require('./getGitPath'),
+  ...require('./gitRepo'),
   ...require('./getRemoteUrl'),
+  ...require('./git'),
 }

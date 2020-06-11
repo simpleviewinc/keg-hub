@@ -1,5 +1,5 @@
 const { deepMerge } = require('jsutils')
-const { buildGitSSH } = require('KegUtils/git')
+const { buildGitSSH } = require('KegUtils/git/buildGitSSH')
 const { getGlobalConfig } = require('KegUtils/globalConfig')
 const { limboify } = require('KegUtils/helpers')
 
@@ -27,8 +27,8 @@ const gitOutputHandler = git => {
  *
  * @returns {void}
  */
-const setupGitSSH = git => {
-  const sshCmd = buildGitSSH(getGlobalConfig())
+const setupGitSSH = (globalConfig, git) => {
+  const sshCmd = buildGitSSH(globalConfig || getGlobalConfig())
   git.env('GIT_SSH_COMMAND', sshCmd)
 }
 
@@ -39,9 +39,9 @@ const setupGitSSH = git => {
  *
  * @returns {Object} - Loads simple-git module
  */
-const loadSimpleGit = (gitRepoDir, { log, ssh }) => {
+const loadSimpleGit = (globalConfig, gitRepoDir, { log, ssh }) => {
   const git = require('simple-git/promise')(gitRepoDir)
-  ssh && setupGitSSH(git)
+  ssh && setupGitSSH(globalConfig, git)
   log && gitOutputHandler(git)
 
   return git
@@ -55,8 +55,12 @@ const loadSimpleGit = (gitRepoDir, { log, ssh }) => {
  *
  * @returns Object with all simple-git functions wrapped with limbo
  */
-const getGit = (gitRepoDir, options={}) => {
-  return limboify(loadSimpleGit(gitRepoDir, deepMerge(defGitOpts, options)))
+const getGit = (gitRepoDir, globalConfig, options={}, ) => {
+  return limboify(loadSimpleGit(
+    globalConfig,
+    gitRepoDir,
+    deepMerge(defGitOpts, options),
+  ))
 }
 
 module.exports = {

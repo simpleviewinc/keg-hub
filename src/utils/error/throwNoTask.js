@@ -1,4 +1,5 @@
 const { Logger } = require('KegLog')
+const { throwTaskFailed } = require('./throwTaskFailed')
 
 /**
  * Prints CLI unknown task when task can not be found
@@ -14,7 +15,7 @@ const throwNoTask = task => {
   Logger.green(`Type "keg help' to see all known tasks.`)
   Logger.empty()
 
-  throw new Error(`Task failed!`)
+  throwTaskFailed()
 }
 
 module.exports = {

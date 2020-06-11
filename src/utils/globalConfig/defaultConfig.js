@@ -5,9 +5,31 @@ const { deepMerge } = require('jsutils')
 const cliParent = path.join(CLI_ROOT, '../')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 
-// TODO: Add script to ask user for values when first setting up cli.config.json
-//  - Need git user name
-//  - Could also set git token at this point
+const defPaths = {
+  cli: CLI_ROOT,
+  components: path.join(cliParent, 'keg-components'),
+  containers: path.join(CLI_ROOT, 'containers'),
+  core: path.join(cliParent, 'keg-core'),
+  keg: cliParent,
+  proxy: path.join(cliParent, 'keg-proxy'),
+  resolver: path.join(cliParent, 'tap-resolver'),
+  retheme: path.join(cliParent, 're-theme'),
+}
+
+/**
+ * Builds the keg repo paths on the local machine
+ * @param {Object} paths - Custom paths to keg repos
+ *
+ * @returns {Object} - Custom paths to repos joined with defaults
+ */
+const buildInstallPaths = (paths={}) => {
+  return Object.keys(defPaths)
+    .reduce((usePaths, key) => {
+      return key === 'cli' || key === `keg`
+        ? usePaths
+        : { ...usePaths, [key]: paths[key] || defPaths[key] }
+    }, {})
+}
 
 /**
  * Builds the default global config from the package.json and the cli.json
@@ -15,7 +37,12 @@ const cliJson = require('KegRoot/scripts/setup/cli.config.json')
  *
  * @returns {Object} - Default global config
  */
-const defaultConfig = () => {
+const defaultConfig = (args={}) => {
+  const { paths={} } = args
+
+  const usePaths = buildInstallPaths(paths)
+  
+  
   const config = {
     version: packageJson.version,
     name: packageJson.name,
@@ -33,19 +60,11 @@ const defaultConfig = () => {
           cli: "keg-cli",
           core: "keg-core",
           components: "keg-components",
-          retheme: "re-theme"
+          retheme: "re-theme",
+          resolver: "tap-resolver",
         }
       },
-      paths: {
-        cli: CLI_ROOT,
-        components: path.join(cliParent, 'keg-components'),
-        containers: path.join(CLI_ROOT, 'containers'),
-        core: path.join(cliParent, 'keg-core'),
-        keg: cliParent,
-        proxy: path.join(cliParent, 'keg-proxy'),
-        resolver: path.join(cliParent, 'tap-resolver'),
-        retheme: path.join(cliParent, 're-theme'),
-      },
+      paths: usePaths,
       settings: {
         docker: { preConfirm: false },
         git: { secure: false },
@@ -61,4 +80,5 @@ const defaultConfig = () => {
 
 module.exports = {
   defaultConfig,
+  defPaths,
 }
