@@ -1,9 +1,34 @@
-const { buildLocationContext } = require('KegUtils/builders')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { buildDockerCmd } = require('KegUtils/docker')
-const { DOCKER } = require('KegConst/docker')
+const path = require('path')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
+const { DOCKER } = require('KegConst/docker')
+const { buildDockerCmd } = require('KegUtils/docker')
+const { copyFileSync } = require('KegFileSys/fileSys')
+const { buildLocationContext } = require('KegUtils/builders')
+const { throwRequired, generalError } = require('KegUtils/error')
+const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
+
+/**
+ * Copies over the keg-core package.json to the taps temp folder
+ * @function
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Initial command being run
+ *
+ * @returns {void}
+ */
+const copyLocalPackageJson = async (globalConfig, location) => {
+  const corePath = getPathFromConfig(globalConfig, 'core')
+  !corePath && generalError(`Could not find keg-core path in globalConfig`)
+
+  // Get the paths for the keg-core and the taps temp folder
+  const corePackage = path.join(corePath, 'package.json')
+  const tapCorePackage = path.join(location, `temp/core-package.json`)
+
+  // Copy the file to the temp folder
+  copyFileSync(corePackage, tapCorePackage)
+
+}
+
 
 /**
  * Builds a docker container so it can be run
@@ -20,7 +45,7 @@ const { Logger } = require('KegLog')
  */
 const dockerBuild = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { context, envs } = params
+  const { context, envs, core } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
@@ -37,6 +62,9 @@ const dockerBuild = async args => {
     `Tap location could not be found for ${ tap }!`,
     `Please ensure the tap path is linked in the global config!`
   )
+
+  // Check if we should also copy the keg-core package.json
+  tap && core && await copyLocalPackageJson(globalConfig, location)
 
   // Build the docker build command with options
   const dockerCmd = await buildDockerCmd(globalConfig, {
@@ -81,6 +109,11 @@ module.exports = {
       cache: {
         description: 'Docker will use build cache when building the image',
         default: true
+      },
+      core: {
+        description: 'Use the local keg-core package.json when install node_modules during the build',
+        example: `keg docker build --context tap --core true`,
+        default: false,
       },
       tap: {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',

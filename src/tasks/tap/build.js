@@ -41,6 +41,11 @@ module.exports = {
         example: 'keg tap --cache false',
         default: true
       },
+      core: {
+        description: 'Use the local keg-core package.json when install node_modules during the build',
+        example: `keg tap --core`,
+        default: false,
+      },
       env: {
         description: 'Environment to build the Docker image for. Gets added as a tag to the image.',
         example: 'keg tap --env staging',
