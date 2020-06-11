@@ -74,7 +74,7 @@
   * Add setting for no ask in globalConfig
 
 Setup - To Fix
- * Add keg install task
-   * Installs repos
-   * Asks for install location
-   * Sets default location to ~/keg
+ * `keg dcm` command needed for each terminal session
+
+
+

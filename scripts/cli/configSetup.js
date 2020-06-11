@@ -176,22 +176,28 @@ const installRepos = async (globalConf) => {
  */
 const setupDocker = async (globalConf) => {
   const dockerObj = deepMerge({}, get(globalConf, `docker`, {}))
-  dockerObj.user = await ask.input({
-    message: `Enter your docker provider user name`,
-    default: get(globalConf, `cli.git.user`)
-  })
-
-  const defToken = `Git key if provided`
-  const token = await ask.password({
-    message: `Enter your docker provider token`,
-    default: defToken,
-  })
-  token && token !== defToken && ( dockerObj.token = token )
 
   dockerObj.providerUrl = await ask.input({
     message: `Enter your docker provider url`,
     default: get(globalConf, `docker.providerUrl`),
   })
+
+  dockerObj.user = await ask.input({
+    message: `Enter your docker provider user name`,
+    default: get(globalConf, `cli.git.user`)
+  })
+
+  const isGitHub = dockerObj.providerUrl === get(globalConf, `docker.providerUrl`)
+  const hasGitToken = Boolean(get(globalConf, `cli.git.key`))
+
+  if(!isGitHub || !hasGitToken){
+    const defToken = `<"Git Token" if provided>`
+    const token = await ask.password({
+      message: `Enter your docker provider token`,
+      default: defToken,
+    })
+    token && token !== defToken && ( dockerObj.token = token )
+  }
 
   // Add the docker object to the globalConfig
   set(globalConf, `docker`, dockerObj)
@@ -235,15 +241,17 @@ const setupSettings = async (globalConf) => {
     default: get(globalConf, `cli.settings.docker.preConfirm`, true)
   })
 
+  // NOTE: Most don't know what this is, so just use the default
+  // If someone wants to turn it off, then they can update their config
   // Use the new experiment buildkit option for docker build
-  settingsObj.docker.buildKit = await ask.confirm({
-    message: `Use docker buildkit for building docker images?`,
-    default: get(globalConf, `cli.settings.docker.buildKit`, true)
-  })
+  // settingsObj.docker.buildKit = await ask.confirm({
+  //   message: `Use docker buildkit for building docker images?`,
+  //   default: get(globalConf, `cli.settings.docker.buildKit`, true)
+  // })
 
   // Should we auto force docker actions?
   settingsObj.docker.force = await ask.confirm({
-    message: `Auto force docker actions? Example: docker image rm core --force`,
+    message: `Auto force docker actions? Example: "docker image rm core --force"`,
     default: get(globalConf, `cli.settings.docker.force`, true)
   })
 
@@ -310,9 +318,7 @@ const configSetup = async () => {
 
 }
 
-module.exports = {
-  configSetup
-}
-
-// Check if script shoudl be auto-run when running form terminal
+// Check if script should be auto-run when running form terminal
 !module.parent && configSetup()
+
+module.exports = { configSetup }
