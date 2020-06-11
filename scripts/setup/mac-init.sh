@@ -4,8 +4,8 @@
 KEG_CLI_URL=github.com/simpleviewinc/keg-cli.git
 
 # Install location
-KEG_INSTALL_DIR=~/keg
-KEG_CLI_PATH=$KEG_INSTALL_DIR/keg-cli
+export KEG_ROOT_DIR=~/keg
+export KEG_CLI_PATH=$KEG_ROOT_DIR/keg-cli
 
 # Size of the docker-machien virtual box hhd
 # KEG_VB_SIZE=24288
@@ -195,6 +195,23 @@ keg_setup_yarn(){
   
 }
 
+# Install the dependencies for the keg-cli
+keg_install_cli_dependencies(){
+
+  # Cache the current diretory
+  local CUR_DIR=$(pwd)
+  
+  # Navigate to the keg-cli directory
+  cd $KEG_CLI_PATH
+  # Install the dependencies
+  yarn install
+
+  # Navigate back to the original directory
+  cd $CUR_DIR
+
+}
+
+
 # If you run into this problem =>
 # mkmf.rb can't find header files for ruby at /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/include/ruby.h
 # Follow the stpes of the first answer here=>
@@ -233,9 +250,19 @@ keg_install_repo(){
     return
   fi
 
-  # Check if there is a GITHUB_KEY in the ENV, and is so use it to clone the repos
+  local USE_GIT_KEY
+  # Check if there is GITHUB_KEY || GIT_KEY in the ENV, and is so use it to clone the repos
   if [[ "$GITHUB_KEY" ]]; then
-    git clone --recurse-submodules https://$GITHUB_KEY@$1 $2
+    USE_GIT_KEY=$GITHUB_KEY
+
+  elif  [[ "$GIT_KEY" ]]; then
+    USE_GIT_KEY=$GIT_KEY
+
+  fi
+
+  # Check if USE_GIT_KEY is set, and is so use it to clone the repos
+  if [[ "$USE_GIT_KEY" ]]; then
+    git clone --recurse-submodules https://$USE_GIT_KEY@$1 $2
   
   # Otherwise use the a regular git clone, without the key
   else
@@ -300,18 +327,20 @@ keg_install_cli(){
 
   # Check if the keg-cli install directory exists
   # If not, then create it, and set it's permissions to the current user/group
-  if [[ ! -d "$KEG_INSTALL_DIR" ]]; then
+  if [[ ! -d "$KEG_ROOT_DIR" ]]; then
     keg_message "Creating /keg directory..."
     local USR=$(logname)
     local GROUP=$(id -g -n $USR)
-    sudo mkdir -p $KEG_INSTALL_DIR
-    sudo chown -R $USER:$GROUP $KEG_INSTALL_DIR
+    sudo mkdir -p $KEG_ROOT_DIR
+    sudo chown -R $USER:$GROUP $KEG_ROOT_DIR
   fi
 
-  cd $KEG_INSTALL_DIR
+  cd $KEG_ROOT_DIR
 
-  # Clone the needed key repos
-  keg_install_repo $KEG_CLI_URL keg-cli
+  if [[ ! -d "$KEG_CLI_URL" ]]; then
+    # Clone the needed key repos
+    keg_install_repo $KEG_CLI_URL keg-cli
+  fi
 
   # Update the bash profile to include the keg-cli bash commands
   keg_check_bash_file
@@ -371,10 +400,10 @@ keg_reset_docker_machine(){
 keg_uninstall_all(){
   keg_clean_all
 
-  if [[ -d "$KEG_INSTALL_DIR" ]] && [[ "$KEG_INSTALL_DIR" != "/" ]]; then
-    local ANSWER=$(keg_ask_question "Confirm remove $KEG_INSTALL_DIR? (y/n):")
+  if [[ -d "$KEG_ROOT_DIR" ]] && [[ "$KEG_ROOT_DIR" != "/" ]]; then
+    local ANSWER=$(keg_ask_question "Confirm remove $KEG_ROOT_DIR? (y/n):")
     if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
-      sudo rm -rf $KEG_INSTALL_DIR
+      sudo rm -rf $KEG_ROOT_DIR
     fi
   fi
 
@@ -402,7 +431,6 @@ keg_add_machine_envs(){
 
 }
 
-
 # Adds act package, which allows testing github actions locally through docker
 keg_install_github_cli(){
 
@@ -415,7 +443,7 @@ keg_install_github_cli(){
 
 }
 
-
+# Increases the max watchers of the local machine
 keg_setup_max_watchers(){
   local SYS_CONF=/etc/sysctl.conf
 
@@ -443,6 +471,11 @@ keg_setup_max_watchers(){
 
   fi
   
+}
+
+# Runs the node KEG-CLI config setup script
+keg_cli_config_setup(){
+  node $KEG_CLI_PATH/scripts/cli/configSetup.js
 }
 
 # Runs methods to setup the keg-cli, with docker and vagrant
@@ -574,8 +607,14 @@ keg_setup(){
     keg_setup_yarn "${@:2}"
   fi
 
-
-  # Add yarn install here
+  # Setup and install cli deps
+  # To run:
+  # bash mac-init.sh nm
+  #  * Runs only the node_modules portion of this scrip
+  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node_modules" || "$SETUP_TYPE" == "nm" ]]; then
+    keg_message "Installing cli dependencies..."
+    keg_install_cli_dependencies
+  fi
 
   # Setup and install cli
   # To run:
@@ -595,30 +634,49 @@ keg_setup(){
     keg_setup_docker_sync "${@:2}"
   fi
 
-  keg_message "Keg CLI setup complete!"
+  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "config" ]]; then
+    keg_message "Running KEG-CLI config setup..."
+    keg_cli_config_setup "${@:2}"
+  fi
+
+  keg_message "--------------------------------------------- [ KEG CLI ]"
+  keg_message "                       Keg CLI setup complete!                       "
+  keg_message "                     Run source ~/.bash_profile                      "
+  keg_message "              Open a new terminal window to use the cli!             "
+  keg_message "--------------------------------------------- [ KEG CLI ]"
 
 }
 
-# Unset these envs so we can validate that the current envs get loaded
-unset KEG_DOCKER_IP
-unset KEG_DOCKER_NAME
+keg_init_setup(){
 
-# Only run the setup scirpt if the ENVs are unset from above
-if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
-
-  # Re-add all machine envs
-  keg_add_machine_envs
-
-  # Ensure the ENVs were reset, so we can properly setup the keg-cli
-  if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
-    keg_setup "$@"
-
-  # Show message if setup ENVs could not be set
-  else
-    keg_message "Error running keg-cli setup. Could not set keg-cli setup ENVs!"
+  if [[ ! -d "$KEG_ROOT_DIR" ]]; then
+    keg_install_cli
   fi
 
-# Show message if setup ENVs could not be unset
-else
-  keg_message "Error running keg-cli setup. Could not unset keg-cli setup ENVs!"
-fi
+  # Unset these envs so we can validate that the current envs get loaded
+  unset KEG_DOCKER_IP
+  unset KEG_DOCKER_NAME
+
+  # Only run the setup scirpt if the ENVs are unset from above
+  if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
+
+    # Re-add all machine envs
+    keg_add_machine_envs
+
+    # Ensure the ENVs were reset, so we can properly setup the keg-cli
+    if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
+      keg_setup "$@"
+
+    # Show message if setup ENVs could not be set
+    else
+      keg_message "Error running keg-cli setup. Could not set keg-cli setup ENVs!"
+    fi
+
+  # Show message if setup ENVs could not be unset
+  else
+    keg_message "Error running keg-cli setup. Could not unset keg-cli setup ENVs!"
+  fi
+}
+
+# Call init setup to start the setup proccess
+keg_init_setup "$@"

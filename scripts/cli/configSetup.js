@@ -9,13 +9,14 @@ const { DOCKER } = require('KegConst/docker')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 
 /**
- * Asks the user a few qestions to help build out the global config
+ * Asks the user a few questions to help build out the global config
  *
  * @returns {Object} - Default global config based off user answers
  */
 const configSetup = async () => {
   const gc = {}
-  Logger.header(`Welcome to the Keg Cli`)
+  Logger.header(`Keg Cli config setup...`)
+  
 
 
   return gc

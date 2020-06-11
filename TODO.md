@@ -52,19 +52,6 @@
     * Stored in `cli.config.json`
 
 
-## Docker keg-base updates
-  * Install all keg repos, and node_modules for repos
-  * In other containers, copy over node_modules using the copy-from directive in a Dockerfile
-    * This means no need to install node_modules on every rebuild of from docker files
-
-## Docker sync start --clean
-  * Should run the full clean task; not just the internal docker-sync command
-
-### Docker Sync w/ unison
-* Set one way sync, with no deletion
-  * unison /src/dir /dest/dir -force /src/dir -nodeletion /dest/dir
-
-
 
 ### Setup Scripts
   * Added check machine type
@@ -85,12 +72,8 @@
   * Add `ask` key to option
   * If it's missing, it will ask the user for the value when the command is run
   * Add setting for no ask in globalConfig
-  
-  
-  
-  
+
 Setup - To Fix
- * Add `yarn install` to setup script in keg-cli
  * Add keg install task
    * Installs repos
    * Asks for install location
