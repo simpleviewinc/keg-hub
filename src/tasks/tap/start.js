@@ -249,6 +249,7 @@ module.exports = {
       },
       install: {
         alias: [ 'in' ],
+        allowed: [ false, true, 'core' ],
         description: 'Install node_modules ( yarn install ) in the container before starting the app',
         example: 'keg tap start --install',
         default: false
