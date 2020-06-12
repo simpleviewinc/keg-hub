@@ -1,7 +1,6 @@
 require('module-alias/register')
 
 const path = require('path')
-const { Git } = require('KegGit')
 const { Logger } = require('KegLog')
 const homeDir = require('os').homedir()
 const { ask } = require('KegQuestions')
@@ -14,6 +13,7 @@ const { defPaths } = require('KegUtils/globalConfig/defaultConfig')
 const { deepMerge, mapObj, reduceObj, get, set } = require('jsutils')
 const { saveGlobalConfig } = require('KegUtils/globalConfig/saveGlobalConfig')
 const packageJson = require('KegRoot/package.json')
+
 
 // Cache hold for repo map of name to repo name
 const gitRepoMap = {}

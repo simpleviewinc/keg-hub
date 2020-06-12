@@ -131,6 +131,13 @@ keg(){
 
 # Auto loads the GIT_KEY and docker-machine envs
 keg_auto_load_envs(){
+  local KEG_GLOBAL_CONFIG=$HOME/.kegConfig/cli.config.json
+
+  # Ensure global cli config exists
+  if [[ ! -f "$KEG_GLOBAL_CONFIG" ]]; then
+    keg_message "KEG-CLI Global config does not exist! Skipping ENV autoload!"
+    return
+  fi
 
   # Check if GIT_KEY is already loaded
   if [[ -z "$GIT_KEY" ]]; then
