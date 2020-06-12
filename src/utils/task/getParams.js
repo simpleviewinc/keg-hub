@@ -41,7 +41,7 @@ const checkRequired = (task, key, meta) => {
 const checkBoolValue = value => {
   if(!exists(value) || isBool(value)) return value
 
-  const lowerVal = value && value.toLowerCase()
+  const lowerVal = isStr(value) && value.toLowerCase() || value
 
   // Check the value is one of the joined bool options
   return boolOpts.indexOf(lowerVal) === -1
@@ -135,7 +135,6 @@ const buildMatchTypes = (long, short, alias=[]) => {
     return matchTypes.concat([ type, `--${type}`, `-${type}` ])
   }, [ long, `--${long}`, short, `-${short}` ])
 }
-
 
 /**
  * Checks the current argument for a starting "
@@ -323,6 +322,10 @@ const loopTaskOptions = (task, taskKeys, options) => {
     const meta = isObj(task.options[key])
       ? task.options[key]
       : { description: task.options[key] }
+
+    // TODO: Need to remove the key value form the options array
+    // The value get's remove but not the key, which causes the parse to fail
+    // When more then one key starts with the same char
 
     // Find the value of the argument from the passed in options
     const value = findParam({

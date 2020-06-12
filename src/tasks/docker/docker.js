@@ -76,6 +76,7 @@ module.exports = {
       ...require('./exec'),
       ...require('./image'),
       ...require('./machine'),
+      ...require('./package'),
       ...require('./provider'),
       ...require('./prune'),
       ...require('./run'),

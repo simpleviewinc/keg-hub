@@ -25,8 +25,9 @@ const dockerContainer = async args => {
   if(apiMethod) return apiMethod({ item: container, force, format })
 
   const cmdArgs = { ...params }
-
-  if(!cmd && options[0]) cmd = options[0]
+  
+  const first = options[0]
+  if(!cmd && first && first.indexOf('=') === -1 && first.indexOf('-') !== 0) cmd = first
   if(!container && options[1]) container = options[1]
 
   cmdArgs.opts = cmd

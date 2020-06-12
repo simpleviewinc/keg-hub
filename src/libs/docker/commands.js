@@ -161,13 +161,14 @@ const pull = async url => {
  *
  * @returns {*} - Response from the docker cli command
  */
-const raw = async (cmd, args, loc) => {
+const raw = async (cmd, args={}, loc=process.cwd()) => {
 
-  const { error, data } = await spawnProc(
-    cmd.trim().indexOf('docker') === 0 ? cmd : `docker ${cmd}`,
-    args,
-    loc
-  )
+  // Build the command to be run
+  // Add docker if needed
+  const toRun = cmd.trim().indexOf('docker') === 0 ? cmd : `docker ${cmd}`
+
+  // Run the docker command
+  const { error, data } = await spawnProc(toRun, args, loc)
 
   error && !data
     ? apiError(error)

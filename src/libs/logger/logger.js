@@ -67,19 +67,26 @@ class Log {
 
   /**
   * Helper create string in the passed in color
-  * @returns {string} colorName - name of the color to use
-  * @returns {string} data - data to set color for
+  * @function
+  * @param {string} colorName - name of the color to use
+  * @param {string} data - data to set color for
+  *
+  * @returns {void}
   */
   color = (colorName, data) => (colors[this.colorMap[colorName] || colorName](data))
 
   /**
   * Helper to print the passed in data
+  * @function
+  *
   * @returns {void}
   */
   print = (...data) => console.log(...data)
 
   /**
   * Helper to change the default colors
+  * @function
+  *
   * @returns {void}
   */
   setColors = colorMap => (
@@ -88,12 +95,16 @@ class Log {
 
   /**
   * Helper to log an empty line
+  * @function
+  *
   * @returns {void}
   */
   empty = () => console.log('')
 
   /**
   * Helper to log out CLI message header
+  * @function
+  *
   * @param {string} title
   *
   * @returns {void}
@@ -114,6 +125,7 @@ class Log {
 
   /**
   * Helper to log a title and message in separate colors
+  * @function
   * @param {string} title - Prints the string in cyan
   * @param {string} message - Prints the string in white
   *
@@ -130,6 +142,7 @@ class Log {
 
   /**
   * Helper to log a spaced title and message in separate colors
+  * @function
   * @param {string} title - Prints the string in cyan
   * @param {string} message - Prints the string in white
   *
@@ -140,6 +153,11 @@ class Log {
     this.message(title, message)
     this.empty()
   }
+
+  /**
+  * Same as spacedMsg
+  */
+  spaceMsg = (...args) => this.spacedMsg(...args)
 
 }
 

@@ -1,6 +1,7 @@
 const { compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { isArr, toStr, isStr } = require('jsutils')
+const { Logger } = require('KegLog')
 
 /**
  * Calls the docker api and gets a list of current images
@@ -180,7 +181,8 @@ const clean = async ({ force, opts='', log=false }) => {
  *
  * @returns {string|Array} - Response from docker cli
  */
-const runImage = async ({ entry, envs, image, location, name, opts=[] }) => {
+const runImage = async (args) => {
+  const { cmd, entry, envs, image, location, name, opts=[], tag, log } = args
 
   const containerName = isStr(name)
     ? name
@@ -188,22 +190,28 @@ const runImage = async ({ entry, envs, image, location, name, opts=[] }) => {
       ? `img-${image}`
       : `img-${image.name}`
 
-  const imgName = isStr(image) ? image : image.name
+  let imgName = isStr(image) ? image : image.name
+  imgName = isStr(tag)
+    ? tag.indexOf(image) !== 0
+      ? `${ image }:${ tag }`
+      : tag
+    : imgName
 
   // Set the name of the container based off the image name
-  let cmd = `run --name ${ containerName }`.trim()
+  let cmdToRun = `docker run --name ${ containerName }`.trim()
 
   // Add any passed in docker cli opts 
-  cmd = `${ cmd } ${ isArr(opts) ? opts.join(' ') : opts }`.trim()
+  cmdToRun = `${ cmdToRun } ${ isArr(opts) ? opts.join(' ') : opts }`.trim()
 
   // Convert the passed in envs to envs that can be passed to the container
-  cmd = toContainerEnvs(envs, cmd)
+  // cmdToRun = toContainerEnvs(envs, cmdToRun)
 
   // Set / overwrite the entry for the container
-  cmd = `${ cmd } ${ imgName } ${ entry || '/bin/sh' }`.trim()
+  cmdToRun = `${ cmdToRun } ${ imgName } ${ cmd || entry || '/bin/sh' }`.trim()
 
+  log && Logger.spacedMsg(`  Running command: `, cmdToRun)
   // Run the command
-  return raw(cmd, { options: { env: envs }}, location)
+  return raw(cmdToRun, { options: { env: envs }}, location)
 
 }
 

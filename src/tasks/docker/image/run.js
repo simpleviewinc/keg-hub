@@ -17,7 +17,7 @@ const docker = require('KegDocCli')
  */
 const runDockerImage = async args => {
   const { globalConfig, params, task } = args
-  const { context, cleanup, entry } = params
+  const { context, cleanup, entry, tag } = params
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
@@ -38,11 +38,14 @@ const runDockerImage = async args => {
     container => container.names === imgContainer,
     'json'
   )
+  // TODO: if the container already exists
+  // Ask the user if they want to kill it, or not
 
   const opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
 
   await docker.image.run({
+    tag,
     opts,
     entry,
     location,
@@ -76,6 +79,10 @@ module.exports = {
         example: 'keg docker image run --entry \\"node index.js\\"',
         default: '/bin/sh'
       },
+      tag: {
+        description: 'Tag of the image to be run',
+        example: 'keg docker image run --context core --tag updates',
+      }
     },
   }
 }
