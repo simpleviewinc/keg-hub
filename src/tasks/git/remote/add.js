@@ -9,7 +9,7 @@ const { getGit } = require('KegGit')
  * @returns {*} - Response of the addRemote method
  */
 const addRemote = (remote, url) => {
-  Logger.message(`Adding git remote`, `${remote} => ${url}`)
+  Logger.pair(`Adding git remote`, `${remote} => ${url}`)
   // Add remote repo url as origin to repo
   return simpleGitPromise.addRemote(remote, url)
 }

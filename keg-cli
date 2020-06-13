@@ -1,18 +1,23 @@
 #!/usr/bin/env node
 
 require('module-alias/register')
-const { loadGlobalConfig } = require('KegUtils/globalConfig/loadGlobalConfig')
 
 ;(async () => {
   try {
+
+    const { loadGlobalConfig } = require('KegUtils/globalConfig/loadGlobalConfig')
+    const { checkUpdates } = require('KegScripts/cli/checkUpdates')
+    const { getSetting } = require('KegUtils/globalConfig/getSetting')
 
     // Load the users global config, or create it on the fly
     const globalConfig = await loadGlobalConfig()
 
     // Pull in the runTask method, and call it immediately
     const { runTask } = require('KegRunTask')
-
     await runTask(globalConfig)
+
+    // Check for Keg CLI updates if setting is true
+    getSetting('checkUpdates') && await checkUpdates()
 
   }
   catch(e){

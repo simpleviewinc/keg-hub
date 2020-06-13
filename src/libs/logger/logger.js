@@ -131,7 +131,7 @@ class Log {
   *
   * @returns {void}
   */
-  message = (title, message) => {
+  pair = (title, message) => {
     const toLog = []
     // Check that the title and message exist, then add to the toLog array
     title && toLog.push(Logger.colors.brightCyan(title))
@@ -139,6 +139,8 @@ class Log {
 
     toLog.length && this.print(...toLog)
   }
+
+  label = (...args) => this.pair(...args)
 
   /**
   * Helper to log a spaced title and message in separate colors
@@ -150,7 +152,7 @@ class Log {
   */
   spacedMsg = (title, message) => {
     this.empty()
-    this.message(title, message)
+    this.pair(title, message)
     this.empty()
   }
 

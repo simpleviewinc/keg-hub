@@ -7,9 +7,9 @@ describe('logVirtualUrl', () => {
 
   beforeEach(() => jest.resetAllMocks())
   
-  it('should call Logger.message', () => {
+  it('should call Logger.pair', () => {
     logVirtualUrl()
-    expect(Logger.message).toHaveBeenCalled()
+    expect(Logger.pair).toHaveBeenCalled()
   })
 
   it('should call Logger.warn', () => {

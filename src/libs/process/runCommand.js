@@ -24,7 +24,7 @@ const getExtraArgs = extra => {
  */
 const doSpawnCmd = (...args) => {
   const extra = getExtraArgs(args[1])
-  Logger.message(`Running command: `, `${args[0]}${extra}`)
+  Logger.pair(`Running command: `, `${args[0]}${extra}`)
   return spawnProc(...args)
 }
 

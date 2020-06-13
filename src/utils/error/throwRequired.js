@@ -14,10 +14,10 @@ const throwRequired = (task, key, meta) => {
 
   Logger.error(`\n Task '${task.name}' ${requireType} '${key}' argument.`)
 
-  meta.alias && Logger.message(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
-  meta.description && Logger.message(`  * Description:`, meta.description)
-  meta.allowed && Logger.message(`  * Allowed Values:`, meta.allowed.join(' | '))
-  meta.example && Logger.message(`  * Example:`, meta.example)
+  meta.alias && Logger.pair(`  * Alias:`, [ key[0] ].concat(meta.alias).join(' | '))
+  meta.description && Logger.pair(`  * Description:`, meta.description)
+  meta.allowed && Logger.pair(`  * Allowed Values:`, meta.allowed.join(' | '))
+  meta.example && Logger.pair(`  * Example:`, meta.example)
 
   Logger.empty()
 

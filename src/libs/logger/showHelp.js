@@ -102,7 +102,7 @@ const showTaskInfo = (task, infoSpacer) => {
  * @returns {void}
  */
 const showTaskInfoItem = (name, desc, infoSpacer) => {
-  desc && Logger.message(`${infoSpacer}${name}:`, desc)
+  desc && Logger.pair(`${infoSpacer}${name}:`, desc)
 }
 
 const showTaskOptions = (task, infoSpacer, dblSpacer) => {
