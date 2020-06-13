@@ -257,7 +257,7 @@ const findParam = ({ key, meta={}, index, task, ...args }) => {
     optionSchemas: task.options
   })
 
-  // If value exists and if there's not any allowed, then return it
+  // If value exists or if there's not any allowed, then return it
   if (exists(value) || !isArr(meta.allowed)) return value
 
   // Otherwise loop the allowed and check if one exists in the options array
@@ -332,7 +332,7 @@ const ensureParams = async (task, mappedParams={}) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const loopOptionSchemas = (task, taskKeys, options) => {
+const loopTaskOptions = (task, taskKeys, options) => {
   return taskKeys.reduce(async (toResolve, key, index) => {
     const params = await toResolve
 
@@ -391,7 +391,7 @@ const getParams = async ({ options=[], task }) => {
   return options.length !== 1 || options[0].indexOf('=') !== -1
 
     // Loop over the task keys and map the task options to the passed in options
-    ? taskKeys && await loopOptionSchemas(task, taskKeys, options)
+    ? taskKeys && await loopTaskOptions(task, taskKeys, options)
     
     // Otherwise set it as the first key in the task options object
     : ensureParams(
