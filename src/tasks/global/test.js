@@ -27,6 +27,11 @@ module.exports = {
       foo: {
         description: 'Is foo bar',
       },
+      fax: {
+        alias: ['zip'],
+        allowed: ['buzz', 'bizz'],
+        description: 'Is fax bar',
+      },
       boo: {
         description: 'Sounds from casper',
         required: true,

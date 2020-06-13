@@ -1,4 +1,3 @@
-const { Logger } = require('KegLog')
 const { throwRequired } = require('../error')
 const { exists, mapEnv } = require('../helpers')
 const { optionsAsk } = require('./optionsAsk')
@@ -7,10 +6,6 @@ const {
   isStr,
   isObj,
   isBool,
-  softFalsy,
-  wordCaps,
-  isStrBool,
-  toBool,
   reduceObj
 } = require('jsutils')
 const { BOOL_VALUES } = require('KegConst/constants')
@@ -79,6 +74,21 @@ const removeOption = (options, opt) => {
 
   return options
 }
+/*
+ * Returns true if `str` is a valid key in the optionSchemas
+ * @param {string} str 
+ * @param {Object} optionSchemas - the 'options' object in the schema for a task
+ * @returns {boolean} true if `str` is a valid option key to use with the task on the command line
+ */
+const isOptionKey = (str, optionSchemas) => {
+  // loop over every option definition, and check if its match types include the string str
+  return Object
+    .entries(optionSchemas)
+    .some(([key, schema]) => {
+      const validKeys = buildMatchTypes(key, key[0], schema.alias)
+      return validKeys.includes(str)
+    })
+}
 
 /**
  * Matches the option against the passed in matchTypes
@@ -89,21 +99,27 @@ const removeOption = (options, opt) => {
  * @param {Array} matchTypes - Keys to match the option against
  * @param {string} option - Passed in option from the command line
  * @param {string} value - Value to set if there is a match
+ * @param {Object} optionSchemas - the 'options' object in the schema for a task
  *
  * @returns {string|boolean} - Passed in value, or true if taskKey match
  */
-const matchParamType = (taskKeys, matchTypes, option, value) => {
+const matchParamType = (matchTypes, option, value, optionSchemas) => {
   // Search for a match between the option and matchTypes
-  const match = matchTypes.reduce((matched, type) => matched || option === type, false)
+  const match = matchTypes.includes(option)
+
+  // If no match return null, so the splitEqualsMatch method will run
+  if (!match) return null
+
+  // if value is defined, split it on the equals so that we can check if it is another flag.
+  // This helps with cases like `keg cool cmd --foo b=2`, which should interpret --foo as true 
+  // and b as 2. If the value doesn't conform to the pattern x=y, this just sets possibleKey to value
+  const possibleKey = isStr(value) && value.split('=')[0]
 
   // If there's a match, and it's not a taskKey return the value
-  // If there's a match, but no value or is a taskKey match, return true
-  // If no match return null, so the splitEqualsMatch method will run
-  return match
-    ? value && taskKeys.indexOf(value) === -1
-      ? value
-      : true
-    : null
+  // If there's a match, but no value or is a task option key match, return true
+  return value && !isOptionKey(possibleKey, optionSchemas)
+    ? value
+    : true
 }
 
 /**
@@ -119,7 +135,7 @@ const matchParamType = (taskKeys, matchTypes, option, value) => {
 const splitEqualsMatch = (option, matchTypes, argument) => {
   const [ key, value ] = option.split('=')
   // Check if the key exists in the matchTypes, and return the value if it does
-  return matchTypes.indexOf(key) !== -1 ? value : argument
+  return matchTypes.includes(key) ? value : argument
 }
 
 /**
@@ -183,7 +199,7 @@ const checkQuotedOptions = (argument, options, index) => {
  *
  * @returns {string} - The found value || the passed in default
  */
-const getParamValue = ({ taskKeys, options, long, short, alias }) => {
+const getParamValue = ({ options, long, short, alias, optionSchemas }) => {
 
   const matchTypes = buildMatchTypes(long, short, alias)
 
@@ -191,7 +207,7 @@ const getParamValue = ({ taskKeys, options, long, short, alias }) => {
     options.reduce((argument, option, index) => {
 
       // If the value was already found, check for quoted string and return it 
-      if(exists(argument)) return checkQuotedOptions(argument, options, index)
+      if (exists(argument)) return checkQuotedOptions(argument, options, index)
 
       const nextOpt = options[ index + 1 ]
 
@@ -200,18 +216,19 @@ const getParamValue = ({ taskKeys, options, long, short, alias }) => {
       // Pass the taskKeys, to ensure the next option is not a task key option
       // This is to ensure the next option is a value, and not a key to a value
       let value = matchParamType(
-        taskKeys,
         matchTypes,
         option,
-        nextOpt
+        nextOpt,
+        optionSchemas
       )
 
       // If no value if found, then check for a split equals match
-      if(!exists(value) && option.indexOf('=') !== -1)
+      if (!exists(value) && option.includes('='))
         value = splitEqualsMatch(option, matchTypes, argument)
 
-      // If value is the next option, remove it from the options array
-      if(value === nextOpt) options = removeOption(options, value)
+      // If value is the next option, remove the key and its value from the options array
+      if (value === nextOpt)
+        options.splice(index, 2)
 
       return value
 
@@ -237,10 +254,11 @@ const findParam = ({ key, meta={}, index, task, ...args }) => {
     long: key,
     short: key[0],
     alias: meta.alias,
+    optionSchemas: task.options
   })
 
   // If value exists or if there's not any allowed, then return it
-  if(exists(value) || !isArr(meta.allowed)) return value
+  if (exists(value) || !isArr(meta.allowed)) return value
 
   // Otherwise loop the allowed and check if one exists in the options array
   // If a allowed if found, it will be used as the value for the argument key
@@ -323,17 +341,12 @@ const loopTaskOptions = (task, taskKeys, options) => {
       ? task.options[key]
       : { description: task.options[key] }
 
-    // TODO: Need to remove the key value form the options array
-    // The value get's remove but not the key, which causes the parse to fail
-    // When more then one key starts with the same char
-
     // Find the value of the argument from the passed in options
     const value = findParam({
       key,
       meta,
       task,
       index,
-      taskKeys,
       options,
     })
 
