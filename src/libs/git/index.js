@@ -5,4 +5,5 @@ module.exports = {
   ...require('./gitRepo'),
   ...require('./getRemoteUrl'),
   ...require('./git'),
+  ...require('./github'),
 }

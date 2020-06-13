@@ -1,7 +1,6 @@
 require('module-alias/register')
 
 const path = require('path')
-const { Git } = require('KegGit')
 const { Logger } = require('KegLog')
 const homeDir = require('os').homedir()
 const { ask } = require('KegQuestions')
@@ -189,14 +188,8 @@ const installRepos = async (globalConf) => {
     // Check if the repo should be cloned
     if(NO_CUSTOM.indexOf(key) !== -1) return true
 
-    const repoUrl = getGitUrl(globalConf, name)
-    const { location } = defRepos[key]
-    
-    const git = new Git(location, globalConf)
-    const [ err, exists ] = await git.repo.exists()
-    if(err) return logError(err)
-    if(exists) return true
-    
+    const repoUrl = getGitUrl({ globalConf, name })
+
     // TODO: Add code to clone the repo locally
     // const [ cloneErr, cloned ] = await git.repo.clone(repoUrl, location)
     // if(cloneErr) return logError(cloneErr)

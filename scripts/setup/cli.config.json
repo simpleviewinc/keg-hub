@@ -13,6 +13,7 @@
     "git": {
       "orgName": "simpleviewinc",
       "orgUrl": "https://github.com/simpleviewinc",
+      "provider": "https://github.com",
       "repos": {
         "cli": "keg-cli",
         "core": "keg-core",

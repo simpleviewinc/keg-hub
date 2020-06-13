@@ -24,15 +24,16 @@ const buildGitUrl = (orgUrl, name, branch) => {
  *
  * @returns {string} - Found repo url
  */
-const getGitUrl = (globalConfig, key, branch) => {
+const getGitUrl = ({ globalConfig, repo, branch, org }) => {
 
   const { orgUrl, repos } = get(globalConfig, GLOBAL_CONFIG_PATHS.GIT)
 
-  return orgUrl && repos[key] && buildGitUrl(
-    orgUrl,
-    repos[key],
-    branch ? `#{branch}` : ''
-  )
+  return orgUrl
+    ? repos[repo] && buildGitUrl(
+        orgUrl,
+        repos[repo],
+        branch ? `#{branch}` : ''
+      )
 
 }
 
