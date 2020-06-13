@@ -4,6 +4,7 @@ const { DOCKER } = require('KegConst/docker')
 const { isStr, get, isFunc, isArr } = require('jsutils')
 const { buildLocationContext } = require('KegUtils/builders')
 const { throwRequired, generalError } = require('KegUtils/error')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Gets the author to use for the docker commit command
@@ -30,6 +31,16 @@ const rmDockerItem = (item, type='container') => {
   return docker.raw(`${ type } rm ${ item }`.trim())
 }
 
+/**
+ * Builds a tar command to be run in the docker container
+ * @function
+ * @param {string} from - the tar file to be referenced
+ * @param {string} to - the Path the from tar file relates to
+ * @param {boolean} unpack - If the tar command should unpack the from tar file
+ * @param {boolean} log - IF the tar command output should be logged
+ *
+ * @returns {string} - Built tar command
+ */
 const buildTarCmd = ({ from, to, unpack, log }) => {
   to = isArr(to) ? to.join(' ') : to
 
@@ -40,6 +51,14 @@ const buildTarCmd = ({ from, to, unpack, log }) => {
   return `tar ${ tarArgs } ${ from }${ packArgs }${ to } ${ logArgs }`.trim()
 }
 
+/**
+ * Builds the tar commands to be run durning the package task
+ * @function
+ * @param {string} to - the Path the from tar file relates to
+ * @param {boolean} unpack - If the tar command should unpack the from tar file
+ *
+ * @returns {Object} - Container the tar file path, and the pack / unpack tar commands 
+ */
 const getTarCmds = (to, log) => {
   const from = `/keg-temp/keg.gz`
   // const tarCmd = `tar -czvf ${ tarPath } ${ contextEnvs.DOC_APP_PATH }`
@@ -102,7 +121,6 @@ const dockerPackage = async args => {
   Logger.info(`  Finished creating tar package in container!`)
 
 
-
   /*
   * ----------- Step 2 ----------- *
   * Create image of the container using docker commit
@@ -119,7 +137,6 @@ const dockerPackage = async args => {
   })
 
   Logger.info(`  Finished creating temp image!`)
-
 
 
   /*
@@ -160,7 +177,6 @@ const dockerPackage = async args => {
   Logger.info(`  Finished creating temp container and unpacking tar!`)
 
 
-
   /*
   * ----------- Step 4 ----------- *
   * Create a new commit of the container created above which includes the un-packed tar
@@ -192,15 +208,29 @@ const dockerPackage = async args => {
 
   Logger.success(`  Finished docker package command. Created image "${ finalTag }"!`)
 
-  if(!push) return
 
   /*
   * ----------- Step 6 ----------- *
   * Push docker image to docker provider registry
   */
 
-  // Logger.info(`  Pushing image "${ finalTag }" to provider ...`)
-  // push && docker.push()
+  Logger.info(`  Pushing image "${ finalTag }" to provider ...`)
+
+  push && await runInternalTask(
+    'tasks.docker.tasks.provider.tasks.push',
+    {
+      ...args,
+      command: 'push',
+      params: {
+        ...args.params,
+        image,
+        build: false,
+        tag: finalTag,
+      }
+    }
+  )
+
+  Logger.success(`  Finished pushing docker image "${ finalTag }" to provider!`)
 
 }
 

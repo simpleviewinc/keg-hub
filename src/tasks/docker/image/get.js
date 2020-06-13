@@ -18,10 +18,10 @@ const { dockerLog } = require('KegUtils/log/dockerLog')
 const getImage = async args => {
 
   const { params, __skipLog } = args
-  const { force, name, tag } = params
+  const { force, context, tag } = params
 
   // Check the name for a tag ref, or use the passed in name and tag
-  let [ nameRef, tagRef ] = name.indexOf(':') !== -1 ? name.split(':') : [ name, tag ]
+  let [ nameRef, tagRef ] = context.indexOf(':') !== -1 ? context.split(':') : [ context, tag ]
 
   // Ensure we have an image to remove by checking for a mapped nameRef, or use original
   let imgRef = get(CONTAINERS, `${nameRef && nameRef.toUpperCase()}.ENV.IMAGE`, nameRef)
@@ -47,8 +47,9 @@ module.exports = {
     description: `Get docker image by name or id`,
     example: 'keg docker image get <options>',
     options: {
-      name: {
-        description: 'Name or Id of the image to get, optionally with the tag.',
+      context: {
+        alias: [ 'name' ],
+        description: 'Context, name or id of the image to get, optionally with the tag.',
         example: 'keg docker image get --name core:0.1.4 ( tag optional )',
         required: true,
       },
