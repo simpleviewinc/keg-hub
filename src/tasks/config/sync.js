@@ -1,4 +1,4 @@
-const { createGlobalConfig } = require('KegUtils/globalConfig')
+const { createGlobalConfig } = require('KegUtils/globalConfig/createGlobalConfig')
 const { confirmExec } = require('KegUtils/helpers')
 
 /**

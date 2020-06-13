@@ -1,11 +1,20 @@
 #!/bin/bash
 
+set -e
+trap 'echo "Finished with exit code $?"' EXIT
+
 # Github Repos
 KEG_CLI_URL=github.com/simpleviewinc/keg-cli.git
 
 # Install location
 export KEG_ROOT_DIR=~/keg
 export KEG_CLI_PATH=$KEG_ROOT_DIR/keg-cli
+
+KEG_USER="$USER"
+KEG_GROUP="$(id -g -n $KEG_USER)"
+
+# If set will exit out of the script with an exit error
+KEG_EXIT=""
 
 # Size of the docker-machien virtual box hhd
 # KEG_VB_SIZE=24288
@@ -53,6 +62,27 @@ keg_brew_install(){
     #  Install brew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
+}
+
+# Checks who owns the Ruby gems folder, and updates the owner if needed
+keg_check_ruby_gem_owner(){
+
+  local GEM_PATH=/Library/Ruby/Gems
+  local GEM_OWNER="$(ls -ld "$GEM_PATH" | awk '{print $3}')"
+
+  # Check if the gem owner is the same as the current user
+  if [[ "$KEG_USER" != $GEM_OWNER ]]; then
+    local ANSWER=$(keg_ask_question "Current user $KEG_USER does not own ruby gems path $GEM_PATH. Would you like to update it? (y/n):")
+
+    if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+      keg_message "Updating Ruby Gems folder owner..."
+      sudo chown -R $KEG_USER:$KEG_GROUP $GEM_PATH
+
+    else
+      KEG_EXIT="Exiting because user does not own ruby gem path. Please update and run this script again!"
+    fi
+  fi
+
 }
 
 # Checks and install docker / docker-machine / docker-compose
@@ -163,10 +193,20 @@ keg_virtualbox_process_fix(){
 
 # Check and install nvm and node
 keg_setup_nvm_node(){
+  
 
-  if [[ -z "$(which nvm)" ]]; then
+  if [[ -d "$HOME/.nvm" ]]; then
+
     keg_message "NVM already installed!"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+    local NODE_VER="$(nvm current)"
+    if [[ "$NODE_VER" !=  "v12.15.0" ]]; then
+      nvm install 12.15.0
+    fi
+    
   else
+
     keg_message "Installing NVM"
 
     # Download and run the bash install script
@@ -211,18 +251,21 @@ keg_install_cli_dependencies(){
 
 }
 
-
 # If you run into this problem =>
 # mkmf.rb can't find header files for ruby at /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/include/ruby.h
 # Follow the stpes of the first answer here=>
 # https://stackoverflow.com/questions/46377667/docker-for-mac-mkmf-rb-cant-find-header-files-for-ruby
 keg_setup_docker_sync(){
 
-  if which ruby >/dev/null && which gem >/dev/null; then
+  if [[ -x "$(command -v docker-sync 2>/dev/null)" ]]; then
+    keg_message "docker-sync is installed"
+
+  elif which ruby >/dev/null && which gem >/dev/null; then
     keg_message "Installing docker-sync"
     gem install docker-sync
     keg_message "Updating \$PATH"
     export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+
   fi
 
   # Install the docker-sync dep unison
@@ -234,10 +277,9 @@ keg_setup_docker_sync(){
     brew link unison
   else
     keg_message "Linking unison"
-    brew link unison
+    brew link unison 2>/dev/null
   fi
 
-  keg_src_bash
 }
 
 # Close a github repo locally
@@ -316,9 +358,6 @@ keg_check_bash_file(){
 
   fi
 
-  # Re-Souce bash to include the cli script
-  source $BASH_FILE
-
 }
 
 # Installs the keg-cli, and clones the keg-core / keg-componets repos locally
@@ -329,10 +368,9 @@ keg_install_cli(){
   # If not, then create it, and set it's permissions to the current user/group
   if [[ ! -d "$KEG_ROOT_DIR" ]]; then
     keg_message "Creating /keg directory..."
-    local USR=$(logname)
-    local GROUP=$(id -g -n $USR)
     sudo mkdir -p $KEG_ROOT_DIR
-    sudo chown -R $USER:$GROUP $KEG_ROOT_DIR
+    
+    sudo chown -R $KEG_USER:$KEG_GROUP $KEG_ROOT_DIR
   fi
 
   cd $KEG_ROOT_DIR
@@ -443,39 +481,20 @@ keg_install_github_cli(){
 
 }
 
-# Increases the max watchers of the local machine
-keg_setup_max_watchers(){
-  local SYS_CONF=/etc/sysctl.conf
-
-  # Ensure the sysctl file exists
-  if [[ ! -f "$SYS_CONF" ]]; then
-    sudo touch $SYS_CONF
-  fi
-  
-  # Check if the kern.maxfiles has already been added
-  if grep -Fq kern.maxfiles "$SYS_CONF"; then
-    keg_message "Machine max files listeners already updated!"
-
-  # If not added, add it to the file
-  # Will probably ask for sudo password
-  else
-
-    keg_message "Updating max files listeners..."
-
-    echo "fs.inotify.max_user_watches=524288" >> $SYS_CONF
-    echo "kern.maxfiles=10485760" >> $SYS_CONF
-    echo "kern.maxfilesperproc=1048576" >> $SYS_CONF
-
-    sudo sysctl -w kern.maxfiles=10485760
-    sudo sysctl -w kern.maxfilesperproc=10485760
-
-  fi
-  
-}
-
 # Runs the node KEG-CLI config setup script
 keg_cli_config_setup(){
   node $KEG_CLI_PATH/scripts/cli/configSetup.js
+}
+
+# Check and create the global config folder if it doesn't exist
+keg_check_global_config(){
+  local KEG_GLOBAL_PATH=$HOME/.kegConfig
+
+  # Ensure global cli config folder exists
+  if [[ ! -d "$KEG_GLOBAL_PATH" ]]; then
+    keg_message "Creating global config folder at $KEG_GLOBAL_PATH"
+    mkdir -p $KEG_GLOBAL_PATH
+  fi
 }
 
 # Runs methods to setup the keg-cli, with docker and vagrant
@@ -544,11 +563,20 @@ keg_setup(){
     INIT_SETUP="true"
   fi
 
+  # Validate the ruby gems owner
+  # To run:
+  # bash mac-init.sh gem
+  #  * Runs only the gem portion of this script
+  if [[ -z "$KEG_EXIT" ]] && [[ -z "$INIT_SETUP" || "$SETUP_TYPE" == "gem" ]]; then
+    keg_message "Checking for gem path owner..."
+    keg_check_ruby_gem_owner
+  fi
+
   # Setup and install brew
   # To run:
   # bash mac-init.sh brew
   #  * Runs only the brew portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "brew" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "brew" ]]; then
     keg_message "Checking for brew install..."
     keg_brew_install "${@:2}"
   fi
@@ -557,7 +585,7 @@ keg_setup(){
   # To run:
   # bash mac-init.sh brew
   #  * Runs only the brew portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "gh" || "$SETUP_TYPE" == "hub" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "gh" ]]; then
     keg_message "Checking for github cli install..."
     keg_install_github_cli
   fi
@@ -566,7 +594,7 @@ keg_setup(){
   # To run:
   # bash mac-init.sh docker
   #  * Runs only the docker portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "docker" || "$SETUP_TYPE" == "d" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "docker" ]]; then
     keg_message "Checking for docker install..."
     keg_docker_install "${@:2}"
   fi
@@ -575,7 +603,7 @@ keg_setup(){
   # To run:
   # bash mac-init.sh virtualbox
   #  * Runs only the virtualbox portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "virtualbox" || "$SETUP_TYPE" == "vb" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "virtualbox" ]]; then
     keg_message "Checking for virtualbox install..."
     keg_setup_virtualbox "${@:2}"
   fi
@@ -584,7 +612,7 @@ keg_setup(){
   # To run:
   # bash mac-init.sh machine
   #  * Runs only the docker-machine portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "machine" || "$SETUP_TYPE" == "dm" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "machine" ]]; then
     keg_message "Checking if docker-machine is setup..."
     keg_setup_docker_machine "${@:2}"
   fi
@@ -593,7 +621,7 @@ keg_setup(){
   # To run:
   # bash mac-init.sh node
   #  * Runs only the node portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node" ]]; then
     keg_message "Checking for node install..."
     keg_setup_nvm_node "${@:2}"
   fi
@@ -602,16 +630,25 @@ keg_setup(){
   # To run:
   # bash mac-init.sh yarn
   #  * Runs only the yarn portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "yarn" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "yarn" ]]; then
     keg_message "Checking for yarn install..."
     keg_setup_yarn "${@:2}"
+  fi
+
+  # Setup and install cli
+  # To run:
+  # bash mac-init.sh cli
+  #  * Runs only the keg cli portion of this script
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "cli" ]]; then
+    keg_message "Checking keg cli install..."
+    keg_install_cli "${@:2}"
   fi
 
   # Setup and install cli deps
   # To run:
   # bash mac-init.sh nm
   #  * Runs only the node_modules portion of this scrip
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node_modules" || "$SETUP_TYPE" == "nm" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node_modules" ]]; then
     keg_message "Installing cli dependencies..."
     keg_install_cli_dependencies
   fi
@@ -620,21 +657,12 @@ keg_setup(){
   # To run:
   # bash mac-init.sh cli
   #  * Runs only the keg cli portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "cli" ]]; then
-    keg_message "Checking keg cli install..."
-    keg_install_cli "${@:2}"
-  fi
-
-  # Setup and install cli
-  # To run:
-  # bash mac-init.sh cli
-  #  * Runs only the keg cli portion of this script
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "sync" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "sync" ]]; then
     keg_message "Checking docker-sync install..."
     keg_setup_docker_sync "${@:2}"
   fi
 
-  if [[ "$INIT_SETUP" || "$SETUP_TYPE" == "config" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "config" ]]; then
     keg_message "Running KEG-CLI config setup..."
     keg_cli_config_setup "${@:2}"
 
@@ -644,12 +672,18 @@ keg_setup(){
 
   fi
 
+  # If exit error is set, print and return
+  if [[ "$KEG_EXIT" ]]; then
+    echo "[ KEG ERROR ] $KEG_EXIT" >&2
+    return
+  fi
+
   echo ""
   keg_message "--------------------------------------------- [ KEG CLI ]"
   echo ""
   echo "                       Keg CLI setup complete!"
   echo "                     Run source ~/.bash_profile"
-  echo "              Open a new terminal window to use the cli!"
+  echo "            Or open a new terminal window to use the cli!"
   echo ""
   keg_message "--------------------------------------------- [ KEG CLI ]"
   echo ""
@@ -661,6 +695,9 @@ keg_init_setup(){
   if [[ ! -d "$KEG_ROOT_DIR" ]]; then
     keg_install_cli
   fi
+  
+  # Check that the global config folder exists
+  keg_check_global_config
 
   # Unset these envs so we can validate that the current envs get loaded
   unset KEG_DOCKER_IP

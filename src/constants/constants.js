@@ -1,19 +1,15 @@
 const { deepFreeze, keyMap } = require('jsutils')
 const homeDir = require('os').homedir()
 const path = require('path')
-const fs = require('fs')
-
-const { GLOBAL_CONFIG_PATH } = process.env
+const { KEG_GLOBAL_CONFIG } = process.env
 
 // The default global config path
 let GLOBAL_CONFIG_FOLDER = path.join(homeDir, '.kegConfig')
-!fs.existsSync(GLOBAL_CONFIG_FOLDER) && fs.mkdirSync(GLOBAL_CONFIG_FOLDER)
-
 let GLOBAL_CONFIG_FILE = 'cli.config'
 
 // If the global config path is passed in as an ENV, use that instead
-if(GLOBAL_CONFIG_PATH){
-  const configPathSplit = GLOBAL_CONFIG_PATH.split('/')
+if(KEG_GLOBAL_CONFIG){
+  const configPathSplit = KEG_GLOBAL_CONFIG.split('/')
   GLOBAL_CONFIG_FILE = configPathSplit.pop()
   GLOBAL_CONFIG_FOLDER = configPathSplit.join('/')
 }

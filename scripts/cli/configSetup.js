@@ -1,18 +1,21 @@
 require('module-alias/register')
 
 const path = require('path')
+const { Git } = require('KegGit')
 const { Logger } = require('KegLog')
 const homeDir = require('os').homedir()
 const { ask } = require('KegQuestions')
 const { encrypt } = require('KegCrypto')
+const packageJson = require('KegRoot/package.json')
 const { getGitUrl } = require('KegUtils/git/getGitUrl')
+const { requireFile } = require('tap-resolver/src/helpers')
 const { throwNoTask } = require('KegUtils/error/throwNoTask')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 const { throwExitError } = require('KegUtils/error/throwExitError')
 const { defPaths } = require('KegUtils/globalConfig/defaultConfig')
 const { deepMerge, mapObj, reduceObj, get, set } = require('jsutils')
 const { saveGlobalConfig } = require('KegUtils/globalConfig/saveGlobalConfig')
-const packageJson = require('KegRoot/package.json')
+const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
 
 
 // Cache hold for repo map of name to repo name
@@ -20,6 +23,40 @@ const gitRepoMap = {}
 
 // KEG CLI paths that can not be overwritten
 const NO_CUSTOM = [ 'cli', 'containers', 'keg', 'proxy' ]
+
+/**
+ * Helper to try and load the current global config
+ *
+ * @returns {Object} globalConfig object
+ */
+const loadCurrentGlobalConfig = async () => {
+  try {
+
+    // Load the global config file
+    const { data, location } = requireFile(GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE)
+    if(!data) return false
+
+    // If we get data, then the global config already exists
+    // So ask if we should overwrite it
+    const overwrite = data && await ask.confirm(
+      `Global Config already exists. Would like to overwite it?`
+    )
+
+    // If we are overwriting, return the global config
+    // Otherwise log and exit
+    return overwrite
+      ? data
+      : (() => {
+          Logger.spaceMsg(`  Exiting Global Config setup!`)
+          process.exit(0)
+        })()
+
+  }
+  catch(e){
+    Logger.error(e.stack)
+    return false
+  }
+}
 
 /**
  * Helper to get the name of a repo from the path
@@ -282,8 +319,11 @@ const configSetup = async () => {
 
     Logger.header(`Keg Cli Global Config Setup`)
 
+    // Try to get the current global config
+    const curGlobalConfig = await loadCurrentGlobalConfig()
+
     // Create a copy of the default cliJson config
-    const globalConf = deepMerge({
+    const globalConf = curGlobalConfig || deepMerge({
       version: packageJson.version,
       name: packageJson.name,
       displayName: "Keg CLI",
@@ -302,7 +342,7 @@ const configSetup = async () => {
     await setupSettings(globalConf)
 
     // Install the keg git repos from github
-    await installRepos(globalConf)
+    // await installRepos(globalConf)
 
     // Finally save the global config
     await saveConfig(globalConf)

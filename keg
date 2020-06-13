@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# TODO: **IMPORTANT** Need to set this path dyamically some how
-# Need to `source ~/keg/keg-cli/keg` add to .bashrc or .bash_profile
-export KEG_CLI_PATH=~/keg/keg-cli
+export KEG_CLI_PATH=$HOME/keg/keg-cli
 
 # Prints message to stderr so we can do returns with echo to stdout
 keg_message(){
@@ -80,7 +78,6 @@ keg_cli_move_directory(){
   return 1
 }
 
-
 # Opening to the keg cli
 # For navigation commands, calls keg_cli_move_directory
 # All other commands call keg-cli node script
@@ -131,13 +128,6 @@ keg(){
 
 # Auto loads the GIT_KEY and docker-machine envs
 keg_auto_load_envs(){
-  local KEG_GLOBAL_CONFIG=$HOME/.kegConfig/cli.config.json
-
-  # Ensure global cli config exists
-  if [[ ! -f "$KEG_GLOBAL_CONFIG" ]]; then
-    keg_message "KEG-CLI Global config does not exist! Skipping ENV autoload!"
-    return
-  fi
 
   # Check if GIT_KEY is already loaded
   if [[ -z "$GIT_KEY" ]]; then
@@ -170,7 +160,7 @@ keg_auto_load_envs(){
     # TODO: docker-machine vagrant-drive hangs after the computer goes to sleep
     # Only way to fix is to restart. Need to come up with a better solution
     # The issue is with VirtualBox, not docker-machine
-    # Running any docker-machine cmd will make the terminal hand
+    # Running any docker-machine cmd will make the terminal hang
 
     # DOCKER_MACHINE_NAME gets defined by running the keg_cli_init_docker_machine
     # So check to see if it's already defined before re-calling the function

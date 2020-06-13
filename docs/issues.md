@@ -8,5 +8,4 @@ To Fix
   * `xcode-select --install`
   * May need to also run `xcode-select --reset` based on your setup
 
-
-Tirs to copy default
+ 
