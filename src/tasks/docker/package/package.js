@@ -237,11 +237,14 @@ const dockerPackage = async args => {
 module.exports = {
   package: {
     name: 'package',
-    alias: [ 'pack', 'pk' ],
+    alias: [ 'dpg', 'pack', 'pk' ],
     action: dockerPackage,
     description: `Packages a docker container for deploying to a docker provider`,
     example: 'keg docker package <options>',
     location_context: DOCKER.LOCATION_CONTEXT.REPO,
+    tasks: {
+      ...require('./run'),
+    },
     options: {
       context: {
         alias: [ 'name' ],

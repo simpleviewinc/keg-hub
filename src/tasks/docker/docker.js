@@ -12,6 +12,7 @@ const dockerSubTasks = {
   di: 'image',
   dm: 'machine',
   dp: 'provider',
+  dpg: 'package',
   ds: 'sync',
 }
 
@@ -68,7 +69,7 @@ const dockerTask = args => {
 module.exports = {
   docker: {
     name: 'docker',
-    alias: [ 'doc', 'd', 'dc', 'di', 'dm', 'dp', 'ds' ],
+    alias: [ 'doc', 'd', 'dc', 'di', 'dm', 'dp', 'dpg', 'ds' ],
     tasks: {
       ...require('./build'),
       ...require('./compose'),
