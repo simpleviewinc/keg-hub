@@ -105,7 +105,7 @@ const isOptionKey = (str, optionSchemas) => {
  */
 const matchParamType = (matchTypes, option, value, optionSchemas) => {
   // Search for a match between the option and matchTypes
-  const match = matchTypes.some(type => option === type)
+  const match = matchTypes.includes(option)
 
   // If no match return null, so the splitEqualsMatch method will run
   if (!match) return null
