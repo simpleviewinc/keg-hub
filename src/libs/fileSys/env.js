@@ -57,7 +57,7 @@ const parseContent = (envPath, encoding) => {
   // Load at run time to speed up other cli calls
   const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
   const { fillTemplate } = require('KegUtils/template/fillTemplate')
-  const globalConfig = getGlobalConfig()
+  const globalConfig = getGlobalConfig() || {}
   
   return fillTemplate({
     template: fs.readFileSync(envPath, { encoding }),
