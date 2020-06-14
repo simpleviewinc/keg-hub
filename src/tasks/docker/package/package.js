@@ -44,11 +44,10 @@ const rmDockerItem = (item, type='container') => {
 const buildTarCmd = ({ from, to, unpack, log }) => {
   to = isArr(to) ? to.join(' ') : to
 
-  const tarArgs = unpack ? `-xvf` : `-czvf`
+  const tarArgs = unpack ? `-xf` : `-czf`
   const packArgs = unpack ? ` -C ` : ` `
-  const logArgs = log ? `` : `> /dev/null 2>&1`
-
-  return `tar ${ tarArgs } ${ from }${ packArgs }${ to } ${ logArgs }`.trim()
+  
+  return `tar ${ tarArgs }${ log ? 'v' : '' } ${ from }${ packArgs }${ to }`.trim()
 }
 
 /**
@@ -60,10 +59,11 @@ const buildTarCmd = ({ from, to, unpack, log }) => {
  * @returns {Object} - Container the tar file path, and the pack / unpack tar commands 
  */
 const getTarCmds = (to, log) => {
-  const from = `/keg-temp/keg.gz`
-  // const tarCmd = `tar -czvf ${ tarPath } ${ contextEnvs.DOC_APP_PATH }`
+  const from = `/tmp/keg.gz`
+  // const tarCmd = `tar -czf ${ tarPath } ${ contextEnvs.DOC_APP_PATH }`
   const tarCmd = buildTarCmd({ from, to, log })
-  // const unTarCmd = `tar -xvf ${ tarPath } -C ${ contextEnvs.DOC_APP_PATH }`
+  
+  // const unTarCmd = `tar -xf ${ tarPath } -C ${ contextEnvs.DOC_APP_PATH }`
   const unTarCmd = buildTarCmd({ from, to, log, unpack: true })
 
   return { tarPath: from, tarCmd, unTarCmd }
@@ -100,7 +100,8 @@ const dockerPackage = async args => {
   const useAuthor = getAuthor(globalConfig, author)
   const tempContainer = `${ image }-package`
   const imgTag = `${image}:${ Date.now() }`
-  const finalTag = `${image}:${ tag || 'package-' + Date.now() }`
+  const pushTag = tag || 'package-' + Date.now()
+  const finalTag = `${image}:${ pushTag }`
   
   const { tarPath, tarCmd, unTarCmd } = getTarCmds(contextEnvs.DOC_APP_PATH, log)
 
@@ -225,7 +226,7 @@ const dockerPackage = async args => {
         ...args.params,
         image,
         build: false,
-        tag: finalTag,
+        tag: pushTag,
       }
     }
   )
@@ -261,6 +262,7 @@ module.exports = {
         description: 'Push the packaged image up to a docker provider registry',
         required: true,
         ask: {
+          type: 'confirm',
           message: "Do you want to push to your docker provider?",
           default: false,
         },

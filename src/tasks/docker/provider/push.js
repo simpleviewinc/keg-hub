@@ -25,19 +25,31 @@ const providerPush = async (args) => {
   // Ensure we have the context of the image to be pushed
   !context && throwRequired(task, 'context', get(task, `options.context`))
 
-  // 1. Build the image
+  /*
+  * ----------- Step 1 ----------- *
+  * Build the image
+  */
   const image = await getOrBuildImage(args)
 
-  // 2. Build the provider url
+  /*
+  * ----------- Step 2 ----------- *
+  * Build the provider url
+  */
   const url = await buildProviderUrl(image, args)
-  
-  // 3. Add the provider tags
+
+  /*
+  * ----------- Step 3 ----------- *
+  * Add the provider tags
+  */
   const taggedUrl = await addProviderTags(image, url, args)
 
   // If we couldn't tag the image properly, just return
   !taggedUrl && generalError(`Failed to tag ${context} image!`)
 
-  // 4. Finally push the image to docker using the tagged url
+  /*
+  * ----------- Step 4 ----------- *
+  * Finally push the image to docker using the tagged url
+  */
   await docker.push(taggedUrl)
 
 }

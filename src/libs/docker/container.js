@@ -236,8 +236,6 @@ const commit = async (args, cmdOpts={}) => {
   return raw(cmd, cmdOpts, location)
 }
 
-
-
 /**
  * Root docker container method to run docker container commands
  * @function

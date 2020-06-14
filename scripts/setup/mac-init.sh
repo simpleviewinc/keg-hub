@@ -6,8 +6,11 @@ trap 'echo "Finished with exit code $?"' EXIT
 # Github Repos
 KEG_CLI_URL=github.com/simpleviewinc/keg-cli.git
 
-# Install location
-export KEG_ROOT_DIR=~/keg
+# Check if the keg root dir has been set. If not, then set it
+if [[ -z "$KEG_ROOT_DIR" ]]; then
+  export KEG_ROOT_DIR=$HOME/keg
+fi
+
 export KEG_CLI_PATH=$KEG_ROOT_DIR/keg-cli
 
 KEG_USER="$USER"
@@ -154,6 +157,7 @@ keg_setup_docker_machine(){
 # Update docker-machines ip-address to be static
 # So it's the same every time the instance boots
 keg_setup_static_ip(){
+
   # Add this to the bootup script
   # Will kill the dhcp server for eth1,
   # Then sets a static ip address for the machine everytime it boots up
@@ -228,7 +232,7 @@ keg_setup_yarn(){
 
   # Check for yarn install
   if [[ -x "$(command -v yarn 2>/dev/null)" ]]; then
-    keg_message "yarn is installed"
+    keg_message "Yarn is installed"
   else
     brew install yarn
   fi
@@ -238,16 +242,30 @@ keg_setup_yarn(){
 # Install the dependencies for the keg-cli
 keg_install_cli_dependencies(){
 
-  # Cache the current diretory
-  local CUR_DIR=$(pwd)
+  local KEG_CLI_DEPS="$KEG_CLI_PATH/node_modules"
+  local HAS_DEPS=""
+  if [[ -d "$KEG_CLI_DEPS" ]]; then
+    HAS_DEPS="$(ls -A $KEG_CLI_DEPS)"
+  fi
   
-  # Navigate to the keg-cli directory
-  cd $KEG_CLI_PATH
-  # Install the dependencies
-  yarn install
+  if [[ -z "$HAS_DEPS" ]]; then
+    keg_message "Installing KEG-CLI node dependencies..."
 
-  # Navigate back to the original directory
-  cd $CUR_DIR
+    # Cache the current diretory
+    local CUR_DIR=$(pwd)
+
+    # Navigate to the keg-cli directory
+    cd $KEG_CLI_PATH
+
+    # Install the dependencies
+    yarn install
+
+    # Navigate back to the original directory
+    cd $CUR_DIR
+    
+  else
+    keg_message "KEG-CLI node dependencies already installed"
+  fi
 
 }
 
@@ -322,7 +340,7 @@ keg_install_repo(){
 # If not found, it will add it; and reload the bash file
 keg_check_bash_file(){
 
-  keg_message "Checking bash profile for keg-cli..."
+  keg_message "Checking bash profile for KEG-CLI..."
 
   # Check if the bashfile exists
   local BASHRC_FILE
@@ -345,14 +363,14 @@ keg_check_bash_file(){
 
   # Check if the keg cli is installed, and if not, add it to bash file
   if grep -Fq $KEG_CLI_PATH/keg "$BASH_FILE"; then
-    keg_message "keg-cli already added to $BASH_FILE"
+    keg_message "KEG-CLI already added to $BASH_FILE"
   else
 
     # TODO: Add check for NVM => export NVM_DIR=
     # The entry for the keg should come before the NVM entry
     # We need to load the keg-cli and $GIT_KEY before loading NVM
 
-    keg_message "Adding keg-cli to $BASH_FILE"
+    keg_message "Adding KEG-CLI to $BASH_FILE"
     echo "" >> $BASH_FILE
     echo "source $KEG_CLI_PATH/keg" >> $BASH_FILE
 
@@ -362,7 +380,7 @@ keg_check_bash_file(){
 
 # Installs the keg-cli, and clones the keg-core / keg-componets repos locally
 # Updates the bash_profile to source the keg-cli when loaded!
-keg_install_cli(){
+keg_check_cli_dirs(){
 
   # Check if the keg-cli install directory exists
   # If not, then create it, and set it's permissions to the current user/group
@@ -455,7 +473,7 @@ keg_add_machine_envs(){
 
   # Ensure the env file exists
   if [[ -f "$KEG_DM_ENVS" ]]; then
-    keg_message "setting docker-machine ENVs" >&2
+    keg_message "Setting docker-machine envs" >&2
     # Load the docker-machine ENVs, but route the output to dev/null
     # This way nothing is printed to the terminal
     set -o allexport
@@ -640,8 +658,8 @@ keg_setup(){
   # bash mac-init.sh cli
   #  * Runs only the keg cli portion of this script
   if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "cli" ]]; then
-    keg_message "Checking keg cli install..."
-    keg_install_cli "${@:2}"
+    keg_message "Checking KEG-CLI install..."
+    keg_check_cli_dirs "${@:2}"
   fi
 
   # Setup and install cli deps
@@ -649,7 +667,7 @@ keg_setup(){
   # bash mac-init.sh nm
   #  * Runs only the node_modules portion of this scrip
   if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node_modules" ]]; then
-    keg_message "Installing cli dependencies..."
+    keg_message "Checking KEG-CLI node dependencies..."
     keg_install_cli_dependencies
   fi
 
@@ -683,7 +701,7 @@ keg_setup(){
   echo ""
   echo "                       Keg CLI setup complete!"
   echo "                     Run source ~/.bash_profile"
-  echo "            Or open a new terminal window to use the cli!"
+  echo "            Or open a new terminal window to use the it!"
   echo ""
   keg_message "--------------------------------------------- [ KEG CLI ]"
   echo ""
@@ -692,9 +710,8 @@ keg_setup(){
 
 keg_init_setup(){
 
-  if [[ ! -d "$KEG_ROOT_DIR" ]]; then
-    keg_install_cli
-  fi
+  # Check that the keg-cli directories have been setup
+  keg_check_cli_dirs
   
   # Check that the global config folder exists
   keg_check_global_config
@@ -703,25 +720,20 @@ keg_init_setup(){
   unset KEG_DOCKER_IP
   unset KEG_DOCKER_NAME
 
-  # Only run the setup scirpt if the ENVs are unset from above
-  if [[ -z "$KEG_DOCKER_IP" && -z "$KEG_DOCKER_NAME" ]]; then
+  # Re-add all machine envs including $KEG_DOCKER_IP && $KEG_DOCKER_NAME
+  keg_add_machine_envs
 
-    # Re-add all machine envs
-    keg_add_machine_envs
+  # Ensure the ENVs were reset, so we can properly setup the keg-cli
+  # $KEG_DOCKER_IP && $KEG_DOCKER_NAME should now be reset from keg_add_machine_envs
+  if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
+    keg_setup "$@"
 
-    # Ensure the ENVs were reset, so we can properly setup the keg-cli
-    if [[ "$KEG_DOCKER_IP" && "$KEG_DOCKER_NAME" ]]; then
-      keg_setup "$@"
-
-    # Show message if setup ENVs could not be set
-    else
-      keg_message "Error running keg-cli setup. Could not set keg-cli setup ENVs!"
-    fi
-
-  # Show message if setup ENVs could not be unset
+  # Show message if setup ENVs could not be set
   else
-    keg_message "Error running keg-cli setup. Could not unset keg-cli setup ENVs!"
+    keg_message "Error running keg-cli setup. Could not set keg-cli setup ENVs!"
+    exit 1
   fi
+
 }
 
 # Call init setup to start the setup proccess
