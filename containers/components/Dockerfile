@@ -21,10 +21,8 @@ ARG NM_CACHE=/keg/nm-cache/components
 ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
 
 # Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-core locally
-RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_COMPONENTS_URL $DOC_APP_PATH; \
-    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/
+# Pull down the keg-components locally
+RUN git clone $GIT_COMPONENTS_URL $DOC_APP_PATH;
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $NM_CACHE/
