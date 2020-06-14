@@ -68,7 +68,7 @@ const buildLocationContext = async ({ envs={}, globalConfig, __internal, params,
   if(__internal && validateInternal(__internal, CONTEXT_KEYS))
     return __internal
 
-  const { cmdContext, tap } = buildCmdContext({
+  const { cmdContext, package, tap } = buildCmdContext({
     params,
     globalConfig,
     allowed: get(task, 'options.context.allowed', IMAGES),
@@ -96,13 +96,18 @@ const buildLocationContext = async ({ envs={}, globalConfig, __internal, params,
     ...getContainerConst(cmdContext, 'env', {}),
 
     // Get the ENVs for the Tap context if it exists
-    ...( tap && tap !== 'tap' && await buildTapContext({ globalConfig, cmdContext, tap, envs }) ),
+    ...( tap && tap !== 'tap' && await buildTapContext({
+        globalConfig,
+        cmdContext,
+        tap,
+        envs
+      })),
 
     // Add the git key so we can call github within the image / container
     GIT_KEY: await getGitKey(globalConfig),
   }
 
-  return { cmdContext, contextEnvs, location, tap, image }
+  return { cmdContext, contextEnvs, location, package, tap, image }
 }
 
 module.exports = {

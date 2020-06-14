@@ -42,7 +42,6 @@ services:
       - GIT_CLI_URL
       - GIT_CORE_URL
       - GIT_COMPONENTS_URL
-      - GIT_KEY
       - GIT_RETHEME_URL
       - GIT_RESOLVER_URL
       - GIT_TAP_URL

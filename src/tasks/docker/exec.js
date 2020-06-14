@@ -14,22 +14,26 @@ const { DOCKER } = require('KegConst/docker')
  * @returns {void}
  */
 const dockerExec = async args => {
-  const { params, globalConfig, task } = args
+  const { params, globalConfig, task, command } = args
   const { context, cmd, options } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap, image } = await buildLocationContext({
-    globalConfig,
-    task,
-    params,
-  })
+  const {
+    cmdContext,
+    contextEnvs,
+    location,
+    package,
+    tap,
+    image
+  } = await buildLocationContext({ globalConfig, task, params })
+
 
   // Run the command on the container
   await docker.container.exec(
-    { container: image, opts: options, cmd },
+    { cmd, container: package || image, opts: options },
     { options: { env: contextEnvs } },
     location
   )
@@ -39,7 +43,7 @@ const dockerExec = async args => {
 module.exports = {
   exec: {
     name: 'exec',
-    alias: [ 'ex' ],
+    alias: [ 'ex', 'attach', 'att' ],
     action: dockerExec,
     description: 'Execute a command on a running docker container',
     example: 'keg docker exec <options>',

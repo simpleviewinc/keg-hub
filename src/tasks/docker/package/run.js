@@ -1,7 +1,8 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { isUrl, get } = require('jsutils')
+const { isUrl, get, deepMerge } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
+const { PACKAGE } = require('KegConst/constants')
 const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
 const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
@@ -52,10 +53,11 @@ const dockerPackageRun = async args => {
   * ----------- Step 3 ----------- *
   * Build the container context information
   */
-  const { contextEnvs, location } = buildLocationContext({
-    task: { options: { context: { allowed: [ parsed.repo ] } } },
+  const { contextEnvs, location } = await buildLocationContext({
     globalConfig,
-    params: { context: parsed.repo },
+    params: { ...params, context: parsed.repo },
+    // Need to add our packaged repo to the allow options so we can run it
+    task: deepMerge(task, { options: { context: { allowed: [ parsed.repo ] } } }),
   })
 
   /*
@@ -67,10 +69,11 @@ const dockerPackageRun = async args => {
   await docker.image.run({
     ...parsed,
     opts,
+    
     location,
     envs: contextEnvs,
-    cmd: `${ contextEnvs.DOC_CLI_PATH }/containers/core/run.sh`,
-    name: `package-${ parsed.image }-${ parsed.tag }`,
+    cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/core/run.sh`,
+    name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
   })
 
 }
@@ -84,7 +87,7 @@ module.exports = {
     options: {
       package: {
         description: 'Pull request package url or name',
-        example: `keg docker ps --package lancetipton/keg-core/kegcore:bug-fixes`,
+        example: `keg docker package --package lancetipton/keg-core/kegcore:bug-fixes`,
         required: true,
         ask: {
           message: 'Enter the docker package url or path (<user>/<repo>/<package>:<tag>)',
@@ -92,7 +95,7 @@ module.exports = {
       },
       branch: {
         description: 'Name of branch name that exists as the image name',
-        example: 'keg docker provider pull --branch develop',
+        example: 'keg docker package run --branch develop',
       },
       context: {
         alias: [ 'name' ],
@@ -110,20 +113,20 @@ module.exports = {
       provider: {
         alias: [ 'pro' ],
         description: 'Url of the docker registry provider',
-        example: 'keg docker provider pull --provider docker.pkg.github.com'
+        example: 'keg docker package run --provider docker.pkg.github.com'
       },
       repo: {
         description: 'The name of the repository holding docker images to pull',
-        example: 'keg docker provider pull --repo keg-core',
+        example: 'keg docker package run --repo keg-core',
       },
       user: {
         alias: [ 'usr' ],
         description: 'User to use when logging into the registry provider. Defaults to the docker.user property in your global config.',
-        example: 'keg docker provider pull --user gituser',
+        example: 'keg docker package run --user gituser',
       },
       version: {
         description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
-        example: 'keg docker provider pull --version 0.0.1',
+        example: 'keg docker package run --version 0.0.1',
       },
     }
   }

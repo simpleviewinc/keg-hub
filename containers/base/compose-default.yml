@@ -24,7 +24,6 @@ services:
     environment:
       - EXPO_DEBUG_PORT
       - EXPO_APP_PORT
-      - GIT_KEY
       - GIT_CLI_URL
       - GIT_CORE_URL
       - GIT_COMPONENTS_URL

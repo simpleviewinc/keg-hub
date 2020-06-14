@@ -67,6 +67,7 @@ module.exports = {
         description: 'Remove the docker image related to keg-core',
         example: 'keg core destroy --image false',
         ask: {
+          type: 'confirm',
           message: 'Confirm remove docker image?'
         },
         default: false

@@ -193,10 +193,9 @@ const exists = async (compare, doCompare, format) => {
  * @returns {void}
  */
 const exec = async (args, cmdOpts={}) => {
-  const { container, item, opts, cmd, location } = args
+  const { cmd, container, item, location, opts } = args
   const options = isArr(opts) ? opts.join(' ') : opts
-  let cont = container || item
-  cont = isStr(cont) ? cont : cont
+  const cont = container || item
 
   return raw(
     `exec ${ options } ${ cont } ${ cmd }`.trim(),

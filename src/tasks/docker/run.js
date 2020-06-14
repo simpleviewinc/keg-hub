@@ -7,7 +7,7 @@ const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
 
 /**
- * Builds a docker container so it can be run
+ * Builds then executes a docker run command
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -81,7 +81,8 @@ module.exports = {
         description: `Extra docker arguments to pass to the 'docker run command'`
       },
       image: {
-        description: `Name of the docker image to use. Defaults to context:latest`
+        description: `Name of the docker image to use. Defaults to context:latest`,
+        example: 'keg docker run --image my-image:test',
       },
       install: {
         description: `Run yarn install before starting the application`,

@@ -84,6 +84,54 @@ keg_cli_move_directory(){
   return 1
 }
 
+# Auto loads the GIT_KEY and docker-machine envs
+keg_auto_load_envs(){
+
+  # Check if GIT_KEY is already loaded
+  if [[ -z "$GIT_KEY" ]]; then
+    # Auto set the GIT_KEY
+    keg_export_git_key "NO-MESSAGE"
+  fi
+
+  # Check if $KEG_DOCKER_NAME is already loaded
+  if [[ -z "$KEG_DOCKER_NAME" ]]; then
+
+    # Build the path to the docker-machine envs
+    local KEG_DM_ENVS=$KEG_CLI_PATH/scripts/setup/docker-machine.env
+
+    # Ensure the file exists
+    if [[ -f "$KEG_DM_ENVS" ]]; then
+      # Load the docker-machine ENVs, but route the output to dev/null
+      # This way nothing is printed to the terminal
+      set -o allexport
+      source $KEG_DM_ENVS >/dev/null 2>&1
+      set +o allexport
+    fi
+
+  fi
+
+  # Putthing this here for now
+  # Testing adding a timeout to the docker-machine call
+  # Will re-evaluate if docker-machine hangs again
+  # Docker-machine vagrant-drive hangs after the computer goes to sleep
+  # Only way to fix is to restart. Need to come up with a better solution
+  # The issue is with VirtualBox, not docker-machine
+  # Running any docker-machine cmd will make the terminal hang
+  # Potential Fix
+  # sudo route -d add -net 192.168.99.1/24 -interface <Name of interface>
+  #   - Find the interface by running command " VBoxManage list hostonlyifs "
+  #   - Find the interface with the IPAddress of 192.168.99.1
+  #   - The first "Name" Above the IPAddress should be the interface name
+  #   - Example name would be "vboxnet0"
+  keg_cli_init_docker_machine
+
+  if [[ -z "$KEG_CLI_AUTO_LOAD" ]]; then
+    keg_message "Loaded!"
+    return
+  fi
+
+}
+
 # Opening to the keg cli
 # For navigation commands, calls keg_cli_move_directory
 # All other commands call keg-cli node script
