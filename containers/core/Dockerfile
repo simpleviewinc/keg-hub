@@ -51,7 +51,6 @@ WORKDIR /
 
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
-ARG GIT_KEY
 ARG GIT_CORE_URL
 
 # Path of the keg cli within the docker container

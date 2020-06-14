@@ -1,35 +1,86 @@
 # Allows overwriting where the base image is pulled from
+# Must come before the FROM directive
 ARG IMAGE_FROM=kegbase:latest
-FROM $IMAGE_FROM
+FROM $IMAGE_FROM as builder
 
-WORKDIR /keg
+WORKDIR /
 
-# Add the GIT_KEY arg, and set value to initial
-# This expects --build-arg GIT_KEY=key_value to be set
-# Which will override the default initial value, and allow updating git
-ARG GIT_KEY=INITIAL
+# These args are expected to be set as --build-arg
+# Which Allow them to be used durring the build
+ARG GIT_KEY
+ARG GIT_TAP_URL
 
-# Add the GIT_COMPONENTS_URL arg, and set value to initial
-# This expects --build-arg GIT_COMPONENTS_URL=key_value to be set
-# URL of the tap to clone from github
-ARG GIT_COMPONENTS_URL=INITIAL
+# Path of the keg cli within the docker container
+ARG DOC_CLI_PATH=/keg/keg-cli
 
-# Pull down the tap locally
-RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_COMPONENTS_URL" != "INITIAL" ]; then \
-      git clone $GIT_COMPONENTS_URL $DOC_APP_PATH; \
-    fi
+# Path of the app within the docker container
+ARG DOC_APP_PATH=/keg/keg-components
 
-# Navigate to the taps directory
-WORKDIR $DOC_APP_PATH
+# Path where node_modules will be installed durring docker built
+ARG NM_CACHE=/keg/nm-cache/components
+
+ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
+
+# Update git calls to github to include the key so private repos can be pulled
+# Pull down the keg-core locally
+RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+    git clone $GIT_COMPONENTS_URL $DOC_APP_PATH; \
+    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json $DOC_APP_PATH/package.json
-COPY yarn.lock $DOC_APP_PATH/yarn.lock
+COPY package.json $NM_CACHE/
+COPY yarn.lock $NM_CACHE/
 
-# Install the dependecies
-RUN yarn install
 
+# ------- New Build Stage ------- #
+
+# Use a multi stage build for security
+# This is so GIT_KEY is not accessable in the final image
+FROM node:12.8-alpine
+WORKDIR /
+
+# These args are expected to be set as --build-arg
+# Which Allow them to be used durring the build
+ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
+
+# Path of the keg cli within the docker container
+ARG DOC_CLI_PATH=/keg/keg-cli
+
+# Path of the app within the docker container
+ARG DOC_APP_PATH=/keg/keg-components
+
+# Path where node_modules will be installed durring docker built
+ARG NM_CACHE=/keg/nm-cache/components
+
+# Get the ip of docker-machine from the ARG, so we can set it as an ENV
+ARG KEG_DOCKER_IP
+
+# Used by react native builder to set the ip address, other wise 
+# Will use the ip address of the docker container.
+ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
+
+# Install git for the new stage
+RUN apk add --no-cache git
+
+# Copy over the globally installed modules from above
+COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+
+# Copy over keg cli from kegbase
+COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
+
+# Copy over the cloned app
+COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH
+
+# Copy over keg cli from above
+COPY --from=builder $NM_CACHE $NM_CACHE
+
+# Expose the default http and https ports
 EXPOSE 80
+EXPOSE 443
 
-# Run the script
-CMD [ "/bin/sh", "/keg/keg-cli/containers/components/run.sh" ]
+# Set the current directory to keg-core repo
+WORKDIR /$DOC_APP_PATH
+
+# Run the start script
+# Dont use the array syntax, so we have access to the DOC_CLI_PATH ENV
+CMD /bin/sh $DOC_CLI_PATH/containers/core/run.sh
