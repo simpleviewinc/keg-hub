@@ -14,8 +14,10 @@ const addComponent = args => {
 }
 
 module.exports = {
-  name: 'add',
-  action: addComponent,
-  description: `Add a new component to the keg-components repo`,
-  example: 'keg component add <component name>'
+  add: {
+    name: 'add',
+    action: addComponent,
+    description: `Add a new component to the keg-components repo`,
+    example: 'keg component add <component name>'
+  }
 }

@@ -21,9 +21,18 @@ keg_set_container_paths(){
 
 }
 
+# Add the yarn global bin to the path
+keg_add_yarn_bin_to_path(){
+  # Adds the yarn globaly installed .bin to the $PATH
+  # This allows calling expo-cli
+  export PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:$PATH"
+}
+
+
+
 # Runs yarn install at run time
-# Use when adding extra node_modules to keg-core without rebuilding
-keg_run_tap_yarn_setup(){
+# Use whnode_modules to keg-components
+keg_run_yarn_install(){
 
   # Check if we should run yarn install
   # Is $NM_INSTALL doesn't exist, just return
@@ -33,18 +42,33 @@ keg_run_tap_yarn_setup(){
 
   keg_message "Running yarn install for keg-components..."
   keg_message "Switching to keg-components directory..."
-  cd $COMPONENTS_PATH
+  cd $NM_CACHE
   yarn install
 }
 
-# Runs a Tap
-keg_run_the_components(){
+# Copies over the locally cached node_modules
+keg_copy_node_modules(){
+
+  # ensure we know where the node_module cache is
+  if [[ -z "$NM_CACHE" ]]; then
+    return
+  fi
+
+  # Copy recursivly (-r) and prompt before overwrite (-i)
+  # Then pipe to dev/null, so we hide the overwrite prompts
+  keg_message "Running node_modules copy from cache to tap..."
+  false | cp -ir $NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
+
+}
+
+# Runs a keg-components repo
+keg_run_components(){
 
   cd $COMPONENTS_PATH
 
   local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="web"
+    KEG_EXEC_CMD="storybook"
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"
@@ -52,8 +76,14 @@ keg_run_the_components(){
 
 }
 
-# Run yarn setup for any extra node_modules to be installed from the mounted tap's package.json
-keg_run_tap_yarn_setup
+# Add yarn global bin to the $PATH ENV
+keg_add_yarn_bin_to_path
+
+# Run yarn install for any extra node_modules from the mounted components package.json
+keg_run_yarn_install
+
+# Copies over the locally cached node_modules into the apps node_modules
+keg_copy_node_modules
 
 # Start the keg core instance
-keg_run_the_components
+keg_run_components

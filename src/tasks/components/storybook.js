@@ -43,23 +43,25 @@ const storybook = async args => {
 }
 
 module.exports = {
-  name: 'storybook',
-  alias: [ 'sb', 'start' ],
-  action: storybook,
-  description: `Run storybook in development mode`,
-  example: 'keg component storybook <options>',
-  options: {
-    [`default (No Options)`]: {
-      description: 'Run keg-components storybook in a development environment'
-    },
-    build: {
-      description: 'Build storybook for the keg-components'
-    },
-    deploy: {
-      description: 'Deploy to the keg-components storybook website'
-    },
-    native: {
-      description: 'Run storybook in a native context'
-    },
+  storybook: {
+    name: 'storybook',
+    alias: [ 'sb', 'start' ],
+    action: storybook,
+    description: `Run storybook in development mode`,
+    example: 'keg component storybook <options>',
+    options: {
+      [`default (No Options)`]: {
+        description: 'Run keg-components storybook in a development environment'
+      },
+      build: {
+        description: 'Build storybook for the keg-components'
+      },
+      deploy: {
+        description: 'Deploy to the keg-components storybook website'
+      },
+      native: {
+        description: 'Run storybook in a native context'
+      },
+    }
   }
 }

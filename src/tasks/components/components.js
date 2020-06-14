@@ -11,10 +11,24 @@ const { executeTask } = require('KegUtils/task')
  *
  * @returns {void}
  */
-const componentsDefCmd = args => {
+const componentsCmd = args => {
   const { command, options, tasks, globalConfig } = args
-
+  console.log(`---------- componentsCmd ----------`)
+  console.log(componentsCmd)
 
 }
 
-module.exports = componentsDefCmd
+module.exports = {
+  components: {
+    name: 'components',
+    alias: [ 'comps', 'comp' ],
+    tasks: {
+      ...require('./add'),
+      ...require('./start'),
+      ...require('./storybook'),
+    },
+    action: componentsCmd,
+    description: 'Keg CLI components specific tasks',
+    example: 'keg components <command> <options>'
+  }
+}
