@@ -1,12 +1,13 @@
-const { get } = require('jsutils')
+const { get, isStr } = require('jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
+const { exists } = require('KegUtils/helpers')
 const { generalError } = require('KegUtils/error')
 const { dockerLog } = require('KegUtils/log/dockerLog')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
-const { exists } = require('KegUtils/helpers')
 
 /**
  * Run a docker container command
@@ -25,11 +26,15 @@ const removeContainer = async args => {
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
   // Ensure we have an container to remove by checking for a mapped context, or use original
-  const containerRef = getContainerConst(context, `env.image`, context)
+  let containerRef = context && getContainerConst(context, `env.image`)
+  containerRef = containerRef || await containerSelect()
+
   !containerRef && generalError(`The docker "container remove" command requires a context argument!`)
 
   // Get the container meta data
-  const container = await docker.container.get(containerRef)
+  const container = isStr(containerRef)
+    ? await docker.container.get(containerRef)
+    : containerRef
 
   // Ensure we have the container meta data, and try to remove by containerId
   // __skipThrow is an internal argument, so it's not documented

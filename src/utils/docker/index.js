@@ -4,9 +4,11 @@ module.exports = {
   ...require('./buildDockerCmd'),
   ...require('./buildDockerMounts'),
   ...require('./compose'),
+  ...require('./containerSelect'),
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getDockerArgs'),
   ...require('./getOrBuildImage'),
   ...require('./getContainerConst'),
+  ...require('./imageSelect'),
 }

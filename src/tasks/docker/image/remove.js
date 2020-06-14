@@ -1,11 +1,12 @@
-const { get } = require('jsutils')
-const { generalError } = require('KegUtils/error')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { get, isStr } = require('jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { dockerLog } = require('KegUtils/log/dockerLog')
-const { getSetting } = require('KegUtils/globalConfig/getSetting')
+const { generalError } = require('KegUtils/error')
 const { exists } = require('KegUtils/helpers/exists')
+const { dockerLog } = require('KegUtils/log/dockerLog')
+const { CONTAINERS } = require('KegConst/docker/containers')
+const { imageSelect } = require('KegUtils/docker/imageSelect')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 
 /**
  * Run a docker image command
@@ -24,11 +25,15 @@ const removeDockerImage = async args => {
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
   // Ensure we have an image to remove by checking for a mapped context, or use original
-  const imgRef = tag || get(CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`, context)
+  let imgRef = tag || context && get(CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`)
+  imgRef = imgRef || await imageSelect()
+
   !imgRef && generalError(`The docker "image remove" requires a context, name or tag argument!`)
 
   // Get the image meta data
-  const image = await docker.image[ tag ? 'getByTag' : 'get' ](imgRef)
+  const image = isStr(imgRef)
+    ? await docker.image[ tag ? 'getByTag' : 'get' ](imgRef)
+    : imgRef
 
   // Ensure we have the image meta data, and try to remove by imageId
   // __skipThrow is an internal argument, so it's not documented
