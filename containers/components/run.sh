@@ -56,7 +56,7 @@ keg_copy_node_modules(){
 
   # Copy recursivly (-r) and prompt before overwrite (-i)
   # Then pipe to dev/null, so we hide the overwrite prompts
-  keg_message "Running node_modules copy from cache to tap..."
+  keg_message "Running node_modules copy from cache to keg-components..."
   false | cp -ir $NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
 
 }

@@ -1,30 +1,13 @@
 
 const { get } = require('jsutils')
-const { spawnCmd } = require('KegProc')
-const { buildLocationContext } = require('KegUtils/builders')
-const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocCli')
+const { spawnCmd } = require('KegProc')
+const { CONTAINERS } = require('KegConst/docker/containers')
+const { imageSelect } = require('KegUtils/docker/imageSelect')
+const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
 
-/**
- * Run a docker image command
- * @param {Object} args - arguments passed from the runTask method
- * @param {string} args.command - Initial command being run
- * @param {Array} args.options - arguments passed from the command line
- * @param {Object} args.tasks - All registered tasks of the CLI
- * @param {Object} globalConfig - Global config object for the keg-cli
- *
- * @returns {void}
- */
-const runDockerImage = async args => {
-  const { globalConfig, params, task } = args
-  const { context, cleanup, entry, tag } = params
 
-  // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
-    globalConfig,
-    task,
-    params,
-  })
+const buildContainerName = async cmdContext => {
 
   const imgName = get(
     CONTAINERS,
@@ -38,8 +21,72 @@ const runDockerImage = async args => {
     container => container.names === imgContainer,
     'json'
   )
+
   // TODO: if the container already exists
   // Ask the user if they want to kill it, or not
+
+  return imgContainer
+
+}
+
+const getImageContext = async (args) => {
+  const { globalConfig, params, task } = args
+  const { tag } = params
+
+  // Get the context data for the command to be run
+  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+    globalConfig,
+    task,
+    params,
+  })
+
+  // Build the name for the container
+  const container = await buildContainerName(cmdContext)
+
+  return { container, contextEnvs, location, tag, tap }
+}
+
+const getImageData = async args => {
+  const { globalConfig, task, params } = args
+
+  const image = await imageSelect(args)
+
+  // Get the context data for the command to be run
+  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+    task,
+    globalConfig,
+    params: { ...params, context: image.rootId },
+  })
+
+  // Build the name for the container
+  const container = await buildContainerName(cmdContext)
+
+  return {
+    container,
+    location,
+    tag: image.tag,
+    image: image.rootId,
+  }
+
+}
+
+/**
+ * Run a docker image command
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Initial command being run
+ * @param {Array} args.options - arguments passed from the command line
+ * @param {Object} args.tasks - All registered tasks of the CLI
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ *
+ * @returns {void}
+ */
+const runDockerImage = async args => {
+  const { globalConfig, params, task } = args
+  const { context, cleanup, entry } = params
+
+  const { tag, location, contextEnvs, container, image } = context
+    ? await getImageContext(args)
+    : await getImageData(args)
 
   const opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
@@ -48,10 +95,10 @@ const runDockerImage = async args => {
     tag,
     opts,
     entry,
+    image,
     location,
     envs: contextEnvs,
-    name: imgContainer,
-    image: imgName,
+    name: container,
   })
 
 }

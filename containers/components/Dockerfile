@@ -8,7 +8,6 @@ WORKDIR /
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
 ARG GIT_KEY
-ARG GIT_TAP_URL
 
 # Path of the keg cli within the docker container
 ARG DOC_CLI_PATH=/keg/keg-cli
@@ -29,8 +28,19 @@ RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://githu
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $NM_CACHE/
-COPY yarn.lock $NM_CACHE/
+# COPY yarn.lock $NM_CACHE/
 
+# Create a fake post install script for after the yarn install
+# Install the dependecies with yarn install, then remove the .npmrc
+RUN mkdir -p $NM_CACHE/scripts; \
+    touch $NM_CACHE/scripts/postinstall.js; \
+    cd $NM_CACHE; \
+    echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
+    echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
+    yarn install; \
+    yarn cache clean; \
+    rm -f .npmrc; \
+    rm -f $DOC_APP_PATH/.npmrc;
 
 # ------- New Build Stage ------- #
 

@@ -24,6 +24,8 @@ module.exports = {
     alias: [ 'comps', 'comp' ],
     tasks: {
       ...require('./add'),
+      ...require('./build'),
+      ...require('./destory'),
       ...require('./start'),
       ...require('./storybook'),
     },
