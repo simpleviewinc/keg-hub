@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  kegcore:
+  kegcomponents:
     volumes:
       - components-sync:${DOC_APP_PATH}:nocopy
       - cli-sync:/keg/keg-cli:nocopy

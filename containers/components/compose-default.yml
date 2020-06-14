@@ -17,8 +17,21 @@ services:
     environment:
       - ENV
       - EXEC_CMD
+      - DOC_APP_PATH
+      - DOC_CLI_PATH
+      - DOC_CORE_PATH
+      - DOC_COMPONENTS_PATH
+      - DOC_RESOLVER_PATH
+      - DOC_RETHEME_PATH
+      - GIT_CLI_URL
+      - GIT_CORE_URL
+      - GIT_COMPONENTS_URL
+      - GIT_RETHEME_URL
+      - GIT_RESOLVER_URL
+      - GIT_TAP_URL
+      - IMAGE_FROM
+      - KEG_CORE_PROGRESS
       - NM_INSTALL
       - NODE_ENV
-      - DOC_APP_PATH
     ports:
       - 80:${STORYBOOK_PORT}

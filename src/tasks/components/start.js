@@ -78,13 +78,13 @@ const checkBuildImage = async (args, context) => {
  */
 const startComponents = async (args) => {
   const { params } = args
-  const { attached, compose, detached, ensure, service, sync } = params
+  const { attached, build, compose, detached, ensure, service, sync } = params
 
   // Check if the base image exists, and if not then build it
   ensure && await buildBaseImg(args)
 
   // Check if we should build the container image first
-  ensure && await checkBuildImage(args, 'components')
+  ;(ensure || build) && await checkBuildImage(args, 'components')
 
   // Check if we are running the container with just docker
   if(service === 'container') return startContainer(args)

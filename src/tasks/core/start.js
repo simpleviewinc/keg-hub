@@ -85,7 +85,7 @@ const startCore = async (args) => {
   ensure && await buildBaseImg(args)
 
   // Check if we should build the container image first
-  ensure && await checkBuildImage(args, 'core')
+  ;(ensure || build) && await checkBuildImage(args, 'core')
 
   // Check if we are running the container with just docker
   if(service === 'container') return startContainer(args)
