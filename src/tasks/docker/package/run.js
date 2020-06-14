@@ -1,13 +1,11 @@
-const path = require('path')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { isUrl, get } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { buildDockerCmd } = require('KegUtils/docker')
-const { copyFileSync } = require('KegFileSys/fileSys')
-const { buildLocationContext } = require('KegUtils/builders')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
+const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
+const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 
 /**
  * Builds a docker container so it can be run
@@ -24,25 +22,57 @@ const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
  */
 const dockerPackageRun = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { package, provider } = params
+  const { context, cleanup, package, provider, repo, user, version } = params
 
   // TODO: Add check, if a context is provided, and no package
   // Then use the package utils to get a list of all packages for that context
   // Allow the user to select a package from the list
+  // Or if a package is provided, build the packageUrl url
 
-  // Or if a package is provided, build the fullPackage url
-
-  // Get the full package url
-  const fullPackage = isUrl(package)
+  /*
+  * ----------- Step 1 ----------- *
+  * Get the full package url
+  */
+  const packageUrl = isUrl(package)
     ? package
     : isUrl(provider)
       ? `${provider}/${package}`
       : `${ get(globalConfig, `docker.providerUrl`) }/${ package }`
 
-  console.log(`---------- fullPackage ----------`)
-  console.log(fullPackage)
-  // TODO: Pull the image using the fullPackage url
-  // Then run the it in a container without mounting any volumes
+  const parsed = parsePackageUrl(packageUrl)
+
+  /*
+  * ----------- Step 2 ----------- *
+  * Pull the image from the provider and tag it
+  */
+  // await docker.pull(packageUrl)
+  // await docker.image.tag(packageUrl, `${parsed.image}:${parsed.tag}`)
+  
+
+  /*
+  * ----------- Step 3 ----------- *
+  * Build the container context information
+  */
+  const { contextEnvs, location } = buildLocationContext({
+    task: { options: { context: { allowed: [ parsed.repo ] } } },
+    globalConfig,
+    params: { context: parsed.repo },
+  })
+
+  /*
+  * ----------- Step 4 ----------- *
+  * Run the image in a container without mounting any volumes
+  */
+  const opts = [ `-it` ]
+  cleanup && opts.push(`--rm`)
+  await docker.image.run({
+    ...parsed,
+    opts,
+    location,
+    envs: contextEnvs,
+    overrideCmd: false,
+    name: `package-${ parsed.image }-${ parsed.tag }`,
+  })
 
 }
 
@@ -53,13 +83,6 @@ module.exports = {
     description: `Runs a git pr docker image in a container`,
     example: 'keg docker package run <options>',
     options: {
-      context: {
-        alias: [ 'name' ],
-        allowed: DOCKER.IMAGES,
-        description: 'Context of the docker package to run',
-        example: 'keg docker package run --context core',
-        enforced: true,
-      },
       package: {
         description: 'Pull request package url or name',
         example: `keg docker ps --package lancetipton/keg-core/kegcore:bug-fixes`,
@@ -68,10 +91,40 @@ module.exports = {
           message: 'Enter the docker package url or path (<user>/<repo>/<package>:<tag>)',
         }
       },
+      branch: {
+        description: 'Name of branch name that exists as the image name',
+        example: 'keg docker provider pull --branch develop',
+      },
+      context: {
+        alias: [ 'name' ],
+        allowed: [],
+        description: 'Context of the docker package to run',
+        example: 'keg docker package run --context core',
+        enforced: true,
+      },
+      cleanup: {
+        alias: [ 'clean', 'rm' ],
+        description: 'Auto remove the docker container after exiting',
+        example: `keg docker package run --cleanup false`,
+        default: true
+      },
       provider: {
         alias: [ 'pro' ],
         description: 'Url of the docker registry provider',
         example: 'keg docker provider pull --provider docker.pkg.github.com'
+      },
+      repo: {
+        description: 'The name of the repository holding docker images to pull',
+        example: 'keg docker provider pull --repo keg-core',
+      },
+      user: {
+        alias: [ 'usr' ],
+        description: 'User to use when logging into the registry provider. Defaults to the docker.user property in your global config.',
+        example: 'keg docker provider pull --user gituser',
+      },
+      version: {
+        description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
+        example: 'keg docker provider pull --version 0.0.1',
       },
     }
   }

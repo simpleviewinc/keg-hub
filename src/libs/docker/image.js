@@ -182,7 +182,18 @@ const clean = async ({ force, opts='', log=false }) => {
  * @returns {string|Array} - Response from docker cli
  */
 const runImage = async (args) => {
-  const { cmd, entry, envs, image, location, name, opts=[], tag, log } = args
+  const {
+    cmd,
+    entry=cmd,
+    envs,
+    image,
+    location,
+    log,
+    name,
+    opts=[],
+    overrideCmd=true,
+    tag
+  } = args
 
   const containerName = isStr(name)
     ? name
@@ -205,9 +216,12 @@ const runImage = async (args) => {
 
   // Convert the passed in envs to envs that can be passed to the container
   // cmdToRun = toContainerEnvs(envs, cmdToRun)
+  
+  // Get the container run command
+  const containerCmd = overrideCmd && (entry || '/bin/sh') || ''
 
   // Set / overwrite the entry for the container
-  cmdToRun = `${ cmdToRun } ${ imgName } ${ cmd || entry || '/bin/sh' }`.trim()
+  cmdToRun = `${ cmdToRun } ${ imgName } ${ containerCmd }`.trim()
 
   log && Logger.spacedMsg(`  Running command: `, cmdToRun)
   // Run the command

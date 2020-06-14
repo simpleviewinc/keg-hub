@@ -6,5 +6,6 @@ module.exports = {
   ...require('./formatPackage'),
   ...require('./getAllPackages'),
   ...require('./getPackage'),
+  ...require('./parsePackageUrl'),
   ...require('./validatePackageVersion'),
 }

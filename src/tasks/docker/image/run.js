@@ -70,6 +70,7 @@ module.exports = {
         example: 'keg docker image run --context core'
       },
       cleanup: {
+        alias: [ 'clean', 'rm' ],
         description: 'Auto remove the docker container after exiting',
         example: `keg docker image run  --cleanup false`,
         default: true

@@ -31,7 +31,7 @@ const buildCmdContext = ({ globalConfig, params, allowed, defContext }) => {
   const cmdContext = hasTapPath ? 'tap' : context || defContext
 
   // Ensure we have a valid context to run the command in
-  ;(!cmdContext || allowed.indexOf(cmdContext) === -1) &&
+  ;(!cmdContext || (!allowed.includes(cmdContext) && !allowed.includes(params.context))) &&
     generalError(`The context "${ context }" is invalid. A valid "context" is required!`)
 
   return { cmdContext, tap: tap || context }

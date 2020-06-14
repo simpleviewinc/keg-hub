@@ -103,6 +103,10 @@ module.exports = {
         example: 'keg docker provider pull --provider docker.pkg.github.com',
         default: 'docker.pkg.github.com'
       },
+      repo: {
+        description: 'The name of the repository holding docker images to pull',
+        example: 'keg docker provider pull --repo keg-core',
+      },
       tag: {
         description: 'Specify the tag tied to the image being pushed',
         example: 'keg docker provider pull --tag latest',
@@ -124,10 +128,6 @@ module.exports = {
         description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
         example: 'keg docker provider pull --version 0.0.1',
       },
-      repo: {
-        description: 'The name of the repository holding docker images to pull',
-        example: 'keg docker provider pull --repo keg-core',
-      }
     }
   }
 }
