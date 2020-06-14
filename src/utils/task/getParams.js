@@ -388,16 +388,17 @@ const getParams = async ({ options=[], task }) => {
   if(!taskKeys || !taskKeys.length) return ensureParams(task)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
-  return options.length !== 1 || options[0].indexOf('=') !== -1
+  const doOptsLoop = options.length !== 1 ||
+    options[0].includes('=')  ||
+    options[0].indexOf('-') === 0
 
-    // Loop over the task keys and map the task options to the passed in options
+  // Loop over the task keys and map the task options to the passed in options
+  // Otherwise set it as the first key in the task options object
+  return doOptsLoop
     ? taskKeys && await loopTaskOptions(task, taskKeys, options)
-    
-    // Otherwise set it as the first key in the task options object
-    : ensureParams(
-        task,
-        { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], options[0]) }
-      )
+    : ensureParams(task, {
+        [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], options[0])
+      })
 
 }
 
