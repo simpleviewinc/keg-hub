@@ -1,13 +1,7 @@
-const webResolver = require('../webResolver')
-
 describe('Get web content path', () => {
-  
-  beforeEach(() => {
-    
-  })
-  
+  beforeEach(() => {})
+
   it('', () => {
     expect(true).toBe(true)
   })
-
 })

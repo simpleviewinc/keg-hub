@@ -1,11 +1,15 @@
 const path = require('path')
 const fs = require('fs')
 const rimraf = require('rimraf')
-const { deepMerge, logData, get } = require('jsutils')
-const getAppConfig = require('../resolvers/getAppConfig')
-const { validateApp, ensureDirSync, isDirectory, checkTapKegPath } = require('../helpers')
+const { logData, get } = require('jsutils')
+const {
+  validateApp,
+  ensureDirSync,
+  isDirectory,
+  checkTapKegPath,
+} = require('../helpers')
 const tapConstants = require('./tapConstants')
-const { configKeys }  = tapConstants
+const { configKeys } = tapConstants
 
 // Default location to store files
 const TEMP_DEF_FOLDER = './temp'
@@ -20,7 +24,6 @@ const TEMP_DEF_FOLDER = './temp'
  * @returns {string} - path to the base tap
  */
 const getBaseTapPath = ({ config, tapPath, kegPath }) => {
-
   // Get the base tap path
   const baseLoc = get(config, [ 'keg', 'tapResolver', 'paths', 'kegSrc' ])
 
@@ -29,7 +32,6 @@ const getBaseTapPath = ({ config, tapPath, kegPath }) => {
 
   // Ensure it's a directory, and return
   return isDirectory(basePath, true) && basePath
-
 }
 
 /**
@@ -40,7 +42,7 @@ const getBaseTapPath = ({ config, tapPath, kegPath }) => {
  */
 const getActiveTapName = config => {
   const tapName = process.env.TAP || config.name
-  if(tapName !== config.name ) config.name = tapName
+  if (tapName !== config.name) config.name = tapName
 
   return config.name
 }
@@ -56,8 +58,10 @@ const getActiveTapName = config => {
  * @returns {string} - tap source directory
  */
 const getTapSrc = (options, HAS_TAP) => {
-  const tapSrc = HAS_TAP && get(options, [ 'config', 'keg', 'tapResolver', 'paths', 'tapSrc' ], '')
-  return tapSrc && path.join(options.tapPath, tapSrc) || options.tapPath
+  const tapSrc =
+    HAS_TAP &&
+    get(options, [ 'config', 'keg', 'tapResolver', 'paths', 'tapSrc' ], '')
+  return (tapSrc && path.join(options.tapPath, tapSrc)) || options.tapPath
 }
 
 /**
@@ -76,7 +80,6 @@ const cleanupOldTempConfig = TEMP_FOLDER_PATH => {
     if (e.code !== 'ENOENT') throw e
   }
 }
-
 
 /**
  * Finds the path where temp config files should be stored
@@ -105,7 +108,6 @@ const getTempFolderPath = (options, TAP_PATH) => {
   ensureDirSync(configTemp)
 
   return configTemp
-
 }
 
 /**
@@ -118,7 +120,6 @@ const getTempFolderPath = (options, TAP_PATH) => {
  * @returns {Object} - Merged app config, and it's path
  */
 const buildJoinedConfigs = (config, TAP_PATH, TEMP_FOLDER_PATH) => {
-
   // Rebuild the temp folder path
   fs.mkdirSync(TEMP_FOLDER_PATH)
 
@@ -129,11 +130,7 @@ const buildJoinedConfigs = (config, TAP_PATH, TEMP_FOLDER_PATH) => {
   )
 
   // Write the temp config file
-  fs.writeFileSync(
-    TEMP_CONFIG_PATH,
-    JSON.stringify(config, null, 2),
-    'utf8'
-  )
+  fs.writeFileSync(TEMP_CONFIG_PATH, JSON.stringify(config, null, 2), 'utf8')
 
   // Return the joined config, and the path to the temp config file
   return { APP_CONFIG: config, APP_CONFIG_PATH: TEMP_CONFIG_PATH }
@@ -152,10 +149,13 @@ const buildJoinedConfigs = (config, TAP_PATH, TEMP_FOLDER_PATH) => {
  * @returns {Object} - Merged app config, and it's path
  */
 const setupTapConfig = (options, TAP_PATH, HAS_TAP) => {
-  const { kegPath, config } = options
+  const { config } = options
 
   // Data to load tap from
-  let tapData = { APP_CONFIG: config, APP_CONFIG_PATH: config[configKeys.TAP_RESOLVER_LOC] }
+  let tapData = {
+    APP_CONFIG: config,
+    APP_CONFIG_PATH: config[configKeys.TAP_RESOLVER_LOC],
+  }
 
   // If no tap just return the default tapData
   if (!HAS_TAP) return tapData
@@ -189,7 +189,6 @@ const setupTapConfig = (options, TAP_PATH, HAS_TAP) => {
  * @returns {Object} - Build constants and paths data for the active tap
  */
 module.exports = options => {
-
   const { config, tapPath, kegPath } = options
 
   // Ensure the required app data exists
@@ -202,7 +201,7 @@ module.exports = options => {
   const TAP_NAME = getActiveTapName(config)
 
   // Flag set if the active tap is different from the default keg
-  const HAS_TAP = Boolean(TAP_NAME !== get(config, ['keg', 'name']))
+  const HAS_TAP = Boolean(TAP_NAME !== get(config, [ 'keg', 'name' ]))
 
   // Set the tap path if an active tap is set
   const TAP_PATH = HAS_TAP ? tapPath : BASE_PATH
@@ -217,10 +216,11 @@ module.exports = options => {
     HAS_TAP
   )
 
-  !HAS_TAP && logData(
-    `No tap folder found at ${TAP_PATH}, using defaults at ${BASE_PATH}`,
-    'warn'
-  )
+  !HAS_TAP &&
+    logData(
+      `No tap folder found at ${TAP_PATH}, using defaults at ${BASE_PATH}`,
+      'warn'
+    )
 
   return {
     APP_CONFIG,
@@ -229,6 +229,6 @@ module.exports = options => {
     TAP_NAME,
     TAP_PATH,
     TAP_SRC,
-    HAS_TAP
+    HAS_TAP,
   }
 }

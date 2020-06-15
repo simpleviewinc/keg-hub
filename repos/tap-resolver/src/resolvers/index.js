@@ -5,5 +5,5 @@ const webResolver = require('./webResolver')
 module.exports = {
   getAppConfig,
   contentResolver,
-  webResolver
+  webResolver,
 }

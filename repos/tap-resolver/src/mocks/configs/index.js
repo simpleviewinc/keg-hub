@@ -7,8 +7,8 @@ unset(appJson, [ 'keg', 'overrides' ])
 const joinConfigs = () => {
   const config = deepMerge(appJson, tapJson)
 
-  configOverrides && Object.keys(configOverrides)
-    .map(key => {
+  configOverrides &&
+    Object.keys(configOverrides).map(key => {
       const override = configOverrides[key]
       set(config, override, get(appJson, override))
     })
@@ -19,5 +19,5 @@ const joinConfigs = () => {
 module.exports = {
   appConfig: deepFreeze(appJson),
   tapConfig: deepFreeze(tapJson),
-  config: joinConfigs()
+  config: joinConfigs(),
 }

@@ -1,5 +1,4 @@
 const path = require('path')
-const fs = require('fs')
 const { cloneArr, get, isObj, reduceObj } = require('jsutils')
 const buildAssets = require('./buildAssets')
 const { validateApp } = require('../helpers')
@@ -14,14 +13,21 @@ const freezeObj = Object.freeze
  * @returns {Object} - new addTo object with it's keys updated
  */
 const addNameSpace = (appConfig, addTo) => {
-  const nameSpace = get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'nameSpace' ], '')
-  if(!nameSpace || !isObj(addTo)) return addTo
-  
-  return reduceObj(addTo, (key, value, updated) => {
-    updated[`${nameSpace}${key}`] = value
-    return updated
-  }, {})
+  const nameSpace = get(
+    appConfig,
+    [ 'keg', 'tapResolver', 'aliases', 'nameSpace' ],
+    ''
+  )
+  if (!nameSpace || !isObj(addTo)) return addTo
 
+  return reduceObj(
+    addTo,
+    (key, value, updated) => {
+      updated[`${nameSpace}${key}`] = value
+      return updated
+    },
+    {}
+  )
 }
 
 /**
@@ -31,16 +37,19 @@ const addNameSpace = (appConfig, addTo) => {
  *
  * @returns {Object} - Allowed file extensions
  */
- const buildExtensions = (appConfig={}) => {
+const buildExtensions = (appConfig = {}) => {
   return freezeObj(
     cloneArr(
       // Try to pull the extensions from the config
-      get(appConfig, [ 'keg', 'tapResolver', 'extensions', 'resolve' ],
-      // Otherwise set the default extensions
-      get(tapConstants, [ 'extensions', 'resolve' ], [])
-    ))
+      get(
+        appConfig,
+        [ 'keg', 'tapResolver', 'extensions', 'resolve' ],
+        // Otherwise set the default extensions
+        get(tapConstants, [ 'extensions', 'resolve' ], [])
+      )
+    )
   )
- }
+}
 
 /**
  * Builds default folders at the base path
@@ -50,13 +59,13 @@ const addNameSpace = (appConfig, addTo) => {
  *
  * @returns {Object} - static mapped paths
  */
- const buildBaseContent = (appConfig={}) => {
+const buildBaseContent = (appConfig = {}) => {
   return freezeObj(
     addNameSpace(appConfig, {
-      ...get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'base'], {})
+      ...get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'base' ], {}),
     })
   )
- }
+}
 
 /**
  * Builds the default folders used to build an alias
@@ -66,28 +75,26 @@ const addNameSpace = (appConfig, addTo) => {
  *
  * @returns {Object} - all dynamically mapped paths
  */
-const buildDynamicContent = (appConfig={}) => {
+const buildDynamicContent = (appConfig = {}) => {
   // Build the dynamic alias paths
   return freezeObj(
     addNameSpace(appConfig, {
-      ...get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'dynamic'], {}),
+      ...get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'dynamic' ], {}),
     })
   )
 }
 
-
- /**
-  * Builds the default Alias to load app content
-  * Can not be over-written
-  * Paths that pull base folder only
-  * @param {string} kegPath - path to the root of the project
-  * @param {Object} [appConfig={}] - app.json config file
-  * @param {Object} [paths={}] - object holds the paths to be set
-  *
-  * @returns {Object} - all paths that should be an alias
-  */
- const buildAliases = (kegPath, appConfig={}, paths={}) => {
-
+/**
+ * Builds the default Alias to load app content
+ * Can not be over-written
+ * Paths that pull base folder only
+ * @param {string} kegPath - path to the root of the project
+ * @param {Object} [appConfig={}] - app.json config file
+ * @param {Object} [paths={}] - object holds the paths to be set
+ *
+ * @returns {Object} - all paths that should be an alias
+ */
+const buildAliases = (kegPath, appConfig = {}, paths = {}) => {
   return freezeObj(
     addNameSpace(appConfig, {
       AppRoot: kegPath,
@@ -97,15 +104,16 @@ const buildDynamicContent = (appConfig={}) => {
       TapSrc: paths.tapSrc,
       Config: paths.config,
       ...reduceObj(
-        get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'root'], {}),
+        get(appConfig, [ 'keg', 'tapResolver', 'aliases', 'root' ], {}),
         (key, value, addAliases) => {
           addAliases[key] = path.join(kegPath, value)
           return addAliases
-        }, {})
+        },
+        {}
+      ),
     })
   )
- }
-
+}
 
 /**
  * Builds the constants which contains paths to the taps folder
@@ -117,7 +125,6 @@ const buildDynamicContent = (appConfig={}) => {
  * @return {Object} - Alias map to load files
  */
 module.exports = options => {
-
   const { config, kegPath } = options
 
   // Ensure the required app data exists
@@ -143,7 +150,7 @@ module.exports = options => {
     base: BASE_PATH,
     tap: TAP_PATH,
     tapSrc: TAP_SRC,
-    config: APP_CONFIG_PATH
+    config: APP_CONFIG_PATH,
   }
 
   // Return the constants set from the tap data
@@ -160,5 +167,4 @@ module.exports = options => {
     DYNAMIC_CONTENT: buildDynamicContent(APP_CONFIG),
     EXTENSIONS: buildExtensions(APP_CONFIG),
   })
-  
 }

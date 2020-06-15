@@ -14,22 +14,20 @@ const { validateApp } = require('../helpers')
  * @return {Object} - Alias map to load files
  */
 const buildDynamicAliases = (appConfig, contentResolver, aliasMap, content) => {
-
   // Ensure there a tap exists and the contentResolver is a function
   const useResolver = content.tap && isFunc(contentResolver)
 
   // Add dynamic content
-  return Object.keys(content.dynamic)
-    .reduce((updatedMap, key, value) => {
-      // If we have a tap, use the contentResolver method to resolve the path
-      // Otherwise set the path to the basePath
-      updatedMap[key] = useResolver
-        ? contentResolver(appConfig, updatedMap, content, content.dynamic[key])
-        : path.join(content.basePath, content.dynamic[key])
+  return Object.keys(content.dynamic).reduce((updatedMap, key, value) => {
+    // If we have a tap, use the contentResolver method to resolve the path
+    // Otherwise set the path to the basePath
+    updatedMap[key] = useResolver
+      ? contentResolver(appConfig, updatedMap, content, content.dynamic[key])
+      : path.join(content.basePath, content.dynamic[key])
 
-      // return the update map
-      return updatedMap
-    }, aliasMap)
+    // return the update map
+    return updatedMap
+  }, aliasMap)
 }
 
 /**
@@ -54,17 +52,21 @@ module.exports = (appConfig, contentResolver, aliasMap, content) => {
   // Wrap the exposed function with a function to get access to the original passed in args
   return () => {
     // Build dynamic content folder paths
-    aliasMap = buildDynamicAliases(appConfig, contentResolver, aliasMap, content)
+    aliasMap = buildDynamicAliases(
+      appConfig,
+      contentResolver,
+      aliasMap,
+      content
+    )
 
     // Map the base content to the path from the base
     // This ensures the paths can not be overwritten
-    return Object.keys(content.base)
-      .reduce((updatedMap, key) => {
-        // Set the path to the base path
-        updatedMap[key] = path.join(content.basePath, content.base[key])
+    return Object.keys(content.base).reduce((updatedMap, key) => {
+      // Set the path to the base path
+      updatedMap[key] = path.join(content.basePath, content.base[key])
 
-        // return the update map
-        return updatedMap
-      }, aliasMap)
+      // return the update map
+      return updatedMap
+    }, aliasMap)
   }
 }

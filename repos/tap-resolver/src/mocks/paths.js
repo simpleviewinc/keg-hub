@@ -13,5 +13,5 @@ module.exports = {
   tapPath,
   tapAssetsPath,
   tapConfigPath,
-  webResolverPath
+  webResolverPath,
 }

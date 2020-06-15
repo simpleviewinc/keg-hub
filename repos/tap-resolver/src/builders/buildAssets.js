@@ -11,19 +11,23 @@ const tapConstants = require('../tap/tapConstants')
  *
  * @returns {Array} - all assets found for the passed in tap
  */
-const assetFileNames = (tapAssetPath, extensions=[]) => {
-
+const assetFileNames = (tapAssetPath, extensions = []) => {
   // Get all allowed extensions
-  const allExtensions = get(tapConstants, [ 'extensions', 'assets' ], []).concat(extensions)
+  const allExtensions = get(tapConstants, [ 'extensions', 'assets' ], []).concat(
+    extensions
+  )
 
   // Create an Array from the assets found at the tapAssetPath
   return Array.from(
     // Use Set to ensure all files are unique
     new Set(
       // Read all the files from the passed in path
-      fs.readdirSync(tapAssetPath)
+      fs
+        .readdirSync(tapAssetPath)
         // Filter out any that don't match the allowed asset extensions
-        .filter(file => allExtensions.indexOf(`.${ file.split('.').pop() }`) !== -1)
+        .filter(
+          file => allExtensions.indexOf(`.${file.split('.').pop()}`) !== -1
+        )
     )
   )
 }
@@ -64,9 +68,12 @@ const getAssetsPath = (appConf, BASE_PATH, TAP_PATH) => {
  * @returns {Object} - path to taps assets
  */
 module.exports = (appConf, BASE_PATH, TAP_PATH) => {
-  
   // Get the assets path
-  const { full: tapAssetPath, relative } = getAssetsPath(appConf, BASE_PATH, TAP_PATH)
+  const { full: tapAssetPath, relative } = getAssetsPath(
+    appConf,
+    BASE_PATH,
+    TAP_PATH
+  )
 
   // Gets all the images assets in the taps assets folder
   const assetNames = []
@@ -79,19 +86,19 @@ module.exports = (appConf, BASE_PATH, TAP_PATH) => {
       const assetName = name.split('.').shift()
       // Add to the asset names with space in front for formatting
       assetNames.push(`  ${assetName}`)
-      
+
       // Return the require statement
       return `const ${assetName} = require('${tapAssetPath}/${name}')`
     })
     .join(',\n')
-  
+
   const exportStr = `${properties}\n\nexport {\n${assetNames}\n}`
   // Ass the assets content to the assets object
   // const string = `const assets = {\n  ${properties}\n}\n\nexport assets`
 
   // Build the location to save the assets
   const assetsPath = `${tapAssetPath}/index.js`
- 
+
   // Write the file to the assets location
   fs.writeFileSync(assetsPath, exportStr, 'utf8')
 

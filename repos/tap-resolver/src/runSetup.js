@@ -1,7 +1,7 @@
 const { setLogs } = require('jsutils')
 const buildAliases = require('./builders/buildAliases')
 const buildConstants = require('./builders/buildConstants')
-const { validateApp } =  require('./helpers')
+const { validateApp } = require('./helpers')
 const defContentResolver = require('./resolvers/contentResolver')
 
 setLogs(process.env.LOG, `log`, `[ Tap Resolver ]`)
@@ -17,7 +17,6 @@ setLogs(process.env.LOG, `log`, `[ Tap Resolver ]`)
  * @return {Object} - Alias map to load files
  */
 module.exports = (options, contentResolver) => {
-
   // Ensure the required app data exists
   validateApp(options.kegPath, options.config)
 
@@ -32,7 +31,7 @@ module.exports = (options, contentResolver) => {
     BASE_PATH,
     DYNAMIC_CONTENT,
     EXTENSIONS,
-    HAS_TAP
+    HAS_TAP,
   } = buildConstants(options)
 
   // Build out the Tap / Keg aliases
@@ -45,7 +44,7 @@ module.exports = (options, contentResolver) => {
       basePath: BASE_PATH,
       dynamic: DYNAMIC_CONTENT,
       tap: HAS_TAP,
-      extensions: EXTENSIONS
+      extensions: EXTENSIONS,
     }
   )
 

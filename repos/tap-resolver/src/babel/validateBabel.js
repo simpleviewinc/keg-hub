@@ -9,24 +9,22 @@ const { isObj, isStr } = require('jsutils')
  * @return {void}
  */
 const validateBabel = ({ config, tapPath, kegPath }) => {
-
-  if(!tapPath || !isStr(tapPath))
+  if (!tapPath || !isStr(tapPath))
     throw new Error(
       `Tap Resolver requires a tapPath as a valid string. Instead ${tapPath} was received!`
     )
 
-  if(!kegPath || !isStr(kegPath))
+  if (!kegPath || !isStr(kegPath))
     throw new Error(
       `Tap Resolver requires a kegPath as a valid string. Instead ${kegPath} was received!`
     )
 
-  if(!config || !isObj(config))
+  if (!config || !isObj(config))
     throw new Error(
       `Tap Resolver requires a config as a valid object. Instead ${config} was received!`
     )
-
 }
 
 module.exports = {
-  validateBabel
+  validateBabel,
 }

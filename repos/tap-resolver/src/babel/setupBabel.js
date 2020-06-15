@@ -36,36 +36,35 @@ const getPlatformData = (options, key) => {
  */
 const getResolverFile = (options, type) => {
   try {
-
     // Get the defined resolver path
-    const resolverPath = get(options, [ 'config', 'keg', 'tapResolver', 'paths', type ])
+    const resolverPath = get(options, [
+      'config',
+      'keg',
+      'tapResolver',
+      'paths',
+      type,
+    ])
 
     // Ensure the path exists
-    const resolver = resolverPath && checkTapKegPath(
-      options.tapPath,
-      options.kegPath,
-      resolverPath
-    )
+    const resolver =
+      resolverPath &&
+      checkTapKegPath(options.tapPath, options.kegPath, resolverPath)
 
     if (resolver) console.log(`Using custom resolver for ${type}`)
 
     // Load the resolved path
-    return resolver
-      ? require(resolver)
-      : require(`../resolvers/${type}`)
-
+    return resolver ? require(resolver) : require(`../resolvers/${type}`)
   }
-  catch (e){
+  catch (e) {
     console.log(`Error loading custom resolver for ${type}`)
     console.error(e.message)
     console.error(e.stack)
 
     return require(`../resolvers/${type}`)
-
   }
 }
 
 module.exports = {
   getPlatformData,
-  getResolverFile
+  getResolverFile,
 }

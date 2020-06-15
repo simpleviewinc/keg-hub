@@ -3,5 +3,5 @@ const tapConstants = require('./tapConstants')
 
 module.exports = {
   setupTap,
-  tapConstants
+  tapConstants,
 }

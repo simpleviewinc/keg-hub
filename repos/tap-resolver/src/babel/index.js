@@ -3,5 +3,5 @@ const validateBabel = require('./validateBabel')
 
 module.exports = {
   ...setupBabel,
-  ...validateBabel
+  ...validateBabel,
 }

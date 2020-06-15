@@ -1,17 +1,7 @@
-
-const helpers = require('../helpers')
-
 describe('helpers', () => {
-  
-  beforeEach(() => {
+  beforeEach(() => {})
 
-  })
-  
-  it('', () => {
-    
-  })
+  it('test1', () => {})
 
-  it('', () => {
-    
-  })
+  it('test2', () => {})
 })

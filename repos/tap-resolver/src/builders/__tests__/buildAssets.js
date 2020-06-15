@@ -9,7 +9,6 @@ const isDirMock = jest.fn(() => isDirectory)
 const buildAssets = require('../buildAssets')
 
 describe('Build Assets', () => {
-  
   beforeEach(() => {
     isDirMock.mockClear()
     FS.writeFileSync.mockClear()
@@ -22,7 +21,7 @@ describe('Build Assets', () => {
 
   it('Should write to the assets path set in the config if it is a directory', () => {
     isDirectory = true
-    const assetsPath = buildAssets(config, basePath, tapPath)
+    buildAssets(config, basePath, tapPath)
     const savePath = FS.writeFileSync.mock.calls[0][0]
 
     expect(FS.readdirSync).toHaveBeenCalledWith(`${tapPath}/assets`)
@@ -32,7 +31,7 @@ describe('Build Assets', () => {
 
   it('Should write the base assets path when config assets path is NOT a directory', () => {
     isDirectory = false
-    const assetsPath = buildAssets(config, basePath, tapPath)
+    buildAssets(config, basePath, tapPath)
     const savePath = FS.writeFileSync.mock.calls[0][0]
 
     expect(FS.readdirSync).toHaveBeenCalledWith(`${basePath}/assets`)
@@ -47,19 +46,18 @@ describe('Build Assets', () => {
       keg: {
         tapResolver: {
           ...config.keg.tapResolver,
-          paths: { ...config.keg.tapResolver.paths, tapAssets: undefined }
-        }
-      }
+          paths: { ...config.keg.tapResolver.paths, tapAssets: undefined },
+        },
+      },
     }
-    const assetsPath = buildAssets(confCopy, basePath, tapPath)
+    buildAssets(confCopy, basePath, tapPath)
     const savePath = FS.writeFileSync.mock.calls[0][0]
 
     expect(savePath).toBe(path.join(basePath, './assets/index.js'))
   })
 
   it('Should only include allowed extensions', () => {
-
-    const assetsPath = buildAssets(config, basePath, tapPath)
+    buildAssets(config, basePath, tapPath)
     const saveContent = FS.writeFileSync.mock.calls[0][1]
 
     expect(saveContent.indexOf('duper.jpg')).not.toEqual(-1)
@@ -73,5 +71,4 @@ describe('Build Assets', () => {
 
     expect(assetsPath).toEqual('assets')
   })
-
 })

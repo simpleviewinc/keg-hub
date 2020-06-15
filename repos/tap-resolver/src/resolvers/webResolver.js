@@ -14,7 +14,6 @@ const findAliasPath = (fullPath, extensions = []) => {
   const usePath = fs.existsSync(`${fullPath}`)
     ? fullPath
     : extensions.reduce((foundPath, ext) => {
-
       // If the path is already found, just return it
       if (foundPath) return foundPath
 
@@ -22,7 +21,7 @@ const findAliasPath = (fullPath, extensions = []) => {
       const withExt = `${fullPath}${ext}`
 
       // Check the extention exists and return it
-      return fs.existsSync(withExt) && withExt || undefined
+      return (fs.existsSync(withExt) && withExt) || undefined
     }, undefined)
 
   return usePath
@@ -38,14 +37,12 @@ const findAliasPath = (fullPath, extensions = []) => {
  * @returns {string} - path to file ( from taps directory || core/base directory )
  */
 module.exports = (sourcePath, currentFile, opts) => {
-
   // Check if the sourcePath is an alias
   const aliasMap = opts.alias[sourcePath]
 
   // Check if it already has the rootDir
   // If it doesn't, that means it dosn't it's a custom alias, so just return the mapped path
-  if (isStr(aliasMap) && aliasMap.indexOf(rootDir) === -1)
-    return aliasMap
+  if (isStr(aliasMap) && aliasMap.indexOf(rootDir) === -1) return aliasMap
 
   // Split the path to get the alias
   // Aliases should always be '<alias>' || '<alias>/path/to/sub/file'
@@ -60,5 +57,4 @@ module.exports = (sourcePath, currentFile, opts) => {
     : isFunc(alias)
       ? alias([ aliasKey, pathToFile.join('/') ])
       : findAliasPath(path.join(alias, ...pathToFile), opts.extensions)
-
 }

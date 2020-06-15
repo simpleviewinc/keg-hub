@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { get, isObj, isStr, keyMap, deepFreeze } = require('jsutils')
+const { isObj, isStr } = require('jsutils')
 
 /**
  * Checks is a path is a directory
@@ -12,8 +12,8 @@ const isDirectory = (check, skipThrow) => {
   try {
     return fs.lstatSync(check).isDirectory()
   }
-  catch(e){
-    if(skipThrow) return false
+  catch (e) {
+    if (skipThrow) return false
 
     throw e
   }
@@ -32,8 +32,8 @@ const pathExists = check => {
       // If no error the it exits, so resolve ture
       !err
         ? res(true)
-        // If the error is 34, means the file does not exist, so return false
-        : err.errno === 34
+        : // If the error is 34, means the file does not exist, so return false
+        err.errno === 34
           ? res(false)
           : rej(err)
     })
@@ -48,10 +48,10 @@ const pathExists = check => {
  */
 const pathExistsSync = checkPath => {
   try {
-    const stats = fs.statSync(checkPath)
+    fs.statSync(checkPath)
     return true
   }
-  catch(err) {
+  catch (err) {
     return false
   }
 }
@@ -64,8 +64,8 @@ const pathExistsSync = checkPath => {
  * @returns {string|boolean} - Path if it exists || false
  */
 const buildCheckPath = (basePath, checkPath) => {
-  if(!isStr(basePath) || !isStr(checkPath)) false
-  
+  if (!isStr(basePath) || !isStr(checkPath)) false
+
   const location = path.join(basePath, checkPath)
 
   return pathExistsSync(location) && location
@@ -82,7 +82,9 @@ const buildCheckPath = (basePath, checkPath) => {
  * @returns {string|boolean} - Path if it exists || false
  */
 const checkTapKegPath = (tapPath, kegPath, checkPath) => {
-  return buildCheckPath(tapPath, checkPath) || buildCheckPath(kegPath, checkPath)
+  return (
+    buildCheckPath(tapPath, checkPath) || buildCheckPath(kegPath, checkPath)
+  )
 }
 
 /**
@@ -98,7 +100,7 @@ const ensureDirSync = dirPath => {
 
     return dirPath
   }
-  catch(err) {
+  catch (err) {
     return false
   }
 }
@@ -120,9 +122,12 @@ const requireFile = (folder, file, logError) => {
 
     return { data, location }
   }
-  catch(e){
-    if(!logError) return {}
-    logData(`Could not require file from path => ${path.join(folder, file)}`, `error`)
+  catch (e) {
+    if (!logError) return {}
+    logData(
+      `Could not require file from path => ${path.join(folder, file)}`,
+      `error`
+    )
     logData(e.message, `error`)
     logData(e.stack, `error`)
   }
@@ -136,18 +141,16 @@ const requireFile = (folder, file, logError) => {
  * @return {void}
  */
 const validateApp = (kegPath, config) => {
-  if(!kegPath || !isStr(kegPath))
+  if (!kegPath || !isStr(kegPath))
     throw new Error(
       `Tap Resolver requires a kegPath as a valid string. Instead ${kegPath} was received!`
     )
 
-  if(!config || !isObj(config))
+  if (!config || !isObj(config))
     throw new Error(
       `Tap Resolver requires a config as a valid object. Instead ${config} was received!`
     )
-
 }
-
 
 module.exports = {
   checkTapKegPath,
@@ -156,5 +159,5 @@ module.exports = {
   pathExists,
   pathExistsSync,
   requireFile,
-  validateApp
+  validateApp,
 }

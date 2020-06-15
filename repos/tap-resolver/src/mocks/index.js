@@ -3,7 +3,11 @@ const Rimraf = require('./rimraf')
 const paths = require('./paths')
 const configs = require('./configs')
 const webResolver = require('./base/webResolver')
-const options = { config: configs.config, kegPath: paths.kegPath, tapPath: paths.tapPath }
+const options = {
+  config: configs.config,
+  kegPath: paths.kegPath,
+  tapPath: paths.tapPath,
+}
 
 module.exports = {
   FS,
@@ -11,5 +15,5 @@ module.exports = {
   webResolver,
   ...paths,
   ...configs,
-  options
+  options,
 }
