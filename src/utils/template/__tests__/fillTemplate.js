@@ -1,3 +1,4 @@
+const path = require('path')
 const { Logger } = require('KegMocks/logger')
 jest.setMock('KegLog', { Logger })
 
@@ -18,12 +19,13 @@ describe('fillTemplate', () => {
 
   })
 
-  it('should fill passed in path templates', () => {
+  it('should load and fill template from a passed in location', async () => {
 
-    const filled = fillTemplate({
-      loc: path.join('test-template.tmp'),
+    const testTemplate = path.join(__dirname, './test-template.tmp')
+
+    const filled = await fillTemplate({
+      loc: testTemplate,
       data: { thing: 'test-from-file' },
-      root: __dirname,
     })
 
     expect(filled).toBe('I am a test-from-file')

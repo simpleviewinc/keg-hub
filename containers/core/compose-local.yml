@@ -3,12 +3,16 @@ services:
   kegcore:
     volumes:
       - cli-sync:/${DOC_CLI_PATH}:nocopy
+      - core-sync:${DOC_APP_PATH}:nocopy
       - components-sync:${DOC_COMPONENTS_PATH}:nocopy
       - retheme-sync:${DOC_RETHEME_PATH}:nocopy
 volumes:
   cli-sync:
     external:
       name: "cli-unison-sync"
+  core-sync:
+    external:
+      name: "core-unison-sync"
   components-sync:
     external:
       name: "components-unison-sync"
