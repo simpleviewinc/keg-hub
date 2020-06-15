@@ -1,6 +1,8 @@
-const { getGit, printGitBranches, getGitPath } = require('KegUtils/git')
+const { getGitPath } = require('KegUtils/git/getGitPath')
+const { printGitBranches } = require('KegUtils/git/printGitBranches')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { generalError } = require('KegUtils/error')
+const { git } = require('KegGit')
 
 const branchList = async (args) => {
   const { globalConfig, params, __skipLog } = args
@@ -9,19 +11,13 @@ const branchList = async (args) => {
   const gitPath = getGitPath(globalConfig, context) || location
 
   if(!gitPath) throw new Error(`Git path does not exist for ${ context || location }`)
+
+  const branches = await git.branch.list(gitPath)
+
+  // Check if we should print the branch list
+  !__skipLog && printGitBranches(branches)
   
-  git = getGit(gitPath)
-
-  const listArgs = [ '--list' ]
-  all && listArgs.push('--all')
-
-  // Call cmd to print the branch list
-  const [ err, data ] = await git.branch(listArgs)
-
-  // Check if there's an error and throw || print the branch list
-  err ? generalError(err.stack) : !__skipLog && printGitBranches(data)
-  
-  return data
+  return branches
 }
 
 module.exports = {

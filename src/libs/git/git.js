@@ -1,11 +1,13 @@
-const { Branch } = require('./gitBranch')
-const { Repo } = require('./gitRepo')
+const { Branch } = require('./branch')
+const { Repo } = require('./repo')
+const { Remote } = require('./remote')
 
 class Git {
 
   constructor(options){
     this.branch = new Branch(this, options)
     this.repo = new Repo(this, options)
+    this.remote = new Remote(this, options)
   }
 
 }

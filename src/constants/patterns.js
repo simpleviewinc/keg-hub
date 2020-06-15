@@ -8,4 +8,5 @@ module.exports = deepFreeze({
   NEWLINES_MATCH: /\n|\r|\r\n/,
   SPACE_MATCH: / [ ]+/,
   WHITESPACE_MATCH: /[\s]+/,
+  BULLET_MATCH: /[\s]+(\*|-)/g,
 })

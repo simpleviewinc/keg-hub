@@ -1,6 +1,6 @@
 const { throwWrap } = require('KegUtils/error/throwWrap')
-const { list } = require('./list')
 const { get, isFunc } = require('jsutils')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Git branch task
@@ -13,11 +13,8 @@ const { get, isFunc } = require('jsutils')
  * @returns {void}
  */
 const gitBranch = args => {
-
   // Auto call the list task if we reach the gitBranch root task
-  const list = get(args, `task.tasks.list.action`)
-  const res = isFunc(list) ? list(args) : throwWrap(`Git branch "list" task not found!`)
-
+  return runInternalTask('tasks.git.tasks.branch.tasks.list', args)
 }
 
 module.exports = {
@@ -28,11 +25,25 @@ module.exports = {
     description: `Run git branch commands on a repo.`,
     example: 'keg branch <options>',
     tasks: {
-      list,
+      ...require('./list'),
       ...require('./current'),
     },
     options: {
-      ...list.options
+      context: {
+        alias: [ 'name' ],
+        description: 'Name of the repo to show branches of, may also be a linked tap',
+        example: 'keg git branch context=core',
+      },
+      all: {
+        description: 'Print all branches for the repo',
+        example: 'keg git branch --all',
+      },
+      location: {
+        alias: [ 'loc' ],
+        description: `Location when the git branch command will be run`,
+        example: 'keg git branch location=<path/to/git/repo>',
+        default: process.cwd()
+      }
     }
   }
 }

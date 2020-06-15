@@ -2,18 +2,22 @@ const { Logger } = require('KegLog')
 const { mapObj, reduceObj } = require('jsutils')
 
 /**
- * Prints a formated git branch with index
+ * Prints a formatted git branch with index
  * @param {*} branch - Git branch to be printed
  * @param {*} index - Index of the branch
  *
  * @returns {void}
  */
 const printBranchIndex = (branch, index) => {
+  const remote = branch.remote && branch.remote !== 'origin'
+    ? branch.remote + '/'
+    : ''
+
   Logger.print(
     branch.current ? ` 🌟` : `   `,
     Logger.color('data', index),
     Logger.color('blue', ' => '),
-    Logger.color('data', branch.name)
+    Logger.color('data', `${ remote }${ branch.name }`)
   )
 }
 
@@ -23,9 +27,9 @@ const printBranchIndex = (branch, index) => {
  *
  * @returns {void}
  */
-const printGitBranches = (branches={}) => {
+const printGitBranches = (branches=[]) => {
   Logger.header(`GIT BRANCHES`)
-  Object.keys(branches).map((key, index) => printBranchIndex(branches[key], index))
+  branches.map((branch, index) => printBranchIndex(branch, index))
   Logger.empty()
 }
 
