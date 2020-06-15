@@ -44,7 +44,7 @@
     "format:eslint": "eslint --config ./core/configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./core/configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
-    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint {{changed}} --fix"
+    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./core/configs/eslintrc.config.js {{changed}} --fix"
   },
   "dependencies": {},
   "devDependencies": {

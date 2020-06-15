@@ -56,8 +56,8 @@ const getMockPath = filePath => {
   return noPathUpdate.indexOf(filePath) !== -1
     ? filePath
     : filePath.indexOf('../') !== 0
-    ? path.join(BASE_PATH, filePath)
-    : getPath(filePath)
+      ? path.join(BASE_PATH, filePath)
+      : getPath(filePath)
 }
 
 export const setMocks = (toMock, reset) => {

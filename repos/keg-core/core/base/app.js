@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Provider } from 'react-redux'
-import { ReThemeProvider, getDefaultTheme, setDefaultTheme } from '@simpleviewinc/re-theme'
+import {
+  ReThemeProvider,
+  getDefaultTheme,
+  setDefaultTheme,
+} from '@simpleviewinc/re-theme'
 import { getStore } from 'SVStore'
 import { initAppAction } from 'SVActions'
 import { AppContainer } from 'SVContainers'
@@ -27,14 +31,24 @@ const App = props => {
 
   return (
     <>
-      <SafeAreaView style={{backgroundColor:get(activeTheme, 'colors.surface.primary.colors.dark')}}/>
+      <SafeAreaView
+        style={{
+          backgroundColor: get(
+            activeTheme,
+            'colors.surface.primary.colors.dark'
+          ),
+        }}
+      />
       <StatusBar
         barStyle={get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])}
       />
       <Router history={getHistory()}>
         <SafeAreaView>
           <Provider store={getStore()}>
-            <ReThemeProvider theme={activeTheme} merge={false}>
+            <ReThemeProvider
+              theme={activeTheme}
+              merge={false}
+            >
               <AppContainer switchTheme={switchTheme} />
             </ReThemeProvider>
           </Provider>

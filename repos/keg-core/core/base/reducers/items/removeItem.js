@@ -26,6 +26,6 @@ export const removeItem = (state, action) => {
     ...state,
     [category]: isArr(state[category])
       ? omitRange(state[category], key, 1)
-      : omitKeys(state[category], [ key ]),
+      : omitKeys(state[category], [key]),
   }
 }

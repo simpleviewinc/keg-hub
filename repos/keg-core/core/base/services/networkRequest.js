@@ -56,7 +56,7 @@ export const networkRequest = async request => {
       statusCode: status,
     }
   }
- catch ({ response, message, stack }) {
+  catch ({ response, message, stack }) {
     logData('ERROR in makeRequest', message, stack, 'error')
 
     return {

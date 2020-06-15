@@ -9,7 +9,7 @@ export const hasDomAccess = () => {
       window.document.createElement
     )
   }
- catch (error) {
+  catch (error) {
     return false
   }
 }

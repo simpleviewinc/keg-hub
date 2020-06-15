@@ -3,7 +3,7 @@ import { Mocks } from 'SVMocks'
 const { getOrThrow } = require('../getOrThrow')
 
 const testRootObj = {
-  test: { foo: [ 'bar' ] },
+  test: { foo: ['bar'] },
 }
 
 describe('getOrThrow', () => {

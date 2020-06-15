@@ -7,4 +7,14 @@ import { localStorage } from './localStorage'
 
 import { Route, RouterSwitch, mockLocation } from './components'
 
-export { Mocks, Native, Redux, Axios, Route, RouterSwitch, mockLocation, Utils, localStorage }
+export {
+  Mocks,
+  Native,
+  Redux,
+  Axios,
+  Route,
+  RouterSwitch,
+  mockLocation,
+  Utils,
+  localStorage,
+}

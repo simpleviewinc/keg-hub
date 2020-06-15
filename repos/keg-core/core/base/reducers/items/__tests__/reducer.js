@@ -64,9 +64,9 @@ describe('items reducer', () => {
 
   describe('upsertItems', () => {
     it('should initialize the items', () => {
-      const users = [ charlie ]
+      const users = [charlie]
       const nextState = addUsers(users)
-      expect(nextState.users).toEqual(expect.arrayContaining([ charlie ]))
+      expect(nextState.users).toEqual(expect.arrayContaining([charlie]))
     })
   })
 
@@ -82,7 +82,7 @@ describe('items reducer', () => {
         expect(nextState.users.length).toEqual(0)
         expect(Array.isArray(nextState.users)).toBe(true)
         nextState = addUser(charlie, undefined, nextState)
-        expect(nextState.users).toEqual(expect.arrayContaining([ charlie ]))
+        expect(nextState.users).toEqual(expect.arrayContaining([charlie]))
       })
 
       it('should update an item at an index', () => {
@@ -118,20 +118,17 @@ describe('items reducer', () => {
   describe('removeItem', () => {
     let nextState = null
 
-    afterEach(() => {
-      expect(nextState.error).toBeFalsy()
-      expect(nextState.users.error).toBeFalsy()
-    })
-
     describe('array', () => {
       beforeEach(() => {
-        nextState = addUsers([ charlie ])
+        nextState = addUsers([charlie])
       })
 
       it('should remove a user by index', () => {
         expect(nextState.users.length).toEqual(1)
         const stateAfterRemove = removeUser(0, nextState)
         expect(stateAfterRemove.users.length).toEqual(0)
+        expect(nextState.error).toBeFalsy()
+        expect(nextState.users.error).toBeFalsy()
       })
     })
 
@@ -146,6 +143,8 @@ describe('items reducer', () => {
         expect(nextState.users[charlie.id]).toEqual(charlie)
         const stateAfterRemove = removeUser(charlie.id, nextState)
         expect(stateAfterRemove.users[charlie.id]).toBeUndefined()
+        expect(nextState.error).toBeFalsy()
+        expect(nextState.users.error).toBeFalsy()
       })
     })
   })
@@ -157,7 +156,7 @@ describe('items reducer', () => {
       const state = itemsReducer(initialState, {
         type: ActionTypes.UPSERT_ITEMS,
         payload: {
-          items: [ charlie ],
+          items: [charlie],
         },
       })
       expect(state.error).toBeInstanceOf(ItemsRequestError)

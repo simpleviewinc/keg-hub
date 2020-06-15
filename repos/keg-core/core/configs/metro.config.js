@@ -1,9 +1,8 @@
 const path = require('path')
-const fs = require('fs')
 const { get } = require('jsutils')
 const tapPath = require('app-root-path').path
 const tapPackage = require(path.resolve(tapPath, 'package.json'))
-const kegPath = path.join(__dirname, "../../")
+const kegPath = path.join(__dirname, '../../')
 const kegPackage = require(path.resolve(kegPath, 'package.json'))
 
 /**
@@ -14,7 +13,7 @@ const blackList = [
   'react-dom',
   'react-native-web',
   'react-router-dom',
-  'sv-keg'
+  'sv-keg',
 ]
 
 /**
@@ -23,19 +22,20 @@ const blackList = [
  *
  * @returns {Object} - Build node modules paths
  */
-const extraNodeModules = (package, repoPath) => {
+const extraNodeModules = (nodePackage, repoPath) => {
   const dependencies = {
-    ...get(package, 'dependencies', {}),
-    ...get(package, 'devDependencies', {}),
+    ...get(nodePackage, 'dependencies', {}),
+    ...get(nodePackage, 'devDependencies', {}),
   }
 
-  return Object.keys(dependencies)
-    .reduce((nodeModules, name) => {
+  return (
+    Object.keys(dependencies).reduce((nodeModules, name) => {
       blackList.indexOf(name) === -1 &&
-      (nodeModules[name] = path.resolve(repoPath, 'node_modules', name))
+        (nodeModules[name] = path.resolve(repoPath, 'node_modules', name))
 
       return nodeModules
     }, {}) || {}
+  )
 }
 
 /**
@@ -43,14 +43,12 @@ const extraNodeModules = (package, repoPath) => {
  * @return {Object} - config obj for extraNodeModules
  */
 const getNodeModules = () => {
-
-  return tapPath !== kegPath 
+  return tapPath !== kegPath
     ? {
         ...extraNodeModules(kegPackage, kegPath),
-        ...extraNodeModules(tapPackage, tapPath)
+        ...extraNodeModules(tapPackage, tapPath),
       }
     : extraNodeModules(tapPackage, tapPath)
-    
 }
 
 /**
@@ -60,17 +58,14 @@ const getNodeModules = () => {
  * @return {Object} - metro config object
  */
 const buildMetroConfig = rootPath => {
-  return metroConf = {
+  return (metroConf = {
     resolver: {
       extraNodeModules: getNodeModules(),
     },
     projectRoot: kegPath,
     resetCache: true,
-    watchFolders: [
-      tapPath,
-      kegPath,
-    ],
-  }
+    watchFolders: [ tapPath, kegPath ],
+  })
 }
 
 module.exports = buildMetroConfig

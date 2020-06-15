@@ -9,6 +9,8 @@ export const RouterSwitch = jest.fn(config => {
   return <View></View>
 })
 
-export const mockLocation = jest.fn(({search}) => {
-  return () => { return { search } } 
+export const mockLocation = jest.fn(({ search }) => {
+  return () => {
+    return { search }
+  }
 })

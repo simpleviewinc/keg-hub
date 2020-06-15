@@ -1,7 +1,7 @@
 import { Mocks, Utils } from 'SVMocks'
 
 const mockValidNavigator = {
-  userAgent: 'iPhone'
+  userAgent: 'iPhone',
 }
 
 describe('Platform | isIOSWeb', () => {
@@ -20,7 +20,7 @@ describe('Platform | isIOSWeb', () => {
 
   afterAll(() => Mocks.resetMocks())
 
-  it ('should return false on non-web platforms', () => {
+  it('should return false on non-web platforms', () => {
     const isIOSWeb = require('../isIOSWeb').isIOSWeb
     expect(isIOSWeb()).toBe(false)
 
@@ -30,7 +30,7 @@ describe('Platform | isIOSWeb', () => {
     expect(isIOSWeb()).toBe(false)
   })
 
-  it ('should return true when the system is ios web', () => {
+  it('should return true when the system is ios web', () => {
     global.isNativeMock = false
     global.mockWindow = {}
     global.mockNavigator = mockValidNavigator

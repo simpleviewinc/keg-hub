@@ -7,7 +7,7 @@ const errorHandler = (module, key, method) => {
         const response = await method(...args)
         return res(response)
       }
- catch (e) {
+      catch (e) {
         // TODO: add better error handling here
         // Send notification to zerista
         rej(e.message)

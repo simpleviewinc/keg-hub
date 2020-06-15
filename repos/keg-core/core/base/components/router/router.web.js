@@ -10,5 +10,5 @@ export {
   useParams,
   withRouter,
   useLocation,
-  useHistory
+  useHistory,
 } from 'react-router-dom'

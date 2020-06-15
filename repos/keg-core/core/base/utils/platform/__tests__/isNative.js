@@ -11,7 +11,7 @@ describe('Platform | isNative', () => {
     Platform.OS = orig
   })
 
-  it ('should return true if on ios or android', () => {
+  it('should return true if on ios or android', () => {
     Platform.OS = ios.OS
     const result = require('../isNative').isNative()
     expect(result).toEqual(true)
@@ -21,7 +21,7 @@ describe('Platform | isNative', () => {
     expect(androidResult).toEqual(true)
   })
 
-  it ('should return false for non-native platforms', () => {
+  it('should return false for non-native platforms', () => {
     Platform.OS = web.OS
     const result = require('../isNative').isNative()
     expect(result).toEqual(false)

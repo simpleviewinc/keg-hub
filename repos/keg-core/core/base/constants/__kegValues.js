@@ -25,7 +25,7 @@ export const Values = deepMerge(
     /**
      * 1:1 Constants
      */
-    ...keyMap([ 'PageNotFoundContainer' ], false),
+    ...keyMap(['PageNotFoundContainer'], false),
   },
   TapValues
 )

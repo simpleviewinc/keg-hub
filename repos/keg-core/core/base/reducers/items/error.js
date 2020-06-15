@@ -57,8 +57,9 @@ export const MakeRequestIssue = deepFreeze({
   }),
   [IssueTypes.InvalidItemsType]: items => ({
     type: IssueTypes.InvalidItemsType,
-    message: `Items data must be either an object or an array. Found: ${items &&
-      typeof items}`,
+    message: `Items data must be either an object or an array. Found: ${
+      items && typeof items
+    }`,
   }),
   [IssueTypes.InvalidItemAndKey]: (item, key) => ({
     type: IssueTypes.InvalidItemAndKey,

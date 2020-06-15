@@ -8,5 +8,5 @@ import { localStorage } from '../localStorage'
 export const defaultMocks = () =>
   setMocks({
     'react-native-svg': RNSvg,
-    'expo-secure-store': localStorage
+    'expo-secure-store': localStorage,
   })

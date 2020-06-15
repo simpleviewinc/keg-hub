@@ -5,7 +5,7 @@ export const reloadAppAction = async tap => {
   try {
     SVReload && checkCall(SVReload.reload)
   }
- catch (e) {
+  catch (e) {
     console.warn('[ACTION ERROR] Could not reload app!', e)
   }
 }

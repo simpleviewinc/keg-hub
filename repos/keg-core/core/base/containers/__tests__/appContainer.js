@@ -5,8 +5,8 @@ import renderer from 'react-test-renderer'
 import { theme } from 'SVTheme'
 import { ReThemeProvider } from '@simpleviewinc/re-theme'
 
-Mocks.setMocks({ 
-  store: Store, 
+Mocks.setMocks({
+  store: Store,
   'react-redux': Redux,
   'utils/platform/getWindow': { getWindow: () => Utils.validWindowMock },
 })
@@ -18,7 +18,10 @@ describe('App Container', () => {
 
   it('renders correctly', () => {
     renderer.create(
-      <ReThemeProvider theme={theme} merge={false}>
+      <ReThemeProvider
+        theme={theme}
+        merge={false}
+      >
         <AppContainer data={'test-data'} />
       </ReThemeProvider>
     )

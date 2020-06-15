@@ -1,4 +1,3 @@
-const path = require('path')
 const kegPath = require('app-root-path').path
 
 /**
@@ -8,9 +7,8 @@ const kegPath = require('app-root-path').path
  * @returns {Object} - paths for testing
  */
 const buildTestPaths = () => {
-
   const rootDir = kegPath
-  const moduleDirectories = [ 'node_modules' ]
+  const moduleDirectories = ['node_modules']
 
   return {
     rootDir,
@@ -19,18 +17,21 @@ const buildTestPaths = () => {
       `${rootDir}/**/__tests__/**/*.js?(x)`,
       `${rootDir}/**/?(*.)(test).js?(x)`,
     ],
-    collectCoverageFrom: [ 
-      'App.js',
-      'core/base/**/*.{js,jsx}',
-    ],
-    coverageDirectory: 'reports/coverage'
+    collectCoverageFrom: [ 'App.js', 'core/base/**/*.{js,jsx}' ],
+    coverageDirectory: 'reports/coverage',
   }
 }
 
 /**
  * Setup keg paths
  */
-const { collectCoverageFrom, coverageDirectory, moduleDirectories, testMatch, rootDir } = buildTestPaths()
+const {
+  collectCoverageFrom,
+  coverageDirectory,
+  moduleDirectories,
+  testMatch,
+  rootDir,
+} = buildTestPaths()
 
 /**
  * Modules that should be transpiled before the tests are run
@@ -70,7 +71,7 @@ const assetStubs = [
   'webm',
   'swf',
   'wav',
-  'mid'
+  'mid',
 ].join('|')
 
 module.exports = {
@@ -81,29 +82,30 @@ module.exports = {
   moduleDirectories,
   preset: 'jest-expo',
   transform: {
-    '^.+\\.js$': `${kegPath}/node_modules/react-native/jest/preprocessor.js`
+    '^.+\\.js$': `${kegPath}/node_modules/react-native/jest/preprocessor.js`,
   },
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
-    [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1'
+    [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1',
   },
   verbose: true,
-  testPathIgnorePatterns: [ '/node_modules/', ],
-  transformIgnorePatterns: [
-    `node_modules/(?!(${transpileForTests})/)`
-  ],
+  testPathIgnorePatterns: ['/node_modules/'],
+  transformIgnorePatterns: [`node_modules/(?!(${transpileForTests})/)`],
   reporters: [
     'default',
-    [ './node_modules/jest-html-reporter', {
-      'pageTitle': 'Keg Test Results',
-      'outputPath': '<rootDir>/reports/test-results.html',
-    }]
+    [
+      './node_modules/jest-html-reporter',
+      {
+        pageTitle: 'Keg Test Results',
+        outputPath: '<rootDir>/reports/test-results.html',
+      },
+    ],
   ],
   testURL: 'http://localhost/',
   globals: {
-    __DEV__: true
+    __DEV__: true,
   },
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: [ `${kegPath}/core/scripts/js/setupTests.js` ],
-  snapshotSerializers: [ 'enzyme-to-json/serializer' ]
+  setupFilesAfterEnv: [`${kegPath}/core/scripts/js/setupTests.js`],
+  snapshotSerializers: ['enzyme-to-json/serializer'],
 }

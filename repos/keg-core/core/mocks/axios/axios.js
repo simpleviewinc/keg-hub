@@ -5,7 +5,7 @@ export const Axios = jest.fn(request => {
     if (isValidUrl(request.url)) {
       resolve(global.testMocks.axios.response)
     }
- else {
+    else {
       reject(global.testMocks.axios.response)
     }
   })

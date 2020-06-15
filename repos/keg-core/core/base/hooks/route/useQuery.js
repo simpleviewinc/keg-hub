@@ -5,12 +5,11 @@ import { useState, useEffect } from 'react'
 /**
  * Returns the querystring object OR the value of a given key. searches the current active route/path
  * @param {String=} key - optional key from the querystring of the current route/path
- * 
+ *
  * @returns {String|Object} - value of the given key, or 'null' if it doesn't exist || object mapping of querystring
  */
-export const useQuery = (key) => {
-
-  const [value, setValue] = useState(null)
+export const useQuery = key => {
+  const [ value, setValue ] = useState(null)
   const routeLocation = useLocation()
 
   // calls only when routeLocation changes
@@ -23,9 +22,7 @@ export const useQuery = (key) => {
     const val = key ? get(obj, [key], null) : obj
 
     setValue(val)
-
   }, [routeLocation.search])
 
   return value
-
 }

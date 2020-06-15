@@ -36,6 +36,6 @@ export const getOrThrow = (rootObj, path, defaultVal) => {
   return softFalsy(found)
     ? found
     : __DEV__
-    ? createError(...errorData)
-    : console.warn(...errorData) || found
+      ? createError(...errorData)
+      : console.warn(...errorData) || found
 }

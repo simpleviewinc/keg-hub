@@ -11,16 +11,16 @@ export const initialState = { ...itemsState }
  */
 export function items(state = initialState, action) {
   switch (action.type) {
-    case ActionTypes.UPSERT_ITEMS:
-      return upsertItems(state, action)
+  case ActionTypes.UPSERT_ITEMS:
+    return upsertItems(state, action)
 
-    case ActionTypes.UPSERT_ITEM:
-      return upsertItem(state, action)
+  case ActionTypes.UPSERT_ITEM:
+    return upsertItem(state, action)
 
-    case ActionTypes.REMOVE_ITEM:
-      return removeItem(state, action)
+  case ActionTypes.REMOVE_ITEM:
+    return removeItem(state, action)
 
-    default:
-      return state
+  default:
+    return state
   }
 }

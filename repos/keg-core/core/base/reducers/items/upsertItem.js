@@ -39,7 +39,7 @@ export const upsertItem = (state, action) => {
  * @param {*} item
  */
 const updateCollection = (coll, key, item) => {
-  const next = isArr(coll) ? [ ...coll ] : { ...coll }
+  const next = isArr(coll) ? [...coll] : { ...coll }
   next[key] = item
   return next
 }

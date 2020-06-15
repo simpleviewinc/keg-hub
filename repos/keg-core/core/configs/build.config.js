@@ -1,8 +1,20 @@
 const path = require('path')
 const rootDir = require('app-root-path').path
-const appConf = require('@simpleviewinc/tap-resolver/src/getAppConfig')(rootDir, true, false)
+const appConf = require('@simpleviewinc/tap-resolver/src/getAppConfig')(
+  rootDir,
+  true,
+  false
+)
 const { get, deepMerge } = require('jsutils')
-const { AWS_BUCKET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, NODE_ENV, ENV, TAP, AWS_PROFILE } = process.env
+const {
+  AWS_BUCKET,
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_REGION,
+  ENV,
+  TAP,
+  AWS_PROFILE,
+} = process.env
 
 // Gets the base or tap to be deployed
 const deployType = TAP || 'base'
@@ -19,12 +31,13 @@ const awsConfig = {
  * @returns {string} - path where the build should be exported
  */
 const getExportPath = () => {
-
   // Gets the build path from the app.json
   const exportFolder = get(appConf, [ 'keg', 'paths', 'exportFolder' ])
 
-  if(!exportFolder)
-    throw new Error(`Build Failed! No exportFolder path exists at keg.paths.exportFolder in the app.json`)
+  if (!exportFolder)
+    throw new Error(
+      `Build Failed! No exportFolder path exists at keg.paths.exportFolder in the app.json`
+    )
 
   // Setup the build export folder
   return exportFolder && path.join(rootDir, exportFolder, deployType)
@@ -48,25 +61,20 @@ const defaultConfig = exportTo => ({
     s3: {
       bucket: AWS_BUCKET,
       options: {
-        useFoldersForFileTypes: false
-      }
+        useFoldersForFileTypes: false,
+      },
     },
   },
   commands: {
     build: {
-      args: [ 'build' ],
-      cmd: 'next'
+      args: ['build'],
+      cmd: 'next',
     },
     export: {
-      args: [
-        'export',
-        '-o', exportTo,
-        '--threads', 1,
-        '--concurrency', 1
-      ],
-      cmd: 'next'
-    }
-  }
+      args: [ 'export', '-o', exportTo, '--threads', 1, '--concurrency', 1 ],
+      cmd: 'next',
+    },
+  },
 })
 
 /**
@@ -77,21 +85,17 @@ const defaultConfig = exportTo => ({
  * @returns {Object} - default build config
  */
 module.exports = appConf => {
-
   const exportTo = getExportPath()
-  
+
   // ENV specific config settings
   // Used to change things like S3 upload folder
   const config = {
     development: {},
     staging: {},
     qa: {},
-    production: {}
+    production: {},
   }
-  
+
   // Merge the default config with the ENV config, then return
-  return deepMerge(
-    defaultConfig(exportTo),
-    config[ENV || 'development']
-  )
+  return deepMerge(defaultConfig(exportTo), config[ENV || 'development'])
 }

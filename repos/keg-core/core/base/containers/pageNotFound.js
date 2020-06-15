@@ -10,7 +10,6 @@ const stylesCenter = {
  * Default Container that's displayed when Container-Key Mapping is not found
  */
 export const PageNotFoundContainer = () => {
-
   return (
     <View style={stylesCenter}>
       <Text>Default Page Not Found!</Text>

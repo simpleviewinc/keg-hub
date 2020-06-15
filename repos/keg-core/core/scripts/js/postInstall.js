@@ -28,7 +28,6 @@ const doYarnInstall = async () => {
  * If not, then calls doYarnInstall
  */
 const checkForNodeModules = () => {
-  
   console.log(`--- Checking for installed Keg node_modules! ---`)
   const checkModules = [
     path.join(kegDir, 'node_modules/expo'),
@@ -37,18 +36,16 @@ const checkForNodeModules = () => {
   ]
 
   return checkModules.map(dir => fs.existsSync(dir))
-
 }
 
 ;(async () => {
-
   const installed = checkForNodeModules()
 
   try {
-    installed.indexOf(false) !== -1 && await doYarnInstall()
+    installed.indexOf(false) !== -1 && (await doYarnInstall())
     console.log(`--- Keg node_modules are installed! ---`)
   }
-  catch(err){}
+  catch (err) {}
 
   process.exit(0)
 })()

@@ -9,7 +9,6 @@ const { NODE_ENV } = process.env
 
 module.exports = rootDir => {
   return async (env, argv) => {
-
     /**
      * Get the default expo webpack config so we can add the tap-resolver
      */
@@ -18,22 +17,20 @@ module.exports = rootDir => {
     /**
      * Force the correct NODE_ENV for the webpack bundle
      */
-     config.mode = NODE_ENV || 'development'
+    config.mode = NODE_ENV || 'development'
 
     /**
      * Setup our JS files to use the tap-resolver through babel
      */
     config.module.rules.unshift({
       test: /\.js?$/,
-      include: [
-        path.resolve(tapPath),
-      ],
+      include: [path.resolve(tapPath)],
       exclude: /node_modules\/(?!(keg-core)\/).*/,
       loader: require.resolve('babel-loader'),
       options: { ...babelConfig },
     })
 
-    // necessary to provide web workers access to the window object and 
+    // necessary to provide web workers access to the window object and
     // postMessage function (see https://github.com/webpack/webpack/issues/6642#issuecomment-371087342)
     config.output.globalObject = 'this'
 
@@ -44,7 +41,7 @@ module.exports = rootDir => {
       ...(config.resolve.modules || []),
       'node_modules',
       path.resolve(tapPath, 'node_modules'),
-      path.resolve(kegPath, 'node_modules')
+      path.resolve(kegPath, 'node_modules'),
     ]
 
     return config
