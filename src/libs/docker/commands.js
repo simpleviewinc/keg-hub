@@ -14,6 +14,15 @@ const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 /**
  * Calls the docker cli from the command line and returns the response
  * @function
+ * @param {string} cmd - docker command to be run
+ *
+ * @returns {string} - cmd with docker added
+ */
+const ensureDocker = cmd => cmd.trim().indexOf('docker') === 0 ? cmd : `docker ${cmd}`
+
+/**
+ * Calls the docker cli from the command line and returns the response
+ * @function
  * @param {Object} params - arguments used to modify the docker api call
  * @param {Object} params.opts - optional arguments to pass to the docker command
  * @param {Object} params.asObj - Return the response as an unformatted string
@@ -33,7 +42,7 @@ const dockerCli = async (params={}, cmdOpts={}) => {
   const useFormat = format === 'json' ? `--format "{{json .}}"` : format
   const useForce = force ? '--force' : ''
 
-  const cmdToRun = `docker ${ options } ${ useForce } ${ useFormat }`.trim()
+  const cmdToRun = ensureDocker(`${ options } ${ useForce } ${ useFormat }`.trim())
 
   log && Logger.spacedMsg(`  Running command: `, cmdToRun)
 
@@ -165,7 +174,7 @@ const raw = async (cmd, args={}, loc=process.cwd()) => {
 
   // Build the command to be run
   // Add docker if needed
-  const toRun = cmd.trim().indexOf('docker') === 0 ? cmd : `docker ${cmd}`
+  const toRun = ensureDocker(cmd)
 
   // Run the docker command
   const { error, data } = await spawnProc(toRun, args, loc)

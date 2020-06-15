@@ -1,4 +1,4 @@
-const { getGit, gitBranchPrint, getGitPath } = require('KegLibs/git')
+const { getGit, printGitBranches, getGitPath } = require('KegUtils/git')
 const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { generalError } = require('KegUtils/error')
 
@@ -19,7 +19,7 @@ const branchList = async (args) => {
   const [ err, data ] = await git.branch(listArgs)
 
   // Check if there's an error and throw || print the branch list
-  err ? generalError(err.stack) : !__skipLog && gitBranchPrint(data)
+  err ? generalError(err.stack) : !__skipLog && printGitBranches(data)
   
   return data
 }

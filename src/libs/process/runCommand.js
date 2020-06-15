@@ -28,7 +28,6 @@ const doSpawnCmd = (...args) => {
   return spawnProc(...args)
 }
 
-
 /**
  * Spawns a new process to run a passed in cmd
  * @param {Array} args - Arguments to run a command
@@ -41,8 +40,25 @@ const spawnProc = (...args) => {
     : spawnCmd(...args, process.cwd())
 }
 
+/**
+ * Executes an inline async call to the command line
+ * @param {string} cmd - Command to be run
+ * @param {Array} args - Arguments to run a command
+ *
+ * @returns {*} - Response from async exec cmd
+ */
+const executeCmd = (cmd, ...args) => {
+  // Get the options and location from the args
+  const [ options={}, location=process.cwd() ] = args
+
+  // Ensure the cwd is set
+  options.cwd = options.cwd || location
+
+  return asyncCmd(cmd, options)
+}
+
 module.exports = {
   spawnProc,
-  executeCmd: asyncCmd,
+  executeCmd,
   spawnCmd: doSpawnCmd,
 }

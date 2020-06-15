@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { getGit } = require('KegGit')
+const { getGit } = require('KegUtils/git/getGit')
 
 const setupGitConfig = (git, email, user) => {
   // add local git config like username and email

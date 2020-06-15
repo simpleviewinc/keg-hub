@@ -1,4 +1,4 @@
-const { getGit, gitCurrentBranch, getGitPath } = require('KegLibs/git')
+const { getGit, gitCurrentBranch, getGitPath } = require('KegUtils/git')
 const { Logger } = require('KegLog')
 const { throwNoGitBranch } = require('KegUtils/error/throwNoGitBranch')
 const { DOCKER } = require('KegConst/docker')

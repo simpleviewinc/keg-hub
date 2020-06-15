@@ -1,4 +1,5 @@
-const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
+const { getPathFromConfig } = require('../globalConfig/getPathFromConfig')
+const { getTapPath } = require('../globalConfig/getTapPath')
 
 /**
  * Get the path to a git repo
@@ -8,7 +9,10 @@ const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
  * @returns {string} - path to a git repo || the current dir
  */
 const getGitPath = (globalConfig, name) => {
-  const gitPath = name && (getPathFromConfig(globalConfig, name) || getTapPath(globalConfig, name))
+  const gitPath = name &&
+    (getPathFromConfig(globalConfig, name) ||
+    getTapPath(globalConfig, name))
+
   return gitPath || process.cwd()
 }
 

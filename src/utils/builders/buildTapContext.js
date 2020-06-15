@@ -3,7 +3,7 @@ const { generalError, throwNoTapLink } = require('../error')
 const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
-const { getRemoteUrl } = require('KegLibs/git/getRemoteUrl')
+const { getRemoteUrl } = require('KegUtils/git/getRemoteUrl')
 
 /**
  * Checks if the context is tap, and gets the Tap path if needed

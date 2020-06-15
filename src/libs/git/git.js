@@ -1,16 +1,11 @@
-const { getGit } = require('./getGit')
-const { Branch, gitCurrentBranch, gitBranchPrint } = require('./gitBranch')
-const { gitClone, Repo } = require('./gitRepo')
-
-
+const { Branch } = require('./gitBranch')
+const { Repo } = require('./gitRepo')
 
 class Git {
 
-  constructor(repoPath, globalConfig, options){
-    this.local = repoPath
-    this.git = getGit(repoPath, globalConfig, options)
-    this.branch = new Branch(this.git)
-    this.repo = new Repo(this.git)
+  constructor(options){
+    this.branch = new Branch(this, options)
+    this.repo = new Repo(this, options)
   }
 
 }
