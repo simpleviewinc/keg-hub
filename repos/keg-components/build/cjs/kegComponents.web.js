@@ -7,7 +7,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var React = require('react');
 var React__default = _interopDefault(React);
 var PropTypes = _interopDefault(require('prop-types'));
-var reTheme = require('re-theme');
+var reTheme = require('@simpleviewinc/re-theme');
 var jsutils = require('jsutils');
 var vectorIcons = require('@expo/vector-icons');
 var reactNative = require('react-native');
