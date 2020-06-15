@@ -18,24 +18,46 @@ keg_message(){
 # Otherwise shows warning that virtual-box is not installed
 keg_cli_init_docker_machine(){
 
-  if [[ -x "$(command -v VBoxManage)" ]]; then
+  # Docker-machine vagrant-drive hangs after the computer goes to sleep
+  # Only way to fix is to restart. Need to come up with a better solution
+  # The issue is with VirtualBox, not docker-machine
+  # Running any docker-machine cmd will make the terminal hang
+  # Potential Fix
+  # sudo route -d add -net 192.168.99.1/24 -interface vboxnet0
+  #   - Find the interface by running command " VBoxManage list hostonlyifs "
+  #   - Find the interface with the IPAddress of 192.168.99.1
+  #   - The first "Name" Above the IPAddress should be the interface name
+  #   - Example name would be "vboxnet0"
+  local KEG_STATUS="$(timeout 5s docker-machine status $KEG_DOCKER_NAME)"
 
-    local KEG_STATUS="$(timeout 10s docker-machine status $KEG_DOCKER_NAME)"
+  if [[ -z "$KEG_STATUS" ]]; then
 
-    # Ensure docker-machine is running
-    if [[ "$KEG_STATUS" != "Running" ]]; then
-      keg_message "Docker-machine status is $KEG_STATUS"
-      keg_message "Starting docker-machine $KEG_DOCKER_NAME"
-      docker-machine start $KEG_DOCKER_NAME
+    keg_message "Docker-machine is not responding!"
+    keg_message "Would you like to restart docker-machine?"
+    keg_message "[ WARNING ] This will kill all running virtual-box processes!"
+
+    read -p "" INPUT;
+    local ANSWER="${INPUT:0:1}"
+
+    if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+      keg_message "Killing virtual-box and docker-machine processes!"
+      kill $(ps -e | grep VBox | awk '{ print $1 }')
+    else
+      keg_message "Could not init docker-machine. Please ensure it is running properly!"
+      exit 1
     fi
-
-    # Load the docker machine env, pipe to dev/null so we don't see the output
-    eval "$(docker-machine env $KEG_DOCKER_NAME)" >/dev/null 2>&1
-
-  else
-    keg_message "Error loading 'docker-machine', VBoxManage not installed!"
-
   fi
+
+  # Ensure docker-machine is running
+  if [[ "$KEG_STATUS" != "Running" ]]; then
+    keg_message "Docker-machine status is $KEG_STATUS"
+    keg_message "Starting docker-machine $KEG_DOCKER_NAME"
+    docker-machine start $KEG_DOCKER_NAME
+  fi
+
+  # Load the docker machine env, pipe to dev/null so we don't see the output
+  eval "$(docker-machine env $KEG_DOCKER_NAME)" >/dev/null 2>&1
+
 }
 
 # Exports the stored GIT_KEY from the globalConfig
@@ -110,20 +132,12 @@ keg_auto_load_envs(){
 
   fi
 
-  # Putthing this here for now
-  # Testing adding a timeout to the docker-machine call
-  # Will re-evaluate if docker-machine hangs again
-  # Docker-machine vagrant-drive hangs after the computer goes to sleep
-  # Only way to fix is to restart. Need to come up with a better solution
-  # The issue is with VirtualBox, not docker-machine
-  # Running any docker-machine cmd will make the terminal hang
-  # Potential Fix
-  # sudo route -d add -net 192.168.99.1/24 -interface <Name of interface>
-  #   - Find the interface by running command " VBoxManage list hostonlyifs "
-  #   - Find the interface with the IPAddress of 192.168.99.1
-  #   - The first "Name" Above the IPAddress should be the interface name
-  #   - Example name would be "vboxnet0"
-  keg_cli_init_docker_machine
+  if [[ -x "$(command -v VBoxManage)" ]]; then
+    keg_cli_init_docker_machine
+  else
+    keg_message "Error loading 'docker-machine'; virtual-box is not installed!"
+    return
+  fi
 
   if [[ -z "$KEG_CLI_AUTO_LOAD" ]]; then
     keg_message "Loaded!"

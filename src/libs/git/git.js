@@ -10,6 +10,9 @@ class Git {
 
 }
 
+const git = new Git({})
+
 module.exports = {
-  Git
+  Git,
+  git
 }
