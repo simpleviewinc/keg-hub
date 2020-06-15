@@ -25,7 +25,8 @@ ARG NM_CACHE=/keg/nm-cache/core
 # Pull down the keg-core locally
 RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
     git clone $GIT_CORE_URL $DOC_APP_PATH; \
-    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/
+    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/; \
+    rm -rf $DOC_APP_PATH/.npmrc
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $NM_CACHE/

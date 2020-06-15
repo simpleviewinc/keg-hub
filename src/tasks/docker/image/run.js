@@ -34,7 +34,7 @@ const getImageContext = async (args) => {
   const { tag } = params
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+  const { cmdContext, contextEnvs, image, location, tap } = await buildLocationContext({
     globalConfig,
     task,
     params,
@@ -43,7 +43,7 @@ const getImageContext = async (args) => {
   // Build the name for the container
   const container = await buildContainerName(cmdContext)
 
-  return { container, contextEnvs, location, tag, tap }
+  return { container, contextEnvs, image, location, tag, tap }
 }
 
 const getImageData = async args => {
