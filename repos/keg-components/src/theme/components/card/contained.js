@@ -3,7 +3,6 @@ import { margin } from '../../margin'
 import { padding } from '../../padding'
 import { flex } from '../../flex'
 import { helpers } from '../../helpers'
-import defaults from '../../defaults.json'
 import { get } from 'jsutils'
 
 const opacity05 = get(colors, 'opacity._05')
@@ -19,7 +18,7 @@ export const contained = {
       elevation: 1,
     },
     $web: {
-      boxShadow: `1px 1px 5px ${ opacity05 }`
+      boxShadow: `1px 1px 5px ${opacity05}`,
     },
     $all: {
       backgroundColor: colorPalette.white01,
@@ -37,7 +36,7 @@ export const contained = {
   footer: {
     container: {},
     text: {},
-    divider: {}
+    divider: {},
   },
   header: {
     container: {
@@ -62,7 +61,7 @@ export const contained = {
       width: '100%',
     },
     image: {
-      width: '100%'
+      width: '100%',
     },
     loadingComp: {
       indicator: {
@@ -70,11 +69,11 @@ export const contained = {
           fontSize: '100px',
           color: colorPalette.gray01,
         },
-      }
+      },
     },
     video: {
-      width: '100%'
-    }
+      width: '100%',
+    },
   },
   featured: {
     title: {
@@ -88,7 +87,7 @@ export const contained = {
       marginBottom: 8,
       color: colorPalette.white01,
       fontWeight: '400',
-    }
+    },
   },
   overlay: {
     flex: 1,
@@ -98,6 +97,5 @@ export const contained = {
     justifyContent: 'center',
     ...helpers.abs,
   },
-  body: {
-  },
+  body: {},
 }

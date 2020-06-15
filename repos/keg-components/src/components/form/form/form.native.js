@@ -18,9 +18,9 @@ import PropTypes from 'prop-types'
 const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
   return (
     <View
-      { ...elProps }
-      { ...props }
-      ref={ ref }
+      {...elProps}
+      {...props}
+      ref={ref}
     >
       { children }
     </View>
@@ -29,8 +29,8 @@ const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
 
 export const Form = props => (
   <FormWrapper
-    { ...props }
-    Element={ Element }
+    {...props}
+    Element={Element}
     elType='native'
   />
 )
@@ -39,7 +39,7 @@ Form.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   onSubmit: PropTypes.func,
   ref: PropTypes.object,

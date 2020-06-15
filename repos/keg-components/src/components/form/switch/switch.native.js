@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { SwitchWrapper } from './switch.wrapper'
-import { Switch as RNSwitch, TouchableOpacity, Platform } from 'react-native'
+import { Switch as RNSwitch, TouchableOpacity } from 'react-native'
 import { View } from 'KegView'
 
 /**
@@ -12,7 +12,11 @@ import { View } from 'KegView'
  *
  * @returns {Object} - Contains the Native color props for the Switch component
  */
-const getSwitchColors = (thumbColor, trackColor, { indicator={}, area={} }) => {
+const getSwitchColors = (
+  thumbColor,
+  trackColor,
+  { indicator = {}, area = {} }
+) => {
   const indicatorColor = thumbColor || indicator.color
   const areaColor = trackColor || area.backgroundColor
   const colors = {
@@ -38,23 +42,22 @@ const getSwitchColors = (thumbColor, trackColor, { indicator={}, area={} }) => {
  *
  */
 const Element = React.forwardRef((props, ref) => {
-  
   const {
     elProps,
     style,
-    styles={},
+    styles = {},
     thumbColor,
     trackColor,
     ...attrs
   } = props
 
   return (
-    <View style={ styles.wrapper } >
+    <View style={styles.wrapper}>
       <RNSwitch
-        { ...getSwitchColors(thumbColor, trackColor, styles) }
-        { ...elProps }
-        { ...attrs }
-        ref={ ref }
+        {...getSwitchColors(thumbColor, trackColor, styles)}
+        {...elProps}
+        {...attrs}
+        ref={ref}
       />
     </View>
   )
@@ -62,9 +65,9 @@ const Element = React.forwardRef((props, ref) => {
 
 export const Switch = props => (
   <SwitchWrapper
-    { ...props }
-    elType={ 'switch' }
-    Element={ Element }
+    {...props}
+    elType={'switch'}
+    Element={Element}
   />
 )
 
@@ -73,7 +76,7 @@ Switch.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   disabled: PropTypes.bool,
   onClick: PropTypes.func,

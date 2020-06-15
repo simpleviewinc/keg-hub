@@ -12,11 +12,11 @@ import { pickKeys } from 'jsutils'
  *
  * @return {boolean} - If a width style rule exists
  */
-const hasWidth = style => (
+const hasWidth = style =>
   useMemo(() => {
-    return Object.keys(pickKeys(style, [ 'width', 'minWidth', 'maxWidth' ])).length
-  }, [ style ])
-)
+    return Object.keys(pickKeys(style, [ 'width', 'minWidth', 'maxWidth' ]))
+      .length
+  }, [style])
 
 /**
  * Container
@@ -24,18 +24,26 @@ const hasWidth = style => (
  * @param {Object} props - see PropTypes below
  *
  */
-export const Container = ({ onPress, onClick, children, flexDir, size, style, ...props }) => {
-  
+export const Container = ({
+  onPress,
+  onClick,
+  children,
+  flexDir,
+  size,
+  style,
+  ...props
+}) => {
   // Get flex type based on size or style
-  const flexStyle = flexDir === 'row'
-    ? { flexDirection: flexDir, flex: size ? size : hasWidth(style) ? 0 : 1 }
-    : {}
+  const flexStyle =
+    flexDir === 'row'
+      ? { flexDirection: flexDir, flex: size ? size : hasWidth(style) ? 0 : 1 }
+      : {}
 
   return (
     <View
-      { ...props }
-      style={{  ...flexStyle, ...style }}
-      { ...getPressHandler(getPlatform(), onClick || onPress)  }
+      {...props}
+      style={{ ...flexStyle, ...style }}
+      {...getPressHandler(getPlatform(), onClick || onPress)}
     >
       { children }
     </View>

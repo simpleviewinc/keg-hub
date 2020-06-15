@@ -9,7 +9,10 @@ const { Loading } = require('../loading')
 describe('Loading', () => {
   it('renders correctly', () => {
     renderer.create(
-      <ReThemeProvider theme={theme} merge={false}>
+      <ReThemeProvider
+        theme={theme}
+        merge={false}
+      >
         <Loading text={'Test Loading'} />
       </ReThemeProvider>
     )

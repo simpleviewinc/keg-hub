@@ -7,16 +7,12 @@ import { View } from 'KegView'
 /**
  * Gets the height of the slider component
  *
- * @param {string|number} height - current state height 
+ * @param {string|number} height - current state height
  * @param {boolean} toggled - is the slider open or closed
  * @returns {string|number} - height that the slider should be
  */
 const getHeight = (height, toggled) => {
-  return toggled
-    ? height
-    : height && !toggled
-      ? 0
-      : null
+  return toggled ? height : height && !toggled ? 0 : null
 }
 
 /**
@@ -30,7 +26,6 @@ const getHeight = (height, toggled) => {
  *
  */
 export const Drawer = props => {
-
   const theme = useTheme()
   const { style, children, toggled } = props
 
@@ -40,20 +35,23 @@ export const Drawer = props => {
 
   useLayoutEffect(() => {
     const curHeight = get(slideRef, 'current.offsetHeight')
-    if(curHeight === 0) return
+    if (curHeight === 0) return
 
     height !== curHeight && setHeight(curHeight)
-  }, [ height ])
+  }, [height])
 
   const sliderStyle = theme.join(
     { overflow: 'hidden', transition: 'max-height 1s ease' },
     get(theme, 'components.drawer'),
     style,
-    { maxHeight: getHeight(height, toggled) },
+    { maxHeight: getHeight(height, toggled) }
   )
 
   return (
-    <View ref={ slideRef } style={ sliderStyle } >
+    <View
+      ref={slideRef}
+      style={sliderStyle}
+    >
       { children }
     </View>
   )

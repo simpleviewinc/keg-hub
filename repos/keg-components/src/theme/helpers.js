@@ -4,7 +4,8 @@ import defaults from './defaults.json'
 
 export const spaceHelper = (amount, sides = [], type) => {
   sides = (sides.length && sides) || defaults.layout.sides
-  if (sides === 'all' || (isArr(sides) && sides[0] === 'all')) sides = defaults.layout.sides
+  if (sides === 'all' || (isArr(sides) && sides[0] === 'all'))
+    sides = defaults.layout.sides
 
   return sides.reduce((styles, side) => {
     styles[`${type}${capitalize(side)}`] = unitsHelper(amount)
@@ -20,7 +21,7 @@ export const unitsHelper = value => {
     if ((amount || amount === 0) && amount.toString() === value)
       value += defaults.font.units
   }
- else value += defaults.font.units
+  else value += defaults.font.units
 
   return value
 }
@@ -28,7 +29,8 @@ export const unitsHelper = value => {
 const align = dir => (isStr(dir) && { textAlign: dir }) || {}
 const background = color => ({ backgroundColor: colors[color] || color || '' })
 const bold = () => ({ fontWeight: defaults.font.bold })
-const color = color => colors[color] ? { color: colors[color] } : { color: color }
+const color = color =>
+  colors[color] ? { color: colors[color] } : { color: color }
 const size = num => ({ fontSize: unitsHelper(num) })
 const weight = num => ({ fontWeight: num })
 const initial = prop => prop && { [prop]: 'initial' }
@@ -47,5 +49,5 @@ export const helpers = {
   color,
   initial,
   size,
-  weight
+  weight,
 }

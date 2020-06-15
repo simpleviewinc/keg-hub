@@ -9,10 +9,13 @@ const { AppHeader } = require('../appHeader')
 describe('AppHeader', () => {
   it('renders correctly', () => {
     renderer.create(
-      <ReThemeProvider theme={theme} merge={false}>
-        <AppHeader 
-          shadow 
-          title={"Header Title"}
+      <ReThemeProvider
+        theme={theme}
+        merge={false}
+      >
+        <AppHeader
+          shadow
+          title={'Header Title'}
           leftIcon={'beer'}
         />
       </ReThemeProvider>

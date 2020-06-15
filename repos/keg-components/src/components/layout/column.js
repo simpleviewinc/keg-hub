@@ -13,9 +13,7 @@ const widthFromSize = (size, theme) => {
 }
 
 const getColumnWidth = (size, theme) => {
-  return size
-    ? widthFromSize(size, theme)
-    : { flexGrow: 1 }
+  return size ? widthFromSize(size, theme) : { flexGrow: 1 }
 }
 
 export const Column = ({ children, size, center, ...props }) => {
@@ -24,12 +22,12 @@ export const Column = ({ children, size, center, ...props }) => {
   return (
     <Container
       {...props}
-      size={ size }
+      size={size}
       flexDir='column'
-      style={ theme.join(
+      style={theme.join(
         get(theme, [ 'layout', 'grid', 'column' ]),
         props.style,
-        getColumnWidth(size, theme),
+        getColumnWidth(size, theme)
       )}
     >
       { children }

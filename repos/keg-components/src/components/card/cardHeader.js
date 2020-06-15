@@ -8,26 +8,24 @@ import { get, deepMerge } from 'jsutils'
 
 const HeaderWrap = ({ numberOfLines, styles, children }) => {
   const textProps = { style: get(styles, 'header.text') }
-  numberOfLines && ( textProps.numberOfLines = numberOfLines )
+  numberOfLines && (textProps.numberOfLines = numberOfLines)
 
   return (
-    <View style={ get(styles, 'header.container') } >
-      <Text { ...textProps } >
-        { children }
-      </Text>
-      <Divider style={ deepMerge(styles.divider, get(styles, 'header.divider')) } />
+    <View style={get(styles, 'header.container')}>
+      <Text {...textProps}>{ children }</Text>
+      <Divider
+        style={deepMerge(styles.divider, get(styles, 'header.divider'))}
+      />
     </View>
   )
 }
 
 export const CardHeader = ({ Header, ...props }) => {
-  return Header
-    ? renderFromType(Header, props, HeaderWrap)
-    : null
+  return Header ? renderFromType(Header, props, HeaderWrap) : null
 }
 
 CardHeader.propTypes = {
   header: PropTypes.string,
   numberOfLines: PropTypes.number,
-  styles: PropTypes.object
+  styles: PropTypes.object,
 }

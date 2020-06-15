@@ -17,19 +17,19 @@ import { ImageWrapper } from './image.wrapper'
  */
 const Element = forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
   <img
-    alt={ alt }
-    { ...attrs }
-    { ...props }
-    ref={ ref }
+    alt={alt}
+    {...attrs}
+    {...props}
+    ref={ref}
   />
 ))
 
 export const Image = forwardRef((props, ref) => (
   <ImageWrapper
-    { ...props }
+    {...props}
     ref={ref}
-    Element={ Element }
-    isWeb={ true }
+    Element={Element}
+    isWeb={true}
   />
 ))
 
@@ -37,9 +37,6 @@ Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
-  src: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
+  src: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
   style: PropTypes.object,
 }

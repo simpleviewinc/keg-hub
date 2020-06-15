@@ -10,17 +10,18 @@ const textStyle = (state, colorType) => {
   return {
     main: {
       $all: {
-        backgroundColor: state === 'hover'
-          ? colors.opacity(10, activeColor)
-          : get(colors, 'palette.transparent')
-      }
+        backgroundColor:
+          state === 'hover'
+            ? colors.opacity(10, activeColor)
+            : get(colors, 'palette.transparent'),
+      },
     },
     content: {
       $all: {
         color: activeColor,
-      }
-    }
+      },
+    },
   }
 }
 
-export const text = buildTheme(textStyle, { inheritFrom: [ contained ] })
+export const text = buildTheme(textStyle, { inheritFrom: [contained] })

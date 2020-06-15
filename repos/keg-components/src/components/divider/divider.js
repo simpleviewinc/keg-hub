@@ -7,15 +7,10 @@ import { View } from 'KegView'
 export const Divider = ({ style, ...props }) => {
   const theme = useTheme()
 
-  return (
-    <View
-      { ...props }
-      style={ theme.join(
-        get(theme, ['divider']),
-        style
-      )}
-    />
-  )
+  return <View
+    {...props}
+    style={theme.join(get(theme, ['divider']), style)}
+  />
 }
 
 Divider.propTypes = {

@@ -1,10 +1,10 @@
-import React, {useMemo} from 'react'
+import React from 'react'
 import { withTheme } from '@simpleviewinc/re-theme'
 import { Text as RNText } from 'react-native'
 
 const ellipsisProps = {
   ellipsizeMode: 'tail',
-  numberOfLines: 1
+  numberOfLines: 1,
 }
 export const KegText = element => {
   return withTheme(props => {
@@ -18,11 +18,11 @@ export const KegText = element => {
     )
 
     return (
-      <RNText 
-        {...attrs} 
-        { ...(ellipsis && ellipsisProps) }
-        style={ theme.join(textStyles, style) 
-      }>
+      <RNText
+        {...attrs}
+        {...(ellipsis && ellipsisProps)}
+        style={theme.join(textStyles, style)}
+      >
         { children }
       </RNText>
     )

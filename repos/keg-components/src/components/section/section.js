@@ -4,15 +4,15 @@ import PropTypes from 'prop-types'
 import { View } from 'KegView'
 
 export const Section = withTheme(props => {
-  const { theme, children, style, type, ...args }  = props
+  const { theme, children, style, type, ...args } = props
 
   return (
     <View
-      { ...args }
+      {...args}
       style={theme.get(
-        `keg-section-${ type || 'default' }`,
+        `keg-section-${type || 'default'}`,
         `section.default`,
-        type && `section.${ type }`,
+        type && `section.${type}`,
         style
       )}
     >

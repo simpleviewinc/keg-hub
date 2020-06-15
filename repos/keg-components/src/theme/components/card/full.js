@@ -1,6 +1,5 @@
-import { deepMerge, get } from 'jsutils'
+import { deepMerge } from 'jsutils'
 import { contained } from './contained'
-import { margin } from '../../margin'
 import { padding } from '../../padding'
 
 export const full = deepMerge(contained, {
@@ -20,10 +19,10 @@ export const full = deepMerge(contained, {
     },
     divider: {
       display: 'none',
-    }
+    },
   },
   body: {
     padding: padding.size,
     paddingTop: 0,
-  }
+  },
 })

@@ -15,8 +15,8 @@ const buildCenterStyles = isCenter => {
   return isCenter === 'x' || isCenter === 'xaxis' || isCenter === 'x-axis'
     ? { justifyContent: 'center' }
     : isCenter === 'y' || isCenter === 'yaxis' || isCenter === 'y-axis'
-    ? { alignItems: 'center' }
-    : (isCenter && { alignItems: 'center', justifyContent: 'center' }) || {}
+      ? { alignItems: 'center' }
+      : (isCenter && { alignItems: 'center', justifyContent: 'center' }) || {}
 }
 
 /**
@@ -26,13 +26,13 @@ const buildCenterStyles = isCenter => {
  * @return { bool }
  */
 const getChildAttrs = children => {
-  children = (isArr(children) && children) || [ children ]
+  children = (isArr(children) && children) || [children]
 
   return children.reduce(
     (attrs, child) => {
       if (attrs.isRow && attrs.isCenter) return attrs
-      if (!attrs.isRow && (child && child.type === Row)) attrs.isRow = true
-      if (!attrs.isCenter && (child && child.props && child.props.center))
+      if (!attrs.isRow && child && child.type === Row) attrs.isRow = true
+      if (!attrs.isCenter && child && child.props && child.props.center)
         attrs.isCenter = child.props.center.toString().toLowerCase()
 
       return attrs
@@ -47,10 +47,10 @@ export const Grid = ({ children, style, ...props }) => {
 
   return (
     <Container
-      { ...props }
-      flexDir={ isRow ? 'column' : 'row' }
-      size={ 1 }
-      style={ theme.join(
+      {...props}
+      flexDir={isRow ? 'column' : 'row'}
+      size={1}
+      style={theme.join(
         get(theme, [ 'layout', 'grid', 'wrapper' ]),
         style,
         isCenter && buildCenterStyles(isCenter)

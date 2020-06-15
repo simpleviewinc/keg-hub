@@ -9,13 +9,13 @@ import { deepMerge, isObj } from 'jsutils'
  * @example
  * inheritFrom(parentStyles, childStyles, subChildStyles)
  * @param {Array} styles - Array of objects each with style rules
- * 
+ *
  * @returns {Object} - Merge styles
  */
 export const inheritFrom = (...styles) => {
-  return deepMerge(...styles.map(style => {
-    return isObj(style)
-      ? platformFlatten(style)
-      : undefined
-  }))
+  return deepMerge(
+    ...styles.map(style => {
+      return isObj(style) ? platformFlatten(style) : undefined
+    })
+  )
 }

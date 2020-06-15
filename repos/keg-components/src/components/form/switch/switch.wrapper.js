@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react'
-import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
+import { useTheme } from '@simpleviewinc/re-theme'
 import { Text } from '../../typography'
 import { View } from 'KegView'
 import { useThemePath } from '../../../hooks'
 import { get, isStr, toBool, checkCall } from 'jsutils'
-import { getOnChangeHandler, getChecked, getStyles, renderFromType } from '../../../utils'
+import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import PropTypes from 'prop-types'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
- * Checked styles only rebuild when isChecked value has changed 
+ * Checked styles only rebuild when isChecked value has changed
  * @param {boolean} isChecked - Current state of the switch component
  * @param {Object} themeStyles - Styles of the Switch component
  *
@@ -18,20 +18,17 @@ import PropTypes from 'prop-types'
 const useCheckedState = (isChecked, themeStyles) => {
   const theme = useTheme()
   return useMemo(() => {
-    return theme.join(
-      themeStyles,
-      {
-        area: {
-          ...get(themeStyles, 'area.off'),
-          ...( isChecked && get(themeStyles, 'area.on') )
-        },
-        indicator: {
-          ...get(themeStyles, 'indicator.off'),
-          ...( isChecked && get(themeStyles, 'indicator.on') )
-        }
-      }
-    )
-  }, [ isChecked ])
+    return theme.join(themeStyles, {
+      area: {
+        ...get(themeStyles, 'area.off'),
+        ...(isChecked && get(themeStyles, 'area.on')),
+      },
+      indicator: {
+        ...get(themeStyles, 'indicator.off'),
+        ...(isChecked && get(themeStyles, 'indicator.on')),
+      },
+    })
+  }, [isChecked])
 }
 
 /**
@@ -56,13 +53,15 @@ const setCheckedValue = (isChecked, setChecked, onChange) => {
  * @param {Object} props
  * @property {React Component|string|Object|Array} Component  - custom component to display in the section.
  * @property {Object} style - default headerstyle obj for section
- * 
+ *
  * @returns {Component} - section component
  */
 const SideComponent = ({ Component, style }) => {
-  return isStr(Component)
-    ? (<Text style={ style } >{ Component }</Text>)
-    : renderFromType(Component, { style: styles.content })
+  return isStr(Component) ? (
+    <Text style={style}>{ Component }</Text>
+  ) : (
+    renderFromType(Component, { style: styles.content })
+  )
 }
 
 /**
@@ -72,9 +71,7 @@ const SideComponent = ({ Component, style }) => {
  * @returns {React Component|Object|Array}
  */
 const ChildrenComponent = ({ children }) => (
-  <>
-    { renderFromType(children, {}, null) }
-  </>
+  <>{ renderFromType(children, {}, null) }</>
 )
 
 /**
@@ -84,9 +81,6 @@ const ChildrenComponent = ({ children }) => (
  *
  */
 export const SwitchWrapper = props => {
-
-  const theme = useTheme()
-
   const {
     checked,
     children,
@@ -110,50 +104,49 @@ export const SwitchWrapper = props => {
 
   const [ isChecked, setChecked ] = useState(toBool(checked || value))
 
-  const elThemePath = themePath || `form.${elType}.${ close && 'close' || 'default' }`
-  const [ themeStyles ] = useThemePath(elThemePath, styles)
+  const elThemePath =
+    themePath || `form.${elType}.${(close && 'close') || 'default'}`
+  const [themeStyles] = useThemePath(elThemePath, styles)
   const activeStyles = useCheckedState(isChecked, themeStyles)
 
-  return (children && (
-      <View style={ activeStyles.container } >
-        <ChildrenComponent children={ children } />
+  return (
+    (children && (
+      <View style={activeStyles.container}>
+        <ChildrenComponent children={children} />
       </View>
-    ) || (
-      <View style={ activeStyles.container } >
-
+    )) || (
+      <View style={activeStyles.container}>
         { LeftComponent && (
           <SideComponent
-            Component={ LeftComponent }
-            style={ activeStyles.left }
+            Component={LeftComponent}
+            style={activeStyles.left}
           />
-        )}
+        ) }
 
-        { SwitchComponent
-          ? renderFromType(SwitchComponent, { ...props, styles: activeStyles })
-          : (
-              <Element
-                elProps={ elProps }
-                disabled={ disabled }
-                styles={ activeStyles }
-                { ...getChecked(isWeb, isChecked) }
-                { ...getOnChangeHandler(
-                  isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)
-                )}
-              />
-            )
-        }
+        { SwitchComponent ? (
+          renderFromType(SwitchComponent, { ...props, styles: activeStyles })
+        ) : (
+          <Element
+            elProps={elProps}
+            disabled={disabled}
+            styles={activeStyles}
+            {...getChecked(isWeb, isChecked)}
+            {...getOnChangeHandler(
+              isWeb,
+              setCheckedValue(isChecked, setChecked, onChange || onValueChange)
+            )}
+          />
+        ) }
 
         { RightComponent && (
           <SideComponent
-            Component={ RightComponent }
-            style={ activeStyles.right }
+            Component={RightComponent}
+            style={activeStyles.right}
           />
-        )}
-
+        ) }
       </View>
     )
   )
-
 }
 
 SwitchWrapper.propTypes = {
@@ -161,7 +154,7 @@ SwitchWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   disabled: PropTypes.bool,
   isWeb: PropTypes.bool,

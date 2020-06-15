@@ -17,11 +17,11 @@ import { IconWrapper } from './icon.wrapper'
  */
 export const Icon = props => (
   <IconWrapper
-    { ...props }
-    Element={ props.Element || FontAwesome }
+    {...props}
+    Element={props.Element || FontAwesome}
   />
 )
 
 Icon.propTypes = {
-  ...IconWrapper.propTypes
+  ...IconWrapper.propTypes,
 }

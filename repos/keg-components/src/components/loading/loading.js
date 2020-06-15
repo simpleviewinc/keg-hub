@@ -16,20 +16,17 @@ import { useThemePath } from 'KegHooks'
  * @property {Object} props.theme - App theme object
  *
  */
-const Progress = (props) => {
-  const { styles, text, theme, loadIndicator } = props
+const Progress = props => {
+  const { styles, text, loadIndicator } = props
   const LoadingIndicator = loadIndicator || Indicator
 
   return (
-    <View style={ styles.progress } >
-      { isValidComponent(LoadingIndicator)
-        ? (<LoadingIndicator styles={ styles.indicator } />)
-        : text && (
-            <Text style={ styles.text } >
-            { text }
-            </Text>
-          )
-      }
+    <View style={styles.progress}>
+      { isValidComponent(LoadingIndicator) ? (
+        <LoadingIndicator styles={styles.indicator} />
+      ) : (
+        text && <Text style={styles.text}>{ text }</Text>
+      ) }
     </View>
   )
 }
@@ -41,34 +38,33 @@ const Progress = (props) => {
  * @param {Object} props - see buttonPropTypes
  * @property {String} props.text - button text
  * @property {Object} props.style - custom style
-  * @property {Object} props.wrapStyle - custom wrapper style
+ * @property {Object} props.wrapStyle - custom wrapper style
  * @property {Object} props.children
  *
  */
 export const Loading = props => {
   const {
     children,
-    text="Loading",
+    text = 'Loading',
     indicator,
-    styles={},
+    styles = {},
     themePath,
-    type='default'
+    type = 'default',
   } = props
 
-  const [ builtStyles ] = useThemePath(themePath || `loading.${type}`, styles)
+  const [builtStyles] = useThemePath(themePath || `loading.${type}`, styles)
 
   return (
-    <View style={ builtStyles.container } >
+    <View style={builtStyles.container}>
       { children || (
         <Progress
-          styles={ styles }
-          text={ text }
-          loadIndicator={ indicator }
+          styles={styles}
+          text={text}
+          loadIndicator={indicator}
         />
-      )}
+      ) }
     </View>
   )
-
 }
 
 Loading.propTypes = {

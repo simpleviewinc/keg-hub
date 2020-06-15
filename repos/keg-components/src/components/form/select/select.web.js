@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { SelectWrapper } from './select.wrapper'
 
 /**
@@ -16,21 +15,23 @@ import { SelectWrapper } from './select.wrapper'
  * @property {Object} props.ref - reference to native element
  *
  */
-const Element = React.forwardRef(({ elProps, children, readOnly, ...props }, ref) => (
-  <select
-    { ...elProps }
-    { ...props }
-    ref={ ref }
-  >
-    { children }
-  </select>
-))
+const Element = React.forwardRef(
+  ({ elProps, children, readOnly, ...props }, ref) => (
+    <select
+      {...elProps}
+      {...props}
+      ref={ref}
+    >
+      { children }
+    </select>
+  )
+)
 
 export const Select = props => (
   <SelectWrapper
-    { ...props }
-    Element={ Element }
-    isWeb={ true }
+    {...props}
+    Element={Element}
+    isWeb={true}
   />
 )
 

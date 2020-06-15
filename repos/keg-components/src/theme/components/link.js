@@ -7,16 +7,16 @@ export const link = {
     },
     $native: {
       textDecorationLine: 'underline',
-      textDecorationColor: colors.palette.blue02
+      textDecorationColor: colors.palette.blue02,
     },
     $web: {
       textDecoration: 'underline',
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   hover: {
     $web: {
       color: colors.palette.blue02,
-    }
+    },
   },
 }

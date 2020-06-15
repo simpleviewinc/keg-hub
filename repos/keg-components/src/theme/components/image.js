@@ -7,9 +7,7 @@ export const image = {
         display: 'flex',
       },
     },
-    loadingComp: {
-      
-    },
+    loadingComp: {},
     loading: {
       opacity: 0,
     },

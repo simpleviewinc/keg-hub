@@ -1,8 +1,12 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 import { ButtonWrapper } from './button.wrapper'
-import { Platform, TouchableOpacity, TouchableNativeFeedback } from 'react-native'
-const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
+import {
+  Platform,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+} from 'react-native'
+const Touchable =
+  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
 /**
  * Button
@@ -19,15 +23,15 @@ const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : Touchabl
  *
  */
 const Element = React.forwardRef((props, ref) => {
-  return (<Touchable { ...props } ref={ ref } />)
+  return <Touchable
+    {...props}
+    ref={ref}
+  />
 })
 
-
-export const Button = props => (
-  <ButtonWrapper
-    { ...props }
-    Element={ Element }
-  />
-)
+export const Button = props => <ButtonWrapper
+  {...props}
+  Element={Element}
+/>
 
 Button.propTypes = { ...Touchable.propTypes, ...ButtonWrapper.propTypes }

@@ -7,26 +7,24 @@ import { renderFromType } from '../../utils'
 
 const FooterWrap = ({ numberOfLines, styles, children }) => {
   const textProps = { style: get(styles, 'footer.text') }
-  numberOfLines && ( textProps.numberOfLines = numberOfLines )
+  numberOfLines && (textProps.numberOfLines = numberOfLines)
 
   return (
-    <View style={ get(styles, 'footer.container') } >
-      <Text { ...textProps } >
-        { children }
-      </Text>
-      <Divider style={ deepMerge(styles.divider, get(styles, 'footer.divider')) } />
+    <View style={get(styles, 'footer.container')}>
+      <Text {...textProps}>{ children }</Text>
+      <Divider
+        style={deepMerge(styles.divider, get(styles, 'footer.divider'))}
+      />
     </View>
   )
 }
 
 export const CardFooter = ({ Footer, ...props }) => {
-  return Footer
-    ? renderFromType(Footer, props, FooterWrap)
-    : null
+  return Footer ? renderFromType(Footer, props, FooterWrap) : null
 }
 
 CardFooter.propTypes = {
   header: PropTypes.string,
   numberOfLines: PropTypes.number,
-  styles: PropTypes.object
+  styles: PropTypes.object,
 }

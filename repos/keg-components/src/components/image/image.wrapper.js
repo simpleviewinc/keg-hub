@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react'
 import { useThemeHover } from '@simpleviewinc/re-theme'
-import { get, checkCall } from 'jsutils'
+import { checkCall } from 'jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'
 import { View } from 'KegView'
@@ -29,7 +29,6 @@ const onLoadEvent = (setLoading, props, setStyle, loadedStyle) => {
  *
  */
 export const ImageWrapper = forwardRef((props, ref) => {
-
   const [ loading, setLoading ] = useState(true)
 
   const {
@@ -41,52 +40,47 @@ export const ImageWrapper = forwardRef((props, ref) => {
     onPress,
     src,
     source,
-    styles={},
-    type='default',
+    styles = {},
+    type = 'default',
     themePath,
-    useLoading=true,
+    useLoading = true,
     ...attrs
   } = props
 
-  const [ builtStyles ] = useThemePath(themePath || `image.${type}`, styles)
+  const [builtStyles] = useThemePath(themePath || `image.${type}`, styles)
   const loadingStyles = useStyle(builtStyles.loading, builtStyles.image)
   const loadedStyles = useStyle(loadingStyles, builtStyles.loaded)
 
-  const [ useRef, elementStyle, setStyle ] = useThemeHover(
+  const [ , elementStyle, setStyle ] = useThemeHover(
     loadedStyles,
     builtStyles.hover,
     { ref }
   )
 
   return (
-    <View style={ builtStyles.container }>
-
-      { loading && useLoading &&
-        <Loading styles={ builtStyles.loadingComp } />
-      }
+    <View style={builtStyles.container}>
+      { loading && useLoading && <Loading styles={builtStyles.loadingComp} /> }
 
       <Element
-        ref={ ref }
-        attrs={ attrs }
-        alt={ alt }
-        style={ loading ? loadingStyles : builtStyles.image }
-        { ...getPressHandler(isWeb, onClick, onPress) }
-        { ...getImgSrc(isWeb, src, source) }
-        { ...getOnLoad(isWeb, onLoadEvent(setLoading, props, setStyle, elementStyle)) }
+        ref={ref}
+        attrs={attrs}
+        alt={alt}
+        style={loading ? loadingStyles : builtStyles.image}
+        {...getPressHandler(isWeb, onClick, onPress)}
+        {...getImgSrc(isWeb, src, source)}
+        {...getOnLoad(
+          isWeb,
+          onLoadEvent(setLoading, props, setStyle, elementStyle)
+        )}
       />
-
     </View>
   )
-
 })
 
 ImageWrapper.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
-  src: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
+  src: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
   style: PropTypes.object,
 }

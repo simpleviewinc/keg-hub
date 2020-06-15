@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { deepMerge, isStr, get, reduceObj } from 'jsutils'
-import { View } from 'KegView'
 import { useThemePath, useMediaProps } from 'KegHooks'
 
 // Card children imports
@@ -11,8 +9,7 @@ import { CardFooter } from './cardFooter'
 import { CardHeader } from './cardHeader'
 import { CardMedia } from './cardMedia'
 
-export const Card = ({ styles, ...props}) => {
-
+export const Card = ({ styles, ...props }) => {
   styles = styles || {}
 
   const {
@@ -26,52 +23,48 @@ export const Card = ({ styles, ...props}) => {
     subtitle,
     themePath,
     title,
-    type='default',
+    type = 'default',
     video,
     ...attributes
   } = props
 
-  const [ cardStyles ] = useThemePath(themePath || `card.${type}`, styles)
+  const [cardStyles] = useThemePath(themePath || `card.${type}`, styles)
   const mediaProps = useMediaProps({ Media, image, video, styles: cardStyles })
 
   return (
     <CardContainer
-      attributes={ attributes }
-      styles={ cardStyles }
+      attributes={attributes}
+      styles={cardStyles}
     >
-
       { Header && (
         <CardHeader
-          Header={ Header }
-          numberOfLines={ headerLines }
-          styles={ cardStyles }
+          Header={Header}
+          numberOfLines={headerLines}
+          styles={cardStyles}
         />
-      )}
+      ) }
 
       { (Media || mediaProps) && (
         <CardMedia
-          title={ title }
-          subtitle={ subtitle }
-          mediaProps={ mediaProps }
-          styles={ cardStyles }
+          title={title}
+          subtitle={subtitle}
+          mediaProps={mediaProps}
+          styles={cardStyles}
         />
-      )}
+      ) }
 
-      { children && (
-        <CardBody
-          style={ cardStyles.body }
-          children={ children }
-        />
-      )}
+      { children && <CardBody
+        style={cardStyles.body}
+        children={children}
+      /> }
 
       { Footer && (
         <CardFooter
-          footer={ Footer }
-          numberOfLines={ footerLines }
-          styles={ cardStyles }
+          footer={Footer}
+          numberOfLines={footerLines}
+          styles={cardStyles}
         />
-      )}
-
+      ) }
     </CardContainer>
   )
 }

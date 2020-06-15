@@ -12,7 +12,7 @@ import { get, isFunc, isArr } from 'jsutils'
 export const getInputValueKey = (isWeb, onChange, onValueChange, readOnly) => {
   return !isWeb
     ? 'selectedValue'
-    : (isFunc(onChange) || isFunc(onValueChange) || readOnly)
+    : isFunc(onChange) || isFunc(onValueChange) || readOnly
       ? 'value'
       : 'defaultValue'
 }
@@ -29,7 +29,7 @@ export const getValueFromChildren = (value, children) => {
     ? value
     : children
       ? isArr(children)
-        ? get(children, ['0', 'props', 'children'])
-        : get(children, [ 'props', 'children' ])
+          ? get(children, [ '0', 'props', 'children' ])
+          : get(children, [ 'props', 'children' ])
       : ''
 }

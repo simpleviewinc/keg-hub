@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 
-export  const CardContainer = ({ attributes={}, children, styles={} }) => {
+export const CardContainer = ({ attributes = {}, children, styles = {} }) => {
   return (
-    <View { ...attributes } style={ styles.main } >
-      <View style={ styles.container } >
-        { children }
-      </View>
+    <View
+      {...attributes}
+      style={styles.main}
+    >
+      <View style={styles.container}>{ children }</View>
     </View>
   )
 }

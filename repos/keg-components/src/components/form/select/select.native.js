@@ -17,29 +17,29 @@ import { SelectWrapper } from './select.wrapper'
  * @property {Object} props.ref - reference to native element
  *
  */
-const Element = React.forwardRef(({ elProps, children, editable, ...props }, ref) => (
-  <Picker
-    { ...elProps }
-    { ...props }
-    enabled={editable}
-    ref={ ref }
-  >
-    { children }
-  </Picker>
-))
-
-export const Select = props => (
-  <SelectWrapper
-    { ...props }
-    Element={ Element }
-  />
+const Element = React.forwardRef(
+  ({ elProps, children, editable, ...props }, ref) => (
+    <Picker
+      {...elProps}
+      {...props}
+      enabled={editable}
+      ref={ref}
+    >
+      { children }
+    </Picker>
+  )
 )
+
+export const Select = props => <SelectWrapper
+  {...props}
+  Element={Element}
+/>
 
 Select.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   disabled: PropTypes.bool,
   onChange: PropTypes.func,

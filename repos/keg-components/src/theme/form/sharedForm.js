@@ -3,7 +3,6 @@ import { get } from 'jsutils'
 import { colors } from '../colors'
 import { padding } from '../padding'
 
-
 export const sharedForm = {
   inputs: {
     backgroundColor: colors.palette.white01,

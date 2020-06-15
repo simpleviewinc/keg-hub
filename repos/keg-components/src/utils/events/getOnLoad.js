@@ -1,4 +1,3 @@
-
-export const getOnLoad = (isWeb, callback) => (
-  { [isWeb ? 'onLoad' : 'onLoadEnd']: callback }
-)
+export const getOnLoad = (isWeb, callback) => ({
+  [isWeb ? 'onLoad' : 'onLoadEnd']: callback,
+})

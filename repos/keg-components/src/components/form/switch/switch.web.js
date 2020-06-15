@@ -19,16 +19,15 @@ import { View } from 'KegView'
  *
  */
 const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
-
   return (
-    <View style={ styles.wrapper }>
-      <View style={ styles.area }></View>
-      <View style={ styles.indicator } ></View>
+    <View style={styles.wrapper}>
+      <View style={styles.area}></View>
+      <View style={styles.indicator}></View>
       <input
-        { ...elProps }
-        { ...props }
+        {...elProps}
+        {...props}
         type='checkbox'
-        ref={ ref }
+        ref={ref}
         style={{
           position: 'absolute',
           top: 0,
@@ -44,13 +43,12 @@ const Element = React.forwardRef(({ elProps, styles, ...props }, ref) => {
   )
 })
 
-
 export const Switch = props => (
   <SwitchWrapper
-    { ...props }
-    elType={ 'switch' }
-    Element={ Element }
-    isWeb={ true }
+    {...props}
+    elType={'switch'}
+    Element={Element}
+    isWeb={true}
   />
 )
 
@@ -58,7 +56,7 @@ Switch.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   disabled: PropTypes.bool,
   onClick: PropTypes.func,

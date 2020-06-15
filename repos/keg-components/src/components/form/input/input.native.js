@@ -5,13 +5,11 @@ import { InputWrapper } from './input.wrapper'
 import { withTouch } from '../../../hocs'
 
 const Element = forwardRef(({ elProps, ...args }, ref) => {
-  return (
-    <TextInput
-      { ...args }
-      { ...elProps }
-      ref={ ref }
-    />
-  )
+  return <TextInput
+    {...args}
+    {...elProps}
+    ref={ref}
+  />
 })
 
 /**
@@ -20,13 +18,11 @@ const Element = forwardRef(({ elProps, ...args }, ref) => {
 const TouchableElement = withTouch(Element, { showFeedback: false })
 
 export const Input = forwardRef((props, ref) => {
-  return (
-    <InputWrapper
-      Element={ TouchableElement }
-      ref={ ref }
-      { ...props }
-    />
-  )
+  return <InputWrapper
+    Element={TouchableElement}
+    ref={ref}
+    {...props}
+  />
 })
 
 Input.propTypes = {

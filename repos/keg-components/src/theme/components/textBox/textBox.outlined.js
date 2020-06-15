@@ -1,4 +1,3 @@
-
 import { contained } from './textBox.contained'
 import { inheritFrom } from '../../../utils'
 import { get } from 'jsutils'
@@ -12,11 +11,9 @@ export const outlined = {
         borderWidth: 2,
         borderRadius: 2,
         borderColor: get(surface, 'default.colors.main'),
-      }
+      },
     },
   },
 }
 
 outlined.default = inheritFrom(contained.default, outlined.default)
-
-

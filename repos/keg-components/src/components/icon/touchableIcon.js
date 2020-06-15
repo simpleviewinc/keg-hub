@@ -12,5 +12,5 @@ export const TouchableIcon = withTouch(Icon)
 
 TouchableIcon.propTypes = {
   ...TouchableIcon.propTypes,
-  ...Icon.propTypes
+  ...Icon.propTypes,
 }

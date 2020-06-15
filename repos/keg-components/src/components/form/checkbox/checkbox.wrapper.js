@@ -8,7 +8,7 @@ import { SwitchWrapper } from '../switch/switch.wrapper'
  *
  */
 export const CheckboxWrapper = props => {
-  return <SwitchWrapper { ...props } />
+  return <SwitchWrapper {...props} />
 }
 
 CheckboxWrapper.propTypes = { ...SwitchWrapper.propTypes }

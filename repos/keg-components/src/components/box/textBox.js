@@ -19,41 +19,40 @@ import PropTypes from 'prop-types'
  * @param {Boolean} props.useClipboard - if true, renders a copy button for copying text to clipboard
  * @param {Number} props.maxLines - maximum number of lines of text. Defaults to 100.
  */
-export const TextBox = (props) => {
+export const TextBox = props => {
   const {
     text,
-    themePath='textBox.outlined.default',
+    themePath = 'textBox.outlined.default',
     styles,
-    useClipboard=false,
-    maxLines=100
+    useClipboard = false,
+    maxLines = 100,
   } = props
-  
+
   const theme = useTheme()
 
-  const [ style ] = useThemePath(themePath, styles)
+  const [style] = useThemePath(themePath, styles)
 
   return (
     <View style={theme.join(style.main, styles)}>
-
       <View style={get(style, 'content.wrapper')}>
-        <Text 
+        <Text
           numberOfLines={maxLines}
-          style={get(style, 'content.text')}>
+          style={get(style, 'content.text')}
+        >
           { text || '' }
         </Text>
       </View>
 
       { /* A copy icon that copies the content to system clipboard on press */ }
       <Text>
-        { useClipboard && 
-          text &&
-            <TouchableIcon 
-              name={'copy'} 
-              size={15}
-              wrapStyle={get(style, 'content.clipboard')}
-              onPress={_ => text && Clipboard.setString(text)}
-            />
-        }
+        { useClipboard && text && (
+          <TouchableIcon
+            name={'copy'}
+            size={15}
+            wrapStyle={get(style, 'content.clipboard')}
+            onPress={_ => text && Clipboard.setString(text)}
+          />
+        ) }
       </Text>
     </View>
   )

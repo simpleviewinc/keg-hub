@@ -3,15 +3,12 @@ import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
 import { getPressHandler, getTarget } from '../../utils'
 import { get } from 'jsutils'
 import PropTypes from 'prop-types'
-import { KegText } from 'KegText'
 
-
-const getSpacer = (isWeb) => {
+const getSpacer = isWeb => {
   return isWeb ? ' ' : '\n'
 }
 
 export const LinkWrapper = props => {
-
   const theme = useTheme()
   const {
     children,
@@ -23,18 +20,18 @@ export const LinkWrapper = props => {
     space,
     style,
     target,
-    type 
+    type,
   } = props
 
   const linkStyle = theme.get(
     'typography.font.family',
     'components.link.default',
-    type && `components.link.${type}`,
+    type && `components.link.${type}`
   )
 
   const [ ref, themeStyle ] = useThemeHover(
     theme.join(linkStyle, style),
-    get(theme, `components.link.hover` ),
+    get(theme, `components.link.hover`)
   )
 
   const spacer = space && getSpacer(space, isWeb)
@@ -43,11 +40,11 @@ export const LinkWrapper = props => {
     <>
       { spacer }
       <Element
-        ref={ ref }
-        href={ href }
-        style={ themeStyle }
-        { ...getPressHandler(isWeb, onClick, onPress) }
-        { ...getTarget(isWeb, target) }
+        ref={ref}
+        href={href}
+        style={themeStyle}
+        {...getPressHandler(isWeb, onClick, onPress)}
+        {...getTarget(isWeb, target)}
       >
         { children }
       </Element>

@@ -9,12 +9,9 @@ export const indicator = {
       position: 'relative',
     },
     icon: {
-      $all: {
-      },
-      $web: {
-      },
-      $native: {
-      }
-    }
-  }
+      $all: {},
+      $web: {},
+      $native: {},
+    },
+  },
 }

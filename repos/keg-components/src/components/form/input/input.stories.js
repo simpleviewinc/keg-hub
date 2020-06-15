@@ -1,5 +1,3 @@
-
-
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { Input } from '../../'
@@ -7,25 +5,28 @@ import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
 storiesOf('Form | Input', module)
-  .add('Default', () =>
+  .add('Default', () => (
     <StoryWrap>
-      <Input onChange={ action("Input Change!") } />
+      <Input onChange={action('Input Change!')} />
     </StoryWrap>
-  )
+  ))
   .add('On Value Change', () => (
     <StoryWrap>
-      <Input onValueChange={ action("Value Change!") } />
-      <Input onChangeText={ action("Changed text!") } />
+      <Input onValueChange={action('Value Change!')} />
+      <Input onChangeText={action('Changed text!')} />
     </StoryWrap>
   ))
   .add('Read only', () => (
     <StoryWrap>
-      <Input value="Sorry, I'm read only." readOnly />
+      <Input
+        value="Sorry, I'm read only."
+        readOnly
+      />
     </StoryWrap>
   ))
   .add('Placeholder', () => (
     <StoryWrap>
-      <Input placeholder="Type here..." />
+      <Input placeholder='Type here...' />
     </StoryWrap>
   ))
   .add('On Press', () => (
@@ -35,12 +36,14 @@ storiesOf('Form | Input', module)
   ))
   .add('Read only', () => (
     <StoryWrap>
-      <Input value="Sorry, I'm read only." readOnly />
+      <Input
+        value="Sorry, I'm read only."
+        readOnly
+      />
     </StoryWrap>
   ))
   .add('Placeholder', () => (
     <StoryWrap>
-      <Input placeholder="Type here..." />
+      <Input placeholder='Type here...' />
     </StoryWrap>
   ))
-

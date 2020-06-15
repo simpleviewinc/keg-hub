@@ -1,9 +1,7 @@
 import defaults from '../defaults.json'
 import { colors } from '../colors'
-import { margin } from '../margin'
 import { get, deepMerge } from 'jsutils'
 
-const space = get(defaults, 'form.checkbox.space', 15)
 const height = get(defaults, 'form.checkbox.height', 20)
 const width = get(defaults, 'form.checkbox.width', 20)
 
@@ -18,7 +16,7 @@ const checkboxDefault = {
     },
     $web: {
       display: 'flex',
-    }
+    },
   },
   wrapper: {
     $web: {
@@ -31,7 +29,7 @@ const checkboxDefault = {
     },
     $native: {
       alignItems: 'center',
-    }
+    },
   },
   area: {
     off: {
@@ -43,15 +41,15 @@ const checkboxDefault = {
         height: '100%',
         width: '100%',
         position: 'absolute',
-        boxShadow: `inset 0px 0px 5px ${ get(colors, 'opacity._15') }`,
+        boxShadow: `inset 0px 0px 5px ${get(colors, 'opacity._15')}`,
         borderRadius: get(defaults, 'form.border.radius', 5),
       },
     },
     on: {
       $all: {
         backgroundColor: get(colors, 'surface.primary.colors.main'),
-      }
-    }
+      },
+    },
   },
   indicator: {
     off: {
@@ -70,12 +68,12 @@ const checkboxDefault = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-      }
+      },
     },
-    on: {}
+    on: {},
   },
   disabled: {
-    opacity: 0.4
+    opacity: 0.4,
   },
   left: {
     flex: 1,
@@ -84,29 +82,26 @@ const checkboxDefault = {
   right: {
     flex: 1,
     textAlign: 'right',
-  }
+  },
 }
 
-const checkboxClose = deepMerge(
-  checkboxDefault,
-  {
-    container: {
-      $all: {
-        justifyContent: 'flex-start',
-      }
+const checkboxClose = deepMerge(checkboxDefault, {
+  container: {
+    $all: {
+      justifyContent: 'flex-start',
     },
-    left: {
-      flex: 'none',
-      marginRight: '10px',
-      textAlign: 'inherit',
-    },
-    right: {
-      flex: 'none',
-      marginLeft: '10px',
-      textAlign: 'inherit',
-    }
-  }
-)
+  },
+  left: {
+    flex: 'none',
+    marginRight: '10px',
+    textAlign: 'inherit',
+  },
+  right: {
+    flex: 'none',
+    marginLeft: '10px',
+    textAlign: 'inherit',
+  },
+})
 
 export const checkbox = {
   default: checkboxDefault,

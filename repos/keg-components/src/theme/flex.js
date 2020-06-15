@@ -22,7 +22,7 @@ const flex = {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-  }
+  },
 }
 
 flex.direction.row = { flexDirection: 'row' }

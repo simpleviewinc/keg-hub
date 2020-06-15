@@ -20,8 +20,8 @@ export const layout = {
       minWidth: '100%',
     },
     column: {
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     },
     columns: 12,
-  }
+  },
 }

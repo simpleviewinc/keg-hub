@@ -12,13 +12,17 @@ import { isValidComponent } from '../validate/isValidComponent'
  * @returns {React Component|Object} - rendered React Component
  */
 export const renderFromType = (Element, props, Wrapper) => {
-  return isValidComponent(Element)
-    ? isFunc(Element)
-      ? (<Element { ...props } />)
-      : Element
-    : isArr(Element)
-      ? Element
-      : Wrapper
-        ? (<Wrapper { ...props }>{ Element }</Wrapper>)
-        : Element
+  return isValidComponent(Element) ? (
+    isFunc(Element) ? (
+      <Element {...props} />
+    ) : (
+      Element
+    )
+  ) : isArr(Element) ? (
+    Element
+  ) : Wrapper ? (
+    <Wrapper {...props}>{ Element }</Wrapper>
+  ) : (
+    Element
+  )
 }

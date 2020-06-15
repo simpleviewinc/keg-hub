@@ -17,17 +17,17 @@ import { ImageWrapper } from './image.wrapper'
  */
 const Element = forwardRef(({ attrs, src, ...props }, ref) => (
   <RNImage
-    ref={ ref }
-    { ...attrs }
-    { ...props }
+    ref={ref}
+    {...attrs}
+    {...props}
   />
 ))
 
 export const Image = forwardRef((props, ref) => (
   <ImageWrapper
-    { ...props }
-    ref={ ref }
-    Element={ Element }
+    {...props}
+    ref={ref}
+    Element={Element}
   />
 ))
 
@@ -35,9 +35,6 @@ Image.propTypes = {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
-  src: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
+  src: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
   style: PropTypes.object,
 }

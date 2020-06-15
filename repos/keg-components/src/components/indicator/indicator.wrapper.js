@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
 import { indicatorUri } from '../../assets/spinners/moderate'
 import { getImgSrc } from '../../utils'
 import { View } from 'KegView'
@@ -14,20 +13,19 @@ export const IndicatorWrapper = props => {
     src,
     source,
     styles,
-    type='default',
+    type = 'default',
     themePath,
   } = props
 
-  const theme = useTheme()
-  const [ builtStyles ] = useThemePath(themePath || `indicator.${type}`, styles)
+  const [builtStyles] = useThemePath(themePath || `indicator.${type}`, styles)
 
   return (
-    <View style={ builtStyles.container } >
+    <View style={builtStyles.container}>
       <Element
-        alt={ alt || 'Loading' }
-        style={ builtStyles.icon }
-        resizeMode={ resizeMode || 'contain' }
-        { ...getImgSrc(isWeb, src, source, indicatorUri) }
+        alt={alt || 'Loading'}
+        style={builtStyles.icon}
+        resizeMode={resizeMode || 'contain'}
+        {...getImgSrc(isWeb, src, source, indicatorUri)}
       />
     </View>
   )

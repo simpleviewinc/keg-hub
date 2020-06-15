@@ -11,13 +11,12 @@ import { useThemePath } from '../../hooks'
 
 /**
  * AppHeader
- * @summary custom header component 
+ * @summary custom header component
  * @param {Object} props - see PropTypes below
- * 
+ *
  * @returns {Component} - header component
  */
-export const AppHeader = (props) => {
-
+export const AppHeader = props => {
   const theme = useTheme()
 
   const {
@@ -33,53 +32,51 @@ export const AppHeader = (props) => {
     shadow,
     ellipsis,
     themePath,
-    type='default',
-    children
+    type = 'default',
+    children,
   } = props
 
-  const [ headerStyles ] = useThemePath(themePath || `appHeader.${type}`, styles)
+  const [headerStyles] = useThemePath(themePath || `appHeader.${type}`, styles)
 
   // builds the left, center, and right section based on props
   return (
     <View
       style={theme.join(
         get(headerStyles, ['container']),
-        shadow && get(headerStyles, ['container', 'shadow']),
+        shadow && get(headerStyles, [ 'container', 'shadow' ]),
         styles
       )}
     >
       { children || (
         <>
-          <Side 
-            defaultStyle={headerStyles} 
-            iconName={leftIcon} 
-            action={onLeftClick} 
+          <Side
+            defaultStyle={headerStyles}
+            iconName={leftIcon}
+            action={onLeftClick}
           >
-            {LeftComponent}
+            { LeftComponent }
           </Side>
 
           <Center
-            ellipsis={ellipsis} 
-            theme={theme} 
-            defaultStyle={headerStyles} 
-            title={title} 
-            textStyle={get(headerStyles, ['center', 'content', 'title'])}
+            ellipsis={ellipsis}
+            theme={theme}
+            defaultStyle={headerStyles}
+            title={title}
+            textStyle={get(headerStyles, [ 'center', 'content', 'title' ])}
           >
-            {CenterComponent}
+            { CenterComponent }
           </Center>
-          
+
           <Side
             right
-            defaultStyle={headerStyles} 
-            iconName={rightIcon} 
-            action={onRightClick} 
+            defaultStyle={headerStyles}
+            iconName={rightIcon}
+            action={onRightClick}
           >
-            {RightComponent}
+            { RightComponent }
           </Side>
-
         </>
-      )}
-      
+      ) }
     </View>
   )
 }
@@ -96,7 +93,7 @@ AppHeader.propTypes = {
   rightIcon: PropTypes.string,
   shadow: PropTypes.bool,
   ellipsis: PropTypes.bool,
-  themePath: PropTypes.string
+  themePath: PropTypes.string,
 }
 
 /**
@@ -112,32 +109,29 @@ AppHeader.propTypes = {
 
  * @returns {Component} - center component
  */
-const Center = (props) => {
-
+const Center = props => {
   const {
     theme,
     defaultStyle,
     title,
     textStyle,
     ellipsis = true,
-    children
+    children,
   } = props
 
-
   return (
-    <View style={get(defaultStyle, ['center', 'main'])} >
-      { children && renderFromType(children, {}, null) || (
-        <H6 
-          ellipsis={ ellipsis }
-          style={ theme.join(
-            get(defaultStyle, ['center', 'content', 'title']),
+    <View style={get(defaultStyle, [ 'center', 'main' ])}>
+      { (children && renderFromType(children, {}, null)) || (
+        <H6
+          ellipsis={ellipsis}
+          style={theme.join(
+            get(defaultStyle, [ 'center', 'content', 'title' ]),
             textStyle
           )}
         >
           { title }
         </H6>
-      )}
-     
+      ) }
     </View>
   )
 }
@@ -151,45 +145,42 @@ const Center = (props) => {
  * @property {Function} action - function to perform on section click
  * @property {Component} children  - custom component to display on the section. overrides the other props
  * @property {Boolean} right - to decide which side theme to use
- * 
+ *
  * @returns {Component} - section component
  */
-const Side = (props) => {
-
-  const {
-    defaultStyle,
-    iconName,
-    action,
-    children,
-    right,
-  } = props
+const Side = props => {
+  const { defaultStyle, iconName, action, children, right } = props
 
   const position = right ? 'right' : 'left'
-  const mainStyles = get(defaultStyle, ['side', position, 'content', 'container'])
+  const mainStyles = get(defaultStyle, [
+    'side',
+    position,
+    'content',
+    'container',
+  ])
   const iconProps = {
     defaultStyle,
     iconName,
-    position
+    position,
   }
 
   return (
-    <View style={get(defaultStyle, ['side', position, 'main'])}>
-      { children && renderFromType(children, {}, null) || (
-        action
-          ? (
-            <Button
-              styles={{ main: mainStyles }}
-              onClick={ action }
-            >
-              { iconName && <CustomIcon {...iconProps} /> }
-            </Button>
-          )
-          : iconName && (
-            <View styles={{ main: mainStyles }} >
-              <CustomIcon { ...iconProps } />
+    <View style={get(defaultStyle, [ 'side', position, 'main' ])}>
+      { (children && renderFromType(children, {}, null)) ||
+        (action ? (
+          <Button
+            styles={{ main: mainStyles }}
+            onClick={action}
+          >
+            { iconName && <CustomIcon {...iconProps} /> }
+          </Button>
+        ) : (
+          iconName && (
+            <View styles={{ main: mainStyles }}>
+              <CustomIcon {...iconProps} />
             </View>
           )
-      )}
+        )) }
     </View>
   )
 }
@@ -197,27 +188,21 @@ const Side = (props) => {
 /**
  * CustomIcon
  * @summary Creates a customized Icon Component for the side components
- * @param {Object} props 
+ * @param {Object} props
  * @property {Boolean} styled - whether to use the default icon styling or not
  * @property {Object} defaultStyle - default theme style
  * @property {String} iconName - icon name
  * @property {String} position - side position (left/right)
- * 
+ *
  * @returns {Component} - Customized Icon component
  */
-const CustomIcon = (props) => {
-
-  const {
-    styled,
-    defaultStyle,
-    iconName,
-    position
-  } = props
+const CustomIcon = props => {
+  const { defaultStyle, iconName, position } = props
 
   return (
-    <Icon 
-      name={ iconName }
-      styles={ get(defaultStyle, ['side', position, 'content', 'icon' ]) }
+    <Icon
+      name={iconName}
+      styles={get(defaultStyle, [ 'side', position, 'content', 'icon' ])}
     />
   )
 }

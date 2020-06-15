@@ -3,11 +3,7 @@ import PropTypes from 'prop-types'
 import { View } from 'KegView'
 
 export const CardBody = ({ style, children }) => {
-  return (
-    <View style={ style } >
-      { children }
-    </View>
-  )
+  return <View style={style}>{ children }</View>
 }
 
 CardBody.propTypes = {
@@ -20,5 +16,3 @@ CardBody.propTypes = {
   ]),
   style: PropTypes.object,
 }
-
-

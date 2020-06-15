@@ -16,12 +16,12 @@ import { FontAwesome } from '@expo/vector-icons'
  */
 export const Icon = props => (
   <IconWrapper
-    { ...props }
-    Element={ props.Element || FontAwesome }
-    isWeb={ true }
+    {...props}
+    Element={props.Element || FontAwesome}
+    isWeb={true}
   />
 )
 
 Icon.propTypes = {
-  ...IconWrapper.propTypes
+  ...IconWrapper.propTypes,
 }

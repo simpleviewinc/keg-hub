@@ -1,4 +1,4 @@
-import { wrapper, } from './defaults'
+import { wrapper } from './defaults'
 import { get } from 'jsutils'
 import { colors } from '../../colors'
 const { surface, palette } = colors
@@ -18,7 +18,7 @@ export const contained = {
       content: {
         wrapper: {
           display: 'flex',
-          marginRight: (wrapper.padding + 5),
+          marginRight: wrapper.padding + 5,
           flex: 1,
           flexWrap: 'wrap',
         },
@@ -31,10 +31,10 @@ export const contained = {
           opacity: 0.7,
           right: 0,
           top: 0,
-          margin: (wrapper.padding - 2),
+          margin: wrapper.padding - 2,
           position: 'absolute',
-        }
-      }
+        },
+      },
     },
     $native: {
       main: {
@@ -42,12 +42,11 @@ export const contained = {
         flex: 1,
       },
       content: {
-        clipboard: {
-        }
-      }
-    }
+        clipboard: {},
+      },
+    },
   },
   disabled: {},
   hover: {},
-  active: {}
+  active: {},
 }

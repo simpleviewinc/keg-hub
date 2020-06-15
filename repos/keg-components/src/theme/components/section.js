@@ -12,7 +12,7 @@ export const section = {
       elevation: 1,
     },
     $web: {
-      boxShadow: `1px 1px 5px ${ colors.opacity._05 }`
+      boxShadow: `1px 1px 5px ${colors.opacity._05}`,
     },
     $all: {
       backgroundColor: colors.palette.white01,
@@ -22,7 +22,7 @@ export const section = {
       padding: padding.size,
       margin: margin.size,
       marginBottom: 0,
-      minHeight: 200
+      minHeight: 200,
     },
-  }
+  },
 }

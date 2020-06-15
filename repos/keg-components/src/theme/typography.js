@@ -10,9 +10,9 @@ export const typography = {
     family: {
       $native: {},
       $web: {
-        fontFamily: fontDefs.family || "Verdana, Geneva, sans-serif"
-      }
-    }
+        fontFamily: fontDefs.family || 'Verdana, Geneva, sans-serif',
+      },
+    },
   },
   default: {
     color: colors.opacity._85,
@@ -23,17 +23,17 @@ export const typography = {
   caption: {
     color: colors.opacity._60,
     fontSize: 12,
-    letterSpacing: 0.4
+    letterSpacing: 0.4,
   },
   h1: {
     fontWeight: '300',
     fontSize: 96,
-    letterSpacing: -1.5
+    letterSpacing: -1.5,
   },
   h2: {
     fontWeight: '300',
     fontSize: 60,
-    letterSpacing: -0.5
+    letterSpacing: -0.5,
   },
   h3: {
     color: colors.opacity._60,
@@ -41,7 +41,7 @@ export const typography = {
   },
   h4: {
     fontSize: 34,
-    letterSpacing: 0.25
+    letterSpacing: 0.25,
   },
   h5: {
     fontSize: 24,
@@ -50,18 +50,18 @@ export const typography = {
     color: colors.opacity._60,
     fontSize: 20,
     letterSpacing: 0.15,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   label: {
     minWidth: '100%',
     fontSize: 11,
     letterSpacing: 0.15,
     fontWeight: '700',
-    marginBottom: margin.size / 4
+    marginBottom: margin.size / 4,
   },
   paragraph: {
     fontSize: fontDefs.size || 16,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 12,

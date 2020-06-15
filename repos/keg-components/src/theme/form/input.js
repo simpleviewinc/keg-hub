@@ -1,7 +1,3 @@
-import defaults from '../defaults.json'
-import { get } from 'jsutils'
-import { colors } from '../colors'
-import { padding } from '../padding'
 import { typography } from '../typography'
 import { sharedForm } from './sharedForm'
 
@@ -18,6 +14,6 @@ export const input = {
     },
     $native: {
       width: '100%',
-    }
-  }
+    },
+  },
 }

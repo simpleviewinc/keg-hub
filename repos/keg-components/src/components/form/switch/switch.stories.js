@@ -1,5 +1,3 @@
-
-
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { Switch, Checkbox } from '../../'
@@ -7,40 +5,56 @@ import { action } from '@storybook/addon-actions'
 import { StoryWrap, Split } from 'StoryWrap'
 
 storiesOf('Form | Switch', module)
-  .add('Default', () =>
+  .add('Default', () => (
     <StoryWrap>
-      <Switch onChange={ action("Switch Click!") } />
+      <Switch onChange={action('Switch Click!')} />
     </StoryWrap>
-  )
-  .add('Custom', () =>
+  ))
+  .add('Custom', () => (
     <StoryWrap>
-      <Switch SwitchComponent={ <Checkbox onChange={ action("Checkbox Click!") } /> } />
-    </StoryWrap>
-  )
-  .add('Side Text', () =>
-    <StoryWrap>
-      <Switch LeftComponent="Left Text" onChange={ action("Switch Click!") } />
-      <Split />
-      <Switch RightComponent="Right Text" onChange={ action("Switch Click!") } />
-      <Split />
       <Switch
-        LeftComponent="Left Text"
-        RightComponent="Right Text"
-        onChange={ action("Switch Click!") }
+        SwitchComponent={<Checkbox onChange={action('Checkbox Click!')} />}
       />
     </StoryWrap>
-  )
-  .add('Close Text', () =>
+  ))
+  .add('Side Text', () => (
     <StoryWrap>
-      <Switch close LeftComponent="Left Text" onChange={ action("Switch Click!") } />
+      <Switch
+        LeftComponent='Left Text'
+        onChange={action('Switch Click!')}
+      />
       <Split />
-      <Switch close RightComponent="Right Text" onChange={ action("Switch Click!") } />
+      <Switch
+        RightComponent='Right Text'
+        onChange={action('Switch Click!')}
+      />
+      <Split />
+      <Switch
+        LeftComponent='Left Text'
+        RightComponent='Right Text'
+        onChange={action('Switch Click!')}
+      />
+    </StoryWrap>
+  ))
+  .add('Close Text', () => (
+    <StoryWrap>
+      <Switch
+        close
+        LeftComponent='Left Text'
+        onChange={action('Switch Click!')}
+      />
       <Split />
       <Switch
         close
-        LeftComponent="Left Text"
-        RightComponent="Right Text"
-        onChange={ action("Switch Click!") }
+        RightComponent='Right Text'
+        onChange={action('Switch Click!')}
+      />
+      <Split />
+      <Switch
+        close
+        LeftComponent='Left Text'
+        RightComponent='Right Text'
+        onChange={action('Switch Click!')}
       />
     </StoryWrap>
-  )
+  ))

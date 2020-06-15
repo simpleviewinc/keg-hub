@@ -2,7 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@simpleviewinc/re-theme'
 import { useThemePath } from '../../../hooks'
-import { getValueFromChildren, getInputValueKey, getReadOnly } from '../../../utils'
+import {
+  getValueFromChildren,
+  getInputValueKey,
+  getReadOnly,
+} from '../../../utils'
 import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
 
 /**
@@ -12,8 +16,10 @@ import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
  *
  * @returns {Object} - key / value pair for the select component
  */
-const getValue = ({ children, onChange, onValueChange, readOnly, value }, isWeb) => {
-  
+const getValue = (
+  { children, onChange, onValueChange, readOnly, value },
+  isWeb
+) => {
   const setValue = getValueFromChildren(value, children)
 
   const valKey = getInputValueKey(isWeb, onChange, onValueChange, readOnly)
@@ -23,7 +29,7 @@ const getValue = ({ children, onChange, onValueChange, readOnly, value }, isWeb)
 
 export const SelectWrapper = props => {
   const theme = useTheme()
-  const { 
+  const {
     children,
     editable,
     disabled,
@@ -32,42 +38,38 @@ export const SelectWrapper = props => {
     readOnly,
     onChange,
     onValueChange,
-    type='default',
-    themePath=`form.select.${type}`,
+    type = 'default',
+    themePath = `form.select.${type}`,
     style,
     value,
     ...elProps
   } = props
-  
-  const [ selectStyles ] = useThemePath(themePath)
+
+  const [selectStyles] = useThemePath(themePath)
 
   return (
     <Element
-      elProps={ elProps }
-      style={ theme.join(selectStyles, style) }
-      { ...getReadOnly(isWeb, readOnly, disabled, editable) }
-      { ...getValue(props, isWeb) }
-      { ...useSelectHandlers({ onChange, onValueChange }) }
+      elProps={elProps}
+      style={theme.join(selectStyles, style)}
+      {...getReadOnly(isWeb, readOnly, disabled, editable)}
+      {...getValue(props, isWeb)}
+      {...useSelectHandlers({ onChange, onValueChange })}
     >
       { children }
     </Element>
   )
-
 }
 
 SelectWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.array
+    PropTypes.array,
   ]),
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   ref: PropTypes.object,
   style: PropTypes.object,
   type: PropTypes.string,
-  value: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ])
+  value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 }

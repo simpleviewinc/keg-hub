@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { FilePicker } from 'KegFilePicker'
@@ -7,38 +6,38 @@ import { StoryWrap } from 'StoryWrap'
 import { P } from '../typography'
 
 storiesOf('File Picker', module)
-  .add('Default', () =>
+  .add('Default', () => (
     <StoryWrap>
-      <FilePicker 
-        title={'Click here to select a file'} 
-        onFilePicked={ action("File selected!") } 
+      <FilePicker
+        title={'Click here to select a file'}
+        onFilePicked={action('File selected!')}
       />
     </StoryWrap>
-  )
+  ))
 
-  .add('As a button only', () =>
+  .add('As a button only', () => (
     <StoryWrap>
-      <FilePicker 
+      <FilePicker
         title={'Click here to select a darn file'}
-        showFile={false} 
-        onFilePicked={ action("File selected!") }
+        showFile={false}
+        onFilePicked={action('File selected!')}
       />
     </StoryWrap>
-  )
+  ))
 
-  .add('With standard input props', () => 
+  .add('With standard input props', () => (
     <StoryWrap>
-      <FilePicker 
+      <FilePicker
         accept='image/*'
         title={'Click here to select an image'}
-        onChange={ action("File selected!") } 
+        onChange={action('File selected!')}
       />
     </StoryWrap>
-  )
+  ))
 
   .add('With children', () => (
     <StoryWrap>
-      <FilePicker onFilePicked={ file => action("File selected!", file) }>
+      <FilePicker onFilePicked={file => action('File selected!', file)}>
         <P>Some additional text here as a child element.</P>
       </FilePicker>
     </StoryWrap>
@@ -46,10 +45,10 @@ storiesOf('File Picker', module)
 
   .add('Opening picker on mount', () => (
     <StoryWrap>
-      <FilePicker 
+      <FilePicker
         accept='image/*'
         title={'Click here to select an image'}
-        onChange={ action("File selected!") } 
+        onChange={action('File selected!')}
         openOnMount
       />
     </StoryWrap>
@@ -58,18 +57,16 @@ storiesOf('File Picker', module)
   .add('With themes', () => {
     return (
       <StoryWrap>
-        {
-          [ 'default', 'primary', 'secondary', 'warn', 'danger'].map(type => (
-            <FilePicker 
-              key={type}
-              style={{ marginTop: 10 }}
-              buttonThemePath={`button.contained.${type}`} 
-              onFilePicked={file => action("File selected!", file)}>
-                <P>File picker {type}</P>
-            </FilePicker>
-          ))
-        }
+        { [ 'default', 'primary', 'secondary', 'warn', 'danger' ].map(type => (
+          <FilePicker
+            key={type}
+            style={{ marginTop: 10 }}
+            buttonThemePath={`button.contained.${type}`}
+            onFilePicked={file => action('File selected!', file)}
+          >
+            <P>File picker { type }</P>
+          </FilePicker>
+        )) }
       </StoryWrap>
     )
   })
-  

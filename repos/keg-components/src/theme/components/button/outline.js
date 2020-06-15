@@ -13,20 +13,21 @@ const outlineStyles = (state, colorType) => {
         padding: 8,
         borderWidth: 1,
         borderColor: activeColor,
-        backgroundColor: state === 'hover'
-          ? colors.opacity(10, activeColor) 
-          : get(colors, 'palette.white01'),
+        backgroundColor:
+          state === 'hover'
+            ? colors.opacity(10, activeColor)
+            : get(colors, 'palette.white01'),
       },
       $web: {
         outline: 'none',
-      }
+      },
     },
     content: {
       $all: {
         color: activeColor,
-      }
-    }
+      },
+    },
   }
 }
 
-export const outline = buildTheme(outlineStyles, { inheritFrom: [ contained ] })
+export const outline = buildTheme(outlineStyles, { inheritFrom: [contained] })

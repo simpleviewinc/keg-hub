@@ -5,5 +5,5 @@ import { outline } from './outline'
 export const button = {
   contained,
   text,
-  outline
+  outline,
 }
