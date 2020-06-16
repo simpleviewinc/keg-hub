@@ -76,7 +76,7 @@ keg_check_ruby_gem_owner(){
 
   # Check if the gem owner is the same as the current user
   if [[ "$KEG_USER" != $GEM_OWNER ]]; then
-    local ANSWER=$(keg_ask_question "Current user $KEG_USER does not own ruby gems path $GEM_PATH. Would you like to update it? (y/n):")
+    local ANSWER=$(keg_ask_question "Current user $KEG_USER does not own ruby gems path $GEM_PATH. Would you like to update it? (y/N):")
 
     if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
       keg_message "Updating Ruby Gems folder owner..."
@@ -337,6 +337,48 @@ keg_install_repo(){
 
 }
 
+# Checks if the timeout lib exists
+keg_check_timeout_in_path(){
+  keg_message "Checking timeout is installed..."
+
+  # Checks that the timeout module is install
+  if [[ -x "$(command -v timeout 2>/dev/null)" ]]; then
+    keg_message "timeout is installed"
+    return
+
+  # If not, then use brew to install it 
+  else
+
+    # Hack to get around bug in brew coreutils
+    local TIMEOUT_PATH=/usr/local/bin/timeout
+
+    # Check if coreutils is installed
+    if brew ls --versions coreutils > /dev/null; then
+      keg_message "Brew coreutils is installed"
+
+    # Otherwise install coreutils
+    else
+      keg_message "Installing brew coreutils"
+      brew install coreutils
+
+    fi
+
+    # # Ensure the timeout gets symlinked to the bin
+    local TIMEOUT_PATH="/usr/local/bin/timeout"
+    if [[ -f "$TIMEOUT_PATH" || -h "$TIMEOUT_PATH" ]]; then
+      keg_message "Timeout is in bin"
+      return
+
+    # Symlink gtimeout to timeout
+    else
+      keg_message "Setting up timeout sym-link..."
+      sudo ln -s /usr/local/bin/gtimeout /usr/local/bin/timeout
+
+    fi
+
+  fi
+}
+
 # Checks the bash_profile and bashrc files for entries of the keg-cli
 # If not found, it will add it; and reload the bash file
 keg_check_bash_file(){
@@ -380,7 +422,7 @@ keg_check_bash_file(){
 }
 
 keg_remove_from_bash(){
-  keg_message "Checking bash profile for KEG-CLI..."
+  keg_message "Removing keg from terminal profile..."
 
   # Check if the bashfile exists
   local BASHRC_FILE
@@ -428,26 +470,44 @@ keg_check_cli_dirs(){
 
 }
 
+# Uninstalls a package from brew
+keg_uninstall_brew_package(){
+
+  local PACK_NAME="$2"
+  if [[ -z "$2" ]]; then
+    PACK_NAME="$1"
+  fi
+
+  local ANSWER=$(keg_ask_question "Confirm remove $PACK_NAME? (y/N):")
+  if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+    keg_message "Removing $PACK_NAME..."
+    brew uninstall $1
+  fi
+
+}
+
+
 # Removes all install docker software
 keg_clean_all(){
 
-  keg_message "Removing keg from bash..."
   keg_remove_from_bash
 
-  keg_message "Removing docker-sync..."
-  gem uninstall docker-sync
-  brew uninstall unison
-  brew uninstall eugenmayer/dockersync/unox
+  local ANSWER=$(keg_ask_question "Confirm remove docker-sync? (y/N):")
+  if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+    keg_message "Removing docker-sync..."
+    gem uninstall docker-sync
+  fi
 
-  keg_message "Removing docker-compose..."
-  brew uninstall docker-compose
+  keg_uninstall_brew_package "unison"
+  keg_uninstall_brew_package "eugenmayer/dockersync/unox"
+  keg_uninstall_brew_package "docker-compose"
 
-  keg_message "Removing docker-machine..."
   docker-machine rm $KEG_DOCKER_NAME
-  brew uninstall docker-machine
-
-  keg_message "Removing docker..."
-  brew uninstall docker
+  keg_uninstall_brew_package "docker-machine"
+  
+  keg_uninstall_brew_package "docker"
+  keg_uninstall_brew_package "github/gh/gh" "Github CLI"
+  keg_uninstall_brew_package "coreutils" "coreutils ( timeout )"
 
   keg_remove_virtual_box
 
@@ -459,7 +519,7 @@ keg_remove_virtual_box(){
   keg_message "Checking if virtualbox is installed!"
 
   if [[ -d "/Applications/VirtualBox.app" ]]; then
-    local ANSWER=$(keg_ask_question "Confirm remove Virtual Box? (y/n):")
+    local ANSWER=$(keg_ask_question "Confirm remove Virtual Box? (y/N):")
     if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
       keg_message "Removing virtualbox..."
       brew cask uninstall virtualbox
@@ -482,7 +542,7 @@ keg_uninstall_all(){
   keg_clean_all
 
   if [[ -d "$KEG_ROOT_DIR" ]] && [[ "$KEG_ROOT_DIR" != "/" ]]; then
-    local ANSWER=$(keg_ask_question "Confirm remove $KEG_ROOT_DIR? (y/n):")
+    local ANSWER=$(keg_ask_question "Confirm remove $KEG_ROOT_DIR? (y/N):")
     if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
       sudo rm -rf $KEG_ROOT_DIR
     fi
@@ -548,7 +608,7 @@ keg_remove_global_config(){
 
   if [[ -d "$KEG_GLOBAL_PATH" ]]; then
 
-    local ANSWER=$(keg_ask_question "Confirm remove $KEG_GLOBAL_PATH? (y/n):")
+    local ANSWER=$(keg_ask_question "Confirm remove $KEG_GLOBAL_PATH? (y/N):")
     if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
       keg_message "Removing global config folder at $KEG_GLOBAL_PATH"
       rm -rf $KEG_GLOBAL_PATH
@@ -642,14 +702,24 @@ keg_setup(){
     keg_brew_install "${@:2}"
   fi
 
-  # Setup and install brew
+  # Setup and install github cli
   # To run:
-  # bash mac-init.sh brew
-  #  * Runs only the brew portion of this script
+  # bash mac-init.sh gh
+  #  * Runs only the gh portion of this script
   if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "gh" ]]; then
     keg_message "Checking for github cli install..."
     keg_install_github_cli
   fi
+
+  # Setup and install timeout
+  # To run:
+  # bash mac-init.sh timeout
+  #  * Runs only the timeout portion of this script
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "timeout" ]]; then
+    keg_message "Checking for timeout install..."
+    keg_check_timeout_in_path
+  fi
+
 
   # Setup and install docker
   # To run:
