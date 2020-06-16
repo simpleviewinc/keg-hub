@@ -2,12 +2,16 @@ version: "3.8"
 services:
   kegcomponents:
     volumes:
-      - components-sync:${DOC_APP_PATH}:nocopy
       - cli-sync:/keg/keg-cli:nocopy
+      - components-sync:${DOC_APP_PATH}:nocopy
+      - retheme-sync:${DOC_RETHEME_PATH}:nocopy
 volumes:
-  components-sync:
-    external:
-      name: "components-unison-sync"
   cli-sync:
     external:
       name: "cli-unison-sync"
+  components-sync:
+    external:
+      name: "components-unison-sync"
+  retheme-sync:
+    external:
+      name: "retheme-unison-sync"

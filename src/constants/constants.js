@@ -104,4 +104,7 @@ module.exports = deepFreeze({
 
   PACKAGE: 'package',
 
+  // ENV port to map to port 80 inside the docker container
+  HTTP_PORT_ENV: `EXPO_APP_PORT`,
+
 })

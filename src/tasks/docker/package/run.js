@@ -69,7 +69,6 @@ const dockerPackageRun = async args => {
   await docker.image.run({
     ...parsed,
     opts,
-    
     location,
     envs: contextEnvs,
     cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/core/run.sh`,

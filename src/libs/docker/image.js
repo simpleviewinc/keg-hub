@@ -215,7 +215,7 @@ const runImage = async (args) => {
   cmdToRun = `${ cmdToRun } ${ isArr(opts) ? opts.join(' ') : opts }`.trim()
 
   // Convert the passed in envs to envs that can be passed to the container
-  // cmdToRun = toContainerEnvs(envs, cmdToRun)
+  cmdToRun = toContainerEnvs(envs, cmdToRun)
   
   // Get the container run command
   const containerCmd = overrideCmd && (entry || '/bin/sh') || ''

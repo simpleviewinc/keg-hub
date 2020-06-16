@@ -2,6 +2,7 @@
 const { get } = require('jsutils')
 const docker = require('KegDocCli')
 const { spawnCmd } = require('KegProc')
+const { HTTP_PORT_ENV } = require('KegConst/constants')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
 const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
@@ -70,6 +71,17 @@ const getImageData = async args => {
 
 }
 
+
+const addExposedPorts = envs => {
+  return Object.keys(envs).reduce((ports, key) => {
+    return key.includes('_PORT')
+      ? key === HTTP_PORT_ENV
+        ? ports.concat([ `-p 80:${envs[key]}` ])
+        : ports.concat([ `-p ${envs[key]}:${envs[key]}` ])
+      : ports
+  }, [])
+}
+
 /**
  * Run a docker image command
  * @param {Object} args - arguments passed from the runTask method
@@ -82,14 +94,15 @@ const getImageData = async args => {
  */
 const runDockerImage = async args => {
   const { globalConfig, params, task } = args
-  const { context, cleanup, entry } = params
+  const { context, cleanup, entry, options } = params
 
   const { tag, location, contextEnvs, container, image } = context
     ? await getImageContext(args)
     : await getImageData(args)
 
-  const opts = [ `-it` ]
+  let opts = options.concat([ `-it` ])
   cleanup && opts.push(`--rm`)
+  opts = opts.concat(addExposedPorts(contextEnvs))
 
   await docker.image.run({
     tag,
@@ -97,6 +110,7 @@ const runDockerImage = async args => {
     entry,
     image,
     location,
+    log: true,
     envs: contextEnvs,
     name: container,
   })
@@ -122,10 +136,21 @@ module.exports = {
         example: `keg docker image run  --cleanup false`,
         default: true
       },
+      options: {
+        alias: [ 'opts' ],
+        description: 'Extra docker run command options',
+        example: `keg docker image run --options \\"-p 80:19006 -e MY_ENV=data\\"`,
+        default: []
+      },
       entry: {
         description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bas h)',
         example: 'keg docker image run --entry \\"node index.js\\"',
         default: '/bin/sh'
+      },
+      log: {
+        description: 'Log the docker run command to the terminal',
+        example: 'keg docker image run --log false',
+        default: true,
       },
       tag: {
         description: 'Tag of the image to be run',

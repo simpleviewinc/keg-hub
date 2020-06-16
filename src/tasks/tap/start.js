@@ -208,7 +208,7 @@ module.exports = {
         allowed: [ true, false, 'sync', 'compose' ],
         description: 'Attaches to a process in lieu of running in the backgound. Overrides "detached"',
         example: `keg tap start --attach compose ( Runs sync in background and attaches to compose) `,
-        default: 'compose',
+        default: 'sync',
       },
       build: {
         description: 'Removes and rebuilds the docker container before running the tap',
@@ -227,8 +227,8 @@ module.exports = {
       },
       compose: {
         description: 'Run the docker-compose up command',
-        example: 'keg tap start --compose false',
-        default: true,
+        example: 'keg tap start --compose',
+        default: false,
       },
       detached: {
         alias: [ 'detach', 'dt', 'de' ],

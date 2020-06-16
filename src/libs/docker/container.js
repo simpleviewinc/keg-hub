@@ -1,6 +1,6 @@
 const { compareItems, noItemError, cmdSuccess } = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
-const { isArr, toStr, isStr, deepMerge } = require('jsutils')
+const { isArr, toStr, isStr, deepMerge, checkCall } = require('jsutils')
 
 // Container commands the require an item argument of the container id or name
 const containerItemCmds = [
@@ -252,12 +252,16 @@ const container = (args={}) => dynamicCmd(
 const get = async nameOrId => {
   // Get all current containers
   const containers = await list({ errResponse: [], format: 'json' })
+
   return containers.reduce((item, container) => {
     return item 
       ? item
-      : container.names === nameOrId || container.id === nameOrId
-        ? container
-        : item
+      : checkCall(() => {
+          let match = container.names === nameOrId || container.id === nameOrId
+          match = match || container.names.indexOf(`-${ nameOrId }`) === 0
+
+          return match ? container : item
+        })
   }, false)
 }
 

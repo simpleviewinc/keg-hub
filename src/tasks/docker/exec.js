@@ -1,8 +1,45 @@
+const docker = require('KegDocCli')
+const { isStr, get, checkCall } = require('jsutils')
+const { DOCKER } = require('KegConst/docker')
 const { buildLocationContext } = require('KegUtils/builders')
 const { throwRequired, generalError } = require('KegUtils/error')
-const { isStr, get } = require('jsutils')
-const docker = require('KegDocCli')
-const { DOCKER } = require('KegConst/docker')
+const { containerSelect } = require('KegUtils/docker/containerSelect')
+
+/**
+ * Gets the correct context for the command
+ * If no context exists, it asks user to select a container for context
+ * @function
+ *
+ * @returns {Object} - context, and container to exec
+ */
+const ensureContext = async ({ context, tap }) => {
+
+  // Get the container / image from the context
+  let name = tap
+    ? 'tap'
+    : !context
+      ? false
+      : context.includes('keg')
+        ? context
+        : `keg${context}`
+
+  // Try to get the container from the context
+  let container = name && await docker.container.get(name)
+
+  // If no container, then ask which container to use
+  container = container || await containerSelect(containers => {
+    return containers.filter(container => !container.status.includes('Exited'))
+  })
+
+  // Get the context to use
+    // If no context, use the container image to find the context
+  const useContext = tap
+    ? 'tap'
+    : context|| container && container.image.replace('keg', '').split(':')[0]
+
+  return { container, context: useContext }
+
+}
 
 /**
  * Execute a docker command on a running container
@@ -15,7 +52,8 @@ const { DOCKER } = require('KegConst/docker')
  */
 const dockerExec = async args => {
   const { params, globalConfig, task, command } = args
-  const { context, cmd, options } = params
+  const { cmd, options } = params
+  const { context, container } = await ensureContext(params)
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
@@ -28,12 +66,14 @@ const dockerExec = async args => {
     package,
     tap,
     image
-  } = await buildLocationContext({ globalConfig, task, params })
+  } = await buildLocationContext({ globalConfig, task, params: { ...params, context } })
 
+  // Get the name of the container to exec
+  const containerName = container && container.names || package || image
 
   // Run the command on the container
   await docker.container.exec(
-    { cmd, container: package || image, opts: options },
+    { cmd, container: containerName, opts: options },
     { options: { env: contextEnvs } },
     location
   )

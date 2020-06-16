@@ -34,6 +34,9 @@ const rmDockerItem = (item, type='container') => {
 /**
  * Builds a tar command to be run in the docker container
  * @function
+ * @example
+ * Pack => tar -czf /tmp/keg.gz /keg/keg-core
+ * Unpack => tar -xf /tmp/keg.gz -C /keg/keg-core
  * @param {string} from - the tar file to be referenced
  * @param {string} to - the Path the from tar file relates to
  * @param {boolean} unpack - If the tar command should unpack the from tar file
@@ -46,7 +49,7 @@ const buildTarCmd = ({ from, to, unpack, log }) => {
 
   const tarArgs = unpack ? `-xf` : `-czf`
   const packArgs = unpack ? ` -C ` : ` `
-  
+
   return `tar ${ tarArgs }${ log ? 'v' : '' } ${ from }${ packArgs }${ to }`.trim()
 }
 

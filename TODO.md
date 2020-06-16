@@ -52,6 +52,27 @@
     * Stored in `cli.config.json`
 
 
+* Add a full docker clean command
+  * clean docker-sync tap / core
+  * clean docker containers
+  * clean docker images
+  * clean docker volumes
+
+
+* Add tasks to update version for repos
+  * Should update the package.json version
+  * All - Must follow this order
+    * update re-theme
+    * update tap-resolver
+    * update keg-components
+    * update keg-core
+    * update taps ( optional )
+  * Allow passing in major minor patch
+  * Allow auto-committing to develop, then develop to qa, then develop to master
+    * This is done for each repo
+  
+
+
 
 ### Setup Scripts
   * Added check machine type
