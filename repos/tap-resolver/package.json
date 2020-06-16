@@ -1,6 +1,6 @@
 {
   "name": "@simpleviewinc/tap-resolver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Resolves tap files within the SV-Keg",
   "main": "babel.config.js",
   "author": "Lance Tipton",
