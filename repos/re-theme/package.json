@@ -4,14 +4,14 @@
   "description": "Simple Theme switcher / builder for React and React Native",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
-  "publishConfig": { 
-    "registry": "https://npm.pkg.github.com/" 
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
-  "repository" : {
+  "repository": {
     "url": "ssh://git@github.com/simpleviewinc/re-theme.git",
     "type": "git"
   },
-  "homepage" : "https://simpleviewinc.github.io/re-theme",
+  "homepage": "https://simpleviewinc.github.io/re-theme",
   "author": "Lance Tipton",
   "license": "MIT",
   "files": [
@@ -35,20 +35,28 @@
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
-    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint {{changed}} --fix"
+    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix"
   },
   "devDependencies": {
-    "app-root-path": "3.0.0",
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.6.3",
-    "babel-eslint": "10.1.0",
     "@rollup/plugin-alias": "2.2.0",
+    "app-root-path": "3.0.0",
+    "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
+    "eslint": "7.1.0",
+    "eslint-plugin-jest": "23.13.2",
+    "eslint-plugin-react": "7.20.0",
+    "eslint-plugin-react-native": "3.8.1",
     "gh-pages": "^2.2.0",
+    "husky": "4.2.5",
     "jest": "24.7.1",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
+    "lint-staged": "10.2.10",
+    "onchange": "7.0.2",
+    "prettier": "2.0.5",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-native": "0.61.1",
@@ -62,13 +70,7 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
     "rollup-plugin-sourcemaps": "0.4.2",
-    "rollup-plugin-terser": "5.1.2",
-    "onchange": "7.0.2",
-    "prettier": "2.0.5",
-    "eslint": "7.1.0",
-    "eslint-plugin-jest": "23.13.2",
-    "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-native": "3.8.1"
+    "rollup-plugin-terser": "5.1.2"
   },
   "peerDependencies": {
     "jsutils": "^git+https://github.com/lancetipton/jsutils.git#v3.2.1",
@@ -104,5 +106,10 @@
     "setupFilesAfterEnv": [
       "<rootDir>/setupTests.js"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged --config ./configs/lint-staged.config.js"
+    }
   }
 }
