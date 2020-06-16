@@ -8,9 +8,11 @@ require('KegMocks/logger/console')
 const { Logger } = require('KegMocks/logger')
 jest.setMock('KegLog', { Logger })
 
+const Tasks = require('KegTasks')
 const { getTask } = require('KegMocks/helpers/testTasks')
-global.getTask = getTask
 
+global.cliTasks = Tasks
+global.getTask = getTask
 global.testMocks = global.testMocks || {}
 
 // Setup our cache holder

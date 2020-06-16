@@ -11,12 +11,11 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 /**
  * Helper to call an internal task to get the current branch name
  * Then uses the branch name to build the image name for tagging a docker image
- * @param {Object} image - Docker API image object
  * @param {Object} args - arguments required to build the tag
  *
  * @returns {Object} - The name of the image and branch of the repo
  */
-const getGitBranch = async (image, args) => {
+const getGitBranch = async args => {
   const branch = await runInternalTask(
     'tasks.git.tasks.branch.tasks.current',
     { ...args, command: 'current', __skipLog: true },
@@ -119,7 +118,8 @@ const addProviderTags = async (image, url, args) => {
   const { context, tag } = params
 
   // Get the branch name 
-  const branch = await getGitBranch(image, args)
+  const branch = await getGitBranch(args)
+
   const name = image.repository
 
   // Build the version tag, and add it to the docker image

@@ -133,10 +133,11 @@ class Branch {
   */
   current = async (location=process.cwd(), branches) => {
     branches = branches || await this.list(location)
-    return branches && branches.reduce((found, key) => {
-      const value = branches[key]
-      return !found && value && value.current ? value : found
+
+    return branches && branches.reduce((current, branch) => {
+      return !current && branch && branch.current ? branch : current
     }, null)
+
   }
 
 }
