@@ -21,4 +21,20 @@ const setupAssumeUnchange = async folderName => {
   }
 }
 
-setupAssumeUnchange('build')
+/**
+ * runs `yarn app:install - which sets up the /app`
+ */
+const setupApp = async () => {
+  console.log(`-----running yarn app:install-----`)
+  try {
+    await exec(`cd ${rootDir} && yarn app:install`)
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+
+if (!__dirname.includes('node_modules')) {
+  setupAssumeUnchange('build')
+  setupApp()
+}
