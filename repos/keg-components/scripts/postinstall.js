@@ -18,5 +18,7 @@ const setupAssumeUnchange = async (folderName) => {
   }
 }
 
-setupAssumeUnchange('build')
+if (!__dirname.includes('node_modules')) {
+  setupAssumeUnchange('build')
+}
 

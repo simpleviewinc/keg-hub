@@ -7,8 +7,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "files": [
-    "build",
-    "scripts"
+    "build"
   ],
   "repository": {
     "url": "ssh://git@github.com/simpleviewinc/keg-components.git",
@@ -16,7 +15,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd scripts && node postinstall.js",
+    "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
     "clean": "yarn clean:nm",
     "clean:nm": "rimraf ./node_modules; yarn cache clean; yarn install",
@@ -58,7 +57,7 @@
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-json": "4.0.1",
     "@rollup/plugin-replace": "2.3.0",
-    "@simpleviewinc/re-theme": "1.1.0",
+    "@simpleviewinc/re-theme": "1.1.2",
     "@storybook/addon-actions": "5.3.6",
     "@storybook/addon-docs": "5.3.6",
     "@storybook/addon-links": "5.3.6",
@@ -112,7 +111,7 @@
   },
   "peerDependencies": {
     "@expo/vector-icons": "^10.2.0",
-    "@simpleviewinc/re-theme": "1.1.0",
+    "@simpleviewinc/re-theme": "1.1.2",
     "expo": "^36.0.0",
     "expo-font": "^8.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
