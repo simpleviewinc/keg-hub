@@ -12,6 +12,7 @@ if [[ -z "$KEG_ROOT_DIR" ]]; then
 fi
 
 export KEG_CLI_PATH=$KEG_ROOT_DIR/keg-cli
+export KEG_GLOBAL_PATH=$HOME/.kegConfig
 
 KEG_USER="$USER"
 KEG_GROUP="$(id -g -n $KEG_USER)"
@@ -378,6 +379,30 @@ keg_check_bash_file(){
 
 }
 
+keg_remove_from_bash(){
+  keg_message "Checking bash profile for KEG-CLI..."
+
+  # Check if the bashfile exists
+  local BASHRC_FILE
+
+  # Check for .bash file
+  local PROFILE=~/.bash_profile
+  local BRC=~/.bashrc
+  if [[ -f "$PROFILE" ]]; then
+    BASH_FILE="$PROFILE"
+  elif [[ -f "$BRC" ]]; then
+    BASH_FILE="$BRC"
+  fi
+
+  # If no bash file is found, then nothing to remove
+  if [[ ! -f "$BASH_FILE" ]]; then
+    return
+  fi
+  
+  grep -v "source $KEG_CLI_PATH/keg" $BASH_FILE > $BASH_FILE.tmp; mv $BASH_FILE.tmp $BASH_FILE
+
+}
+
 # Installs the keg-cli, and clones the keg-core / keg-componets repos locally
 # Updates the bash_profile to source the keg-cli when loaded!
 keg_check_cli_dirs(){
@@ -406,6 +431,9 @@ keg_check_cli_dirs(){
 # Removes all install docker software
 keg_clean_all(){
 
+  keg_message "Removing keg from bash..."
+  keg_remove_from_bash
+
   keg_message "Removing docker-sync..."
   gem uninstall docker-sync
   brew uninstall unison
@@ -422,9 +450,6 @@ keg_clean_all(){
   brew uninstall docker
 
   keg_remove_virtual_box
-
-  # Reload users .bashrc and .bash_profile
-  keg_src_bash
 
 }
 
@@ -462,6 +487,9 @@ keg_uninstall_all(){
       sudo rm -rf $KEG_ROOT_DIR
     fi
   fi
+
+  # Remove the global config folder that holds all the user settings
+  keg_remove_global_config
 
 }
 
@@ -506,13 +534,28 @@ keg_cli_config_setup(){
 
 # Check and create the global config folder if it doesn't exist
 keg_check_global_config(){
-  local KEG_GLOBAL_PATH=$HOME/.kegConfig
 
   # Ensure global cli config folder exists
   if [[ ! -d "$KEG_GLOBAL_PATH" ]]; then
     keg_message "Creating global config folder at $KEG_GLOBAL_PATH"
     mkdir -p $KEG_GLOBAL_PATH
   fi
+
+}
+
+# Checks and removes the global config folder if it exists
+keg_remove_global_config(){
+
+  if [[ -d "$KEG_GLOBAL_PATH" ]]; then
+
+    local ANSWER=$(keg_ask_question "Confirm remove $KEG_GLOBAL_PATH? (y/n):")
+    if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+      keg_message "Removing global config folder at $KEG_GLOBAL_PATH"
+      rm -rf $KEG_GLOBAL_PATH
+    fi
+
+  fi
+
 }
 
 # Runs methods to setup the keg-cli, with docker and vagrant
