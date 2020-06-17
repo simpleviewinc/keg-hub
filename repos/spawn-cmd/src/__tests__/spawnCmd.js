@@ -8,8 +8,7 @@ describe('/spawnCmd', () => {
 
     beforeEach(() => jest.resetAllMocks())
 
-    it('should return an successful exitCode', async (done) => {
-
+    it('should return an successful exitCode', async done => {
       const [ err, exitCode ] = await limbo(spawnCmd('sleep 1'))
 
       setTimeout(() => {
@@ -19,11 +18,11 @@ describe('/spawnCmd', () => {
 
     })
 
-    it('should return exit code 1 when error throws', async (done) => {
+    it('should return exit code 1 when error throws', async done => {
       const [ err, exitCode ] = await limbo(spawnCmd('sleep 1; __test__error__'))
 
       setTimeout(() => {
-        expect(exitCode).toBe(1)
+        expect(exitCode !== 0).toBe(true)
         done()
       }, 1100)
 
@@ -38,7 +37,10 @@ describe('/spawnCmd', () => {
     it('should call onStdOut method when passed in config', async () => {
 
       const onStdOut = jest.fn()
-      const [ err, exitCode ] = await limbo(spawnCmd('echo Test stdout', { onStdOut }))
+      const [ err, exitCode ] = await limbo(spawnCmd(
+        'echo Test stdout',
+        {  onStdOut, options: { stdio: 'pipe' } },
+      ))
 
       expect(onStdOut).toHaveBeenCalled()
 
@@ -50,9 +52,13 @@ describe('/spawnCmd', () => {
 
     beforeEach(() => jest.resetAllMocks())
 
-    it('should call onStdErr method when passed in config and error throws', async (done) => {
+    it('should call onStdErr method when passed in config and error throws', async done => {
+
       const onStdErr = jest.fn()
-      const [ err, exitCode ] = await limbo(spawnCmd('sleep 1; __test__error__', { onStdErr }))
+      const [ err, exitCode ] = await limbo(spawnCmd(
+        'sleep 1; __test__error__',
+        { onStdErr, options: { stdio: 'pipe' } }
+      ))
 
       setTimeout(() => {
         expect(onStdErr).toHaveBeenCalled()
@@ -61,9 +67,13 @@ describe('/spawnCmd', () => {
 
     })
 
-    it('should NOT call onStdErr method NO error throws', async (done) => {
+    it('should NOT call onStdErr method NO error throws', async done => {
+
       const onStdErr = jest.fn()
-      const [ err, exitCode ] = await limbo(spawnCmd('sleep 1', { onStdErr }))
+      const [ err, exitCode ] = await limbo(spawnCmd(
+        'sleep 1',
+        { onStdErr, options: { stdio: 'pipe' }}
+      ))
 
       setTimeout(() => {
         expect(onStdErr).not.toHaveBeenCalled()
@@ -78,7 +88,7 @@ describe('/spawnCmd', () => {
 
     beforeEach(() => jest.resetAllMocks())
 
-    it('should call onExit method when passed in config', async (done) => {
+    it('should call onExit method when passed in config', async done => {
       const onExit = jest.fn()
       const [ err, exitCode ] = await limbo(spawnCmd('sleep 1', { onExit }))
 
@@ -89,12 +99,17 @@ describe('/spawnCmd', () => {
 
     })
 
-    it('should call onExit method when passed in config and error throws', async (done) => {
+    it('should call onExit method when passed in config and error throws', async done => {
       const onStdErr = jest.fn()
-      const [ err, exitCode ] = await limbo(spawnCmd('sleep 1; __test__error__', { onStdErr }))
+      const onExit = jest.fn()
+      const [ err, exitCode ] = await limbo(spawnCmd(
+        'sleep 1; __test__error__',
+        { onStdErr, onExit, options: { stdio: 'pipe' }}
+      ))
 
       setTimeout(() => {
         expect(onStdErr).toHaveBeenCalled()
+        expect(onExit).toHaveBeenCalled()
         done()
       }, 1100)
 

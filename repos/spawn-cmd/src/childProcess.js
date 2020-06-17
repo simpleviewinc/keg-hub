@@ -3,7 +3,7 @@ const { spawn } = require('child_process')
 const killProc = require('tree-kill')
 const rootDir = require('app-root-path').path
 const { exitError, errorHandler } = require('./utils')
-const { logData, mapObj, checkCall, deepMerge } = require('jsutils')
+const { logData, mapObj, checkCall, deepMerge, isFunc } = require('jsutils')
 
 /**
  * Cache to hold child processes
@@ -44,6 +44,7 @@ const spawnOpts = {
   env: process.env,
   cwd: rootDir,
   stdio: 'inherit',
+  shell: true,
 }
 
 /**
@@ -61,11 +62,11 @@ const defKillProc = async (_, procId) => {
 }
 
 const defEvents = {
-  onExit: { method: defKillProc,  name: 'exit' },
-  onStdErr: { name: 'stderr', childKey: 'stderr' },
   onError: { name: 'error' },
-  onStdOut: { name: 'stdout', childKey: 'stdout' },
-  onClose: { name: 'close' }
+  onClose: { name: 'close' },
+  onStdErr: { name: 'stderr', childKey: 'stderr', sub: 'data' },
+  onStdOut: { name: 'stdout', childKey: 'stdout', sub: 'data' },
+  onExit: { method: defKillProc,  name: 'exit' },
 }
 
 const evtWrap = (cb, procId, event) => (data => checkCall(cb, data, procId))
@@ -86,13 +87,16 @@ const addEvents = (procId, cbEvents, child) => {
   child = child || get(procId)
   if (!child) return logData(`No child process found with ID: ${procId}`)
 
-  mapObj(defEvents, (key, { name, method, childKey }) => {
+  mapObj(defEvents, (key, { name, method, childKey, sub }) => {
+
     const validChild = childKey ? Boolean(child[childKey]) : true
     const callback = cbEvents[key] || method
+    if(!validChild || !isFunc(callback)) return
 
-    validChild &&
-      callback &&
-      child.on(name, evtWrap(callback, procId, name))
+    sub
+      ? child[childKey].on(sub, evtWrap(callback, procId, name))
+      : child.on(name, evtWrap(callback, procId, name))
+
   })
 
 }

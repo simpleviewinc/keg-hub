@@ -15,7 +15,7 @@ const defEvents = (config, res, rej) => ({
     const onOut = get(config, 'onStdOut')
     isFunc(onOut)
       ? onOut(data, procId)
-      : console.log(data)
+      : process.stdout.write(data)
   },
   onStdErr: (err, procId) => {
     const onErr = get(config, 'onStdErr')
@@ -120,7 +120,7 @@ module.exports = (...args) => {
       ...defEvents(config, res, rej),
       options: {
         env: process.env,
-        cwd: cwd,
+        ...(cwd && { cwd: cwd }),
         ...get(config, 'options', {}),
       },
     })
