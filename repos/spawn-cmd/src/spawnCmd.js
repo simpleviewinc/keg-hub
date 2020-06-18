@@ -21,20 +21,16 @@ const defEvents = (config, res, rej) => ({
     const onErr = get(config, 'onStdErr')
     isFunc(onErr)
       ? onErr(err, procId)
-      : errorHandler(err)
+      : process.stderr.write(err)
   },
   onError: (err, procId) => {
     const onErr = get(config, 'onError')
     isFunc(onErr)
       ? onErr(err, procId)
-      : (() => {
-        errorHandler(err)
-        kill(procId)
-      })()
+      : errorHandler(err)
   },
-  onExit: (exitCode, procId) => {
-    checkCall(get(config, 'onExit'), exitCode, procId)
-    kill(procId)
+  onExit: (event, exitCode, proc, childProc) => {
+    checkCall(get(config, 'onExit'), event, exitCode, proc, childProc)
     res(exitCode)
   }
 })
