@@ -1,6 +1,6 @@
 {
   "name": "spawn-cmd",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Spawn child process in Node",
   "repository": "https://github.com/lancetipton/spawn-cmd",
   "main": "index.js",
