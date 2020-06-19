@@ -256,13 +256,17 @@ const create = params => {
 
   const { cmd, args, options } = params
   const procOpts = deepMerge(spawnOpts, options)
-
   const childProc = spawn(cmd, args || [], procOpts)
 
   if(!childProc.pid){
     logData(`Child process created, but is no longer running!`, `warn`)
     return childProc
   }
+
+  // Detach the child from the parent if procOpts.detached is set, and has own IO
+  procOpts.detached &&
+    procOpts.stdio !== 'inherit' &&
+    childProc.unref()
 
   setupProc(childProc)
   addEvents(childProc.pid, params, childProc)
