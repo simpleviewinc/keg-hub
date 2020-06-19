@@ -29,8 +29,8 @@ const defEvents = (config, res, rej) => ({
       ? onErr(err, procId)
       : errorHandler(err)
   },
-  onExit: (event, exitCode, proc, childProc) => {
-    checkCall(get(config, 'onExit'), event, exitCode, proc, childProc)
+  onExit: (exitCode, procId) => {
+    checkCall(get(config, 'onExit'), exitCode, procId)
     res(exitCode)
   }
 })

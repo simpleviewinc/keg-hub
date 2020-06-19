@@ -20,7 +20,7 @@ const processes = {}
  *
  * @returns {void}
 */
-const initExitHandlers = (proc, childProc, onExit) => {
+const initExitHandlers = () => {
   
   Array.from([
     'exit',
@@ -30,14 +30,27 @@ const initExitHandlers = (proc, childProc, onExit) => {
     'uncaughtException',
     'SIGTERM'
   ])
-    .map(event => proc.on(event, async exitCode => {
-      if(childProc.__spOnExitCalled || proc.__spOnExitCalled || onExit.__spOnExitCalled || !isFunc(onExit)) return
+    // Loop over the events, and add each one to the current process
+    // This way we watch for any time the current process is killed
+    .map(event => process.on(event, async exitCode => {
+      // If exit was already called, return
+      if(process.__spOnExitCalled) return
 
-      childProc.__spOnExitCalled = true
-      onExit.__spOnExitCalled = true
-      proc.__spOnExitCalled = true
+      // Add our flag, so we don't call this again
+      process.__spOnExitCalled = true
 
-      await onExit(event, exitCode, proc, childProc)
+      // Loop over all child process, and kill them
+      mapObj(processes, (procId, childProc) => {
+        // If exit was already called, return
+        if(childProc.__spOnExitCalled) return
+
+        // Add our flag, so we don't call this again
+        childProc.__spOnExitCalled = true
+        logData(`Cleaning up child processes, On event: ${event}`)
+
+        // Force kill all child processes
+        killProc(procId, 'SIGKILL')
+      })
 
     }))
 
@@ -59,6 +72,21 @@ const spawnOpts = {
 }
 
 /**
+ * Default helper to ensure the child processes get killed
+ * @param {*} _ - NOT USED
+ * @param {string|number} procId - id of the child process to force kill
+ */
+const defKillProc = async (_, procId) => {
+  try {
+    return await forceKill(procId)
+  }
+  catch (e){
+    console.error(e.stack)
+    return 1
+  }
+}
+
+/**
  * Default event options.
  * @object
 */
@@ -67,6 +95,7 @@ const defEvents = {
   onClose: { name: 'close' },
   onStdErr: { name: 'stderr', childKey: 'stderr', sub: 'data' },
   onStdOut: { name: 'stdout', childKey: 'stdout', sub: 'data' },
+  onExit: { method: defKillProc,  name: 'exit' },
 }
 
 /**
@@ -226,7 +255,9 @@ const create = params => {
   params.log && logData('Creating child process...')
 
   const { cmd, args, options } = params
-  const childProc = spawn(cmd, args || [], deepMerge(spawnOpts, options))
+  const procOpts = deepMerge(spawnOpts, options)
+
+  const childProc = spawn(cmd, args || [], procOpts)
 
   if(!childProc.pid){
     logData(`Child process created, but is no longer running!`, `warn`)
@@ -235,7 +266,7 @@ const create = params => {
 
   setupProc(childProc)
   addEvents(childProc.pid, params, childProc)
-  initExitHandlers(process, childProc, params.onExit)
+  initExitHandlers()
 
   params.log && logData(`Created child process with PID: ${childProc.pid}`)
 
