@@ -1,119 +1,16 @@
+const { get } = require('jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { DOCKER } = require('KegConst')
-const { spawnCmd } = require('KegProc')
-const { logVirtualUrl } = require('KegUtils/log')
-const { isDetached } = require('KegUtils/helpers/isDetached')
-const { waitForIt } = require('KegUtils/helpers/waitForIt')
-const { buildDockerCmd } = require('KegUtils/docker')
-const { getCoreVersion } = require('KegUtils/getters')
 const { generalError } = require('KegUtils/error/generalError')
-const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { checkCall, get, reduceObj, isObj, isFunc } = require('jsutils')
-const { buildDockerImage } = require('KegUtils/builders/buildDockerImage')
-const { getContainerConst } = require('KegUtils/docker/getContainerConst')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
+const { checkBuildImage } = require('KegUtils/builders/checkBuildImage')
+const { throwInvalidSyncParams } = require('KegUtils/error/throwInvalidSyncParams')
+const {
+  composeService,
+  containerService,
+  mutagenService,
+} = require('KegUtils/services')
 
-/**
- * Starts a docker container for a tap
- * @param {Object} args - arguments passed from the runTask method
- * @param {Object} args.globalConfig - Global config object for the keg-cli
- * @param {Object} args.params - Formatted object of the passed in options 
- *
- * @returns {void}
- */
-const startContainer = async ({ globalConfig, params }) => {
-  const { tap, env, docker, mounts } = params
-
-  const location = getTapPath(globalConfig, tap)
-  // TODO: update version to come from docker CONTAINERS constants
-  const version = getCoreVersion(globalConfig)
-
-  const dockerCmd = buildDockerCmd(globalConfig, {
-    tap,
-    env,
-    mounts,
-    location,
-    docker,
-    name: 'tap',
-    cmd: `run`,
-    container: 'TAP',
-  })
-
-  logVirtualUrl()
-
-  await spawnCmd(dockerCmd, location)
-}
-
-/**
- * Checks that the tap image exists. If it doesn't then build it
- * @param {Object} args - arguments passed from the runTask method
- * @param {Object} context - Context for the image
- * @param {Object} tap - Name of the tap to build the image for
- *
- * @returns {Object} - Build image object from docker CLI
- */
-const checkBuildImage = async (args, context, tap) => {
-
-  const exists = await docker.image.exists('tap')
-
-  // If the image exists, and there's no build param, return
-  if(exists && !get(args, 'params.build')) return true
-
-  // Other wise print message about the build, then do it
-  exists
-    ? Logger.info(`  Force building image ${ tap }...`)
-    : Logger.info(`  Image ${ tap } does not exist, building now...`)
-
-  Logger.empty()
-
-  const tapImg = await buildDockerImage(args, context, tap)
-
-  // TODO: Add better error message
-  return tapImg || generalError(`Could not build Docker "${tap} Tap" image!`)
-
-}
-
-/**
- * Checks that the tap container exists
- * @param {Object} total - Amount of time the container has been checked
- *
- * @returns {Object} - Build image object from docker CLI
- */
-const checkForContainer = async (total) => {
-
-  Logger.info(` Checking for sync containers...`)
-
-  // TODO: need to pull this from globalConfig, or ENVs
-  const containers = [ `tap-unison-sync`, `cli-unison-sync`, `core-unison-sync` ]
-
-  const exists = await docker.container.exists(
-    containers,
-    container => containers.indexOf(container.names) !== -1,
-    'json'
-  )
-
-  exists && Logger.info(` Sync containers found!`)
-
-  return exists
-}
-
-/**
- * Checks that the tap image exists. If it doesn't then build it
- * @param {Object} args - arguments passed from the runTask method
- * @param {Object} context - Context for the image
- * @param {Object} tap - Name of the tap to build the image for
- *
- * @returns {void}
- */
-const checkBuildBase = async args => {
-  // Check if the base image exists, and if not then build it
-  const baseImg = await buildBaseImg(args)
-
-  // TODO: Add better error message
-  return baseImg || generalError(`Could not build Docker "Keg Base" image!`)
-}
 
 /**
  * Start a docker-sync or docker container for a tap
@@ -126,68 +23,29 @@ const checkBuildBase = async args => {
  * @returns {void}
  */
 const startTap = async (args) => {
-
   const { params } = args
-  const { attached, compose, detached, ensure, service, sync, tap } = params
+  const { attached, build, ensure, log, service, tap } = params
+
+  // Ensure the sync params are correct
+  throwInvalidSyncParams(params)
 
   // Check if the base image exists, and if not then build it
-  ensure && await checkBuildBase(args)
+  log && Logger.info(`Checking base docker image...`)
+  ensure && await buildBaseImg(args)
 
   // Check if we should build the container image first
-  ensure && await checkBuildImage(args, 'tap', tap)
+  log && Logger.info(`Checking tap docker image...`)
+  ;(ensure || build) && await checkBuildImage(args, 'tap', 'tap', tap)
 
-  // Check if we are running the container with just docker
-  if(service === 'container') return startContainer(args)
+  // Check and run the correct service
+  const serviceResp = service === 'container'
+    ? await containerService(args, { container: 'tap', tap })
+    : await composeService(args, { container: 'tap', tap })
 
-  // Run the docker-sync task internally
-  // Capture the response in case detached is true
-  // That way we can use it with the docker-compose up command
-  const syncContextData = sync && await runInternalTask(
-    'tasks.docker.tasks.sync.tasks.start',
-    {
-      ...args,
-      command: 'start',
-      params: {
-        ...args.params,
-        detached: isDetached(`sync`, detached, attached),
-        context: 'tap'
-      },
-    }
-  )
+  // TODO: Add mutagen service here
+  // await mutagenService(args, {})
 
-  // If sync was started with detached
-  // Then we need to start docker-compose manually
-  const startedTap = compose &&
-    get(syncContextData, 'params.detached') &&
-    await waitForIt({
-      // Check for check for sync ontainers
-      check: checkForContainer,
-      // Check 5 times
-      amount: 2,
-      // Wait 5 second between each check
-      wait: 10000,
-      // It takes some time for the sync containers to boot
-      // So we need to wait a bit until the have started up
-      onFinish: async () => {
-        await runInternalTask(
-          'tasks.docker.tasks.compose.tasks.up',
-          {
-            ...args,
-            command: 'up',
-            params: {
-              ...args.params,
-              detached: isDetached(`compose`, detached, attached),
-              context: 'tap'
-            },
-            __internal: syncContextData,
-          }
-        )
-      }
-    })
-
-  ;!startedTap
-    ? Logger.error(`Could not start tap in docker-compose!`)
-    : Logger.success(`Tap is now running in docker-compose!`)
+  return serviceResp
 
 }
 
@@ -205,14 +63,19 @@ module.exports = {
       },
       attached: {
         alias: [ 'attach', 'att', 'at' ],
-        allowed: [ true, false, 'sync', 'compose' ],
+        allowed: [ false, 'sync', 'compose' ],
         description: 'Attaches to a process in lieu of running in the backgound. Overrides "detached"',
-        example: `keg tap start --attach compose ( Runs sync in background and attaches to compose) `,
-        default: 'sync',
+        example: `keg core start --attach compose ( Runs sync in background and attaches to compose) `,
+        default: false,
       },
       build: {
         description: 'Removes and rebuilds the docker container before running the tap',
         default: false
+      },
+      cache: {
+        description: 'Docker will use build cache when building the image',
+        example: 'keg tap --cache false',
+        default: true
       },
       clean: {
         description: 'Cleans docker-sync before running the tap',
@@ -225,53 +88,47 @@ module.exports = {
         example: 'keg tap start --command ios',
         default: 'web'
       },
-      compose: {
-        description: 'Run the docker-compose up command',
-        example: 'keg tap start --compose',
-        default: false,
+      destroy: {
+        alias: [ 'des' ],
+        description: 'All collateral items will be destoryed if the sync task fails ( true )',
+        example: 'keg tap start --destroy false',
+        default: true
       },
-      detached: {
-        alias: [ 'detach', 'dt', 'de' ],
-        allowed: [ true, false, 'sync', 'compose' ],
-        description: 'Runs the process in the background. Boolean for sync and compose, define by name.',
-        example: 'keg tap start --detached sync ( Runs sync in background and attaches to compose) ',
-        default: false
-      },
-      ensure: {
-        description: 'Will check if required images are built, and build them in necessary.',
-        example: "keg core start --ensure false",
-        default: true,
+      docker: {
+        alias: [ 'doc' ],
+        description: `Extra docker arguments to pass to the 'docker run command'`
       },
       env: {
         alias: [ 'environment' ],
         description: 'Environment to start the Docker service in',
         default: 'development',
       },
+      ensure: {
+        description: 'Will check if required images are built, and build them in necessary.',
+        example: "keg core start --ensure false",
+        default: true,
+      },
       install: {
-        alias: [ 'in' ],
-        allowed: [ false, true, 'core' ],
         description: 'Install node_modules ( yarn install ) in the container before starting the app',
-        example: 'keg tap start --install',
+        example: 'keg core start --install',
         default: false
       },
-      docker: {
-        alias: [ 'doc' ],
-        description: `Extra docker arguments to pass to the 'docker run command'`
+      log: {
+        alias: [ 'lg' ],
+        description: 'Prints log information as the task runs',
+        example: 'keg core start --log',
+        default: false,
       },
       mounts: {
         alias: [ 'mount' ],
         description: `List of key names or folder paths to mount into the docker container`
       },
       service: {
-        allowed: [ 'sync', 'container' ],
-        description: 'What docker service to build the tap with. Must be on of ( sync || container )',
-        default: 'sync'
-      },
-      sync: {
-        description: 'Run the docker-sync command',
-        example: 'keg tap start --sync false',
-        default: true,
-      },
+        allowed: [ 'compose', 'sync', 'container' ],
+        description: 'What docker service to build the tap with. Must be on of ( sync || container ). Same as passing options "--attached sync "',
+        example: 'keg core --service container',
+        default: 'compose'
+      }
     }
   }
 }

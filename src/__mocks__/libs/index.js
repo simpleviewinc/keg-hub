@@ -1,3 +1,4 @@
 module.exports = {
-  fileSys: require('./fileSys')
+  docker: require('./docker'),
+  fileSys: require('./fileSys'),
 }

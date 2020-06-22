@@ -168,6 +168,16 @@ class Log {
   */
   spaceMsg = (...args) => this.spacedMsg(...args)
 
+  /**
+  * Writes to the process stdout
+  */
+  stdout = (...args) => process.stdout.write(...args)
+  /**
+
+  * Writes to the process stderr
+  */
+  stderr = (...args) => process.stderr.write(...args)
+
 }
 
 /**

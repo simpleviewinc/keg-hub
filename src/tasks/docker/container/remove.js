@@ -20,7 +20,7 @@ const { getContainerConst } = require('KegUtils/docker/getContainerConst')
  * @returns {void}
  */
 const removeContainer = async args => {
-  const { params, __skipThrow } = args
+  const { params, __internal={} } = args
   const { context } = params
 
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
@@ -37,9 +37,9 @@ const removeContainer = async args => {
     : containerRef
 
   // Ensure we have the container meta data, and try to remove by containerId
-  // __skipThrow is an internal argument, so it's not documented
+  // __internal.skipThrow is an internal argument, so it's not documented
   if(!container || !container.id)
-    return __skipThrow !== true &&
+    return __internal.skipThrow !== true &&
       generalError(`The docker container "${ containerRef }" does not exist!`)
 
   const res = await docker.container.remove({ item: container.id, force })

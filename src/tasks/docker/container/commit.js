@@ -1,4 +1,4 @@
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { dockerLog } = require('KegUtils/log/dockerLog')
 const { DOCKER } = require('KegConst/docker')
@@ -22,7 +22,7 @@ const containerCommit = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location } = await buildContainerContext({
     globalConfig,
     task,
     params,

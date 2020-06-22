@@ -172,7 +172,7 @@ const exists = async (compare, doCompare, format) => {
         container,
         compare,
         doCompare,
-        [ 'id', 'names' ]
+        [ 'id', 'name' ]
       ))
 
     })
@@ -257,8 +257,8 @@ const get = async nameOrId => {
     return item 
       ? item
       : checkCall(() => {
-          let match = container.names === nameOrId || container.id === nameOrId
-          match = match || container.names.indexOf(`-${ nameOrId }`) === 0
+          let match = container.name === nameOrId || container.id === nameOrId
+          match = match || container.name.indexOf(`-${ nameOrId }`) === 0
 
           return match ? container : item
         })

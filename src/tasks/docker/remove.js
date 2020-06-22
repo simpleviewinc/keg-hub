@@ -1,6 +1,5 @@
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
-const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
@@ -23,7 +22,7 @@ const dockerRemove = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location, tap } = await buildContainerContext({
     globalConfig,
     task,
     params,

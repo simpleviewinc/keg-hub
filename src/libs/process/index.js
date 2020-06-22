@@ -1,1 +1,4 @@
-module.exports = require('./runCommand')
+module.exports = {
+  ...require('./pipeCommand'),
+  ...require('./runCommand'),
+}

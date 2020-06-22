@@ -14,7 +14,7 @@ const containerSelect = async (filter) => {
   const filtered = checkCall(filter, containers) || containers
 
   // Get a string of each container to print to terminal
-  const items = filtered.map(cont => `${cont.names} | ${ cont.image } | ${ cont.id }`)
+  const items = filtered.map(cont => `${cont.name} | ${ cont.image } | ${ cont.id }`)
 
   const index = await ask.promptList(
     items,

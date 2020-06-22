@@ -29,7 +29,6 @@ services:
         - NODE_ENV
         - TAP
     container_name: ${CONTAINER_NAME}
-    env_file: ${CONTEXT_ENV_FILE}
     environment:
       - ENV
       - EXEC_CMD

@@ -1,0 +1,28 @@
+
+env:
+  # --- LOCAL ENV CONTEXT --- #
+
+  CONTEXT_PATH: "{{ cli.paths.components }}"
+
+
+  # --- COMPONENTS ENV CONTEXT --- #
+
+  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/components/Dockerfile"
+  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/components/values.yml"
+  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/components/compose-default.yml"
+  COMPOSE_SYNC: "{{ cli.paths.containers }}/components/compose-sync.yml"
+
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  DOC_APP_PATH: /keg/keg-components
+  DOC_APP_PORT: 60710
+  DOC_RETHEME_PATH: /keg/keg-components/node_modules/@simpleviewinc/re-theme/build
+  NM_CACHE: /keg/nm-cache/keg-components
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image Build information
+  IMAGE: kegcomponents
+  VERSION: "0.0.1"
+  CONTAINER_NAME: kegcomponents

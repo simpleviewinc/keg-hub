@@ -1,11 +1,7 @@
-// docker system prune  -af
-
-
-const { buildLocationContext } = require('KegUtils/builders')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { isStr, get } = require('jsutils')
 const docker = require('KegDocCli')
+const { isStr, get, checkCall } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
+const { Logger } = require('KegLog')
 
 /**
  * Execute a docker prune command
@@ -26,7 +22,13 @@ const dockerPrune = async args => {
   confirm && options.push('-f')
 
   // Run the prune command
-  await docker.prune(options)
+  const resp = await docker.prune(options)
+  
+  // Log the docker prune response
+  !isStr(resp) && Logger.data(resp) || checkCall(() => {
+    const  [ label, space ] = resp.split(': ')
+    Logger.label(`  ${ label }:`, space)
+  })
 
 }
 

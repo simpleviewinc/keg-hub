@@ -1,7 +1,7 @@
 const docker = require('KegDocCli')
 const { isStr, get, checkCall } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
 
@@ -31,8 +31,7 @@ const ensureContext = async ({ context, tap }) => {
     return containers.filter(container => !container.status.includes('Exited'))
   })
 
-  // Get the context to use
-    // If no context, use the container image to find the context
+  // If no context, use the container image to find the context
   const useContext = tap
     ? 'tap'
     : context|| container && container.image.replace('keg', '').split(':')[0]
@@ -63,13 +62,13 @@ const dockerExec = async args => {
     cmdContext,
     contextEnvs,
     location,
-    package,
+    prefix,
     tap,
     image
-  } = await buildLocationContext({ globalConfig, task, params: { ...params, context } })
+  } = await buildContainerContext({ globalConfig, task, params: { ...params, context } })
 
   // Get the name of the container to exec
-  const containerName = container && container.names || package || image
+  const containerName = container && container.name || prefix || image
 
   // Run the command on the container
   await docker.container.exec(

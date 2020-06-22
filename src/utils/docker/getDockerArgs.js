@@ -2,7 +2,24 @@ const { DOCKER } = require('KegConst')
 const { reduceObj, get, isStr } = require('jsutils')
 const { exists } = require('KegUtils/helpers/exists')
 const docker = require('KegDocCli')
-const { getContainerConst } = require('./getContainerConst')
+
+
+/**
+ * Temp helper method to map the app port to port 80
+ * <br/> Once keg-proxy is setup this method will not be needed
+ * @param {string} [dockerCmd=''] - Docker command to add the name to
+ * @param {string} context - Context of the docker container
+ *
+ * @returns {string} - dockerCmd with the port arg added
+ */
+const getPortMap = (dockerCmd, context) => {
+  const appPort = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }.ENV.DOC_APP_PORT`)
+
+  return appPort
+    ? `${dockerCmd} -p 80:${appPort}`
+    : dockerCmd
+}
+
 
 /**
  * Loops over the passed in args and maps them to the docker constants
@@ -30,6 +47,12 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
   // Get All values get compared against the checkArgs array
   // If set to true, then the value from containerOpts.VALUES is added to the cmd
   return reduceObj(containerOpts.VALUES, (key, value, joinedArgs) => {
+
+    // Only add the Dockerfile path when building, not durring run
+    if(key === 'file' && cmd === 'run')  return joinedArgs
+
+    // Only add connect '-id' when running, not durning build
+    if(key === 'connect' && cmd === 'build')  return joinedArgs
 
     // Ensure both detached and attached are not added to the docker args
     if(key === 'detached' && args.attached) return joinedArgs
@@ -66,29 +89,13 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
 
 /**
  * Adds the name of the container to the dockerCmd
- * @param {string} name - Name of the container to add to the dockerCmd
  * @param {string} [dockerCmd=''] - Docker command to add the name to
+ * @param {string} name - Name of the container to add to the dockerCmd
  *
  * @returns {string} - dockerCmd with the name arg added
  */
 const addContainerName = (dockerCmd='', name) => {
   return `${dockerCmd} --name ${name}`
-}
-
-/**
- * Adds location as a mounted volume to the dockerCmd
- * @param {string} location - Local location of the tap to mount
- * @param {string} [dockerCmd=''] - Docker command to add the mounted tap to
- *
- * @returns {string} - dockerCmd with the mounted tap arg added
- */
-const addTapMount = (dockerCmd, context, location) => {
-  const mountPath = getContainerConst(context, `ENV.DOC_APP_PATH`)
-
-  return mountPath
-    ? `${dockerCmd} -v ${location}:${ mountPath }`
-    : dockerCmd
-
 }
 
 /**
@@ -111,6 +118,6 @@ const addContainerEnv = (dockerCmd='', options={}) => {
 module.exports = {
   addContainerEnv,
   addContainerName,
-  addTapMount,
-  getDockerArgs
+  getDockerArgs,
+  getPortMap,
 }

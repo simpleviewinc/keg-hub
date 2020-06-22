@@ -116,3 +116,7 @@ test-report.xml
 # Ingnore docker-sync deamon logs
 .docker-sync
 reports
+
+containers/**/*values*.yml
+!containers/**/values.yml
+containers/**/*.env

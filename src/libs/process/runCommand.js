@@ -35,9 +35,9 @@ const doSpawnCmd = (...args) => {
  * @returns {*} - Response from spawned process
  */
 const spawnProc = (...args) => {
-  return args.length > 1
-    ? spawnCmd(...args)
-    : spawnCmd(...args, process.cwd())
+  return args.length === 1
+    ? spawnCmd(...args, {}, process.cwd())
+    : spawnCmd(...args)
 }
 
 /**

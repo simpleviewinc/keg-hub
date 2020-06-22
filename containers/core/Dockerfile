@@ -30,7 +30,6 @@ RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://githu
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $NM_CACHE/
-COPY yarn.lock $NM_CACHE/
 
 # Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc
@@ -70,6 +69,9 @@ ARG KEG_DOCKER_IP
 # Will use the ip address of the docker container.
 ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
+# Set GIT_KEY to be empty value so yarn install doesn't fail
+ENV GIT_KEY=""
+
 # Install git for the new stage
 RUN apk add --no-cache git
 
@@ -85,9 +87,12 @@ COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH
 # Copy over keg cli from above
 COPY --from=builder $NM_CACHE $NM_CACHE
 
-# Expose the default http and https ports
+# Expose container ports
 EXPOSE 80
 EXPOSE 443
+EXPOSE 19002
+EXPOSE 19006
+EXPOSE 60710
 
 # Set the current directory to keg-core repo
 WORKDIR /$DOC_APP_PATH

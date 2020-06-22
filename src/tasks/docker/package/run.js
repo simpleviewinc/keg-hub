@@ -1,12 +1,12 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { isUrl, get, deepMerge } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { PACKAGE } = require('KegConst/constants')
-const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
-const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
+const { isUrl, get, deepMerge } = require('jsutils')
+const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+const { PACKAGE } = CONTAINER_PREFIXES
 
 /**
  * Builds a docker container so it can be run
@@ -53,7 +53,7 @@ const dockerPackageRun = async args => {
   * ----------- Step 3 ----------- *
   * Build the container context information
   */
-  const { contextEnvs, location } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location } = await buildContainerContext({
     globalConfig,
     params: { ...params, context: parsed.repo },
     // Need to add our packaged repo to the allow options so we can run it
@@ -71,7 +71,7 @@ const dockerPackageRun = async args => {
     opts,
     location,
     envs: contextEnvs,
-    cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/core/run.sh`,
+    cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`,
     name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
   })
 

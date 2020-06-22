@@ -1,0 +1,35 @@
+
+env:
+  # --- LOCAL ENV CONTEXT --- #
+  COMPONENTS_PATH: "{{ cli.paths.components }}/build"
+  RETHEME_PATH: "{{ cli.paths.retheme }}/build"
+  RESOLVER_PATH: "{{ cli.paths.resolver }}/src"
+
+  # --- CORE ENV CONTEXT --- #
+
+  # Docker data
+  CONTEXT_PATH: "{{ cli.paths.core }}"
+  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/core/Dockerfile"
+  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/core/values.yml"
+  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/compose-default.yml"
+  COMPOSE_SYNC: "{{ cli.paths.containers }}/core/compose-sync.yml"
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  NM_CACHE: "/keg/nm-cache/core"
+  DOC_APP_PATH: "/keg/keg-core"
+  DOC_APP_PORT: 19006
+  DOC_CORE_PATH: "/keg/keg-core"
+  DOC_COMPONENTS_PATH: "/keg/keg-core/node_modules/@simpleviewinc/keg-components/build"
+  DOC_RETHEME_PATH: "/keg/keg-core/node_modules/@simpleviewinc/re-theme/build"
+  DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@simpleviewinc/tap-resolver/src"
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image Build information
+  IMAGE: "kegcore"
+  VERSION: "0.0.1"
+  CONTAINER_NAME: "kegcore"
+
+  # --- Override the default progress output for expo-webpack in keg-core --- #
+  KEG_CORE_PROGRESS: true

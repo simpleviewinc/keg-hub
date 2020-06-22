@@ -20,11 +20,3 @@ global.getGlobalCliConfig = reset => {
   if(reset) delete require.cache[require.resolve('KegMocks/helpers/globalConfig')]
   return require('KegMocks/helpers/globalConfig')
 }
-
-// These modules always get overwritten
-// const { FS } = require('KegMocks/node')
-// jest.setMock('fs', FS)
-
-// const { fileSys } = require('KegMocks/libs')
-// jest.setMock('KegFileSys', fileSys)
-

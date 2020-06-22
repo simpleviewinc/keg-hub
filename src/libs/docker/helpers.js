@@ -1,5 +1,7 @@
 const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
+const { DOCKER } = require('KegConst/docker')
+const { CLI_KEY_MAP } = DOCKER
 const {
   camelCase,
   isArr,
@@ -127,8 +129,8 @@ const apiError = (error, errResponse, skipError) => {
  *
  * @returns {Array} - JSON array of items
  */
-const apiSuccess = (data, format) => {
-  return format === 'json' ? jsonOutput(data) : data
+const apiSuccess = (data, format, skipError) => {
+  return format === 'json' ? jsonOutput(data, skipError) : data
 }
 
 /**
@@ -140,7 +142,7 @@ const apiSuccess = (data, format) => {
  *
  * @returns {Object} - Formatted docker output as an object
  */
-const jsonOutput = (data) => {
+const jsonOutput = (data, skipError) => {
   return data.split('\n')
     .reduce((items, item) => {
       if(!item.trim()) return items
@@ -148,8 +150,12 @@ const jsonOutput = (data) => {
       try {
         const parsed = JSON.parse(item.replace(/\\"/g, ''))
         const built = {}
-        Object.keys(parsed).map(key => built[camelCase(snakeCase(key))] = parsed[key])
-        
+        Object.keys(parsed).map(key => {
+          // Check if there's an alt key to use instead of the default
+          const useKey = CLI_KEY_MAP[key] || key
+          built[camelCase(snakeCase(useKey))] = parsed[key]
+        })
+
       // Adds rootId key, which removes and docker repository content
       // This allows us to pull from a remote provider, and compare just the original image name
         if(built.repository)
@@ -159,8 +165,8 @@ const jsonOutput = (data) => {
 
         return items.concat([ built ])
       }
-      catch(e){
-        return items
+      catch(err){
+        return apiError(err, items, skipError)
       }
 
     }, [])
@@ -246,10 +252,11 @@ const toContainerEnvs = (envs={}, cmd='') => {
  *
  * @returns {string} - Passed in cmd, with the key/value converted to docker build-args
  */
-const asBuildArg = (key, value, cmd='') => {
-  return value && `${cmd} --build-arg ${ key }=${ value }`.trim() || cmd
+const asBuildArg = (key, value, cmd='', filters=[]) => {
+  return !filters.includes(key) && value
+    ? `${cmd} --build-arg ${ key }=${ value }`.trim()
+    : cmd
 }
-
 
 /**
  * Converts an object into docker build-args ( --build-arg key=value )
@@ -259,8 +266,14 @@ const asBuildArg = (key, value, cmd='') => {
  *
  * @returns {string} - Passed in cmd, with the envs converted to docker build-args
  */
-const toBuildArgs = (envs={}, cmd='') => {
-  return isObj(envs) ? reduceObj(envs, asBuildArg, cmd).trim() : cmd
+const toBuildArgs = (envs={}, cmd='', filters=[]) => {
+  return !isObj(envs)
+    ? cmd
+    : reduceObj(
+        envs,
+        (key, value, buildCmd) => asBuildArg(key, value, buildCmd, filters),
+        cmd
+      ).trim()
 }
 
 module.exports = {

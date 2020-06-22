@@ -618,6 +618,14 @@ keg_remove_global_config(){
 
 }
 
+keg_setup_mutagen(){
+  if [[ -x "$(command -v mutagen 2>/dev/null)" ]]; then
+    keg_message "Mutagen is installed"
+  else
+    brew install mutagen-io/mutagen/mutagen
+  fi
+}
+
 # Runs methods to setup the keg-cli, with docker and vagrant
 # Params
 #   * $1 - (Optional) - Section of the setup script to run
@@ -746,6 +754,16 @@ keg_setup(){
   if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "machine" ]]; then
     keg_message "Checking if docker-machine is setup..."
     keg_setup_docker_machine "${@:2}"
+  fi
+
+
+  # Setup and install machine
+  # To run:
+  # bash mac-init.sh machine
+  #  * Runs only the docker-machine portion of this script
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "mutagen" ]]; then
+    keg_message "Checking if mutagen is setup..."
+    keg_setup_mutagen "${@:2}"
   fi
 
   # Setup and install node

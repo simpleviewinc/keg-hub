@@ -4,7 +4,7 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { copyFileSync } = require('KegFileSys/fileSys')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
 
@@ -51,7 +51,7 @@ const dockerBuild = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location, tap } = await buildContainerContext({
     globalConfig,
     task,
     params,

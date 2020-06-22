@@ -1,15 +1,19 @@
 const { deepFreeze } = require('jsutils')
-const { defaultENVs, dockerEnv, images, locationContext } = require('./values')
+const { cliKeyMap, defaultENVs, dockerEnv, images, locationContext } = require('./values')
+const containers = require('./containers')
 
-module.exports = deepFreeze({
-  DOCKER: {
-    ...require('./containers'),
-    ...require('./machine'),
-    ...require('./run'),
-    ...require('./volumes'),
-    IMAGES: images,
-    DOCKER_ENV: dockerEnv,
-    LOCATION_CONTEXT: locationContext,
-    CONTAINERS_PATH: defaultENVs.CONTAINERS_PATH,
-  }
-})
+const DOCKER = {
+  ...require('./machine'),
+  ...require('./run'),
+  ...require('./volumes'),
+  CLI_KEY_MAP: cliKeyMap,
+  IMAGES: images,
+  DOCKER_ENV: dockerEnv,
+  LOCATION_CONTEXT: locationContext,
+  CONTAINERS_PATH: defaultENVs.CONTAINERS_PATH,
+}
+
+// Add the CONTAINERS property, with a get function do it only get called when referenced
+Object.defineProperty(DOCKER, 'CONTAINERS', { get: () => containers.CONTAINERS, enumerable: true })
+
+module.exports = deepFreeze({ DOCKER })

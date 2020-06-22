@@ -1,6 +1,23 @@
 const fs = require('fs')
 const path = require('path')
-const { checkCall } = require('jsutils')
+const { checkCall, limbo } = require('jsutils')
+const { generalError } = require('KegUtils/error')
+
+/**
+ * Wraps a method with a callback into a promise
+ * @function
+ * @param {*} cb - method to wrap in a promise
+ * @param {*} args - Arguments to pass to the callback method
+ *
+ * @returns {Promise|*} - Success response of fs.rename method
+ */
+const limboify = (cb, ...args) => {
+  return limbo(
+    new Promise((res, rej) => cb(...args, (err, success) => 
+      err? rej(err) : res(success || true) 
+    ))
+  )
+}
 
 /**
  * Copy a file from one location to another
@@ -11,9 +28,7 @@ const { checkCall } = require('jsutils')
  * @returns {Promise|*} - Success response of fs.rename method
  */
 const movePath = (oldPath, newPath) => {
-  return new Promise((res, rej) => {
-    fs.rename(oldPath, newPath, (err, success) => err ? rej(err) : res(success))
-  })
+  return limboify(fs.rename, oldPath, newPath)
 }
 
 /**
@@ -24,11 +39,7 @@ const movePath = (oldPath, newPath) => {
  * @returns {Promise|boolean} - Success creating the directory
  */
 const mkDir = filePath => {
-  return new Promise((res, rej) => {
-    fs.mkdir(filePath, { recursive: true }, err => {
-      err ? rej(err) : res(true)
-    })
-  })
+  return limboify(fs.mkdir, filePath, { recursive: true })
 }
 
 /**
@@ -41,10 +52,7 @@ const mkDir = filePath => {
  * @returns {Promise|boolean} - True if the file was written successfully
  */
 const writeFile = (filePath, data, format='utf8') => {
-  return new Promise((res, rej) => {
-    // Write the temp config file
-    fs.writeFile(filePath, data, format, (err) => err ? rej(err) : res(true))
-  })
+  return limboify(fs.writeFile, filePath, data, format)
 }
 
 /**
@@ -60,6 +68,21 @@ const writeFileSync = (filePath, data, format='utf8') => {
   return fs.writeFileSync(filePath, data, format)
 }
 
+const readDir = (dirPath) => {
+  return limboify(fs.readdir, dirPath)
+}
+
+/**
+ * Checks if a path exists using fs.stat wrapped in a promise
+ * @function
+ * @param {string} path - Path to Check
+ *
+ * @returns {Promise|boolean} - True if the file exists
+ */
+const stat = (path) => {
+  return limboify(fs.stat, path)
+}
+
 /**
  * Gets the content of a folder based on passed in options
  * @function
@@ -72,28 +95,36 @@ const writeFileSync = (filePath, data, format='utf8') => {
  */
 const getFolderContent = async (fromPath, opts={}) => {
 
-  const { full, type } = opts
-  const allContent = await fs.readdir(fromPath)
+  const { full, type, filters=[] } = opts
 
-  return Promise.all(
-    allFiles.reduce(async (allFound, file) => {
+  const [ err, allFiles ] = await readDir(fromPath)
+  err && generalError(err)
 
-      // Check if we should use the full path
-      const found = full ? path.join(fromPath, file) : file
+  return allFiles.reduce(async (toResolve, file) => {
+    const allFound = await toResolve
 
-      // If no type, then add and return
-      if(!type) return allFound.concat([ found ])
-      
-      // Check if the path is a directory
-      const isDir = await fs.stat(found).isDirectory()
+    // Filter out any files matching the filters
+    if(!file || filters.indexOf(file) !== -1)
+      return allFound
 
-      // Check the type and return based on type
-      return (type === 'folder' && isDir) || (type !== 'folder' && !isDir)
-        ? allFound.concat([ found ])
-        : allFound
+    // Check if we should use the full path
+    const found = full ? path.join(fromPath, file) : file
 
-    }, [])
-  )
+    // If no type, then add and return
+    if(!type) return allFound.concat([ found ])
+    
+    // Check if the path is a directory
+    const [ statErr, fileStat ] = await stat(path.join(fromPath, file))
+    statErr && generalError(statErr)
+
+    const isDir = fileStat.isDirectory()
+
+    // Check the type and return based on type
+    return (type === 'folder' && isDir) || (type !== 'folder' && !isDir)
+      ? allFound.concat([ found ])
+      : allFound
+
+  }, Promise.resolve([]))
 
 }
 
@@ -105,8 +136,8 @@ const getFolderContent = async (fromPath, opts={}) => {
  *
  * @returns {Array} - All files found in the path
  */
-const getFiles = (fromPath, full=false) => {
-  return getFolderContent(fromPath, { type: 'file', full })
+const getFiles = (fromPath, opts) => {
+  return getFolderContent(fromPath, { ...opts, type: 'file' })
 }
 
 /**
@@ -117,8 +148,8 @@ const getFiles = (fromPath, full=false) => {
  *
  * @returns {Array} - All folders found in the path
  */
-const getFolders = (fromPath, full=false) => {
-  return getFolderContent(fromPath, { type: 'folder', full })
+const getFolders = (fromPath, opts) => {
+  return getFolderContent(fromPath, { ...opts, type: 'folder' })
 }
 
 /**
@@ -153,9 +184,7 @@ const getFilesSync = fromPath => {
  * @returns {Promise|boolean} - True if the path exists, false if not
  */
 const pathExists = checkPath => {
-  return new Promise((res, rej) => {
-    return res(fs.existsSync(checkPath))
-  })
+  return limboify(fs.access, checkPath, fs.constants.F_OK)
 }
 
 /**
@@ -176,11 +205,7 @@ const pathExistsSync = checkPath => fs.existsSync(checkPath)
  * @returns {Promise|string} - Content of the file
  */
 const readFile = (filePath, format='utf8') => {
-  return new Promise((res, rej) => {
-    fs.readFile(filePath, format, (err, data) => {
-      err ? rej(err) : res(data)
-    })
-  })
+  return limboify(fs.readFile, filePath, format)
 }
 
 /**
@@ -224,13 +249,8 @@ const copyStream = (from, to, cb, format='utf8') => {
  * @returns {Promise} - Resolves after file has been copied
  */
 const copyFile = (to, from, mode) => {
-  return new Promise((res, rej) => {
-    fs.copyFile(to, from, mode, (err, copied) => {
-      err ? rej(err) : res(copied)
-    })
-  })
+  return limboify(fs.copyFile, to, from, mode)
 }
-
 
 /**
  * Copies from one file path to another synchronously
@@ -242,6 +262,24 @@ const copyFile = (to, from, mode) => {
  * @returns {void}
  */
 const copyFileSync = (from, to, mode) => fs.copyFileSync(from, to, mode)
+
+/**
+ * Removes a file from the local files system
+ * @function
+ * @param {string} file - Path to the file to be removed
+ *
+ * @returns {void}
+ */
+const removeFile = file => limboify(fs.unlink, file)
+
+/**
+ * Removes a file from the local files system synchronously
+ * @function
+ * @param {string} file - Path to the file to be removed
+ *
+ * @returns {void}
+ */
+const removeFileSync = file => fs.unlinkSync(filePath, callbackFunction)
 
 module.exports = {
   copyFile,
@@ -258,6 +296,9 @@ module.exports = {
   pathExistsSync,
   readFile,
   readFileSync,
+  removeFile,
+  removeFileSync,
+  stat,
   writeFile,
   writeFileSync,
 }

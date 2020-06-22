@@ -56,7 +56,7 @@ const raw = async (cmd, args={}, loc=process.cwd(), log) => {
 
   // Build the command to be run
   // Add git if needed
-  const toRun = cmd.trim().indexOf('git') === 0 ? cmd : `git ${cmd}`
+  const toRun = ensureGit(cmd)
 
   // Run the git command
   const { error, data } = await spawnProc(toRun, args, loc)
@@ -68,6 +68,14 @@ const raw = async (cmd, args={}, loc=process.cwd(), log) => {
   return data
 }
 
+/**
+ * Error handler for error in the Git CLI
+ * @function
+ * @param {string|Object} error - Error that was thrown
+ * @param {boolean} skip - Should error logs be skipped
+ *
+ * @returns {void}
+ */
 const cliError = (error, skip=false) => {
   if(skip) return
 

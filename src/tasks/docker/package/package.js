@@ -2,7 +2,7 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { isStr, get, isFunc, isArr } = require('jsutils')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
@@ -94,7 +94,7 @@ const dockerPackage = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap, image } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
     globalConfig,
     task,
     params,
@@ -155,7 +155,7 @@ const dockerPackage = async args => {
   */
   const exists = await docker.container.exists(
     tempContainer,
-    container => container.names === tempContainer,
+    container => container.name === tempContainer,
     'json'
   )
 

@@ -1,5 +1,5 @@
 const { spawnCmd } = require('KegProc')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { DOCKER } = require('KegConst/docker')
 
 /**
@@ -14,7 +14,7 @@ const listDockerSync = async args => {
   const { globalConfig, params, options, task } = args
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+  const { location, cmdContext, contextEnvs } = await buildContainerContext({
     globalConfig,
     task,
     params,

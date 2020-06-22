@@ -1,6 +1,5 @@
 const { getGitPath } = require('KegUtils/git/getGitPath')
 const { printGitBranches } = require('KegUtils/git/printGitBranches')
-const { getPathFromConfig, getTapPath } = require('KegUtils/globalConfig')
 const { generalError } = require('KegUtils/error')
 const { git } = require('KegGitCli')
 

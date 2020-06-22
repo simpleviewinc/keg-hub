@@ -5,8 +5,9 @@ const { spawnCmd } = require('KegProc')
 const { HTTP_PORT_ENV } = require('KegConst/constants')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
-const { buildLocationContext } = require('KegUtils/builders/buildLocationContext')
-
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+const { CONTAINER_PREFIXES } = require('KegConst/constants')
+const { IMAGE } = CONTAINER_PREFIXES
 
 const buildContainerName = async cmdContext => {
 
@@ -16,15 +17,12 @@ const buildContainerName = async cmdContext => {
     cmdContext
   )
 
-  const imgContainer = `img-${imgName}`
+  const imgContainer = `${ IMAGE }-${ imgName }`
   const exists = await docker.container.exists(
     imgContainer,
-    container => container.names === imgContainer,
+    container => container.name === imgContainer,
     'json'
   )
-
-  // TODO: if the container already exists
-  // Ask the user if they want to kill it, or not
 
   return imgContainer
 
@@ -35,7 +33,7 @@ const getImageContext = async (args) => {
   const { tag } = params
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, image, location, tap } = await buildLocationContext({
+  const { cmdContext, contextEnvs, image, location, tap } = await buildContainerContext({
     globalConfig,
     task,
     params,
@@ -53,7 +51,7 @@ const getImageData = async args => {
   const image = await imageSelect(args)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildLocationContext({
+  const { cmdContext, contextEnvs, location, tap } = await buildContainerContext({
     task,
     globalConfig,
     params: { ...params, context: image.rootId },

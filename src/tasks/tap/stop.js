@@ -1,5 +1,4 @@
 const { get } = require('jsutils')
-const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { spawnCmd } = require('KegProc')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { DOCKER } = require('KegConst/docker')

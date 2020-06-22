@@ -3,8 +3,7 @@ const { ask } = require('KegQuestions')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
 const { getSetting } = require('../globalConfig/getSetting')
-const { DOCKER, GLOBAL_CONFIG_PATHS } = require('KegConst')
-const gitKey = get(DOCKER, 'CONTAINERS.CORE.ARGS.GIT_KEY', 'GIT_KEY')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 /**
  * Gets the git key to allow cloning private repos
@@ -14,7 +13,7 @@ const gitKey = get(DOCKER, 'CONTAINERS.CORE.ARGS.GIT_KEY', 'GIT_KEY')
  * @returns {string} - Found git key
  */
 const getGitKey = async globalConfig => {
-  if(process.env[ gitKey ]) return process.env[ gitKey ]
+  if(process.env.GIT_KEY) return process.env.GIT_KEY
 
   const password = getSetting(`git.secure`)
     ? await ask.password('Please enter your password')

@@ -1,22 +1,25 @@
 version: "2"
 options:
   compose-file-path: '${COMPOSE_DEFAULT}'
-  compose-dev-file-path: '${COMPOSE_ENV}'
+  compose-dev-file-path: '${COMPOSE_SYNC}'
   verbose: false
   project_root: '${KEG_PATH}'
 syncs:
   cli-unison-sync:
     src: '${CLI_PATH}'
+    sync_prefer: 'src'
     sync_strategy: 'unison'
-    sync_excludes: [ "yarn.lock", "package.lock", 'node_modules', '.git', '.github' ]
-    sync_args: '-silent -terse -force ${CLI_PATH} -nocreation ${CLI_PATH} -nodeletion ${CLI_PATH} -noupdate ${CLI_PATH}'
+    sync_excludes: [ "yarn.lock", "package.lock", 'node_modules', '.git', '.github', '*.md', '.*' ]
+    sync_args: '${SYNC_LOGS}-force ${CLI_PATH} -nocreation ${CLI_PATH} -nodeletion ${CLI_PATH} -noupdate ${CLI_PATH}'
   components-unison-sync:
     src: '${COMPONENTS_PATH}'
+    sync_prefer: 'src'
     sync_strategy: 'unison'
-    sync_excludes: [ '.npmrc', '.expo', 'node_modules', '.expo-shared', "temp", "yarn.lock", "package.lock", '.git', '.github', '.DS_Store' ]
-    sync_args: '-silent -terse -prefer newer'
+    sync_excludes: [ '.npmrc', '.expo', 'node_modules', '.expo-shared', "temp", "yarn.lock", "package.lock", '.git', '.github', '.DS_Store', '*.md', '.*' ]
+    sync_args: '${SYNC_LOGS}'
   retheme-unison-sync:
     src: '${RETHEME_PATH}'
+    sync_prefer: 'src'
     sync_strategy: 'unison'
-    sync_excludes: [ '.npmrc', '.expo', 'node_modules', '.expo-shared', "temp", "yarn.lock", "package.lock", '.git', '.github', '.DS_Store' ]
-    sync_args: '-silent -terse -force ${RETHEME_PATH} -nocreation ${RETHEME_PATH} -nodeletion ${RETHEME_PATH} -noupdate ${RETHEME_PATH}'
+    sync_excludes: [ '.npmrc', '.expo', 'node_modules', '.expo-shared', "temp", "yarn.lock", "package.lock", '.git', '.github', '.DS_Store', '*.md', '.*' ]
+    sync_args: '${SYNC_LOGS}-force ${RETHEME_PATH} -nocreation ${RETHEME_PATH} -nodeletion ${RETHEME_PATH} -noupdate ${RETHEME_PATH}'

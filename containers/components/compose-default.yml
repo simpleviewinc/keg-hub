@@ -13,7 +13,6 @@ services:
         GIT_KEY: ${GIT_KEY}
         DOC_APP_PATH: ${DOC_APP_PATH}
     container_name: ${CONTAINER_NAME}
-    env_file: ${CONTEXT_ENV_FILE}
     environment:
       - ENV
       - EXEC_CMD

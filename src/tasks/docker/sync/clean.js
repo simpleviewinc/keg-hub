@@ -1,7 +1,7 @@
 const { get } = require('jsutils')
 const { spawnCmd } = require('KegProc')
 const { confirmExec } = require('KegUtils')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { DOCKER } = require('KegConst/docker')
 
@@ -18,7 +18,7 @@ const cleanDockerSync = async args => {
   const { detached, context } = params
   
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+  const { location, cmdContext, contextEnvs } = await buildContainerContext({
     globalConfig,
     task,
     params

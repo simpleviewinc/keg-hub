@@ -91,20 +91,37 @@ module.exports = deepFreeze({
   },
 
   // Keys in the object that should be returned by
-  // the buildLocationContext method
+  // the buildContainerContext method
   CONTEXT_KEYS: [
     `cmdContext`,
     'contextEnvs',
+    `image`,
     'location',
     'tap'
   ],
 
   // URLs for navigating to the application
   TAP_URL: `http://tap.kegdev.xyz/`,
-
-  PACKAGE: 'package',
-
   // ENV port to map to port 80 inside the docker container
   HTTP_PORT_ENV: `EXPO_APP_PORT`,
+  
+
+  // Container context helpers
+  // Mapped prefixes for some tasks that add prefixes when running containers
+  CONTAINER_PREFIXES: {
+    PACKAGE: 'package',
+    IMAGE: 'img',
+  },
+
+  // Map shortcuts and variations to the contianer cmdContext
+  CONTAINER_ALIAS: {
+    kegcore: 'core',
+    'keg-core': 'core',
+    comp: 'components',
+    kegcomp: 'components',
+    kegcomponents: 'components',
+    'keg-comp': 'components',
+    'keg-components': 'components',
+  },
 
 })

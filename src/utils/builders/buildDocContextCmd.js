@@ -5,7 +5,7 @@ const { generalError } = require('KegUtils/error')
 /**
  * Builds the context for call docker cli commands
  * @function
- * @param {Object} - args - Response from the buildLocationContext helper
+ * @param {Object} - args - Response from the buildContainerContext helper
  * @param {string} image - Name of the image to be used
  * @param {Object} contextEnvs - ENVs to be added when making the docker cli call
  * @param {string}  - Path where the docker cli command should be run from

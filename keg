@@ -132,6 +132,7 @@ keg_auto_load_envs(){
 
   fi
 
+  # Ensure Virtual Box is installed before setting the docker-machine env
   if [[ -x "$(command -v VBoxManage)" ]]; then
     keg_cli_init_docker_machine
   else
@@ -139,10 +140,11 @@ keg_auto_load_envs(){
     return
   fi
 
-  if [[ -z "$KEG_CLI_AUTO_LOAD" ]]; then
-    keg_message "Loaded!"
-    return
-  fi
+  # Set the keg auto loaded to true, so we don't call the auto load again
+  # for any future keg-cli commands
+  export KEG_ENV_LOADED="loaded"
+
+  return
 
 }
 
@@ -190,11 +192,20 @@ keg(){
     fi
   fi
 
+  if [[ -z "$KEG_ENV_LOADED" ]]; then
+    # Auto load the envs before running the keg-cli cmd
+    keg_auto_load_envs
+  fi
+
   # All other commands get passed on to the node keg-cli script
   node $KEG_CLI_PATH/keg-cli $@
 
 }
 
+# Checks if we should print the Keg-CLI loaded message
+# KEG_CLI_AUTO_LOAD should only be set on servers that are ssh'ed into
+# If it's a local machine, then print the loaded message to we know the keg-cli was loaded
+if [[ -z "$KEG_CLI_AUTO_LOAD" ]]; then
+  keg_message "Loaded!"
+fi
 
-# Call the auto load envs so we can use the environment
-keg_auto_load_envs

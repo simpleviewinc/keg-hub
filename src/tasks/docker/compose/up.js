@@ -1,8 +1,10 @@
 const { get } = require('jsutils')
-const { spawnCmd } = require('KegProc')
 const { Logger } = require('KegLog')
+const { DOCKER } = require('KegConst')
+const { spawnCmd } = require('KegProc')
 const { buildComposeCmd } = require('KegUtils/docker')
-const { buildLocationContext, buildDockerImage } = require('KegUtils/builders')
+const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
+const { logVirtualUrl } = require('KegUtils/log')
 
 /**
  * Runs docker-compose up command for (components | core | tap)
@@ -17,7 +19,7 @@ const upDockerCompose = async args => {
   const { detached, build, context } = params
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs, tap } = await buildLocationContext({
+  const { location, cmdContext, contextEnvs, tap } = await buildContainerContext({
     globalConfig,
     task,
     params,
@@ -36,6 +38,8 @@ const upDockerCompose = async args => {
     cmdContext,
     params
   )
+
+  logVirtualUrl()
 
   // Run the docker-compose up command
   await spawnCmd(
@@ -69,7 +73,7 @@ module.exports = {
         default: false
       },
       context: {
-        allowed: [ 'components', 'core', 'tap' ],
+        allowed: DOCKER.IMAGES,
         description: 'Context of docker compose up command (components || core || tap)',
         example: 'keg docker compose up --context core',
         default: 'core'
@@ -77,6 +81,11 @@ module.exports = {
       detached: {
         description: 'Runs the docker-sync process in the background',
         example: 'keg docker compose up --detached',
+        default: false
+      },
+      sync: {
+        description: 'Add the compose-sync.yml file as a config. Which setups docker-sync volumes',
+        example: 'keg docker compose up --sync',
         default: false
       }
     }

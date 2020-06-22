@@ -4,7 +4,8 @@ module.exports = {
   ...require('./buildDocContextCmd'),
   ...require('./buildDockerImage'),
   ...require('./buildDockerLogin'),
-  ...require('./buildLocationContext'),
+  ...require('./buildContainerContext'),
   ...require('./buildTaskAlias'),
   ...require('./buildTapContext'),
+  ...require('./checkBuildImage'),
 }

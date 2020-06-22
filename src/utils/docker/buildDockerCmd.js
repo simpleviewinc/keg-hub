@@ -1,13 +1,13 @@
 const { isObj } = require('jsutils')
 const { getBuildTags } = require('./getBuildTags')
-const { getDirsToMount, getVolumeMounts } = require('./buildDockerMounts')
+const { getDirsToMount, getAppMount, getVolumeMounts } = require('./buildDockerMounts')
 const { getDockerImg } = require('./getDockerImg')
 const { getBuildArgs } = require('./getBuildArgs')
 const {
   addContainerName,
   addContainerEnv,
-  addTapMount,
-  getDockerArgs
+  getDockerArgs,
+  getPortMap,
 } = require('./getDockerArgs')
 
 /**
@@ -85,6 +85,10 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     tap ? `${context}-${tap}` : context,
   )
 
+  // Temp helper to map port 80 to the DOC_APP_PORT
+  // This should be removed when keg-proxy is setup
+  dockerCmd = getPortMap(dockerCmd, context)
+
   // Add the env to the docker command
   dockerCmd = addContainerEnv(dockerCmd, {
     TAP: tap,
@@ -98,7 +102,9 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
   })
 
   // Mount the tap location by default
-  dockerCmd = addTapMount(dockerCmd, context, location)
+  // TODO: Add a setting to globalConfig which sets mount docker app by default
+  // Commenting out for now, must explicitly set the mount option from command line
+  // dockerCmd = getAppMount(dockerCmd, context, location)
 
   // First fet the directory paths to mount
   const toMount = getDirsToMount(

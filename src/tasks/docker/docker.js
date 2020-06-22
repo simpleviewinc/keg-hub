@@ -10,6 +10,7 @@ const docker = require('KegDocCli')
 const dockerSubTasks = {
   dc: 'container',
   di: 'image',
+  dcp: 'compose',
   dm: 'machine',
   dp: 'provider',
   dpg: 'package',

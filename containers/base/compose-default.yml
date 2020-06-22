@@ -20,7 +20,6 @@ services:
         - DOC_RESOLVER_PATH
         - DOC_PROXY_PATH
     container_name: ${CONTAINER_NAME}
-    env_file: ${CONTEXT_ENV_FILE}
     environment:
       - EXPO_DEBUG_PORT
       - EXPO_APP_PORT

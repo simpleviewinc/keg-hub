@@ -2,8 +2,8 @@ const docker = require('KegDocCli')
 const { spawnCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
 const { get, checkCall } = require('jsutils')
-const { confirmExec } = require('KegUtils/helpers')
-const { buildLocationContext } = require('KegUtils/builders')
+const { confirmExec, exists } = require('KegUtils/helpers')
+const { buildContainerContext } = require('KegUtils/builders')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
@@ -16,11 +16,11 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
  * @returns {void}
  */
 const destroyDockerSync = async args => {
-  const { globalConfig, params, options, task, tasks } = args
+  const { globalConfig, params, options, task, tasks, __internal={}, } = args
   const { context, image } = params
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+  const { location, cmdContext, contextEnvs } = await buildContainerContext({
     globalConfig,
     task,
     params,
@@ -29,11 +29,15 @@ const destroyDockerSync = async args => {
     envs: { CONTEXT_PATH: 'INITIAL' }
   })
 
+  const preConfirm = exists(__internal.preConfirm)
+    ? __internal.preConfirm
+    : getSetting('docker.preConfirm') === true
+
   confirmExec({
     confirm: `This will remove all docker items related to ${ cmdContext }. Are you sure?`,
     success: `Finished running 'docker-sync destroy' command`,
     cancel: `Command 'keg docker sync destroy' has been cancelled!`,
-    preConfirm: getSetting('docker.preConfirm') === true,
+    preConfirm: preConfirm,
     execute: async () => {
 
       // Remove the container
@@ -48,20 +52,31 @@ const destroyDockerSync = async args => {
         skipError: true,
         type: 'container',
       })
-
+      
+      // Get any extra internal options passed from other task
+      const extraOpts = __internal.cmdOpts || {}
+      
       // Remove the docker-sync container volumes
       // Must come after removing the container
-      await spawnCmd(`docker-sync clean`, { options: { env: contextEnvs }}, location)
+      await spawnCmd(
+        `docker-sync clean`,
+        { options: { ...extraOpts, env: contextEnvs }},
+        location
+      )
 
       // Remove the docker image as well
       image && await runInternalTask('docker.tasks.image.tasks.remove', {
         ...args,
-        __skipThrow: true,
+        __internal:{ ...__internal, skipThrow: true },
         params: { ...args.params, context: cmdContext, force: true }
       })
 
       // Stop the docker-sync daemon
-      await spawnCmd(`docker-sync stop`, { options: { env: contextEnvs }}, location)
+      await spawnCmd(
+        `docker-sync stop`,
+        { options: { ...extraOpts, env: contextEnvs }},
+        location
+      )
 
     },
   })

@@ -18,6 +18,7 @@ const validateCli = args => {
 module.exports = {
   validate: {
     name: 'validate',
+    alias: [ 'val' ],
     action: validateCli,
     description: `Validate the keg-cli is setup correctly!`,
     example: 'keg global validate',

@@ -3,6 +3,8 @@ module.exports = {
   ...require('./throwDockerCreds'),
   ...require('./throwExitError'),
   ...require('./throwGitCmd'),
+  ...require('./throwInvalidSyncParams'),
+  ...require('./throwInvalidParamMatch'),
   ...require('./throwNoRepo'),
   ...require('./throwNoAction'),
   ...require('./throwNoConfigPath'),
@@ -14,4 +16,5 @@ module.exports = {
   ...require('./throwRequired'),
   ...require('./throwWrap'),
   ...require('./throwWrongPassword'),
+  
 }

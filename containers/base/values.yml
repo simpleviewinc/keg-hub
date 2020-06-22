@@ -1,0 +1,18 @@
+
+env:
+  # --- BASE ENV CONTEXT --- #
+
+  CONTEXT_PATH: "{{ cli.paths.cli }}"
+  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/base/Dockerfile"
+  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/base/values.yml"
+  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/base/compose-default.yml"
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  # Image ENVs
+  IMAGE: kegbase
+  VERSION: "0.0.1"
+
+  # Container ENVs
+  CONTAINER_NAME: kegbase
+  NM_CACHE: /keg/nm-cache/base

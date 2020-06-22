@@ -2,7 +2,8 @@ const { get, reduceObj } = require('jsutils')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { buildComposeCmd, buildComposeName } = require('KegUtils/docker')
-const { buildLocationContext } = require('KegUtils/builders')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Runs the docker-compose build command
@@ -17,7 +18,7 @@ const buildDockerCompose = async args => {
   const { cache, remove, pull, context } = params
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs } = await buildLocationContext({
+  const { location, cmdContext, contextEnvs } = await buildContainerContext({
     globalConfig,
     task,
     params
@@ -52,14 +53,15 @@ module.exports = {
     example: 'keg docker compose build <options>',
     options: {
       context: {
-        allowed: [ 'components', 'core', 'tap' ],
+        allowed: DOCKER.IMAGES,
         description: 'Context of docker compose build command (tap || core)',
         example: 'keg docker compose build --context core',
         default: 'base'
       },
-      remove: {
+      clean: {
+        alias: [ 'remove' ],
         description: 'Always remove intermediate containers',
-        example: 'keg docker compose build --remove',
+        example: 'keg docker compose build --clean',
         default: true
       },
       cache: {
@@ -71,6 +73,11 @@ module.exports = {
         description: 'Always attempt to pull a newer version of the image',
         example: 'keg docker compose build --pull',
         default: true
+      },
+      sync: {
+        description: 'Add the compose-sync.yml file as a config. Which setups docker-sync volumes',
+        example: 'keg docker compose build --sync',
+        default: false
       }
     }
   }

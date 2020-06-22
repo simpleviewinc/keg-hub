@@ -9,12 +9,8 @@ const { isStr } = require('jsutils')
  *
  * @returns {boolean} - If a process should be run in detached mode
  */
-const isDetached = (validate='', detached=false, attached=true) => (
-  isStr(attached) && attached !== validate
-    ? true
-    : attached === validate || attached === true
-      ? false
-      : detached === validate || detached === true
+const isDetached = (validate='', attached) => (
+  attached !== validate
 )
 
 module.exports = {

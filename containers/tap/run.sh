@@ -17,7 +17,6 @@ keg_add_yarn_bin_to_path(){
   export PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:$PATH"
 }
 
-
 # Overwrite the default cli, core, tap paths with passed in ENVs
 keg_set_container_paths(){
 

@@ -9,14 +9,16 @@ const mountPaths = {
     cli: '/keg/keg-cli'
   },
   core: {
-    core: '/keg/tap'
+    core: '/keg/keg-core'
   },
   tap: {
     core: '/keg/tap/node_modules/keg-core',
     tap: '/keg/tap',
   },
   components: {
-    tap: '/keg/keg-components',
+    components: '/keg/keg-components',
+    comps: '/keg/keg-components',
+    retheme: `/keg/keg-components/node_modules/@simpleviewinc/re-theme`,
   },
   proxy: {
     proxy: '/keg/keg-proxy',
@@ -27,13 +29,7 @@ const DEFAULT = {
   PATHS: {
     cli: mountPaths.base.cli,
   },
-  DEV_DEFAULTS: [
-    'cli',
-    // 'core',
-    'resolver',
-    'components',
-    'retheme'
-  ]
+  DEV_DEFAULTS: []
 }
 
 /**
@@ -42,20 +38,26 @@ const DEFAULT = {
  */
 const VOLUMES = images.reduce((data, image) => {
 
-  if(!mountPaths[image] || !mountPaths[image].core)
+  if(!mountPaths[image]) return data
+
+  if(!mountPaths[image].core){
+    data[image.toUpperCase()] = deepMerge(DEFAULT, { PATHS: { ...mountPaths[image] } })
     return data
-  
+  }
+
   const corePath = mountPaths[image].core
   data[image.toUpperCase()] = deepMerge(DEFAULT, {
     PATHS: {
-      // core: corePath,
-      components: `${corePath}/node_modules/keg-components`,
-      resolver: `${corePath}/node_modules/tap-resolver`,
-      retheme: `${corePath}/node_modules/re-theme`,
+      components: `${corePath}/node_modules/@simpleviewinc/keg-components`,
+      resolver: `${corePath}/node_modules/@simpleviewinc/tap-resolver`,
+      retheme: `${corePath}/node_modules/@simpleviewinc/re-theme`,
     },
   })
 
   return data
 }, {})
 
-module.exports = deepFreeze({ VOLUMES })
+module.exports = deepFreeze({
+  VOLUMES,
+  SYNC_LOGS: 'SYNC_LOGS'
+})

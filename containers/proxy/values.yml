@@ -1,0 +1,18 @@
+
+env:
+  # --- LOCAL ENV CONTEXT --- #
+  # Docker data
+  CONTEXT_PATH: "{{ cli.paths.proxy }}"
+  COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/compose-default.yml"
+  CONTEXT_DOCKER_FILE: "{{ cli.paths.cli }}/containers/proxy/Dockerfile"
+  CONTEXT_VALUES_FILE: "{{ cli.paths.cli }}/containers/proxy/values.yml"
+  COMPOSE_SYNC: "{{ cli.paths.cli }}/containers/proxy/compose-sync.yml"
+
+  # Should be the keg-proxy github url
+  GIT_PROXY_URL: INITIAL
+
+  # Should be the sv-letsencrypt github url
+  GIT_LETS_ENCRYPT_URL: https://github.com/lancetipton/sv-letsencrypt.git
+
+  # If set, copies the local proxy/src folder into the docker container at /keg/proxy/src
+  FROM_LOCAL: INITIAL

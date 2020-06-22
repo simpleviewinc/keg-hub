@@ -20,7 +20,7 @@ const { getSetting } = require('KegUtils/globalConfig/getSetting')
  */
 const removeDockerImage = async args => {
 
-  const { params, __skipThrow } = args
+  const { params, __internal={} } = args
   const { context, tag } = params
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
@@ -36,9 +36,9 @@ const removeDockerImage = async args => {
     : imgRef
 
   // Ensure we have the image meta data, and try to remove by imageId
-  // __skipThrow is an internal argument, so it's not documented
+  // __internal.skipThrow is an internal argument, so it's not documented
   if(!image || !image.id)
-    return __skipThrow !== true &&
+    return __internal.skipThrow !== true &&
       generalError(`The docker image "${ imgRef }" does not exist!`)
 
   const res = await docker.image.remove({ item: image.id, force })

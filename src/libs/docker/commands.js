@@ -50,7 +50,7 @@ const dockerCli = async (params={}, cmdOpts={}) => {
 
   return error
     ? apiError(error, errResponse, skipError)
-    : apiSuccess(data, format)
+    : apiSuccess(data, format, skipError)
 
 }
 
@@ -84,13 +84,13 @@ const dynamicCmd = async (args, type) => {
  *
  * @returns {void}
  */
-const remove = ({ item, force, skipError, type='' }) => {
+const remove = ({ item, force, skipError, type='' }, cmdOpts) => {
   return item
     ? dockerCli({
         force,
         skipError: skipError,
         opts: `${ type } rm ${ item }`.trim(),
-      })
+      }, cmdOpts)
     : noItemError(`docker.remove`)
 }
 
