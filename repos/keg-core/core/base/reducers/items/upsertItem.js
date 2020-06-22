@@ -25,8 +25,10 @@ export const upsertItem = (state, action) => {
   return {
     ...state,
     [category]:
-      key === undefined && isArr(state[category])
-        ? [ ...state[category], item ]
+      key === undefined
+        ? isArr(state[category])
+            ? [ ...state[category], item ]
+            : { ...state[category], ...item }
         : updateCollection(state[category], key, item),
   }
 }

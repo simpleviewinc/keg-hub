@@ -100,6 +100,19 @@ describe('items reducer', () => {
         nextState = addUsers({})
       })
 
+      it('should append an item to the category level if key is not provided', () => {
+        expect(nextState.users).toEqual({})
+        nextState = itemsReducer(nextState, {
+          type: ActionTypes.UPSERT_ITEM,
+          payload: {
+            category: 'users',
+            item: charlie,
+          },
+          error: null,
+        })
+        expect(nextState.users).toEqual(charlie)
+      })
+
       it('should add an item', () => {
         expect(nextState.users[charlie.id]).toBe(undefined)
         nextState = addUser(charlie, charlie.id, nextState)
