@@ -102,6 +102,13 @@ class Log {
   empty = () => console.log('')
 
   /**
+   * Helper to print out a table.
+   * @see docs about params here: https://developer.mozilla.org/en-US/docs/Web/API/Console/table
+   * @returns {void}
+   */
+  table = (...args) => console.table(...args)
+
+  /**
   * Helper to log out CLI message header
   * @function
   *
