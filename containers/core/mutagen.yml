@@ -1,0 +1,20 @@
+sync:
+  kegcore:
+    alpha: "/keg/keg-core"
+    beta: "docker://kegcore/keg/keg-core"
+    mode: "two-way-resolved"
+    flushOnCreate: true
+    ignore:
+      vcs: true
+      paths:
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"

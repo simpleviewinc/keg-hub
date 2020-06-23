@@ -9,6 +9,7 @@ const {
   toStr,
   checkCall
 } = require('jsutils')
+const { Logger } = require('KegLog')
 
 /**
  * Error handler for error in the Mutagen CLI
@@ -194,7 +195,7 @@ const buildIgnore = (ignore=[]) => {
  *
  * @returns {string} - Joined create arguments as a string
  */
-const buildMutagenArgs = ({ ignore, args }) => {
+const buildMutagenArgs = ({ ignore, alpha, beta, mode, flushOnCreate, ...args }) => {
   const mutagenArgs = reduceObj(args, (key, value, buildArgs) => {
     const useKey = trainCase(key)
     return value === true

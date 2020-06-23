@@ -1,0 +1,30 @@
+const path = require('path')
+const { DOCKER } = require('KegConst/docker')
+const { yml } = require('KegFileSys/yml')
+const { tryCatch } = require('../helpers')
+const { get } = require('jsutils')
+
+const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
+
+/**
+ * Loads the mutagen config for the passed in content
+ * <br/> Wrapped in a tryCatch that returns an empty object when error is thrown
+ * @param {Object} context - Parent folder name of the mutagen config file
+ *
+ * @returns {Object} - Loaded mutagen config file
+ */
+const getMutagenConfig = (context, service) => tryCatch(async () => {
+  const ymlConfig = await yml.load(path.join(CONTAINERS_PATH, context, 'mutagen.yml'))
+  const config = get(ymlConfig, `sync.${ service }`)
+
+  // MUTAGEN_MAP
+
+  return { ...config, ignore: get(config, 'ignore.paths') }
+
+}, () => ({}))
+
+
+
+module.exports = {
+  getMutagenConfig
+}

@@ -4,6 +4,7 @@ const { mutagen } = require('KegMutagen')
 const { DOCKER } = require('KegConst/docker')
 const { mutagenLog } = require('KegUtils/log/mutagenLog')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { getMutagenConfig } = require('KegUtils/getters/getMutagenConfig')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { getContainerFromContext } = require('KegUtils/docker/getContainerFromContext')
 const {
@@ -42,10 +43,15 @@ const startContainer = async (args, contextData) => {
  *
  * @returns {Object} - Build params for create a mutagen sync
  */
-const getSyncParams = contextData => {
+const getSyncParams = async (contextData) => {
 
-  const localPath = get(contextData, 'contextEnvs.CONTEXT_PATH')
-  const remotePath = get(contextData, 'contextEnvs.DOC_APP_PATH')
+  const config = await getMutagenConfig(
+    contextData.cmdContext,
+    contextData.name || contextData.image
+  )
+
+  const localPath = get(contextData, 'contextEnvs.CONTEXT_PATH', config.alpha)
+  const remotePath = get(contextData, 'contextEnvs.DOC_APP_PATH', config.beta)
 
   !localPath && generalError(
     `Can not set the local path, missing "CONTEXT_PATH" environment variable!`
@@ -55,11 +61,11 @@ const getSyncParams = contextData => {
   )
 
   return {
+    config: config,
     local: localPath,
     remote: remotePath,
     container: contextData.id,
     name: contextData.cmdContext,
-    config: {},
   }
 
 }
@@ -122,7 +128,7 @@ const mutagenCreate = async args => {
   !contextData.id && throwContainerNotFound(contextData.tap || contextData.cmdContext)
 
   // Get the params to create the mutagen sync
-  const syncParams = getSyncParams(contextData)
+  const syncParams = await getSyncParams(contextData)
 
   // Create the sync
   await createMutagenSync(args, syncParams)

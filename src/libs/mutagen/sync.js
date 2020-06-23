@@ -8,25 +8,23 @@ const { buildIgnore, buildMountPath, buildMutagenArgs } = require('./helpers')
  */
 const syncDefs = {
   create: {
-    args: {
-      defaultFileMode: '0644',
-      defaultDirectoryMode: '0755',
-      syncMode: `two-way-resolved`,
-      ignoreVcs: true
-    },
-    ignore: [
-      '/node_modules',
-      '/core/base/assets/*',
-      '/.*',
-      '!/.storybook',
-      '*.lock',
-      '*.md',
-      '/temp',
-      '/web-build',
-      '/reports',
-      '/build',
-      '/docs',
-    ]
+    defaultFileMode: '0644',
+    defaultDirectoryMode: '0755',
+    syncMode: `two-way-resolved`,
+    ignoreVcs: true,
+    // ignore: [
+    //   '/node_modules',
+    //   '/core/base/assets/*',
+    //   '/.*',
+    //   '!/.storybook',
+    //   '*.lock',
+    //   '*.md',
+    //   '/temp',
+    //   '/web-build',
+    //   '/reports',
+    //   '/build',
+    //   '/docs',
+    // ]
   }
 }
 
@@ -73,8 +71,8 @@ class Sync {
   * @returns {*} - response local the mutagen CLI
   */
   create = async (args) => {
-    const { container, options, name, log } = args
-    const argsStr = buildMutagenArgs(deepMerge(get(this, 'options.create', {}), options))
+    const { container, config, name, log } = args
+    const argsStr = buildMutagenArgs(deepMerge(get(this, 'options.create', {}), config))
     const mountPath = buildMountPath(args)
 
     return mutagenCli({

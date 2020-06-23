@@ -41,10 +41,19 @@ const cliKeyMap = {
   Names: 'name'
 }
 
+/**
+ * Maps keys from the mutagen yml config to work with the mutagen cli
+ * @object
+ */
+
+const mutagenMap = {
+  
+}
 
 module.exports = deepFreeze({
   images,
   cliKeyMap,
+  mutagenMap,
   cliRootDir,
   defaultENVs,
   locationContext,
