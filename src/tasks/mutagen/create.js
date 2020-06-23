@@ -80,7 +80,7 @@ const createMutagenSync = async (args, params) => {
   exists && mutagenSyncExists(params, exists)
 
   // Make call to start the mutagen sync
-  await mutagen.sync.create(params)
+  !exists && await mutagen.sync.create(params)
 
   mutagenLog(`Mutagen sync`, `"${ params.name }"`, `created!`)
 

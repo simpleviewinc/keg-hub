@@ -17,14 +17,17 @@ const { runInternalTask } = require('../task/runInternalTask')
 
 */
 
-
-const mutagenService = async (args) => {
-
-  // Ensure the mutagen daemon is running
-  await runInternalTask('tasks.mutagen.tasks.daemon.tasks.start', args)
+const mutagenService = async (args, composeRes={}) => {
 
   // Create the mutagen sync
-  await runInternalTask('tasks.mutagen.tasks.create', args)
+  return runInternalTask('tasks.mutagen.tasks.create', {
+    ...args,
+    params: {
+      ...args.params,
+      ...composeRes.params
+    },
+    __internal: composeRes.containerContext,
+  })
 
 }
 

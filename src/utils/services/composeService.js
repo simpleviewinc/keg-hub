@@ -63,7 +63,6 @@ const composeService = async (args, { context, tap }) => {
   // If service is sync and running sync in attached mode return
   if(syncRes.attached) return sync.contextData
 
-
   // ----- Run the docker-compose up command ----- //
 
   // If sync was started with detached or if the service is not sync
@@ -84,7 +83,7 @@ const composeService = async (args, { context, tap }) => {
           tap,
           context,
         },
-        __internal: sync.contextData,
+        __internal: syncRes.contextData,
       }
   )
 
