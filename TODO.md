@@ -52,8 +52,6 @@
     * This is done for each repo
   
 
-
-
 ### Setup Scripts
   * Added check machine type
     * Install yarn based on machine type
@@ -73,3 +71,8 @@
   * Add `ask` key to option
   * If it's missing, it will ask the user for the value when the command is run
   * Add setting for no ask in globalConfig
+
+
+* TODO: 
+  * keg config sync should also sync default.env file
+  * 

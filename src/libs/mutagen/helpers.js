@@ -1,6 +1,31 @@
 const { reduceObj, snakeCase, styleCase, trainCase } = require('jsutils')
 
 /**
+ * Error handler for error in the Mutagen CLI
+ * @function
+ * @param {string|Object} error - Error that was thrown
+ * @param {boolean} skip - Should error logs be skipped
+ *
+ * @returns {void}
+ */
+const cliError = (error, skip=false) => {
+  if(skip) return
+
+  const toLog = isStr(error)
+    ? error
+    : isObj(error) && error.stack
+      ? error.stack
+      : toStr(error)
+
+  Logger.empty()
+  Logger.error(`  Mutagen CLI Error:`)
+  Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
+  Logger.empty()
+
+}
+
+
+/**
  * Builds the mount path for the sync between the local host and docker container
  * @function
  * @param {string} args.from - Location on the local host to be synced
@@ -62,4 +87,5 @@ module.exports = {
   buildIgnore,
   buildMountPath,
   buildMutagenArgs,
+  cliError,
 }

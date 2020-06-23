@@ -45,6 +45,16 @@ class Sync {
     this.options = deepMerge(syncDefs, this.mutagen.options)
   }
 
+  list = async (args) => {
+    const data = await mutagenCli({
+      opts: `sync list`,
+    })
+    
+    // TODO: parse the list data into js object
+    return data
+
+  }
+
   /**
   * Creates a sync between the local machine an a docker container
   * <br/> First builds the args, then the full create string, then calls the mutagen CLI 
@@ -58,13 +68,13 @@ class Sync {
   * @returns {*} - response local the mutagen CLI
   */
   create = async (args) => {
-    const { container, options, name } = args
+    const { container, options, name, log } = args
     const argsStr = buildMutagenArgs(deepMerge(get(this, 'options.create', {}), options))
     const mountPath = buildMountPath(args)
 
     return mutagenCli({
+      log,
       opts: `sync create --name=${ name } ${ argsStr } ${ mountPath }`,
-      log: true,
     })
 
   }

@@ -51,7 +51,7 @@ const dockerBuild = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildContainerContext({
+  const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
     globalConfig,
     task,
     params,
@@ -84,7 +84,8 @@ const dockerBuild = async args => {
 
   // Return the built image as a json object
   // This is needed for internal keg-cli calls
-  return docker.image.get(cmdContext)
+  // TODO: This is not returning the image properly
+  return docker.image.get(image)
 
 }
 

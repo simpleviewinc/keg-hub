@@ -2,6 +2,7 @@ const { isArr, isStr, toStr, isObj } = require('jsutils')
 const { Logger } = require('KegLog')
 const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
+const { cliError } = require('./helpers')
 
 /**
  * Calls the git cli from the command line and returns the response
@@ -69,32 +70,7 @@ const raw = async (cmd, args={}, loc=process.cwd(), log) => {
 }
 
 
-/**
- * Error handler for error in the Mutagen CLI
- * @function
- * @param {string|Object} error - Error that was thrown
- * @param {boolean} skip - Should error logs be skipped
- *
- * @returns {void}
- */
-const cliError = (error, skip=false) => {
-  if(skip) return
-
-  const toLog = isStr(error)
-    ? error
-    : isObj(error) && error.stack
-      ? error.stack
-      : toStr(error)
-
-  Logger.empty()
-  Logger.error(`  Mutagen CLI Error:`)
-  Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
-  Logger.empty()
-
-}
-
 module.exports = {
-  cliError,
   mutagenCli,
   raw,
 }
