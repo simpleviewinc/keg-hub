@@ -2,7 +2,7 @@ const { isArr, isStr, toStr, isObj } = require('jsutils')
 const { Logger } = require('KegLog')
 const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
-const { cliError } = require('./helpers')
+const { cliError, cliSuccess } = require('./helpers')
 
 /**
  * Calls the git cli from the command line and returns the response
@@ -30,7 +30,7 @@ const ensureMutagen = cmd => cmd.trim().indexOf('mutagen') === 0 ? cmd : `mutage
  * @returns {Array|string} - JSON array of items || stdout from git cli call
  */
 const mutagenCli = async (args={}, cmdOpts={}, location) => {
-  const { opts, log, skipError } = args
+  const { format, log, opts, skipError, isList } = args
 
   const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
   const cmdToRun = ensureMutagen(`${ options }`.trim())
@@ -38,7 +38,7 @@ const mutagenCli = async (args={}, cmdOpts={}, location) => {
 
   const { error, data } = await executeCmd(cmdToRun, cmdOpts, location)
 
-  return error ? cliError(error, skipError) : data
+  return error ? cliError(error, skipError) : cliSuccess(data, format, skipError, isList)
 
 }
 

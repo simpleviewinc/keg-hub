@@ -1,4 +1,14 @@
-const { reduceObj, snakeCase, styleCase, trainCase } = require('jsutils')
+const { NEWLINES_MATCH, SPACE_MATCH, TAB_MATCH } = require('KegConst/patterns')
+const {
+  reduceObj,
+  snakeCase,
+  camelCase,
+  trainCase,
+  isStr,
+  isObj,
+  toStr,
+  checkCall
+} = require('jsutils')
 
 /**
  * Error handler for error in the Mutagen CLI
@@ -24,6 +34,120 @@ const cliError = (error, skip=false) => {
 
 }
 
+/**
+ * Formats the docker cli response into an array of items based on the format
+ * @function
+ * @param {string} data - response data from the docker CLI
+ * @param {string} format - Output format of the data
+ *
+ * @returns {Array} - JSON array of items
+ */
+const cliSuccess = (data, format, skipError, isList) => {
+  return format !== 'json'
+    ? data
+    : isList
+      ? jsonListOutput(data, skipError)
+      : jsonOutput(data, skipError)
+}
+
+/**
+ * Formats the mutagen output into a json object
+ * This helper cleans up the output, so it can be properly parsed as JSON
+ * @function
+ * @param {string} data - Output of a docker command in table format 
+ *
+ * @returns {Object} - Formatted mutagen output as an object
+ */
+const jsonOutput = (data, skipError) => {
+  // TODO: parse other json output strings
+  return data
+}
+
+/**
+ * Parses a line for the mutagen sync list output
+ * @function
+ * @param {string} line - Output of a mutagen command
+ *
+ * @returns {Object} - Formatted key and value based on the line
+ */
+const parseListLine = line => {
+  // Split the line by :
+  let [ key, value ] = line.split(': ')
+  key = key.trim()
+  value = value && value.trim()
+
+  // Some values are split by the = sign, so validate and parse that if needed
+  // Check if theres no value and the key has an equals sign
+  if(key.indexOf('=') !== -1 && !value){
+    // Use the = sign as the seperator, and get the key value from that
+    const [ equalKey, equalValue ] = key.split('=')
+    key = equalKey.trim()
+    value = equalValue.trim()
+
+    // If still no value, just return false
+    if(!value) return {}
+  }
+
+  // Check if the last char of the key is a :, ff it is, remove it
+  key[key.length - 1] === ':' && ( key = key.replace(':', '') )
+
+  // Convert the key to camelCase
+  // And set value to an object if it does not exist
+  // Return the parsed key and value
+  return {
+    key: camelCase(snakeCase(key)),
+    value: value || {}
+  }
+
+}
+
+/**
+ * Formats the mutagen list output into a json object
+ * This helper cleans up the output, so it can be properly parsed as JSON
+ * @function
+ * @param {string} data - Output of a docker command in table format 
+ *
+ * @returns {Object} - Formatted mutagen list output as an object
+ */
+const jsonListOutput = (data, skipError) => {
+  // Default list text split sync items with long lines in between i.e. '----------'
+  // So create a new array with 81 chars and join it to get a 80 char long string of -
+  // Then split the output to separate each sync item
+  return data.split(new Array(81).join('-'))
+    .reduce((items, item) => {
+      const built = {}
+      let added = false
+      let childObj
+
+      // Split the item on new lines, to parse each line individuallys
+      item.split(NEWLINES_MATCH).map(lineSplit => {
+        const line = lineSplit.replace(/\\t/g, '').trim()
+        if(!line) return
+
+        const { key, value } = parseListLine(line)
+        // If no value returned, then just return
+        if(!value) return
+
+        // Check if it has any tabs and if so, then add it to the childObj
+        // If no tabs, then it gets added to the top level built item
+        lineSplit.indexOf(`\t`) !== -1
+          ? isObj(childObj) && (childObj[key] = value)
+          : checkCall(() => {
+              added = true
+              built[key] = value
+              // Reset childObj every time a parent item is set
+              // If set to undefined, then next item should be a parent item
+              // Which could set the childObj to a new object
+              childObj = isObj(value) ? value : undefined
+            })
+      })
+    
+      // Check the flag if anything was added
+      // If it was add it to the items array, else just return the items array
+      return added ? items.concat([ built ]) : items
+    }, [])
+
+}
 
 /**
  * Builds the mount path for the sync between the local host and docker container
@@ -88,4 +212,5 @@ module.exports = {
   buildMountPath,
   buildMutagenArgs,
   cliError,
+  cliSuccess,
 }

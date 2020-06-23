@@ -3,14 +3,6 @@ const { deepMerge, get } = require('jsutils')
 const { buildIgnore, buildMountPath, buildMutagenArgs } = require('./helpers')
 
 /**
-
-  Works :)
-  mutagen sync create --name=keg --default-file-mode=0644 --default-directory-mode=0755 --sync-mode=one-way-safe --ignore=/node_modules --ignore=/.* --ignore=/core/base/assets/* /Users/lancetipton/keg/keg-core docker://c4aea5b80d16/keg/keg-core
-  ${ CONTEXT_PATH } docker://${ containerId }/${ DOC_APP_PATH }
-
-*/
-
-/**
  * Default sync argument options
  * @object
  */
@@ -45,19 +37,32 @@ class Sync {
     this.options = deepMerge(syncDefs, this.mutagen.options)
   }
 
-  list = async (args) => {
-    const data = await mutagenCli({
-      opts: `sync list`,
-    })
-    
-    // TODO: parse the list data into js object
-    return data
+  /**
+  * Gets a list of all the current mutagen syncs
+  * <br/> Allows parsing the format into json
+  * @member Sync
+  * @function
+  * @param {Object} args - determine how the command and output should be handled
+  * @param {Array} args.opts - Extra options to pass to the mutagenCli command
+  * @param {string} args.format - Output format type ( text || json )
+  * @param {boolean} args.log - Should the command being run be logged
+  *
+  * @returns {*} - response local the mutagen CLI
+  */
+  list = async (args={}) => {
+    const { opts=[] } = args
 
+    return mutagenCli({
+      ...args,
+      isList: true,
+      opts: [ `sync`, `list` ].concat(opts),
+    })
   }
 
   /**
   * Creates a sync between the local machine an a docker container
   * <br/> First builds the args, then the full create string, then calls the mutagen CLI 
+  * @member Sync
   * @function
   * @param {Object} args - Location on the local host to be synced
   * @param {Object} args.ignore - All paths that the sync should ignore
@@ -77,6 +82,24 @@ class Sync {
       opts: `sync create --name=${ name } ${ argsStr } ${ mountPath }`,
     })
 
+  }
+
+  /**
+  * Gets a list of all the current mutagen syncs
+  * <br/> Allows parsing the format into json
+  * @member Sync
+  * @function
+  * @param {Object} args - determine how find the sync item
+  * @param {Object} args.name - Name of the sync item to find
+  * @param {string} args.otherArgs - Arguments for the sync.list command
+  *
+  * @returns {*} - response local the mutagen CLI
+  */
+  get = async args => {
+    const { name, ...otherArgs } = args
+    const list = await this.list({ ...otherArgs, format: 'json' })
+
+    return list.find(item => item.name === name)
   }
 
 }

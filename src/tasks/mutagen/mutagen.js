@@ -24,6 +24,8 @@ module.exports = {
     example: 'keg mutagen <options>',
     tasks: {
       create,
+      ...require('./get'),
+      ...require('./list'),
       ...require('./start'),
       ...require('./stop'),
     },
