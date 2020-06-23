@@ -1,8 +1,9 @@
 const { get } = require('jsutils')
 const { Logger } = require('KegLog')
+const { syncService } = require('./syncService')
+const { mutagenService } = require('./mutagenService')
 const { isDetached } = require('../helpers/isDetached')
 const { runInternalTask } = require('../task/runInternalTask')
-const { syncService } = require('./syncService')
 
 /**
  * Checks if the service is `sync`, and runs the `docker-sync` service
@@ -16,11 +17,16 @@ const { syncService } = require('./syncService')
  *
  * @returns {*} - Response from the `docker-sync` task
  */
-const checkSyncService = (args, { context, log, service, syncDetached, tap }) => {
-  if(service !== 'sync') return
+const checkSyncService = async ({ args, context, log, service, tap }) => {
+  if(service !== 'sync') return {}
 
-  log && Logger.info(`Running docker-sync service as ${ syncDetached ? 'detached' : 'attached' }`)
-  return syncService(args, { context, syncDetached, tap })
+  // Check if the service is sync, and if we should attach the terminal
+  const detached = isDetached(`sync`, attached)
+
+  log && Logger.info(`Running docker-sync service as ${ detached ? 'detached' : 'attached' }`)
+  const contextData = await syncService(args, { context, detached, tap })
+
+  return { attached: !detached, contextData: contextData }
 }
 
 /**
@@ -38,27 +44,35 @@ const composeService = async (args, { context, tap }) => {
   const { params } = args
   const { attached, ensure, service, log } = params
 
+  // Ensure the context and tap
   context = context || params.context
   tap = tap || params.tap
 
-  // Check if the service is sync, and if we should attach the terminal
-  const syncDetached = isDetached(`sync`, attached)
+
+  // ----- Check and run docker-sync command if needed ----- //
 
   // Check and run the sync if needed
-  const syncContextData = await checkSyncService(
+  const syncRes = await checkSyncService({
     args,
-    { context, log, service, syncDetached, tap }
-  )
+    context,
+    log,
+    service,
+    tap
+  })
 
-  // If not running sync in detached mode return
-  if(!syncDetached) return syncContextData
+  // If service is sync and running sync in attached mode return
+  if(syncRes.attached) return sync.contextData
 
-  const composeDetached = isDetached(`compose`, attached)
+
+  // ----- Run the docker-compose up command ----- //
 
   // If sync was started with detached or if the service is not sync
   // Then we need to start docker-compose
+
+  const composeDetached = isDetached(`compose`, attached)
   log && Logger.info(`Running compose service as ${ composeDetached ? 'detached' : 'attached' }`)
-  return runInternalTask(
+
+  const composeRes = await runInternalTask(
       'tasks.docker.tasks.compose.tasks.up',
       {
         ...args,
@@ -70,9 +84,15 @@ const composeService = async (args, { context, tap }) => {
           tap,
           context,
         },
-        __internal: syncContextData,
+        __internal: sync.contextData,
       }
   )
+
+  // ----- Run the mutagen service if needed ----- //
+
+  return service === 'mutagen'
+    ? mutagenService(args, composeRes)
+    : composeRes
 
 }
 

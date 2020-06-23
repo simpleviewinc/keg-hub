@@ -18,16 +18,16 @@ const mutagenSync = args => {
 module.exports = {
   mutagen: {
     name: 'mutagen',
-    alias: [ 'sync', 'muta', 'mt' ],
+    alias: [ 'sync', 'sy', 'muta', 'mut', 'mt' ],
     action: mutagenSync,
     description: `mutagen commands for the Keg-CLI`,
     example: 'keg mutagen <options>',
     tasks: {
       create,
+      ...require('./daemon'),
       ...require('./get'),
       ...require('./list'),
-      ...require('./start'),
-      ...require('./stop'),
+      ...require('./terminate'),
     },
     options: {
       ...create.options,

@@ -1,3 +1,5 @@
+const { runInternalTask } = require('../task/runInternalTask')
+
 
 /**
 
@@ -16,8 +18,14 @@
 */
 
 
-const mutagenService = () => {
-  
+const mutagenService = async (args) => {
+
+  // Ensure the mutagen daemon is running
+  await runInternalTask('tasks.mutagen.tasks.daemon.tasks.start', args)
+
+  // Create the mutagen sync
+  await runInternalTask('tasks.mutagen.tasks.create', args)
+
 }
 
 module.exports = {

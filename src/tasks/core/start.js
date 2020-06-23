@@ -41,9 +41,6 @@ const startCore = async (args) => {
     ? await containerService(args, { container: 'core' })
     : await composeService(args, { context: 'core' })
 
-  // TODO: Add mutagen service here
-  // await mutagenService(args, {})
-  
   return serviceResp
 
 }
@@ -122,10 +119,10 @@ module.exports = {
         example: 'keg core --mounts core,cli,retheme',
       },
       service: {
-        allowed: [ 'compose', 'sync', 'container' ],
+        allowed: [ 'compose', 'sync', 'container', 'mutagen' ],
         description: 'What docker service to build the tap with. Must be on of ( sync || container ). Same as passing options "--attached sync "',
         example: 'keg core --service container',
-        default: 'compose'
+        default: 'mutagen'
       }
     }
   }

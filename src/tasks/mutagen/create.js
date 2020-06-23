@@ -1,13 +1,17 @@
 const docker = require('KegDocCli')
 const { get } = require('jsutils')
-const { Logger } = require('KegLog')
 const { mutagen } = require('KegMutagen')
 const { DOCKER } = require('KegConst/docker')
+const { mutagenLog } = require('KegUtils/log/mutagenLog')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { getContainerFromContext } = require('KegUtils/docker/getContainerFromContext')
-const { throwRequired, generalError, throwContainerNotFound } = require('KegUtils/error')
-
+const {
+  generalError,
+  mutagenSyncExists,
+  throwRequired,
+  throwContainerNotFound
+} = require('KegUtils/error')
 
 /**
   Steps to do sync
@@ -15,8 +19,6 @@ const { throwRequired, generalError, throwContainerNotFound } = require('KegUtil
   * Load in mutagen config for the context
     * Should include ignores / mount locations / create args etc 
 */
-
-
 const startContainer = async (args, contextData) => {
   await runInternalTask('tasks.docker.tasks.compose.tasks.up', {
     ...args,
@@ -36,35 +38,11 @@ const startContainer = async (args, contextData) => {
 
 /**
  * Start the mutagen daemon
- * @param {Object} args - arguments passed from the runTask method
- * @param {string} args.command - Initial command being run
- * @param {Array} args.options - arguments passed from the command line
- * @param {Object} args.tasks - All registered tasks of the CLI
- * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {Object} contextData - response from the buildContainerContext helper
  *
- * @returns {void}
+ * @returns {Object} - Build params for create a mutagen sync
  */
-const mutagenCreate = async args => {
-  const { command, globalConfig, params, task } = args
-  const { context, container, local, options, remote } = params
-
-  // Ensure we have a content to build the container
-  !context && !container && throwRequired(task, 'context', task.options.context)
-
-  // Get the context data for the command to be run
-  let contextData = await buildContainerContext({
-    globalConfig,
-    task,
-    params,
-  })
-  
-  // Check if the id exists, if not id / then the container does not exist
-  // So we need to start it
-  contextData = contextData.id ? contextData : await startContainer(args, contextData)
-
-  // Ensure we have a container id to do the sync
-  // If not throw not found error
-  !contextData.id && throwContainerNotFound(contextData.tap || contextData.cmdContext)
+const getSyncParams = contextData => {
 
   const localPath = get(contextData, 'contextEnvs.CONTEXT_PATH')
   const remotePath = get(contextData, 'contextEnvs.DOC_APP_PATH')
@@ -76,25 +54,92 @@ const mutagenCreate = async args => {
     `Can not set the remote path, missing "DOC_APP_PATH" environment variable!`
   )
 
+  return {
+    local: localPath,
+    remote: remotePath,
+    container: contextData.id,
+    name: contextData.cmdContext,
+    config: {},
+  }
+
+}
+
+/**
+ * Start the mutagen daemon
+ * @param {Object} args - Arguments passed to the task
+ * @param {Object} params - Response from the getSyncParams helper
+ *
+ * @returns {void}
+ */
+const createMutagenSync = async (args, params) => {
+  // Make sure the mutagen daemon is running
+  await runInternalTask('tasks.mutagen.tasks.daemon.tasks.start', args)
+
+  // Check if the sync item already exists
+  const exists = await mutagen.sync.exists(params)
+  exists && mutagenSyncExists(params, exists)
+
+  // Make call to start the mutagen sync
+  await mutagen.sync.create(params)
+
+  mutagenLog(`Mutagen sync`, `"${ params.name }"`, `created!`)
+
+  return true
+}
+
+/**
+ * Start the mutagen daemon
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Initial command being run
+ * @param {Array} args.options - arguments passed from the command line
+ * @param {Object} args.tasks - All registered tasks of the CLI
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ *
+ * @returns {void}
+ */
+const mutagenCreate = async args => {
+  const { command, globalConfig, params, task, __internal } = args
+  const { context, container, local, options, remote } = params
+
+  // Ensure we have a content to build the container
+  !context && !container && throwRequired(task, 'context', task.options.context)
+
+  // Get the context data for the command to be run
+  let contextData = await buildContainerContext({
+    task,
+    params,
+    __internal,
+    globalConfig,
+  })
+
+  // Check if the id exists, if no id then container needs to be started
+  contextData = contextData.id
+    ? contextData
+    : await startContainer(args, contextData)
+
+  // Ensure we have a container id to do the sync
+  // If not throw notFound Error
+  !contextData.id && throwContainerNotFound(contextData.tap || contextData.cmdContext)
+
+  // Get the params to create the mutagen sync
+  const syncParams = getSyncParams(contextData)
+
+  // Create the sync
+  await createMutagenSync(args, syncParams)
+
+  // Return the context, and built sync params
+  return { ...contextData, mutagen: syncParams }
+
   // TODO: Create sync for each repo based on the cmdContext
   // If cmdContext === core
   // Create sync for core / re-theme (node_modules) / tap-resolver (node_modules) / etc...
-
-  // Make call to start the mutagen sync
-  const res = await mutagen.sync.create({
-    container: contextData.id,
-    name: contextData.cmdContext,
-    local: localPath,
-    remote: remotePath,
-  })
-
 
 }
 
 module.exports = {
   create: {
     name: 'create',
-    alias: [ 'cr' ],
+    alias: [ 'cr', 'start', 'st', 's' ],
     action: mutagenCreate,
     description: `Creates a mutagen sync between the local filesystem and a docker container`,
     example: 'keg mutagen create <options>',

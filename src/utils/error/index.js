@@ -1,5 +1,6 @@
 module.exports = {
   ...require('./generalError'),
+  ...require('./mutagenSyncExists'),
   ...require('./throwDockerCreds'),
   ...require('./throwExitError'),
   ...require('./throwGitCmd'),
@@ -16,5 +17,4 @@ module.exports = {
   ...require('./throwRequired'),
   ...require('./throwWrap'),
   ...require('./throwWrongPassword'),
-  
 }

@@ -14,17 +14,18 @@ const { logVirtualUrl } = require('KegUtils/log')
  *
  * @returns {void}
  */
-const upDockerCompose = async args => {
+const composeUp = async args => {
   const { globalConfig, __internal, params, options, task } = args
   const { detached, build, context } = params
 
   // Get the context data for the command to be run
-  const { location, cmdContext, contextEnvs, tap } = await buildContainerContext({
+  const containerContext = await buildContainerContext({
     globalConfig,
     task,
     params,
     __internal,
   })
+  const { location, cmdContext, contextEnvs, tap } = containerContext
 
   // Check if build param is passed, and use the docker build to build container
   // This allow use of BuildKit which is faster, and has better caching
@@ -39,6 +40,7 @@ const upDockerCompose = async args => {
     params
   )
 
+  // Log the virtual url so users know how to access the running containers
   logVirtualUrl()
 
   // Run the docker-compose up command
@@ -52,9 +54,7 @@ const upDockerCompose = async args => {
   return {
     tap,
     params,
-    location,
-    cmdContext,
-    contextEnvs,
+    containerContext
   }
 
 }
@@ -63,7 +63,7 @@ module.exports = {
   up: {
     name: 'up',
     alias: [ 'u' ],
-    action: upDockerCompose,
+    action: composeUp,
     description: `Run docker-compose up command`,
     example: 'keg docker compose up <options>',
     options: {

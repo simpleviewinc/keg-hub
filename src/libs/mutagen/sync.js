@@ -90,8 +90,8 @@ class Sync {
   * @member Sync
   * @function
   * @param {Object} args - determine how find the sync item
-  * @param {Object} args.name - Name of the sync item to find
-  * @param {string} args.otherArgs - Arguments for the sync.list command
+  * @param {string} args.name - Name of the sync item to find
+  * @param {Object} args.otherArgs - Arguments for the sync.list command
   *
   * @returns {*} - response local the mutagen CLI
   */
@@ -100,6 +100,48 @@ class Sync {
     const list = await this.list({ ...otherArgs, format: 'json' })
 
     return list.find(item => item.name === name)
+  }
+
+  /**
+  * Checks if a sync exists based on the local and remote paths
+  * <br/> If paths are not passed in, uses name
+  * @member Sync
+  * @function
+  * @param {Object} args - determine how find the sync item
+  * @param {string} args.name - Name of the sync item to find
+  * @param {string} args.local - Local folder to be synced
+  * @param {string} args.remote - Docker folder to be synced
+  *
+  * @returns {Object} - Found sync object
+  */
+  exists = async ({ container, local, name, remote }) => {
+    const syncList = await this.list({ format: 'json' })
+    const usePaths = Boolean(container && local && remote)
+
+    return syncList.find(sync => {
+      return !usePaths
+        ? sync.name === name
+        : get(sync, 'alpha.url') === local &&
+          get(sync, 'beta.url', '').split(container)[1] === remote
+    })
+
+  }
+
+  /**
+  * Terminates a sync by name
+  * @member Sync
+  * @function
+  * @param {Object} args - determine how find the sync item
+  * @param {string} args.name - Name of the sync item to terminate
+  * @param {string} args.log - Log the mutagen command 
+  *
+  * @returns {string} - Response from the mutagenCLI
+  */
+  terminate = async ({ name, log }) => {
+    return mutagenCli({
+      log,
+      opts: `sync terminate ${ name }`,
+    })
   }
 
 }
