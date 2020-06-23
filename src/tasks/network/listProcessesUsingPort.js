@@ -23,7 +23,7 @@ const list = async args => {
 }
 
 module.exports = {
-  'listProcessesUsingPort': {
+  list: {
     name: 'list',
     alias: [ 'ls', 'l', ],
     action: list,
