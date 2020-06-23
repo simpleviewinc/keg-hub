@@ -48,7 +48,8 @@ const tagImage = async (args, imgTag) => {
   const { item, tag, log } = args
 
   // Get the image as an object
-  let image = args.image || await getImage(item, log)
+  let image = args.image || await getImage(item)
+
 
   // If no image, then just throw, otherwise add the tag to the image
   return !image
@@ -56,7 +57,38 @@ const tagImage = async (args, imgTag) => {
     : dockerCli({
         ...args,
         format: '',
-        opts: [ 'tag', image.id, tag ]
+        opts: [ 'tag', image.id, `${image.rootId}:${tag}` ]
+      })
+}
+
+/**
+ * Un-tags an image with the passed in imgTag
+ * @function
+ * @param {Object|string} args - Arguments to tag an image || an Image identifier
+ * @param {string} args.item - Image identifier; either name or id
+ * @param {string} args.tag - Tag to add to the image
+ * @param {string} args.log - Log the output of the docker image tag command
+ * @param {string} imgTag - Tag to add to the image. Used when args is a string
+ *
+ * @returns {*} - Output of the docker image tag command
+ */
+const removeTagImage = async (args, imgTag) => {
+  // Allow calling the removeTagImage with a string image name and string imgTag
+  args = isStr(args) ? { item: args, tag: imgTag } : args
+
+  // Pull the needed params from the args object
+  const { item, tag, log } = args
+
+  // Get the image as an object
+  let image = args.image || await getImage(item)
+
+  // If no image, then just throw, otherwise remove the tag from the image
+  return !image
+    ? noItemFoundError('image', image)
+    : dockerCli({
+        ...args,
+        format: '',
+        opts: [ 'rmi', `${image.rootId}:${tag}` ]
       })
 }
 
@@ -248,6 +280,7 @@ Object.assign(image, {
   run: runImage,
   remove: removeImage,
   tag: tagImage,
+  removeTag: removeTagImage,
 })
 
 module.exports = image

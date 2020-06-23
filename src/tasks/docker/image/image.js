@@ -46,6 +46,7 @@ module.exports = {
       ...require('./get'),
       ...require('./remove'),
       ...require('./run'),
+      ...require('./tag'),
     },
     description: `Runs docker image command`,
     example: 'keg docker image <options>',

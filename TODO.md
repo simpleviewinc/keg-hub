@@ -75,4 +75,3 @@
 
 * TODO: 
   * keg config sync should also sync default.env file
-  * 
