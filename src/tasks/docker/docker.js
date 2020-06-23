@@ -14,6 +14,7 @@ const dockerSubTasks = {
   dm: 'machine',
   dp: 'provider',
   dpg: 'package',
+  dr: 'restart',
   ds: 'sync',
 }
 
@@ -70,7 +71,7 @@ const dockerTask = args => {
 module.exports = {
   docker: {
     name: 'docker',
-    alias: [ 'doc', 'd', 'dc', 'di', 'dm', 'dp', 'dpg', 'ds' ],
+    alias: [ 'doc', 'd', ].concat(Object.keys(dockerSubTasks)),
     tasks: {
       ...require('./build'),
       ...require('./compose'),
@@ -81,6 +82,7 @@ module.exports = {
       ...require('./package'),
       ...require('./provider'),
       ...require('./prune'),
+      ...require('./restart'),
       ...require('./run'),
       ...require('./sync'),
     },

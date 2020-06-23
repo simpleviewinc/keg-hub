@@ -14,7 +14,7 @@ WORKDIR /
 # Install git and the expo-cli
 # TODO: Look into adding sharp-cli, to allow smaller bundle sizes
 RUN apk add --no-cache git bash; \
-    yarn global add expo-cli@$EXPO_CLI_VERSION
+    yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli
 
 # Pull down the keg-cli locally
 RUN if [ ! -z "$GIT_CLI_URL" ]; then \
