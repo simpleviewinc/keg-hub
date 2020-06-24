@@ -1,5 +1,4 @@
 const { get } = require('jsutils')
-const { isDetached } = require('../helpers/isDetached')
 const { runInternalTask } = require('../task/runInternalTask')
 const { throwInvalidParamMatch } = require('../error/throwInvalidParamMatch')
 

@@ -81,7 +81,7 @@ module.exports = {
       detached: {
         description: 'Runs the docker-sync process in the background',
         example: 'keg docker compose up --detached',
-        default: false
+        default: true
       },
       sync: {
         description: 'Add the compose-sync.yml file as a config. Which setups docker-sync volumes',

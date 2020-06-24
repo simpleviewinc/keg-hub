@@ -3,6 +3,19 @@ const { mutagen } = require('KegMutagen')
 const { isObj } = require('jsutils')
 
 /**
+ * Default daemon task options
+ * @Object
+ */
+const taskOptions = {
+  log: {
+    alias: [ 'lg' ],
+    description: 'Log the mutagen daemon command',
+    example: 'keg mutagen daemon <task> --log',
+    default: false,
+  } 
+}
+
+/**
  * Runs a mutagen daemon action
  * @param {string} method - Name of the method to run 
  * @param {string} text - Text to print matching the method being run
@@ -10,10 +23,13 @@ const { isObj } = require('jsutils')
  * @returns {void}
  */
 const daemonAction = (method, text) => {
-  return async () => {
-    Logger.info(`${ text } Mutagen daemon...`)
+  return async args => {
+    const { params: { log } } = args
+
+    log && Logger.info(`${ text } Mutagen daemon...`)
     const data = await mutagen[ method ]()
-    data && Logger.info(data)
+
+    log && data && Logger.info(data)
   }
 }
 
@@ -32,7 +48,8 @@ const mutagenStart = {
   alias: [ 'st', 's' ],
   description: `Start mutagen daemon`,
   example: 'keg mutagen start',
-  action: daemonAction('start', 'Starting')
+  action: daemonAction('start', 'Starting'),
+  options: taskOptions,
 }
 
 /**
@@ -51,6 +68,7 @@ const mutagenStop = {
   description: `Start mutagen daemon`,
   example: 'keg mutagen stop',
   action: daemonAction('stop', 'Stopping'),
+  options: taskOptions,
 }
 
 module.exports = {

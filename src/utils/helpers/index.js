@@ -4,7 +4,6 @@ module.exports = {
   ...require('./exists'),
   ...require('./hasHelpArg'),
   ...require('./invoke'),
-  ...require('./isDetached'),
   ...require('./limboify'),
   ...require('./mapEnv'),
   ...require('./waitForIt'),
