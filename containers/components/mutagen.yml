@@ -1,9 +1,8 @@
 sync:
   kegcomponents:
-    alpha: "/keg/tap"
-    beta: "docker://kegcore/keg/tap"
+    alpha: "/keg/keg-components"
+    beta: "docker://kegcomponents/keg/keg-components"
     mode: "two-way-resolved"
-    flushOnCreate: true
     ignore:
       vcs: true
       paths:

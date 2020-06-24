@@ -43,11 +43,11 @@ const cliKeyMap = {
 
 /**
  * Maps keys from the mutagen yml config to work with the mutagen cli
+ * <br/> The cli keys are not a 1:1 with the yml config keys
  * @object
  */
-
 const mutagenMap = {
-  
+  mode: 'syncMode',
 }
 
 module.exports = deepFreeze({

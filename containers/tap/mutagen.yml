@@ -1,9 +1,8 @@
 sync:
   tap:
     alpha: "/keg/tap"
-    beta: "docker://kegcore/keg/tap"
+    beta: "docker://tap/keg/tap"
     mode: "two-way-resolved"
-    flushOnCreate: true
     ignore:
       vcs: true
       paths:

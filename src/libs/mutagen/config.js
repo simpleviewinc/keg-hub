@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepMerge } = require('jsutils')
+const { deepMerge, deepClone } = require('jsutils')
 const { loadYml, writeYml, stat } = require('KegFileSys')
 const { generalError } = require('KegUtils/error')
 
@@ -18,17 +18,50 @@ const buildPath = ({ configFolder }, name) => {
 }
 
 /**
- * Default config argument options
- * @object
+ * Default sync create config arguments
+ * @Object
  */
-const configDefs = {}
+const configDefs = {
+  defaultFileMode: '0644',
+  defaultDirectoryMode: '0755',
+  syncMode: `two-way-resolved`,
+  ignoreVcs: true,
+  ignore: {
+    paths: [
+      '/node_modules',
+      '/core/base/assets/*',
+      '/.*',
+      '!/.storybook',
+      '*.lock',
+      '*.md',
+      '/temp',
+      '/web-build',
+      '/reports',
+      '/build',
+      '/docs',
+    ]
+  }
+}
 
 class Config {
 
   constructor(mutagen){
     this.mutagen = mutagen
-    this.options = deepMerge(configDefs, this.mutagen.options)
+    this.defaults = deepClone(configDefs)
   }
+
+  /**
+  * Gets the default config, and merges with the passed in overrides object
+  * @function
+  * @member Config
+  * @param {Object} overrides - Config object to override the default config options 
+  *
+  * @returns {Object} - Mutagen config
+  */
+  get = (overrides={}) => {
+    return deepMerge(this.defaults, overrides)
+  }
+
 
   /**
   * Loads a mutagen config from the passed in name
@@ -38,8 +71,8 @@ class Config {
   *
   * @returns {Object} - Mutagen config file
   */
-  get = async name => {
-    return loadYml(buildPath(options, name))
+  load = async name => {
+    return loadYml(buildPath(this.mutagen.options, name))
   }
 
   /**
@@ -52,7 +85,7 @@ class Config {
   * @returns {boolean} - True if the file could be saved
   */
   write = (name, content) => {
-    return writeYml(buildPath(options, name), content)
+    return writeYml(buildPath(this.mutagen.options, name), content)
   }
 
   /**
@@ -64,7 +97,7 @@ class Config {
   * @returns {boolean} - True if the file exists
   */
   exists = async name => {
-    const [ err, doesExist ] = await stat(buildPath(options, name))
+    const [ err, doesExist ] = await stat(buildPath(this.mutagen.options, name))
     return err ? generalError(err) : doesExist
   }
 

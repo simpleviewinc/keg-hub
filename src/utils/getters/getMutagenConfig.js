@@ -3,7 +3,6 @@ const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
 const { tryCatch } = require('../helpers')
 const { get, deepMerge } = require('jsutils')
-
 const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
 
 /**
@@ -15,13 +14,16 @@ const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
  */
 const getMutagenConfig = (context, service, overrides={}) => tryCatch(async () => {
   const ymlConfig = await yml.load(path.join(CONTAINERS_PATH, context, 'mutagen.yml'))
-  const config = get(ymlConfig, `sync.${ service }`)
 
-  // MUTAGEN_MAP
+  const config = get(ymlConfig, `sync.${ service }`, {})
 
-  return config
-    ? deepMerge(config, overrides)
-    : overrides
+  const mappedConf = Object.keys(config)
+    .reduce((conf, key) => {
+      conf[ MUTAGEN_MAP[key] || key ] = config[ key ]
+      return conf
+    }, {})
+
+  return deepMerge(mappedConf, overrides)
 
 }, () => (overrides))
 

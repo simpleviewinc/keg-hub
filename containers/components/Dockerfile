@@ -26,7 +26,7 @@ RUN git clone $GIT_COMPONENTS_URL $DOC_APP_PATH;
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $NM_CACHE/
-# COPY yarn.lock $NM_CACHE/
+
 
 # Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc

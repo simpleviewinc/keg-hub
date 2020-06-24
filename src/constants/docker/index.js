@@ -1,6 +1,13 @@
 const { deepFreeze } = require('jsutils')
-const { cliKeyMap, defaultENVs, dockerEnv, images, locationContext } = require('./values')
 const containers = require('./containers')
+const {
+  cliKeyMap,
+  defaultENVs,
+  dockerEnv,
+  images,
+  locationContext,
+  mutagenMap
+} = require('./values')
 
 const DOCKER = {
   ...require('./machine'),
@@ -11,6 +18,7 @@ const DOCKER = {
   DOCKER_ENV: dockerEnv,
   LOCATION_CONTEXT: locationContext,
   CONTAINERS_PATH: defaultENVs.CONTAINERS_PATH,
+  MUTAGEN_MAP: mutagenMap,
 }
 
 // Add the CONTAINERS property, with a get function do it only get called when referenced

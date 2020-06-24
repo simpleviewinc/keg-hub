@@ -6,7 +6,6 @@ const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getMutagenConfig } = require('KegUtils/getters/getMutagenConfig')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { getContainerFromContext } = require('KegUtils/docker/getContainerFromContext')
 const {
   generalError,
   mutagenSyncExists,
@@ -14,28 +13,6 @@ const {
   throwContainerNotFound
 } = require('KegUtils/error')
 
-/**
-  Steps to do sync
-  * Once container is running, get the container id
-  * Load in mutagen config for the context
-    * Should include ignores / mount locations / create args etc 
-*/
-const startContainer = async (args, contextData) => {
-  await runInternalTask('tasks.docker.tasks.compose.tasks.up', {
-    ...args,
-    command: 'up',
-    params: {
-      ...args.params,
-      detached: true,
-      tap: contextData.tap,
-      context: contextData.cmdContext
-    },
-    __internal: { containerContext: contextData },
-  })
-
-  return getContainerFromContext(contextData)
-
-}
 
 /**
  * Creates the Mutagen sync params overrides config with command line params
@@ -81,7 +58,7 @@ const getSyncParams = async (contextData, { local, remote, name }) => {
  */
 const createMutagenSync = async (args, params, skipExists) => {
   // Make sure the mutagen daemon is running
-  await runInternalTask('tasks.mutagen.tasks.daemon.tasks.start', args)
+  await runInternalTask('mutagen.tasks.daemon.tasks.start', args)
 
   // Check if the sync item already exists
   const exists = await mutagen.sync.exists(params)
@@ -89,7 +66,9 @@ const createMutagenSync = async (args, params, skipExists) => {
 
   // Make call to start the mutagen sync
   !exists && await mutagen.sync.create(params)
-  Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
+
+  // If we started the sync, log to let the user know
+  ;(!exists || skipExists) && Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
 
   return true
 }
@@ -119,14 +98,9 @@ const mutagenCreate = async args => {
     globalConfig,
   })
 
-  // Check if the id exists, if no id then container needs to be started
-  contextData = contextData.id
-    ? contextData
-    : await startContainer(args, contextData)
-
-  // Ensure we have a container id to do the sync
-  // If not throw notFound Error
-  !contextData.id && throwContainerNotFound(contextData.tap || contextData.cmdContext)
+  // Mutagen requires the container be running before the sync can be created
+  // So check if the container id exists, if no id then throw
+  !contextData.id && throwContainerNotFound(contextData.cmdContext)
 
   // Get the params to create the mutagen sync
   const syncParams = await getSyncParams(contextData, params)

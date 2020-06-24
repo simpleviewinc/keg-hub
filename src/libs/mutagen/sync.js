@@ -2,45 +2,11 @@ const { mutagenCli } = require('./commands')
 const { deepMerge, get } = require('jsutils')
 const { buildIgnore, buildMountPath, buildMutagenArgs } = require('./helpers')
 
-/**
- * Default sync argument options
- * @object
- */
-const syncDefs = {
-  create: {
-    defaultFileMode: '0644',
-    defaultDirectoryMode: '0755',
-    // flushOnCreate: "true",
-    syncMode: `two-way-resolved`,
-    ignoreVcs: true,
-    ignore: {
-      paths: [
-        '/node_modules',
-        '/core/base/assets/*',
-        '/.*',
-        '!/.storybook',
-        '*.lock',
-        '*.md',
-        '/temp',
-        '/web-build',
-        '/reports',
-        '/build',
-        '/docs',
-      ]
-    }
-  }
-}
-
-// TODO: look into using --configuration-file <path to file>
-// - Could make config files for each repo that could be synced
-// - So core would have a components file that syncs to node_modules/@simpleviewinc/keg-components
-// - Also flush on create no work from cmd line
 
 class Sync {
 
   constructor(mutagen){
     this.mutagen = mutagen
-    this.options = deepMerge(syncDefs, this.mutagen.options)
   }
 
   /**
@@ -80,7 +46,7 @@ class Sync {
   */
   create = async (args) => {
     const { container, config, name, log } = args
-    const argsStr = buildMutagenArgs(deepMerge(get(this, 'options.create', {}), config))
+    const argsStr = buildMutagenArgs(this.mutagen.config.get(config))
     const mountPath = buildMountPath(args)
 
     return mutagenCli({

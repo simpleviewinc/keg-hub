@@ -3,7 +3,6 @@ sync:
     alpha: "/keg/keg-core"
     beta: "docker://kegcore/keg/keg-core"
     mode: "two-way-resolved"
-    flushOnCreate: true
     ignore:
       vcs: true
       paths:
