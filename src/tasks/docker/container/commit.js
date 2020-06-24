@@ -1,8 +1,8 @@
-const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { dockerLog } = require('KegUtils/log/dockerLog')
-const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
+const { Logger } = require('KegLog')
+const { DOCKER } = require('KegConst/docker')
+const { throwRequired, generalError } = require('KegUtils/error')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 /**
  * Creates an image from a docker container
@@ -16,32 +16,29 @@ const docker = require('KegDocCli')
  */
 const containerCommit = async args => {
   const { globalConfig, params, task } = args
-  const { context, message, author } = params
+  const { context, message, author, log } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location } = await buildContainerContext({
+  const { cmdContext, id, name } = await buildContainerContext({
     globalConfig,
     task,
     params,
   })
 
-  // If using a tap, and no location is found, throw an error
-  cmdContext === 'tap' && tap && !location && generalError(
-    `Tap location could not be found for ${ tap }!`,
-    `Please ensure the tap path is linked in the global config!`
-  )
-
-  const res = await docker.container.commit({
-    author,
-    message,
-    container: cmdContext,
-  })
+  const containerRef = id || name
+  const res = containerRef
+    ? await docker.container.commit({
+        author,
+        message,
+        container: containerRef,
+      })
+    : Logger.warn(`Can not find container for "${ tap || cmdContext }"!`)
 
   // Log the output of the command
-  dockerLog(res)
+  log && Logger.highlight(`Docker`, `"commit"`, `${ cmdContext } complete!`)
 
 }
 
@@ -61,6 +58,11 @@ module.exports = {
       author: {
         description: `The author of the new docker image`,
         example: `keg docker container commit --author "John Doe"`,
+      },
+      log: {
+        description: 'Log the commit command to the terminal',
+        example: 'keg docker container commit --log false',
+        default: true,
       },
       message: {
         description: `Apply a commit message to the docker image`,

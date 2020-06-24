@@ -23,8 +23,8 @@ const startCore = async (args) => {
 
   // Check and run the correct service
   const serviceResp = service === 'container'
-    ? await containerService(args, { container: 'core' })
-    : await composeService(args, { context: 'core' })
+    ? await containerService(args, { context: 'core', container: 'kegcore' })
+    : await composeService(args, { context: 'core', container: 'kegcore' })
 
   return serviceResp
 

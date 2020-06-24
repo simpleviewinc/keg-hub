@@ -18,7 +18,7 @@ const destroyComponents = async (args) => {
 module.exports = {
   destroy: {
     name: 'destroy',
-    alias: [ 'dest', 'des' ],
+    alias: [ 'dest', 'des', 'kill' ],
     action: destroyComponents,
     description: `Destroys the docker items for keg-core`,
     example: 'keg components destroy <options>',

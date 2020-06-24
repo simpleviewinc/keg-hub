@@ -4,5 +4,6 @@ module.exports = {
   ...require('./containerService'),
   ...require('./destroyService'),
   ...require('./mutagenService'),
+  ...require('./stopService'),
   ...require('./serviceOptions'),
 }

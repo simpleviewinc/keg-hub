@@ -1,7 +1,7 @@
 const { stopService } = require('KegUtils/services')
 
 /**
- * Stop tap docker containers and syncs
+ * Stop keg-core docker containers and syncs
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -10,8 +10,8 @@ const { stopService } = require('KegUtils/services')
  *
  * @returns {void}
  */
-const stopTap = async (args) => {
-  return stopService(args, { context: 'tap', container: 'tap', tap: args.params.tap })
+const stopCore = async (args) => {
+  return stopService(args, { context: 'components', container: 'kegcomponents' })
 }
 
 
@@ -19,14 +19,8 @@ module.exports = {
   stop: {
     name: 'stop',
     alias: [ 'stp', 'halt', 'hlt' ],
-    action: stopTap,
-    description: `Stops tap docker containers and syncs`,
-    example: 'keg tap stop <options>',
-    options: {
-      tap: { 
-        description: 'Name of the tap to stop. Must be a tap linked in the global config',
-        required: true,
-      },
-    }
+    action: stopCore,
+    description: `Stops keg-components containers and syncs`,
+    example: 'keg components stop',
   }
 }

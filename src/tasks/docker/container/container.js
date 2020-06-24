@@ -54,6 +54,7 @@ module.exports = {
       ...require('./clean'),
       ...require('./commit'),
       ...require('./remove'),
+      ...require('./stop'),
     },
     options: {
       cmd: {

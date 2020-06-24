@@ -11,14 +11,13 @@ const { destroyService } = require('KegUtils/services')
  * @returns {void}
  */
 const destroyTap = async (args) => {
-  const { params } = args
-  return destroyService(args, { context: 'tap', container: 'tap', tap: params.tap })
+  return destroyService(args, { context: 'tap', container: 'tap', tap: args.params.tap })
 }
 
 module.exports = {
   destroy: {
     name: 'destroy',
-    alias: [ 'dest', 'des' ],
+    alias: [ 'dest', 'des', 'kill' ],
     action: destroyTap,
     description: `Destroys the docker items for a tap`,
     example: 'keg tap destroy <options>',

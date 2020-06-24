@@ -1,10 +1,5 @@
-const { get } = require('jsutils')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { getPathFromConfig } = require('KegUtils/globalConfig')
-const { dockerLog } = require('KegUtils/log/dockerLog')
-const { spawnCmd } = require('KegProc')
-const { CONTAINERS } = require('KegConst/docker/containers')
 const docker = require('KegDocCli')
+const { Logger } = require('KegLog')
 
 /**
  * Run a docker container command
@@ -17,12 +12,13 @@ const docker = require('KegDocCli')
  * @returns {void}
  */
 const containerClean = async args => {
+  const { params: { log } } = args
 
   // Call the container clean command
   await docker.container.clean(args.params)
 
   // Log the output of the command
-  dockerLog(undefined, 'clean')
+  log && Logger.highlight(`Docker container`, `"clean"`, `complete!`)
 
 }
 
@@ -33,5 +29,12 @@ module.exports = {
     action: containerClean,
     description: `Removes all stopped docker containers`,
     example: 'keg docker container clean <options>'
+    options: {
+      log: {
+        description: 'Log the clean command to the terminal',
+        example: 'keg docker container clean --log false',
+        default: true,
+      },
+    }
   }
 }

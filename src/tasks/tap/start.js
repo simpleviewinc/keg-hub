@@ -16,15 +16,15 @@ const {
  * @returns {void}
  */
 const startTap = async (args) => {
-  const { params: { service } } = args
+  const { params: { service, tap } } = args
 
   // Call the build service to ensure required images are built 
   await buildService(args, { context: 'tap', image: 'tap', tap })
 
   // Check and run the correct service
   const serviceResp = service === 'container'
-    ? await containerService(args, { container: 'tap', tap })
-    : await composeService(args, { container: 'tap', tap })
+    ? await containerService(args, { context: 'tap', container: 'tap', tap })
+    : await composeService(args, { context: 'tap', container: 'tap', tap })
 
   return serviceResp
 
