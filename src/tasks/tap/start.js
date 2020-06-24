@@ -36,7 +36,7 @@ module.exports = {
     action: startTap,
     description: `Runs a tap in a docker container`,
     example: 'keg tap start <options>',
-    options: serviceOptions('core', 'start', {
+    options: serviceOptions('tap', 'start', {
       tap: { 
         description: 'Name of the tap to run. Must be a tap linked in the global config',
         example: 'keg tap start --tap events-force',
