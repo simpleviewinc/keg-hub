@@ -8,7 +8,7 @@ const { getServiceArgs } = require('./getServiceArgs')
  *
  * @returns {void}
  */
-const stopService = (args, argsExt) => {
+const stopService = async (args, argsExt) => {
 
   // Build the service arguments
   const serviceArgs = getServiceArgs(args, argsExt)

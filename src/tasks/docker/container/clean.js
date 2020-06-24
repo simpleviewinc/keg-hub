@@ -28,7 +28,7 @@ module.exports = {
     alias: [ 'cl' ],
     action: containerClean,
     description: `Removes all stopped docker containers`,
-    example: 'keg docker container clean <options>'
+    example: 'keg docker container clean <options>',
     options: {
       log: {
         description: 'Log the clean command to the terminal',
