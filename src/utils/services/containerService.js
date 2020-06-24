@@ -16,7 +16,7 @@ const { getRepoPath } = require('../globalConfig/getRepoPath')
  *
  * @returns {void}
  */
-const containerService = ({ globalConfig, params }, { container, tap, location }) => {
+const containerService = ({ globalConfig, params }, { context, container, tap, location }) => {
 
   const { env, docker, mounts } = params
   const containerCaps = container.toUpperCase()
@@ -34,7 +34,7 @@ const containerService = ({ globalConfig, params }, { container, tap, location }
     version: get(DOCKER, `CONTAINERS.${ containerCaps }.ENV.VERSION`),
   })
 
-  logVirtualUrl()
+  logVirtualUrl(context)
 
   return spawnCmd(dockerCmd, location)
 

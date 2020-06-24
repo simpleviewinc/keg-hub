@@ -41,7 +41,7 @@ const composeUp = async args => {
   )
 
   // Log the virtual url so users know how to access the running containers
-  logVirtualUrl()
+  logVirtualUrl(cmdContext)
 
   // Run the docker-compose up command
   await spawnCmd(

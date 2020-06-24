@@ -53,7 +53,7 @@ const dockerRun = async args => {
   log && Logger.message(`Running docker cmd:`, dockerCmd)
 
   // Log out the containers ip, so we know how to connect to it in the browser
-  log && logVirtualUrl()
+  log && logVirtualUrl(cmdContext)
 
   // Run the container
   await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)
