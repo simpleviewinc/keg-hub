@@ -103,7 +103,7 @@ module.exports = deepFreeze({
   // URLs for navigating to the application
   TAP_URL: `http://tap.kegdev.xyz/`,
   // ENV port to map to port 80 inside the docker container
-  HTTP_PORT_ENV: `EXPO_APP_PORT`,
+  HTTP_PORT_ENV: `DOC_APP_PORT`,
   
 
   // Container context helpers

@@ -27,4 +27,4 @@ services:
       - NM_INSTALL
       - NODE_ENV
     ports:
-      - 80:${STORYBOOK_PORT}
+      - 80:${DOC_APP_PORT}

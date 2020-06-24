@@ -47,6 +47,12 @@ const serviceOptions = (task='', action='', overrides={}) => {
       example: "keg ${ task } ${ action } --ensure false",
       default: true,
     },
+    follow: {
+      alias: [ 'f', 'tail', 't' ],
+      description: 'Automatically follow the log output of the started service',
+      example: `keg ${ task } ${ action } --follow false`,
+      default: true
+    },
     install: {
       description: 'Install node_modules ( yarn install ) in the container before starting the app',
       example: 'keg ${ task } ${ action } --install',

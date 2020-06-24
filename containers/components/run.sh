@@ -29,7 +29,6 @@ keg_add_yarn_bin_to_path(){
 }
 
 
-
 # Runs yarn install at run time
 # Use whnode_modules to keg-components
 keg_run_yarn_install(){
@@ -42,23 +41,8 @@ keg_run_yarn_install(){
 
   keg_message "Running yarn install for keg-components..."
   keg_message "Switching to keg-components directory..."
-  cd $NM_CACHE
+  cd $COMPONENTS_PATH
   yarn install
-}
-
-# Copies over the locally cached node_modules
-keg_copy_node_modules(){
-
-  # ensure we know where the node_module cache is
-  if [[ -z "$NM_CACHE" ]]; then
-    return
-  fi
-
-  # Copy recursivly (-r) and prompt before overwrite (-i)
-  # Then pipe to dev/null, so we hide the overwrite prompts
-  keg_message "Running node_modules copy from cache to keg-components..."
-  false | cp -ir $NM_CACHE/node_modules/. $DOC_APP_PATH/node_modules 2>/dev/null
-
 }
 
 # Runs a keg-components repo
@@ -84,9 +68,6 @@ keg_add_yarn_bin_to_path
 
 # Run yarn install for any extra node_modules from the mounted components package.json
 keg_run_yarn_install
-
-# Copies over the locally cached node_modules into the apps node_modules
-keg_copy_node_modules
 
 # Start the keg core instance
 keg_run_components

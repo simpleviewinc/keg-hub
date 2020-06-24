@@ -69,7 +69,6 @@ const getImageData = async args => {
 
 }
 
-
 const addExposedPorts = envs => {
   return Object.keys(envs).reduce((ports, key) => {
     return key.includes('_PORT')

@@ -49,4 +49,4 @@ services:
       - NODE_ENV
     ports:
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
-      - 80:${EXPO_APP_PORT}
+      - 80:${DOC_APP_PORT}

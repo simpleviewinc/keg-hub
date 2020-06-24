@@ -15,8 +15,6 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/keg-components
 
-# Path where node_modules will be installed durring docker built
-ARG NM_CACHE=/keg/nm-cache/components
 
 ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
 
@@ -25,14 +23,12 @@ ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
 RUN git clone $GIT_COMPONENTS_URL $DOC_APP_PATH;
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json $NM_CACHE/
+COPY package.json $DOC_APP_PATH/
 
 
 # Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc
-RUN mkdir -p $NM_CACHE/scripts; \
-    touch $NM_CACHE/scripts/postinstall.js; \
-    cd $NM_CACHE; \
+RUN cd $DOC_APP_PATH; \
     echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
     echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
     yarn install; \
@@ -57,9 +53,6 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/keg-components
 
-# Path where node_modules will be installed durring docker built
-ARG NM_CACHE=/keg/nm-cache/components
-
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV
 ARG KEG_DOCKER_IP
 
@@ -81,9 +74,6 @@ COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
 
 # Copy over the cloned app
 COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH
-
-# Copy over keg cli from above
-COPY --from=builder $NM_CACHE $NM_CACHE
 
 # Expose container ports
 EXPOSE 80
