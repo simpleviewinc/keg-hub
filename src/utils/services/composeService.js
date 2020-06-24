@@ -2,6 +2,7 @@ const { get } = require('jsutils')
 const { mutagenService } = require('./mutagenService')
 const { runInternalTask } = require('../task/runInternalTask')
 
+
 /**
  * Runs `docker-compose` up command based on the passed in args
  * @function
@@ -14,22 +15,20 @@ const { runInternalTask } = require('../task/runInternalTask')
  */
 const composeService = async (args, { context, tap }) => {
   const { params } = args
-  const { service, log } = params
 
-  const composeRes = await runInternalTask('tasks.docker.tasks.compose.tasks.up', {
+  const containerContext = await runInternalTask('tasks.docker.tasks.compose.tasks.up', {
     ...args,
-    command: 'up',
     params: {
-      ...args.params,
+      ...params,
       tap: tap || params.tap,
       context: context || params.context,
-    },
+    }
   })
 
   // Run the mutagen service if needed
-  return service === 'mutagen'
-    ? mutagenService(args, composeRes)
-    : composeRes
+  return get(args, 'params.service') === 'mutagen'
+    ? mutagenService(args, { context, tap, containerContext })
+    : containerContext
 
 }
 

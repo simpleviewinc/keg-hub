@@ -60,6 +60,7 @@ module.exports = {
     tasks: {
       ...require('./build'),
       ...require('./down'),
+      ...require('./stop'),
       ...require('./up'),
     },
     options: {

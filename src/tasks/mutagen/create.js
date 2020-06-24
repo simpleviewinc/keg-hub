@@ -1,8 +1,8 @@
 const docker = require('KegDocCli')
 const { get } = require('jsutils')
+const { Logger } = require('KegLog')
 const { mutagen } = require('KegMutagen')
 const { DOCKER } = require('KegConst/docker')
-const { mutagenLog } = require('KegUtils/log/mutagenLog')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getMutagenConfig } = require('KegUtils/getters/getMutagenConfig')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
@@ -30,7 +30,7 @@ const startContainer = async (args, contextData) => {
       tap: contextData.tap,
       context: contextData.cmdContext
     },
-    __internal: contextData,
+    __internal: { containerContext: contextData },
   })
 
   return getContainerFromContext(contextData)
@@ -88,7 +88,7 @@ const createMutagenSync = async (args, params) => {
   // Make call to start the mutagen sync
   !exists && await mutagen.sync.create(params)
 
-  mutagenLog(`Mutagen sync`, `"${ params.name }"`, `created!`)
+  Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
 
   return true
 }

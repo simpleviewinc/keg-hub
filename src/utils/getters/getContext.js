@@ -78,12 +78,13 @@ const containerContext = async toFind => {
  * @param {string} params.context - Docker container context to use
  * @param {string} params.container - Docker container name or id. Overrides context
  * @param {string} params.tap - Name of the tap to use, when context is tap
+ * @param {boolean} ask - If container can not be found ask the user which contianer to use
  *
  * @returns {Object} - Found context, and prefix if it exists
  */
-const getContext = ({ context, container, tap }) => {
+const getContext = ({ context, container, tap }, askContainer) => {
 
-  return container
+  return container && askContainer
     ? containerContext(container)
     : tap
       ? { context: 'tap', tap }

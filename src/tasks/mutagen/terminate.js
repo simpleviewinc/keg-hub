@@ -1,6 +1,6 @@
 const { mutagen } = require('KegMutagen')
 const { generalError } = require('KegUtils/error')
-const { mutagenLog } = require('KegUtils/log/mutagenLog')
+const { Logger } = require('KegLog')
 /**
  * Start the mutagen daemon
  * @param {Object} args - arguments passed from the runTask method
@@ -12,7 +12,7 @@ const { mutagenLog } = require('KegUtils/log/mutagenLog')
  * @returns {void}
  */
 const mutagenTerminate = async args => {
-  const { command, globalConfig, options, params, tasks } = args
+  const { command, globalConfig, options, params, tasks, __internal={} } = args
   const { context } = params
 
   // Get the sync item
@@ -21,9 +21,9 @@ const mutagenTerminate = async args => {
   // If the sync item is found, terminate it
   ;syncItem
     ? await mutagen.sync.terminate(syncItem)
-    : generalError(`Mutagen sync "${ context }" does not exist!`)
+    : !__internal.skipThrow && generalError(`Mutagen sync "${ context }" does not exist!`)
 
-  return mutagenLog(`Mutagen sync`, `"${ context }"`, `terminated!`)
+  Logger.highlight(`Mutagen sync`, `"${ context }"`, `terminated!`)
 
 }
 

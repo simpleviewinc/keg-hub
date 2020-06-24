@@ -1,7 +1,7 @@
 const { reduceObj } = require('jsutils')
 const { generalError } = require('../error/generalError')
 const { getTapPath } = require('../globalConfig/getTapPath')
-const { getContext } = require('KegUtils/getters/getContext')
+const { getContext } = require('../getters/getContext')
 const { getContainerConst } = require('../docker/getContainerConst')
 
 /**
@@ -11,12 +11,12 @@ const { getContainerConst } = require('../docker/getContainerConst')
  *
  * @returns {Object} - ENVs for the context
  */
-const buildCmdContext = ({ globalConfig, params, allowed }) => {
+const buildCmdContext = async ({ globalConfig, params, allowed, askContainer }) => {
   const { tap, container } = params
 
   // Check if the context is prefixed with `keg`
   // If it is, remove it. This allows passing in "kegcore" or just "core"
-  const contextData = getContext(params)
+  const contextData = await getContext(params, askContainer)
   const { context } = contextData
 
   // If context is in the allowed, and it's not a tap, then just return the cmdContext

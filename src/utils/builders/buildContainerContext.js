@@ -47,9 +47,13 @@ const getLocation = (globalConfig, task, context, tap) => {
  *
  * @returns {boolean} - Does __internal have all required keys
  */
-const validateInternal = (__internal, keys=[]) => {
-  const internalKeys = Object.keys(__internal)
+const validateInternal = (contextObj, keys=[]) => {
+  if(!contextObj) return false
+
+  const internalKeys = Object.keys(contextObj)
   return !Boolean(keys.filter(key => internalKeys.indexOf(key) === -1).length)
+    ? false
+    : contextObj
 }
 
 /**
@@ -63,17 +67,18 @@ const validateInternal = (__internal, keys=[]) => {
  *
  * @returns {Object} - The location, context, and envs for the context
  */
-const buildContainerContext = async ({ envs={}, globalConfig, __internal, params, task }) => {
+const buildContainerContext = async args => {
+  const { envs={}, globalConfig, __internal, params, task } = args
 
-  // This is used by internal tasks.
-  // If we already have the output of buildContainerContext
-  // No need run the code again
-  if(__internal && validateInternal(__internal, CONTEXT_KEYS))
-    return __internal
+  // Checks If we already have the containerContext
+  const contextObj = validateInternal(get(__internal, 'containerContext'), CONTEXT_KEYS)
+  if(contextObj) return contextObj
 
-  const contextData = buildCmdContext({
+  const contextData = await buildCmdContext({
     params,
     globalConfig,
+    // Only ask for the container if it's no an internal task call
+    askContainer: !Boolean(__internal),
     allowed: get(task, 'options.context.allowed', IMAGES),
     defContext: get(task, 'options.context.default')
   })

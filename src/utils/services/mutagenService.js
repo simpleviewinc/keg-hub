@@ -1,32 +1,25 @@
 const { runInternalTask } = require('../task/runInternalTask')
 
-
 /**
-
-* This service should be called after the docker-compose service is called
-  * So the docker-compose containers should already exist
-* Steps to setup
-  * Call the mutagen start task, to ensure the mutagen daemon is running
-  * Calls the mutagen create task to create the mutagen sync
-    * This task should be updated to validate if the sync already exists
-  * Should add an exit listener similar to the docker-sync task
-    * When the docker-compose service is closed, the mutagen sync should stop as well
-    * Need to add a mutagen task to stop a sync
-    * Need to add a mutagen task to list all syncs
-    * Need to add a mutagen task to get all syncs
-
-*/
-
-const mutagenService = async (args, composeRes={}) => {
+ * Calls the mutagen create task internally
+ * @param {Object} args - Default arguments passed to all tasks
+ * @param {Object} argsExt - Arguments to override the passed in params
+ * @param {Object} argsExt.composeRes - Response from the compose service
+ *
+ * @returns {*} - Response from the mutagen create task
+ */
+const mutagenService = async (args, { context, tap, containerContext }) => {
+  const { params } = args
 
   // Create the mutagen sync
-  return runInternalTask('tasks.mutagen.tasks.create', {
+  return runInternalTask('mutagen.tasks.create', {
     ...args,
+    ...(containerContext && { __internal: { containerContext } }),
     params: {
-      ...args.params,
-      ...composeRes.params
+      ...params,
+      tap: tap || params.tap,
+      context: context || params.context,
     },
-    __internal: composeRes.containerContext,
   })
 
 }

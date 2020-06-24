@@ -15,7 +15,7 @@ const { getContainerConst } = require('KegUtils/docker/getContainerConst')
  */
 const checkForLatestTag = (image, args) => {
   return image.tag !== 'latest' &&
-    runInternalTask(`tasks.docker.tasks.image.tasks.tag`, {
+    runInternalTask(`docker.tasks.image.tasks.tag`, {
       ...args,
       __internal: { image: 'kegbase' },
       params: { context: 'base', tag: 'latest', log: false },

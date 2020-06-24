@@ -15,7 +15,7 @@ const { DOCKER } = require('KegConst/docker')
  */
 const buildDockerCompose = async args => {
   const { globalConfig, params, task } = args
-  const { cache, remove, pull, context } = params
+  const { cache, remove, pull, context, log } = params
 
   // Get the context data for the command to be run
   const { location, cmdContext, contextEnvs } = await buildContainerContext({
@@ -41,6 +41,8 @@ const buildDockerCompose = async args => {
     { options: { env: contextEnvs }},
     location
   )
+
+  log && Logger.highlight(`Compose build service`, `"${ cmdContext }"`, `complete!`)
 
 }
 
@@ -68,6 +70,11 @@ module.exports = {
         description: 'Use cache when building the container',
         example: 'keg docker compose build --cache',
         default: true
+      },
+      log: {
+        description: 'Log the compose command to the terminal',
+        example: 'keg docker compose build --log false',
+        default: true,
       },
       pull: {
         description: 'Always attempt to pull a newer version of the image',

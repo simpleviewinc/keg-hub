@@ -62,6 +62,20 @@ const addCmdOpts = (dockerCmd, params) => {
   }, dockerCmd)
 }
 
+
+const getDownArgs = (dockerCmd, remove) => {
+  return remove.split(',').reduce((builtCmd, toRemove) => {
+    if(toRemove === 'all' || toRemove === 'local')
+      dockerCmd = `${dockerCmd} -rmi ${toRemove}`
+    else if(toRemove === 'v' || toRemove === 'volumes')
+      dockerCmd = `${dockerCmd} --volumes`
+    else if(toRemove === 'or' || toRemove === 'orphans')
+      dockerCmd = `${dockerCmd} --remove-orphans`
+
+    return dockerCmd
+  }, dockerCmd)
+}
+
 /**
  * Creates the docker-compose up command
  * @function
@@ -72,7 +86,7 @@ const addCmdOpts = (dockerCmd, params) => {
  * @returns {string} - Built docker command
  */
 const buildComposeCmd = async (globalConfig, cmd, cmdContext, params) => {
-  const { detached, build, sync } = params
+  const { attach, build, sync, remove } = params
 
   let dockerCmd = `docker-compose`
   dockerCmd = addComposeFiles(dockerCmd, cmdContext, sync)
@@ -80,7 +94,11 @@ const buildComposeCmd = async (globalConfig, cmd, cmdContext, params) => {
   
   if(cmd === 'build') return addCmdOpts(dockerCmd, params)
 
-  dockerCmd = addDockerArg(dockerCmd, '--detach', Boolean(detached))
+  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
+
+  dockerCmd = cmd === 'down' && remove
+    ? getDownArgs(dockerCmd, remove)
+    : dockerCmd
 
   return dockerCmd
 }

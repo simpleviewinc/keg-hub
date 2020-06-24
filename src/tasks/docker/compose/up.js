@@ -16,7 +16,7 @@ const { logVirtualUrl } = require('KegUtils/log')
  */
 const composeUp = async args => {
   const { globalConfig, __internal, params, options, task } = args
-  const { detached, build, context } = params
+  const { detached, build, context, log } = params
 
   // Get the context data for the command to be run
   const containerContext = await buildContainerContext({
@@ -50,12 +50,10 @@ const composeUp = async args => {
     location
   )
 
+  log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `is up!`)
+
   // Return the built context info, so it can be reused if needed
-  return {
-    tap,
-    params,
-    containerContext
-  }
+  return containerContext
 
 }
 
@@ -76,17 +74,12 @@ module.exports = {
         allowed: DOCKER.IMAGES,
         description: 'Context of docker compose up command (components || core || tap)',
         example: 'keg docker compose up --context core',
-        default: 'core'
+        required: true
       },
-      detached: {
-        description: 'Runs the docker-sync process in the background',
-        example: 'keg docker compose up --detached',
-        default: true
-      },
-      sync: {
-        description: 'Add the compose-sync.yml file as a config. Which setups docker-sync volumes',
-        example: 'keg docker compose up --sync',
-        default: false
+      log: {
+        description: 'Log the compose command to the terminal',
+        example: 'keg docker compose build --log false',
+        default: true,
       }
     }
   }

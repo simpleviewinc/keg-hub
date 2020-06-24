@@ -43,15 +43,15 @@ const tagOpts = {
  * @returns {void}
  */
 const dockerTag = async args => {
-  const { command, __internal, globalConfig, options, params, task, tasks } = args
+  const { command, __internal={}, globalConfig, options, params, task, tasks } = args
   const { context, tag, remove, log } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { image } = __internal
-    ? __internal
+  const { image } = __internal.containerContext
+    ? __internal.containerContext
     : await buildContainerContext({ globalConfig, task, params })
 
   // If remove is passed, then call the removeTag method

@@ -24,6 +24,7 @@ const destroyDockerSync = async args => {
     globalConfig,
     task,
     params,
+    __internal,
     // Set a default context path as it's not needed for cleaning up a tap container
     // And it will throw if not set for a tap
     envs: { CONTEXT_PATH: 'INITIAL' }
@@ -55,14 +56,6 @@ const destroyDockerSync = async args => {
       
       // Get any extra internal options passed from other task
       const extraOpts = __internal.cmdOpts || {}
-      
-      // Remove the docker-sync container volumes
-      // Must come after removing the container
-      await spawnCmd(
-        `docker-sync clean`,
-        { options: { ...extraOpts, env: contextEnvs }},
-        location
-      )
 
       // Remove the docker image as well
       image && await runInternalTask('docker.tasks.image.tasks.remove', {
@@ -70,13 +63,6 @@ const destroyDockerSync = async args => {
         __internal:{ ...__internal, skipThrow: true },
         params: { ...args.params, context: cmdContext, force: true }
       })
-
-      // Stop the docker-sync daemon
-      await spawnCmd(
-        `docker-sync stop`,
-        { options: { ...extraOpts, env: contextEnvs }},
-        location
-      )
 
     },
   })

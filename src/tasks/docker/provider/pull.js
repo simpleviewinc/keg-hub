@@ -35,7 +35,7 @@ const providerPull = async args => {
   } = params
 
   // Get the command context
-  const { cmdContext, tap } = buildCmdContext({
+  const { cmdContext, tap } = await buildCmdContext({
     params,
     globalConfig,
     allowed: get(task, 'options.context.allowed', DOCKER.IMAGES)

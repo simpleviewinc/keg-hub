@@ -8,6 +8,7 @@ module.exports = {
   ...require('./throwNoRepo'),
   ...require('./throwNoAction'),
   ...require('./throwNoConfigPath'),
+  ...require('./throwNoContainers'),
   ...require('./throwNoFileExists'),
   ...require('./throwNoGitBranch'),
   ...require('./throwNoTask'),

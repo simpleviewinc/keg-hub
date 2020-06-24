@@ -1,4 +1,4 @@
-const { checkCall, get, isObj, isFunc, isStr } = require('jsutils')
+const { checkCall, get, isObj, isFunc, isStr, deepClone } = require('jsutils')
 const { throwNoAction, throwNoTask } = require('../error')
 const { validateTask } = require('./validateTask')
 const { ensureParams } = require('./getParams')
@@ -12,10 +12,15 @@ const { ensureParams } = require('./getParams')
  */
 const runInternalTask = async (taskPath, args, task) => {
 
+  // Pull out the tasks, globalConfig, originalTask
+  // Then join the rest under taskArgs
+  // This allows a faster clone of taskArgs
+  const { tasks, globalConfig, task:orgTask, __internal, ...taskArgs } = args
+
   // Ensure path starts with a tasks key
   taskPath = taskPath.indexOf(`tasks.`) === 0 ? taskPath : `tasks.${taskPath}`
 
-  // // Get the docker-sync start tasks
+  // // Get the from path tasks
   task = task || get(args, taskPath)
 
   // If task a string, then it's  an alias, so get the real task
@@ -27,10 +32,12 @@ const runInternalTask = async (taskPath, args, task) => {
   // Validate the task, then call it's action
   return validateTask(task, taskPath)
     .action({
-      ...args,
       task,
-      params,
+      tasks,
+      __internal,
+      globalConfig,
       command: task.name,
+      ...deepClone({ ...taskArgs, params, options: [ ...args.options ] })
     })
 
 }

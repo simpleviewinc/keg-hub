@@ -22,7 +22,7 @@ const dockerRemove = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildContainerContext({
+  const { cmdContext, contextEnvs, location, tap, image, name } = await buildContainerContext({
     globalConfig,
     task,
     params,
@@ -31,7 +31,7 @@ const dockerRemove = async args => {
   await docker.remove({
     type,
     force,
-    item: cmdContext,
+    item: image || name || cmdContext,
   })
 
 }

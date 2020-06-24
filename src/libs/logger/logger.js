@@ -172,11 +172,24 @@ class Log {
   * Writes to the process stdout
   */
   stdout = (...args) => process.stdout.write(...args)
-  /**
 
+  /**
   * Writes to the process stderr
   */
   stderr = (...args) => process.stderr.write(...args)
+
+  /**
+  * Helper to highlight a word in a logged message
+  * @function
+  * @param {string} start - Beginning of the message
+  * @param {string} highlight - Part of message to be highlighted
+  * @param {string} end - End of the message
+  *
+  * @returns {void}
+  */
+  highlight = (start='', highlight='', end='') => {
+    this.log(`  ${ start }`, Logger.colors.cyan(highlight), end)
+  }
 
 }
 

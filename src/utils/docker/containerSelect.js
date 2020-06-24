@@ -1,6 +1,8 @@
 const { ask } = require('KegQuestions')
 const docker = require('KegDocCli')
 const { checkCall } = require('jsutils')
+const { throwNoContainers } = require('KegUtils/error/throwNoContainers')
+
 /**
  * Prompts user to select a container from the current docker containers
  * @param {function} filter - Method to filter which containers are displayed. Must return array
@@ -9,6 +11,9 @@ const { checkCall } = require('jsutils')
  */
 const containerSelect = async (filter) => {
   const containers = await docker.container.list()
+
+  // If no containers available, then call throwNoContainers
+  !containers.length && throwNoContainers()
 
   // Filter the containers if filter method passed
   const filtered = checkCall(filter, containers) || containers

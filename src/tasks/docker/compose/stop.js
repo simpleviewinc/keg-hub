@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst')
-const { executeCmd } = require('KegProc')
+const { spawnCmd } = require('KegProc')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { buildComposeCmd } = require('KegUtils/docker')
 
@@ -12,10 +12,10 @@ const { buildComposeCmd } = require('KegUtils/docker')
  *
  * @returns {void}
  */
-const composeDown = async args => {
+const composeStop = async args => {
   const { globalConfig, params } = args
   const { log } = params
-
+  
   // Get the context data for the command to be run
   const containerContext = await buildContainerContext(args)
   const { location, cmdContext, contextEnvs } = containerContext
@@ -23,52 +23,46 @@ const composeDown = async args => {
   // Build the docker compose command
   const dockerCmd = await buildComposeCmd(
     globalConfig,
-    'down',
+    'stop',
     cmdContext,
     params
   )
 
   // Run the docker compose build command
-  await executeCmd(
+  await spawnCmd(
     dockerCmd,
     { options: { env: contextEnvs }},
     location
   )
 
-  log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `terminated!`)
+  log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `stopped!`)
 
   return containerContext
 
 }
 
 module.exports = {
-  down: {
-    name: 'down',
-    alias: [ 'kill' ],
-    action: composeDown,
-    description: `Run docker-compose down command`,
-    example: 'keg docker compose down <options>',
+  stop: {
+    name: 'stop',
+    alias: [ 'stp', 'halt' ],
+    action: composeStop,
+    description: `Run docker-compose stop command`,
+    example: 'keg docker compose stop <options>',
     options: {
       context: {
         allowed: DOCKER.IMAGES,
         description: 'Context of docker compose down command (tap | core | components)',
-        example: 'keg docker compose down --context core',
+        example: 'keg docker compose stop --context core',
         required: true
       },
       log: {
         description: 'Log the compose command to the terminal',
-        example: 'keg docker compose down --log false',
+        example: 'keg docker compose build --log false',
         default: true,
       },
       tap: {
         description: 'Name of the tap to down. Required when "context" is "tap"',
-        example: 'keg docker compose down --context tap --tap events-force',
-      },
-      remove: {
-        alias: [ 'rm' ],
-        allowed: [ 'images', 'volumes', 'all', 'orphans' ],
-        description: 'Remove collateral docker items while bringing the docker-compose service down',
-        example: 'keg docker compose down --remove images,volumes'
+        example: 'keg docker compose stop --context tap --tap events-force',
       },
     }
   }
