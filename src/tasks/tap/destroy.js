@@ -1,26 +1,4 @@
-const { get } = require('jsutils')
-const docker = require('KegDocCli')
-const { DOCKER } = require('KegConst/docker')
-const { spawnCmd } = require('KegProc')
-const { getSetting } = require('KegUtils/globalConfig/getSetting')
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { exists } = require('KegUtils/helpers/exists')
-
-/**
- * Destroys a docker container for a tap
- * @param {Object} args - arguments passed from the runTask method
- * @param {Object} args.globalConfig - Global config object for the keg-cli
- * @param {Object} args.params - Formatted object of the passed in options 
- *
- * @returns {void}
- */
-const destroyContainer = async ({ params={} }, force) => {
-  // Destroy the container
-  await docker.container.destroy({
-    force,
-    item: get(DOCKER, `CONTAINERS.TAP.ENV.CONTAINER_NAME`),
-  })
-}
+const { destroyService } = require('KegUtils/services')
 
 /**
  * Removes all docker items for a tap based on the passed in service type
@@ -34,22 +12,7 @@ const destroyContainer = async ({ params={} }, force) => {
  */
 const destroyTap = async (args) => {
   const { params } = args
-  const force = exists(params.force) ? params.force : getSetting(`docker.force`)
-
-  // Check if we are running the container with just docker
-  return get(args, 'params.service') === 'container'
-    ? destroyContainer(args, force)
-    : runInternalTask('tasks.docker.tasks.sync.tasks.destroy', {
-        ...args,
-        command: 'docker',
-        params: {
-          ...args.params,
-          force,
-          context: 'tap',
-          tap: params.tap,
-        },
-      })
-
+  return destroyService(args, { context: 'tap', container: 'tap', tap: params.tap })
 }
 
 module.exports = {
@@ -64,19 +27,10 @@ module.exports = {
         description: 'Name of the tap to destroy. Must be a tap linked in the global config',
         required: true,
       },
-      force: {
-        description: 'Force execute the destroy task',
-        default: false
-      },
       image: {
         description: 'Remove the docker image related to the tap',
         example: 'keg tap destroy --image',
         default: false
-      },
-      service: {
-        allowed: [ 'sync', 'container' ],
-        description: 'What docker service to destroy. Must be on of ( sync || container )',
-        default: 'sync'
       },
     }
   }
