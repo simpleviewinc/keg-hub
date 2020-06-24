@@ -270,37 +270,6 @@ keg_install_cli_dependencies(){
 
 }
 
-# If you run into this problem =>
-# mkmf.rb can't find header files for ruby at /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/include/ruby.h
-# Follow the stpes of the first answer here=>
-# https://stackoverflow.com/questions/46377667/docker-for-mac-mkmf-rb-cant-find-header-files-for-ruby
-keg_setup_docker_sync(){
-
-  if [[ -x "$(command -v docker-sync 2>/dev/null)" ]]; then
-    keg_message "docker-sync is installed"
-
-  elif which ruby >/dev/null && which gem >/dev/null; then
-    keg_message "Installing docker-sync"
-    gem install docker-sync
-    keg_message "Updating \$PATH"
-    export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-
-  fi
-
-  # Install the docker-sync dep unison
-  if [[ -z "$(which unison)" ]]; then
-    keg_message "Installing unison"
-    brew install unison
-    brew tap eugenmayer/dockersync
-    brew install eugenmayer/dockersync/unox
-    brew link unison
-  else
-    keg_message "Linking unison"
-    brew link unison 2>/dev/null
-  fi
-
-}
-
 # Close a github repo locally
 # Tries to use the $GITHUB_KEG if it exists, othwise tries to clone without it
 keg_install_repo(){
@@ -486,20 +455,12 @@ keg_uninstall_brew_package(){
 
 }
 
-
 # Removes all install docker software
 keg_clean_all(){
 
   keg_remove_from_bash
 
-  local ANSWER=$(keg_ask_question "Confirm remove docker-sync? (y/N):")
-  if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
-    keg_message "Removing docker-sync..."
-    gem uninstall docker-sync
-  fi
-
-  keg_uninstall_brew_package "unison"
-  keg_uninstall_brew_package "eugenmayer/dockersync/unox"
+  keg_uninstall_brew_package "mutagen-io/mutagen/mutagen"
   keg_uninstall_brew_package "docker-compose"
 
   docker-machine rm $KEG_DOCKER_NAME
@@ -761,7 +722,7 @@ keg_setup(){
   # To run:
   # bash mac-init.sh machine
   #  * Runs only the docker-machine portion of this script
-  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "mutagen" ]]; then
+  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "mutagen" || "$SETUP_TYPE" == "sync" ]]; then
     keg_message "Checking if mutagen is setup..."
     keg_setup_mutagen "${@:2}"
   fi
@@ -800,15 +761,6 @@ keg_setup(){
   if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "node_modules" ]]; then
     keg_message "Checking KEG-CLI node dependencies..."
     keg_install_cli_dependencies
-  fi
-
-  # Setup and install cli
-  # To run:
-  # bash mac-init.sh cli
-  #  * Runs only the keg cli portion of this script
-  if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "sync" ]]; then
-    keg_message "Checking docker-sync install..."
-    keg_setup_docker_sync "${@:2}"
   fi
 
   if [[ -z "$KEG_EXIT" ]] && [[ "$INIT_SETUP" || "$SETUP_TYPE" == "config" ]]; then

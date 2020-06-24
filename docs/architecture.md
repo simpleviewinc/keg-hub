@@ -94,7 +94,7 @@
 
 ### Docker
 * Docker
-* Docker-Sync
+* Mutagen ( Docker folder syncing )
 * Docker-Composer
 * Docker-Machine
 * Github Packages - ( Docker Repository )

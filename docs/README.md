@@ -38,7 +38,7 @@
     * [docker]() - Runs the containers and images of the keg
     * [docker-machine]() - Runs the core docker instance through virtualbox 
     * [docker-compose]() - Run multiple docker containers from one yml file
-    * [docker-sync]() - syncs local folder with the running docker containers
+    * [mutagen]() - syncs local folder with the running docker containers
     * [virtualbox]() - Run by docker-machine
 
 ### Docker Containers

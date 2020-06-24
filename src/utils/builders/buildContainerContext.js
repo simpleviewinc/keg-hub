@@ -11,7 +11,7 @@ const { getSetting } = require('../globalConfig/getSetting')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { getContainerFromContext } = require('../docker/getContainerFromContext')
 const { generalError, throwNoTapLink, throwNoConfigPath } = require('../error')
-const { IMAGES, LOCATION_CONTEXT, SYNC_LOGS } = DOCKER
+const { IMAGES, LOCATION_CONTEXT } = DOCKER
 const { getPrefix } = require('../getters/getPrefix')
 
 /**
@@ -112,9 +112,6 @@ const buildContainerContext = async args => {
         tap,
         envs
       })),
-
-    // Get the ENV for setting the docker-sync logs
-    [SYNC_LOGS]: Boolean(params.slogs) ? '' : `-silent -terse `,
 
     // Add the git key so we can call github within the image / container
     GIT_KEY: await getGitKey(globalConfig),

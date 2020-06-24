@@ -20,7 +20,7 @@ const stopContainer = async ({ params={} }) => {
 }
 
 /**
- * Start a docker-sync or docker container for a tap
+ * Stop keg-core docker containers and syncs
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -34,12 +34,8 @@ const stopCore = async (args) => {
   // Check if we are running the container with just docker
   return get(args, 'params.service') === 'container'
     ? stopContainer(args)
-    : runInternalTask('tasks.docker.tasks.sync.tasks.stop', {
-        ...args,
-        command: 'docker',
-        params: { ...args.params, tap: undefined, context: 'core' },
-      })
-
+    : (() => {})()
+    // TODO: add a stopService
 }
 
 

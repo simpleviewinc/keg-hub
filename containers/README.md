@@ -18,8 +18,7 @@
     * `values.yml` - Environment file containing envs to pass to the docker container
   * Some folders contain
     * `compose-default.yml` - Default `docker-compose` file
-    * `compose-sync.yml` - Overrides `compose-default.yml` with `docker-sync` settings
-    * `docker-sync.yml` - Docker Sync configuration file
+    * `mutagen.yml` - Docker folder syncing configuration file
 
 ### Values / ENV files
 * See `src/constants/docker/containers.js`

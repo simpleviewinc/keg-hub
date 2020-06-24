@@ -6,7 +6,6 @@ env:
   COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/compose-default.yml"
   CONTEXT_DOCKER_FILE: "{{ cli.paths.cli }}/containers/proxy/Dockerfile"
   CONTEXT_VALUES_FILE: "{{ cli.paths.cli }}/containers/proxy/values.yml"
-  COMPOSE_SYNC: "{{ cli.paths.cli }}/containers/proxy/compose-sync.yml"
 
   # Should be the keg-proxy github url
   GIT_PROXY_URL: INITIAL

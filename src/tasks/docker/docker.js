@@ -15,7 +15,6 @@ const dockerSubTasks = {
   dp: 'provider',
   dpg: 'package',
   dr: 'restart',
-  ds: 'sync',
 }
 
 /**
@@ -84,7 +83,6 @@ module.exports = {
       ...require('./prune'),
       ...require('./restart'),
       ...require('./run'),
-      ...require('./sync'),
     },
     action: dockerTask,
     description: 'Keg Docker specific tasks',

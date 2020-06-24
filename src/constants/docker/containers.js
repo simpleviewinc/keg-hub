@@ -29,9 +29,7 @@ const DEFAULT = {
   ], true),
   ENV: {},
   // Filter envs from becoming build-args durning the build process
-  BUILD_ARGS_FILTER: [
-    'SYNC_LOGS'
-  ],
+  BUILD_ARGS_FILTER: [],
 }
 
 /*

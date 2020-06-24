@@ -20,7 +20,7 @@ const stopContainer = async ({ params={} }) => {
 }
 
 /**
- * Start a docker-sync or docker container for a tap
+ * Stop tap docker containers and syncs
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line

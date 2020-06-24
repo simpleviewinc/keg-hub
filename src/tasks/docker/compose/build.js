@@ -80,11 +80,6 @@ module.exports = {
         description: 'Always attempt to pull a newer version of the image',
         example: 'keg docker compose build --pull',
         default: true
-      },
-      sync: {
-        description: 'Add the compose-sync.yml file as a config. Which setups docker-sync volumes',
-        example: 'keg docker compose build --sync',
-        default: false
       }
     }
   }

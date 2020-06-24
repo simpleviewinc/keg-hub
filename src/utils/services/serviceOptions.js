@@ -19,11 +19,6 @@ const serviceOptions = (task='', action='', overrides={}) => {
       default: true,
       example: `keg ${ task } ${ action } --cache false`,
     },
-    clean: {
-      description: 'Cleans docker-sync before running the keg-components',
-      example: 'keg ${ task } ${ action } --clean true',
-      default: false
-    },
     command: {
       alias: [ 'cmd' ],
       description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',

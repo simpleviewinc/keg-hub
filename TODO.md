@@ -33,7 +33,6 @@
 
 
 * Add a full docker clean command
-  * clean docker-sync tap / core
   * clean docker containers
   * clean docker images
   * clean docker volumes

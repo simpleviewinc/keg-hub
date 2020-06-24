@@ -6,7 +6,7 @@ const {
 } = require('KegUtils/services')
 
 /**
- * Start a docker-sync or docker container for a tap
+ * Start a keg-core with docker-compose
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line

@@ -11,7 +11,6 @@ env:
   CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/tap/Dockerfile"
   CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/tap/values.yml"
   COMPOSE_DEFAULT: "{{ cli.paths.containers }}/tap/compose-default.yml"
-  COMPOSE_SYNC: "{{ cli.paths.containers }}/tap/compose-sync.yml"
 
   # The CONTEXT_PATH env should be the location of the tap being run
   # So it should NOT be set inside the .env file

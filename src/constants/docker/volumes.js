@@ -59,5 +59,4 @@ const VOLUMES = images.reduce((data, image) => {
 
 module.exports = deepFreeze({
   VOLUMES,
-  SYNC_LOGS: 'SYNC_LOGS'
 })
