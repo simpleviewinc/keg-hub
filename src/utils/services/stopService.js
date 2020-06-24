@@ -1,5 +1,6 @@
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getServiceArgs } = require('./getServiceArgs')
+const { Logger } = require('KegLog')
 
 /**
  * Stops a running docker-compose service
@@ -9,20 +10,24 @@ const { getServiceArgs } = require('./getServiceArgs')
  * @returns {void}
  */
 const stopService = async (args, argsExt) => {
+  Logger.empty()
 
   // Build the service arguments
   const serviceArgs = getServiceArgs(args, argsExt)
 
   // Call the docker-compose stop task
-  const containerContext = await runInternalTask('docker.tasks.compose.tasks.stop',serviceArgs)
+  const containerContext = await runInternalTask('docker.tasks.compose.tasks.stop', serviceArgs)
 
-  // Mutagen only has a pause state, so use that instead
-  await runInternalTask('mutagen.tasks.pause', {
-    ...serviceArgs,
-    ...(containerContext && { __internal: { ...serviceArgs.__internal, containerContext }}),
-  })
+  // Just terminate the Mutagen sync, no point in keeping it around
+  await runInternalTask('mutagen.tasks.terminate', serviceArgs)
 
-  Logger.highlight(`Stopped`, `"${ serviceArgs.tap || serviceArgs.context }"`, `environment!`)
+  Logger.highlight(
+    `Stopped`,
+    `"${ serviceArgs.params.tap || serviceArgs.params.context }"`,
+    `compose environment!`
+  )
+  Logger.empty()
+
 }
 
 module.exports = {

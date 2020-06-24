@@ -7,7 +7,9 @@ const {
   isStr,
   isObj,
   toStr,
-  checkCall
+  checkCall,
+  uniqArr,
+  isArr,
 } = require('jsutils')
 const { Logger } = require('KegLog')
 
@@ -177,8 +179,10 @@ const buildMountPath = ({ local, remote, container, type='docker' }) => {
  *
  * @returns {string} - Joined ignore arguments as a string
  */
-const buildIgnore = (ignore=[]) => {
-  return ignore.reduce((ignored, ignore) => {
+const buildIgnore = (ignore={}) => {
+  const paths = uniqArr(isArr(ignore.paths) ? ignore.paths : [])
+  
+  return paths.reduce((ignored, ignore) => {
     return !ignore
       ? ignored
       : ignored
@@ -195,7 +199,7 @@ const buildIgnore = (ignore=[]) => {
  *
  * @returns {string} - Joined create arguments as a string
  */
-const buildMutagenArgs = ({ ignore, alpha, beta, mode, flushOnCreate, ...args }) => {
+const buildMutagenArgs = ({ ignore, mode, ...args }) => {
   const mutagenArgs = reduceObj(args, (key, value, buildArgs) => {
     const useKey = trainCase(key)
     return value === true

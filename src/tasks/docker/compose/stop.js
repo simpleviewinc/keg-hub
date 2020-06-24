@@ -13,7 +13,7 @@ const { buildComposeCmd } = require('KegUtils/docker')
  * @returns {void}
  */
 const composeStop = async args => {
-  const { globalConfig, params } = args
+  const { globalConfig, __internal, params } = args
   const { log } = params
   
   // Get the context data for the command to be run
@@ -32,7 +32,8 @@ const composeStop = async args => {
   await spawnCmd(
     dockerCmd,
     { options: { env: contextEnvs }},
-    location
+    location,
+    !Boolean(__internal),
   )
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `stopped!`)

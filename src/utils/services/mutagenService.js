@@ -14,7 +14,7 @@ const mutagenService = async (args, { context, tap, containerContext }) => {
   // Create the mutagen sync
   return runInternalTask('mutagen.tasks.create', {
     ...args,
-    ...(containerContext && { __internal: { containerContext } }),
+    ...(containerContext && { __internal: { containerContext, skipExists: true } }),
     params: {
       ...params,
       tap: tap || params.tap,

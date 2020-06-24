@@ -15,7 +15,7 @@ const { logVirtualUrl } = require('KegUtils/log')
  * @returns {void}
  */
 const composeUp = async args => {
-  const { globalConfig, __internal, params, options, task } = args
+  const { globalConfig, __internal, params, task } = args
   const { detached, build, context, log } = params
 
   // Get the context data for the command to be run
@@ -47,7 +47,8 @@ const composeUp = async args => {
   await spawnCmd(
     `${dockerCmd} ${ contextEnvs.IMAGE }`,
     { options: { env: contextEnvs }},
-    location
+    location,
+    !Boolean(__internal),
   )
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `is up!`)

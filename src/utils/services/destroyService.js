@@ -12,11 +12,12 @@ const { getServiceArgs } = require('./getServiceArgs')
  * @returns {void}
  */
 const destroyService = async (args, argsExt) => {
+  Logger.empty()
 
   // build the internal arguments
   const serviceArgs = getServiceArgs(args, argsExt)
 
-  // Bring down the mutagen sync process
+  // Terminate the mutagen sync process
   await runInternalTask('mutagen.tasks.terminate', serviceArgs)
 
   // Bring down the docker-compose services
@@ -32,7 +33,12 @@ const destroyService = async (args, argsExt) => {
   get(args, 'params.image') &&
     await runInternalTask('docker.tasks.image.tasks.remove', serviceArgs)
 
-  Logger.highlight(`Destroyed`, `"${ serviceArgs.tap || serviceArgs.context }"`, `environment!`)
+  Logger.highlight(
+    `Destroyed`,
+    `"${ serviceArgs.params.tap || serviceArgs.params.context }"`,
+    `compose environment!`
+  )
+  Logger.empty()
 
 }
 

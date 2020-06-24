@@ -88,13 +88,9 @@ const buildComposeCmd = async (globalConfig, cmd, cmdContext, params) => {
   dockerCmd = addComposeFiles(dockerCmd, cmdContext)
   dockerCmd = `${dockerCmd} ${cmd}`
   
-  if(cmd === 'build') return addCmdOpts(dockerCmd, params)
-
-  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
-
-  dockerCmd = cmd === 'down' && remove
-    ? getDownArgs(dockerCmd, remove)
-    : dockerCmd
+  if(cmd === 'up')  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
+  if(cmd === 'build') dockerCmd = addCmdOpts(dockerCmd, params)
+  if(cmd === 'down') dockerCmd = remove ? getDownArgs(dockerCmd, remove) : dockerCmd
 
   return dockerCmd
 }

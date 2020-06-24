@@ -9,10 +9,11 @@ const { throwTaskFailed } = require('./throwTaskFailed')
  * @param {string} args.name - Name of the existing sync
  * @param {string} args.remote - Remote path of the existing sync
  * @param {Object} sync - Existing sync object
+ * @param {Object} throwError - Should an error be thrown
  *
  * @returns {void}
  */
-const mutagenSyncExists = ({ local, name, remote }, sync) => {
+const mutagenSyncExists = ({ local, name, remote }, sync, throwError=true) => {
 
   Logger.empty()
 
@@ -27,7 +28,7 @@ const mutagenSyncExists = ({ local, name, remote }, sync) => {
 
   Logger.empty()
 
-  throwTaskFailed()
+  throwError && throwTaskFailed()
 
 }
 

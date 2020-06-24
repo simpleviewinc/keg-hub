@@ -1,0 +1,20 @@
+sync:
+  tap:
+    alpha: "/keg/tap"
+    beta: "docker://kegcore/keg/tap"
+    mode: "two-way-resolved"
+    flushOnCreate: true
+    ignore:
+      vcs: true
+      paths:
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"

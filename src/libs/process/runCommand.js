@@ -1,4 +1,4 @@
-const { isObj, isArr } = require('jsutils')
+const { isObj, isArr, isBool } = require('jsutils')
 const { spawnCmd, asyncCmd } = require('spawn-cmd')
 const { Logger } = require('KegLog')
 
@@ -17,20 +17,42 @@ const getExtraArgs = extra => {
 }
 
 /**
- * Logs the command to be run, then calls spawnProc to run the passed in command
+ * Checks the passed in args to see if the command should be logged
  * @param {Array} args - Arguments to run a command
+ * @param {Array} message - Message to be logged
+ *
+ * @returns {void}
+ */
+const logSpawn = (args, message) => {
+  // Get the last argument
+  const lastArg = args[ args.length - 1 ]
+
+  // Check if the command should br logged
+  ;( args.length < 3 || !isBool(lastArg) || lastArg !== false ) && Logger.pair(...message)
+}
+
+/**
+ * Checks if the the command to be run should be logged,
+ * <br/> Then calls spawnProc to run the passed in command
+ * @param {Array} args - Arguments to run a command
+ * @param {string} args.cmd - Command to be passed to the node child process
+ * @param {Array|Object*} args.options - Options to pass to the node child process
+ * @param {string*} args.location - Path the child process will use as the cwd
+ * @param {string*} args.log - Should the command be logged
  *
  * @returns {*} - Response from spawned process
  */
 const doSpawnCmd = (...args) => {
-  const extra = getExtraArgs(args[1])
-  Logger.pair(`Running command: `, `${args[0]}${extra}`)
+  logSpawn(args, [ `  Running command: `, `${ args[0] }${ getExtraArgs(args[1]) }` ])
   return spawnProc(...args)
 }
 
 /**
  * Spawns a new process to run a passed in cmd
  * @param {Array} args - Arguments to run a command
+ * @param {string} args.cmd - Command to be passed to the node child process
+ * @param {Array|Object*} args.options - Options to pass to the node child process
+ * @param {string*} args.location - Path the child process will use as the cwd
  *
  * @returns {*} - Response from spawned process
  */
@@ -44,6 +66,8 @@ const spawnProc = (...args) => {
  * Executes an inline async call to the command line
  * @param {string} cmd - Command to be run
  * @param {Array} args - Arguments to run a command
+ * @param {Array|Object*} args.options - Options to pass to the node child process
+ * @param {string*} args.location - Path the child process will use as the cwd
  *
  * @returns {*} - Response from async exec cmd
  */

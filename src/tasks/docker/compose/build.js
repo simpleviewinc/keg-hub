@@ -14,7 +14,7 @@ const { DOCKER } = require('KegConst/docker')
  * @returns {void}
  */
 const buildDockerCompose = async args => {
-  const { globalConfig, params, task } = args
+  const { globalConfig, __internal, params, task } = args
   const { cache, remove, pull, context, log } = params
 
   // Get the context data for the command to be run
@@ -39,7 +39,8 @@ const buildDockerCompose = async args => {
   await spawnCmd(
     `${dockerCmd} ${ buildName }`,
     { options: { env: contextEnvs }},
-    location
+    location,
+    !Boolean(__internal),
   )
 
   log && Logger.highlight(`Compose build service`, `"${ cmdContext }"`, `complete!`)

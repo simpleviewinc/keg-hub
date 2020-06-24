@@ -38,34 +38,36 @@ const startContainer = async (args, contextData) => {
 }
 
 /**
- * Start the mutagen daemon
+ * Creates the Mutagen sync params overrides config with command line params
+ * Loads the config for the context
  * @param {Object} contextData - response from the buildContainerContext helper
  *
  * @returns {Object} - Build params for create a mutagen sync
  */
-const getSyncParams = async (contextData) => {
+const getSyncParams = async (contextData, { local, remote, name }) => {
 
-  const config = await getMutagenConfig(
+  const { alpha, beta, ...config } = await getMutagenConfig(
     contextData.cmdContext,
-    contextData.name || contextData.image
+    contextData.name || contextData.image,
+    {
+      alpha: local || get(contextData, 'contextEnvs.CONTEXT_PATH'),
+      beta: remote || get(contextData, 'contextEnvs.DOC_APP_PATH')
+    }
   )
 
-  const localPath = get(contextData, 'contextEnvs.CONTEXT_PATH', config.alpha)
-  const remotePath = get(contextData, 'contextEnvs.DOC_APP_PATH', config.beta)
-
-  !localPath && generalError(
+  !alpha && generalError(
     `Can not set the local path, missing "CONTEXT_PATH" environment variable!`
   )
-  !remotePath && generalError(
+  !beta && generalError(
     `Can not set the remote path, missing "DOC_APP_PATH" environment variable!`
   )
 
   return {
     config: config,
-    local: localPath,
-    remote: remotePath,
+    local: alpha,
+    remote: beta,
     container: contextData.id,
-    name: contextData.cmdContext,
+    name: name || contextData.cmdContext,
   }
 
 }
@@ -77,17 +79,16 @@ const getSyncParams = async (contextData) => {
  *
  * @returns {void}
  */
-const createMutagenSync = async (args, params) => {
+const createMutagenSync = async (args, params, skipExists) => {
   // Make sure the mutagen daemon is running
   await runInternalTask('tasks.mutagen.tasks.daemon.tasks.start', args)
 
   // Check if the sync item already exists
   const exists = await mutagen.sync.exists(params)
-  exists && mutagenSyncExists(params, exists)
+  exists && !skipExists && mutagenSyncExists(params, exists, false)
 
   // Make call to start the mutagen sync
   !exists && await mutagen.sync.create(params)
-
   Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
 
   return true
@@ -104,8 +105,8 @@ const createMutagenSync = async (args, params) => {
  * @returns {void}
  */
 const mutagenCreate = async args => {
-  const { command, globalConfig, params, task, __internal } = args
-  const { context, container, local, options, remote } = params
+  const { command, globalConfig, params, task, __internal={} } = args
+  const { context, container, options } = params
 
   // Ensure we have a content to build the container
   !context && !container && throwRequired(task, 'context', task.options.context)
@@ -128,10 +129,10 @@ const mutagenCreate = async args => {
   !contextData.id && throwContainerNotFound(contextData.tap || contextData.cmdContext)
 
   // Get the params to create the mutagen sync
-  const syncParams = await getSyncParams(contextData)
+  const syncParams = await getSyncParams(contextData, params)
 
   // Create the sync
-  await createMutagenSync(args, syncParams)
+  await createMutagenSync(args, syncParams, __internal.skipExists)
 
   // Return the context, and built sync params
   return { ...contextData, mutagen: syncParams }
@@ -151,7 +152,6 @@ module.exports = {
     example: 'keg mutagen create <options>',
     options: {
       context: {
-        alias: [ 'name' ],
         allowed: DOCKER.IMAGES,
         description: 'Context or name of the container to sync with',
         example: 'keg mutagen create --context core',
@@ -168,6 +168,10 @@ module.exports = {
         example: 'keg mutagen create --container my-container --local ~/keg/keg-core',
         depends: { container: true },
         enforced: true,
+      },
+      name: {
+        description: 'Name of the Mutagen sync to create',
+        example: 'keg mutagen create --name my-sync',
       },
       remote: {
         alias: [ 'to' ],
