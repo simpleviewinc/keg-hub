@@ -25,7 +25,6 @@ env:
   DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@simpleviewinc/keg-components/build
   DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@simpleviewinc/re-theme/build
   DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@simpleviewinc/tap-resolver/src
-  NM_CACHE: /keg/nm-cache/tap
 
 
   # --- GENERAL CONTEXT ENVs --- #

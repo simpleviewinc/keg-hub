@@ -18,26 +18,17 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/keg-core
 
-# Path where node_modules will be installed durring docker built
-ARG NM_CACHE=/keg/nm-cache/core
-
 # Update git calls to github to include the key so private repos can be pulled
 # Pull down the keg-core locally
 RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_CORE_URL $DOC_APP_PATH; \
-    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/; \
-    rm -rf $DOC_APP_PATH/.npmrc
+    git clone $GIT_CORE_URL $DOC_APP_PATH
 
 # Copy over the package.json, and yarn.lock files
-COPY package.json $NM_CACHE/
+COPY package.json $DOC_APP_PATH/package.json
+COPY yarn.lock $DOC_APP_PATH/yarn.lock
 
-# Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc
-RUN mkdir -p $NM_CACHE/core/scripts/js; \
-    touch $NM_CACHE/core/scripts/js/postInstall.js; \
-    cd $NM_CACHE; \
-    echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
-    echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
+RUN cd $DOC_APP_PATH; \
     yarn install --frozen-lockfile; \
     yarn cache clean; \
     rm -f .npmrc
@@ -58,9 +49,6 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/keg-core
-
-# Path where node_modules will be installed durring docker built
-ARG NM_CACHE=/keg/nm-cache/core
 
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV
 ARG KEG_DOCKER_IP
@@ -83,9 +71,6 @@ COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
 
 # Copy over the cloned app
 COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH
-
-# Copy over keg cli from above
-COPY --from=builder $NM_CACHE $NM_CACHE
 
 # Expose container ports
 EXPOSE 80

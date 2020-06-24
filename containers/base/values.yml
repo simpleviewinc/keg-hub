@@ -15,4 +15,3 @@ env:
 
   # Container ENVs
   CONTAINER_NAME: kegbase
-  NM_CACHE: /keg/nm-cache/base

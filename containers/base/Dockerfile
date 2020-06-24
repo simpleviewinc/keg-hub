@@ -11,8 +11,7 @@ ARG EXPO_CLI_VERSION="3.21.3"
 
 WORKDIR /
 
-# Install git and the expo-cli
-# TODO: Look into adding sharp-cli, to allow smaller bundle sizes
+# Install git and the expo-cli and sharp-cli
 RUN apk add --no-cache git bash; \
     yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli
 
@@ -20,23 +19,10 @@ RUN apk add --no-cache git bash; \
 RUN if [ ! -z "$GIT_CLI_URL" ]; then \
     git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
     git clone $GIT_CLI_URL $DOC_CLI_PATH; \
-    git config --global url.https://github.com/.insteadOf https://$GIT_KEY@github.com/; \
   fi
 
-# Copy over our package json and yarn lock files
-COPY package.json ./
-COPY yarn.lock ./
-
-# Cd into the docker cli path, and run yarn install
-# Then remove the .npmrc
-RUN if [ ! -z "$GIT_KEY" ]; then \
-      cd $DOC_CLI_PATH; \
-      echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
-      echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
-      yarn install --frozen-lockfile; \
-      yarn cache clean; \
-      rm -f .npmrc; \
-    fi
+# Copy over our local containers folder to get the updated run scripts
+COPY containers $DOC_CLI_PATH/containers
 
 # ------- New Build Stage ------- #
 

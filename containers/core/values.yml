@@ -15,7 +15,6 @@ env:
 
   # --- DOCKER ENV CONTEXT --- #
 
-  NM_CACHE: "/keg/nm-cache/core"
   DOC_APP_PATH: "/keg/keg-core"
   DOC_APP_PORT: 19006
   DOC_CORE_PATH: "/keg/keg-core"
