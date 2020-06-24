@@ -14,13 +14,14 @@ const { Logger } = require('KegLog')
  */
 const dockerPrune = async args => {
   const { params } = args
-  const { all, confirm } = params
+  const { all, confirm, volumes } = params
 
   // Build the options for the prune command
   const options = []
   all && options.push('-a')
-  confirm && options.push('-f')
-
+  !confirm && options.push('-f')
+  volumes && options.push('--volumes')
+  
   // Run the prune command
   const resp = await docker.prune(options)
   
@@ -42,13 +43,19 @@ module.exports = {
     options: {
       all: {
         description: 'Remove all unused images, not just dangling images',
-        example: 'keg docker prune --all',
-        default: false
+        example: 'keg docker prune --all false',
+        default: true
       },
       confirm: {
         alias: [ 'conf' ],
         description: 'Confirm docker prune command',
-        example: 'keg docker prune --confirm false',
+        example: 'keg docker prune --confirm',
+        default: false
+      },
+      volumes: {
+        alias: [ 'vol', 'v' ],
+        description: 'Confirm docker prune command',
+        example: 'keg docker prune --volumes false',
         default: true
       }
     }
