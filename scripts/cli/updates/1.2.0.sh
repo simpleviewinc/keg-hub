@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ~/keg/keg-cli/keg
+
 # Prints a message to the terminal through stderr
 keg_message(){
   echo "[ KEG CLI ] $@" >&2
@@ -13,6 +15,13 @@ keg_ask_question(){
   local ANSWER="${INPUT:0:1}"
 
   echo "$ANSWER"
+}
+
+keg_destroy_all_docker(){
+  docker stop $(docker ps -aq) 2>/dev/null
+  docker rm $(docker ps -aq) 2>/dev/null
+  keg di clean
+  keg d clean
 }
 
 # Check for docker-sync, then asks if you want to remove it
@@ -50,7 +59,17 @@ keg_install_mutagen(){
   fi
 }
 
+keg_reset_default_env(){
+  local KEG_DEFS=~/.kegConfig/defaults.env
+  if [[ -f "$KEG_DEFS" ]]; then
+    rm -rf ~/.kegConfig/defaults.env
+  fi
+}
+
 keg_cli_1_2_0_update(){
+
+  # Clean up docker so we can do the update
+  keg_destroy_all_docker
 
   # Remove docker-sync from the local machine
   keg_remove_docker_sync
@@ -61,6 +80,12 @@ keg_cli_1_2_0_update(){
 
   # Install mutagen on the local machine
   keg_install_mutagen
+
+  # Reset the default envs
+  keg_reset_default_env
+
+  # Resync the global config
+  keg config sync
 
   echo ""
   keg_message "1.2.0 Update Complete!"
