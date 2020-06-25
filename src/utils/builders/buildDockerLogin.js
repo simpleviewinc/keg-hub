@@ -16,8 +16,7 @@ const { throwDockerCreds } = require('../error/throwDockerCreds')
  */
 const validateLoginCreds = creds => {
   return reduceObj(creds, (key, value, validated) => {
-    !value && throwDockerCreds(creds, key)
-
+    key !== 'namespace' && !value && throwDockerCreds(creds, key)
     return creds
   }, creds)
 }
@@ -32,7 +31,7 @@ const validateLoginCreds = creds => {
  *
  * @returns {Object} - The built login creds
  */
-const buildDockerLogin = async ({ user, token, provider }) => {
+const buildDockerLogin = async ({ user, token, provider, namespace }) => {
   const globalConfig = getGlobalConfig()
   const gitUser = user || await getGitConfigItem('user.name')
 
@@ -40,6 +39,7 @@ const buildDockerLogin = async ({ user, token, provider }) => {
     token: token || await getGitKey(globalConfig),
     user: gitUser || get(globalConfig, 'docker.user'),
     providerUrl: provider || get(globalConfig, 'docker.providerUrl'),
+    namespace: namespace && get(globalConfig, 'docker.namespace'),
   })
 
 }

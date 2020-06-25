@@ -1,7 +1,9 @@
 const docker = require('KegDocCli')
+const { git } = require('KegGitCli')
+const { ask } = require('KegQuestions')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
-const { isStr, get, isFunc, isArr } = require('jsutils')
+const { isStr, get, isFunc, isArr, checkCall } = require('jsutils')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
@@ -19,57 +21,41 @@ const getAuthor = (globalConfig, author) => {
 }
 
 /**
- * Removes a docker item
+ * Gets the current branch to use as the commit tag of the image
  * @function
- * @param {string} item - Docker item to remove
- * @param {string} location - to run the docker cmd
- * @param {Object} ENVs - envs to add the the env for the command
+ * @param {string} location - Local path of the repo to get the current branch from
  *
- * @returns {*} - Response from the docker raw method
+ * @returns {string} - Name of the current branch
  */
-const rmDockerItem = (item, type='container') => {
-  return docker.raw(`${ type } rm ${ item }`.trim())
+const getCommitTag = async location => {
+  const currentBr = await git.branch.current(location)
+  return currentBr && currentBr.name
 }
 
 /**
- * Builds a tar command to be run in the docker container
+ * Checks if an image already exists with the passed in tag
+ * <br/> If it does, asks user if they want to remove it
  * @function
- * @example
- * Pack => tar -czf /tmp/keg.gz /keg/keg-core
- * Unpack => tar -xf /tmp/keg.gz -C /keg/keg-core
- * @param {string} from - the tar file to be referenced
- * @param {string} to - the Path the from tar file relates to
- * @param {boolean} unpack - If the tar command should unpack the from tar file
- * @param {boolean} log - IF the tar command output should be logged
+ * @param {string} imgTag - Image name plus the commit tag
+ * @param {string} commitTag - Tag to use when creating the image
  *
- * @returns {string} - Built tar command
+ * @returns {boolean} - false is the image does not already exist
  */
-const buildTarCmd = ({ from, to, unpack, log }) => {
-  to = isArr(to) ? to.join(' ') : to
+const checkImgExists = async (imgTag, commitTag) => {
+  const exists = await docker.image.getByTag(commitTag)
+  if(!exists) return
 
-  const tarArgs = unpack ? `-xf` : `-czf`
-  const packArgs = unpack ? ` -C ` : ` `
+  Logger.empty()
+  Logger.highlight(`Image`,`"${ imgTag }"`, `already exists.`)
+  Logger.empty()
 
-  return `tar ${ tarArgs }${ log ? 'v' : '' } ${ from }${ packArgs }${ to }`.trim()
-}
+  const replace = await ask.confirm(`Would you like to replace it?`)
+  replace && await docker.image.remove({ item: exists.id, force: true })
 
-/**
- * Builds the tar commands to be run durning the package task
- * @function
- * @param {string} to - the Path the from tar file relates to
- * @param {boolean} unpack - If the tar command should unpack the from tar file
- *
- * @returns {Object} - Container the tar file path, and the pack / unpack tar commands 
- */
-const getTarCmds = (to, log) => {
-  const from = `/tmp/keg.gz`
-  // const tarCmd = `tar -czf ${ tarPath } ${ contextEnvs.DOC_APP_PATH }`
-  const tarCmd = buildTarCmd({ from, to, log })
-  
-  // const unTarCmd = `tar -xf ${ tarPath } -C ${ contextEnvs.DOC_APP_PATH }`
-  const unTarCmd = buildTarCmd({ from, to, log, unpack: true })
+  // Return the opposite of replace because we want to know if the image exist
+  // If not replace, then the image still exists
+  return !replace
 
-  return { tarPath: from, tarCmd, unTarCmd }
 }
 
 /**
@@ -94,131 +80,46 @@ const dockerPackage = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
+  const { cmdContext, contextEnvs, location, tap, image, id } = await buildContainerContext({
     globalConfig,
     task,
     params,
   })
 
+
   const useAuthor = getAuthor(globalConfig, author)
-  const tempContainer = `${ image }-package`
-  const imgTag = `${image}:${ Date.now() }`
-  const pushTag = tag || 'package-' + Date.now()
-  const finalTag = `${image}:${ pushTag }`
-  
-  const { tarPath, tarCmd, unTarCmd } = getTarCmds(contextEnvs.DOC_APP_PATH, log)
+
+  const currentBranch = tag || await getCommitTag(location)
+  const commitTag = (currentBranch || 'package-' + Date.now()).toLowerCase()
+  const imgTag = `${ image }:${ commitTag }`.toLowerCase()
+
+  const exists = await checkImgExists(imgTag, commitTag)
 
   /*
-  * ----------- Step 1 ----------- *
-  * Copy /keg/< image name > folder to a tar within the running container
-  * Use the tar command to tar the folder
-  */
-
-  Logger.info(`  Creating package in container "${ image }" ...`)
-
-  await docker.container.exec(
-    { cmd: tarCmd, container: image, opts: [ '-it' ]},
-    { options: { env: contextEnvs } },
-    location
-  )
-
-  Logger.info(`  Finished creating tar package in container!`)
-
-
-  /*
-  * ----------- Step 2 ----------- *
   * Create image of the container using docker commit
   * Docker commit command creates a new image of a running container
   */
-  
-  Logger.info(`  Creating temp image of package with tag "${ imgTag }" ...`)
+  ;exists
+    ? Logger.highlight(`Skipping image commit!`)
+    : await checkCall(async () => {
+        Logger.highlight(`Creating image of container with tag`, `"${ imgTag }"`, `...`)
+        
+        await docker.container.commit({
+          container: id,
+          message: message,
+          author: useAuthor,
+          tag: imgTag,
+        })
 
-  await docker.container.commit({
-    container: image,
-    message: message,
-    author: useAuthor,
-    tag: imgTag,
-  })
-
-  Logger.info(`  Finished creating temp image!`)
-
-
-  /*
-  * ----------- Step 3 ----------- *
-  * Run new image and copy tar back to original /keg location
-  */
-
-  Logger.info(`  Checking it temp container exists ...`)
+        Logger.info(`  Finished creating image!`)
+      })
 
   /*
-  * Before we create the new container, check if the container exists and then remove it
-  */
-  const exists = await docker.container.exists(
-    tempContainer,
-    container => container.name === tempContainer,
-    'json'
-  )
-
-  exists && Logger.info(`  Found temp container, removing ...`)
-  exists && await rmDockerItem(tempContainer, location, contextEnvs)
-
-  /*
-  * Run the container and unpack tar back to the original location with out the volumes mounted
-  */
-  
-  Logger.info(`  Creating temp container from temp image "${ imgTag }" and unpacking tar ...`)
-  
-  await docker.image.run({
-    image,
-    location,
-    tag: imgTag,
-    cmd: unTarCmd,
-    envs: contextEnvs,
-    name: tempContainer,
-    opts: [ `-it` ],
-  })
-
-  Logger.info(`  Finished creating temp container and unpacking tar!`)
-
-
-  /*
-  * ----------- Step 4 ----------- *
-  * Create a new commit of the container created above which includes the un-packed tar
-  */
-
-  Logger.info(`  Creating final image with tag "${ finalTag }" ...`)
-
-  await docker.container.commit({
-    container: tempContainer,
-    message: message,
-    author: useAuthor,
-    tag: finalTag,
-  })
-
-  Logger.info(`  Finished creating final image with tag "${ finalTag }"!`)
-
-
-  /*
-  * ----------- Step 5 ----------- *
-  * Clean up the temp container and images
-  */
-
-  Logger.info(`  Cleaning up temp docker items ...`)
-
-  // Remove the temp container i.e. => *-package
-  await rmDockerItem(tempContainer)
-  // Remove the temp image i.e. => image tagged with 'imgTag ( Date.now() )' argument
-  await rmDockerItem(imgTag, 'image')
-
-  Logger.success(`  Finished docker package command. Created image "${ finalTag }"!`)
-
-
-  /*
-  * ----------- Step 6 ----------- *
   * Push docker image to docker provider registry
   */
-
-  Logger.info(`  Pushing image "${ finalTag }" to provider ...`)
+  Logger.empty()
+  Logger.highlight(`Pushing image`,`"${ imgTag }"`,`to provider ...`)
+  Logger.empty()
 
   push && await runInternalTask(
     'tasks.docker.tasks.provider.tasks.push',
@@ -229,12 +130,13 @@ const dockerPackage = async args => {
         ...args.params,
         image,
         build: false,
-        tag: pushTag,
+        tag: commitTag,
       }
     }
   )
 
-  Logger.success(`  Finished pushing docker image "${ finalTag }" to provider!`)
+  Logger.success(`  Finished pushing docker image "${ imgTag }" to provider!`)
+  Logger.empty()
 
 }
 
@@ -271,14 +173,9 @@ module.exports = {
         },
       },
       tag: {
-        alias: [ 'c' ],
-        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg docker package tags=my-tag,local,development',
-        required: true,
-        ask: {
-          message: "Enter a tag for the packaged image?",
-          default: Date.now(),
-        }
+        alias: [ 'tg' ],
+        description: 'Tag for the image create for the package. Defaults to the current branch of the passed in context',
+        example: 'keg docker package tag=my-tag',
       },
       tap: {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',

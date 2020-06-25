@@ -3,6 +3,7 @@
   "displayName": "Keg CLI",
   "docker": {
     "providerUrl": "docker.pkg.github.com",
+    "namespace": "simpleviewinc/keg-packages",
     "user": "",
     "token": ""
   },

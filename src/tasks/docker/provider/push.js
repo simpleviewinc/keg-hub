@@ -71,6 +71,10 @@ module.exports = {
         description: 'Build the docker image before pushing to the provider',
         default: false
       },
+      namespace: {
+        description: 'Use the docker namespace instead of the user for the docker provider url',
+        default: true
+      },
       tag: {
         description: 'Specify the tag tied to the image being pushed',
         default: 'latest',

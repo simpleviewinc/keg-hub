@@ -79,7 +79,12 @@ const buildVersionTag = async (image, context, url, name, tag, branch) => {
   })
 
   // Then call command to add the tag to the image
-  await docker.image.tag({ image, tag: tagVersion, log: true })
+  await docker.image.tag({
+    image,
+    log: true,
+    provider: true,
+    tag: tagVersion,
+  })
 
   return tagVersion
 }
@@ -102,7 +107,12 @@ const buildLatestTag = async (image, url, tag, branch, name) => {
     })
 
   // Add the latest tag if needed
-  tagLatest && await docker.image.tag({ image, tag: tagLatest, log: true })
+  tagLatest && await docker.image.tag({
+    image,
+    log: true,
+    provider: true,
+    tag: tagLatest,
+  })
 }
 
 /**

@@ -48,21 +48,23 @@ const getImageContext = async (args) => {
 const getImageData = async args => {
   const { globalConfig, task, params } = args
 
-  const image = await imageSelect(args)
+  const image = params.image &&
+    await docker.image.get(params.image) ||
+    await imageSelect(args)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap } = await buildContainerContext({
+  const containerContext = await buildContainerContext({
     task,
     globalConfig,
     params: { ...params, context: image.rootId },
   })
 
   // Build the name for the container
-  const container = await buildContainerName(cmdContext)
+  const container = await buildContainerName(containerContext.cmdContext)
 
   return {
+    ...containerContext,
     container,
-    location,
     tag: image.tag,
     image: image.rootId,
   }
@@ -93,9 +95,11 @@ const runDockerImage = async args => {
   const { globalConfig, params, task } = args
   const { context, cleanup, entry, options } = params
 
-  const { tag, location, contextEnvs, container, image } = context
+  const imageContext = context
     ? await getImageContext(args)
     : await getImageData(args)
+
+  const { tag, location, contextEnvs, container, image } = imageContext
 
   let opts = options.concat([ `-it` ])
   cleanup && opts.push(`--rm`)
@@ -132,6 +136,10 @@ module.exports = {
         description: 'Auto remove the docker container after exiting',
         example: `keg docker image run  --cleanup false`,
         default: true
+      },
+      image: {
+        description: 'Image id of the image to run',
+        example: 'keg docker image run --image <id>'
       },
       options: {
         alias: [ 'opts' ],

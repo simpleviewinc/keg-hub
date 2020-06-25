@@ -83,7 +83,8 @@ const containerContext = async toFind => {
  * @returns {Object} - Found context, and prefix if it exists
  */
 const getContext = ({ context, container, tap }, askContainer) => {
-
+  // TODO: Add image to the params and get the context form the image
+  
   return container && askContainer
     ? containerContext(container)
     : tap
