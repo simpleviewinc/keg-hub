@@ -6,7 +6,6 @@ module.exports = {
   ...require('./getRepoName'),
   ...require('./getGlobalConfig'),
   ...require('./getPathFromConfig'),
-  ...require('./getRepoPath'),
   ...require('./getSetting'),
   ...require('./getTapPath'),
   ...require('./removeGlobalConfigProp'),

@@ -1,4 +1,10 @@
 
+
+const paramsTest = args => {
+  // console.log(`---------- Keg CLI Test Params Parsing ----------`)
+  // console.log(args.params)
+}
+
 /**
  * Test task for global commands
  * @param {Object} args - arguments passed from the runTask method
@@ -23,6 +29,29 @@ module.exports = {
     action: testCommand,
     description: `Test a cli command`,
     example: 'keg global test',
+    tasks: {
+      params: {
+        name: 'params',
+        alias: [ 'par', 'p' ],
+        description: 'Test params parsing',
+        example: 'keg global test params <options>',
+        action: paramsTest,
+        options: {
+          context: {
+            description: 'Context of name of the item to test',
+            example: 'keg global test params --context core',
+          },
+          test: {
+            description: 'Test param option',
+            example: 'keg global test params --test my-test',
+          },
+          tap: {
+            description: 'Name of the tap when context option value is "tap"',
+            example: 'keg global test params --context tap --tap events-force',
+          }
+        }
+      }
+    },
     options: {
       foo: {
         description: 'Is foo bar',

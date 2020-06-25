@@ -1,94 +1,25 @@
 const { throwRequired } = require('../error')
-const { exists, mapEnv } = require('../helpers')
+const { exists } = require('../helpers')
 const { optionsAsk } = require('./optionsAsk')
 const {
   isArr,
   isStr,
   isObj,
-  isBool,
   reduceObj
 } = require('jsutils')
-const { BOOL_VALUES } = require('KegConst/constants')
 
-const boolOpts = BOOL_VALUES.truthy.concat(BOOL_VALUES.falsy)
+const {
+  buildMatchTypes,
+  checkBoolValue,
+  checkContextOption,
+  checkEnvKeyValue,
+  checkQuotedOptions,
+  checkRequired,
+  isOptionKey,
+  removeOption,
+  splitEqualsMatch
+} = require('./taskOptions')
 
-/**
- * Checks for a required option, and throws if it does not exist
- * @param {string|number|boolean} value
- * @param {Object} task - Task Model of current task being run
- * @param {Array} key - Name the argument to find
- * @param {string} meta - Info about the option from the task
- * @param {Array} hasVal - Does the value exist
- *
- * @returns {Void}
- */
-const checkRequired = (task, key, meta) => {
-  meta.required && throwRequired(task, key, meta)
-}
-
-/**
- * Checks if the value is a string bool, and auto-converts it
- * @function
- * @param {*} value - Value to check for string bool
- *
- * @returns {*} - Boolean or original value
- */
-const checkBoolValue = value => {
-  if(!exists(value) || isBool(value)) return value
-
-  const lowerVal = isStr(value) && value.toLowerCase() || value
-
-  // Check the value is one of the joined bool options
-  return boolOpts.indexOf(lowerVal) === -1
-    ? value
-    : BOOL_VALUES.truthy.indexOf(lowerVal) !== -1
-      ? true
-      : false
-}
-
-/**
- * Checks if the key is an env, and maps the value for shortcuts
- * @function
- * @param {*} key - Key to check for environment
- * @param {*} value - Value to check for string bool
- *
- * @returns {*} - The original value or mapped environment value
- */
-const checkEnvKeyValue = (key, value) => {
-  // Check if the arg is env, and map it from the env shortcuts
-  return key === 'env' || key === 'environment'
-    ? mapEnv(value)
-    : value
-}
-
-/**
- * Removes an option from the options array
- * @function
- * @param {Array} options - Arguments passed in from the terminal
- * @param {string} opt - Item to remove from the array
- *
- * @returns {Array} - Updated options array
- */
-const removeOption = (options, opt) => {
-  options.splice(options.indexOf(opt), 1)
-
-  return options
-}
-/*
- * Returns true if `str` is a valid key in the optionSchemas
- * @param {string} str 
- * @param {Object} optionSchemas - the 'options' object in the schema for a task
- * @returns {boolean} true if `str` is a valid option key to use with the task on the command line
- */
-const isOptionKey = (str, optionSchemas) => {
-  // loop over every option definition, and check if its match types include the string str
-  return Object
-    .entries(optionSchemas)
-    .some(([key, schema]) => {
-      const validKeys = buildMatchTypes(key, key[0], schema.alias)
-      return validKeys.includes(str)
-    })
-}
 
 /**
  * Matches the option against the passed in matchTypes
@@ -122,70 +53,6 @@ const matchParamType = (matchTypes, option, value, optionSchemas) => {
     : true
 }
 
-/**
- * Checks arguments for '=' and splits it to key value pair
- * @function
- * @param {string} option - Option passer from command line to check for '='
- * @param {string} long - Long version of the option
- * @param {string} short - Short version of the option
- * @param {string} argument - Current value of the search
- *
- * @returns {string} - Value of the current search
- */
-const splitEqualsMatch = (option, matchTypes, argument) => {
-  const [ key, value ] = option.split('=')
-  // Check if the key exists in the matchTypes, and return the value if it does
-  return matchTypes.includes(key) ? value : argument
-}
-
-/**
- * Builds all possible matches for the passed in argument
- * @param {string} long - Long form name of the argument to find
- * @param {string} short - Short form name of the argument to find
- * @param {Array} [alias=[]] - Other names of the argument to find
- *
- * @returns {Array} - All possible argument names
- */
-const buildMatchTypes = (long, short, alias=[]) => {
-  return alias.reduce((matchTypes, type) => {
-    return matchTypes.concat([ type, `--${type}`, `-${type}` ])
-  }, [ long, `--${long}`, short, `-${short}` ])
-}
-
-/**
- * Checks the current argument for a starting "
- * If found, adds all other options until and end " is found
- * @param {string} argument - Found argument to check for starting "
- * @param {Array} options - Items to search for the end "
- * @param {number} index - Location in the options array to start looking for an end "
- *
- * @returns {string} - Built quoted string
- */
-const checkQuotedOptions = (argument, options, index) => {
-  // Check if the current option has a quote
-  if(argument[0] !== '"') return argument
-
-  // flag for when then end quote is found
-  let foundEnd
-
-  // Get all passed in options after the current option
-  const slicedOpts = options.slice(index)
-  return slicedOpts.reduce((joined, opt) => {
-    // If foundEnd is true, just return and don't add anymore options,
-    if(foundEnd) return joined
-
-    // Remove the current option from the options array
-    options = removeOption(options, opt)
-
-    if(opt[opt.length -1] === '"'){
-      foundEnd = true
-      return `${joined.substring(1)} ${opt.slice(0, -1)}`
-    }
-
-    return `${joined} ${opt}`
-
-  }, argument)
-}
 
 /**
  * Searches for a argument in the options array, and gets it's value
@@ -391,6 +258,9 @@ const getParams = async ({ options=[], task }) => {
   const doOptsLoop = options.length !== 1 ||
     options[0].includes('=')  ||
     options[0].indexOf('-') === 0
+
+
+  // const withContext = checkContextOption(task, taskKeys[0], options)
 
   // Loop over the task keys and map the task options to the passed in options
   // Otherwise set it as the first key in the task options object
