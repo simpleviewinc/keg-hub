@@ -1,7 +1,7 @@
-
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
- * Stop keg-core docker containers and syncs
+ * Pulls a branch of a pullrequest from github based on the passed in pullrequest number
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -11,11 +11,10 @@
  * @returns {void}
  */
 const pullRequest = async args => {
-  const { params: { number } } = args
-  console.log(`---------- params ----------`)
-  console.log(params)
-  
-  
+  return runInternalTask('git.tasks.pullrequest.tasks.checkout', {
+    ...args,
+    params: { ...args.params, context: 'core' },
+  })
 }
 
 
