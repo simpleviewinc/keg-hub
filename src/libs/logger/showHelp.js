@@ -1,4 +1,4 @@
-const { get, isStr, isObj, mapObj } = require('jsutils')
+const { get, isStr, isObj, mapObj, isArr } = require('jsutils')
 const { Logger } = require('./logger')
 const colors = require('colors/safe')
 
@@ -152,6 +152,36 @@ const showAllHelp = (tasks, opts={}) => {
   Logger.empty()
 }
 
+/**
+ * Displays the detail info (if any) of a specific option from a task (alias, description, example)
+ * @example keg core start --attached -h
+ * @param {Object} task 
+ * @param {string} option - option item from the task
+ * @param {string} infoSpacer - spacing
+ * @param {string} dblSpacer - spacing
+ */
+const showTaskOptionDetail = (task, option, infoSpacer, dblSpacer) => {
+
+  if(!task.options) return
+
+  let validKey
+  // 1. find matching option key in task
+  mapObj(task.options, (key) => {
+    if (option.includes(key)) {
+      return validKey = key
+    }
+  })
+  // 2. if found, display the info 
+  if (validKey) {
+    Logger.empty()
+    console.log(colors.brightBlue(`${infoSpacer}Option: ${validKey}`))
+    return showTaskInfo(task.options[validKey], `  ${infoSpacer}`)
+  }
+
+  // if no key found, default to showing all options
+  showTaskOptions(task, infoSpacer, dblSpacer)
+
+}
 
 /**
  * Prints information about a single task 
@@ -170,7 +200,12 @@ const showTaskHelp = (task, opts={}) => {
   showHelpHeader(header)
   showTaskHeader(task.name, header, spacer, dblSpacer)
   showTaskInfo(task, infoSpacer)
-  showTaskOptions(task, infoSpacer, dblSpacer)
+
+  // if opt is array, then we passed in an option to the help cmd
+  isArr(opts) && opts.length > 1
+    ? showTaskOptionDetail(task, opts[0], infoSpacer, dblSpacer)
+    : showTaskOptions(task, infoSpacer, dblSpacer)
+  
 
   subtasks && showSubTasks(task, { ...opts, dblSpacer })
 }
