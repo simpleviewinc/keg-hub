@@ -1,0 +1,15 @@
+node_modules
+
+tests/reports/cucumber/*
+!tests/reports/cucumber/.gitkeep
+
+tests/reports/archive/*
+!tests/reports/archive/.gitkeep
+
+test/reports/*.json
+test/reports/*.html
+
+tests/node_modules
+
+*.log
+tests/*.log

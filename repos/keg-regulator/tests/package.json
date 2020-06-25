@@ -1,0 +1,26 @@
+{
+  "name": "keg-test",
+  "version": "1.0.0",
+  "description": "Cucumber tests for keg",
+  "main": "index.js",
+  "scripts": {
+    "archive": "./scripts/archive.sh reports",
+    "cucumber": "node_modules/.bin/cucumber-js --format json:reports/cucumber/${BROWSER:-chrome}.json",
+    "test:rerun": "./scripts/rerun.sh",
+    "test:chrome": "BROWSER=chrome yarn cucumber",
+    "test:firefox": "BROWSER=firefox yarn cucumber",
+    "test:local": "./scripts/test.sh; yarn report;",
+    "test:grid": "bash scripts/testGrid.sh",
+    "report": "node scripts/generateReport.js",
+    "serve:reports": "http-server ./reports/cucumber/ --port 4000 --silent",
+    "view:served:reports": "open http://$(docker-machine ip default):4000",
+    "view:reports": "open ./reports/cucumber/index.html"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "0.12.3",
+    "selenium-webdriver": "4.0.0-alpha.7",
+    "cucumber": "6.0.5",
+    "multiple-cucumber-html-reporter": "1.16.3"
+  }
+}

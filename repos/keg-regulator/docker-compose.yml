@@ -1,0 +1,58 @@
+# To execute this docker-compose yml file use `docker-compose -f <file_name> up`
+# Add the `-d` flag at the end for detached execution
+version: "3"
+services:
+  selenium-hub:
+    image: selenium/hub:3.141.59-20200525
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome:3.141.59-20200525
+    container_name: 'selenium-chrome'
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - "5555:5555"
+
+  firefox:
+    image: selenium/node-firefox:3.141.59-20200525
+    container_name: 'selenium-firefox'
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - "6666:5555"
+
+  tests:
+    build: "tests"
+    tty: true
+    stdin_open: true
+    privileged: true
+    container_name: 'keg-tests'
+    volumes:
+      - ./tests/features:/keg-test/features
+      - ./tests/reports:/keg-test/reports
+    ports:
+      - "4000:4000"
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - TEST_FILTER_TAGS
+      - WINDOW_HEIGHT
+      - WINDOW_WIDTH
+    depends_on:
+      - "selenium-hub"
+      - "chrome"
+      - "firefox"
+  

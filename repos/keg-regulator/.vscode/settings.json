@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/dist": true,
+  },
+  "[markdown]": {
+      "editor.formatOnSave": true,
+      "editor.renderWhitespace": "all",
+      "editor.acceptSuggestionOnEnter": "off"
+  },
+  "editor.autoIndent": "full",
+}
