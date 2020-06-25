@@ -24,14 +24,14 @@ RUN git clone $GIT_COMPONENTS_URL $DOC_APP_PATH;
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/
-
+COPY *.lock $DOC_APP_PATH/
 
 # Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
     echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
     echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
-    yarn install; \
+    yarn install --frozen-lockfile; \
     yarn cache clean; \
     rm -f .npmrc; \
     rm -f $DOC_APP_PATH/.npmrc;

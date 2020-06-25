@@ -25,7 +25,7 @@ RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://githu
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/package.json
-COPY yarn.lock $DOC_APP_PATH/yarn.lock
+COPY *.lock $DOC_APP_PATH/
 
 # Install the dependecies with yarn install, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \

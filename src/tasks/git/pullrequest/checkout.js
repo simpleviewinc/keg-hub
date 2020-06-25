@@ -1,7 +1,10 @@
-const { reduceObj } = require('jsutils')
+const { reduceObj, isInt, toInt } = require('jsutils')
+const { exists } = require('KegUtils/helpers/exists')
 const { spawnCmd } = require('KegProc')
 const { getGitPath } = require('KegUtils/git/getGitPath')
-const { throwNoConfigPath } = require('KegUtils/error')
+const { throwNoConfigPath, generalError } = require('KegUtils/error')
+
+
 /**
  * Git log task
  * @param {Object} args - arguments passed from the runTask method
@@ -13,13 +16,20 @@ const { throwNoConfigPath } = require('KegUtils/error')
  * @returns {void}
  */
 const checkout = async args => {
-  const { params, tasks, globalConfig } = args
+  const { params, options, tasks, globalConfig } = args
   const { context, number, tap } = params
 
-  const location = await getGitPath(tap || context)
+  const prNum = number || options.find(opt => isInt(toInt(opt)))
+
+  !exists(prNum) && generalError(`A pull request number is required!`)
+
+  const location = !tap && ! context
+    ? process.cwd()
+    : await getGitPath(tap || context)
+
   !location && throwNoConfigPath(globalConfig, tap || context)
 
-  await spawnCmd(`gh pr checkout ${ number }`, {}, location)
+  await spawnCmd(`gh pr checkout ${ prNum }`, {}, location)
 }
 
 module.exports = {
