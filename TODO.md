@@ -77,3 +77,6 @@
   * compose service should check if an existing compose service is already running
     * If it is, ask the user if if should be destroyed
       * Can not run two compose services at once 
+  * Mutagen - Looks at adding a one-way-sync for node_modules
+
+
