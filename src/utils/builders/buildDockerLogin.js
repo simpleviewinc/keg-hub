@@ -33,11 +33,10 @@ const validateLoginCreds = creds => {
  */
 const buildDockerLogin = async ({ user, token, provider, namespace }) => {
   const globalConfig = getGlobalConfig()
-  const gitUser = user || await getGitConfigItem('user.name')
 
   return validateLoginCreds({
     token: token || await getGitKey(globalConfig),
-    user: gitUser || get(globalConfig, 'docker.user'),
+    user: user || get(globalConfig, 'docker.user') || await getGitConfigItem('user.name'),
     providerUrl: provider || get(globalConfig, 'docker.providerUrl'),
     namespace: namespace && get(globalConfig, 'docker.namespace'),
   })

@@ -3,9 +3,11 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { isUrl, get, deepMerge } = require('jsutils')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
+const { getPortMap } = require('KegUtils/docker/getDockerArgs')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+
 const { PACKAGE } = CONTAINER_PREFIXES
 
 /**
@@ -47,7 +49,11 @@ const dockerPackageRun = async args => {
   * Pull the image from the provider and tag it
   */
   await docker.pull(packageUrl)
-  await docker.image.tag(packageUrl, `${parsed.image}:${parsed.tag}`)
+  await docker.image.tag({
+    item: packageUrl,
+    tag: `${parsed.image}:${parsed.tag}`,
+    provider: true
+  })
 
   /*
   * ----------- Step 3 ----------- *
@@ -55,22 +61,26 @@ const dockerPackageRun = async args => {
   */
   const { cmdContext, contextEnvs, location } = await buildContainerContext({
     globalConfig,
-    params: { ...params, context: parsed.repo },
+    params: { ...params, context: parsed.image },
     // Need to add our packaged repo to the allow options so we can run it
-    task: deepMerge(task, { options: { context: { allowed: [ parsed.repo ] } } }),
+    task: deepMerge(task, { options: { context: { allowed: [ parsed.image ] } } }),
   })
+
+  
 
   /*
   * ----------- Step 4 ----------- *
   * Run the image in a container without mounting any volumes
   */
-  const opts = [ `-it` ]
+
+  const opts = [ `-it`, getPortMap('', cmdContext) ]
   cleanup && opts.push(`--rm`)
   await docker.image.run({
     ...parsed,
     opts,
     location,
     envs: contextEnvs,
+    log: true,
     cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`,
     name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
   })
