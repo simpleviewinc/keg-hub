@@ -2,20 +2,36 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { executeCmd } = require('KegProc')
 const { DOCKER } = require('KegConst/docker')
-const { isStr, get, plural } = require('jsutils')
+const { isStr, get, plural, uniqArr } = require('jsutils')
 const { generalError } = require('KegUtils/error/generalError')
 const { confirmExec } = require('KegUtils/helpers/confirmExec')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 
+/**
+ * Removes all of a docker type base on the passed in args
+ * @function
+ * @param {Object} items - Items to check for match
+ * @param {string} type - Docker item type
+ * @param {Array} refs - Refs to the docker items to validate matches
+ *
+ * @returns {Array} - Docker items matching the type and passed in references
+ */
 const getMatchingRefs = (items, type, refs) => {
-  return items.reduce((removeItems, item) => {
-    const toRemove = type === 'volume' ? item.name : item.id
+  const toCheck = [ 'id', 'name', 'repository' ]
 
-    return !refs || refs.includes(toRemove)
-      ? removeItems.concat([ toRemove ])
-      : removeItems
+  const matching = items.reduce((removeItems, item) => {
+    toCheck.map(check => {
+      const removeRef = item.id || item.name || item[ check ]
+      refs.includes(item[ check ]) &&
+        !removeItems.includes(removeRef) &&
+        removeItems.push(removeRef)
+        
+    })
 
-  }, []).join(' ')
+    return removeItems
+  }, [])
+
+  return uniqArr(matching).join(' ')
 }
 
 /**
@@ -35,7 +51,7 @@ const dockerDestroy = async args => {
   let toRemove
   let removeType
 
-  switch(type){
+  switch(type.toLowerCase()){
     case 'c':
     case 'cont':
     case 'container':
@@ -70,30 +86,42 @@ const dockerDestroy = async args => {
 
   const pluralRemove = plural(removeType)
 
-  toRemove && confirmExec({
-    confirm: `Remove all ${ pluralRemove }?`,
-    success: `Removed all ${ pluralRemove }!`,
-    cancel: `Remove all ${ pluralRemove } cancelled!`,
-    preConfirm: getSetting(`docker.preConfirm`),
-    execute: async () => {
+  !toRemove
+    ? Logger.error(`Could not find any ${ type } matching ${ toRemove }!`)
+    : confirmExec({
+        confirm: `Remove all ${ pluralRemove }?`,
+        success: `Removed all ${ pluralRemove }!`,
+        cancel: `Remove all ${ pluralRemove } cancelled!`,
+        preConfirm: getSetting(`docker.preConfirm`),
+        execute: async () => {
 
-      // Containers must be stopped before they can be removed!
-      const contRes = removeType === 'container'
-        ? await executeCmd(`docker stop ${ toRemove } 2>/dev/null`)
-        : {}
+          // Containers must be stopped before they can be removed!
+          const contRes = removeType === 'container'
+            ? await checkCall(() => {
+                reference
+                  ? Logger.highlight(`Stopping ${ pluralRemove } by references`, `"${ reference }"`)
+                  : Logger.highlight(`Stopping all`, `"${ pluralRemove }"`)
 
-      // Just log the error, because we don't want to throw
-      // Stopping containers might error on a single container
-      // But we can still call remove to remove other containers
-      contRes.error && Logger.error(error)
+                return executeCmd(`docker stop ${ toRemove } --force`)
+              })
+            : {}
 
-      const { error, data } = await executeCmd(
-        `docker ${ removeType } rm ${ toRemove } 2>/dev/null`
-      )
-      error && generalError(error)
+          // Just log the error, because we don't want to throw
+          // Stopping containers might error on a single container
+          // But we can still call remove to remove other containers
+          contRes.error && Logger.error(error)
 
-    },
-  })
+          reference
+            ? Logger.highlight(`Destroying ${ pluralRemove } by references`, `"${ reference }"`)
+            : Logger.highlight(`Destroying all`, `"${ pluralRemove }"`)
+
+          const { error, data } = await executeCmd(
+            `docker ${ removeType } rm ${ toRemove } --force`
+          )
+          error && generalError(error)
+
+        },
+      })
 
 
 }
@@ -110,6 +138,16 @@ module.exports = {
         allowed: [ 'containers', 'container', 'cont', 'c', 'images', 'image', 'img', 'i', 'volumes', 'volume', 'vol', 'v' ],
         description: 'Type of docker item to destroy',
         example: 'keg docker destroy --type containers',
+        ask: {
+          type: 'list',
+          default: 'N/A',
+          message: 'Please select a type...',
+          choices: [
+            'Containers',
+            'Images',
+            'Volumes',
+          ]
+        },
       },
       reference: {
         alias: [ 'refs', 'ref' ],
