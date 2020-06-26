@@ -1,5 +1,6 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
+const { ask } = require('KegQuestions')
 const { DOCKER } = require('KegConst/docker')
 const { isUrl, get, deepMerge } = require('jsutils')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
@@ -9,6 +10,27 @@ const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 const { PACKAGE } = CONTAINER_PREFIXES
+
+const checkExists = async container => {
+  const exists = await docker.container.get(container)
+  if(!exists) return false
+  
+  Logger.empty()
+  Logger.print(
+    Logger.colors.brightYellow(` A docker container already exists with the name`),
+    Logger.colors.cyan(`"${ container }"\n`),
+    Logger.colors.brightRed(`The container must be removed before this container can be run!`)
+  )
+
+  Logger.empty()
+  const remove = await ask.confirm(`Would you like to remove it?`)
+  Logger.empty()
+
+  return remove
+    ? await docker.container.destroy(container) && false
+    : true
+
+}
 
 /**
  * Builds a docker container so it can be run
@@ -32,6 +54,7 @@ const dockerPackageRun = async args => {
   // Allow the user to select a package from the list
   // Or if a package is provided, build the packageUrl url
 
+
   /*
   * ----------- Step 1 ----------- *
   * Get the full package url
@@ -43,6 +66,8 @@ const dockerPackageRun = async args => {
       : `${ get(globalConfig, `docker.providerUrl`) }/${ package }`
 
   const parsed = parsePackageUrl(packageUrl)
+  const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
+
 
   /*
   * ----------- Step 2 ----------- *
@@ -55,6 +80,7 @@ const dockerPackageRun = async args => {
     provider: true
   })
 
+
   /*
   * ----------- Step 3 ----------- *
   * Build the container context information
@@ -66,13 +92,20 @@ const dockerPackageRun = async args => {
     task: deepMerge(task, { options: { context: { allowed: [ parsed.image ] } } }),
   })
 
-  
 
   /*
   * ----------- Step 4 ----------- *
+  * Check if a container with the same name is already running
+  * If it is, ask the user if they want to remove it
+  */
+  const exists = await checkExists(containerName)
+  if(exists) return Logger.info(`Exiting "package run" task!`)
+
+
+  /*
+  * ----------- Step 5 ----------- *
   * Run the image in a container without mounting any volumes
   */
-
   const opts = [ `-it`, getPortMap('', cmdContext) ]
   cleanup && opts.push(`--rm`)
   await docker.image.run({
@@ -80,7 +113,6 @@ const dockerPackageRun = async args => {
     opts,
     location,
     envs: contextEnvs,
-    log: true,
     cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`,
     name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
   })

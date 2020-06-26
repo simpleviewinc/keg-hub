@@ -1,4 +1,4 @@
-const { compareItems, noItemError, cmdSuccess } = require('./helpers')
+const { compareItems, noItemError, cmdSuccess, portAsJSON } = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { isArr, toStr, isStr, deepMerge, checkCall } = require('jsutils')
 
@@ -118,7 +118,7 @@ const containerCmds = containerItemCmds.reduce((commands, command) => {
  *
  * @returns {boolean} - If the Docker command successfully ran
  */
-const destroy = async (arg={}) => {
+const destroy = async (args={}) => {
   const opts = isStr(args) ? { item: args, type: 'container' } : args
   await containerCmds.kill({ ...opts, skipError: true, errResponse: false })
   const res = await removeContainer({
@@ -158,7 +158,7 @@ const removeContainer = (args={}, shouldThrow=true) => {
  *
  * @returns {boolean} - Based on if the container exists
  */
-const exists = async (compare, doCompare, format) => {
+const exists = async (compare, doCompare) => {
   compare = isArr(compare) ? compare : [ compare ]
 
   // Get all current containers
@@ -265,6 +265,35 @@ const get = async nameOrId => {
   }, false)
 }
 
+/**
+ * Gets the bound ports for a container, or the bound to port, if a port is passed in
+ * @function
+ * @param {string} nameOrId - Name of Id of the container to get the ports of
+ * @param {string|number} [port] - Port to check if it's bound
+ *
+ * @returns {string|Array} - Response from docker cli
+ */
+const port = async (args, _port, _format, cmdOpts) => {
+  const params = isStr(args)
+    ? { item: args, port: _port, format: _format || 'json'}
+    : { port: _port, format: _format || 'json', ...args }
+
+  const { item, port, format } = params
+  
+  const container = await get(item)
+  if(!container) return false
+
+  const opts = [ 'port', item ]
+  port && opts.push(port)
+
+  const portData = await dockerCli({ opts }, cmdOpts)
+  
+  return format === 'json'
+    ? portAsJSON(portData, port)
+    : portData
+
+}
+
 // Add the sub-methods to the root docker image method
 Object.assign(container, {
   ...containerCmds,
@@ -276,6 +305,7 @@ Object.assign(container, {
   get,
   list,
   remove: removeContainer,
+  port,
 })
 
 module.exports = container
