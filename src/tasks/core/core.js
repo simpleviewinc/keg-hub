@@ -27,6 +27,7 @@ module.exports = {
       ...require('./pullrequest'),
       ...require('./start'),
       ...require('./stop'),
+      ...require('./sync'),
     },
     action: coreCommand,
     description: 'Keg CLI core specific tasks',

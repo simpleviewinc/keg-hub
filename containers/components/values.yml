@@ -16,7 +16,7 @@ env:
 
   DOC_APP_PATH: /keg/keg-components
   DOC_APP_PORT: 60710
-  DOC_RETHEME_PATH: /keg/keg-components/node_modules/@simpleviewinc/re-theme/build
+  DOC_RETHEME_PATH: /keg/keg-components/node_modules/@simpleviewinc/re-theme
 
   # --- GENERAL CONTEXT ENVs --- #
 

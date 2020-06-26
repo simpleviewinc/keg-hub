@@ -32,6 +32,7 @@ const configDefs = {
       '/core/base/assets/*',
       '/.*',
       '!/.storybook',
+      '!/.npmrc',
       '*.lock',
       '*.md',
       '/temp',

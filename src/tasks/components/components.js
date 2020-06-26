@@ -28,6 +28,7 @@ module.exports = {
       ...require('./destory'),
       ...require('./start'),
       ...require('./storybook'),
+      ...require('./sync'),
     },
     action: componentsCmd,
     description: 'Keg CLI components specific tasks',

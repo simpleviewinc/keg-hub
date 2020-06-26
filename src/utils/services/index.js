@@ -6,4 +6,5 @@ module.exports = {
   ...require('./mutagenService'),
   ...require('./stopService'),
   ...require('./serviceOptions'),
+  ...require('./syncService'),
 }
