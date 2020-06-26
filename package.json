@@ -92,6 +92,7 @@
       "^KegLibs(.*)$": "<rootDir>/src/libs$1",
       "^KegLog(.*)$": "<rootDir>/src/libs/logger$1",
       "^KegMocks(.*)$": "<rootDir>/src/__mocks__$1",
+      "^KegMutagen(.*)$": "<rootDir>/src/libs/mutagen$1",
       "^KegProc(.*)$": "<rootDir>/src/libs/process$1",
       "^KegPackage(.*)$": "<rootDir>/package.json",
       "^KegQuestions(.*)$": "<rootDir>/src/libs/questions$1",

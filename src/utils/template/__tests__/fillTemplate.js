@@ -6,7 +6,7 @@ const { fillTemplate } = require('../fillTemplate')
 
 describe('fillTemplate', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   it('should fill passed in string templates', () => {
 

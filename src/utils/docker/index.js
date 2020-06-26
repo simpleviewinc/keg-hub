@@ -5,6 +5,7 @@ module.exports = {
   ...require('./buildDockerMounts'),
   ...require('./compose'),
   ...require('./containerSelect'),
+  ...require('./checkRunningContainers'),
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getContainerFromContext'),

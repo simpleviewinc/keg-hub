@@ -6,7 +6,7 @@ const { buildContainerContext } = require('../buildContainerContext')
 
 describe('buildContainerContext', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
   
   it('should return an object with keys cmdContext, contextEnvs, location, and tap', async () => {
 
@@ -17,8 +17,11 @@ describe('buildContainerContext', () => {
       envs: {},
     })
 
-    const keys = [ 'cmdContext', 'contextEnvs', 'location', 'tap' ]
-    Object.keys(res).map(key => expect(keys.indexOf(key)).not.toBe(-1))
+    const resKeys = Object.keys(res)
+    const keys = [ 'cmdContext', 'contextEnvs', 'location', 'tap', 'image', 'prefix' ]
+
+    keys.map(key => { expect(resKeys.indexOf(key)).not.toBe(-1) })
+
 
   })
 

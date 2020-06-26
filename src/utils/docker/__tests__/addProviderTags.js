@@ -14,7 +14,7 @@ const defArgs = {
 
 describe('addProviderTags', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   it('It should not throw when a context param is passed in', async done => {
     

@@ -52,13 +52,13 @@ class Mutagen {
   * @returns {boolean|string} - False if the daemon is not running, or the daemon pid
   */
   isRunning = async () => {
-    const { err, data } = await executeCmd(
+    const { error, data } = await executeCmd(
       `ps ax | grep -v docker | grep -v grep  | grep "mutagen"`
     )
 
     // If there's an error or no data assume the daemon is NOT running
     // Otherwise return the pid
-    return err || !data
+    return error || !data
       ? false
       : data.trim().split(' ')[0]
   }

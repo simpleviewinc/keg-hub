@@ -1,21 +1,32 @@
 const path = require('path')
+const { isArr } = require('jsutils')
 const cliRoot = path.join(__dirname, '../../../../')
-const { Branch } = require('../branch')
+const { git } = require('../git')
 
-const branch = new Branch({})
 
 describe('branch', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterEach(() => jest.resetAllMocks())
 
   describe('list', () => {
 
-    it('should return a list of all branchs for the passed in location', async done => {
-      const res = await branch.list(cliRoot)
+    it('should return a list of all branches for the passed in location', async done => {
 
-      expect(typeof res).toBe(Array)
+      const res = await git.branch.list(cliRoot)
+
+      expect(isArr(res)).toBe(true)
+
       done()
+    })
 
+    it('should return an array of  branch objects matching the correct model', async done => {
+
+      const res = await git.branch.list(cliRoot)
+      const keys = [ 'commit', 'remote', 'name', 'current', 'message' ]
+
+      res.map(branch => keys.map(key => expect(key in branch).toBe(true)))
+
+      done()
     })
 
   })

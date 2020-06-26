@@ -46,10 +46,10 @@ const checkPrefix = toCheck => {
     }, false)
 
   return !hasPrefix
-    ? { context: filterKeg(toCheck) }
+    ? { context: filterKeg(toCheck), noPrefix: toCheck }
     : checkCall(() => {
         const [ _, context ] = toCheck.split('-')
-        return { context: filterKeg(context), prefix: toCheck }
+        return { context: filterKeg(context), prefix: toCheck, noPrefix: context }
       })
 }
 
@@ -60,13 +60,16 @@ const checkPrefix = toCheck => {
  *
  * @returns {Object} - Container, context, and the original with the prefix
  */
-const containerContext = async toFind => {
+const containerContext = async (toFind, askContainer) => {
   const found = await docker.container.get(toFind)
 
-  const container = found || await askWhenNoContext()
-  const { context, prefix } = checkPrefix(container.name)
+  const container = found || askContainer && await askWhenNoContext()
 
-  return { ...container, context, prefix }
+  if(!container) return false
+
+  const { context, prefix, noPrefix } = checkPrefix(container.name)
+
+  return { ...container, context, prefix, noPrefix }
 
 }
 
@@ -84,11 +87,13 @@ const containerContext = async toFind => {
  */
 const getContext = ({ context, container, tap }, askContainer) => {
   // TODO: Add image to the params and get the context form the image
+
+  const foundContext = container && containerContext(container, askContainer)
   
-  return container && askContainer
-    ? containerContext(container)
+  return foundContext
+    ? foundContext
     : tap
-      ? { context: 'tap', tap }
+      ? { context: 'tap', tap, noPrefix: 'tap' }
       : context
         ? checkPrefix(context)
         : {}

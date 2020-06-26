@@ -4,11 +4,11 @@ const Helpers = require('../helpers')
 
 describe('Docker Helpers', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   describe('apiSuccess', () => {
 
-    beforeEach(() => jest.resetAllMocks())
+    afterAll(() => jest.resetAllMocks())
 
     it('It should convert the dockerCLI output into a jsonObject', () => {
 
@@ -22,7 +22,7 @@ describe('Docker Helpers', () => {
 
   describe('portAsJSON', () => {
 
-    beforeEach(() => jest.resetAllMocks())
+    afterAll(() => jest.resetAllMocks())
 
     it('It should convert the port string data into a JSON object', () => {
 

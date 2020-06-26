@@ -17,7 +17,7 @@ const onFinish = jest.fn(() => {
 
 describe('waitForIt', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   it('should wait for it', async done => {
     waitForIt({

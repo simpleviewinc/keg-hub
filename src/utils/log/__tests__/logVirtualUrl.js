@@ -5,7 +5,7 @@ const { logVirtualUrl } = require('../logVirtualUrl')
 
 describe('logVirtualUrl', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
   
   it('should call Logger.pair', () => {
     logVirtualUrl()

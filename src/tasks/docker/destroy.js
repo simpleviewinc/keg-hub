@@ -1,11 +1,25 @@
 const docker = require('KegDocCli')
-const { isStr, get, checkCall } = require('jsutils')
-const { DOCKER } = require('KegConst/docker')
 const { Logger } = require('KegLog')
 const { executeCmd } = require('KegProc')
+const { DOCKER } = require('KegConst/docker')
+const { isStr, get, plural } = require('jsutils')
+const { generalError } = require('KegUtils/error/generalError')
+const { confirmExec } = require('KegUtils/helpers/confirmExec')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
+
+const getMatchingRefs = (items, type, refs) => {
+  return items.reduce((removeItems, item) => {
+    const toRemove = type === 'volume' ? item.name : item.id
+
+    return !refs || refs.includes(toRemove)
+      ? removeItems.concat([ toRemove ])
+      : removeItems
+
+  }, []).join(' ')
+}
 
 /**
- * Execute a docker prune command
+ * Removes all of a docker type base on the passed in args
  * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
@@ -15,22 +29,30 @@ const { executeCmd } = require('KegProc')
  */
 const dockerDestroy = async args => {
   const { params } = args
-  const { type } = params
+  const { reference, type } = params
+  const refs = reference && reference.split(',')
+
+  let toRemove
+  let removeType
 
   switch(type){
     case 'c':
     case 'cont':
     case 'container':
     case 'containers': {
-      // docker stop $(docker ps -aq) 2>/dev/null
-      // docker rm $(docker ps -aq) 2>/dev/null
-      // executeCmd(``)
+      const containers = await docker.container.list()
+      removeType = 'container'
+      toRemove = getMatchingRefs(containers, removeType, refs)
+
       break
     }
     case 'i':
     case 'img':
     case 'image':
     case 'images': {
+      const images = await docker.image.list()
+      removeType = 'image'
+      toRemove = getMatchingRefs(images, removeType, refs)
       
       break
     }
@@ -38,10 +60,40 @@ const dockerDestroy = async args => {
     case 'vol':
     case 'volume':
     case 'volumes': {
-      
+      const volumes = await docker.volume.list()
+      removeType = 'volume'
+      toRemove = getMatchingRefs(volumes, removeType, refs)
+
       break
     }
   }
+
+  const pluralRemove = plural(removeType)
+
+  toRemove && confirmExec({
+    confirm: `Remove all ${ pluralRemove }?`,
+    success: `Removed all ${ pluralRemove }!`,
+    cancel: `Remove all ${ pluralRemove } cancelled!`,
+    preConfirm: getSetting(`docker.preConfirm`),
+    execute: async () => {
+
+      // Containers must be stopped before they can be removed!
+      const contRes = removeType === 'container'
+        ? await executeCmd(`docker stop ${ toRemove } 2>/dev/null`)
+        : {}
+
+      // Just log the error, because we don't want to throw
+      // Stopping containers might error on a single container
+      // But we can still call remove to remove other containers
+      contRes.error && Logger.error(error)
+
+      const { error, data } = await executeCmd(
+        `docker ${ removeType } rm ${ toRemove } 2>/dev/null`
+      )
+      error && generalError(error)
+
+    },
+  })
 
 
 }
@@ -59,11 +111,11 @@ module.exports = {
         description: 'Type of docker item to destroy',
         example: 'keg docker destroy --type containers',
       },
-      all: {
-        description: 'Remove all, not just unused',
-        example: 'keg docker destroy --all false',
-        default: true
-      },
+      reference: {
+        alias: [ 'refs', 'ref' ],
+        description: 'Comma separated list of names or ids referencing the items to be removed. ( Defaults to all of type )',
+        example: 'keg docker destroy --type containers --reference my-container,other-container',
+      }
     }
   }
 }

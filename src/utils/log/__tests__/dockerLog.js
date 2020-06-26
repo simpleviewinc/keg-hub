@@ -5,7 +5,7 @@ const { dockerLog } = require('../dockerLog')
 
 describe('dockerLog', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterEach(() => jest.resetAllMocks())
   
   it('should call Logger.data when a response is passed', () => {
 

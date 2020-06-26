@@ -2,7 +2,7 @@ const Image = require('../image')
 
 describe('Docker Image', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   it('', () => {
 

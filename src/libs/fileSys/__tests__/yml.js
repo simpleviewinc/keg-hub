@@ -32,7 +32,7 @@ describe('Yaml Lib', () => {
     await removeYmlFile(testYmlWrite)
   })
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   describe('loadYml', () => {
 

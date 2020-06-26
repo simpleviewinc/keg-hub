@@ -34,7 +34,7 @@ describe('parseTemplate', () => {
     await removeYmlFile(testYmlWrite)
   })
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
 
   it('Should load and parse content from the passed in file path', async done => {
@@ -47,7 +47,7 @@ describe('parseTemplate', () => {
 
   })
 
-  it.only('Should load and parse content from the passed in template', async done => {
+  it('Should load and parse content from the passed in template', async done => {
 
     const globalConfig = getGlobalConfig() || {}
     const parsed = parseTemplate({ template: `{{ ${ validateReplace } }}` })

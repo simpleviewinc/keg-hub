@@ -1,14 +1,24 @@
 const { keyMap } = require('jsutils')
 
+const logData = (...data) => console.log(...data)
+
 const Logger = {
   color: jest.fn((colorName, data) => data),
-  print: jest.fn((...data) => console.log(...data)),
+  print: jest.fn(logData),
   setColors: jest.fn(),
-  header: jest.fn(),
+  header: jest.fn(logData),
+  highlight: jest.fn(logData),
   empty: jest.fn(() => console.log('')),
-  message: jest.fn(),
-  spacedMsg: jest.fn(),
+  label: jest.fn(logData),
+  message: jest.fn(logData),
+  pair: jest.fn(logData),
+  spacedMsg: jest.fn(logData),
+  stderr: jest.fn((...data) => console.error(...data)),
+  stdout: jest.fn(logData),
+  table: jest.fn(logData),
 }
+
+Logger.spaceMsg = Logger.spacedMsg
 Logger.log = Logger.print
 
 const colorMap = [

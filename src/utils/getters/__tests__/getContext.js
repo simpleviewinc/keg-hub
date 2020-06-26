@@ -7,12 +7,11 @@ const { getContext } = require('../getContext')
 
 describe('getContext', () => {
 
-    
-  afterEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   it('should get the context data from a passed in container name or id', async () => {
 
-    const res = await getContext({ container: container.id })
+    const res = await getContext({ container: container.id }, true)
 
     expect(res.context).toBe('core')
     expect(res.prefix).toBe('img-kegcore')

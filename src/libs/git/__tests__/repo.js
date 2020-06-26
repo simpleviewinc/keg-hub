@@ -7,7 +7,7 @@ const repo = new Repo({})
 
 describe('repo', () => {
 
-  beforeEach(() => jest.resetAllMocks())
+  afterAll(() => jest.resetAllMocks())
 
   describe('exists', () => {
 

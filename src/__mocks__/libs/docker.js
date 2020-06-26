@@ -15,7 +15,44 @@ global.testDocker = {
       size: '0B',
       status: 'Up 16 minutes',
       context: 'core',
-      prefix: 'img-kegcore'
+      prefix: 'img-kegcore',
+      noPrefix: 'kegcore'
+    },
+    base: {
+      command: 'docker-entrypoint.s…',
+      createdAt: '2020-06-25 23:22:34 -0700 MST',
+      id: '3ad8d5edbf6c',
+      image: 'kegbase',
+      labels: '',
+      localVolumes: '0',
+      mounts: '',
+      name: 'package-kegbase',
+      networks: 'bridge',
+      ports: '80/tcp, 443/tcp, 873/tcp, 8080-8082/tcp, 0.0.0.0:19002->19002/tcp, 19000-19001/tcp, 60710/tcp, 0.0.0.0:19006->19006/tcp',
+      runningFor: '27 minutes ago',
+      size: '0B',
+      status: 'Up 27 minutes',
+      context: 'base',
+      prefix: 'img-kegbase',
+      noPrefix: 'kegbase'
+    },
+    random: {
+      command: 'docker-entrypoint.s…',
+      createdAt: '2020-06-25 23:22:34 -0700 MST',
+      id: '1caa46fa11ba',
+      image: 'random',
+      labels: '',
+      localVolumes: '0',
+      mounts: '',
+      name: 'test-random',
+      networks: 'bridge',
+      ports: '80/tcp, 443/tcp, 873/tcp, 8080-8082/tcp, 0.0.0.0:19002->19002/tcp, 19000-19001/tcp, 60710/tcp, 0.0.0.0:19006->19006/tcp',
+      runningFor: '27 minutes ago',
+      size: '0B',
+      status: 'Up 27 minutes',
+      context: 'random',
+      prefix: 'test-random',
+      noPrefix: 'random'
     }
   }
 }
@@ -27,7 +64,9 @@ const docker = {
     }),
     list: jest.fn(() => {
       return [
-        global.testDocker.containers.core, 
+        global.testDocker.containers.core,
+        global.testDocker.containers.random,
+        global.testDocker.containers.base,
       ]
     }),
     port: jest.fn((args) => {
