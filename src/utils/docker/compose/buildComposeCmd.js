@@ -1,10 +1,29 @@
-const { DOCKER } = require('KegConst/docker')
 const { get } = require('jsutils')
+const { DOCKER } = require('KegConst/docker')
+const { DOCKER_ENV, CONTAINERS } = DOCKER
+
 
 const composeArgs = {
   clean: '--force-rm',
   cache: '--no-cache',
   pull: '--pull'
+}
+
+/**
+ * Builds a docker-compose file argument based on the passed in args
+ * @function
+ * @param {string} dockerCmd - Docker command to add the compile file paths to
+ * @param {string} context - Context the docker command is being run in ( core / tap )
+ * @param {string} ENV - Name of the ENV that defines the file path of the compose file
+ * @param {string} composeFile - compose file path to override pulling from container ENVs
+ *
+ * @returns {string} - dockerCmd string with the file path added
+ */
+const addComposeFile = (dockerCmd='', container, ENV, composeFile) => {
+  const compPath = composeFile || get(CONTAINERS, `${ container }.ENV.${ ENV }`)
+  const addComposeFile = compPath ? `-f ${ compPath }` : ''
+
+  return `${dockerCmd} ${addComposeFile}`.trim()
 }
 
 /**
@@ -17,10 +36,12 @@ const composeArgs = {
  */
 const addComposeFiles = (dockerCmd, context='') => {
 
-  const compDefPath = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }.ENV.COMPOSE_DEFAULT`)
-  const defCompose = compDefPath ? `-f ${ compDefPath }` : ''
+  // Get the default docker compose file
+  dockerCmd = `${dockerCmd} ${ addComposeFile(dockerCmd, context.toUpperCase(), `COMPOSE_DEFAULT`) }`.trim()
 
-  return `${dockerCmd} ${defCompose}`.trim()
+  // Get the docker compose file for the environment
+  return `${dockerCmd} ${ addComposeFile(dockerCmd, context.toUpperCase(), `COMPOSE_${ DOCKER_ENV }`) }`.trim()
+
 }
 
 /**
@@ -58,7 +79,14 @@ const addCmdOpts = (dockerCmd, params) => {
   }, dockerCmd)
 }
 
-
+/**
+ * Build the docker-compose down args to ensure it cleans up properly
+ * @function
+ * @param {string} dockerCmd - docker-compose command to add params to
+ * @param {string} remove - Args passed in from the command line to define what items to remove
+ *
+ * @returns {string} - Docker compose command, with remove args added
+ */
 const getDownArgs = (dockerCmd, remove) => {
   return remove.split(',').reduce((builtCmd, toRemove) => {
     if(toRemove === 'all' || toRemove === 'local')

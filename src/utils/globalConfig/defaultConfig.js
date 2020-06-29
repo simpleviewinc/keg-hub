@@ -6,14 +6,15 @@ const cliParent = path.join(CLI_ROOT, '../')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 
 const defPaths = {
-  cli: CLI_ROOT,
-  components: path.join(cliParent, 'keg-components'),
-  containers: path.join(CLI_ROOT, 'containers'),
-  core: path.join(cliParent, 'keg-core'),
   keg: cliParent,
+  cli: CLI_ROOT,
+  containers: path.join(CLI_ROOT, 'containers'),
+  components: path.join(cliParent, 'keg-components'),
+  core: path.join(cliParent, 'keg-core'),
   proxy: path.join(cliParent, 'keg-proxy'),
   resolver: path.join(cliParent, 'tap-resolver'),
   retheme: path.join(cliParent, 're-theme'),
+  test: path.join(cliParent, 'keg-test'),
 }
 
 /**

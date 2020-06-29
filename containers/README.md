@@ -17,7 +17,7 @@
     * `Dockerfile` - How to build the docker image
     * `values.yml` - Environment file containing envs to pass to the docker container
   * Some folders contain
-    * `compose-default.yml` - Default `docker-compose` file
+    * `docker-compose.yml` - Default `docker-compose` file
     * `mutagen.yml` - Docker folder syncing configuration file
 
 ### Values / ENV files

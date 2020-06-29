@@ -11,7 +11,7 @@ env:
   CONTEXT_PATH: "{{ cli.paths.core }}"
   CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/core/Dockerfile"
   CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/core/values.yml"
-  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/compose-default.yml"
+  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/docker-compose.yml"
 
   # --- DOCKER ENV CONTEXT --- #
 

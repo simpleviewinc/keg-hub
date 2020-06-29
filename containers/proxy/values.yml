@@ -3,7 +3,7 @@ env:
   # --- LOCAL ENV CONTEXT --- #
   # Docker data
   CONTEXT_PATH: "{{ cli.paths.proxy }}"
-  COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/compose-default.yml"
+  COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/docker-compose.yml"
   CONTEXT_DOCKER_FILE: "{{ cli.paths.cli }}/containers/proxy/Dockerfile"
   CONTEXT_VALUES_FILE: "{{ cli.paths.cli }}/containers/proxy/values.yml"
 
