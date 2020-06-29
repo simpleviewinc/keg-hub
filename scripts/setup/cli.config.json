@@ -19,7 +19,10 @@
         "cli": "keg-cli",
         "core": "keg-core",
         "components": "keg-components",
-        "retheme": "re-theme"
+        "proxy": "keg-proxy",
+        "resolver": "tap-resolver",
+        "retheme": "re-theme",
+        "test": "keg-test"
       }
     },
     "taps": {

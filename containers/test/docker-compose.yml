@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  kegtest:
+    image: ${IMAGE}
+    tty: true
+    stdin_open: true
+    privileged: true
+    build:
+      context: ${CONTEXT_PATH}
+      dockerfile: ${CONTEXT_DOCKER_FILE}
+      args:
+        - ENV
+        - EXEC_CMD
+        - DOC_APP_PATH
+        - GIT_KEY
+        - IMAGE_FROM
+        - NM_INSTALL
+        - NODE_ENV
+    container_name: ${CONTAINER_NAME}
+    environment:
+      - ENV
+      - EXEC_CMD
+      - DOC_APP_PATH
+      - NM_INSTALL
+      - NODE_ENV
+    ports:
+      - 80:${DOC_APP_PORT}

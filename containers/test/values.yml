@@ -1,0 +1,38 @@
+
+env:
+
+  # --- TEST ENV CONTEXT --- #
+
+  # Docker / Docker Compose paths
+  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/test/Dockerfile"
+  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/test/values.yml"
+
+  # The default docker-compose file path
+  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/test/docker-compose.yml"
+  # Can also define an override compose file
+  # by setting an env as COMPOSE_<ENV>=<path to override>
+  # Examples:
+    # COMPOSE_DEVELOPMENT: "/path/to/override.dev.yml"
+    # COMPOSE_PRODUCTION: "/path/to/override.production.yml"
+
+  # The CONTEXT_PATH env should be the location of the tap being run
+  # So it should NOT be set inside the .env file
+  CONTEXT_PATH: /keg/keg-test
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  # Default location of the tap in the docker container
+  DOC_APP_PATH: /keg/keg-test
+  DOC_FEATURES_PATH: /keg/keg-test/features
+  DOC_STEPS_PATH: /keg/keg-test/steps
+
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image Build information
+  IMAGE: kegtest
+  VERSION: "0.0.1"
+  CONTAINER_NAME: kegtest
+
+  # Git tap url in github
+  GIT_TAP_URL: INITIAL

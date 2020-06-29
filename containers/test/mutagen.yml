@@ -1,0 +1,20 @@
+sync:
+  kegtest:
+    alpha: "/keg/keg-test"
+    beta: "docker://kegtest/keg/keg-test"
+    mode: "two-way-resolved"
+    ignore:
+      vcs: true
+      paths:
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"
