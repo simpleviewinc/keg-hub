@@ -10,7 +10,13 @@ env:
   # Docker / Docker Compose paths
   CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/tap/Dockerfile"
   CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/tap/values.yml"
+  # The default docker-compose file path
   COMPOSE_DEFAULT: "{{ cli.paths.containers }}/tap/docker-compose.yml"
+  # Can also define an override compose files
+  # by setting an env as COMPOSE_<ENV>=<path to override> || COMPOSE_TAP_<ENV>=<path to override>
+  # Examples:
+    # COMPOSE_DEVELOPMENT: "/path/to/override.dev.yml"
+    # COMPOSE_TAP_PRODUCTION: "/path/to/override.production.yml"
 
   # The CONTEXT_PATH env should be the location of the tap being run
   # So it should NOT be set inside the .env file

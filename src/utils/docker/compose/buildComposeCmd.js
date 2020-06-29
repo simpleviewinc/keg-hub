@@ -35,13 +35,16 @@ const addComposeFile = (dockerCmd='', container, ENV, composeFile) => {
  * @returns {string} - dockerCmd string with the file paths added
  */
 const addComposeFiles = (dockerCmd, context='') => {
+  const container = context.toUpperCase()
 
   // Get the default docker compose file
-  dockerCmd = `${dockerCmd} ${ addComposeFile(dockerCmd, context.toUpperCase(), `COMPOSE_DEFAULT`) }`.trim()
+  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_DEFAULT`),
 
   // Get the docker compose file for the environment
-  return `${dockerCmd} ${ addComposeFile(dockerCmd, context.toUpperCase(), `COMPOSE_${ DOCKER_ENV }`) }`.trim()
-
+  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_${ DOCKER_ENV }`)
+  
+  // Get the docker compose file for the container and ENV
+  return addComposeFile(dockerCmd, container, `COMPOSE_${ container }_${ DOCKER_ENV }`)
 }
 
 /**
