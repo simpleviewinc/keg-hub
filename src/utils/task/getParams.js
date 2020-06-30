@@ -15,11 +15,28 @@ const {
   checkEnvKeyValue,
   checkQuotedOptions,
   checkRequired,
+  hasKeyIdentifier,
   isOptionKey,
+  optionsHasIdentifiers,
   removeOption,
   splitEqualsMatch
 } = require('./taskOptions')
 
+
+/**
+ * Gets the option meta data for a key from a task
+ * @function
+ * @param {Object} task - Current task the options are being parsed for
+ * @param {string} key - Key name of the option to get meta for
+ *
+ * @returns {string|boolean} - Passed in value, or true if taskKey match
+ */
+const getOptionMeta = (task, key) => {
+  // Get the option meta for the key
+  return isObj(task.options[key])
+    ? task.options[key]
+    : { description: task.options[key] }
+}
 
 /**
  * Matches the option against the passed in matchTypes
@@ -199,14 +216,12 @@ const ensureParams = async (task, mappedParams={}) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const loopTaskOptions = (task, taskKeys, options) => {
+const loopTaskKeys = (task, taskKeys, options) => {
   return taskKeys.reduce(async (toResolve, key, index) => {
     const params = await toResolve
 
     // Get the option meta for the key
-    const meta = isObj(task.options[key])
-      ? task.options[key]
-      : { description: task.options[key] }
+    const meta = getOptionMeta(task, key)
 
     // Find the value of the argument from the passed in options
     const value = findParam({
@@ -229,6 +244,46 @@ const loopTaskOptions = (task, taskKeys, options) => {
   }, Promise.resolve({}))
 }
 
+/**
+ * Maps the task option keys to the passed in options by key index
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} taskKeys - Keg names of the task options
+ * @param {Array} options - items passed from the command line
+ *
+ * @returns {Object} - Mapped params object
+ */
+const mapKeysToOptions = (task, taskKeys, options) => {
+  return taskKeys.reduce(async (toResolve, key, index) => {
+    const params = await toResolve
+
+    // Get the option meta for the key
+    const meta = getOptionMeta(task, key)
+    const val = options[index]
+
+    // If a value exists, add it to the params object
+    exists(val) && ( params[key] = val )
+
+    // Ensure the param exists if needed, and return
+    return ensureParam(task, params, key, meta)
+
+  }, Promise.resolve({}))
+}
+
+/**
+ * Loops the task options looking to a match in the passed in options array
+ * @function
+ * @param {Object} task - Task Model of current task being run
+ * @param {Object} taskKeys - Keg names of the task options
+ * @param {Array} options - items passed from the command line
+ *
+ * @returns {Object} - Mapped arguments object
+ */
+const loopTaskOptions = (task, taskKeys, options) => {
+  return optionsHasIdentifiers(options)
+    ? loopTaskKeys(task, taskKeys, options)
+    : mapKeysToOptions(task, taskKeys, options)
+}
 
 /**
  * Maps all passed in options to the cmdOpts based on keys
@@ -255,10 +310,7 @@ const getParams = async ({ options=[], task }) => {
   if(!taskKeys || !taskKeys.length) return ensureParams(task)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
-  const doOptsLoop = options.length !== 1 ||
-    options[0].includes('=')  ||
-    options[0].indexOf('-') === 0
-
+  const doOptsLoop = options.length !== 1 || hasKeyIdentifier(options[0])
 
   // const withContext = checkContextOption(task, taskKeys[0], options)
 

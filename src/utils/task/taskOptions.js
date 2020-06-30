@@ -54,12 +54,9 @@ const checkContextOption = (task, firstKey, options) => {
 
   // Check if task has a context as first key
   // Of if the first option has a - || =, which means it's not a context value
-  const notContext = firstKey !== 'context' ||
-    firstOpt.indexOf('-') === 0 ||
-    ( firstOpt.indexOf('=') !== -1 && firstOpt.indexOf('"') === -1 )
-  
+  if(firstKey !== 'context' || hasKeyIdentifier(firstKey))
+    return {}
 
-  if(notContext) return {}
 
   // If the first option is included in the task options allowed set and return context
   if(get(task, 'options.context.allowed', []).includes(firstOpt))
@@ -180,6 +177,36 @@ const splitEqualsMatch = (option, matchTypes, argument) => {
   return matchTypes.includes(key) ? value : argument
 }
 
+/**
+ * Checks if the passed in data string has an options key identifier
+ * @function
+ * @param {string} option - Option passed from command line to check for '=' || '-'
+ *
+ * @returns {boolean} - T/F if it has a key identifier
+ */
+const hasKeyIdentifier = option => {
+  return isStr(option) && 
+    option.length && (
+      option.includes('"') ||
+      option.includes('=') ||
+      option.indexOf('-') === 0
+    )
+}
+
+/**
+ * Loops over the options and checks if each one has a key identifier
+ * @function
+ * @param {Array} options - Options to check for identifiers
+ *
+ * @returns {boolean} - T/F if an option has a key identifier
+ */
+const optionsHasIdentifiers = options => {
+  return options
+    .map(option => hasKeyIdentifier(options))
+    .indexOf(true) !== -1
+}
+
+
 module.exports = {
   buildMatchTypes,
   checkBoolValue,
@@ -187,7 +214,9 @@ module.exports = {
   checkEnvKeyValue,
   checkQuotedOptions,
   checkRequired,
+  hasKeyIdentifier,
   isOptionKey,
+  optionsHasIdentifiers,
   removeOption,
   splitEqualsMatch,
 }
