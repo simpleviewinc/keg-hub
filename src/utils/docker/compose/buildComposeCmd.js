@@ -38,7 +38,10 @@ const addComposeFiles = (dockerCmd, context='') => {
   const container = context.toUpperCase()
 
   // Get the default docker compose file
-  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_DEFAULT`),
+  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_DEFAULT`)
+  
+  // Get the docker compose file from the repo
+  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_FROM_REPO`)
 
   // Get the docker compose file for the environment
   dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_${ DOCKER_ENV }`)

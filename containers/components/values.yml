@@ -11,11 +11,11 @@ env:
   CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/components/values.yml"
   # The default docker-compose file path
   COMPOSE_DEFAULT: "{{ cli.paths.containers }}/components/docker-compose.yml"
-  # Can also define an override compose file
-  # by setting an env as COMPOSE_<ENV>=<path to override> || COMPOSE_COMPONENTS_<ENV>=<path to override>
-  # Examples: 
-    # COMPOSE_DEVELOPMENT: "/path/to/override.dev.yml"
-    # COMPOSE_COMPONENTS_PRODUCTION: "/path/to/override.production.yml"
+  # Can also define other an override compose files
+  # Other compose files can loaded by setting an ENVS as follows:
+    # COMPOSE_FROM_REPO="/path/to/override.yml"
+    # COMPOSE_COMPONENTS_<ENV>: "/path/to/override.yml"
+    # COMPOSE_<ENV>: "/path/to/override.yml"
 
 
   # --- DOCKER ENV CONTEXT --- #

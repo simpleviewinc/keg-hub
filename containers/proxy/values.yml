@@ -3,9 +3,14 @@ env:
   # --- LOCAL ENV CONTEXT --- #
   # Docker data
   CONTEXT_PATH: "{{ cli.paths.proxy }}"
-  COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/docker-compose.yml"
   CONTEXT_DOCKER_FILE: "{{ cli.paths.cli }}/containers/proxy/Dockerfile"
   CONTEXT_VALUES_FILE: "{{ cli.paths.cli }}/containers/proxy/values.yml"
+  COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/docker-compose.yml"
+  # Can also define other an override compose files
+  # Other compose files can loaded by setting an ENVS as follows:
+    # COMPOSE_FROM_REPO="/path/to/override.yml"
+    # COMPOSE_PROXY_<ENV>: "/path/to/override.yml"
+    # COMPOSE_<ENV>: "/path/to/override.yml"
 
   # Should be the keg-proxy github url
   GIT_PROXY_URL: INITIAL

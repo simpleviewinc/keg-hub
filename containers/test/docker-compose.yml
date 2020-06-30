@@ -23,5 +23,15 @@ services:
       - DOC_APP_PATH
       - NM_INSTALL
       - NODE_ENV
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - TEST_FILTER_TAGS
+      - WINDOW_HEIGHT
+      - WINDOW_WIDTH
     ports:
-      - 80:${DOC_APP_PORT}
+      - 4000:${DOC_APP_PORT}
+    depends_on:
+      - "selenium-hub"
+      - "chrome"
+      - "firefox"
+  
