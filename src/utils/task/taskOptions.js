@@ -202,7 +202,7 @@ const hasKeyIdentifier = option => {
  */
 const optionsHasIdentifiers = options => {
   return options
-    .map(option => hasKeyIdentifier(options))
+    .map(option => hasKeyIdentifier(option))
     .indexOf(true) !== -1
 }
 
