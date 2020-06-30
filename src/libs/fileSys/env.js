@@ -2,7 +2,7 @@ const path = require('path')
 const { isArr, isStrBool, toBool } = require('jsutils')
 const { KEY_VAL_MATCH, NEWLINE, NEWLINES_MATCH, NEWLINES_ESC } = require('KegConst/patterns')
 const { parseTemplate } = require('./parseTemplate')
-const { pathExistsSync } = require('./fileSys')
+const { pathExistsSync, readFileSync } = require('./fileSys')
 
 // Holds past parsed files so we don't re-parse them
 const parseENVCache = {}
@@ -54,22 +54,30 @@ const parseValue = toParse => {
  *
  * @returns {Object} - Parse .env file content
  */
-const parseContent = (envPath, encoding) => {
+const parseContent = (envPath, encoding='utf8', fillTemplate=true) => {
+
   // Parse the env file as a template to replace any template strings
-  return parseTemplate({ filePath: envPath })
+  // Or just load the text content
+  const content = fillTemplate
+    ? parseTemplate({ filePath: envPath })
+    : readFileSync(envPath)
+
     // Split each line to isolate the keg value pair
-    .split(NEWLINES_MATCH)
-    // Loop over each line an parse the key value pair
-    .reduce((obj, line, idx) => {
+    return content && content.split(NEWLINES_MATCH)
+      // Loop over each line an parse the key value pair
+      .reduce((obj, line, idx) => {
 
-      // Check if line is valid key=value pair that can be split into an array
-      const parsed = getParsedEntry(line)
+        // Check if line is valid key=value pair that can be split into an array
+        const parsed = getParsedEntry(line)
+        if(!parsed) return obj
 
-      // Add the key to the object and parse the value
-      parsed && (obj[ parsed[1] ] = parseValue(parsed[2] || ''))
-      
-      return obj
-    }, {})
+        // Add the key to the object and parse the value
+        obj[ parsed[1] ] = fillTemplate
+          ? parseValue(parsed[2] || '')
+          : parsed[2]
+
+        return obj
+      }, {}) || {}
 }
 
 /**
@@ -102,6 +110,7 @@ const checkLoadEnv = (envPath) => {
 }
 
 module.exports = {
+  parseContent,
   checkLoadEnv,
-  loadENV
+  loadENV,
 }

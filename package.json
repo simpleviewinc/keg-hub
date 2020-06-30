@@ -72,6 +72,7 @@
     "KegRoot": ".",
     "KegRunTask": "src/runTask",
     "KegScripts": "scripts",
+    "KegSetup": "scripts/setup",
     "KegSrc": "src",
     "KegTpl": "src/templates",
     "KegTasks": "src/tasks",

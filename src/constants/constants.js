@@ -4,8 +4,9 @@ const path = require('path')
 const { KEG_GLOBAL_CONFIG } = process.env
 
 // The default global config path
+const CLI_CONFIG = 'cli.config'
 let GLOBAL_CONFIG_FOLDER = path.join(homeDir, '.kegConfig')
-let GLOBAL_CONFIG_FILE = 'cli.config'
+let GLOBAL_CONFIG_FILE = CLI_CONFIG
 
 // If the global config path is passed in as an ENV, use that instead
 if(KEG_GLOBAL_CONFIG){
@@ -37,6 +38,9 @@ module.exports = deepFreeze({
   GLOBAL_CONFIG_EDITOR_CMD: 'cli.settings.editorCmd',
   GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
   GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
+
+  CLI_CONFIG: `${ CLI_CONFIG }.json`,
+  DEFAULT_ENV: `defaults.env`,
   
   // Check if the command should be logged
   // Passed as the last argument to the spawnCmd method

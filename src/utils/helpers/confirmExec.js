@@ -23,6 +23,8 @@ const confirmExec = async ({ execute, confirm, preConfirm, success, cancel, args
   if(!confirmed) return Logger.warn(cancel) || Logger.empty()
   
   const response = await checkCall(execute, ...args)
+
+  Logger.empty()
   success && Logger.success(success)
   Logger.empty()
 

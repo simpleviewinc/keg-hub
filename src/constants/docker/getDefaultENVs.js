@@ -1,5 +1,5 @@
 const path = require('path')
-const { GLOBAL_CONFIG_FOLDER } = require('../constants')
+const { GLOBAL_CONFIG_FOLDER, DEFAULT_ENV } = require('../constants')
 const { copyFileSync, loadENV } = require('../../libs/fileSys')
 const { Logger } = require('../../libs/logger')
 const { tryCatch } = require('../../utils/helpers/tryCatch')
@@ -19,11 +19,11 @@ const noENVLog = () => {
   Logger.empty()
   Logger.log(
     Logger.colors[Logger.colorMap.error](`  Could not find global`),
-    Logger.colors[Logger.colorMap.data](`default.env`),
+    Logger.colors[Logger.colorMap.data](DEFAULT_ENV),
   )
   Logger.log(
     Logger.colors[Logger.colorMap.info](`  Creating from path`),
-    Logger.colors[Logger.colorMap.data](`scripts/setup/default.env`),
+    Logger.colors[Logger.colorMap.data](`scripts/setup//${ DEFAULT_ENV }`),
   )
   Logger.empty()
 }
@@ -41,7 +41,7 @@ const getDefaultENVs = cliRootDir => {
   if(__DEFAULT_ENV) return __DEFAULT_ENV
 
   // Build the path to the global defaults env
-  const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/defaults.env')
+  const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/', DEFAULT_ENV)
 
   // Try to load the default envs
   tryCatch(
@@ -51,7 +51,7 @@ const getDefaultENVs = cliRootDir => {
       noENVLog(err)
 
       // Copy the local default.env file to the global defaults env directory
-      copyFileSync(path.join(cliRootDir, 'scripts/setup/defaults.env'), globalDefEnv)
+      copyFileSync(path.join(cliRootDir, 'scripts/setup/', DEFAULT_ENV), globalDefEnv)
 
       // Load the default envs
       __DEFAULT_ENV = loadENV(globalDefEnv)
