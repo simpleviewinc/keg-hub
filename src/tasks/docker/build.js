@@ -74,10 +74,11 @@ const dockerBuild = async args => {
     options: options,
     context: cmdContext,
     ...(tap && { tap }),
+    ...(image && { image }),
     ...(args && { buildArgs: contextEnvs }),
   })
 
-  Logger.info(`  Building docker image "${ cmdContext }" ...`)
+  Logger.info(`  Building docker image "${ image || cmdContext }" ...`)
 
   // Run the built docker command
   await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)

@@ -117,35 +117,29 @@ module.exports = deepFreeze({
     IMAGE: 'img',
   },
 
-  // Map shortcuts and variations between the container cmdContext and the container
-  CONTAINER_ALIAS: {
-
+  CONTEXT_TO_CONTAINER: {
     base: 'keg-base',
-    // -- Reverse -- //
-    kegbase: 'base',
-    'keg-base': 'base',
-
-    core: 'keg-core',
-    // -- Reverse -- //
-    kegcore: 'core',
-    'keg-core': 'core',
-
     comp: 'keg-components',
     components: 'keg-components',
-    // -- Reverse -- //
+    core: 'keg-core',
+    regulator: 'keg-regulator',
+    reg: 'keg-regulator',
+  },
+
+  // Map shortcuts and variations between the container cmdContext and the container
+  CONTAINER_TO_CONTEXT: {
+    kegbase: 'base',
+    'keg-base': 'base',
     kegcomp: 'components',
     kegcomponents: 'components',
     'keg-comp': 'components',
     'keg-components': 'components',
-    
-    regulator: 'keg-regulator',
-    reg: 'keg-regulator',
-    // -- Reverse -- //
+    kegcore: 'core',
+    'keg-core': 'core',
     kegregulator: 'regulator',
     'kegreg': 'regulator',
     'keg-regulator': 'regulator',
     'keg-reg': 'regulator',
-
   },
 
 })

@@ -51,7 +51,7 @@ const getContext = ({ context, container, tap }, askContainer) => {
   // TODO: Add image to the params and get the context form the image
 
   const foundContext = container && containerContext(container, askContainer)
-  
+
   return foundContext
     ? foundContext
     : tap
