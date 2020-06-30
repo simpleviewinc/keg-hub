@@ -1,23 +1,7 @@
 const docker = require('KegDocCli')
-const { checkCall } = require('jsutils')
-const { CONTAINER_PREFIXES, CONTAINER_ALIAS } = require('KegConst/constants')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
-
-/**
- * Helper to check if the context is an alias or if the context is prefixed with `keg`
- * <br/> If it is, remove it. This allows passing in "keg-core" or just "core"
- * @function
- * @param {string} context - Docker container context to use
- *
- * @returns {string} - Context without `keg`
- */
-const filterKeg = context => {
-  return CONTAINER_ALIAS[context]
-    ? CONTAINER_ALIAS[context]
-    : context.indexOf('keg') === 0
-      ? context.replace(/^keg-/, '').replace(/^keg/, '')
-      : context
-}
+const { getKegContext } = require('./getKegContext')
+const { getPrefixContext } = require('./getPrefixContext')
 
 /**
  * If no context can be found, ask the user when container they want to use
@@ -29,28 +13,6 @@ const askWhenNoContext = async () => {
   return containerSelect(containers => {
     return containers.filter(container => !container.status.includes('Exited'))
   })
-}
-
-/**
- * Check if it's a prefixed context, and if so parse the context from it
- * @function
- * @param {string} context - Docker container context to use
- *
- * @returns {Object} - Context without a prefix, and the original with the prefix
- */
-const checkPrefix = toCheck => {
-  // Loop the prefixes and check if the context has a prefix
-  const hasPrefix = Object.values(CONTAINER_PREFIXES)
-    .reduce((hasPrefix, value) => {
-      return hasPrefix || toCheck.indexOf(value) === 0
-    }, false)
-
-  return !hasPrefix
-    ? { context: filterKeg(toCheck), noPrefix: toCheck }
-    : checkCall(() => {
-        const [ _, context ] = toCheck.split('-')
-        return { context: filterKeg(context), prefix: toCheck, noPrefix: context }
-      })
 }
 
 /**
@@ -67,7 +29,7 @@ const containerContext = async (toFind, askContainer) => {
 
   if(!container) return false
 
-  const { context, prefix, noPrefix } = checkPrefix(container.name)
+  const { context, prefix, noPrefix } = getPrefixContext(container.name)
 
   return { ...container, context, prefix, noPrefix }
 
@@ -95,7 +57,7 @@ const getContext = ({ context, container, tap }, askContainer) => {
     : tap
       ? { context: 'tap', tap, noPrefix: 'tap' }
       : context
-        ? checkPrefix(context)
+        ? getPrefixContext(context)
         : {}
 
 }
