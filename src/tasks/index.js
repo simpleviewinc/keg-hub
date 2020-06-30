@@ -33,7 +33,7 @@ module.exports = config => {
     ...initialize(require('./generate'), 'generate', config),
     ...initialize(require('./mutagen'), 'mutagen', config),
     ...initialize(require('./network'), 'network', config),
+    ...initialize(require('./regulator'), 'regulator', config),
     ...initialize(require('./tap'), 'tap', config),
-    ...initialize(require('./test'), 'test', config),
   }
 }
