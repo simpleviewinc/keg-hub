@@ -11,12 +11,12 @@ ARG GIT_KEY
 ARG GIT_TEST_URL
 
 # Path of the app within the docker container
-ARG DOC_APP_PATH=/keg/keg-test
+ARG DOC_APP_PATH=/keg/keg-regulator
 
 # Update git calls to github to include the key so private repos can be pulled
 # Pull down the keg-core locally
 RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_TEST_URL $DOC_APP_PATH
+    git clone $GIT_REGULATOR_URL $DOC_APP_PATH
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/package.json
@@ -36,7 +36,7 @@ FROM node:12.8-alpine
 WORKDIR /
 
 # Path of the app within the docker container
-ARG DOC_APP_PATH=/keg/keg-test
+ARG DOC_APP_PATH=/keg/keg-regulator
 
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV
 ARG KEG_DOCKER_IP

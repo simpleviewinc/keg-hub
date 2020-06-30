@@ -1,7 +1,7 @@
 sync:
-  kegtest:
-    alpha: "/keg/keg-test"
-    beta: "docker://kegtest/keg/keg-test"
+  kegregulator:
+    alpha: "/keg/keg-regulator"
+    beta: "docker://kegregulator/keg/keg-regulator"
     mode: "two-way-resolved"
     ignore:
       vcs: true

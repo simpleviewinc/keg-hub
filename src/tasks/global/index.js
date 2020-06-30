@@ -9,7 +9,6 @@ module.exports = {
     tasks: {
       ...require('./open'),
       ...require('./setup'),
-      ...require('./test'),
       ...require('./validate'),
     }
   })

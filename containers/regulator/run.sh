@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEST_PATH=/keg/keg-test
+TEST_PATH=/keg/keg-regulator
 
 keg_message(){
   echo $"[ KEG-CLI ] $1" >&2
@@ -14,7 +14,7 @@ keg_add_yarn_bin_to_path(){
   export PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:$PATH"
 }
 
-# Overwrite the default cli, core, test paths with passed in ENVs
+# Overwrite the default cli, core, regulator paths with passed in ENVs
 keg_set_container_paths(){
 
   if [[ "$DOC_APP_PATH" ]]; then
@@ -25,7 +25,7 @@ keg_set_container_paths(){
 
 # Runs yarn install at run time
 # Use when adding extra node_modules to keg-core without rebuilding
-keg_run_test_yarn_setup(){
+keg_run_regulator_yarn_setup(){
 
   # Check if $NM_INSTALL exist, if it doesn't, then return
   if [[ -z "$NM_INSTALL" ]]; then
@@ -35,7 +35,7 @@ keg_run_test_yarn_setup(){
   if [[ "$NM_INSTALL" != "core" ]]; then
     # Navigate to the cached directory, and run the yarn install here
     cd $TEST_PATH
-    keg_message "Running yarn setup for test..."
+    keg_message "Running yarn setup for regulator..."
     yarn install
   fi
 
@@ -43,7 +43,7 @@ keg_run_test_yarn_setup(){
 }
 
 # Runs a Tap
-keg_run_the_test(){
+keg_run_the_regulator(){
 
   cd $TEST_PATH
 
@@ -60,8 +60,8 @@ keg_run_the_test(){
 # Add yarn global bin to the $PATH ENV
 keg_add_yarn_bin_to_path
 
-# Run yarn setup for any extra node_modules to be installed from the mounted test's package.json
-keg_run_test_yarn_setup
+# Run yarn setup for any extra node_modules to be installed from the mounted regulator's package.json
+keg_run_regulator_yarn_setup
 
 # Start the keg core instance
-keg_run_the_test
+keg_run_the_regulator

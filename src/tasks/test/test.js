@@ -1,6 +1,6 @@
 
 /**
- * Run Keg-CLI tasks for the keg-test repo
+ * Run Keg-CLI tasks for the keg-regulator repo
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -9,18 +9,19 @@
  *
  * @returns {void}
  */
-const test = args => {
+const regulator = args => {
   const { command, options, globalConfig, params } = args
   console.log(`---------- Keg Test Tasks ----------`)
   
 }
 
 module.exports = {
-  test: {
-    name: 'test',
-    action: test,
-    description: `Run Keg-CLI tasks for the keg-test repo`,
-    example: 'keg test <options>',
+  regulator: {
+    name: 'regulator',
+    alias: [ 'reg', 'rgl', 'rg' ],
+    action: regulator,
+    description: `Run Keg-CLI tasks for the keg-regulator repo`,
+    example: 'keg regulator <options>',
     tasks: {
       ...require('./start'),
       ...require('./stop'),

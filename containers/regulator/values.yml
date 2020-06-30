@@ -1,0 +1,38 @@
+
+env:
+
+  # --- REGULATOR ENV CONTEXT --- #
+
+  # Docker / Docker Compose paths
+  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/regulator/Dockerfile"
+  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/regulator/values.yml"
+
+  # The default docker-compose file path
+  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/regulator/docker-compose.yml"
+  COMPOSE_FROM_REPO: "{{ cli.paths.regulator }}/docker-compose.yml"
+  # Can also define other an override compose files
+  # Other compose files can loaded by setting an ENVS as follows:
+    # COMPOSE_TEST_<ENV>: "/path/to/override.yml"
+    # COMPOSE_<ENV>: "/path/to/override.yml"
+
+  # The CONTEXT_PATH env should be the location of the regulator repo being run
+  CONTEXT_PATH: /keg/keg-regulator
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  # Default location of the regulator in the docker container
+  DOC_APP_PATH: /keg/keg-regulator
+  DOC_APP_PORT: 4000
+  DOC_FEATURES_PATH: /keg/keg-regulator/features
+  DOC_STEPS_PATH: /keg/keg-regulator/steps
+
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image Build information
+  IMAGE: kegregulator
+  VERSION: "0.0.1"
+  CONTAINER_NAME: kegregulator
+
+  # Git tap url in github
+  GIT_TAP_URL: INITIAL

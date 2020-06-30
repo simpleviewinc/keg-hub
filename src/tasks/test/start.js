@@ -1,6 +1,6 @@
 
 /**
- * Runs keg-tests in a docker container
+ * Runs keg-regulators in a docker container
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -20,7 +20,7 @@ module.exports = {
     name: 'start',
     action: start,
     alias: [ 'st' ],
-    description: `Runs keg-tests in a docker container`,
+    description: `Runs keg-regulators in a docker container`,
     example: 'keg test start <options>',
   }
 }
