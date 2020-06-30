@@ -1,8 +1,9 @@
 const path = require('path')
 const { KegTpl } = require('KegTpl')
-const { readFile, getFiles } = require('KegFileSys')
+const { readFile, readFileSync, getFiles } = require('KegFileSys')
 const { CLI_ROOT } = require('KegConst/constants')
 const { get, mapObj, template } = require('jsutils')
+const { generalError } = require('../error/generalError')
 
 // Cache holder for our templates
 let __TEMPLATES
@@ -23,11 +24,12 @@ const loadTemplate = async (name, data={}) => {
   __TEMPLATES = __TEMPLATES || templateFiles.reduce((mapped, file) => {
     const name = file.split('.').shift()
     mapped[name] = path.join(KegTpl, file)
+
     return mapped
   }, {})
 
   return __TEMPLATES[name]
-    ? template(readFile(__TEMPLATES[name]), data)
+    ? template(readFileSync(__TEMPLATES[name]), data)
     : generalError(`Template with name "${name}" does not exist!`)
 
 }

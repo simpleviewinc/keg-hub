@@ -1,6 +1,7 @@
+const { stopService } = require('KegUtils/services')
 
 /**
- * {{description}}
+ * Stops the running keg-test docker containers and syncs
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -9,16 +10,15 @@
  *
  * @returns {void}
  */
-const {{name}} = args => {
-  const { command, options, globalConfig, params } = args
-
+const stop = args => {
+  return stopService(args, { context: 'test', container: 'test' })
 }
 
 module.exports = {
-  {{name}}: {
-    name: '{{name}}',
-    action: {{name}},
-    description: `{{description}}`,
-    example: '{{example}}',
+  stop: {
+    name: 'stop',
+    action: stop,
+    description: `Stops the running keg-test docker containers and syncs`,
+    example: 'keg test stop <options>',
   }
 }

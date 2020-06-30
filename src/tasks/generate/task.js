@@ -8,16 +8,6 @@ const { loadTemplate } = require('KegUtils/template')
 const { generalError } = require('KegUtils/error/generalError')
 const { writeFile, pathExists, mkDir } = require('KegFileSys')
 
-const taskQuestions = {
-  name: 'Enter the task name',
-  description: 'Enter the task description',
-  example: 'Enter an example of calling the task?',
-  parent: 'Enter the task parent'
-}
-
-const buildQuestions = (questions, defaults) => {
-  return mapObj(questions, (name, message) => input({ name, message, default: defaults[name] }))
-}
 
 const getParentPath = (parent, name) => {
   return parent === 'keg'
@@ -68,14 +58,9 @@ const saveTask = async (content, { parent, name }) => {
 const generateTask = async args => {
   const { command, options, globalConfig, params } = args
 
-  const answers = await ask(buildQuestions(taskQuestions, params))
-
-  const filled = await loadTemplate({
-    name: 'task',
-    data: answers,
-  })
+  const filled = await loadTemplate('task', params)
   
-  await saveTask(filled, answers)
+  await saveTask(filled, params)
 
 }
 
@@ -88,12 +73,30 @@ module.exports = {
   options: {
     name: {
       description: 'Name of the new task',
+      example: 'keg generate task --name my-task',
+      ask: {
+        type: 'input',
+        message: 'Enter the task name',
+      },
+      require: true,
     },
     description: {
       description: 'Explanation of what the task does',
+      example: 'keg generate task --description \"My task does a thing\"',
+      ask: {
+        type: 'input',
+        message: 'Enter the task description',
+      },
+      require: true,
     },
     parent: {
       description: 'Parent task of the new task',
+      example: 'keg generate task --parent task-parant',
+      ask: {
+        type: 'input',
+        message: 'Enter the task parent',
+      },
+      require: true,
     }
   }
 }

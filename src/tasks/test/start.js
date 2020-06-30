@@ -1,6 +1,6 @@
 
 /**
- * {{description}}
+ * Runs keg-tests in a docker container
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -9,16 +9,18 @@
  *
  * @returns {void}
  */
-const {{name}} = args => {
+const start = args => {
   const { command, options, globalConfig, params } = args
+  console.log(`---------- keg test start ----------`)
 
 }
 
 module.exports = {
-  {{name}}: {
-    name: '{{name}}',
-    action: {{name}},
-    description: `{{description}}`,
-    example: '{{example}}',
+  start: {
+    name: 'start',
+    action: start,
+    alias: [ 'st' ],
+    description: `Runs keg-tests in a docker container`,
+    example: 'keg test start <options>',
   }
 }
