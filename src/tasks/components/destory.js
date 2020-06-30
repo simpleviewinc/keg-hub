@@ -12,7 +12,7 @@ const { destroyService } = require('KegUtils/services')
  * @returns {void}
  */
 const destroyComponents = async (args) => {
-  return destroyService(args, { context: 'components', container: 'kegcomponents' })
+  return destroyService(args, { context: 'components', container: 'keg-components' })
 }
 
 module.exports = {

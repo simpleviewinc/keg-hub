@@ -14,14 +14,14 @@ describe('getContext', () => {
     const res = await getContext({ container: container.id }, true)
 
     expect(res.context).toBe('core')
-    expect(res.prefix).toBe('img-kegcore')
-    expect(res.image).toBe('kegcore')
+    expect(res.prefix).toBe('img-keg-core')
+    expect(res.image).toBe('keg-core')
 
   })
 
   it('should get the context when context with keg is passed in', async () => {
 
-    const res = await getContext({ context: 'kegcore' })
+    const res = await getContext({ context: 'keg-core' })
 
     expect(res.context).toBe('core')
     expect(res.prefix).toBe(undefined)
@@ -31,8 +31,8 @@ describe('getContext', () => {
 
   it('should get the context when passed with prefix of img or package', async () => {
 
-    const resImg = await getContext({ context: 'img-kegcore' })
-    const resPack = await getContext({ context: 'package-kegcore' })
+    const resImg = await getContext({ context: 'img-keg-core' })
+    const resPack = await getContext({ context: 'package-keg-core' })
 
     expect(resImg.context).toBe('core')
     expect(resPack.context).toBe('core')

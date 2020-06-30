@@ -1,7 +1,7 @@
 sync:
-  kegcore:
+  keg-core:
     alpha: "/keg/keg-core"
-    beta: "docker://kegcore/keg/keg-core"
+    beta: "docker://keg-core/keg/keg-core"
     mode: "one-way-replica"
     ignore:
       vcs: true

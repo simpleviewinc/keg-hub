@@ -30,9 +30,9 @@ env:
   # --- GENERAL CONTEXT ENVs --- #
 
   # Image Build information
-  IMAGE: kegregulator
+  IMAGE: keg-regulator
   VERSION: "0.0.1"
-  CONTAINER_NAME: kegregulator
+  CONTAINER_NAME: keg-regulator
 
   # Git tap url in github
   GIT_TAP_URL: INITIAL

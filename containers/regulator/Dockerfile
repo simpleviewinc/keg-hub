@@ -1,6 +1,6 @@
 # Allows overwriting where the base image is pulled from
 # Must come before the FROM directive
-ARG IMAGE_FROM=kegbase:latest
+ARG IMAGE_FROM=keg-base:latest
 FROM $IMAGE_FROM as builder
 
 WORKDIR /

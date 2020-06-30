@@ -5,7 +5,7 @@ const { containerSelect } = require('KegUtils/docker/containerSelect')
 
 /**
  * Helper to check if the context is an alias or if the context is prefixed with `keg`
- * <br/> If it is, remove it. This allows passing in "kegcore" or just "core"
+ * <br/> If it is, remove it. This allows passing in "keg-core" or just "core"
  * @function
  * @param {string} context - Docker container context to use
  *

@@ -15,8 +15,8 @@ env:
   # --- DOCKER ENV CONTEXT --- #
 
   # Image ENVs
-  IMAGE: kegbase
+  IMAGE: keg-base
   VERSION: "0.0.1"
 
   # Container ENVs
-  CONTAINER_NAME: kegbase
+  CONTAINER_NAME: keg-base

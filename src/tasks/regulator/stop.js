@@ -11,7 +11,7 @@ const { stopService } = require('KegUtils/services')
  * @returns {void}
  */
 const stop = args => {
-  return stopService(args, { context: 'regulator', container: 'kegregulator' })
+  return stopService(args, { context: 'regulator', container: 'keg-regulator' })
 }
 
 module.exports = {

@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  kegregulator:
+  keg-regulator:
     image: ${IMAGE}
     tty: true
     stdin_open: true

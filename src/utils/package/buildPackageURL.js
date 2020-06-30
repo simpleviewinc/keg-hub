@@ -16,7 +16,7 @@ const strOrNothing = item => !item || isStr(item)
  * @param {string} options.package - Package to build the url from
  * @param {string} options.package.owner - (required) User that owns the package
  * @param {string} options.package.repo - (required) name of repo
- * @param {string} options.package.image - (required) name of container/image to pull (e.g kegbase)
+ * @param {string} options.package.image - (required) name of container/image to pull (e.g keg-base)
  */
 const buildPackageURL = (options={}) => {
   const { version, globalConfig, branch='master', package, provider } = options
@@ -36,7 +36,7 @@ const buildPackageURL = (options={}) => {
   // Get the account from the package owner || the globalConfig organization name
   const account = owner || get(globalConfig, 'cli.git.orgName', 'simpleviewinc')
 
-  // Create a url like: docker.pkg.github.com/simpleviewinc/keg-core/kegbase:1.3.2
+  // Create a url like: docker.pkg.github.com/simpleviewinc/keg-core/keg-base:1.3.2
   return path.join(provider, account, repo, image) + `:${version || branch}`
 }
 

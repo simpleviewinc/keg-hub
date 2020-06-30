@@ -36,7 +36,7 @@ const packages = [
     }
   },
   {
-    "nameWithOwner": "lancetipton/kegbase",
+    "nameWithOwner": "lancetipton/keg-base",
     "repository": {
       "name": "keg-core"
     },

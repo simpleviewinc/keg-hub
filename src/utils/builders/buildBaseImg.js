@@ -17,7 +17,7 @@ const checkForLatestTag = (image, args) => {
   return image.tag !== 'latest' &&
     runInternalTask(`docker.tasks.image.tasks.tag`, {
       ...args,
-      __internal: { image: 'kegbase' },
+      __internal: { image: 'keg-base' },
       params: { context: 'base', tag: 'latest', log: false },
     })
 }
@@ -30,7 +30,7 @@ const checkForLatestTag = (image, args) => {
  * @returns {void}
  */
 const buildBaseImg = async args => {
-  const baseName = getContainerConst('base', `env.image`, 'kegbase')
+  const baseName = getContainerConst('base', `env.image`, 'keg-base')
   const exists = await docker.image.exists(baseName)
 
   if(exists) return checkForLatestTag(exists, args)

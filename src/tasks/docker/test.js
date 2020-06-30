@@ -37,7 +37,7 @@ module.exports = {
       options: {
         alias: [ 'opts' ],
         description: 'Comma separated list of arguments to pass to the method',
-        example: `keg docker test --method container.port --options kegcore,19006`,
+        example: `keg docker test --method container.port --options core,19006`,
       },
       format: {
         description: 'Format of the docker cli output',

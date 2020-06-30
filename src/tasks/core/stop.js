@@ -11,7 +11,7 @@ const { stopService } = require('KegUtils/services')
  * @returns {void}
  */
 const stopCore = async (args) => {
-  return stopService(args, { context: 'core', container: 'kegcore' })
+  return stopService(args, { context: 'core', container: 'keg-core' })
 }
 
 

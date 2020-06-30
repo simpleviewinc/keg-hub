@@ -19,12 +19,12 @@ const startCore = async (args) => {
   const { params: { service } } = args
 
   // Call the build service to ensure required images are built 
-  await buildService(args, { context: 'core', image: 'kegcore' })
+  await buildService(args, { context: 'core', image: 'keg-core' })
 
   // Check and run the correct service
   const serviceResp = service === 'container'
-    ? await containerService(args, { context: 'core', container: 'kegcore' })
-    : await composeService(args, { context: 'core', container: 'kegcore' })
+    ? await containerService(args, { context: 'core', container: 'keg-core' })
+    : await composeService(args, { context: 'core', container: 'keg-core' })
 
   return serviceResp
 

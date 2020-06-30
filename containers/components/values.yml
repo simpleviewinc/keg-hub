@@ -27,6 +27,6 @@ env:
   # --- GENERAL CONTEXT ENVs --- #
 
   # Image Build information
-  IMAGE: kegcomponents
+  IMAGE: keg-components
   VERSION: "0.0.1"
-  CONTAINER_NAME: kegcomponents
+  CONTAINER_NAME: keg-components

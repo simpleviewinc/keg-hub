@@ -1,7 +1,7 @@
 sync:
-  kegcomponents:
+  keg-components:
     alpha: "/keg/keg-components"
-    beta: "docker://kegcomponents/keg/keg-components"
+    beta: "docker://keg-components/keg/keg-components"
     mode: "one-way-replica"
     ignore:
       vcs: true

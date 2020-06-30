@@ -19,12 +19,12 @@ const startComponents = async (args) => {
   const { params: { service } } = args
 
   // Call the build service to ensure required images are built 
-  await buildService(args, { context: 'components', image: 'kegcomponents' })
+  await buildService(args, { context: 'components', image: 'keg-components' })
 
   // Check and run the correct service
   const serviceResp = service === 'container'
-    ? await containerService(args, { context: 'components', container: 'kegcomponents' })
-    : await composeService(args, { context: 'components', container: 'kegcomponents' })
+    ? await containerService(args, { context: 'components', container: 'keg-components' })
+    : await composeService(args, { context: 'components', container: 'keg-components' })
 
   return serviceResp
 

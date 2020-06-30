@@ -209,7 +209,7 @@ const exec = async (args, cmdOpts={}) => {
  * Creates an image from the state of a currently running container
  * @function
  * @example
- * docker container commit kegbase
+ * docker container commit keg-base
  * @param {Object} args - Arguments used to modify the docker api call
  * @param {string} args.container - Name of the container to commit
  * @param {string} args.item - Same as args.container

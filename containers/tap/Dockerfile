@@ -1,6 +1,6 @@
 # Allows overwriting where the base image is pulled from
 # Must come before the FROM directive
-ARG IMAGE_FROM=kegbase:latest
+ARG IMAGE_FROM=keg-base:latest
 FROM $IMAGE_FROM as builder
 
 WORKDIR /
@@ -60,7 +60,7 @@ RUN apk add --no-cache git
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 
-# Copy over keg cli from kegbase
+# Copy over keg cli from keg-base
 COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
 
 # Copy over the cloned app

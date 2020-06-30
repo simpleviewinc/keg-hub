@@ -32,9 +32,9 @@ env:
   # --- GENERAL CONTEXT ENVs --- #
 
   # Image Build information
-  IMAGE: "kegcore"
+  IMAGE: "keg-core"
   VERSION: "0.0.1"
-  CONTAINER_NAME: "kegcore"
+  CONTAINER_NAME: "keg-core"
 
   # --- Override the default progress output for expo-webpack in keg-core --- #
   KEG_CORE_PROGRESS: true

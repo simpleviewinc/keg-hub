@@ -15,7 +15,7 @@ const buildCmdContext = async ({ globalConfig, params, allowed, askContainer }) 
   const { tap, container } = params
 
   // Check if the context is prefixed with `keg`
-  // If it is, remove it. This allows passing in "kegcore" or just "core"
+  // If it is, remove it. This allows passing in "keg-core" or just "core"
   const contextData = await getContext(params, askContainer)
   const { context } = contextData
 
