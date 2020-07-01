@@ -21,8 +21,8 @@ KEG_GROUP="$(id -g -n $KEG_USER)"
 KEG_EXIT=""
 
 # Size of the docker-machien virtual box hhd
-# KEG_VB_SIZE=24288
-KEG_VB_SIZE=8192
+KEG_VB_SIZE=24288
+#KEG_VB_SIZE=8192
 
 # Prints a message to the terminal through stderr
 keg_message(){

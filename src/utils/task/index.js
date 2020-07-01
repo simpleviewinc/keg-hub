@@ -6,4 +6,5 @@ module.exports = {
   ...require('./runInternalTask'),
   ...require('./optionsAsk'),
   ...require('./validateTask'),
+  ...require('./convertParamsToEnvs')
 }

@@ -2,7 +2,7 @@ sync:
   tap:
     alpha: "/keg/tap"
     beta: "docker://tap/keg/tap"
-    mode: "two-way-resolved"
+    mode: "one-way-replica"
     ignore:
       vcs: true
       paths:

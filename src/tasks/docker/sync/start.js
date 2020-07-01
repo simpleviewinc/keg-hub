@@ -9,7 +9,7 @@ const { get, checkCall, limbo } = require('jsutils')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { getContainerConst } = require('KegUtils/docker/getContainerConst')
+const { convertParamsToEnvs } = require('KegUtils/task/convertParamsToEnvs')
 
 
 /**
@@ -92,21 +92,6 @@ const checkSyncClean = async (context, contextEnvs, location) => {
 /**
  * Starts docker-sync for the passed in context
  * @function
- * @param {Object} params - Formatted arguments passed to the current task
- *
- * @returns {void}
- */
-const buildExtraEnvs = ({ env, command, install }) => {
-  const extraENVs = { ENV: env, NODE_ENV: env }
-  command && ( extraENVs.EXEC_CMD = command )
-  install && ( extraENVs.NM_INSTALL = true )
-  
-  return extraENVs
-}
-
-/**
- * Starts docker-sync for the passed in context
- * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  *
@@ -122,7 +107,7 @@ const startDockerSync = async args => {
     globalConfig,
     task,
     params,
-    envs: buildExtraEnvs(params)
+    envs: convertParamsToEnvs(params)
   })
 
   // Check if the base image exists, and if not then build it

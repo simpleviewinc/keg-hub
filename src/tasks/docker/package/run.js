@@ -7,6 +7,7 @@ const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { getPortMap } = require('KegUtils/docker/getDockerArgs')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
+const { convertParamsToEnvs } = require('KegUtils/task/convertParamsToEnvs')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 const { PACKAGE } = CONTAINER_PREFIXES
@@ -112,7 +113,7 @@ const dockerPackageRun = async args => {
     ...parsed,
     opts,
     location,
-    envs: contextEnvs,
+    envs: convertParamsToEnvs(params, contextEnvs),
     cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`,
     name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
   })
@@ -133,6 +134,12 @@ module.exports = {
         ask: {
           message: 'Enter the docker package url or path (<user>/<repo>/<package>:<tag>)',
         }
+      },
+      command: {
+        alias: [ 'cmd' ],
+        description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',
+        example: 'keg docker package run --command dev ( Runs "yarn dev" )',
+        default: 'web'
       },
       branch: {
         description: 'Name of branch name that exists as the image name',

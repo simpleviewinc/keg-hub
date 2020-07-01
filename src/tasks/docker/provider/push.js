@@ -4,7 +4,7 @@ const { get, mapObj } = require('jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { generalError, throwRequired, throwNoRepo, throwWrap } = require('KegUtils/error')
-const { getOrBuildImage, buildProviderUrl, addProviderTags } = require('KegUtils/docker')
+const { getOrBuildImage, buildProviderUrl, addProviderTags, imageSelect } = require('KegUtils/docker')
 
 /**
  * Pushes a local image registry provider in the cloud
@@ -16,7 +16,7 @@ const { getOrBuildImage, buildProviderUrl, addProviderTags } = require('KegUtils
  * @param {Object} args.params - Formatted key / value pair of the passed in options
  * @param {Object} globalConfig - Global config object for the keg-cli
  *
- * @returns {void}
+ * @returns {Promise<Void>}
  */
 const providerPush = async (args) => {
   const { params, task } = args
@@ -29,8 +29,9 @@ const providerPush = async (args) => {
   * ----------- Step 1 ----------- *
   * Build the image
   */
-  const image = await getOrBuildImage(args)
-
+  const image = await getOrBuildImage(args) || await imageSelect()
+  !image && generalError('No img found!')
+  
   /*
   * ----------- Step 2 ----------- *
   * Build the provider url
