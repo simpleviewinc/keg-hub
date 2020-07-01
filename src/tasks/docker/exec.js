@@ -21,7 +21,7 @@ const ensureContext = async ({ context, tap }) => {
       ? false
       : context.includes('keg')
         ? context
-        : `keg${context}`
+        : `keg-${context}`
 
   // Try to get the container from the context
   let container = name && await docker.container.get(name)

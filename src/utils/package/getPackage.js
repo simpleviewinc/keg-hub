@@ -16,8 +16,8 @@ const TEST_ENV = process.env.NODE_ENV === 'test'
  */
 const packageFromContext = (packages, context, tap) => {
   // Get the imageContext from the passed in context
-  // Use `keg${context}` if no image context name can be found
-  const imageContext = getContainerConst(context, `env.image`, `keg${context}`)
+  // Use `keg$-{context}` if no image context name can be found
+  const imageContext = getContainerConst(context, `env.image`, `keg-${context}`)
 
   // Find the pages base on the image name and image context
   return packages.find(p => {
