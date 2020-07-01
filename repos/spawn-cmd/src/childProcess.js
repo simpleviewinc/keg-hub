@@ -1,5 +1,5 @@
 const path = require('path')
-const { spawn } = require('child_process')
+const spawn = require('cross-spawn')
 const killProc = require('tree-kill')
 const rootDir = require('app-root-path').path
 const { exitError, errorHandler } = require('./utils')
@@ -67,8 +67,7 @@ const spawnOpts = {
   uid: process.getuid(),
   env: process.env,
   cwd: rootDir,
-  stdio: 'inherit',
-  shell: true,
+  stdio: 'inherit'
 }
 
 /**

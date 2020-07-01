@@ -1,17 +1,19 @@
 {
   "name": "spawn-cmd",
-  "version": "1.2.1",
-  "description": "Spawn child process in Node",
+  "version": "1.3.0",
+  "description": "Cross platform child_process execution in Node",
   "repository": "https://github.com/lancetipton/spawn-cmd",
   "main": "index.js",
   "author": "Lance Tipton",
   "license": "MIT",
   "scripts": {
-    "test": "NODE_ENV=test jest --no-cache --verbose"
+    "test": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "cross-spawn": "^7.0.3",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",
+    "shell-exec": "^1.0.2",
     "tree-kill": "1.2.1"
   },
   "devDependencies": {

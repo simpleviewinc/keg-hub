@@ -62,7 +62,7 @@ describe('/asyncCmd', () => {
 
   })
 
-  it('should call spawn from passed in directory', async () => {
+  it('should call child_process from passed in directory', async () => {
 
     const { error, data, exitCode } = await asyncCmd('node -pe process.env.PWD', { cwd: __dirname })
 

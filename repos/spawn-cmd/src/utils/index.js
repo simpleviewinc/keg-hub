@@ -1,5 +1,4 @@
-const errorHandlers = require('./error')
-
 module.exports = {
-  ...errorHandlers
+  ...require('./cmdArgs'),
+  ...require('./error'),
 }
