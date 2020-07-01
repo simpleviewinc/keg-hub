@@ -6,9 +6,9 @@ const {
   cmdSuccess,
   shouldLog
 } = require('./helpers')
-
-const { isArr, toStr } = require('jsutils')
 const { Logger } = require('KegLog')
+const { isArr, toStr } = require('jsutils')
+const { addMachineSSH } = require('./machine')
 const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 
 /**
@@ -39,6 +39,10 @@ const dockerCli = async (params={}, cmdOpts={}) => {
   const { opts, errResponse, log, skipError, format='', force } = params
 
   const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
+
+  // TODO: validate running all docker command on the docker-machine instance
+  // const useFormat = format === 'json' ? `--format \\"{{json .}}\\"` : format
+
   const useFormat = format === 'json' ? `--format "{{json .}}"` : format
   const useForce = force ? '--force' : ''
 
@@ -46,7 +50,12 @@ const dockerCli = async (params={}, cmdOpts={}) => {
 
   log && Logger.spacedMsg(`  Running command: `, cmdToRun)
 
-  const { error, data } = await executeCmd(cmdToRun, cmdOpts)
+  const { error, data } = await executeCmd(
+    // TODO: validate running all docker command on the docker-machine instance
+    // addMachineSSH(cmdToRun),
+    cmdToRun,
+    cmdOpts
+  )
 
   return error
     ? apiError(error, errResponse, skipError)

@@ -93,7 +93,7 @@ const addExposedPorts = envs => {
  */
 const runDockerImage = async args => {
   const { globalConfig, params, task } = args
-  const { context, cleanup, entry, options } = params
+  const { context, cleanup, entry, log, options } = params
 
   const imageContext = context
     ? await getImageContext(args)
@@ -107,11 +107,11 @@ const runDockerImage = async args => {
 
   await docker.image.run({
     tag,
+    log,
     opts,
     entry,
     image,
     location,
-    log: true,
     envs: contextEnvs,
     name: container,
   })
@@ -154,8 +154,8 @@ module.exports = {
       },
       log: {
         description: 'Log the docker run command to the terminal',
-        example: 'keg docker image run --log false',
-        default: true,
+        example: 'keg docker image run --log',
+        default: false,
       },
       tag: {
         description: 'Tag of the image to be run',

@@ -17,10 +17,8 @@ const { composeService } = require('./composeService')
  */
 const bddService = async args => {
   const composeContext = await composeService(args, { context: 'regulator', container: 'keg-regulator' })
-  
-  console.log(`---------- composeContext ----------`)
-  console.log(composeContext)
 
+  console.log(`---------- bdd service ----------`)
 
 }
 

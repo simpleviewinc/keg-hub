@@ -44,7 +44,20 @@ const  getEnv = async () => {
 
 }
 
+/*
+ * Adds docker-machine ssh in front of the passed in docker command
+ * <br/>This forces the docker command to be run on the docker-machine, and not the local
+ * Same as running docker-machine ssh docker-keg docker image ls
+ * @params {string} dockerCmd - Docker command to be run
+ *
+ * @returns {string} - Docker command with docker-machine ssh <machine name> in front of it
+*/
+const addMachineSSH = (dockerCmd) => {
+  return `docker-machine ssh ${ NAME } ${ dockerCmd }`
+}
+
 module.exports = {
+  addMachineSSH,
   getEnv,
   getIP
 }

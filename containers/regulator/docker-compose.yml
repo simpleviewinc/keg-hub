@@ -21,10 +21,13 @@ services:
       - ENV
       - EXEC_CMD
       - DOC_APP_PATH
+      - DOC_APP_PORT
+      - DOC_FEATURES_PATH
+      - DOC_STEPS_PATH
       - NM_INSTALL
       - NODE_ENV
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
+      - HUB_HOST
+      - HUB_PORT
       - TEST_FILTER_TAGS
       - WINDOW_HEIGHT
       - WINDOW_WIDTH

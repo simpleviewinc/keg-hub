@@ -42,15 +42,20 @@ keg_run_regulator_yarn_setup(){
 # Runs a Tap
 keg_run_the_regulator(){
 
-  cd $TEST_PATH
+
+  if [[ -f "$TEST_PATH/tests/package.json" ]]; then 
+    cd $TEST_PATH/tests
+  else
+    cd $TEST_PATH
+  fi
 
   local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="start"
+    KEG_EXEC_CMD="test:grid"
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"
-  # yarn $KEG_EXEC_CMD
+  yarn $KEG_EXEC_CMD
 
 }
 

@@ -26,6 +26,7 @@ module.exports = {
       ...require('./build'),
       ...require('./start'),
       ...require('./stop'),
+      ...require('./sync'),
     }
   }
 }

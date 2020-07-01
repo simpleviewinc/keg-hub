@@ -25,6 +25,8 @@ env:
   DOC_APP_PORT: 4000
   DOC_FEATURES_PATH: /keg/keg-regulator/features
   DOC_STEPS_PATH: /keg/keg-regulator/steps
+  HUB_HOST: selenium-hub
+  HUB_PORT: 4444
 
 
   # --- GENERAL CONTEXT ENVs --- #
@@ -34,5 +36,3 @@ env:
   VERSION: "0.0.1"
   CONTAINER_NAME: keg-regulator
 
-  # Git tap url in github
-  GIT_TAP_URL: INITIAL

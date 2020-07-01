@@ -1,5 +1,5 @@
 const { get, checkCall } = require('jsutils')
-const { bddService } = require('KegUtils/services/bddService')
+const { bddService, buildService, serviceOptions } = require('KegUtils/services')
 
 /**
  * Finds the correct service to be run and returns it
@@ -25,7 +25,11 @@ const getService = service => {
  *
  * @returns {void}
  */
-const start = args => {
+const start = async args => {
+  
+  // Call the build service to ensure required images are built
+  await buildService(args, { context: 'regulator', image: 'keg-regulator' })
+
   return checkCall(
     getService(get(args, 'params.service', 'bdd')),
     args
@@ -40,6 +44,7 @@ module.exports = {
     description: `Runs keg-regulators in a docker container`,
     example: 'keg test start <options>',
     options: {
+      ...serviceOptions('regulator', 'start'),
       context: {
         description: 'Context or name of the repo to run the regulator tests on',
         require: true
