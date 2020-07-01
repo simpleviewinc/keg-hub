@@ -23,6 +23,7 @@ module.exports = {
     description: `Run Keg-CLI tasks for the keg-regulator repo`,
     example: 'keg regulator <options>',
     tasks: {
+      ...require('./build'),
       ...require('./start'),
       ...require('./stop'),
     }

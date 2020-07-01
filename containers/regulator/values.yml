@@ -16,7 +16,7 @@ env:
     # COMPOSE_<ENV>: "/path/to/override.yml"
 
   # The CONTEXT_PATH env should be the location of the regulator repo being run
-  CONTEXT_PATH: /keg/keg-regulator
+  CONTEXT_PATH: "{{ cli.paths.regulator }}"
 
   # --- DOCKER ENV CONTEXT --- #
 

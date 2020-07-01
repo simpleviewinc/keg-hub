@@ -1,4 +1,5 @@
 module.exports = {
+  ...require('./bddService'),
   ...require('./buildService'),
   ...require('./composeService'),
   ...require('./containerService'),

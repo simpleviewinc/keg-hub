@@ -32,13 +32,10 @@ keg_run_regulator_yarn_setup(){
     return
   fi
 
-  if [[ "$NM_INSTALL" != "core" ]]; then
-    # Navigate to the cached directory, and run the yarn install here
-    cd $TEST_PATH
-    keg_message "Running yarn setup for regulator..."
-    yarn install
-  fi
-
+  # Navigate to the cached directory, and run the yarn install here
+  cd $TEST_PATH
+  keg_message "Running yarn setup for regulator..."
+  yarn install
 
 }
 
@@ -53,7 +50,7 @@ keg_run_the_regulator(){
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"
-  yarn $KEG_EXEC_CMD
+  # yarn $KEG_EXEC_CMD
 
 }
 

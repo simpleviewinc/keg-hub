@@ -2,7 +2,7 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 
 /**
- * Build the keg-core in docker, without a tap
+ * Builds the docker image for the keg-regulator repo
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -11,8 +11,7 @@ const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
  *
  * @returns {void}
  */
-const buildCore = async args => {
-
+const build = async args => {
   // Check the base image and build it if it doesn't exist
   await buildBaseImg(args)
 
@@ -22,19 +21,19 @@ const buildCore = async args => {
     params: {
       ...args.params,
       tap: undefined,
-      context: 'core',
+      context: 'regulator',
       cache: args.params.cache,
     },
   })
+
 }
 
 module.exports = {
   build: {
     name: 'build',
-    alias: [ 'bld', 'make' ],
-    action: buildCore,
-    description: `Builds the keg-core docker container`,
-    example: 'keg core build <options>',
+    action: build,
+    description: `Builds the docker image for the keg-regulator repo`,
+    example: 'keg regulator build <options>',
     options: {
       envs: {
         description: 'Add build args from container env files',
@@ -42,15 +41,16 @@ module.exports = {
       },
       cache: {
         description: 'Docker will use build cache when building the image',
+        example: 'keg regulator build cache=false',
         default: true
       },
       tags: {
         description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg docker build tags=my-tag,local,development'
+        example: 'keg regulator build tags=my-tag,local,development'
       },
       log: {
         description: 'Log docker command',
-        example: 'keg docker build log=true',
+        example: 'keg regulator build log=true',
         default: false
       },
     }

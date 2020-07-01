@@ -1,4 +1,4 @@
-const { stopService } = require('KegUtils/services')
+const { stopService, regulateService } = require('KegUtils/services')
 
 /**
  * Stops the running keg-regulator docker containers and syncs
@@ -11,7 +11,8 @@ const { stopService } = require('KegUtils/services')
  * @returns {void}
  */
 const stop = args => {
-  return stopService(args, { context: 'regulator', container: 'keg-regulator' })
+  // return stopService(args, { context: 'regulator', container: 'keg-regulator' })
+  console.log(`---------- Task: Regulate Stop ----------`)
 }
 
 module.exports = {

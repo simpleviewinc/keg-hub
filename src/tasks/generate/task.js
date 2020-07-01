@@ -28,7 +28,12 @@ const saveTask = async (content, { parent, name }) => {
   let doWrite = false
 
   if(!parentExists){
-    const doMkDir = await ask.confirm(`Confirm, create task parent folder => ${parentPath}`)
+
+    const doMkDir = await ask.confirm({
+      message: `Confirm, create task parent folder => ${parentPath}`,
+      default: true
+    })
+
     if(!doMkDir) return Logger.warn(`Generate task cancelled!`) || Logger.empty()
     const [ errMake, madeDir ] = await mkDir(parentPath)
     
@@ -37,7 +42,11 @@ const saveTask = async (content, { parent, name }) => {
     doWrite = true
   }
 
-  doWrite = doWrite || await ask.confirm(`Confirm, write task file => ${taskFile}`)
+  doWrite = doWrite || await ask.confirm({
+    message: `Confirm, write task file => ${taskFile}`,
+    default: true,
+  })
+
   if(!doWrite) return Logger.warn(`Generate task cancelled!`) || Logger.empty()
 
   await writeFile(taskFile, content)

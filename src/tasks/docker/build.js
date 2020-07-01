@@ -45,7 +45,7 @@ const copyLocalPackageJson = async (globalConfig, location) => {
  */
 const dockerBuild = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { context, envs, core } = params
+  const { context, envs, core, log } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
@@ -81,12 +81,11 @@ const dockerBuild = async args => {
   Logger.info(`  Building docker image "${ image || cmdContext }" ...`)
 
   // Run the built docker command
-  await docker.raw(dockerCmd, { options: { env: contextEnvs }}, location)
+  await docker.raw(dockerCmd, { log, options: { env: contextEnvs }}, location)
 
   // Return the built image as a json object
   // This is needed for internal keg-cli calls
-  // TODO: This is not returning the image properly
-  return docker.image.get(image)
+  return docker.image.get(image || contextEnvs.IMAGE)
 
 }
 
@@ -124,7 +123,12 @@ module.exports = {
       tags: {
         description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
         example: 'keg docker build tags=my-tag,local,development'
-      }
+      },
+      log: {
+        description: 'Log docker command',
+        example: 'keg docker build log=true',
+        default: false
+      },
     }
   }
 }
