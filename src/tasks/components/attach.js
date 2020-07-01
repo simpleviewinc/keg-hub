@@ -26,6 +26,7 @@ const attach = args => {
 module.exports = {
   attach: {
     name: 'attach',
+    alias: [ 'att' ],
     action: attach,
     description: `Attach to the running keg-components container`,
     example: 'keg components attach',
