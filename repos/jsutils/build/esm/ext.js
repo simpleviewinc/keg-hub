@@ -19,4 +19,6 @@ const isSame = (val1, val2) => val1 === val2 ? val1 !== 0 || 1 / val1 === 1 / va
 
 const isValidDate = date => !isNaN((date instanceof Date && date || new Date(date)).getTime());
 
-export { either, isEmpty, isSame, isValidDate };
+const exists = value => value === value && value !== undefined && value !== null;
+
+export { either, exists, isEmpty, isSame, isValidDate };
