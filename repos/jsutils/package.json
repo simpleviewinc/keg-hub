@@ -1,6 +1,6 @@
 {
   "name": "jsutils",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "common javascript utils",
   "main": "build/umd/index.js",
   "module": "build/esm/index.js",
@@ -16,7 +16,7 @@
     "dev": "rollup -c ./configs/rollup.config.js -w",
     "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc -c ./configs/jsdoc.json",
     "docs:move": "node ./configs/moveDocs.js",
-    "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
+    "test": "NODE_ENV=test jest --detectOpenHandles --no-cache --verbose --config=./configs/jest.config.js",
     "web": "http-server ./docs -p 8888 --cors"
   },
   "dependencies": {
