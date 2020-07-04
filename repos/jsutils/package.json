@@ -1,12 +1,22 @@
 {
-  "name": "jsutils",
-  "version": "4.1.0",
+  "name": "@ltipton/jsutils",
+  "version": "5.0.0",
   "description": "common javascript utils",
   "main": "build/umd/index.js",
   "module": "build/esm/index.js",
-  "repository": "https://github.com/lancetipton/jsutils.git",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/lancetipton/jsutils.git",
+    "type": "git"
+  },
+  "files": [
+    "build"
+  ],
+  "keywords": [
+    "utils",
+    "helpers"
+  ],
   "scripts": {
     "build": "yarn build:clean && yarn build:rollup",
     "build:clean": "rimraf ./build/esm && rimraf ./build/umd && rimraf ./build/cjs",
