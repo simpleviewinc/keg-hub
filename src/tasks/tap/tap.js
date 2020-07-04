@@ -17,4 +17,22 @@ const tapDefTask = args => {
 
 }
 
-module.exports = tapDefTask
+module.exports = {
+  tap: {
+    name: 'tap',
+    alias: [ 'taps' ],
+    action: tapDefTask,
+    description: 'Keg CLI tap specific tasks',
+    example: 'keg tap <command> <options>',
+    tasks: {
+      ...require('./attach'),
+      ...require('./build'),
+      ...require('./destroy'),
+      ...require('./link'),
+      ...require('./new'),
+      ...require('./start'),
+      ...require('./stop'),
+      ...require('./unlink'),
+    },
+  }
+}

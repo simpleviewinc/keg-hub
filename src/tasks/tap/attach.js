@@ -1,7 +1,7 @@
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
- * Attach to the running keg-components container
+ * Attach to the running keg-tap container
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -11,13 +11,13 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
  * @returns {void}
  */
 const attach = args => {
-  // Connect to the components image through internal task
+  // Connect to the tap image through internal task
   return runInternalTask('tasks.docker.tasks.exec', {
     ...args,
     params: {
       ...args.params,
-      tap: undefined,
-      context: 'components',
+      tap: args.params.tap,
+      context: 'tap',
       cache: args.params.cache,
     },
   })
@@ -28,12 +28,12 @@ module.exports = {
     name: 'attach',
     alias: [ 'att' ],
     action: attach,
-    description: `Attach to the running keg-components container`,
-    example: 'keg components attach',
+    description: `Attach to the running tap container`,
+    example: 'keg tap attach',
     options: {
       cmd: {
         description: 'Docker container command to run. Default ( /bin/sh )',
-        example: 'keg components att --cmd test',
+        example: 'keg tap att --cmd test',
         default: 'sh'
       },
       options: {

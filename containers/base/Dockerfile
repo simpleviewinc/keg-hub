@@ -13,7 +13,7 @@ WORKDIR /
 
 # Install git and the expo-cli and sharp-cli
 RUN apk add --no-cache git bash; \
-    yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli
+    yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli nodemon
 
 # Pull down the keg-cli locally
 RUN if [ ! -z "$GIT_CLI_URL" ]; then \

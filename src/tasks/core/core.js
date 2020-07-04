@@ -22,6 +22,7 @@ module.exports = {
     name: 'core',
     alias: [ 'cor', 'cr' ],
     tasks: {
+      ...require('./attach'),
       ...require('./build'),
       ...require('./destroy'),
       ...require('./pullrequest'),
