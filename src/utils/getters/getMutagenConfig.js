@@ -2,7 +2,7 @@ const path = require('path')
 const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
 const { tryCatch } = require('../helpers')
-const { get, deepMerge } = require('jsutils')
+const { get, deepMerge } = require('@ltipton/jsutils')
 const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
 
 /**

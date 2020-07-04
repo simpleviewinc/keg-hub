@@ -1,5 +1,5 @@
 const path = require('path')
-const { isArr } = require('jsutils')
+const { isArr } = require('@ltipton/jsutils')
 const cliRoot = path.join(__dirname, '../../../../')
 const { git } = require('../git')
 

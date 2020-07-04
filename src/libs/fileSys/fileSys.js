@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { checkCall, limbo } = require('jsutils')
+const { checkCall, limbo } = require('@ltipton/jsutils')
 const { generalError } = require('KegUtils/error')
 
 /**

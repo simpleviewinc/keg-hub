@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**

@@ -1,4 +1,4 @@
-const { deepMerge } = require('jsutils')
+const { deepMerge } = require('@ltipton/jsutils')
 const { buildGitSSH } = require('KegUtils/git/buildGitSSH')
 const { getGlobalConfig } = require('KegUtils/globalConfig')
 const { limboify } = require('KegUtils/helpers')

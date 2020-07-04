@@ -1,5 +1,5 @@
 const { throwWrap } = require('KegUtils/error/throwWrap')
-const { get, isFunc } = require('jsutils')
+const { get, isFunc } = require('@ltipton/jsutils')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**

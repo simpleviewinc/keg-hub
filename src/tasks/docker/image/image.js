@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { dockerLog } = require('KegUtils/log/dockerLog')
 const { CONTAINERS } = require('KegConst/docker/containers')

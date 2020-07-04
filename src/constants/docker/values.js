@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepFreeze, keyMap } = require('jsutils')
+const { deepFreeze, keyMap } = require('@ltipton/jsutils')
 const cliRootDir = path.join(__dirname, '../../../')
 const { getDefaultENVs } = require('./getDefaultENVs')
 const { getFoldersSync, pathExistsSync } = require('../../libs/fileSys/fileSys')

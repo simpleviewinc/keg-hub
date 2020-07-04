@@ -8,7 +8,7 @@ const {
 const { encrypt, decrypt } = require('KegCrypto')
 const { ask } = require('KegQuestions')
 const {GLOBAL_CONFIG_PATHS } = require('KegConst')
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 
 
 const printGitKey = async (args) => {

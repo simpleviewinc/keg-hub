@@ -1,7 +1,7 @@
 const { Logger } = require('KegLog')
 const { Loading } = require('./loading')
 const { spawnCmd } = require('spawn-cmd')
-const { get, checkCall, deepMerge, isFunc, isArr } = require('jsutils')
+const { get, checkCall, deepMerge, isFunc, isArr } = require('@ltipton/jsutils')
 
 
 /**

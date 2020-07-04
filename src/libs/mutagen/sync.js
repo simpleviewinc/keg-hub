@@ -1,5 +1,5 @@
 const { mutagenCli } = require('./commands')
-const { deepMerge, get } = require('jsutils')
+const { deepMerge, get } = require('@ltipton/jsutils')
 const { buildIgnore, buildMountPath, buildMutagenArgs } = require('./helpers')
 
 

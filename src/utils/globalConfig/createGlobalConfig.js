@@ -1,4 +1,4 @@
-const { deepMerge } = require('jsutils')
+const { deepMerge } = require('@ltipton/jsutils')
 const { defaultConfig } = require('./defaultConfig')
 const { saveGlobalConfig } = require('./saveGlobalConfig')
 

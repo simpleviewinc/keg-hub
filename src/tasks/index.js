@@ -1,4 +1,4 @@
-const { isObj, isFunc, reduceObj } = require('jsutils')
+const { isObj, isFunc, reduceObj } = require('@ltipton/jsutils')
 const { buildTaskAlias } = require('../utils/builders/buildTaskAlias')
 
 /**

@@ -26,7 +26,7 @@
   * suffix: (String) Change the default suffix message.
 */
 
-const { isFunc, isObj, isStr } = require('jsutils')
+const { isFunc, isObj, isStr } = require('@ltipton/jsutils')
 
 const defaultModel = {
   name: 'question',

@@ -1,4 +1,4 @@
-const { get, isFunc, isStr } = require('jsutils')
+const { get, isFunc, isStr } = require('@ltipton/jsutils')
 const { throwNoAction } = require('KegUtils/error')
 const { executeCmd } = require('KegProc')
 const { getParams } = require('./getParams')

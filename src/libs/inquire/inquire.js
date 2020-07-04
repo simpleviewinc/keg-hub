@@ -4,7 +4,7 @@ const inquirer = require('inquirer')
 const prompt = inquirer.createPromptModule()
 const { questionModels } = require('./models')
 
-const { isArr, limbo } = require('jsutils')
+const { isArr, limbo } = require('@ltipton/jsutils')
 
 // TODO: figure out how to best handle ask errors
 const showAskError = (error) => {

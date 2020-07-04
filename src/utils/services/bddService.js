@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { mutagenService } = require('./mutagenService')
 const { runInternalTask } = require('../task/runInternalTask')
 const { Logger } = require('KegLog')

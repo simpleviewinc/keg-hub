@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepFreeze, deepMerge, keyMap, get } = require('jsutils')
+const { deepFreeze, deepMerge, keyMap, get } = require('@ltipton/jsutils')
 const { cliRootDir, dockerEnv, defaultENVs, images } = require('./values')
 const { checkLoadEnv } = require('KegFileSys/env')
 const { loadYmlSync } = require('KegFileSys/yml')

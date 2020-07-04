@@ -1,4 +1,4 @@
-const { deepFreeze } = require('jsutils')
+const { deepFreeze } = require('@ltipton/jsutils')
 const containers = require('./containers')
 const {
   cliKeyMap,

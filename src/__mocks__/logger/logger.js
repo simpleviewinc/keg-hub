@@ -1,4 +1,4 @@
-const { keyMap } = require('jsutils')
+const { keyMap } = require('@ltipton/jsutils')
 
 const logData = (...data) => console.log(...data)
 

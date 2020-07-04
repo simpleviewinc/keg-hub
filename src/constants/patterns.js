@@ -1,4 +1,4 @@
-const { deepFreeze, keyMap } = require('jsutils')
+const { deepFreeze, keyMap } = require('@ltipton/jsutils')
 
 // Pattern matching (RegEx)
 module.exports = deepFreeze({

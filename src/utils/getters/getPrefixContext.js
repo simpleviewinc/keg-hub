@@ -1,6 +1,6 @@
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { getKegContext } = require('./getKegContext')
-const { checkCall } = require('jsutils')
+const { checkCall } = require('@ltipton/jsutils')
 /**
  * Check if it's a prefixed context, and if so parse the context from it
  * @function

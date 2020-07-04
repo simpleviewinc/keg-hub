@@ -1,4 +1,4 @@
-const { isFunc, isStr } = require('jsutils')
+const { isFunc, isStr } = require('@ltipton/jsutils')
 
 /**
  * Checks if the passed in value is a Hex value

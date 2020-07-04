@@ -12,7 +12,7 @@ const { throwNoTask } = require('KegUtils/error/throwNoTask')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 const { throwExitError } = require('KegUtils/error/throwExitError')
 const { defPaths } = require('KegUtils/globalConfig/defaultConfig')
-const { deepMerge, mapObj, reduceObj, get, set } = require('jsutils')
+const { deepMerge, mapObj, reduceObj, get, set } = require('@ltipton/jsutils')
 const { saveGlobalConfig } = require('KegUtils/globalConfig/saveGlobalConfig')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
 

@@ -1,6 +1,6 @@
 require('module-alias/register')
 
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
 const { getGitKey } = require('KegUtils/git/getGitKey')
 

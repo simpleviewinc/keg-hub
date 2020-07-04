@@ -1,6 +1,6 @@
 const { throwRequired } = require('../error')
 const { exists, mapEnv } = require('../helpers')
-const { isStr, isBool } = require('jsutils')
+const { isStr, isBool } = require('@ltipton/jsutils')
 const { BOOL_VALUES } = require('KegConst/constants')
 
 const boolOpts = BOOL_VALUES.truthy.concat(BOOL_VALUES.falsy)

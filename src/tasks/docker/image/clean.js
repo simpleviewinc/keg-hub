@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { spawnCmd, executeCmd } = require('KegProc')
 const docker = require('KegDocCli')

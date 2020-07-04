@@ -1,7 +1,7 @@
 const path = require('path')
 const { CLI_ROOT } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
-const { deepMerge } = require('jsutils')
+const { deepMerge } = require('@ltipton/jsutils')
 const cliParent = path.join(CLI_ROOT, '../')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 

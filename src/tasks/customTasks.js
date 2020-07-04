@@ -1,7 +1,7 @@
 const { throwExitError } = require('KegUtils/error/throwExitError')
 const { getConfig } = require('../utils')
 const { TASK_REQURIED } = require('../constants')
-const { get, reduceObj, isObj } = require('jsutils')
+const { get, reduceObj, isObj } = require('@ltipton/jsutils')
 const appConfig = getConfig()
 
 /**

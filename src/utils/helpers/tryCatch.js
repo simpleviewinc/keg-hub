@@ -1,4 +1,4 @@
-const { isFunc } = require('jsutils')
+const { isFunc } = require('@ltipton/jsutils')
 /**
  * Wraps toCatch in a try/catch block. If it throws, then onCatch is called
  * @function

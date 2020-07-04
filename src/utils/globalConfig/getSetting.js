@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { __getGlobalConfig } = require('./globalConfigCache')
 /**
  * Gets a setting from the global config

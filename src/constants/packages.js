@@ -1,4 +1,4 @@
-const { deepFreeze, keyMap } = require('jsutils') 
+const { deepFreeze, keyMap } = require('@ltipton/jsutils') 
 
 module.exports = deepFreeze({
   PACKAGE_TYPES: keyMap([

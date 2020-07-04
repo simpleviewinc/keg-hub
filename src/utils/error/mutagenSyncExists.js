@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { Logger } = require('KegLog')
 const { throwTaskFailed } = require('./throwTaskFailed')
 

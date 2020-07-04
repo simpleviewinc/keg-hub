@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { ask } = require('KegQuestions')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')

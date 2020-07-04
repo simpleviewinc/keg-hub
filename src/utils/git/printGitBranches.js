@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { mapObj, reduceObj } = require('jsutils')
+const { mapObj, reduceObj } = require('@ltipton/jsutils')
 
 /**
  * Prints a formatted git branch with index

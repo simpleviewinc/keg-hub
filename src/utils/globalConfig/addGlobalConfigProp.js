@@ -1,4 +1,4 @@
-const { set } = require('jsutils')
+const { set } = require('@ltipton/jsutils')
 const { exists } = require('../helpers/exists')
 const { saveGlobalConfig } = require('./saveGlobalConfig')
 const { validateGlobalConfig } = require('./validateGlobalConfig')

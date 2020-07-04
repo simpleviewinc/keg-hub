@@ -1,4 +1,4 @@
-const { checkCall } = require('jsutils')
+const { checkCall } = require('@ltipton/jsutils')
 
 /**
  * Calls the passed in method with checkCall to ensure it a function

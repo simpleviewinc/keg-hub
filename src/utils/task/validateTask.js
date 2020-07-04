@@ -1,4 +1,4 @@
-const { isObj, isFunc } = require('jsutils')
+const { isObj, isFunc } = require('@ltipton/jsutils')
 const { throwNoAction, throwNoTask } = require('../error')
 
 /**

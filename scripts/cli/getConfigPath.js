@@ -1,6 +1,6 @@
 require('module-alias/register')
 
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
 const { Logger } = require('KegLog')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_PATHS } = require('KegConst/constants')

@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { getGlobalConfig } = require('./getGlobalConfig')
 const {git} = require('KegGitCli')
 const { getTapPath } = require('./getTapPath')

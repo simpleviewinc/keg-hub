@@ -1,4 +1,4 @@
-const { checkCall, get, isObj, isFunc, isStr, deepClone } = require('jsutils')
+const { checkCall, get, isObj, isFunc, isStr, deepClone } = require('@ltipton/jsutils')
 const { throwNoAction, throwNoTask } = require('../error')
 const { validateTask } = require('./validateTask')
 const { ensureParams } = require('./getParams')

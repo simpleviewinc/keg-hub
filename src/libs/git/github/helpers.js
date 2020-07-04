@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
-const { checkCall } = require('jsutils')
+const { checkCall } = require('@ltipton/jsutils')
 
 /**
  * Called on failed ghCli call

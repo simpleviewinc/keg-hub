@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { DOCKER_ENV, CONTAINERS } = DOCKER
 

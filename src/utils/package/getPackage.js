@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { askForPackage } = require('./askForPackage')
 const { formatPackage } = require('./formatPackage')
 const { getAllPackages } = require('./getAllPackages')

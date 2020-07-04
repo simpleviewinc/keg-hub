@@ -1,6 +1,6 @@
 const path = require('path')
 const { Logger } = require('KegLog')
-const { get, mapObj } = require('jsutils')
+const { get, mapObj } = require('@ltipton/jsutils')
 const { getRootDir } = require('KegUtils')
 const { ask, input } = require('KegQuestions')
 const { CLI_ROOT } = require('KegConst/constants')

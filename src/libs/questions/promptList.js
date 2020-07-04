@@ -1,6 +1,6 @@
 const { ask } = require('./ask')
 const { Logger } = require('KegLog')
-const { validate, isArr, isStr } = require('jsutils')
+const { validate, isArr, isStr } = require('@ltipton/jsutils')
 
 /**
  * Helper that prompts the user to select an option from a list.

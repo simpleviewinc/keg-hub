@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { pathExistsSync } = require('KegFileSys')
 const { fillTemplate } = require('../template')
 const { throwNoFileExists } = require('../error/throwNoFileExists')

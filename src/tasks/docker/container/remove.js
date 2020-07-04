@@ -1,4 +1,4 @@
-const { get, isStr } = require('jsutils')
+const { get, isStr } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { exists } = require('KegUtils/helpers')

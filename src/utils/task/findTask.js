@@ -1,4 +1,4 @@
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { getTask } = require('./getTask')
 const { validateTask } = require('./validateTask')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')

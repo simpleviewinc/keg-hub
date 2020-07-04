@@ -1,4 +1,4 @@
-const { checkCall, isStr } = require('jsutils')
+const { checkCall, isStr } = require('@ltipton/jsutils')
 const { gitCli } = require('./commands')
 const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 

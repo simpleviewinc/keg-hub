@@ -1,4 +1,4 @@
-const { isArr } = require('jsutils')
+const { isArr } = require('@ltipton/jsutils')
 const inquirer = require('inquirer')
 const { input } = require('./input')
 const { confirm } = require('./confirm')

@@ -1,4 +1,4 @@
-const { isObj, get } = require('jsutils')
+const { isObj, get } = require('@ltipton/jsutils')
 const { defaultConfig } = require('./defaultConfig')
 const { generalError } = require('../error/generalError')
 

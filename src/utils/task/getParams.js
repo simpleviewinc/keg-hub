@@ -6,7 +6,7 @@ const {
   isStr,
   isObj,
   reduceObj
-} = require('jsutils')
+} = require('@ltipton/jsutils')
 
 const {
   buildMatchTypes,

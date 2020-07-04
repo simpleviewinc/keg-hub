@@ -1,5 +1,5 @@
 const { generalError } = require('KegUtils/error')
-const { isStr, get } = require('jsutils')
+const { isStr, get } = require('@ltipton/jsutils')
 const { findTask, executeTask } = require('KegUtils/task')
 const docker = require('KegDocCli')
 

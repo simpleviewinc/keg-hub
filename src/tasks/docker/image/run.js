@@ -1,5 +1,5 @@
 
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
 const { spawnCmd } = require('KegProc')
 const { HTTP_PORT_ENV } = require('KegConst/constants')

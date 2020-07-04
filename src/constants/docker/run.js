@@ -1,4 +1,4 @@
-const { deepFreeze, deepMerge } = require('jsutils')
+const { deepFreeze, deepMerge } = require('@ltipton/jsutils')
 const { images } = require('./values')
 
 // TODO: some of these values are duplicated in containers.js

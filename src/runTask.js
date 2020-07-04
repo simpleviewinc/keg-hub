@@ -1,5 +1,5 @@
 const Tasks = require('KegTasks')
-const { get, isFunc, isObj } = require('jsutils')
+const { get, isFunc, isObj } = require('@ltipton/jsutils')
 const { findTask, executeTask } = require('KegUtils/task')
 const { throwExitError } = require('KegUtils/error')
 const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')

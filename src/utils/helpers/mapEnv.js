@@ -1,4 +1,4 @@
-const { reduceObj } = require('jsutils')
+const { reduceObj } = require('@ltipton/jsutils')
 const { ENV_MAP } = require('KegConst/constants')
 
 /**

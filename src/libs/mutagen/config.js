@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepMerge, deepClone } = require('jsutils')
+const { deepMerge, deepClone } = require('@ltipton/jsutils')
 const { loadYml, writeYml, stat } = require('KegFileSys')
 const { generalError } = require('KegUtils/error')
 

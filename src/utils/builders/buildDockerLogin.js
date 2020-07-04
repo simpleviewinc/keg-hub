@@ -1,4 +1,4 @@
-const { get, reduceObj } = require('jsutils')
+const { get, reduceObj } = require('@ltipton/jsutils')
 const { getGlobalConfig } = require('../globalConfig/getGlobalConfig')
 const { getGitKey } = require('../git/getGitKey')
 const { getGitConfigItem } = require('../git/getGitConfigItem')

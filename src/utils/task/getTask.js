@@ -1,4 +1,4 @@
-const { get, isStr, isObj } = require('jsutils')
+const { get, isStr, isObj } = require('@ltipton/jsutils')
 
 
 const ensureTaskObject = (tasks, task) => {

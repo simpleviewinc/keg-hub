@@ -1,5 +1,5 @@
 const { throwPackageError } = require('../error/throwPackageError')
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { ask } = require('KegQuestions')
 
 /**

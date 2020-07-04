@@ -1,5 +1,5 @@
 const docker = require('KegDocCli')
-const { get, checkCall } = require('jsutils')
+const { get, checkCall } = require('@ltipton/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { Logger } = require('KegLog')
 

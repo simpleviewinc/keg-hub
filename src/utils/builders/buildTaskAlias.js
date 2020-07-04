@@ -1,4 +1,4 @@
-const { deepClone, get, isArr, reduceObj, set } = require('jsutils')
+const { deepClone, get, isArr, reduceObj, set } = require('@ltipton/jsutils')
 
 /**
  * Finds the alias of passed in task, and adds it to the task object with reference to same value

@@ -1,4 +1,4 @@
-const { isArr, get } = require('jsutils')
+const { isArr, get } = require('@ltipton/jsutils')
 const { DOCKER } = require('KegConst')
 
 /**

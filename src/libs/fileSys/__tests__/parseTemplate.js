@@ -3,7 +3,7 @@ const { yml } = require('../yml')
 const { pathExistsSync, readPath } = require('../fileSys')
 const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
 const path = require('path')
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 
 const testYmlPath = path.join(__dirname, './test.yml')
 const testYmlWrite = path.join(__dirname, './writeTest.yml')

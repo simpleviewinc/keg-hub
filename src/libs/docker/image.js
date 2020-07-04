@@ -1,6 +1,6 @@
 const { compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
-const { isArr, toStr, isStr } = require('jsutils')
+const { isArr, toStr, isStr } = require('@ltipton/jsutils')
 const { Logger } = require('KegLog')
 
 /**

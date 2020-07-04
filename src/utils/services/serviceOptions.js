@@ -1,4 +1,4 @@
-const { deepMerge } = require('jsutils')
+const { deepMerge } = require('@ltipton/jsutils')
 
 /**
  * Builds the options for the compose service

@@ -1,4 +1,4 @@
-const { isObj, isStr, get } = require('jsutils')
+const { isObj, isStr, get } = require('@ltipton/jsutils')
 const { ask, buildModel } = require('KegQuestions')
 const { getSetting } = require('../globalConfig/getSetting')
 

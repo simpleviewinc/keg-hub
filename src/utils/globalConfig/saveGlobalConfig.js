@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const { isObj, checkCall } = require('jsutils')
+const { isObj, checkCall } = require('@ltipton/jsutils')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants/constants')
 const { ensureDirSync } = require('tap-resolver/src/helpers')
 const { validateGlobalConfig } = require('./validateGlobalConfig')

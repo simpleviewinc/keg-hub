@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepMerge } = require('jsutils')
+const { deepMerge } = require('@ltipton/jsutils')
 const { Logger } = require('KegLog')
 const { CLI_ROOT, DEFAULT_ENV, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
 const { writeFile, readFile } = require('KegFileSys/fileSys')

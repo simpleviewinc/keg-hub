@@ -30,6 +30,7 @@
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "dependencies": {
+    "@ltipton/jsutils": "^5.0.0",
     "app-root-path": "2.2.1",
     "axios": "0.19.2",
     "cli-progress": "3.8.2",
@@ -37,7 +38,6 @@
     "colors": "1.4.0",
     "inquirer": "7.0.6",
     "js-yaml": "^3.14.0",
-    "jsutils": "git+https://github.com/lancetipton/jsutils.git",
     "log-update": "4.0.0",
     "module-alias": "2.2.2",
     "recursive-readdir": "2.2.2",

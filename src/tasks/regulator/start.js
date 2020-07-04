@@ -1,4 +1,4 @@
-const { get, checkCall } = require('jsutils')
+const { get, checkCall } = require('@ltipton/jsutils')
 const { bddService, buildService, serviceOptions } = require('KegUtils/services')
 
 /**

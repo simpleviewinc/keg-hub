@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { reduceObj, isStr, isArr, get } = require('jsutils')
+const { reduceObj, isStr, isArr, get } = require('@ltipton/jsutils')
 const { getPathFromConfig } = require('KegUtils')
 const { DOCKER } = require('KegConst')
 const { getContainerConst } = require('./getContainerConst')
