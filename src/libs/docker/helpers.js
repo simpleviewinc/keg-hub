@@ -300,6 +300,10 @@ const toBuildArgs = (envs={}, cmd='', filters=[]) => {
       ).trim()
 }
 
+const getCmdParams = (args, ext={}) => {
+  return isStr(args) ? { item: args, ...ext } : { ...ext, ...args }
+}
+
 module.exports = {
   asBuildArg,
   asContainerEnv,
@@ -307,6 +311,7 @@ module.exports = {
   apiSuccess,
   compareItems,
   cmdSuccess,
+  getCmdParams,
   noItemError,
   noItemFoundError,
   portAsJSON,

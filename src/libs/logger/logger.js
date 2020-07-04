@@ -188,7 +188,7 @@ class Log {
   * @returns {void}
   */
   highlight = (start='', highlight='', end='') => {
-    this.log(`  ${ start }`, Logger.colors.cyan(highlight), end)
+    this.log(`${ start }`, Logger.colors.cyan(highlight), end)
   }
 
 }

@@ -1,4 +1,4 @@
-const { compareItems, noItemError, cmdSuccess, portAsJSON } = require('./helpers')
+const { compareItems, noItemError, cmdSuccess, portAsJSON, getCmdParams } = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { isArr, toStr, isStr, deepMerge, checkCall } = require('@ltipton/jsutils')
 
@@ -274,12 +274,8 @@ const get = async nameOrId => {
  * @returns {string|Array} - Response from docker cli
  */
 const port = async (args, _port, _format, cmdOpts) => {
-  const params = isStr(args)
-    ? { item: args, port: _port, format: _format || 'json'}
-    : { port: _port, format: _format || 'json', ...args }
+  const { item, port, format } = getCmdParams(args, { port: _port, format: _format || 'json' })
 
-  const { item, port, format } = params
-  
   const container = await get(item)
   if(!container) return false
 
@@ -294,6 +290,13 @@ const port = async (args, _port, _format, cmdOpts) => {
 
 }
 
+const ps = (args, cmdOpts) => {
+  return dockerCli({
+    ...getCmdParams(args, { log: false, format: 'json' }),
+    opts: [ 'ps' ]
+  }, cmdOpts)
+}
+
 // Add the sub-methods to the root docker image method
 Object.assign(container, {
   ...containerCmds,
@@ -306,6 +309,7 @@ Object.assign(container, {
   list,
   remove: removeContainer,
   port,
+  ps,
 })
 
 module.exports = container
