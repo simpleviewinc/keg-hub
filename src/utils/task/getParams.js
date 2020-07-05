@@ -195,7 +195,7 @@ const ensureParam = async (task, params, key, meta) => {
  * Adds default values when task is short-circuited
  * @function
  * @param {Object} task - Task Model of current task being run
- * @param {Object} mappedParams - Currently mapped args
+ * @param {Object} args.params - Pre mapped params
  *
  * @returns {Object} - Mapped params object
  */
@@ -213,10 +213,11 @@ const ensureParams = async (task, mappedParams={}) => {
  * @param {Object} task - Task Model of current task being run
  * @param {Object} taskKeys - Keg names of the task options
  * @param {Array} options - items passed from the command line
+ * @param {Object} args.params - Pre mapped params
  *
  * @returns {Object} - Mapped arguments object
  */
-const loopTaskKeys = (task, taskKeys, options) => {
+const loopTaskKeys = (task, taskKeys, options, mappedParams) => {
   return taskKeys.reduce(async (toResolve, key, index) => {
     const params = await toResolve
 
@@ -241,7 +242,7 @@ const loopTaskKeys = (task, taskKeys, options) => {
     // Ensure the param exists if needed, and return
     return ensureParam(task, params, key, meta)
 
-  }, Promise.resolve({}))
+  }, Promise.resolve(mappedParams))
 }
 
 /**
@@ -250,10 +251,11 @@ const loopTaskKeys = (task, taskKeys, options) => {
  * @param {Object} task - Task Model of current task being run
  * @param {Object} taskKeys - Keg names of the task options
  * @param {Array} options - items passed from the command line
+ * @param {Object} args.params - Pre mapped params
  *
  * @returns {Object} - Mapped params object
  */
-const mapKeysToOptions = (task, taskKeys, options) => {
+const mapKeysToOptions = (task, taskKeys, options, mappedParams) => {
   return taskKeys.reduce(async (toResolve, key, index) => {
     const params = await toResolve
 
@@ -267,7 +269,7 @@ const mapKeysToOptions = (task, taskKeys, options) => {
     // Ensure the param exists if needed, and return
     return ensureParam(task, params, key, meta)
 
-  }, Promise.resolve({}))
+  }, Promise.resolve(mappedParams))
 }
 
 /**
@@ -276,13 +278,14 @@ const mapKeysToOptions = (task, taskKeys, options) => {
  * @param {Object} task - Task Model of current task being run
  * @param {Object} taskKeys - Keg names of the task options
  * @param {Array} options - items passed from the command line
+ * @param {Object} params - Pre mapped params
  *
  * @returns {Object} - Mapped arguments object
  */
-const loopTaskOptions = (task, taskKeys, options) => {
+const loopTaskOptions = (task, taskKeys, options, params) => {
   return optionsHasIdentifiers(options)
-    ? loopTaskKeys(task, taskKeys, options)
-    : mapKeysToOptions(task, taskKeys, options)
+    ? loopTaskKeys(task, taskKeys, options, params)
+    : mapKeysToOptions(task, taskKeys, options, params)
 }
 
 /**
@@ -291,13 +294,14 @@ const loopTaskOptions = (task, taskKeys, options) => {
  * @param {Array} args.options - items passed from the command line
  * @param {Object} args.task - Task Model of current task being run
  * @param {Object} args.task.options - Options accepted by the task being run
+ * @param {Object} args.params - Pre mapped params
  *
  * @returns {Object} - Mapped arguments object
  */
-const getParams = async ({ options=[], task }) => {
+const getParams = async ({ options=[], task, params={} }) => {
 
   // If no options to parse, Add the defaults and return it
-  if(!options.length) return ensureParams(task)
+  if(!options.length) return ensureParams(task, params)
 
   // Make copy of options, so we don't affect the original
   const optsCopy = Array.from(options)
@@ -307,7 +311,7 @@ const getParams = async ({ options=[], task }) => {
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
   // If not task keys to loop, just return empty
-  if(!taskKeys || !taskKeys.length) return ensureParams(task)
+  if(!taskKeys || !taskKeys.length) return ensureParams(task, params)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
   const doOptsLoop = options.length !== 1 || hasKeyIdentifier(options[0])
@@ -315,8 +319,11 @@ const getParams = async ({ options=[], task }) => {
   // Loop over the task keys and map the task options to the passed in options
   // Otherwise set it as the first key in the task options object
   return doOptsLoop
-    ? taskKeys && await loopTaskOptions(task, taskKeys, options)
-    : ensureParams(task, { [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], options[0]) })
+    ? taskKeys && await loopTaskOptions(task, taskKeys, options, params)
+    : ensureParams(task, { 
+        ...params,
+        [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], options[0])
+      })
 
 }
 

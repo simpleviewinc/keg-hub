@@ -44,13 +44,13 @@ const getDockerSubTask = (task, command) => {
  *
  * @returns {void}
  */
-const dockerTask = args => {
+const dockerTask = async args => {
 
   const { globalConfig, command, task, tasks, options=[], params } = args
   const cmd = command !== 'd' ? command : options[0]
 
   // Find the docker sub-task
-  const taskData = findTask(
+  const taskData = await findTask(
     globalConfig,
     task.tasks,
     getDockerSubTask(task, cmd),
@@ -60,9 +60,9 @@ const dockerTask = args => {
   // Execute the found sub-task
   return executeTask({
     ...args,
-    task: taskData.task,
-    command: taskData.task.name,
-    options: taskData.options
+    ...taskData,
+    command: get(taskData, 'task.name'),
+    params: { ...args.params, ...taskData.params },
   })
 
 }

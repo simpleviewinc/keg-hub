@@ -24,12 +24,13 @@ const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
     if(!command || hasHelpArg(command)) return showHelp({ tasks })
 
     // Get the task from available tasks
-    const { task, options } = findTask(globalConfig, tasks, command, args)
+    const { task, options, params } = await findTask(globalConfig, tasks, command, args)
 
     await executeTask({
-      options,
       task,
       tasks,
+      params,
+      options,
       command,
       globalConfig,
     })

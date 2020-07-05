@@ -23,8 +23,8 @@ const executeTask = async (args) => {
   // Check is the help should be printed
   if(hasHelpArg(options[ options.length -1 ])) return showHelp({ task, options })
 
-  // get the params for the task
-  const params = await getParams(args)
+  // Get the params for the task if they have not already been parsed
+  const params = args.params || await getParams(args)
 
   return isFunc(task.action)
     ? task.action({ ...args, params })

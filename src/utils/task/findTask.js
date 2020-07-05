@@ -3,6 +3,7 @@ const { getTask } = require('./getTask')
 const { validateTask } = require('./validateTask')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
+const { getParams } = require('./getParams')
 
 /**
  * Checks if the command is a linked tap, and if so, calls the tap command on that tap
@@ -14,18 +15,24 @@ const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
  *
  * @returns {Object} - Found task and options
  */
-const checkLinkedTaps = (globalConfig, tasks, command, options) => {
+const checkLinkedTaps = async (globalConfig, tasks, command, options) => {
 
   const tapPath = get(globalConfig, `${ TAP_LINKS }.${ command }`)
   // If no tap path was found, we have no task, so just return
   if(!tapPath) return {}
 
   // Update the options to include the name argument
-  options = [ ...options, `tap=${command}` ]
+  options = [ ...options ]
 
   // Call getTask, and set the command to be tap
-  return getTask(tasks, 'tap', ...options)
+  const taskData = getTask(tasks, 'tap', ...options)
 
+  // Get the params now instead of in executeTask
+  // This way we can make all tap modification in one place
+  taskData.params = await getParams({ ...taskData, params: { tap: command } })
+  taskData.options.push(`tap=${ command }`)
+
+  return taskData
 }
 
 /**
@@ -38,7 +45,7 @@ const checkLinkedTaps = (globalConfig, tasks, command, options) => {
  *
  * @returns {Object} - Found task and options
  */
-const findTask = (globalConfig, tasks, command, options) => {
+const findTask = async (globalConfig, tasks, command, options) => {
   // Get the task from available tasks
   const foundTask = getTask(tasks, command, ...options)
 
@@ -46,7 +53,7 @@ const findTask = (globalConfig, tasks, command, options) => {
   // If not, check linked Taps for a tap task
   const taskData = foundTask && foundTask.task
     ? foundTask
-    : checkLinkedTaps(globalConfig, tasks, command, options)
+    : await checkLinkedTaps(globalConfig, tasks, command, options)
 
   // Validate the task, and return the taskData
   return validateTask(taskData.task) && taskData
