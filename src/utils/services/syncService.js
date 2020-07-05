@@ -26,7 +26,7 @@ const getLocalPath = (globalConfig, context, local, dependency) => {
 const syncService = async (args, params) => {
   const { globalConfig } = args
   const { dependency, local, remote } = params
-  
+
   const containerContext = await getContext({ container: params.container }, true)
   const { context, id } = containerContext
   containerContext.cmdContext = context

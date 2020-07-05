@@ -32,6 +32,7 @@ module.exports = {
       ...require('./new'),
       ...require('./start'),
       ...require('./stop'),
+      ...require('./sync'),
       ...require('./unlink'),
     },
   }

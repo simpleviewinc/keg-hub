@@ -200,7 +200,7 @@ const hasKeyIdentifier = option => {
  *
  * @returns {boolean} - T/F if an option has a key identifier
  */
-const optionsHasIdentifiers = options => {
+const optionsHasIdentifiers = (options=[]) => {
   return options
     .map(option => hasKeyIdentifier(option))
     .indexOf(true) !== -1
