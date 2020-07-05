@@ -18,12 +18,18 @@ ARG DOC_APP_PATH=/keg/tap
 
 # Update git calls to github to include the key so private repos can be pulled
 # Pull down the keg-core locally
-RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_TAP_URL $DOC_APP_PATH
+RUN if [ "$GIT_TAP_URL" != "INITIAL" ]; then \
+      git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+      git clone $GIT_TAP_URL $DOC_APP_PATH; \
+    fi
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/package.json
 COPY *.lock $DOC_APP_PATH/
+
+# Copy over keg-core package.json, and yarn.lock files
+COPY node_modules/keg-core/package.json $DOC_APP_PATH/node_modules/keg-core/package.json
+COPY node_modules/keg-core/*.lock $DOC_APP_PATH/node_modules/keg-core/
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \

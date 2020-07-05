@@ -16,11 +16,11 @@ const mutagenTerminate = async args => {
   const { context } = params
 
   // Get the sync item
-  const syncItem = await mutagen.sync.get({ name: context })
+  const sync = await mutagen.sync.get({ name: context })
 
   // If the sync item is found, terminate it
-  ;syncItem
-    ? await mutagen.sync.terminate(syncItem)
+  ;sync
+    ? await mutagen.sync.terminate({ name: sync.identifier })
     : !__internal.skipThrow && generalError(`Mutagen sync "${ context }" does not exist!`)
 
   Logger.highlight(`Mutagen sync`, `"${ context }"`, `terminated!`)

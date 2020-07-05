@@ -304,11 +304,41 @@ const getCmdParams = (args, ext={}) => {
   return isStr(args) ? { item: args, ...ext } : { ...ext, ...args }
 }
 
+
+/**
+ * Builds the names for a container and image based on the passed in params
+ * @function
+ * @param {Object} args - Use to build the names
+ * @param {Object} args.image - Image Object returned from get image
+ * @param {string} args.name - Custom name for the container
+ * @param {string} args.tag - Tag of the image
+ *
+ * @returns {Object} - Contains the container and image names
+ */
+const buildNames = ({ image, name, tag }) => {
+  const container = isStr(name)
+    ? name
+    : isStr(image)
+      ? `img-${image}`
+      : `img-${image.name}`
+
+  let imgName = isStr(image) ? image : image.name
+
+  imgName = isStr(tag)
+    ? tag.indexOf(image) !== 0
+      ? `${ image }:${ tag }`
+      : tag
+    : imgName
+
+  return { image: imgName, container }
+}
+
 module.exports = {
   asBuildArg,
   asContainerEnv,
   apiError,
   apiSuccess,
+  buildNames,
   compareItems,
   cmdSuccess,
   getCmdParams,

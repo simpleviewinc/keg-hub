@@ -1,4 +1,5 @@
 module.exports = {
+  ...require('./addKegCLI'),
   ...require('./confirmExec'),
   ...require('./exists'),
   ...require('./hasHelpArg'),

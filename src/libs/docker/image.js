@@ -1,7 +1,7 @@
-const { compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
-const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
-const { isArr, toStr, isStr } = require('@ltipton/jsutils')
 const { Logger } = require('KegLog')
+const { isArr, toStr, isStr } = require('@ltipton/jsutils')
+const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
+const { buildNames, compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 
 /**
  * Calls the docker api and gets a list of current images
@@ -230,21 +230,11 @@ const runImage = async (args) => {
     tag
   } = args
 
-  const containerName = isStr(name)
-    ? name
-    : isStr(image)
-      ? `img-${image}`
-      : `img-${image.name}`
-
-  let imgName = isStr(image) ? image : image.name
-  imgName = isStr(tag)
-    ? tag.indexOf(image) !== 0
-      ? `${ image }:${ tag }`
-      : tag
-    : imgName
+  // Build the names for the container and image
+  const names = buildNames({ image, name, tag })
 
   // Set the name of the container based off the image name
-  let cmdToRun = `docker run --name ${ containerName }`.trim()
+  let cmdToRun = `docker run --name ${ names.container }`.trim()
 
   // Add any passed in docker cli opts 
   cmdToRun = `${ cmdToRun } ${ isArr(opts) ? opts.join(' ') : opts }`.trim()
@@ -256,9 +246,10 @@ const runImage = async (args) => {
   const containerCmd = overrideCmd && (entry || '/bin/sh') || ''
 
   // Set / overwrite the entry for the container
-  cmdToRun = `${ cmdToRun } ${ imgName } ${ containerCmd }`.trim()
+  cmdToRun = `${ cmdToRun } ${ names.image } ${ containerCmd }`.trim()
 
   log && Logger.spacedMsg(`  Running command: `, cmdToRun)
+
   // Run the command
   return raw(cmdToRun, { options: { env: envs }}, location)
 

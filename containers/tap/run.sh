@@ -57,8 +57,21 @@ keg_run_tap_yarn_setup(){
 
 }
 
+# Sleeps for 2 seconds then trys to run the tap
+keg_sleep_loop(){
+  keg_message "Waiting for tap to be mounted..."
+  sleep 2
+  keg_run_the_tap
+}
+
 # Runs a Tap
 keg_run_the_tap(){
+
+  if [[ ! -f "$TAP_PATH/tap.json" ]]; then
+    keg_message "No Tap mounted, will try again in 2 seconds!"
+    keg_sleep_loop
+    return
+  fi
 
   cd $TAP_PATH
 
