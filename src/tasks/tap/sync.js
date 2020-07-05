@@ -1,3 +1,4 @@
+const { syncService } = require('KegUtils/services')
 
 /**
  * Sync a local folder into the tap docker container
@@ -10,8 +11,7 @@
  * @returns {void}
  */
 const sync = args => {
-  const { command, options, globalConfig, params } = args
-
+  return syncService(args, { ...args.params, container: 'tap' })
 }
 
 module.exports = {
@@ -20,5 +20,27 @@ module.exports = {
     action: sync,
     description: `Sync a local folder into the tap docker container`,
     example: '',
+    options: {
+      dependency: {
+        alias: [ 'dep' ],
+        description: 'Name of the dependency to sync into the components container',
+        enforced: true
+      },
+      tap: { 
+        description: 'Name of the tap to run. Must be a tap linked in the global config',
+        example: 'keg tap start --tap events-force',
+        required: true,
+      },
+      local: {
+        alias: [ 'from' ],
+        description: 'Local path to sync into the keg-components container',
+        enforced: true
+      },
+      remove: {
+        alias: [ 'to' ],
+        description: 'Path on the keg-components container to sync to',
+        enforced: true
+      }
+    }
   }
 }
