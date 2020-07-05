@@ -8,6 +8,7 @@ module.exports = {
     tasks: {
       ...require('./build'),
       ...require('./down'),
+      ...require('./restart'),
       ...require('./stop'),
       ...require('./up'),
     }

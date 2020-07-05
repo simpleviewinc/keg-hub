@@ -43,7 +43,7 @@ const logSpawn = (args, message) => {
  * @returns {*} - Response from spawned process
  */
 const doSpawnCmd = (...args) => {
-  logSpawn(args, [ `  Running command: `, `${ args[0] }${ getExtraArgs(args[1]) }` ])
+  logSpawn(args, [ `Running command: `, `${ args[0] }${ getExtraArgs(args[1]) }` ])
   return spawnProc(...args)
 }
 

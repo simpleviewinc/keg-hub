@@ -1,7 +1,7 @@
+const { Logger } = require('KegLog')
 const { get } = require('@ltipton/jsutils')
 const { mutagenService } = require('./mutagenService')
 const { runInternalTask } = require('../task/runInternalTask')
-const { Logger } = require('KegLog')
 
 /**
  * Runs `docker-compose` up command based on the passed in args

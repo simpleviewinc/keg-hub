@@ -30,6 +30,7 @@ module.exports = {
       ...require('./destroy'),
       ...require('./link'),
       ...require('./new'),
+      ...require('./restart'),
       ...require('./start'),
       ...require('./stop'),
       ...require('./sync'),
