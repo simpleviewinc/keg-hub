@@ -16,20 +16,20 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/tap
 
-# Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-core locally
-RUN if [ "$GIT_TAP_URL" != "INITIAL" ]; then \
-      git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-      git clone $GIT_TAP_URL $DOC_APP_PATH; \
-    fi
-
 # Copy over the package.json, and yarn.lock files
-COPY package.json $DOC_APP_PATH/package.json
-COPY *.lock $DOC_APP_PATH/
+COPY . /keg-temp/
 
-# Copy over keg-core package.json, and yarn.lock files
-COPY node_modules/keg-core/package.json $DOC_APP_PATH/node_modules/keg-core/package.json
-COPY node_modules/keg-core/*.lock $DOC_APP_PATH/node_modules/keg-core/
+# Update the build steps git config to include the key
+RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+
+# Pull down the tap locally if a git tap url exists
+# Otherwise copy over the local version from keg-temp
+RUN if [ "$GIT_TAP_URL" != "INITIAL" ]; then \
+      git clone $GIT_TAP_URL $DOC_APP_PATH; \
+      rm -rf /keg-temp; \
+    else \
+      cp -R /keg-temp/ $DOC_APP_PATH; \
+    fi
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \

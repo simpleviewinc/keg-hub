@@ -38,8 +38,8 @@ module.exports = {
       },
       cache: {
         description: 'Docker will use build cache when building the image',
-        example: 'keg tap --cache false',
-        default: true
+        example: 'keg tap --cache',
+        default: false
       },
       core: {
         description: 'Use the local keg-core package.json when install node_modules during the build',
