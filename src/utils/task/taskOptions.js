@@ -127,7 +127,7 @@ const checkQuotedOptions = (argument, options, index) => {
  * @returns {Void}
  */
 const checkRequired = (task, key, meta) => {
-  meta.required && throwRequired(task, key, meta)
+(meta.require || meta.required) && throwRequired(task, key, meta)
 }
 
 /**

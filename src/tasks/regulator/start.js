@@ -26,7 +26,7 @@ const getService = service => {
  * @returns {void}
  */
 const start = async args => {
-  
+
   // Call the build service to ensure required images are built
   await buildService(args, { context: 'regulator', image: 'keg-regulator' })
 
@@ -43,21 +43,20 @@ module.exports = {
     alias: [ 'st' ],
     description: `Runs keg-regulators in a docker container`,
     example: 'keg test start <options>',
-    options: {
-      ...serviceOptions('regulator', 'start'),
+    options: serviceOptions('regulator', 'start', {
       context: {
         description: 'Context or name of the repo to run the regulator tests on',
         require: true
       },
       tap: {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
-        example: `keg docker build --context tap --tap events-force`,
+        example: `keg regulator start --context tap --tap events-force`,
       },
       service: {
         description: 'Regulator service to run.',
-        example: 'keg regulator --service bdd',
+        example: 'keg regulator start --service bdd',
         default: 'bdd',
       },
-    }
+    }),
   }
 }

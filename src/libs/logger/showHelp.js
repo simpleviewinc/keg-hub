@@ -111,13 +111,13 @@ const showTaskOptions = (task, infoSpacer, dblSpacer) => {
   Logger.empty()
   console.log(colors.brightBlue(`${infoSpacer}Options:`))
   mapObj(task.options, (name, meta) => {
-    const { description, enforced, required, alts } = isStr(meta)
+    const { description, enforced, require, required, alts } = isStr(meta)
       ? { description: meta }
       : meta
 
     console.log(
       infoSpacer,
-      (required || enforced) && colors.red(` *`) || '  ',
+      (require || required || enforced) && colors.red(` *`) || '  ',
       colors.brightCyan(`${name}:`),
       colors.brightWhite(meta.description)
     )

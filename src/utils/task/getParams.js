@@ -1,4 +1,3 @@
-const { throwRequired } = require('../error')
 const { exists } = require('../helpers')
 const { optionsAsk } = require('./optionsAsk')
 const {
@@ -310,7 +309,7 @@ const getParams = async ({ options=[], task, params={} }) => {
   // This is used later to compare the keys with the passed in options
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
-  // If not task keys to loop, just return empty
+  // If no task keys to loop, just return empty
   if(!taskKeys || !taskKeys.length) return ensureParams(task, params)
 
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)

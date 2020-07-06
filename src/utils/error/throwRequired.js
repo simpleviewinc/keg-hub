@@ -10,7 +10,7 @@ const { throwTaskFailed } = require('./throwTaskFailed')
  * @returns {void}
  */
 const throwRequired = (task, key, meta) => {
-  const requireType = meta.required ? 'requires' : 'enforces a'
+  const requireType = (meta.require || meta.required) ? 'requires' : 'enforces a'
 
   Logger.error(`\n Task '${task.name}' ${requireType} '${key}' argument.`)
 

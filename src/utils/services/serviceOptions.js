@@ -9,6 +9,11 @@ const { deepMerge } = require('@ltipton/jsutils')
  */
 const serviceOptions = (task='', action='', overrides={}) => {
   return deepMerge({
+    // Add the overrides here, so key order matches 
+    // This allows setting the context as the first key within the object
+    // The overrides + the options defined here get merged with the overrides again
+    // This is to ensure the override values are used, while keeping the correct order
+    ...overrides,
     build: {
       description: 'Removes and rebuilds the docker container before running keg-components',
       example: 'keg ${ task } ${ action } --build',
