@@ -18,3 +18,8 @@ sync:
         - "/reports"
         - "/build"
         - "/docs"
+actions:
+  retheme:
+    - "cd /keg/keg-components/node_modules/@simpleviewinc/re-them"
+    - "yarn install"
+    - "yarn dev"
