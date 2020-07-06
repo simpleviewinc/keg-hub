@@ -1,15 +1,31 @@
-import { useLayoutEffect, useState, useMemo } from 'react'
-import { get, deepMerge, reduceObj, logData, jsonEqual } from 'jsutils'
+import { useLayoutEffect, useState } from 'react'
 import { useTheme } from '@simpleviewinc/re-theme'
+import {
+  get,
+  deepMerge,
+  reduceObj,
+  logData,
+  checkCall,
+  isEmptyColl,
+  jsonEqual,
+} from 'jsutils'
 
 /**
- * Checks it two passed in objects are equal pointers or equal as json strings
- * @param {Object} obj1 - Object to check
- * @param {Object} obj2 - Object to check
+ * Checks if two style object are valid and the same
+ * @param {Object} current - Current styles object being used
+ * @param {string|Array} updates - Updated styles object to validate agains
  *
- * @returns {boolean} - If objects are equal
+ * @returns {boolean} - If the style objects are equal to each other
  */
-const checkEqual = (obj1, obj2) => obj1 === obj2 || jsonEqual(obj1, obj2)
+const stylesEqual = (current, updates) => {
+  return (current && !updates) || (!current && updates)
+    ? false
+    : Boolean(
+      (!current && !updates) ||
+          (isEmptyColl(current) && isEmptyColl(updates)) ||
+          jsonEqual(current, updates)
+    )
+}
 
 /**
  * Gets the styles from the theme object based on passed in path
@@ -23,7 +39,7 @@ const getStylesFromPath = (theme, path) => {
   // If they don't exist, then try to get the default
   return (
     get(theme, path) ||
-    (() => {
+    checkCall(() => {
       logData(`Could not find ${path} on theme`, theme, `warn`)
 
       // Replace the last item, with default
@@ -32,7 +48,7 @@ const getStylesFromPath = (theme, path) => {
 
       // Try to get the defaults
       return get(theme, split, {})
-    })()
+    })
   )
 }
 
@@ -44,32 +60,43 @@ const getStylesFromPath = (theme, path) => {
  *
  * @returns {Object} - Merged styles object
  */
-const getStyles = (pathStyles, userStyles) =>
-  useMemo(() => {
-    // If no user styles, just return the pathStyles
-    if (!userStyles) return pathStyles
+const mergeStyles = (pathStyles, userStyles) => {
+  // If no user styles, just return the pathStyles
+  if (!userStyles) return pathStyles
 
-    // Get the keys of both to try and find the level of the userStyles
-    const pathKeys = Object.keys(pathStyles)
-    const userKeys = Object.keys(userStyles)
+  // Get the keys of both to try and find the level of the userStyles
+  const pathKeys = Object.keys(pathStyles)
+  const userKeys = Object.keys(userStyles)
 
-    // Check if the userKeys has a key at the same level as the pathKeys
-    return pathKeys.indexOf(userKeys[0]) !== -1
-      ? // If there is a match, then merge the objects at the top level
-        // Example => pathStyles.default && userStyles.default both exist
-        deepMerge(pathStyles, userStyles)
-      : // Otherwise the userStyles are expected to be one level deeper
-    // So add the user styles to each key of the path styles
-    // Example => pathStyles.default.main && userStyles.main both exist
-      reduceObj(
-        pathStyles,
-        (key, value, updated) => {
-          updated[key] = deepMerge(value, userStyles)
-          return updated
-        },
-        {}
-      )
-  }, [ pathStyles, userStyles ])
+  // Check if the userKeys has a key at the same level as the pathKeys
+  return pathKeys.indexOf(userKeys[0]) !== -1
+    ? // If there is a match, then merge the objects at the top level
+      // Example => pathStyles.default && userStyles.default both exist
+      deepMerge(pathStyles, userStyles)
+    : // Otherwise the userStyles are expected to be one level deeper
+  // So add the user styles to each key of the path styles
+  // Example => pathStyles.default.main && userStyles.main both exist
+    reduceObj(
+      pathStyles,
+      (key, value, updated) => {
+        updated[key] = deepMerge(value, userStyles)
+        return updated
+      },
+      {}
+    )
+}
+
+/**
+ * Builds the theme styles by getting the styles from the path, and merging with the styles
+ * @param {Object} theme - App Theme
+ * @param {string|Array} path - Path to the styles in the theme
+ * @param {Object} styles - Custom user styles
+ *
+ * @returns {Object} - Merged theme styles
+ */
+const buildTheme = (theme, path, styles) => {
+  return mergeStyles(getStylesFromPath(theme, path), styles)
+}
 
 /**
  * Finds a theme object from the passed in path and merges it with the passed in styles object
@@ -80,45 +107,35 @@ const getStyles = (pathStyles, userStyles) =>
  * @returns {Array} - Built styles object and function to update the styles
  */
 export const useThemePath = (path, styles) => {
+  // Ensure styles is a collection and it's not empty
+  const [ userStyles, setUserStyles ] = useState(styles)
+  const customEqual = stylesEqual(styles, userStyles)
+
   // Get access to the theme
   const theme = useTheme()
 
-  // Get the styles from the passed in path on the theme
-  const foundStyles = getStylesFromPath(theme, path)
-
-  // Add the found path styles to the state, so we can compare it later
-  const [ pathStyles, setPathStyles ] = useState(foundStyles)
-
-  // Set the default user styles
-  const [ userStyles, setUserStyles ] = useState(styles)
-
-  // Create the themeStyles from the passed in userStyles and the theme pathStyles
+  // Create the themeStyles from the passed in styles and the theme pathStyles
   const [ themeStyles, setThemeStyles ] = useState(
-    getStyles(pathStyles, userStyles)
+    buildTheme(theme, path, styles)
   )
 
   // Use the layoutEffect hook to ensure it runs before the dom paint happens
-  // This way we don't cause a re-paint when the styles change
   useLayoutEffect(() => {
-    // Check if the styles have updated
-    const userEqual = checkEqual(styles, userStyles)
-    const pathEqual = checkEqual(foundStyles, pathStyles)
+    // Build the theme styles
+    const updatedStyles = buildTheme(theme, path, styles)
 
-    if (userEqual && pathEqual) return
+    // Check the current themeStyles with the updatedStyles
+    if (stylesEqual(themeStyles, updatedStyles)) return
 
-    // If there's a change to the user styles, update them on the state
-    !userEqual && setUserStyles(styles)
+    // If user styles are not equal to the passed in styles then update them
+    !customEqual && setUserStyles(styles)
 
-    // If there's a change to the theme path styles, update them on the state
-    !pathEqual && setPathStyles(foundStyles)
-
-    // If there's a change to the userStyles || pathStyles, update the themeStyles
-    ;(!userEqual || !pathEqual) &&
-      setThemeStyles(getStyles(pathStyles, userStyles))
+    // If the current themeStyles are not equal the updateTheme styles, update them
+    setThemeStyles(updatedStyles)
 
     // Track changes on the foundStyles ( theme ) and styles ( user ) object
     // If the theme or user styles change we want to re-run the hook to get the updates
-  }, [ foundStyles, styles ])
+  }, [ theme, path, customEqual ])
 
   return [ themeStyles, setThemeStyles ]
 }

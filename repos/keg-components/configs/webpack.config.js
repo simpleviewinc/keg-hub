@@ -4,6 +4,7 @@ const { aliases } = require('./aliases.config')
 const babelConfig = require('./babel.config.js')
 const { get } = require('jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
+const ENV = process.env.NODE_ENV || process.env.ENV || 'development'
 
 // Hard coded plugins
 const addPlugins = [
@@ -29,6 +30,7 @@ const addRules = [
     test: /\.(js|jsx)$/,
     include: [
       path.resolve(__dirname, "../node_modules/@expo/vector-icons"),
+      path.resolve(__dirname, "../node_modules/@simpleviewinc/re-theme"),
     ],
     use: {
       loader: "babel-loader",
@@ -99,6 +101,18 @@ const customRules = rules => {
   return updated.concat(addRules)
 }
 
+// Set custom watch options for webpack re-load
+// Add re-theme build folder so we re-load webpack anytime re-theme re-builds
+const customWatchOptions = options => {
+  return {
+    ...options,
+    ignored: [
+      ...(options.ignored || []),
+      /node_modules([\\]+|\/)+(?!\@simpleviewinc\/re-theme\/build\/esm)/,
+    ]
+  }
+}
+
 module.exports = ({ config, mode }) => {
 
   // Setup custom extensions for loading platform specific files
@@ -112,6 +126,12 @@ module.exports = ({ config, mode }) => {
 
   // Setup custom plugin settings
   config.plugins = customPlugins(config.plugins)
+
+  // Setup custom watch options, to watch more then the src directory
+  // Only want to watch other locations when in development mode
+  ENV === 'development' && (
+    config.watchOptions = customWatchOptions(config.watchOptions || {})
+  )
 
   return config
 }

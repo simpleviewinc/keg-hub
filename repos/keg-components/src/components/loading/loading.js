@@ -47,7 +47,7 @@ export const Loading = props => {
     children,
     text = 'Loading',
     indicator,
-    styles = {},
+    styles,
     themePath,
     type = 'default',
   } = props
@@ -58,7 +58,7 @@ export const Loading = props => {
     <View style={builtStyles.container}>
       { children || (
         <Progress
-          styles={styles}
+          styles={builtStyles}
           text={text}
           loadIndicator={indicator}
         />
