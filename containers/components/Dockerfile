@@ -31,7 +31,7 @@ COPY *.lock $DOC_APP_PATH/
 RUN cd $DOC_APP_PATH; \
     echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
     echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
-    yarn install --frozen-lockfile; \
+    yarn install; \
     yarn cache clean; \
     rm -f .npmrc; \
     rm -f $DOC_APP_PATH/.npmrc;

@@ -29,7 +29,7 @@ COPY *.lock $DOC_APP_PATH/
 
 # Install the dependecies with yarn install, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
-    yarn install --frozen-lockfile; \
+    yarn install; \
     yarn cache clean; \
     rm -f .npmrc
 
