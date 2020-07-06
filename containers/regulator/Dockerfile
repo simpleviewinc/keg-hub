@@ -8,15 +8,27 @@ WORKDIR /
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
 ARG GIT_KEY
-ARG GIT_REGULATOR_URL
+ARG GIT_REGULATOR_URL=INITIAL
+
+# Should we use the local copy of the keg-regulator repo when building
+ARG KEG_COPY_LOCAL
 
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/keg-regulator
 
+# Copy over the local keg-regulator repo to a temp dir
+COPY . /keg-temp/
+
 # Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-core locally
+# Pull down the keg-regulator locally if a git regulator url exists
+# Otherwise copy over the local version from keg-temp
 RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_REGULATOR_URL $DOC_APP_PATH
+    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_REGULATOR_URL" != "INITIAL" ]; then \
+      git clone $GIT_REGULATOR_URL $DOC_APP_PATH; \
+    else \
+      cp -R /keg-temp/ $DOC_APP_PATH; \
+    fi; \
+    rm -rf /keg-temp
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/package.json

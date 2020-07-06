@@ -72,6 +72,11 @@ module.exports = {
         example: 'keg docker compose build --cache',
         default: true
       },
+      local: {
+        description: 'Copy the local repo into the docker container at build time',
+        example: `keg docker build --local`,
+        default: false,
+      },
       log: {
         description: 'Log the compose command to the terminal',
         example: 'keg docker compose build --log false',

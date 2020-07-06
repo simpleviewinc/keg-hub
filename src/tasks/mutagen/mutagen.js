@@ -11,8 +11,10 @@ const { create } = require('./create')
  * @returns {void}
  */
 const mutagenSync = args => {
-  // Automatically run the create task
-  return runInternalTask('tasks.mutagen.tasks.create', args)
+  // Automatically list current syncs or create a sync based on passed in options
+  return !args.options.length
+    ? runInternalTask('tasks.mutagen.tasks.list', args)
+    : runInternalTask('tasks.mutagen.tasks.create', args)
 }
 
 module.exports = {

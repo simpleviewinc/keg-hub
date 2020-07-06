@@ -8,6 +8,10 @@ WORKDIR /
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
 ARG GIT_KEY
+ARG GIT_COMPONENTS_URL=INITIAL
+
+# Should we use the local copy of the keg-core repo when building
+ARG KEG_COPY_LOCAL
 
 # Path of the keg cli within the docker container
 ARG DOC_CLI_PATH=/keg/keg-cli
@@ -16,25 +20,31 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 ARG DOC_APP_PATH=/keg/keg-components
 
 
-ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
+# Copy over the local keg-components repo to a temp dir
+COPY . /keg-temp/
 
 # Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-components locally
-RUN git clone $GIT_COMPONENTS_URL $DOC_APP_PATH;
+# Pull down the tap locally if a git tap url exists
+# Otherwise copy over the local version from keg-temp
+RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_COMPONENTS_URL" != "INITIAL" ]; then \
+      echo "[ Keg-CLI ] Pulling keg-components from github"; \
+      git clone $GIT_COMPONENTS_URL $DOC_APP_PATH; \
+    else \
+      echo "[ Keg-CLI ] Using local keg-components repo"; \
+      cp -R /keg-temp/ $DOC_APP_PATH; \
+    fi; \
+    rm -rf /keg-temp
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/
 COPY *.lock $DOC_APP_PATH/
 
-# Create a fake post install script for after the yarn install
 # Install the dependecies with yarn install, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
-    echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
-    echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
     yarn install; \
     yarn cache clean; \
-    rm -f .npmrc; \
-    rm -f $DOC_APP_PATH/.npmrc;
+    rm -f .npmrc
 
 # ------- New Build Stage ------- #
 
@@ -42,10 +52,6 @@ RUN cd $DOC_APP_PATH; \
 # This is so GIT_KEY is not accessable in the final image
 FROM node:12.8-alpine
 WORKDIR /
-
-# These args are expected to be set as --build-arg
-# Which Allow them to be used durring the build
-ARG GIT_COMPONENTS_URL=https://github.com/simpleviewinc/keg-components.git
 
 # Path of the keg cli within the docker container
 ARG DOC_CLI_PATH=/keg/keg-cli

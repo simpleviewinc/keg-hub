@@ -51,6 +51,11 @@ module.exports = {
         example: 'keg tap --env staging',
         default: 'development',
       },
+      local: {
+        description: 'Copy the local repo into the docker container at build time',
+        example: `keg tap build --local`,
+        default: false,
+      },
       tags: {
         description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
         example: 'keg tap build tags=my-tag,local,development'

@@ -8,9 +8,10 @@ WORKDIR /
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
 ARG GIT_KEY
+ARG GIT_CORE_URL=INITIAL
 
-# Url to git keg-core
-ARG GIT_CORE_URL=https://github.com/simpleviewinc/keg-core.git
+# Should we use the local copy of the keg-core repo when building
+ARG KEG_COPY_LOCAL
 
 # Path of the keg cli within the docker container
 ARG DOC_CLI_PATH=/keg/keg-cli
@@ -18,10 +19,19 @@ ARG DOC_CLI_PATH=/keg/keg-cli
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/keg-core
 
+# Copy over the local keg-core repo to a temp dir
+COPY . /keg-temp/
+
 # Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-core locally
+# Pull down the tap locally if a git tap url exists
+# Otherwise copy over the local version from keg-temp
 RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_CORE_URL $DOC_APP_PATH
+    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_CORE_URL" != "INITIAL" ]; then \
+      git clone $GIT_CORE_URL $DOC_APP_PATH; \
+    else \
+      cp -R /keg-temp/ $DOC_APP_PATH; \
+    fi; \
+    rm -rf /keg-temp
 
 # Copy over the package.json, and yarn.lock files
 COPY package.json $DOC_APP_PATH/package.json

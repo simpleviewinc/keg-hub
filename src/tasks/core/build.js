@@ -38,19 +38,26 @@ module.exports = {
     options: {
       envs: {
         description: 'Add build args from container env files',
+        example: `keg core build --envs`,
         default: false
       },
       cache: {
         description: 'Docker will use build cache when building the image',
+        example: `keg core build --cache false`,
         default: true
+      },
+      local: {
+        description: 'Copy the local repo into the docker container at build time',
+        example: `keg core build --local`,
+        default: false,
       },
       tags: {
         description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg docker build tags=my-tag,local,development'
+        example: 'keg core build tags=my-tag,local,development'
       },
       log: {
         description: 'Log docker command',
-        example: 'keg docker build log=true',
+        example: 'keg core build log=true',
         default: false
       },
     }

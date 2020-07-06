@@ -3,7 +3,11 @@ FROM node:12.8-alpine AS builder
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
 ARG GIT_KEY
-ARG GIT_CLI_URL
+ARG GIT_CLI_URL=INITIAL
+
+# Should we use the local copy of the keg-core repo when building
+ARG KEG_COPY_LOCAL
+
 ARG DOC_CLI_PATH=/keg/keg-cli
 
 # Set the default expojs version to it's locked down
@@ -15,14 +19,22 @@ WORKDIR /
 RUN apk add --no-cache git bash; \
     yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli nodemon
 
-# Pull down the keg-cli locally
-RUN if [ ! -z "$GIT_CLI_URL" ]; then \
-    git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
-    git clone $GIT_CLI_URL $DOC_CLI_PATH; \
-  fi
+# Copy over the local keg-components repo to a temp dir
+COPY . /keg-temp/
+
+# Update git calls to github to include the key so private repos can be pulled
+# Pull down the keg-cli locally if GIT_CLI_URL
+# Otherwise copy over the local version from keg-temp
+RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
+      git clone $GIT_CLI_URL $DOC_CLI_PATH; \
+    else \
+      cp -R /keg-temp/ $DOC_CLI_PATH; \
+    fi; \
+    rm -rf /keg-temp
 
 # Copy over our local containers folder to get the updated run scripts
-COPY containers $DOC_CLI_PATH/containers
+COPY . $DOC_CLI_PATH/
 
 # ------- New Build Stage ------- #
 

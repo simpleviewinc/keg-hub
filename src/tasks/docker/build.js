@@ -45,16 +45,17 @@ const copyLocalPackageJson = async (globalConfig, location) => {
  */
 const dockerBuild = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { context, envs, core, log } = params
+  const { context, envs={}, core, log } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
-    globalConfig,
+    envs,
     task,
     params,
+    globalConfig,
   })
 
   // If using a tap, and no location is found, throw an error
@@ -114,6 +115,11 @@ module.exports = {
       core: {
         description: 'Use the local keg-core package.json when install node_modules during the build',
         example: `keg docker build --context tap --core true`,
+        default: false,
+      },
+      local: {
+        description: 'Copy the local repo into the docker container at build time',
+        example: `keg docker build --local`,
         default: false,
       },
       tap: {

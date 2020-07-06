@@ -24,6 +24,7 @@ module.exports = {
     example: 'keg regulator <options>',
     tasks: {
       ...require('./build'),
+      ...require('./destroy'),
       ...require('./start'),
       ...require('./stop'),
       ...require('./sync'),

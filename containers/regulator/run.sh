@@ -59,11 +59,21 @@ keg_run_the_regulator(){
 
 }
 
+# Keeps the regulator container running
+# This way tests can be re-run without needing to re-start the container
+keg_keep_running(){
+  tail -f /dev/null
+  # sleep infinity
+}
+
 # Add yarn global bin to the $PATH ENV
 keg_add_yarn_bin_to_path
 
-# Run yarn setup for any extra node_modules to be installed from the mounted regulator's package.json
+# Run yarn setup for any extra node_modules from the mounted regulator's package.json
 keg_run_regulator_yarn_setup
 
-# Start the keg core instance
+# Start the keg regulator instance
 keg_run_the_regulator
+
+# Keep the regulator container running
+keg_keep_running

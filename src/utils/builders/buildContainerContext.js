@@ -1,19 +1,16 @@
-const { get } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
+const { get } = require('@ltipton/jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { getGitKey } = require('../git/getGitKey')
+const { getPrefix } = require('../getters/getPrefix')
 const { CONTEXT_KEYS } = require('KegConst/constants')
 const { getPathFromConfig } = require('../globalConfig')
-const { buildTapContext } = require('./buildTapContext')
 const { buildCmdContext } = require('./buildCmdContext')
+const { buildContextEnvs } = require('./buildContextEnvs')
 const { getTapPath } = require('../globalConfig/getTapPath')
-const { getSetting } = require('../globalConfig/getSetting')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { getContainerFromContext } = require('../docker/getContainerFromContext')
 const { generalError, throwNoTapLink, throwNoConfigPath } = require('../error')
 const { IMAGES, LOCATION_CONTEXT } = DOCKER
-const { getPrefix } = require('../getters/getPrefix')
-
 /**
  * Gets the location where a docker command should be executed
  * @function
@@ -96,27 +93,16 @@ const buildContainerContext = async args => {
     tap,
   )
 
-  // Get the ENV vars for the command context
-  // Merge with any passed in envs
-  const contextEnvs = {
-    // Experimental docker builds. Makes docker faster and cleaner
-    ...(getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1, COMPOSE_DOCKER_CLI_BUILD: 1 } : {}),
+  // Get the ENV vars for the command context and merge with any passed in envs
+  const contextEnvs = await buildContextEnvs({
+    tap,
+    envs,
+    params,
+    cmdContext,
+    globalConfig,
+  })
 
-    // Get the ENV context for the command
-    ...getContainerConst(cmdContext, 'env', {}),
-
-    // Get the ENVs for the Tap context if it exists
-    ...( tap && tap !== 'tap' && await buildTapContext({
-        globalConfig,
-        cmdContext,
-        tap,
-        envs
-      })),
-
-    // Add the git key so we can call github within the image / container
-    GIT_KEY: await getGitKey(globalConfig),
-  }
-
+  // Join all context data into one object
   const builtContext = {
     ...contextData,
     cmdContext,

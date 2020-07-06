@@ -16,7 +16,12 @@ const { composeService } = require('./composeService')
  * @returns {void}
  */
 const bddService = async args => {
+
+  // Clean up any old syncs no longer running
+  await runInternalTask('mutagen.tasks.clean', args)
+
   const composeContext = await composeService(args, { context: 'regulator', container: 'keg-regulator' })
+
 
   console.log(`---------- bdd service ----------`)
 

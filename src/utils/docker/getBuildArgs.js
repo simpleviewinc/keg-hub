@@ -38,12 +38,15 @@ const getBuildArgs = async (globalConfig, params) => {
         break
       }
       case 'GIT_CLI_URL':{
-        DOCKER_ENV !== 'local' &&
-          ( useVal = getGitUrl({ globalConfig, repo: 'cli' }) )
+        useVal = getGitUrl({ globalConfig, repo: 'cli' })
         break
       }
       case 'GIT_CORE_URL':{
         useVal = getGitUrl({ globalConfig, repo: 'core' })
+        break
+      }
+      case 'GIT_COMPONENTS_URL':{
+        useVal = getGitUrl({ globalConfig, repo: 'components' })
         break
       }
       case 'GIT_TAP_URL':{
