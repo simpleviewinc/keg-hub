@@ -6,7 +6,7 @@ import { padding, margin, flex, layout } from './layout'
 import { setDefaultTheme } from '@simpleviewinc/re-theme'
 import { transition } from './transition'
 
-export const theme = setDefaultTheme({
+export const theme = { 
   app,
   components,
   display,
@@ -16,4 +16,4 @@ export const theme = setDefaultTheme({
   margin,
   padding,
   transition,
-})
+}

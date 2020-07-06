@@ -56,6 +56,7 @@ export const ReThemeProvider = props => {
 
     // Get the size we should change to
     const changeToSize = getSize(width)
+
     // If no size to change to, just return
     if (!changeToSize) return
 

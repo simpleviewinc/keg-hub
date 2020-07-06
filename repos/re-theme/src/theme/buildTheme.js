@@ -13,18 +13,19 @@ import { restructureTheme } from './restructureTheme'
  * <br/> It takes the all sizes less then the index of the sizeKey, included in the sizeKey
  * <br/> Then loops over each one and joins them together
  * @function
- * @param {Object} theme - Parent theme object hold the child themes divided by size
+ * @param {Object} theme - Parent theme object, which holds the child themes organized by their size keys (e.g. $small)
  * @param {string} sizeKey - Name of the current window size
  * @param {Object} [extraTheme={}] - Extra theme items to add to the theme, has lowest priority
  *
  * @returns {Object} - Merged theme
  */
 const joinThemeSizes = (theme, sizeKey, extraTheme = {}) => {
+  const sizesToMerge = getMergeSizes(sizeKey)
   return deepMerge(
     // Add the extra theme first, so it has lowest priority
     extraTheme,
     // Get the sizes to merge, and map to the theme
-    ...getMergeSizes(sizeKey).reduce((themes, key) => {
+    ...sizesToMerge.reduce((themes, key) => {
       // Check if a theme exists for the passed in key
       // And add it to the themes array
       theme[key] && themes.push(theme[key])
@@ -36,7 +37,8 @@ const joinThemeSizes = (theme, sizeKey, extraTheme = {}) => {
 
 /**
  * Checks if the theme is the same as the default theme.
- * <br/> If not then merges the two together
+ * <br/> If not then merges the two together.
+ * <br /> Also, adds the size themes at the root of the resulting object
  * @function
  * @param {Object} theme - Passed in user there
  * @param {Object} defaultTheme - Cached default theme
@@ -78,9 +80,18 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
   const mergedTheme = mergeWithDefault(theme, defaultTheme, usrPlatform)
 
   // Extract the sizes from the theme
-  const { xsmall, small, medium, large, xlarge, ...extraTheme } = mergedTheme
+  const {
+    $xsmall,
+    $small,
+    $medium,
+    $large,
+    $xlarge,
+    ...extraTheme
+  } = mergedTheme
 
-  const builtTheme = size ? joinThemeSizes(theme, key, extraTheme) : extraTheme
+  const builtTheme = size
+    ? joinThemeSizes(mergedTheme, key, extraTheme)
+    : extraTheme
 
   builtTheme.RTMeta = { key, size, width, height }
   builtTheme.join = builtTheme.join || joinTheme

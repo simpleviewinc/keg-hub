@@ -107,7 +107,7 @@ const mergePlatformOS = (theme, platforms) => {
 }
 
 /**
- * Transverse through the theme to find any keys matching the current platform
+ * Traverse through the theme to find any keys matching the current platform
  * <br/> Once a platform key is found, any sub-keys of that object are not searched
  * @function
  * @example:
@@ -148,7 +148,7 @@ const getPlatformTheme = (theme, platforms, Platform = {}) => {
 }
 
 /**
- * Transverse through the theme to find any size objects matching this size
+ * Traverse through the theme to find any size objects matching this size
  * <br/> Adds them to the root size object, and removes from the default paht
  * @function
  * @example:
@@ -168,7 +168,7 @@ export const restructureTheme = (theme, usrPlatform = {}) => {
   // Pass in the response after the sizes are set
   // Loop over the size map hash keys
   return Object.keys(getSizeMap().hash).reduce((updatedTheme, size) => {
-    // Transverse through the theme to find any size objects matching this size
+    // traverse through the theme to find any size objects matching this size
     const builtSize = buildSizedThemes(theme, theme[size] || {}, size)
 
     // If builtSize is not empty, then size data was found, so set it to the updatedTheme object

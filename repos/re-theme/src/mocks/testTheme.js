@@ -61,17 +61,17 @@ const colors = {
 }
 
 export const buttonTheme = {
-  small: { components: { button: { width: 30 } } },
+  $small: { components: { button: { width: 30 } } },
   components: {
     button: {
-      default: { small: { fontSize: 12, borderRadius: 10 } },
-      small: { width: 100 },
+      default: { $small: { fontSize: 12, borderRadius: 10 } },
+      $small: { width: 100 },
     },
   },
 }
 
 export const testTheme = {
-  small: {
+  $small: {
     components: {
       button: {
         width: 30,
@@ -86,15 +86,15 @@ export const testTheme = {
           borderRadius: 4,
           fontSize: 14,
           color: '#ffffff',
-          small: {
+          $small: {
             fontSize: 12,
             borderRadius: 10,
           },
-          medium: {
+          $medium: {
             fontSize: 16,
             padding: 15,
           },
-          large: {
+          $large: {
             fontSize: 18,
             padding: 20,
           },
@@ -109,14 +109,14 @@ export const testTheme = {
   },
   colors,
   meeting: {
-    xlarge: {
+    $xlarge: {
       text: {
         time: {
           font: 'WEB FONT',
         },
       },
     },
-    large: {
+    $large: {
       text: {
         $web: {
           time: {
@@ -135,7 +135,7 @@ export const testTheme = {
         },
       },
     },
-    medium: {
+    $medium: {
       $web: {
         meetingListOffset: 200,
         $native: {
@@ -167,7 +167,7 @@ export const testTheme = {
         },
       },
     },
-    small: {
+    $small: {
       text: {
         user: {
           width: '95px',
@@ -177,7 +177,7 @@ export const testTheme = {
         },
       },
     },
-    xsmall: {
+    $xsmall: {
       meetingList: {
         $web: {
           flex: 1,

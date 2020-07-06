@@ -11,6 +11,7 @@ import {
   UseThemeActiveExample,
   UseThemeFocusExample,
   UseThemeHoverExample,
+  UseThemeViewportExample,
 } from '../components'
 import ForkMeOnGithub from 'fork-me-on-github'
 
@@ -45,6 +46,10 @@ export const AppScreen = withTheme(props => {
         Element={ Readme }
       />
 
+      <Section style= { gridStyle } title={'Screen Dimensions'} theme={ theme } >
+        <UseThemeViewportExample />
+      </Section>
+
       <Section style={ gridStyle } title={ 'Provider' } theme={ theme } >
         <ThemeProviderExample />
       </Section>
@@ -60,6 +65,7 @@ export const AppScreen = withTheme(props => {
         <UseThemeFocusExample />
         <ReuseRefExample />
       </Section>
+
 
     </div>
   )

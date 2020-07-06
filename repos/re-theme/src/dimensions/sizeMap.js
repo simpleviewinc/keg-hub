@@ -15,11 +15,11 @@ const sizeMap = {
    *  > The Breakpoint is the screen size where the entries becomes active
    */
   entries: [
-    [ 'xsmall', 1 ],
-    [ 'small', 320 ],
-    [ 'medium', 768 ],
-    [ 'large', 1024 ],
-    [ 'xlarge', 1366 ],
+    [ '$xsmall', 1 ],
+    [ '$small', 320 ],
+    [ '$medium', 768 ],
+    [ '$large', 1024 ],
+    [ '$xlarge', 1366 ],
   ],
   hash: {},
   indexes: {},
@@ -124,7 +124,7 @@ export const getSize = width => {
     return updateSize
 
     // Default to xsmall size
-  }, 'xsmall')
+  }, '$xsmall')
 
   return [ name, sizeMap.hash[name] ]
 }

@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { isFunc, isObj, isColl, deepMerge } from 'jsutils'
+import { isFunc, isObj, isColl, deepMerge, checkCall } from 'jsutils'
 import { Constants } from '../constants'
 
 /**
@@ -130,7 +130,7 @@ export const hookFactory = events =>
    *
    * @param {Any} offValue - Value to set when not active
    * @param {Any} onValue - Value to set when active
-   * @param {boolean} noMerge -
+   * @param {boolean} noMerge - Don't merge the offValue with the onValue when false
    *
    * @returns {Array} - Contains the ref to be added to an element, and the current value
    */
@@ -161,32 +161,32 @@ export const hookFactory = events =>
       ref
     )
 
-    // When ref is a function, and there's no change
-    // When value is not equal to off value or updated value,
-    // then we want to return the off value, because that has the updated state from the
-    // Other refs update
-    if (isFunc(ref)) {
-      // Get the value to use based on the current state of the values
-      // If the offValue and value are the same then no updated state
-      const useValue =
-        offValue === value
-          ? value
-          : // Check if value is equal to the activeValue ( original offValue + onValue merged )
-          value === activeValue
-            ? // If value and activeValue are equal, then the State is active either of the refs
-            // The passed in ref or the current ref, so build value to use
-              checkJoinValues(offValue, onValue, activeValue, noMerge)
-            : offValue
+    // Get the value to use based on the current state of the values
+    const useValue =
+      value === offValue
+        ? // If the offValue and value are the same then no updated state
+          value
+        : // Check if value is equal to the activeValue ( original offValue + onValue merged )
+        value === activeValue
+          ? // If value and activeValue are equal,
+          // then the State is active for either the passed in ref or the current ref
+            activeValue
+          : offValue
 
-      // Wrap the callbacks so we can call the passed in ref, and the new ref
-      const wrapRef = element => {
-        ref(element)
-        elementRef(element)
-      }
+    return !isFunc(ref)
+      ? // Return the elementRef function and value to the component
+        [ elementRef, useValue, setValue ]
+      : checkCall(() => {
+        // When ref is a function, and there's no change
+        // or when value is not equal to off value or updated value,
+        // then we want to return the off value, because that has the updated state from the
+        // Other refs update
+        // So wrap the callbacks so we can call the passed in ref, and the new ref
+        const wrapRef = element => {
+          ref(element)
+          elementRef(element)
+        }
 
-      return [ wrapRef, useValue ]
-    }
-
-    // Return the elementRef function and value to the component
-    return [ elementRef, value, setValue ]
+        return [ wrapRef, useValue, setValue ]
+      })
   }

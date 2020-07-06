@@ -1,4 +1,25 @@
 export const components = {
+  sizeExample: {
+    main: {
+      $xsmall: {
+        backgroundColor: 'purple',
+        color: 'white'
+      },
+      $small: {
+        backgroundColor: 'green',
+      },
+      $medium: {
+        backgroundColor: 'yellow',
+        color: 'black'
+      },
+      $large: {
+        backgroundColor: 'orange',
+      },
+      $xlarge: {
+        backgroundColor: 'red',
+      },
+    }
+  },
   button: {
     default: {
       backgroundColor: '#0b81fc',

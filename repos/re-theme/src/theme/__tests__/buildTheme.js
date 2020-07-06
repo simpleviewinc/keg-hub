@@ -1,4 +1,4 @@
-import { buttonTheme } from '../../mocks'
+import { buttonTheme, deeplyNestedTheme } from '../../mocks'
 import * as Dimensions from '../../dimensions'
 import { fireThemeEvent } from '../themeEvent'
 
@@ -20,6 +20,14 @@ const Theme = require('../buildTheme')
 describe('Theme', () => {
   describe('buildTheme', () => {
     afterEach(() => jest.clearAllMocks())
+
+    it('should work with a theme containing deeply nested size keys', () => {
+      const mediumSize = 770
+      const theme = Theme.buildTheme(deeplyNestedTheme, mediumSize, 1000, {})
+      expect(
+        theme.button.contained.default.active.main.backgroundColor
+      ).toEqual('orange')
+    })
 
     it('should return the built theme object', () => {
       const theme = Theme.buildTheme(buttonTheme, 200, 1000, {})
