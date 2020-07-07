@@ -27,6 +27,7 @@ module.exports = {
       ...require('./build'),
       ...require('./copy'),
       ...require('./destroy'),
+      ...require('./restart'),
       ...require('./start'),
       ...require('./stop'),
       ...require('./sync'),
