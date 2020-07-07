@@ -1927,10 +1927,10 @@
     magic-string "^0.25.2"
     rollup-pluginutils "^2.6.0"
 
-"@simpleviewinc/re-theme@1.1.2":
-  version "1.1.2"
-  resolved "https://npm.pkg.github.com/download/@simpleviewinc/re-theme/1.1.2/bd47f27e816112ce35e9796e57dfe62e046cb2e9c9a9e878f0588ac866c06974#3a4580566fd0e8adc8183a3acfe75f2b1197d984"
-  integrity sha512-mt10+3fblhlh6cXObJRYFCWoz4CJYymtkPQXiiZN3hl3CcdlrHO7R8ai4TH3yOBgifA2i+ceRdl8WZ8f2h1U5Q==
+"@simpleviewinc/re-theme@2.0.0":
+  version "2.0.0"
+  resolved "https://npm.pkg.github.com/download/@simpleviewinc/re-theme/2.0.0/9acf39a1e819c9529aa1834fe102a432d3af86710411a757ae98b221ccdf1e6f#71d687f4c5bcc38bafe01e78be095f5e87b1a510"
+  integrity sha512-51m+vcAIY0QcXodu6EAdffGCnROsPKesEHjQqedRQGlyS5U5SiPNnYal25Yz4PZUfBlor8R0IfaP475Fetocow==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"

@@ -1,6 +1,6 @@
 {
   "name": "@simpleviewinc/keg-components",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
   "publishConfig": {
@@ -57,7 +57,7 @@
     "@rollup/plugin-alias": "2.2.0",
     "@rollup/plugin-json": "4.0.1",
     "@rollup/plugin-replace": "2.3.0",
-    "@simpleviewinc/re-theme": "1.1.2",
+    "@simpleviewinc/re-theme": "2.0.0",
     "@storybook/addon-actions": "5.3.6",
     "@storybook/addon-docs": "5.3.6",
     "@storybook/addon-links": "5.3.6",
