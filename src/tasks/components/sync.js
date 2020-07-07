@@ -32,7 +32,7 @@ module.exports = {
         description: 'Local path to sync into the keg-components container',
         enforced: true
       },
-      remove: {
+      remote: {
         alias: [ 'to' ],
         description: 'Path on the keg-components container to sync to',
         enforced: true
