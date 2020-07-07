@@ -1,7 +1,7 @@
 {
   "name": "@simpleviewinc/keg-core",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publishConfig": { 
     "registry": "https://npm.pkg.github.com/" 
   },

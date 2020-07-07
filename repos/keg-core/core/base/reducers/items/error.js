@@ -65,4 +65,17 @@ export const MakeRequestIssue = deepFreeze({
     type: IssueTypes.InvalidItemAndKey,
     message: `Both item and key were undefined. One of these must be defined for an item request.`,
   }),
+  [IssueTypes.MismatchedItemTypes]: (
+    existingType,
+    nextType,
+    category,
+    key
+  ) => ({
+    type: IssueTypes.MismatchedItemTypes,
+    message: `Cannot merge items of different types on upsert.  
+      Path: ${category}/${key ? key : ''}
+      Existing type at path: ${existingType}
+      Received type: ${nextType}
+    `,
+  }),
 })

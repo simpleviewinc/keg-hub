@@ -18,6 +18,7 @@ export const Values = deepMerge(
         'MissingCategory',
         'InvalidItemsType',
         'InvalidItemAndKey',
+        'MismatchedItemTypes',
       ],
       false
     ),

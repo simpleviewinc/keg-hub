@@ -1,13 +1,13 @@
-import { isValidItemRequest, handleInvalidRequest } from './errorHandler'
-
+import { isValidUpsertItemRequest, handleInvalidRequest } from './errorHandler'
 import { ItemsRequestError } from './error'
-
-import { isArr } from 'jsutils'
+import { isArr, isObj, deepMerge } from 'jsutils'
+import '../typedefs'
 
 /**
- * For the category, inserts the item (identified by key) if it doesn't exist, otherwise updates it.
+ * For the category, inserts `item` (identified by `key`) if it doesn't exist, otherwise updates it.
+ * If a key-item pair already exists, it will be merged with `item`.
  * @param {Object} state - redux store state
- * @param {Object} action - an action of the form { type, payload: { category, key, item }}
+ * @param {Action} action - an action of the form { type, payload: { category, key, item }}
  * @returns the next state, with the item inserted/updated
  *
  * Will set the error object in the category of the nextState if the request is Invalid.
@@ -16,7 +16,12 @@ import { isArr } from 'jsutils'
 export const upsertItem = (state, action) => {
   const { category, key, item } = action.payload
 
-  const { isValid, issues } = isValidItemRequest(state, category, key, item)
+  const { isValid, issues } = isValidUpsertItemRequest(
+    state,
+    category,
+    key,
+    item
+  )
   if (!isValid) {
     const err = new ItemsRequestError(issues)
     return handleInvalidRequest(state, category, err)
@@ -41,7 +46,17 @@ export const upsertItem = (state, action) => {
  * @param {*} item
  */
 const updateCollection = (coll, key, item) => {
-  const next = isArr(coll) ? [...coll] : { ...coll }
-  next[key] = item
-  return next
+  const nextCollection = isArr(coll) ? [...coll] : { ...coll }
+
+  const existingItem = nextCollection[key]
+
+  // if item is an object, then merge with the existing item
+  // to preserve properties not included in `item`
+  nextCollection[key] = isObj(item)
+    ? deepMerge(existingItem, item)
+    : isArr(item)
+      ? item.concat(existingItem || [])
+      : item
+
+  return nextCollection
 }

@@ -1,13 +1,12 @@
 import { isValidItemRequest, handleInvalidRequest } from './errorHandler'
-
 import { ItemsRequestError } from './error'
-
 import { isArr, omitKeys, omitRange } from 'jsutils'
+import '../typedefs'
 
 /**
  * Removes the item, identified by key, from the category in the items store.
  * @param {Object} state - redux store state
- * @param {Object} action - an action of the form { type, payload: { category, key }}
+ * @param {Action} action - an action of the form { type, payload: { category, key }}
  * @returns the next state, with the item removed
  *
  * Will set the error object in the category of the nextState if the request is Invalid.

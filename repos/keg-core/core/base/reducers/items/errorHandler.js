@@ -1,4 +1,4 @@
-import { applyToCloneOf, isObj, isArr } from 'jsutils'
+import { applyToCloneOf, isObj, isArr, typeOf, get } from 'jsutils'
 import { MakeRequestIssue } from './error'
 import { Values } from 'SVConstants'
 const { IssueTypes } = Values
@@ -9,7 +9,7 @@ const { IssueTypes } = Values
  * @param {*} category - key for a category beneath state
  * @param {*} key - key of object within category. For arrays, an index; for objects, a key
  * @param {*} item - item object itself. Either key or item should be defined, not both.
- * @returns object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
+ * @returns {Object} object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
  */
 export const isValidItemRequest = (state, category, key, item) => {
   const issues = []
@@ -48,7 +48,7 @@ export const isValidItemRequest = (state, category, key, item) => {
  * @param {object} state - redux state object
  * @param {*} category - key for a category beneath state
  * @param {*} items - items object/array itself.
- * @returns object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
+ * @returns {Object} object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
  */
 export const isValidItemsRequest = (state, category, items) => {
   const issues = []
@@ -72,6 +72,64 @@ export const isValidItemsRequest = (state, category, items) => {
   const isValid = issues.length === 0
 
   return { isValid, issues: Object.freeze(issues) }
+}
+
+/**
+ * Returns object with boolean key isValid as true if the request is valid, else key is false and a string key 'reason' will be defined that lists the errors
+ * @param {object} state - redux state object
+ * @param {*} category - key for a category beneath state
+ * @param {*} key - key of object within category. For arrays, an index; for objects, a key
+ * @param {*} item - item object itself. Either key or item should be defined, not both.
+ * @returns {Object} object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
+ */
+export const isValidUpsertItemRequest = (state, category, key, item) => {
+  const result = isValidItemRequest(state, category, key, item)
+
+  const existingItem = get(state, [ category, key ])
+  const existingType = typeOf(existingItem)
+  const itemType = typeOf(item)
+
+  return existingItem && existingType !== itemType
+    ? {
+        isValid: false,
+        issues: result.issues.concat(
+          MakeRequestIssue[IssueTypes.MismatchedItemTypes](
+            existingType,
+            itemType,
+            category,
+            key
+          )
+        ),
+      }
+    : result
+}
+
+/**
+ * Returns object with boolean key isValid as true if the request is valid, else key is false and a string key 'reason' will be defined that lists the errors
+ * @param {object} state - redux state object
+ * @param {*} category - key for a category beneath state
+ * @param {Array<*> || Object} items - items collection itself. Either key or item should be defined, not both.
+ * @returns object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
+ */
+export const isValidUpsertItemsRequest = (state, category, items) => {
+  const result = isValidItemsRequest(state, category, items)
+
+  const existingItems = state[category]
+  const existingType = typeOf(existingItems)
+  const itemsType = typeOf(items)
+
+  return existingItems && existingType !== itemsType
+    ? {
+        isValid: false,
+        issues: result.issues.concat(
+          MakeRequestIssue[IssueTypes.MismatchedItemTypes](
+            existingType,
+            itemsType,
+            category
+          )
+        ),
+      }
+    : result
 }
 
 /**

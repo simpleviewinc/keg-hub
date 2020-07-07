@@ -1,10 +1,13 @@
-import { isValidItemsRequest, handleInvalidRequest } from './errorHandler'
+import { isValidUpsertItemsRequest, handleInvalidRequest } from './errorHandler'
 import { ItemsRequestError } from './error'
+import { isArr } from 'jsutils'
+import '../typedefs'
 
 /**
- * Inserts the items collection (identified by category) if it doesn't exist, otherwise updates it.
+ * Inserts `action.payload.items` (identified by category) into the store if it doesn't
+ * exist, otherwise merges the existing collection with `action.payload.items`
  * @param {Object} state - redux store state
- * @param {Object} action - an action of the form { type, payload: { category, items }}
+ * @param {Action} action - an action of the form { type, payload: { category, items }}
  * @returns the next state object, with the items inserted/updated
  *
  * Will set the error object in the category of the nextState if the request is Invalid.
@@ -13,14 +16,18 @@ import { ItemsRequestError } from './error'
 export const upsertItems = (state, action) => {
   const { category, items } = action.payload
 
-  const { isValid, issues } = isValidItemsRequest(state, category, items)
+  const { isValid, issues } = isValidUpsertItemsRequest(state, category, items)
   if (!isValid) {
     const err = new ItemsRequestError(issues)
     return handleInvalidRequest(state, null, err)
   }
 
+  const existingItems = state[category]
+
   return {
     ...state,
-    [category]: items,
+    [category]: isArr(items)
+      ? [ ...(existingItems || []), ...items ]
+      : { ...(existingItems || {}), ...items },
   }
 }
