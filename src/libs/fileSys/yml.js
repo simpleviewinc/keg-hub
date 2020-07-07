@@ -1,5 +1,5 @@
 const yaml = require('js-yaml')
-const { ask } = require('../questions')
+const { ask } = require('askIt')
 const writeYamlFile = require('write-yaml-file')
 const { confirmExec } = require('KegUtils/helpers')
 const { parseTemplate } = require('./parseTemplate')

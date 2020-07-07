@@ -1,6 +1,6 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const { DOCKER } = require('KegConst/docker')
 const { isUrl, get, deepMerge } = require('@ltipton/jsutils')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')

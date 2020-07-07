@@ -1,4 +1,4 @@
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const { getProcessesUsingPort, printProcesses, kill } = require('KegUtils')
 const { generalError } = require('KegUtils/error')
 

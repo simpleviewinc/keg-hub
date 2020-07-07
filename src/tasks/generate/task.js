@@ -1,7 +1,7 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { get, mapObj } = require('@ltipton/jsutils')
-const { ask, input } = require('KegQuestions')
+const { ask, input } = require('askIt')
 const { CLI_ROOT } = require('KegConst/constants')
 const { loadTemplate } = require('KegUtils/template')
 const { generalError } = require('KegUtils/error/generalError')

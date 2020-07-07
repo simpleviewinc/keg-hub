@@ -1,4 +1,4 @@
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const { Logger } = require('KegLog')
 const { isArr, checkCall } = require('@ltipton/jsutils')
 const { checkRunningContainers } = require('../checkRunningContainers')

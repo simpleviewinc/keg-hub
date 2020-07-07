@@ -7,7 +7,7 @@ const {
 const { throwRequired } = require('KegUtils/error')
 const { getSetting } = require('KegUtils/globalConfig')
 const { encrypt, decrypt } = require('KegCrypto')
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const {GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { get } = require('@ltipton/jsutils')
 /**

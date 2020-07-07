@@ -1,5 +1,5 @@
 const { checkCall } = require('@ltipton/jsutils')
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const { Logger } = require('KegLog')
 
 /**

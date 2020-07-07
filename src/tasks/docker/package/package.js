@@ -1,6 +1,6 @@
+const { ask } = require('askIt')
 const docker = require('KegDocCli')
 const { git } = require('KegGitCli')
-const { ask } = require('KegQuestions')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { isStr, get, isFunc, isArr, checkCall } = require('@ltipton/jsutils')

@@ -1,9 +1,9 @@
 require('module-alias/register')
 
 const path = require('path')
+const { ask } = require('askIt')
 const { Logger } = require('KegLog')
 const homeDir = require('os').homedir()
-const { ask } = require('KegQuestions')
 const { encrypt } = require('KegCrypto')
 const packageJson = require('KegRoot/package.json')
 const { getGitUrl } = require('KegUtils/git/getGitUrl')

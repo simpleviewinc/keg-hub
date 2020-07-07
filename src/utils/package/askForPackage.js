@@ -1,4 +1,4 @@
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const { throwPackageError } = require('../error/throwPackageError')
 
 /**

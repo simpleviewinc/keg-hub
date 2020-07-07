@@ -1,5 +1,5 @@
 const { get } = require('@ltipton/jsutils')
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
 const { getSetting } = require('../globalConfig/getSetting')

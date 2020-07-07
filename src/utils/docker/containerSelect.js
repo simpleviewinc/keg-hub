@@ -1,4 +1,4 @@
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 const docker = require('KegDocCli')
 const { checkCall } = require('@ltipton/jsutils')
 const { throwNoContainers } = require('KegUtils/error/throwNoContainers')

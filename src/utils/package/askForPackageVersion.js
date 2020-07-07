@@ -1,6 +1,6 @@
 const { throwPackageError } = require('../error/throwPackageError')
 const { get } = require('@ltipton/jsutils')
-const { ask } = require('KegQuestions')
+const { ask } = require('askIt')
 
 /**
  * Asks the user which version of the package to use

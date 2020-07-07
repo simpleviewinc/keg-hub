@@ -39,9 +39,16 @@ keg_run_regulator_yarn_setup(){
 
 }
 
+keg_sleep_for_sync(){
+  keg_message "Sleeping for 5 seconds. I'm tired!"
+  sleep 5
+}
+
 # Runs a Tap
 keg_run_the_regulator(){
 
+  keg_sleep_for_sync
+  keg_message "Ok, done sleeping..."
 
   if [[ -f "$TEST_PATH/tests/package.json" ]]; then 
     cd $TEST_PATH/tests
@@ -62,7 +69,10 @@ keg_run_the_regulator(){
 # Keeps the regulator container running
 # This way tests can be re-run without needing to re-start the container
 keg_keep_running(){
-  tail -f /dev/null
+  cd $TEST_PATH
+  node scripts/miniCLI.js
+
+  # tail -f /dev/null
   # sleep infinity
 }
 
