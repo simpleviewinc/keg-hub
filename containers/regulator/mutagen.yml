@@ -16,5 +16,6 @@ sync:
         - "/temp"
         - "/web-build"
         - "/reports"
+        - "/tests/reports"
         - "/build"
         - "/docs"

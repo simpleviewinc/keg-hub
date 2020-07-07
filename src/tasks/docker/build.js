@@ -5,7 +5,7 @@ const { DOCKER } = require('KegConst/docker')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { copyFileSync } = require('KegFileSys/fileSys')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { throwRequired, generalError } = require('KegUtils/error')
+const { throwRequired, generalError, throwNoTapLoc } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
 
 /**
@@ -59,10 +59,7 @@ const dockerBuild = async args => {
   })
 
   // If using a tap, and no location is found, throw an error
-  cmdContext === 'tap' && tap && !location && generalError(
-    `Tap location could not be found for ${ tap }!`,
-    `Please ensure the tap path is linked in the global config!`
-  )
+  cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)
 
   // Check if we should also copy the keg-core package.json
   tap && core && await copyLocalPackageJson(globalConfig, location)
@@ -79,7 +76,7 @@ const dockerBuild = async args => {
     ...(args && { buildArgs: contextEnvs }),
   })
 
-  Logger.info(`  Building docker image "${ image || cmdContext }" ...`)
+  Logger.info(`Building docker image "${ image || cmdContext }" ...`)
 
   // Run the built docker command
   await docker.raw(dockerCmd, { log, options: { env: contextEnvs }}, location)

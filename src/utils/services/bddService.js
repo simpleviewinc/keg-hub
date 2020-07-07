@@ -1,32 +1,17 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { get } = require('@ltipton/jsutils')
-const { DOCKER } = require('KegConst/docker')
+const { copyFile } = require('KegFileSys/fileSys')
 const { composeService } = require('./composeService')
-const { copyFile, pathExists } = require('KegFileSys/fileSys')
 const { mutagenService } = require('./mutagenService')
-const { runInternalTask } = require('../task/runInternalTask')
-const { getContainerConst } = require('../docker/getContainerConst')
-const { throwNoPathExists } = require('../error/throwNoPathExists')
 const { generalError } = require('../error/generalError')
 const { getRepoPath } = require('../getters/getRepoPath')
-
-const { CONTAINERS_PATH } = DOCKER
-
-/**
- * Checks that a path exists locally
- * @param {string} toCheck - Path to check if it exists
- *
- * @returns {boolean} - If the path exists
- */
-const checkPathExists = async toCheck => {
-  // Check if the exists locally
-  const [ error, exists ] = await pathExists(toCheck)
-
-  return error
-    ? generalError(error.message)
-    : exists
-}
+const { runInternalTask } = require('../task/runInternalTask')
+const { findPathByName } = require('../helpers/findPathByName')
+const { checkPathExists } = require('../helpers/checkPathExists')
+const { DOCKER: { CONTAINERS_PATH } } = require('KegConst/docker')
+const { getContainerConst } = require('../docker/getContainerConst')
+const { throwNoPathExists } = require('../error/throwNoPathExists')
 
 /**
  * Gets the paths needed to create mutagen syncs
@@ -35,11 +20,7 @@ const checkPathExists = async toCheck => {
  *
  * @returns {Object} - Contains feature and steps local and remote locations 
  */
-const getLocationSync = async location => {
-
-  // Check if the exists locally, otherwise throw
-  const rootExists = await checkPathExists(location)
-  !rootExists && throwNoPathExists(location)
+const buildSyncPaths = async location => {
 
   // Get the path for where the features and steps folders should exist
   const featPath = path.join(location, 'features')
@@ -68,23 +49,39 @@ const getLocationSync = async location => {
 
 /**
  * Get the context path from the globalConfig, then use it as the location
- * @param {string} context - Context or name of repo to get the location of
+ * @param {string} location - Path to search for a BDD tests folder
  *
  * @returns {Object} - Contains feature and steps local and remote locations 
  */
-const getContextSync = context => {
-  const contextPath = getRepoPath(context)
-  let locationErr
+const searchForBDDPath = async location => {
 
-  // TODO: Add logging for tests in wrong location
-  try { return getLocationSync(`${contextPath}/tests/BDD`) }
-  catch(err){ locationErr = err }
-  
-  try { return getLocationSync(`${contextPath}/tests`) }
-  catch(e){}
-  
-  try { return getLocationSync(contextPath) }
-  catch(e){ throwNoPathExists(`${contextPath}/tests/BDD`) }
+  // Ensure the root location exists locally, otherwise throw
+  const rootExists = await checkPathExists(location)
+  !rootExists && throwNoPathExists(location)
+
+  Logger.empty()
+  Logger.log(`Searching location for features folder...`)
+
+  // Search for the features folder within the location path
+  const [ foundPath ] = await findPathByName(location, 'features', {
+    type: 'folder',
+    exclude: [ 'reports' ],
+  })
+
+  // Ensure we found a path to use
+  ;(!foundPath || !foundPath.length) && throwNoPathExists(
+    `for the features folder`,
+    `The ${ context } at path ${ location }`
+  )
+
+  // Get the parent directory
+  const parentDir = path.join(foundPath, '../')
+
+  Logger.log(`Found features, building sync paths...`)
+  Logger.empty()
+
+  // Build the sync paths from the parent dir
+  return buildSyncPaths(parentDir)
 
 }
 
@@ -96,7 +93,9 @@ const getContextSync = context => {
  * @returns {Object} - Contains feature and steps local and remote locations 
  */
 const getPathsToSync = ({ context, location }) => {
-  return location ? getLocationSync(location) : getContextSync(context)
+  return location
+    ? searchForBDDPath(location)
+    : searchForBDDPath(getRepoPath(context))
 }
 
 /**
@@ -147,11 +146,11 @@ const bddService = async args => {
   // Step 1. Clean up any old syncs no longer running
   await runInternalTask('mutagen.tasks.clean', args)
 
-  // // Step 2. Copy the run.sh file from the keg-cli/containers/regulator repo
+  // Step 2. Copy the run.sh file from the keg-cli/containers/regulator repo
   const regulatorPath = getRepoPath('regulator')
   await copyFile(`${ CONTAINERS_PATH }/regulator/run.sh`, `${ regulatorPath }/run.sh`)
 
-  // // Step 3. Run docker-compose up task to start the regulator
+  // Step 3. Run docker-compose up task to start the regulator
   const containerContext = await composeService(
     { 
       ...args,
@@ -168,7 +167,7 @@ const bddService = async args => {
   )
 
   // Step 4. Create syncs for the passed in context
-  const syncPaths = await getPathsToSync(params, containerContext)
+  const syncPaths = await getPathsToSync(params)
   const extArgs = { context: 'regulator', containerContext }
 
   // Build the mutagen syncs for the context/location repos features and steps folders

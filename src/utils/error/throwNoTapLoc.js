@@ -4,16 +4,17 @@ const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { throwTaskFailed } = require('./throwTaskFailed')
 
 /*
- * Helper to log an error message when a tap link can not be found in the global config
+ * Helper to log an error message when a tap link location can not be found
  * @function
  * @param {Object} globalConfig - Global config object for the keg-cli
- * @param {string} tapName - Name of the tap that is not linked
+ * @param {string} tap - Name of the tap that is not linked
  *
  * @returns {void}
 */
-const throwNoTapLink = (globalConfig, tapName) => {
+const throwNoTapLoc = (globalConfig, tap) => {
 
-  Logger.error(`\n Linked path for tap '${tapName}' does on exist in the Global config!`)
+  Logger.error(`Tap location could not be found for ${ tap }!`)
+  Logger.highlight(`Ensure the linked tap path for`, `${ tap }`, `exists!`)
 
   Logger.empty()
 
@@ -27,5 +28,5 @@ const throwNoTapLink = (globalConfig, tapName) => {
 }
 
 module.exports = {
-  throwNoTapLink
+  throwNoTapLoc
 }

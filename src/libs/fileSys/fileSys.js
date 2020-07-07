@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { checkCall, limbo } = require('@ltipton/jsutils')
+const { checkCall, limbo, isFunc } = require('@ltipton/jsutils')
 const { generalError } = require('KegUtils/error')
 
 /**
@@ -87,52 +87,107 @@ const stat = (path) => {
  * Gets the content of a folder based on passed in options
  * @function
  * @param {string} fromPath - Path to get the content from
+ * @param {Array} allFound  - Past found file paths
+ * @param {string} file - File path to check if should be added to allFound array
+ * @param {boolean} opts.full - Should return the full path
+ * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
+ *
+ * @returns {Array} - Array of found file paths
+ */
+const buildFoundArray = ({ allFound, recurCall, file, fromPath, opts={} }) => {
+  
+  const { exclude=[], full, include=[], recursive, type } = opts
+
+  // Filter out any folder matching the exclude
+  if(!file || exclude.indexOf(file) !== -1) return allFound
+
+  // Get the full path of the file or folder
+  const fullPath = path.join(fromPath, file)
+
+  // Check if we should use the full path or relative
+  const found = full ? fullPath : file
+
+  // Check if its a directory
+  const isDir = fs.statSync(fullPath).isDirectory()
+
+  // Check if found should be added to the array based on the passed in arguments
+  // Check the for type match or no type
+  ;( !type ||
+    ( type === 'folder' && isDir ) ||
+    ( type !== 'folder' && !isDir )) &&
+    ( !include.length || include.indexOf(file) !== -1 ) &&
+    allFound.push(found)
+
+  return !isDir || !recursive || !isFunc(recurCall)
+    ? allFound
+    : recurCall(fullPath, opts, allFound)
+
+}
+
+/**
+ * Gets the content of a folder based on passed in options
+ * @function
+ * @param {string} fromPath - Path to get the content from
  * @param {Object} [opts={}] - Options for filtering the found contnet
  * @param {boolean} opts.full - Should return the full path
  * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
  *
  * @returns {Promise|Array} - Array of found items
  */
-const getFolderContent = async (fromPath, opts={}) => {
-
-  const { full, type, filters=[] } = opts
-
+const getFolderContent = async (fromPath, opts={}, foundPaths=[]) => {
   const [ err, allFiles ] = await readDir(fromPath)
   err && generalError(err)
 
   return allFiles.reduce(async (toResolve, file) => {
     const allFound = await toResolve
 
-    // Filter out any files matching the filters
-    if(!file || filters.indexOf(file) !== -1)
-      return allFound
+    return buildFoundArray({
+      opts,
+      file,
+      fromPath,
+      allFound,
+      recurCall: getFolderContent,
+    })
+  }, Promise.resolve(foundPaths))
 
-    // Check if we should use the full path
-    const found = full ? path.join(fromPath, file) : file
+}
 
-    // If no type, then add and return
-    if(!type) return allFound.concat([ found ])
-    
-    // Check if the path is a directory
-    const [ statErr, fileStat ] = await stat(path.join(fromPath, file))
-    statErr && generalError(statErr)
-
-    const isDir = fileStat.isDirectory()
-
-    // Check the type and return based on type
-    return (type === 'folder' && isDir) || (type !== 'folder' && !isDir)
-      ? allFound.concat([ found ])
-      : allFound
-
-  }, Promise.resolve([]))
-
+/**
+ * Gets the content of a folder based on passed in options synchronously
+ * @function
+ * @param {string} fromPath - Path to get the content from
+ * @param {Object} [opts={}] - Options for filtering the found contnet
+ * @param {boolean} opts.full - Should return the full path
+ * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
+ *
+ * @returns {Promise|Array} - Array of found items
+ */
+const getFolderContentSync = (fromPath, opts={}, foundPaths=[]) => {
+  return fs.readdirSync(fromPath)
+    .reduce((allFound, file) => buildFoundArray({
+      opts,
+      file,
+      fromPath,
+      allFound,
+      recurCall: getFolderContentSync,
+    }), foundPaths)
 }
 
 /**
  * Gets all files in a directory path
  * @function
  * @param {string} fromPath - Path to find the folders in
- * @param {boolean} full - Should return the full path
+ * @param {Object} [opts={}] - Options for filtering the found contnet
+ * @param {boolean} opts.full - Should return the full path
+ * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
  *
  * @returns {Array} - All files found in the path
  */
@@ -144,7 +199,11 @@ const getFiles = (fromPath, opts) => {
  * Gets all folders in a directory path
  * @function
  * @param {string} fromPath - Path to find the folders in
- * @param {boolean} full - Should return the full path
+ * @param {Object} [opts={}] - Options for filtering the found contnet
+ * @param {boolean} opts.full - Should return the full path
+ * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
  *
  * @returns {Array} - All folders found in the path
  */
@@ -156,24 +215,32 @@ const getFolders = (fromPath, opts) => {
  * Gets all folders in a directory path synchronously
  * @function
  * @param {string} fromPath - Path to find the folders in
+ * @param {Object} [opts={}] - Options for filtering the found contnet
+ * @param {boolean} opts.full - Should return the full path
+ * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
  *
  * @returns {Array} - All folders found in the path
  */
-const getFoldersSync = fromPath => {
-  return fs.readdirSync(fromPath)
-    .filter(f => fs.statSync(path.join(fromPath, f)).isDirectory())
+const getFoldersSync = (fromPath, opts={}) => {
+  return getFolderContentSync(fromPath, { ...opts, type: 'folder' })
 }
 
 /**
  * Gets all files in a directory path synchronously
  * @function
  * @param {string} fromPath - Path to find the files in
+ * @param {Object} [opts={}] - Options for filtering the found contnet
+ * @param {boolean} opts.full - Should return the full path
+ * @param {string} opts.type - Type of content to return (folder || file)
+ * @param {Array} opts.exclude - File or folder to exclude
+ * @param {Array} opts.include - File or folder to include
  *
  * @returns {Array} - All files found in the path
  */
-const getFilesSync = fromPath => {
-  return fs.readdirSync(fromPath)
-    .filter(f => !fs.statSync(path.join(fromPath, f)).isDirectory())
+const getFilesSync = (fromPath, opts) => {
+  return getFolderContentSync(fromPath, { ...opts, type: 'file' })
 }
 
 /**
@@ -290,6 +357,7 @@ module.exports = {
   getFolders,
   getFoldersSync,
   getFolderContent,
+  getFolderContentSync,
   mkDir,
   movePath,
   pathExists,

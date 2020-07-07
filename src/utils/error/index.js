@@ -14,9 +14,10 @@ module.exports = {
   ...require('./throwNoPathExists'),
   ...require('./throwNoRepo'),
   ...require('./throwNoTapLink'),
-  ...require('./throwNoTask'),
   ...require('./throwPackageError'),
   ...require('./throwRequired'),
+  ...require('./throwNoTask'),
+  ...require('./throwNoTapLoc'),
   ...require('./throwWrap'),
   ...require('./throwWrongPassword'),
 }

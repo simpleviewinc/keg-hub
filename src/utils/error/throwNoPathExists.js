@@ -9,10 +9,10 @@ const { throwTaskFailed } = require('./throwTaskFailed')
  *
  * @returns {void}
 */
-const throwNoPathExists = (localPath) => {
+const throwNoPathExists = (localPath, message) => {
 
   Logger.empty()
-
+  message && Logger.error(message)
   Logger.error(`Local path '${ localPath }' does on exist!`)
 
   Logger.empty()
