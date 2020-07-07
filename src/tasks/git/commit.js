@@ -1,5 +1,4 @@
 const { Logger } = require('KegLog')
-const { getGit } = require('KegUtils/git/getGit')
 
 const setupGitConfig = (git, email, user) => {
   // add local git config like username and email
@@ -62,7 +61,6 @@ const doCommit = async (git, args) => {
 const gitCommitRepo = async args => {
 
   // TODO: Update to use libs/git
-  // const git = getGit()
   // await doCommit(git, args)
 
 }

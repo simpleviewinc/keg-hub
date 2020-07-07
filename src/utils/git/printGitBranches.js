@@ -23,7 +23,7 @@ const printBranchIndex = (branch, index) => {
 
 /**
  * Prints all passed in git branches
- * @param {Object} branches - Git object response from simple-git module
+ * @param {Object} branches - Git object response from git Cli module
  *
  * @returns {void}
  */

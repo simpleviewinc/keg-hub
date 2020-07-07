@@ -348,10 +348,59 @@ const removeFile = file => limboify(fs.unlink, file)
  */
 const removeFileSync = file => fs.unlinkSync(filePath, callbackFunction)
 
+
+/**
+ * Wraps require in a try catch so app doesn't throw when require is called inline
+ * @param {string} folder - The path to the file to require
+ * @param {string} file - The file to require
+ * @param {boolean} logError - If the require fails, should the app throw
+ *
+ * @returns {Object} - Content of the required file
+ */
+const requireFile = (folder='', file='', logError) => {
+
+  const location = path.join(folder, file)
+
+  try {
+    // Build the path to the file
+    // load the data
+    const data = require(location)
+
+    return { data, location }
+  }
+  catch (err) {
+    logError &&
+      console.error(`requireFile error for path "${ location }"`, err.stack)
+
+    return {}
+  }
+}
+
+/**
+ * Ensures a directory exists
+ * @param {string} dirPath - path to ensure
+ *
+ * @return {string} - directory path that was ensured
+ */
+const ensureDirSync = (dirPath='', logError) => {
+  try {
+    // make the directory if it doesn't exist
+    !fs.existsSync(dirPath) && fs.mkdirSync(dirPath)
+
+    return dirPath
+  }
+  catch (err) {
+    logError &&
+      console.error(`ensureDirSync error for path "${ dirPath }"`, err.stack)
+    return false
+  }
+}
+
 module.exports = {
   copyFile,
   copyFileSync,
   copyStream,
+  ensureDirSync,
   getFiles,
   getFilesSync,
   getFolders,
@@ -366,6 +415,7 @@ module.exports = {
   readFileSync,
   removeFile,
   removeFileSync,
+  requireFile,
   stat,
   writeFile,
   writeFileSync,

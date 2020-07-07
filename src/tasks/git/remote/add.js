@@ -1,5 +1,4 @@
 const { Logger } = require('KegLog')
-const { getGit } = require('KegUtils/git/getGit')
 
 /**
  * Add remote to a git repo

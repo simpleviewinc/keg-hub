@@ -1,5 +1,4 @@
 const yaml = require('js-yaml')
-const stripBom = require('strip-bom')
 const { ask } = require('../questions')
 const writeYamlFile = require('write-yaml-file')
 const { confirmExec } = require('KegUtils/helpers')
@@ -7,6 +6,19 @@ const { parseTemplate } = require('./parseTemplate')
 const { limbo, deepMerge, isStr } = require('@ltipton/jsutils')
 const { throwNoFileExists, generalError } = require('KegUtils/error')
 const { pathExistsSync, pathExists, removeFile, readFileSync, readFile } = require('./fileSys')
+
+
+/**
+ * Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
+ * <br/> conversion translates it to FEFF (UTF-16 BOM)
+ * @function
+ * @param {string} content - Content of the loaded yml file
+ *
+ * @returns {Object} - stripped string
+ */
+const stripBom = content => (
+  content.charCodeAt(0) === 0xFEFF ? content.slice(1) : content
+)
 
 /**
  * Parses the yml content to replaces any template values from the globalConfig

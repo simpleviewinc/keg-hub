@@ -127,7 +127,7 @@ class Branch {
   /**
   * Gets the current branch as an object from the passed in branches
   * @memberof Branch
-  * @param {Array} { branches } - Git object response from simple-git module
+  * @param {Array} { branches } - Git object response from git CLI module
   *
   * @returns {Object} - Current branch object
   */

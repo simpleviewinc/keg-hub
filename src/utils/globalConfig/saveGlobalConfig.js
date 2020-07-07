@@ -1,12 +1,10 @@
 const path = require('path')
-const fs = require('fs')
 const { isObj, checkCall } = require('@ltipton/jsutils')
-const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants/constants')
-const { ensureDirSync } = require('tap-resolver/src/helpers')
-const { validateGlobalConfig } = require('./validateGlobalConfig')
-const { writeFile } = require('KegFileSys/fileSys')
-const { __updateGlobalConfig } = require('./globalConfigCache')
 const { throwExitError } = require('../error/throwExitError')
+const { __updateGlobalConfig } = require('./globalConfigCache')
+const { validateGlobalConfig } = require('./validateGlobalConfig')
+const { ensureDirSync, writeFile } = require('KegFileSys/fileSys')
+const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('../../constants/constants')
 
 /**
  * Validate the config is the global config and that then global config path exists

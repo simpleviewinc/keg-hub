@@ -1,6 +1,6 @@
 const { checkCall } = require('@ltipton/jsutils')
+const { requireFile } = require('KegFileSys/fileSys')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
-const { requireFile } = require('tap-resolver/src/helpers')
 const { __getGlobalConfig, __updateGlobalConfig } = require('./globalConfigCache')
 
 /**
