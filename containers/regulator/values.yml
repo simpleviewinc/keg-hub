@@ -23,11 +23,10 @@ env:
   # Default location of the regulator in the docker container
   DOC_APP_PATH: /keg/keg-regulator
   DOC_APP_PORT: 4000
-  DOC_FEATURES_PATH: /keg/keg-regulator/features
-  DOC_STEPS_PATH: /keg/keg-regulator/steps
+  DOC_FEATURES_PATH: /keg/keg-regulator/tests/features
+  DOC_STEPS_PATH: /keg/keg-regulator/tests/steps
   HUB_HOST: selenium-hub
   HUB_PORT: 4444
-
 
   # --- GENERAL CONTEXT ENVs --- #
 

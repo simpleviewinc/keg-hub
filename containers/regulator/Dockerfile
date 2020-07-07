@@ -40,11 +40,10 @@ COPY tests/*.lock $DOC_APP_PATH/tests/
 
 # Install the dependecies with yarn install, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
-    yarn install --frozen-lockfile; \
+    yarn install; \
     yarn cache clean; \
-    rm -f .npmrc
-
-RUN cd $DOC_APP_PATH/tests; \
+    rm -f .npmrc; \
+    cd $DOC_APP_PATH/tests; \
     yarn install; \
     yarn cache clean; \
     rm -f .npmrc
@@ -62,14 +61,19 @@ ARG DOC_APP_PATH=/keg/keg-regulator
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV
 ARG KEG_DOCKER_IP
 
+# Used by react native builder to set the ip address, other wise 
+# Will use the ip address of the docker container.
+ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
+
 # Set GIT_KEY to be empty value so yarn install doesn't fail
 ENV GIT_KEY=""
 
 # Install git for the new stage
-RUN apk add --no-cache git bash
+RUN apk add --no-cache git bash; \
+    yarn global add nodemon
 
 # Copy over the globally installed modules from above
-# COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 
 # Copy over the cloned app
 COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH

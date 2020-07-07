@@ -7,7 +7,7 @@ sync:
       vcs: true
       paths:
         - "/node_modules"
-        - "/core/base/assets/*"
+        - "/tests/node_modules"
         - "/.*"
         - "!/.storybook"
         - "!/.npmrc"
