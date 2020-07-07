@@ -66,8 +66,16 @@ const saveTask = async (content, { parent, name }) => {
  */
 const generateTask = async args => {
   const { command, options, globalConfig, params } = args
-
-  const filled = await loadTemplate('task', params)
+  const { alias } = params
+  const splitAlias = alias && alias.trim()
+    .split(',')
+    .map(item => `'${item.trim()}'`)
+    .join(', ')
+  
+  const filled = await loadTemplate(
+    params.async ? 'async-task' : 'task',
+    { ...params, ...(splitAlias && { alias: splitAlias }) }
+  )
   
   await saveTask(filled, params)
 
@@ -98,6 +106,15 @@ module.exports = {
       },
       require: true,
     },
+    example: {
+      description: 'Example of calling the task',
+      example: 'keg generate task --example \"keg task <options>\"',
+      ask: {
+        type: 'input',
+        message: 'Enter the task example',
+      },
+      require: true,
+    },
     parent: {
       description: 'Parent task of the new task',
       example: 'keg generate task --parent task-parant',
@@ -106,6 +123,20 @@ module.exports = {
         message: 'Enter the task parent',
       },
       require: true,
+    },
+    async: {
+      description: 'Should the new task be async',
+      example: 'keg generate task --async false',
+      default: true,
+    },
+    alias: {
+      description: 'Add an alias for calling the task. Separate with a comma for multiple',
+      example: 'keg generate task --name foobar --alias fobo,fb',
+      ask: {
+        type: 'input',
+        message: 'Enter an alias for calling the task. Separate with a comma for multiple',
+        default: ''
+      },
     }
   }
 }

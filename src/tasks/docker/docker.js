@@ -75,6 +75,7 @@ module.exports = {
       ...require('./build'),
       ...require('./compose'),
       ...require('./container'),
+      ...require('./copy'),
       ...require('./destroy'),
       ...require('./exec'),
       ...require('./image'),

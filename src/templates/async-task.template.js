@@ -9,14 +9,14 @@
  *
  * @returns {void}
  */
-const {{name}} = args => {
+const {{name}} = async args => {
   const { command, options, globalConfig, params } = args
 
 }
 
 module.exports = {
   {{name}}: {
-    name: '{{name}}',
+    name: `{{name}}`,
     alias: [ {{alias}} ],
     action: {{name}},
     description: `{{description}}`,

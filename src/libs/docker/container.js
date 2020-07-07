@@ -290,6 +290,15 @@ const port = async (args, _port, _format, cmdOpts) => {
 
 }
 
+/**
+ * Gets all currently running containers in json format
+ * @function
+ * @param {Object} args - Options to pass to the docker container command
+ * @param {string} args.opts - Options used to build the docker command
+ * @param {string} args.format - Format of the docker command output
+ *
+ * @returns {Array} - Array of objects of running containers
+ */
 const ps = (args, cmdOpts) => {
   return dockerCli({
     ...getCmdParams(args, { log: false, format: 'json' }),
@@ -297,11 +306,32 @@ const ps = (args, cmdOpts) => {
   }, cmdOpts)
 }
 
+/**
+ * Copies files or folders to and from a docker container
+ * @function
+ * @param {Object} args - Options to pass to the docker container command
+ * @param {string} args.container - Options used to build the docker command
+ * @param {string} args.local - Local path for the copy command
+ * @param {string} args.remote - Remote path on the container for the copy command
+ * @param {boolean} [args.fromRemote=true] - Copy from remote to local
+ *
+ * @returns {Array} - Array of objects of running containers
+ */
+const copy = ({ container, local, remote, fromRemote=true, ...args }, cmdOpts) => {
+  const opts = fromRemote 
+    ? [ 'cp', `${ container }:${ remote }`, local ]
+    : [ 'cp', local, `${ container }:${ remote }` ]
+
+  return dockerCli({ ...args, opts }, cmdOpts)
+}
+
+
 // Add the sub-methods to the root docker image method
 Object.assign(container, {
   ...containerCmds,
   clean,
   commit,
+  copy,
   destroy,
   exec,
   exists,
