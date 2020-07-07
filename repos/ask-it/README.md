@@ -39,11 +39,11 @@ See an [example here](https://github.com/lancetipton/askIt/blob/master/scripts/v
 
   // Ask for text input
   // Returns a string of the entered text
-  const inputResponse = await ask.input(input)
+  const inputResponse = await ask.input('Ask for text input')
   
   // Ask for a password / secret - input will be hidden
   // Returns a string of the entered text
-  const passwordResponse = await ask.password(password)
+  const passwordResponse = await ask.password('Ask for hidden text input')
 
   // Ask for user to select an option from a list of options
   // Returns the index of the select option within the passed in array
