@@ -4,6 +4,6 @@ require('module-alias/register')
 
 module.exports = {
   ...require('./askIt'),
-  ...require('KegModels'),
-  ...require('KegPrompts'),
+  ...require('./models'),
+  ...require('./prompts'),
 }

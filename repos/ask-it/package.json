@@ -25,23 +25,13 @@
   "dependencies": {
     "@ltipton/jsutils": "^5.0.0",
     "colors": "1.4.0",
-    "inquirer": "7.0.6",
-    "module-alias": "2.2.2"
+    "inquirer": "7.0.6"
   },
   "devDependencies": {
     "jest": "24.8.0",
     "jest-cli": "24.8.0",
     "jest-html-reporter": "3.1.3",
     "jest-sonar-reporter": "2.0.0"
-  },
-  "_moduleAliases": {
-    "KegAsk": "src/askIt",
-    "KegLog": "src/logger",
-    "KegMocks": "src/__mocks__",
-    "KegModels": "src/models",
-    "KegPrompts": "src/prompts",
-    "KegRoot": ".",
-    "KegSrc": "src"
   },
   "jest": {
     "testEnvironment": "node",
@@ -50,13 +40,6 @@
       "__DEV__": true
     },
     "moduleNameMapper": {
-      "^KegAsk(.*)$": "<rootDir>/src/askIt$1",
-      "^KegLog(.*)$": "<rootDir>/src/logger$1",
-      "^KegMocks(.*)$": "<rootDir>/src/__mocks__$1",
-      "^KegModels(.*)$": "<rootDir>/src/models$1",
-      "^KegPrompts(.*)$": "<rootDir>/src/prompts$1",
-      "^KegRoot(.*)$": "<rootDir>$1",
-      "^KegSrc(.*)$": "<rootDir>/src$1"
     },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.js?(x)"

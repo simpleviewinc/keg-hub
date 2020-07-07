@@ -1,6 +1,4 @@
-require('module-alias/register')
-
-const { ask, models } = require('KegSrc')
+const { ask, models } = require('../src')
 
 ;( async () => {
 

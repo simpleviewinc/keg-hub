@@ -1,5 +1,5 @@
 const { ask } = require('../askIt')
-const { Logger } = require('KegLog')
+const { Logger } = require('../logger')
 const { validate, isArr, isStr } = require('@ltipton/jsutils')
 
 /**

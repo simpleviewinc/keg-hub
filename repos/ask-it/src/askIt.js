@@ -1,8 +1,8 @@
 const { isArr } = require('@ltipton/jsutils')
 const inquirer = require('inquirer')
-const { input } = require('KegPrompts/input')
-const { confirm } = require('KegPrompts/confirm')
-const { password } = require('KegPrompts/password')
+const { input } = require('./prompts/input')
+const { confirm } = require('./prompts/confirm')
+const { password } = require('./prompts/password')
 
 /**
  * Creates a separator from inquire

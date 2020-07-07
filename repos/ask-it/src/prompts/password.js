@@ -1,4 +1,4 @@
-const { buildModel } = require('KegModels/buildModel')
+const { buildModel } = require('../models/buildModel')
 
 /**
  * Builds the model for a password question

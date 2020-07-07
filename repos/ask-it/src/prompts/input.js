@@ -1,5 +1,5 @@
 
-const { buildModel } = require('KegModels/buildModel')
+const { buildModel } = require('../models/buildModel')
 
 
 const input = question => buildModel('input', question)

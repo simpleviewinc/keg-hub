@@ -1,4 +1,4 @@
-const { buildModel } = require('KegModels/buildModel')
+const { buildModel } = require('../models/buildModel')
 const { isStr, isObj } = require('@ltipton/jsutils')
 
 const defModel = {

@@ -10,7 +10,9 @@ Add to your package.json
     "askIt": "git+https://github.com/lancetipton/askIt.git"
   ```
 
-### Use It 
+### Use It
+See an [example here](https://github.com/lancetipton/askIt/blob/master/scripts/validate.js)
+
 ```js
 ;(() => {
 
