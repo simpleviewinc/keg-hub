@@ -12,7 +12,6 @@ const getRemotePath = (context, dependency, remote) => {
     DOCKER,
     `CONTAINERS.${ context.toUpperCase() }.ENV.DOC_${ dependency.toUpperCase() }_PATH`
   )
-
 }
 
 const getLocalPath = (globalConfig, context, local, dependency) => {

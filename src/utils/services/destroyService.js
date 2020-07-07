@@ -17,9 +17,6 @@ const destroyService = async (args, argsExt) => {
   // build the internal arguments
   const serviceArgs = getServiceArgs(args, argsExt)
 
-  // Terminate all mutagen sync process for the context type
-  await runInternalTask('mutagen.tasks.clean', serviceArgs)
-
   // Bring down the docker-compose services
   await runInternalTask('docker.tasks.compose.tasks.down', {
     ...serviceArgs,
@@ -32,6 +29,9 @@ const destroyService = async (args, argsExt) => {
   // Remove the docker image if image param is passed as true
   get(args, 'params.image') &&
     await runInternalTask('docker.tasks.image.tasks.remove', serviceArgs)
+
+  // Terminate all mutagen sync process for the context type
+  await runInternalTask('mutagen.tasks.clean', serviceArgs)
 
   Logger.highlight(
     `Destroyed`,

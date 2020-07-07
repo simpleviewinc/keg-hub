@@ -2,7 +2,7 @@ sync:
   keg-regulator:
     alpha: "/keg/keg-regulator"
     beta: "docker://keg-regulator/keg/keg-regulator"
-    mode: "two-way-resolved"
+    mode: "one-way-replica"
     ignore:
       vcs: true
       paths:

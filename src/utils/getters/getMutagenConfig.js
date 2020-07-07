@@ -2,8 +2,30 @@ const path = require('path')
 const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
 const { tryCatch } = require('../helpers')
-const { get, deepMerge } = require('@ltipton/jsutils')
+const { get, deepMerge, isStr, styleCase, checkCall } = require('@ltipton/jsutils')
 const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
+
+const parseOptions = (options={}) => {
+  if(!options || !isStr(options)) return options
+  
+  return options.split(' ')
+    .reduce((parsed, option) => {
+      option.indexOf(`--ignore=`) === 0
+        ? checkCall(() => {
+            const ignorePath = option.split('ignore=').pop()
+            ignorePath.length && parsed.ignore.paths.push(ignorePath)
+
+          })
+        : checkCall(() => {
+            let [ key, value ] = option.split('=')
+            key = key.indexOf('--') === 0 && key.substring(2) || key
+            key && value && (parsed[styleCase(key)] = value)
+          })
+
+      return parsed
+    }, { ignore: { paths: [] }})
+
+}
 
 /**
  * Loads the mutagen config for the passed in content
@@ -12,7 +34,7 @@ const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
  *
  * @returns {Object} - Loaded mutagen config file
  */
-const getMutagenConfig = (context, service, overrides={}) => tryCatch(async () => {
+const getMutagenConfig = (context, service, overrides={}, options) => tryCatch(async () => {
   const ymlConfig = await yml.load(path.join(CONTAINERS_PATH, context, 'mutagen.yml'))
 
   const config = get(ymlConfig, `sync.${ service }`, {})
@@ -23,7 +45,7 @@ const getMutagenConfig = (context, service, overrides={}) => tryCatch(async () =
       return conf
     }, {})
 
-  return deepMerge(mappedConf, overrides)
+  return deepMerge(mappedConf, overrides, parseOptions(options))
 
 }, () => (overrides))
 

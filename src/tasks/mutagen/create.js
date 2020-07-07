@@ -21,7 +21,7 @@ const {
  *
  * @returns {Object} - Build params for create a mutagen sync
  */
-const getSyncParams = async (contextData, { local, remote, name }) => {
+const getSyncParams = async (contextData, { local, remote, name, options }) => {
 
   const { alpha, beta, ...config } = await getMutagenConfig(
     contextData.cmdContext,
@@ -29,7 +29,8 @@ const getSyncParams = async (contextData, { local, remote, name }) => {
     {
       alpha: local || get(contextData, 'contextEnvs.CONTEXT_PATH'),
       beta: remote || get(contextData, 'contextEnvs.DOC_APP_PATH')
-    }
+    },
+    options
   )
 
   !alpha && generalError(
@@ -85,7 +86,7 @@ const createMutagenSync = async (args, params, skipExists) => {
  */
 const mutagenCreate = async args => {
   const { command, globalConfig, params, task, __internal={} } = args
-  const { context, container, options } = params
+  const { context, container } = params
 
   // Ensure we have a content to build the container
   !context && !container && throwRequired(task, 'context', task.options.context)

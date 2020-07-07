@@ -1,5 +1,4 @@
-const { getPathFromConfig } = require('../globalConfig/getPathFromConfig')
-const { getTapPath } = require('../globalConfig/getTapPath')
+const { getRepoPath } = require('../getters/getRepoPath')
 
 /**
  * Get the path to a git repo
@@ -9,9 +8,7 @@ const { getTapPath } = require('../globalConfig/getTapPath')
  * @returns {string} - path to a git repo || the current dir
  */
 const getGitPath = (globalConfig, name) => {
-  const gitPath = name &&
-    (getPathFromConfig(globalConfig, name) ||
-    getTapPath(globalConfig, name))
+  const gitPath = name && getRepoPath(name, globalConfig)
 
   return gitPath || process.cwd()
 }

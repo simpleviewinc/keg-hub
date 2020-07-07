@@ -11,6 +11,7 @@ module.exports = {
   ...require('./throwNoContainers'),
   ...require('./throwNoFileExists'),
   ...require('./throwNoGitBranch'),
+  ...require('./throwNoPathExists'),
   ...require('./throwNoRepo'),
   ...require('./throwNoTapLink'),
   ...require('./throwNoTask'),

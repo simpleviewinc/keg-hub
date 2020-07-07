@@ -6,10 +6,11 @@ const { throwTaskFailed } = require('./throwTaskFailed')
  * @param {Object} task - Current task being run
  * @param {string} key - Name of the argument that's required
  * @param {Object} meta - Information about the missing required argument
+ * @param {boolean} skipTaskFailed - Should the throwTaskFailed call be skipped
  *
  * @returns {void}
  */
-const throwRequired = (task, key, meta) => {
+const throwRequired = (task, key, meta, skipTaskFailed) => {
   const requireType = (meta.require || meta.required) ? 'requires' : 'enforces a'
 
   Logger.error(`\n Task '${task.name}' ${requireType} '${key}' argument.`)
@@ -19,9 +20,8 @@ const throwRequired = (task, key, meta) => {
   meta.allowed && Logger.pair(`  * Allowed Values:`, meta.allowed.join(' | '))
   meta.example && Logger.pair(`  * Example:`, meta.example)
 
-  Logger.empty()
-
-  throwTaskFailed()
+  !skipTaskFailed && Logger.empty()
+  !skipTaskFailed && throwTaskFailed()
 }
 
 module.exports = {

@@ -1,5 +1,13 @@
+const { Logger } = require('KegLog')
 const { get, checkCall } = require('@ltipton/jsutils')
 const { bddService, buildService, serviceOptions } = require('KegUtils/services')
+const { throwRequired } = require('KegUtils/error/throwRequired')
+
+const throwMissingParams = (task) => {
+  throwRequired(task, 'context', get(task, 'options.context'), true)
+  Logger.yellow(`\n  - OR -`)
+  throwRequired(task, 'location', get(task, 'options.location'))
+}
 
 /**
  * Finds the correct service to be run and returns it
@@ -26,6 +34,9 @@ const getService = service => {
  * @returns {void}
  */
 const start = async args => {
+  // Ensure a context or location was passed
+  const { params: { context, location }, task } = args
+  !context && !location && throwMissingParams(task)
 
   // Call the build service to ensure required images are built
   await buildService(args, { context: 'regulator', image: 'keg-regulator' })
@@ -46,7 +57,13 @@ module.exports = {
     options: serviceOptions('regulator', 'start', {
       context: {
         description: 'Context or name of the repo to run the regulator tests on',
-        require: true
+        example: 'keg regulator start --context core',
+        enforce: true,
+      },
+      location: {
+        description: "Local path to the folder containing the features and steps",
+        example: 'keg regulator start --location path/to/my/tests',
+        enforce: true,
       },
       tap: {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
