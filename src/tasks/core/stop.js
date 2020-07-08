@@ -20,7 +20,7 @@ module.exports = {
     name: 'stop',
     alias: [ 'stp', 'halt', 'hlt' ],
     action: stopCore,
-    description: `Stops keg-components containers and syncs`,
+    description: `Stops keg-core containers and syncs`,
     example: 'keg core stop',
   }
 }
