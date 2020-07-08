@@ -20,6 +20,6 @@ module.exports = {
     name: 'stop',
     action: stop,
     description: `Stops the running keg-regulator docker containers and syncs`,
-    example: 'keg test stop <options>',
+    example: 'keg regulator stop <options>',
   }
 }

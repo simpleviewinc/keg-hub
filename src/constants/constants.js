@@ -106,9 +106,13 @@ module.exports = deepFreeze({
 
   // URLs for navigating to the application
   TAP_URL: `http://tap.kegdev.xyz/`,
+
   // ENV port to map to port 80 inside the docker container
   HTTP_PORT_ENV: `DOC_APP_PORT`,
-  
+
+  SYNC_PREFIXES: {
+    BDD_SERVICE: 'bdd',
+  },
 
   // Container context helpers
   // Mapped prefixes for some tasks that add prefixes when running containers

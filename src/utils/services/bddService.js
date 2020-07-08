@@ -10,6 +10,7 @@ const { runInternalTask } = require('../task/runInternalTask')
 const { findPathByName } = require('../helpers/findPathByName')
 const { checkPathExists } = require('../helpers/checkPathExists')
 const { DOCKER: { CONTAINERS_PATH } } = require('KegConst/docker')
+const { SYNC_PREFIXES: { BDD_SERVICE } } = require('KegConst/constants')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { throwNoPathExists } = require('../error/throwNoPathExists')
 
@@ -108,7 +109,15 @@ const getPathsToSync = ({ context, location }) => {
  */
 const createSync = (args, argsExt, { local, remote, name }) => {
   return mutagenService(
-    { ...args, params: { ...args.params, local, remote, name } },
+    { 
+      ...args,
+      params: {
+        ...args.params,
+        local,
+        remote,
+        name: `${ BDD_SERVICE }-${ name }`
+      }
+    },
     argsExt
   )
 }
@@ -123,7 +132,7 @@ const createSync = (args, argsExt, { local, remote, name }) => {
  * @returns {string} - Build options string as required by mutagen
  */
 const buildIgnoreOpts = ({ context, location }) => {
-  return (location && location !== regulatorPath) || context !== 'regulator'
+  return (location && location !== contextPath) || context !== 'regulator'
     ? `--ignore=/tests/features --ignore=/tests/steps`
     : null
 }
@@ -139,20 +148,22 @@ const buildIgnoreOpts = ({ context, location }) => {
  *
  * @returns {void}
  */
-const bddService = async args => {
+const bddService = async (args, { context:cmdContext, container, tap, cmd  }) => {
   const { globalConfig, params } = args
   const { context, location } = params
 
-  // Step 1. Clean up any old syncs no longer running
-  await runInternalTask('mutagen.tasks.clean', args)
-
-  // TODO: --------------------------- IMPORTANT ---------------------------
-  // Step 1.1 - Add step to remove any current feature and step syncs here
-  // TODO: --------------------------- IMPORTANT ---------------------------
+  // Step 1. Remove any current bdd service syncs
+  await runInternalTask('mutagen.tasks.clean', {
+    ...args,
+    params: {
+      ...params,
+      context: `${ BDD_SERVICE }-`,
+      force: true,
+    }
+  })
 
   // Step 2. Copy the run.sh file from the keg-cli/containers/regulator repo
-  const regulatorPath = getRepoPath('regulator')
-  await copyFile(`${ CONTAINERS_PATH }/regulator/run.sh`, `${ regulatorPath }/run.sh`)
+  const contextPath = getRepoPath(cmdContext)
 
   // 2.1 Get the sync paths before starting the container
   // Finding the syncs paths can take a while
@@ -169,20 +180,18 @@ const bddService = async args => {
         service: 'mutagen',
         // Pass in the ignore options 
         // To ignore the features and steps folders of the keg-regulator repo
-        options: buildIgnoreOpts(regulatorPath, params)
+        options: buildIgnoreOpts(contextPath, params)
       }
     },
-    { context: 'regulator', container: 'keg-regulator' }
+    { context: cmdContext, container }
   )
 
   // Step 4. Create syncs for the passed in context
-  const extArgs = { context: 'regulator', containerContext }
+  const extArgs = { context: cmdContext, containerContext }
 
   // Build the mutagen syncs for the context/location repos features and steps folders
   await createSync(args, extArgs, syncPaths.features)
   await createSync(args, extArgs, syncPaths.steps)
-
-  const docAppPath = get(containerContext, 'contextEnvs.DOC_APP_PATH')
 
   // Step 5. Connect to the keg-regulator container and run the mini-cli
   return runInternalTask('tasks.docker.tasks.exec', {
@@ -190,8 +199,8 @@ const bddService = async args => {
     __internal: { containerContext },
     params: {
       ...params,
-      cmd: `sh run.sh`,
-      context: 'regulator',
+      cmd: params.cmd || cmd || `sh run.sh`,
+      context: cmdContext,
     },
   })
 

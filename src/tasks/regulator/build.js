@@ -18,6 +18,7 @@ const build = async args => {
   // Check the base image and build it if it doesn't exist
   await buildBaseImg(args)
 
+  // Copy the run.sh file from the keg-cli/containers/regulator repo
   const regulatorPath = getRepoPath('regulator')
   await copyFile(`${ CONTAINERS_PATH }/regulator/run.sh`, `${ regulatorPath }/run.sh`)
 

@@ -14,29 +14,35 @@ const { isArr, get } = require('@ltipton/jsutils')
  */
 const clean = async args => {
   const { command, options, globalConfig, params } = args
-  const { context, log } = params
+  const { context, log, force } = params
 
   const syncs = await mutagen.sync.list({
     format: 'json'
   })
   
-  isArr(syncs) && syncs.filter(sync =>{
-    if('noSessionsFound' in sync) return false
+  isArr(syncs) && await Promise.all(
+    syncs.filter(sync =>{
+      if('noSessionsFound' in sync) return false
 
-    const nameMatch = Boolean(context && sync.name.indexOf(context) === 0)
-    const orphaned = get(sync, 'beta.connectionState') === 'Disconnected'
-    // If there's a context, then return if there is a nameMatch
-    // Otherwise return true
-    return context
-      ? orphaned && nameMatch
-      : orphaned
+      const nameMatch = Boolean(context && sync.name.indexOf(context) === 0)
+      const orphaned = get(sync, 'beta.connectionState') === 'Disconnected'
+      const halted = get(sync, 'status', '').indexOf('Halted') === 0
 
-  })
-  // Loop over all the syncs to remove and terminate them
-  .map(async sync => {
-    await mutagen.sync.terminate({ name: sync.identifier, log })
-    log && Logger.highlight(`Removed mutagen sync`, sync.name)
-  })
+      // If there's a context, then return if there is a nameMatch
+      // Otherwise return true
+      return !context
+        ? (halted || orphaned)
+        : force
+          ? nameMatch
+          : (halted || orphaned) && nameMatch
+
+    })
+    // Loop over all the syncs to remove and terminate them
+    .map(async sync => {
+      await mutagen.sync.terminate({ name: sync.identifier, log })
+      log && Logger.highlight(`Removed mutagen sync`, sync.name)
+    })
+  )
 
   if(!log) return
 
@@ -56,6 +62,11 @@ module.exports = {
       context: {
         description: 'Only syncs with a name starting with this value will be removed',
         example: 'keg mutagen clean --context core',
+      },
+      force: {
+        description: 'Force remove syncs matching the context!',
+        example: 'keg mutagen clean --force true',
+        default: false,
       },
       log: {
         description: 'Log mutagen command when a sync is removed!',
