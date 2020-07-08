@@ -32,7 +32,9 @@ services:
       - WINDOW_HEIGHT
       - WINDOW_WIDTH
     ports:
-      - 4000:${DOC_APP_PORT}
+      - ${DOC_APP_PORT}:${DOC_APP_PORT}
+    volumes:
+      - ${CONTEXT_PATH}/tests/reports:/keg/keg-regulator/tests/reports
     depends_on:
       - "selenium-hub"
       - "chrome"
