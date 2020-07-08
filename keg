@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 # Check if the keg root dir has been set. If not, then set it
 if [[ -z "$KEG_ROOT_DIR" ]]; then

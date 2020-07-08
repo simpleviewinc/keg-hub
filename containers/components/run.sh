@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 COMPONENTS_PATH=/keg/keg-components
 CLI_PATH=/keg/keg-cli

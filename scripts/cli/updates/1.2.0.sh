@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 . ~/keg/keg-cli/keg
 

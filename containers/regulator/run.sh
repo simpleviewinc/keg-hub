@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env
 
 if [[ "$1" == "sleep" ]]; then
   tail -f /dev/null

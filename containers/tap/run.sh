@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 TAP_PATH=/keg/tap
 CLI_PATH=/keg/keg-cli

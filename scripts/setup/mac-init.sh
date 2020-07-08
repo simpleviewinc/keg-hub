@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 set -e
 trap 'echo "Finished with exit code $?"' EXIT

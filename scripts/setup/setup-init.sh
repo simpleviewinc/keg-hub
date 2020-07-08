@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 # Notes
 # File for finding the correct os type, then running the setup file for that os

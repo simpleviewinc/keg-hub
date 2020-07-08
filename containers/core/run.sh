@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 # Default path ENVs
 DOC_APP_PATH=/keg/keg-core
