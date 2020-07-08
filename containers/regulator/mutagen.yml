@@ -6,8 +6,8 @@ sync:
     ignore:
       vcs: true
       paths:
-        - "/node_modules"
-        - "/tests/node_modules"
+        - "node_modules"
+        - "reports"
         - "/.*"
         - "!/.storybook"
         - "!/.npmrc"
@@ -15,7 +15,5 @@ sync:
         - "*.md"
         - "/temp"
         - "/web-build"
-        - "/reports"
-        - "/tests/reports"
         - "/build"
         - "/docs"

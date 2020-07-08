@@ -65,14 +65,19 @@ module.exports = {
         example: 'keg regulator start --location path/to/my/tests',
         enforce: true,
       },
-      tap: {
-        description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
-        example: `keg regulator start --context tap --tap events-force`,
+      local: {
+        description: 'Copy the local repo into the docker container at build time',
+        example: `keg regulator start --local`,
+        default: false,
       },
       service: {
         description: 'Regulator service to run.',
         example: 'keg regulator start --service bdd',
         default: 'bdd',
+      },
+      tap: {
+        description: 'Name of the tap to mount into keg-regulator container. Only needed if "context" argument is "tap"',
+        example: `keg regulator start --context tap --tap events-force`,
       },
     }),
   }

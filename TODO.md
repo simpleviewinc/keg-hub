@@ -51,3 +51,16 @@
     * Should allow overwriting the globalConfig location
       * If location is overwritten, location should be updated in global config
 
+--------------------------------------------------------------------------------
+                              **IMPORTANT**
+--------------------------------------------------------------------------------
+
+* BDD service
+  * Kill all syncs for steps and features can get overwirtten 
+    * If start with one context, don't kill it
+    * Then run with another content. 
+      * Seems like mutagen handles it, but should remove original syncs **BEFORE** new syncs are created to point to the same directory 
+
+--------------------------------------------------------------------------------
+                              **IMPORTANT**
+--------------------------------------------------------------------------------

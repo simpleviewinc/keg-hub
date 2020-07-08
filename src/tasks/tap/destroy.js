@@ -17,7 +17,7 @@ const destroyTap = async (args) => {
 module.exports = {
   destroy: {
     name: 'destroy',
-    alias: [ 'dest', 'des', 'kill' ],
+    alias: [ 'dest', 'des', 'kill', 'down' ],
     action: destroyTap,
     description: `Destroys the docker items for a tap`,
     example: 'keg tap destroy <options>',

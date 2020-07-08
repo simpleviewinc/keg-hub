@@ -146,16 +146,25 @@ const bddService = async args => {
   // Step 1. Clean up any old syncs no longer running
   await runInternalTask('mutagen.tasks.clean', args)
 
+  // TODO: --------------------------- IMPORTANT ---------------------------
+  // Step 1.1 - Add step to remove any current feature and step syncs here
+  // TODO: --------------------------- IMPORTANT ---------------------------
+
   // Step 2. Copy the run.sh file from the keg-cli/containers/regulator repo
   const regulatorPath = getRepoPath('regulator')
   await copyFile(`${ CONTAINERS_PATH }/regulator/run.sh`, `${ regulatorPath }/run.sh`)
+
+  // 2.1 Get the sync paths before starting the container
+  // Finding the syncs paths can take a while
+  // This way we already have the paths, so we can start the syncs sooner
+  const syncPaths = await getPathsToSync(params)
 
   // Step 3. Run docker-compose up task to start the regulator
   const containerContext = await composeService(
     { 
       ...args,
       params: {
-        ...args.params,
+        ...params,
         follow: false,
         service: 'mutagen',
         // Pass in the ignore options 
@@ -167,19 +176,21 @@ const bddService = async args => {
   )
 
   // Step 4. Create syncs for the passed in context
-  const syncPaths = await getPathsToSync(params)
   const extArgs = { context: 'regulator', containerContext }
 
   // Build the mutagen syncs for the context/location repos features and steps folders
   await createSync(args, extArgs, syncPaths.features)
   await createSync(args, extArgs, syncPaths.steps)
 
-  // Step 5. Connect to the keg-regulator container logs
-  await runInternalTask('docker.tasks.log', {
+  const docAppPath = get(containerContext, 'contextEnvs.DOC_APP_PATH')
+
+  // Step 5. Connect to the keg-regulator container and run the mini-cli
+  return runInternalTask('tasks.docker.tasks.exec', {
     ...args,
     __internal: { containerContext },
     params: {
-      ...args.params,
+      ...params,
+      cmd: `sh run.sh`,
       context: 'regulator',
     },
   })

@@ -69,6 +69,11 @@ const serviceOptions = (task='', action='', overrides={}) => {
       example: 'keg ${ task } ${ action } --log',
       default: false,
     },
+    local: {
+      description: 'Copy the local repo into the docker container at build time',
+      example: `keg ${ task } ${ action } --local`,
+      default: false,
+    },
     mounts: {
       description: `List of key names or folder paths to mount into the docker container. Only used when service === 'container'`,
       example: 'keg ${ task } ${ action } --mounts cli,retheme',

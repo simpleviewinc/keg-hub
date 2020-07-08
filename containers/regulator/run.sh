@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/bin/sh
+
+if [[ "$1" == "sleep" ]]; then
+  tail -f /dev/null
+  exit 0
+fi
 
 TEST_PATH=/keg/keg-regulator
 
@@ -39,41 +44,19 @@ keg_run_regulator_yarn_setup(){
 
 }
 
-keg_sleep_for_sync(){
-  keg_message "Sleeping for 5 seconds. I'm tired!"
-  sleep 5
-}
-
 # Runs a Tap
 keg_run_the_regulator(){
 
-  keg_sleep_for_sync
-  keg_message "Ok, done sleeping..."
-
-  if [[ -f "$TEST_PATH/tests/package.json" ]]; then 
-    cd $TEST_PATH/tests
-  else
-    cd $TEST_PATH
-  fi
+  cd $TEST_PATH
 
   local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="test:grid"
+    KEG_EXEC_CMD="cli"
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"
   yarn $KEG_EXEC_CMD
 
-}
-
-# Keeps the regulator container running
-# This way tests can be re-run without needing to re-start the container
-keg_keep_running(){
-  cd $TEST_PATH
-  node scripts/miniCLI.js
-
-  # tail -f /dev/null
-  # sleep infinity
 }
 
 # Add yarn global bin to the $PATH ENV
@@ -82,8 +65,6 @@ keg_add_yarn_bin_to_path
 # Run yarn setup for any extra node_modules from the mounted regulator's package.json
 keg_run_regulator_yarn_setup
 
-# Start the keg regulator instance
+# Start the keg regulator cli
 keg_run_the_regulator
 
-# Keep the regulator container running
-keg_keep_running

@@ -1,5 +1,8 @@
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { copyFile } = require('KegFileSys/fileSys')
+const { DOCKER: { CONTAINERS_PATH } } = require('KegConst/docker')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
+const { getRepoPath } = require('KegUtils/getters/getRepoPath')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Builds the docker image for the keg-regulator repo
@@ -14,6 +17,9 @@ const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 const build = async args => {
   // Check the base image and build it if it doesn't exist
   await buildBaseImg(args)
+
+  const regulatorPath = getRepoPath('regulator')
+  await copyFile(`${ CONTAINERS_PATH }/regulator/run.sh`, `${ regulatorPath }/run.sh`)
 
   // Build the core image through internal task
   return runInternalTask('tasks.docker.tasks.build', {

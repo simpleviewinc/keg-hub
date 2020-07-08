@@ -40,11 +40,11 @@ COPY tests/*.lock $DOC_APP_PATH/tests/
 
 # Install the dependecies with yarn install, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
-    yarn install; \
+    yarn install --ignore-engines; \
     yarn cache clean; \
     rm -f .npmrc; \
     cd $DOC_APP_PATH/tests; \
-    yarn install; \
+    yarn install --ignore-engines; \
     yarn cache clean; \
     rm -f .npmrc
 
@@ -89,6 +89,6 @@ EXPOSE 4444
 # Set the current directory to tap repo
 WORKDIR /$DOC_APP_PATH
 
-# Run the start script
+# Run the start script passing in sleep
 # Dont use the array syntax, so we have access to the DOC_CLI_PATH ENV
-CMD /bin/sh $DOC_APP_PATH/run.sh
+CMD /bin/sh $DOC_APP_PATH/run.sh "sleep"

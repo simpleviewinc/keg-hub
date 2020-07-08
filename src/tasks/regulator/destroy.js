@@ -18,7 +18,7 @@ const destroyRegulator = async (args) => {
 module.exports = {
   destroy: {
     name: 'destroy',
-    alias: [ 'dest', 'des', 'kill' ],
+    alias: [ 'dest', 'des', 'kill', 'down' ],
     action: destroyRegulator,
     description: `Destroys the docker items for keg-regulator`,
     example: 'keg regulator destroy <options>',
