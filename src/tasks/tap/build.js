@@ -1,4 +1,5 @@
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 
 /**
  * Builds a docker container for a tap so it can be run
@@ -11,6 +12,10 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
  * @returns {void}
  */
 const buildTap = async (args) => {
+
+  // Check the base image and build it if it doesn't exist
+  await buildBaseImg(args)
+
   return runInternalTask('tasks.docker.tasks.build', {
     ...args,
     params: { ...args.params, tap: args.params.tap, context: 'tap' },
