@@ -23,7 +23,7 @@ const removeDockerImage = async args => {
   const { globalConfig, params, __internal={} } = args
   const { context, tag } = params
 
-  (!tag || !context) && generalError(
+  ;(!params.tag && !params.context) && generalError(
     `The docker "image remove" requires a context, name or tag argument!`
   )
 
