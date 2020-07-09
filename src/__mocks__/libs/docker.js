@@ -1,5 +1,22 @@
 global.testDocker = {
   containers: {
+    tap: {
+      command: 'docker-entrypoint.s…',
+      createdAt: '2020-06-20 01:49:18 -0700 MST',
+      id: 'ba9e35cde327',
+      image: 'tap',
+      labels: '',
+      localVolumes: '0',
+      mounts: '',
+      name: 'tap',
+      networks: 'bridge',
+      ports: '80/tcp, 443/tcp, 60710/tcp, 0.0.0.0:19002->19002/tcp, 0.0.0.0:80->19006/tcp',
+      runningFor: '12 minutes ago',
+      size: '0B',
+      status: 'Up 16 minutes',
+      context: 'tap',
+      noPrefix: 'tap'
+    },
     core: {
       command: 'docker-entrypoint.s…',
       createdAt: '2020-06-20 01:49:18 -0700 MST',
@@ -74,6 +91,13 @@ const docker = {
         ? { '19006': '80' }
         : `19006/tcp -> 0.0.0.0:80`
     }),
+    ps: jest.fn((args) => {
+      return [
+        global.testDocker.containers.core,
+        global.testDocker.containers.tap,
+        global.testDocker.containers.random,
+      ]
+    })
   }
 }
 

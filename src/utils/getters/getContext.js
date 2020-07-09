@@ -3,6 +3,7 @@ const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
 const { getKegContext } = require('./getKegContext')
 const { getPrefixContext } = require('./getPrefixContext')
+const { isDockerId } = require('../docker/isDockerId')
 
 /**
  * If no context can be found, ask the user when container they want to use
@@ -25,16 +26,15 @@ const askWhenNoContext = async (type) => {
  *
  * @returns {Object} - Container, context, and the original with the prefix
  */
-const containerContext = async (toFind, askContainer) => {
-  const found = await docker.container.get(toFind)
+const containerContext = async (toFind, prefixData={}, askFor) => {
 
-  const container = found || askContainer && await askWhenNoContext('container')
+  let found = await docker.container.get(toFind)
+  found = found || prefixData.prefix && await docker.container.get(prefixData.prefix)
+  const container = found || askFor && await askWhenNoContext('container')
 
-  if(!container) return false
-
-  const { context, prefix, noPrefix } = getPrefixContext(container.name)
-
-  return { ...container, context, prefix, noPrefix }
+  return !container
+    ? prefixData
+    : { ...container, ...prefixData, ...getPrefixContext(container.name) }
 
 }
 
@@ -45,16 +45,16 @@ const containerContext = async (toFind, askContainer) => {
  *
  * @returns {Object} - Image, context, and the original with the prefix
  */
-const imageContext = async (toFind, askImage) => {
-  const found = await docker.image.get(toFind)
+const imageContext = async (toFind, prefixData={}, askFor) => {
 
-  const image = found || askImage && await askWhenNoContext('image')
+  let found = await docker.image.get(toFind)
+  found = found || prefixData.prefix && await docker.image.get(prefixData.prefix)
+  const image = found || askFor && await askWhenNoContext('image')
 
-  if(!image) return false
+  return !image
+    ? prefixData
+    : { ...image, ...prefixData, ...getPrefixContext(image.repository) }
 
-  const { context, prefix, noPrefix } = getPrefixContext(image.repository)
-
-  return { ...image, context, prefix, noPrefix }
 }
 
 /**
@@ -69,19 +69,19 @@ const imageContext = async (toFind, askImage) => {
  *
  * @returns {Object} - Found context, and prefix if it exists
  */
-const getContext = ({ context, container, image, tap }, askFor) => {
-  // TODO: Add image to the params and get the context form the image
+const getContext = async ({ context, container, image, tap }, askFor) => {
+  const contextRef = context || container || image || (tap && 'tap')
+  const prefixData = isDockerId(contextRef) ? { id: contextRef } : getPrefixContext(contextRef)
 
-  let foundContext = container && containerContext(container, askFor)
-  foundContext = foundContext || image && imageContext(image, askFor)
+  const foundContext = container
+    ? await containerContext(container, prefixData, askFor)
+    : image
+      ? await imageContext(image, prefixData, askFor)
+      : prefixData
 
-  return foundContext
-    ? foundContext
-    : tap
-      ? { context: 'tap', tap, noPrefix: 'tap' }
-      : context
-        ? getPrefixContext(context)
-        : {}
+  return tap 
+    ? { tap, context: 'tap', ...foundContext }
+    : { context, tap: context, ...foundContext }
 
 }
 

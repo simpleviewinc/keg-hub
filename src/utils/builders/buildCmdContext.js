@@ -7,20 +7,22 @@ const { getContainerConst } = require('../docker/getContainerConst')
 /**
  * Gets the cmdContext for the task based on the passed in params
  * @function
- * @param {string} context - Context to run the docker container in
+ * @param {Object} globalConfig - Local Keg-CLI config settings
+ * @param {Object} params - arguments passed to the current task
+ * @param {boolean} askFor - Should ask for the container or image if not found
  *
- * @returns {Object} - ENVs for the context
+ * @returns {Object} - Context data based on the passed in params
  */
-const buildCmdContext = async ({ globalConfig, params, allowed, askContainer }) => {
-  const { tap, container } = params
+const buildCmdContext = async ({ globalConfig, params, askFor }) => {
+  const { tap } = params
 
   // Check if the context is prefixed with `keg`
   // If it is, remove it. This allows passing in "keg-core" or just "core"
-  const contextData = await getContext(params, askContainer)
+  const contextData = await getContext(params, askFor)
   const { context } = contextData
 
   // If context is not a tap, then just return the cmdContext
-  if(context !== 'tap')
+  if(!tap || context !== 'tap')
     return { ...contextData, cmdContext: context, tap: context }
 
   // Check if the context or the tap, has a tap path

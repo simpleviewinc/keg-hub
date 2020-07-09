@@ -1,3 +1,7 @@
+
+const throwTaskFailed = jest.fn(() => {})
+jest.setMock('KegUtils/error/throwTaskFailed', { throwTaskFailed })
+
 const { yml } = require('../yml')
 const { pathExistsSync } = require('../fileSys')
 
@@ -47,17 +51,11 @@ describe('Yaml Lib', () => {
 
     })
 
-    it('should call process.exit if file can not be found', async done => {
-
-      const oldExit = process.exit
-      process.exit = jest.fn();
+    it('should call throwTaskFailed if file can not be found', async () => {
 
       await yml.load('./foo.yml')
 
-      expect(process.exit).toHaveBeenCalled()
-
-      process.exit = oldExit
-      done()
+      expect(throwTaskFailed).toHaveBeenCalled()
 
     })
 

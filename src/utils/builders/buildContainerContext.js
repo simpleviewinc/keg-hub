@@ -75,8 +75,7 @@ const buildContainerContext = async args => {
     params,
     globalConfig,
     // Only ask for the container if it's no an internal task call
-    askContainer: !Boolean(__internal),
-    allowed: get(task, 'options.context.allowed', IMAGES),
+    askFor: !Boolean(__internal),
     defContext: get(task, 'options.context.default')
   })
 

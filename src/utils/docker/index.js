@@ -13,4 +13,5 @@ module.exports = {
   ...require('./getDockerArgs'),
   ...require('./getOrBuildImage'),
   ...require('./imageSelect'),
+  ...require('./isDockerId'),
 }

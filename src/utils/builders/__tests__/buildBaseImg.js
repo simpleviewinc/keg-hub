@@ -1,6 +1,8 @@
-
+const { docker } = require('KegMocks/libs/docker')
 const globalConfig = global.getGlobalCliConfig()
 const testTask = global.getTask()
+jest.setMock('KegDocCli', docker)
+
 
 const { buildBaseImg } = require('../buildBaseImg')
 

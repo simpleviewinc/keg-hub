@@ -11,11 +11,11 @@ describe('checkRunningContainers', () => {
 
   afterAll(() => jest.resetAllMocks())
 
-  it('should call docker.container.list to get a list of all containers', async done => {
+  it('should call docker.container.ps to get a list of all containers', async done => {
 
     await checkRunningContainers()
 
-    expect(docker.container.list).toHaveBeenCalled()
+    expect(docker.container.ps).toHaveBeenCalled()
 
     done()
   })

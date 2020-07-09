@@ -1,6 +1,5 @@
 const { mapObj, reduceObj, checkCall } = require('@ltipton/jsutils')
 const { gitCli } = require('./commands')
-const { isHex } = require('./helpers')
 const { NEWLINES_MATCH, SPACE_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 
 /**
