@@ -19,8 +19,8 @@ const buildCmdContext = async ({ globalConfig, params, allowed, askContainer }) 
   const contextData = await getContext(params, askContainer)
   const { context } = contextData
 
-  // If context is in the allowed, and it's not a tap, then just return the cmdContext
-  if(allowed.indexOf(context) !== -1 && context !== 'tap' && !tap && !container)
+  // If context is not a tap, then just return the cmdContext
+  if(context !== 'tap')
     return { ...contextData, cmdContext: context, tap: context }
 
   // Check if the context or the tap, has a tap path
@@ -33,8 +33,9 @@ const buildCmdContext = async ({ globalConfig, params, allowed, askContainer }) 
   const cmdContext = hasTapPath ? 'tap' : context
 
   // Ensure we have a valid context to run the command in
-  ;(!cmdContext || (!allowed.includes(cmdContext) && !allowed.includes(params.context))) &&
-    generalError(`The context "${ context }" is invalid. A valid "context" is required!`)
+  !cmdContext && (!contextData.image || !contextData.id) && generalError(
+    `The context "${ context }" is invalid. A valid "context" is required!`
+  )
 
   return { ...contextData, cmdContext, tap: tap || context }
 }
