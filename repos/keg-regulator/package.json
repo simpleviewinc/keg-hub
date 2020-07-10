@@ -1,28 +1,31 @@
 {
-  "name": "keg-test",
+  "name": "keg-regulator",
   "description": "Automated web testing for the keg and its associated repos",
   "version": "1.0.0",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "archive": "bash tests/scripts/archive.sh ./tests/reports",
+    "cli": "node ./scripts/cli.js",
     "start": "yarn archive && bash scripts/start.sh",
     "stop": "yarn archive && yarn down",
     "restart:all": "yarn down && yarn start",
     "restart:tests": "yarn archive && bash scripts/restart.sh",
-    "up": "docker-compose up",
-    "down": "docker-compose down -v",
+    "up": "docker-compose -f ./docker-compose.yml -f ./docker-compose.local.yml up",
+    "down": "docker-compose -f ./docker-compose.yml -f ./docker-compose.local.yml down -v",
     "status": "docker container list",
-    "logs": "docker container logs $(docker ps -aqf \"name=keg-tests\") --follow",
-    "enter": "docker exec -it $(docker ps -aqf \"name=keg-tests\") bash",
+    "logs": "docker container logs $(docker ps -aqf \"name=keg-regulator\") --follow",
+    "enter": "docker exec -it $(docker ps -aqf \"name=keg-regulator\") bash",
     "report": "node ./scripts/openURL.js tests/reports/cucumber/index.html",
-    "console": "open http://$(docker-machine ip default):4444/grid/console"
+    "console": "open http://${KEG_DOCKER_IP:-$(docker-machine ip ${KEG_DOCKER_NAME:-docker-keg})}:4444/grid/console"
   },
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
     "chokidar": "^3.4.0",
-    "open": "^7.0.4"
+    "open": "^7.0.4",
+    "askIt": "git+https://github.com/lancetipton/askIt.git",
+    "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git"
   }
 }

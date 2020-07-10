@@ -1,4 +1,9 @@
 node_modules
+.git
+.github
+.vscode
+docs
+*.md
 
 tests/reports/cucumber/*
 !tests/reports/cucumber/.gitkeep
@@ -13,5 +18,3 @@ tests/node_modules
 
 *.log
 tests/*.log
-run.sh
-.DS_Store

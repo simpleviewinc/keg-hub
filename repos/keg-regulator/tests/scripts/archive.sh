@@ -25,7 +25,7 @@ web_assets_path=$src_path/assets
 web_features_path=$src_path/features
 
 if [[ ! -f "$web_report_path" ]]; then
-  # no index.html file, so nothing to archive
+  echo -e "\n Can't find index.html file, nothing to archive! Exiting... \n"
   exit 0
 fi
 
@@ -47,3 +47,4 @@ for file in "${files[@]}"; do
 done
 
 
+echo -e "\n =================== ARCHIVE CREATED =================== \n"

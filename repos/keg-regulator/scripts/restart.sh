@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # restart just the tests container
-docker-compose restart tests
+docker-compose restart keg-regulator
 
 echo -e "\n =========== Running tests and assembling report... =========== \n"
 

@@ -12,8 +12,8 @@
     "test:local": "./scripts/test.sh; yarn report;",
     "test:grid": "bash scripts/testGrid.sh",
     "report": "node scripts/generateReport.js",
-    "serve:reports": "http-server ./reports/cucumber/ --port 4000 --silent",
-    "view:served:reports": "open http://$(docker-machine ip default):4000",
+    "serve:reports": "http-server ./reports/cucumber/ --port ${DOC_APP_PORT:4000} --silent",
+    "view:served:reports": "open http://${KEG_DOCKER_IP:regulator.kegdev.xyz}:${DOC_APP_PORT:4000}",
     "view:reports": "open ./reports/cucumber/index.html"
   },
   "license": "MIT",

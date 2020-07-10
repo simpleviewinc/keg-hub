@@ -24,7 +24,7 @@ runTestsOn() {
   browser="$1"
 
   # only use the tags flag if env is not empty. If we didn't do this, cucumber would complain about the empty --tags value
-  if [ ! -z "$TEST_FILTER_TAGS"]; then
+  if [[ ! -z "$TEST_FILTER_TAGS" ]]; then
     # run the tests
     HEADLESS="$HEADLESS" BROWSER="$browser" yarn cucumber --tags "$TEST_FILTER_TAGS"
   else
@@ -55,6 +55,6 @@ for pid in $pids; do
 done
 
 # if any process failed, return with exit code 1
-if [ "$result" == "1" ]; then
+if [[ "$result" == "1" ]]; then
   exit 1
 fi

@@ -33,8 +33,8 @@ report.generate({
   reportPath: jsonDir,
   displayDuration: true,
   removeFolders: true,
-  pageTitle: 'Keg Test Results',
-  reportName: 'Keg Test Results',
+  pageTitle: 'Keg Regulator Results',
+  reportName: 'Keg Regulator Results',
   openReportInBrowser: true,
   pageFooter:
     '<div class="created-by"><p><a href="https://www.simpleviewinc.com/" target="_blank">Simpleview</a></p></div>',

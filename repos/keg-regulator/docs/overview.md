@@ -5,7 +5,7 @@
       * Uses docker-machine / docker-compose / docker-sync
     * Keg-Core
       * Gets deployed to a CDN
-      * URL would like this => kegcore.staging.kegdev.xyz
+      * URL would like this => core.staging.kegdev.xyz
     * Keg-Components
     * Re-Theme
     * Tap-Resolver
