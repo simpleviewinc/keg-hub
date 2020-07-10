@@ -23,7 +23,7 @@ const noENVLog = () => {
   )
   Logger.log(
     Logger.colors[Logger.colorMap.info](`  Creating from path`),
-    Logger.colors[Logger.colorMap.data](`scripts/setup//${ DEFAULT_ENV }`),
+    Logger.colors[Logger.colorMap.data](`scripts/setup/${ DEFAULT_ENV }`),
   )
   Logger.empty()
 }

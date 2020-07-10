@@ -9,9 +9,10 @@ services:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
       args:
-        GIT_COMPONENTS_URL: ${GIT_COMPONENTS_URL}
-        GIT_KEY: ${GIT_KEY}
-        DOC_APP_PATH: ${DOC_APP_PATH}
+        - GIT_COMPONENTS_URL
+        - GIT_KEY
+        - DOC_APP_PATH
+        - KEG_IMAGE_FROM
     container_name: ${CONTAINER_NAME}
     environment:
       - ENV
@@ -22,7 +23,6 @@ services:
       - GIT_CLI_URL
       - GIT_COMPONENTS_URL
       - GIT_RETHEME_URL
-      - IMAGE_FROM
       - KEG_EXEC_CMD
       - KEG_NM_INSTALL
       - NODE_ENV

@@ -23,7 +23,7 @@ services:
         - GIT_RETHEME_URL
         - GIT_RESOLVER_URL
         - GIT_TAP_URL
-        - IMAGE_FROM
+        - KEG_IMAGE_FROM
         - KEG_EXEC_CMD
         - KEG_NM_INSTALL
         - NODE_ENV
@@ -42,7 +42,7 @@ services:
       - GIT_RETHEME_URL
       - GIT_RESOLVER_URL
       - GIT_TAP_URL
-      - IMAGE_FROM
+      - KEG_IMAGE_FROM
       - KEG_EXEC_CMD
       - KEG_CORE_PROGRESS
       - KEG_NM_INSTALL

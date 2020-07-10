@@ -2,27 +2,8 @@
 
 . ~/keg/keg-cli/keg
 
-# Prints a message to the terminal through stderr
-keg_message(){
-  echo "[ KEG CLI ] $@" >&2
-  return
-}
+source ./update_helpers
 
-# Asks a question in the terminal
-keg_ask_question(){
-  keg_message "$1"
-  read -p "" INPUT;
-  local ANSWER="${INPUT:0:1}"
-
-  echo "$ANSWER"
-}
-
-keg_destroy_all_docker(){
-  docker stop $(docker ps -aq) 2>/dev/null
-  docker rm $(docker ps -aq) 2>/dev/null
-  keg di clean
-  keg d clean
-}
 
 # Check for docker-sync, then asks if you want to remove it
 keg_remove_docker_sync(){

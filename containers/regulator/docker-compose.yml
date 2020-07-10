@@ -12,7 +12,7 @@ services:
         - ENV
         - DOC_APP_PATH
         - GIT_KEY
-        - IMAGE_FROM
+        - KEG_IMAGE_FROM
         - KEG_EXEC_CMD
         - KEG_NM_INSTALL
         - NODE_ENV

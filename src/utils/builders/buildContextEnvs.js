@@ -24,7 +24,7 @@ const buildContextEnvs = async ({ cmdContext, envs={}, globalConfig, params={}, 
     ...getContainerConst(cmdContext, 'env', {}),
 
     // Add the passed in custom ENVS to override any of the defaults
-    ...envs
+    ...envs,
 
     // Experimental docker builds. Makes docker faster and cleaner
     ...(getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1, COMPOSE_DOCKER_CLI_BUILD: 1 } : {}),
