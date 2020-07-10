@@ -1,4 +1,3 @@
-import { typography } from '../typography'
 import { sharedForm } from './sharedForm'
 
 export const input = {
@@ -8,9 +7,7 @@ export const input = {
       ...sharedForm.inputs,
     },
     $web: {
-      outline: 'none',
-      boxSizing: 'border-box',
-      ...typography.font.family,
+      width: '100%',
     },
     $native: {
       width: '100%',

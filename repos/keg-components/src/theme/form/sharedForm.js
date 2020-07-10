@@ -10,7 +10,6 @@ export const sharedForm = {
     overflow: 'hidden',
     height: get(defaults, 'form.input.height', 35),
     padding: padding.size / 2,
-    fontSize: 14,
   },
   border: {
     borderRadius: 5,

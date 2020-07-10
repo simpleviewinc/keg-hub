@@ -1,12 +1,28 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { ActivityIndicator } from 'react-native'
 import { IndicatorWrapper } from './indicator.wrapper'
+import { View } from 'KegView'
 
-export const Indicator = ({ alt, src, source, style }) => (
-  <IndicatorWrapper
-    alt={alt || 'Loading'}
-    Element={Image}
-    src={src || source}
-    style={style}
-  />
-)
+const Element = ({ style = {}, size, color, ...attrs }) => {
+  return (
+    <View>
+      <ActivityIndicator
+        size={size}
+        color={style.color || color}
+      />
+    </View>
+  )
+}
+
+export const Indicator = ({ alt, size, color, styles, ...props }) => {
+  return (
+    <IndicatorWrapper
+      {...props}
+      alt={alt || 'Loading'}
+      size={[ 'large', 'small' ].includes(size) ? size : 'large'}
+      color={color}
+      Element={Element}
+      styles={styles}
+    />
+  )
+}

@@ -1,6 +1,4 @@
 import React from 'react'
-import { indicatorUri } from '../../assets/spinners/moderate'
-import { getImgSrc } from '../../utils'
 import { View } from 'KegView'
 import { useThemePath } from 'KegHooks'
 
@@ -10,11 +8,11 @@ export const IndicatorWrapper = props => {
     Element,
     isWeb,
     resizeMode,
-    src,
-    source,
+    size,
     styles,
     type = 'default',
     themePath,
+    ...elProps
   } = props
 
   const [builtStyles] = useThemePath(themePath || `indicator.${type}`, styles)
@@ -22,10 +20,11 @@ export const IndicatorWrapper = props => {
   return (
     <View style={builtStyles.container}>
       <Element
+        {...elProps}
         alt={alt || 'Loading'}
         style={builtStyles.icon}
+        size={size}
         resizeMode={resizeMode || 'contain'}
-        {...getImgSrc(isWeb, src, source, indicatorUri)}
       />
     </View>
   )

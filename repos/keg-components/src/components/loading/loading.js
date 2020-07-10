@@ -17,13 +17,17 @@ import { useThemePath } from 'KegHooks'
  *
  */
 const Progress = props => {
-  const { styles, text, loadIndicator } = props
+  const { styles, text, loadIndicator, type, size } = props
   const LoadingIndicator = loadIndicator || Indicator
 
   return (
     <View style={styles.progress}>
       { isValidComponent(LoadingIndicator) ? (
-        <LoadingIndicator styles={styles.indicator} />
+        <LoadingIndicator
+          size={size}
+          styles={styles.indicator}
+          type={type}
+        />
       ) : (
         text && <Text style={styles.text}>{ text }</Text>
       ) }
@@ -47,6 +51,7 @@ export const Loading = props => {
     children,
     text = 'Loading',
     indicator,
+    size,
     styles,
     themePath,
     type = 'default',
@@ -61,6 +66,8 @@ export const Loading = props => {
           styles={builtStyles}
           text={text}
           loadIndicator={indicator}
+          type={type}
+          size={size}
         />
       ) }
     </View>

@@ -14,21 +14,11 @@ const switchDefault = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-    },
-    $web: {
       display: 'flex',
     },
   },
   wrapper: {
-    $web: {
-      outline: 'none',
-      height: height,
-      width: width * 2,
-      display: 'flex',
-      alignItems: 'stretch',
-      position: 'relative',
-    },
-    $native: {
+    $all: {
       alignItems: 'center',
     },
   },

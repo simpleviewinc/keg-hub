@@ -43,7 +43,7 @@ export const AppHeader = props => {
     <View
       style={theme.join(
         get(headerStyles, ['container']),
-        shadow && get(headerStyles, [ 'container', 'shadow' ]),
+        shadow && get(headerStyles, ['shadow']),
         styles
       )}
     >

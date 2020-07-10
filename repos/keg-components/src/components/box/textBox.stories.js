@@ -11,7 +11,7 @@ const TextBoxStory = ({ type, useClipboard }) => {
     <StoryWrap style={{ paddingTop: 30 }}>
       <View style={{ flexDirection: 'row' }}>
         <Input
-          style={{ margin: 15 }}
+          style={{ margin: 15, width: 200 }}
           onValueChange={setText}
           placeholder={'Type to fill the box'}
         />

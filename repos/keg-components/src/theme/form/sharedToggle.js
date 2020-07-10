@@ -19,9 +19,6 @@ export const sharedToggle = {
       alignItems: 'center',
       height: height + space,
     },
-    $web: {
-      outline: 'none',
-    },
   },
   left: {
     marginRight: margin.size,

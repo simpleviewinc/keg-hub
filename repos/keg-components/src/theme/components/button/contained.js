@@ -16,13 +16,10 @@ const containedStyles = (state, colorType) => {
         backgroundColor: activeColor,
         padding: 9,
         minHeight: 35,
-        textAlign: 'center',
         opacity,
       },
       $web: {
         cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
-        pointerEvents: state === 'disabled' && 'not-allowed',
-        outline: 'none',
         boxShadow: 'none',
         ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
       },

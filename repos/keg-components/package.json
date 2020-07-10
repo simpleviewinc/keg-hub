@@ -1,6 +1,6 @@
 {
   "name": "@simpleviewinc/keg-components",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
   "publishConfig": {
@@ -34,7 +34,7 @@
     "test:web": "PLATFORM=web RE_PLATFORM=web NODE_ENV=test jest --no-cache --config=./configs/jest.config.js",
     "view:reports": "open reports/coverage/lcov-report/index.html",
     "storybook": "nodemon --watch ./configs --exec 'RE_PLATFORM=web start-storybook -p 60710'",
-    "sb": "nodemon --watch ./configs --exec 'RE_PLATFORM=web start-storybook -p 60710'",
+    "sb": "nodemon --watch ./configs --exec 'RE_PLATFORM=native start-storybook -p 60710'",
     "sb:build": "yarn clean:docs; RE_PLATFORM=web build-storybook -c .storybook -o docs",
     "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
     "sb:web": "RE_PLATFORM=web start-storybook -p 60710",
@@ -112,7 +112,7 @@
   },
   "peerDependencies": {
     "@expo/vector-icons": "^10.2.0",
-    "@simpleviewinc/re-theme": "1.1.2",
+    "@simpleviewinc/re-theme": "2.0.0",
     "expo": "^36.0.0",
     "expo-font": "^8.0.0",
     "jsutils": "git+https://github.com/lancetipton/jsutils.git",

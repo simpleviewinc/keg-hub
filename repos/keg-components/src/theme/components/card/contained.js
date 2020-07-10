@@ -53,7 +53,6 @@ export const contained = {
   },
   divider: {
     marginBottom: margin.size,
-    hairlineWidth: 1,
   },
   media: {
     container: {

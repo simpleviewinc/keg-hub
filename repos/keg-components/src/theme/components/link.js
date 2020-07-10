@@ -4,19 +4,14 @@ export const link = {
   default: {
     $all: {
       color: colors.palette.blue01,
-    },
-    $native: {
       textDecorationLine: 'underline',
       textDecorationColor: colors.palette.blue02,
     },
-    $web: {
-      textDecoration: 'underline',
-      cursor: 'pointer',
-    },
   },
   hover: {
-    $web: {
+    $all: {
       color: colors.palette.blue02,
+      textDecorationColor: colors.palette.blue02,
     },
   },
 }
