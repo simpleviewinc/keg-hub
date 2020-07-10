@@ -11,6 +11,7 @@ const { getSetting } = require('../globalConfig/getSetting')
 const convertParamsToEnvs = ({ env, command, install, local }, contextEnv) => {
   const extraENVs = { ENV: env, NODE_ENV: env }
   command && ( extraENVs.KEG_EXEC_CMD = command )
+  command && ( extraENVs.EXEC_CMD = command )
   install && ( extraENVs.KEG_NM_INSTALL = true )
 
   // Check if we should copy the local repo into the docker container on image build
