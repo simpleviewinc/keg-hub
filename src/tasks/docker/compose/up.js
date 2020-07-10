@@ -1,9 +1,10 @@
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst')
 const { spawnCmd } = require('KegProc')
-const { get, checkCall } = require('@ltipton/jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
+const { get, checkCall } = require('@ltipton/jsutils')
 const { buildComposeCmd } = require('KegUtils/docker')
+const { convertParamsToEnvs } = require('KegUtils/task/convertParamsToEnvs')
 const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
 const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
 
@@ -48,13 +49,14 @@ const composeUp = async args => {
     params
   )
 
+
   // Log the virtual url so users know how to access the running containers
   logVirtualUrl(cmdContext)
 
   // Run the docker-compose up command
   await spawnCmd(
     `${dockerCmd} ${ contextEnvs.IMAGE }`,
-    { options: { env: contextEnvs }},
+    { options: { env: convertParamsToEnvs(params, contextEnvs) }},
     location,
     !Boolean(__internal),
   )
