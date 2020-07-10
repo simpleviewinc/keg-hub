@@ -16,11 +16,6 @@
   * Should run `scripts/setup/cliSetup.js`
     * Sets up cli on the local machine
 
-* Add a full docker clean command
-  * clean docker containers
-  * clean docker images
-  * clean docker volumes
-
 * Add tasks to update version for repos
   * Should update the package.json version
   * All - Must follow this order
@@ -45,22 +40,16 @@
   * compose service should check if an existing compose service is already running
     * If it is, ask the user if if should be destroyed
       * Can not run two compose services at once 
-  * Mutagen - Looks at adding a one-way-sync for node_modules
+    * This is only temporary until keg-proxy is setup
   * Keg repos should be installed through an install command
     * Should use the globalConfig to set the install location
     * Should allow overwriting the globalConfig location
       * If location is overwritten, location should be updated in global config
+  * Auto clean up docker images / cache
+    * Figure out how to call this in the background as tasks are called
+  * Add tags to tap docker images
+    * This will allow us to see if the image for that tap exists or not
+  * Look into building tap images without the name tap
+  * Load a containers for form a linked taps directory
+    * This will allow for dynamic docker setups, while still using the keg
 
---------------------------------------------------------------------------------
-                              **IMPORTANT**
---------------------------------------------------------------------------------
-
-* BDD service
-  * Kill all syncs for steps and features can get overwirtten 
-    * If start with one context, don't kill it
-    * Then run with another content. 
-      * Seems like mutagen handles it, but should remove original syncs **BEFORE** new syncs are created to point to the same directory 
-
---------------------------------------------------------------------------------
-                              **IMPORTANT**
---------------------------------------------------------------------------------

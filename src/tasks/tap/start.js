@@ -18,6 +18,9 @@ const {
 const startTap = async (args) => {
   const { params: { service, tap } } = args
 
+  // Check if a tap image already exists
+  // await checkRemoveImage()
+
   // Call the build service to ensure required images are built 
   await buildService(args, { context: 'tap', image: 'tap', tap })
 

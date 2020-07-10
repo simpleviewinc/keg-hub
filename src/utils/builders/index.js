@@ -8,5 +8,4 @@ module.exports = {
   ...require('./buildDockerLogin'),
   ...require('./buildTapContext'),
   ...require('./buildTaskAlias'),
-  ...require('./checkBuildImage'),
 }

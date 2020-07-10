@@ -6,6 +6,7 @@ module.exports = {
   ...require('./compose'),
   ...require('./containerSelect'),
   ...require('./checkRunningContainers'),
+  ...require('./checkRemoveImage'),
   ...require('./getBuildArgs'),
   ...require('./getBuildTags'),
   ...require('./getContainerFromContext'),

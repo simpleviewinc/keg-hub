@@ -28,7 +28,6 @@ const serviceOptions = (task='', action='', overrides={}) => {
       alias: [ 'cmd' ],
       description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',
       example: 'keg ${ task } ${ action } --command ios ( Runs "yarn dev" )',
-      default: 'storybook'
     },
     destroy: {
       alias: [ 'des' ],

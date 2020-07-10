@@ -68,7 +68,7 @@ const unlinkTap = async args => {
 module.exports = {
   unlink: {
     name: 'unlink',
-    alias: [ 'ul' ],
+    alias: [ 'ul', 'remove', 'rm' ],
     action: unlinkTap,
     description: `Unlinks a tap path in the global config`,
     example: 'keg tap unlink <options>',

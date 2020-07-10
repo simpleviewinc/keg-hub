@@ -49,7 +49,6 @@ const composeUp = async args => {
     params
   )
 
-
   // Log the virtual url so users know how to access the running containers
   logVirtualUrl(cmdContext)
 

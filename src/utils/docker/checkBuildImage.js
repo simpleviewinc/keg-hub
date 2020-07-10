@@ -2,7 +2,7 @@ const { get } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { generalError } = require('../error/generalError')
-const { buildDockerImage } = require('./buildDockerImage')
+const { buildDockerImage } = require('../builders/buildDockerImage')
 const { getContainerConst } = require('../docker/getContainerConst')
 
 /**

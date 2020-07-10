@@ -29,6 +29,7 @@ module.exports = {
       ...require('./build'),
       ...require('./destroy'),
       ...require('./link'),
+      ...require('./list'),
       ...require('./new'),
       ...require('./restart'),
       ...require('./start'),

@@ -116,17 +116,33 @@ class Log {
   *
   * @returns {void}
   */
-  header = title => {
+  header = (title, color) => {
     const middle = `              ${title}              `
 
     const line = middle.split('')
       .reduce((line, item, index) => (line+=' '))
 
+    color = color || 'brightGreen'
+
     this.empty(``)
-    this.print(colors.underline.brightGreen(line))
+    this.print(colors.underline[ color ](line))
     this.print(line)
-    this.print(colors.brightGreen(middle))
-    this.print(colors.underline.brightGreen(line))
+    this.print(colors[ color ](middle))
+    this.print(colors.underline[ color ](line))
+    this.empty(``)
+  }
+
+  subHeader = (title, color) => {
+    const middle = `          ${title}       `
+
+    const line = middle.split('')
+      .reduce((line, item, index) => (line+=' '))
+
+    color = color || 'brightWhite'
+
+    this.empty(``)
+    this.print(colors[ color ](middle))
+    this.print(`  ${colors.underline[ color ](line)}`)
     this.empty(``)
   }
 

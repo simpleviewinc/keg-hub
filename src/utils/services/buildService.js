@@ -2,7 +2,7 @@ const { get } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { buildBaseImg } = require('../builders/buildBaseImg')
-const { checkBuildImage } = require('../builders/checkBuildImage')
+const { checkBuildImage } = require('../docker/checkBuildImage')
 
 /**
  * Checks and builds the required images to run the other services
