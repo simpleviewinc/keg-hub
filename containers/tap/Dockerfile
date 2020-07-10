@@ -67,6 +67,8 @@ RUN apk add --no-cache git
 
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+# Add yarn's global bin to path
+RUN echo "export PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin" >> etc/profile
 
 # Copy over keg cli from keg-base
 COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
