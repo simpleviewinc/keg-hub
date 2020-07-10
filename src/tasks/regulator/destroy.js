@@ -12,6 +12,17 @@ const { destroyService } = require('KegUtils/services')
  * @returns {void}
  */
 const destroyRegulator = async (args) => {
+
+  // Remove any current bdd service syncs
+  await runInternalTask('mutagen.tasks.clean', {
+    ...args,
+    params: {
+      ...params,
+      context: `${ BDD_SERVICE }-`,
+      force: true,
+    }
+  })
+
   return destroyService(args, { context: 'regulator', container: 'keg-regulator' })
 }
 
