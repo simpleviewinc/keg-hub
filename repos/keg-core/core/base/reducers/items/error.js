@@ -65,6 +65,10 @@ export const MakeRequestIssue = deepFreeze({
     type: IssueTypes.InvalidItemAndKey,
     message: `Both item and key were undefined. One of these must be defined for an item request.`,
   }),
+  [IssueTypes.MissingKey]: category => ({
+    type: IssueTypes.MissingKey,
+    message: `The key was undefined. This is required for a setItem request. Category: ${category}`,
+  }),
   [IssueTypes.MismatchedItemTypes]: (
     existingType,
     nextType,

@@ -1,6 +1,8 @@
 import { applyToCloneOf, isObj, isArr, typeOf, get } from 'jsutils'
 import { MakeRequestIssue } from './error'
 import { Values } from 'SVConstants'
+import { exists } from 'SVUtils/helpers/method/exists'
+
 const { IssueTypes } = Values
 
 /**
@@ -72,6 +74,27 @@ export const isValidItemsRequest = (state, category, items) => {
   const isValid = issues.length === 0
 
   return { isValid, issues: Object.freeze(issues) }
+}
+
+/**
+ * Returns object with boolean key isValid as true if the request is valid, else key is false and a string key 'reason' will be defined that lists the errors
+ * @param {Object} state - redux state object
+ * @param {*} category - key for a category beneath state
+ * @param {*} key - key of object within category. For arrays, an index; for objects, a key
+ * @param {*} item - item object itself. Either key or item should be defined, not both.
+ * @returns {Object} object of structure: { isValid: boolean, issues: [Issue] } -- issues is empty if isValid is true
+ */
+export const isValidSetItemRequest = (state, category, key, item) => {
+  const result = isValidItemRequest(state, category, key, item)
+
+  return exists(key)
+    ? result
+    : {
+        isValid: false,
+        issues: result.issues.concat(
+          MakeRequestIssue[IssueTypes.MissingKey](category)
+        ),
+      }
 }
 
 /**

@@ -16,9 +16,30 @@ const upsertUsers = (users, initialState = undefined) =>
     error: null,
   })
 
+const setUsers = (users, initialState = undefined) =>
+  itemsReducer(initialState, {
+    type: ActionTypes.SET_ITEMS,
+    payload: {
+      category: 'users',
+      items: users,
+    },
+    error: null,
+  })
+
 const upsertUser = (user, key, initialState = undefined) =>
   itemsReducer(initialState, {
     type: ActionTypes.UPSERT_ITEM,
+    payload: {
+      category: 'users',
+      item: user,
+      key,
+    },
+    error: null,
+  })
+
+const setUser = (user, key, initialState = undefined) =>
+  itemsReducer(initialState, {
+    type: ActionTypes.SET_ITEM,
     payload: {
       category: 'users',
       item: user,
@@ -72,6 +93,11 @@ describe('items reducer', () => {
     id: '11',
   }
 
+  const expectNoErrors = state => {
+    expect(state.error).toBeFalsy()
+    expect(state.users.error).toBeFalsy()
+  }
+
   describe('Invalid action type', () => {
     const initialState = { test: 1 }
     const invalidActionType = Symbol()
@@ -84,9 +110,67 @@ describe('items reducer', () => {
     })
   })
 
+  describe('setItem', () => {
+    const users = {}
+    let nextState = {}
+    beforeEach(() => {
+      nextState = setUsers(users)
+    })
+
+    afterEach(() => expectNoErrors(nextState))
+
+    it('should add the item when there is no existing item', () => {
+      nextState = setUser(charlie, charlie.id, nextState)
+      expect(nextState.users).toEqual(
+        expect.objectContaining({ [charlie.id]: charlie })
+      )
+    })
+
+    it('should overwrite an existing item', () => {
+      nextState = setUser(charlie, charlie.id, nextState)
+      expect(nextState.users).toEqual(
+        expect.objectContaining({ [charlie.id]: charlie })
+      )
+      const empty = {}
+      nextState = setUser({}, charlie.id, nextState)
+      expect(nextState.users[charlie.id]).toEqual(empty)
+    })
+  })
+
+  describe('setItems', () => {
+    const users = { [charlie.id]: charlie }
+    let nextState = {}
+    beforeEach(() => {
+      nextState = setUsers(users)
+    })
+
+    afterEach(() => expectNoErrors(nextState))
+
+    it('should initialize the items', () => {
+      expect(nextState.users).toEqual(
+        expect.objectContaining({ [charlie.id]: charlie })
+      )
+    })
+
+    it('should overwrite existing items', () => {
+      expect(nextState.users).toEqual(
+        expect.objectContaining({ [charlie.id]: charlie })
+      )
+      const empty = []
+      nextState = setUsers(empty, nextState)
+      expect(nextState.users).toEqual(empty)
+    })
+  })
+
   describe('upsertItems', () => {
     describe('objects', () => {
       const users = { [charlie.id]: charlie }
+      let nextState = {}
+      beforeEach(() => {
+        nextState = upsertUsers(users)
+      })
+      afterEach(() => expectNoErrors(nextState))
+
       it('should initialize the items', () => {
         const nextState = upsertUsers(users)
         expect(nextState.users).toEqual(
@@ -108,18 +192,19 @@ describe('items reducer', () => {
         )
       })
     })
-
     describe('arrays', () => {
+      const users = [charlie]
+      let nextState = {}
+      beforeEach(() => {
+        nextState = upsertUsers(users)
+      })
+      afterEach(() => expectNoErrors(nextState))
+
       it('should initialize the items', () => {
-        const users = [charlie]
-        const nextState = upsertUsers(users)
         expect(nextState.users).toEqual(expect.arrayContaining([charlie]))
       })
 
       it('should merge items if the category already exists', () => {
-        const users = [charlie]
-        let nextState = upsertUsers(users)
-        expect(nextState.users).toEqual(expect.arrayContaining([charlie]))
         nextState = upsertUsers([frank], nextState)
         expect(nextState.users).toEqual(
           expect.arrayContaining([ charlie, frank ])
@@ -135,6 +220,8 @@ describe('items reducer', () => {
       beforeEach(() => {
         nextState = upsertUsers([])
       })
+
+      afterEach(() => expectNoErrors(nextState))
 
       it('should append an item to the array when no key index is defined', () => {
         expect(nextState.users.length).toEqual(0)
@@ -178,9 +265,12 @@ describe('items reducer', () => {
 
     describe('objects', () => {
       let nextState = null
+
       beforeEach(() => {
         nextState = upsertUsers({})
       })
+
+      afterEach(() => expectNoErrors(nextState))
 
       it('should append an item to the category level if key is not provided', () => {
         expect(nextState.users).toEqual({})
@@ -264,6 +354,7 @@ describe('items reducer', () => {
 
   describe('removeItem', () => {
     let nextState = null
+    afterEach(() => expectNoErrors(nextState))
 
     describe('array', () => {
       beforeEach(() => {
@@ -274,8 +365,6 @@ describe('items reducer', () => {
         expect(nextState.users.length).toEqual(1)
         const stateAfterRemove = removeUser(0, nextState)
         expect(stateAfterRemove.users.length).toEqual(0)
-        expect(nextState.error).toBeFalsy()
-        expect(nextState.users.error).toBeFalsy()
       })
     })
 
@@ -290,14 +379,20 @@ describe('items reducer', () => {
         expect(nextState.users[charlie.id]).toEqual(charlie)
         const stateAfterRemove = removeUser(charlie.id, nextState)
         expect(stateAfterRemove.users[charlie.id]).toBeUndefined()
-        expect(nextState.error).toBeFalsy()
-        expect(nextState.users.error).toBeFalsy()
       })
     })
   })
 
   describe('error handling', () => {
     const initialState = undefined
+
+    it('should set an error for a missing key on setItem', () => {
+      let state = setUsers({})
+      state = setUser(charlie, undefined, state)
+      expect(
+        state.users.error && state.users.error.hasIssue(IssueTypes.MissingKey)
+      ).toBe(true)
+    })
 
     it('should set errors for no category defined', () => {
       const state = itemsReducer(initialState, {
