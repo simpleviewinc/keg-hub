@@ -6,6 +6,15 @@ keg_message(){
   return
 }
 
+# Prints a message to the terminal through stderr
+keg_error(){
+  echo ""
+  echo "[ KEG ERROR ] $@" >&2
+  echo ""
+  return
+}
+
+
 # Asks a question in the terminal
 keg_ask_question(){
   keg_message "$1"

@@ -1,6 +1,6 @@
 const { addGlobalConfigProp } = require('KegUtils/globalConfig')
 const { confirmExec } = require('KegUtils/helpers')
-const { softFalsy, set } = require('@ltipton/jsutils')
+const { softFalsy, set, get } = require('@ltipton/jsutils')
 
 /**
  * Sets a value in the global config, and then saves it
@@ -17,7 +17,7 @@ const { softFalsy, set } = require('@ltipton/jsutils')
  */
 const setConfigValue = args => {
   const { command, globalConfig, options, params } = args
-  const { key, value } = params
+  const { key, value, confirm } = params
 
   const confirmText = softFalsy(get(globalConfig, key))
     ? `Key already exists in globalConfig. Are you sure you want to overwrite it?`
@@ -26,6 +26,7 @@ const setConfigValue = args => {
   confirmExec({
     execute: () => addGlobalConfigProp(globalConfig, key, value),
     confirm: confirmText,
+    preConfirm: !confirm,
     success: `Global Config value set!`,
     cancel: `Set Global config value canceled!`,
   })
@@ -45,7 +46,13 @@ module.exports = {
       },
       value: {
         description: 'Value of the key.',
+        example: 'keg config set --key animal --value goats',
         required: true,
+      },
+      confirm: {
+        description: 'Confirm before setting the value.',
+        example: 'keg config set --confirm false',
+        default: true,
       }
     }
   }

@@ -14,12 +14,13 @@ const { createGlobalConfig } = require('KegUtils/globalConfig/createGlobalConfig
  */
 const syncGlobalConfig = async args => {
   const { command, globalConfig, options, params } = args
-  const { merge } = params
+  const { merge, confirm } = params
 
   confirmExec({
     confirm: `Are you sure you want to sync${ merge ? '-merge ' : ' ' }global cli settings?`,
     success: `Global settings synced!`,
     cancel: `Global settings sync canceled!`,
+    preConfirm: !confirm,
     execute: async () => {
 
       // Create a new global config, passing in the current global config
@@ -48,6 +49,11 @@ module.exports = {
         allowed: [ 'global', 'local' ],
         description: 'Which config should be used when in conflict ( global )',
         default: 'global',
+      },
+      confirm: {
+        description: 'Confirm before setting the value.',
+        example: 'keg config set --confirm false',
+        default: true,
       }
     }
   }

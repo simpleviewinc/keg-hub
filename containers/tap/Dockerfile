@@ -35,6 +35,8 @@ RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://githu
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
+    echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
+    echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc; \
     yarn setup; \
     yarn cache clean; \
     rm -f .npmrc
@@ -67,8 +69,8 @@ RUN apk add --no-cache git
 
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
-# Add yarn's global bin to path
-RUN echo "export PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin" >> etc/profile
+# Add yarn's global bin to PATH
+ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
 
 # Copy over keg cli from keg-base
 COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
