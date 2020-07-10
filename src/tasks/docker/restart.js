@@ -49,7 +49,7 @@ const dockerRestart = async args => {
       ? await containerSelect()
       : generalError(`Could not find container with context "${ containerRef }"!`)
 
-  Logger.info(`  Restarting docker container "${ name || context || containerRef }" ...`)
+  Logger.info(`Restarting docker container "${ name || context || containerRef }" ...`)
 
   // Run the restart docker command
   await docker.container.restart({

@@ -25,8 +25,8 @@ keg_set_container_paths(){
 # Use when adding extra node_modules to keg-core without rebuilding
 keg_run_regulator_yarn_setup(){
 
-  # Check if $NM_INSTALL exist, if it doesn't, then return
-  if [[ -z "$NM_INSTALL" ]]; then
+  # Check if $KEG_NM_INSTALL exist, if it doesn't, then return
+  if [[ -z "$KEG_NM_INSTALL" ]]; then
     return
   fi
 
@@ -42,7 +42,6 @@ keg_run_the_regulator(){
 
   cd $TEST_PATH
 
-  local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
     KEG_EXEC_CMD="cli"
   fi

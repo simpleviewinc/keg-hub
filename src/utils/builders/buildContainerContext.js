@@ -11,6 +11,7 @@ const { getContainerConst } = require('../docker/getContainerConst')
 const { getContainerFromContext } = require('../docker/getContainerFromContext')
 const { generalError, throwNoTapLink, throwNoConfigPath } = require('../error')
 const { IMAGES, LOCATION_CONTEXT } = DOCKER
+
 /**
  * Gets the location where a docker command should be executed
  * @function
@@ -28,7 +29,7 @@ const getLocation = (globalConfig, task, context, tap) => {
     ? `${ getPathFromConfig(globalConfig, 'containers') }/${ context }`
     // If it's a repoContext, then get the location for the repo from the context
     : context !== 'tap'
-      ? getContainerConst(context, `env.context_path`)
+      ? getContainerConst(context, `env.keg_context_path`)
       : getTapPath(globalConfig, tap)
 
   // Return the location, or throw because no location could be found

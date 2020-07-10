@@ -6,35 +6,35 @@ services:
     stdin_open: true
     privileged: true
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${CONTEXT_DOCKER_FILE}
+      context: ${KEG_CONTEXT_PATH}
+      dockerfile: ${KEG_DOCKER_FILE}
       args:
         - ENV
-        - EXEC_CMD
         - DOC_APP_PATH
         - GIT_KEY
         - IMAGE_FROM
-        - NM_INSTALL
+        - KEG_EXEC_CMD
+        - KEG_NM_INSTALL
         - NODE_ENV
     container_name: ${CONTAINER_NAME}
     environment:
       - ENV
-      - EXEC_CMD
       - DOC_APP_PATH
       - DOC_APP_PORT
       - DOC_FEATURES_PATH
       - DOC_STEPS_PATH
-      - NM_INSTALL
-      - NODE_ENV
       - HUB_HOST
       - HUB_PORT
+      - KEG_EXEC_CMD
+      - KEG_NM_INSTALL
+      - NODE_ENV
       - TEST_FILTER_TAGS
       - WINDOW_HEIGHT
       - WINDOW_WIDTH
     ports:
       - ${DOC_APP_PORT}:${DOC_APP_PORT}
     volumes:
-      - ${CONTEXT_PATH}/tests/reports:/keg/keg-regulator/tests/reports
+      - ${KEG_CONTEXT_PATH}/tests/reports:/keg/keg-regulator/tests/reports
     depends_on:
       - "selenium-hub"
       - "chrome"

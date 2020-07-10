@@ -42,7 +42,8 @@ module.exports = {
     settings: {
       docker: {
         preConfirm: false,
-        buildKit: true
+        buildKit: true,
+        defaultLocalBuild: true,
       },
       git: {
         secure: false

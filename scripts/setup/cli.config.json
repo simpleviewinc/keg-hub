@@ -33,7 +33,8 @@
       "docker": {
         "preConfirm": true,
         "buildKit": true,
-        "force": true
+        "force": true,
+        "defaultLocalBuild": true
       },
       "checkUpdates": false,
       "editorCmd": false,

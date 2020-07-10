@@ -8,17 +8,17 @@ env:
   # --- CORE ENV CONTEXT --- #
 
   # Docker data
-  CONTEXT_PATH: "{{ cli.paths.core }}"
-  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/core/Dockerfile"
-  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/core/values.yml"
+  KEG_CONTEXT_PATH: "{{ cli.paths.core }}"
+  KEG_DOCKER_FILE: "{{ cli.paths.containers }}/core/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.paths.containers }}/core/values.yml"
 
   # The default docker-compose file path
-  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/docker-compose.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/docker-compose.yml"
   # Can also define other an override compose files
   # Other compose files can loaded by setting an ENVS as follows:
-    # COMPOSE_FROM_REPO="/path/to/override.yml"
-    # COMPOSE_CORE_<ENV>: "/path/to/override.yml"
-    # COMPOSE_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_REPO="/path/to/override.yml"
+    # KEG_COMPOSE_CORE_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
 
   # --- DOCKER ENV CONTEXT --- #
 

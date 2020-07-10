@@ -8,19 +8,19 @@ env:
   # --- TAP ENV CONTEXT --- #
 
   # Docker / Docker Compose paths
-  CONTEXT_DOCKER_FILE: "{{ cli.paths.containers }}/tap/Dockerfile"
-  CONTEXT_VALUES_FILE: "{{ cli.paths.containers }}/tap/values.yml"
+  KEG_DOCKER_FILE: "{{ cli.paths.containers }}/tap/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.paths.containers }}/tap/values.yml"
   # The default docker-compose file path
-  COMPOSE_DEFAULT: "{{ cli.paths.containers }}/tap/docker-compose.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/tap/docker-compose.yml"
   # Can also define other an override compose files
   # Other compose files can loaded by setting an ENVS as follows:
-    # COMPOSE_FROM_REPO="/path/to/override.yml"
-    # COMPOSE_TAP_<ENV>: "/path/to/override.yml"
-    # COMPOSE_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_REPO="/path/to/override.yml"
+    # KEG_COMPOSE_TAP_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
 
-  # The CONTEXT_PATH env should be the location of the tap being run
+  # The KEG_CONTEXT_PATH env should be the location of the tap being run
   # So it should NOT be set inside the .env file
-  CONTEXT_PATH: INITIAL
+  KEG_CONTEXT_PATH: INITIAL
 
   # --- DOCKER ENV CONTEXT --- #
 

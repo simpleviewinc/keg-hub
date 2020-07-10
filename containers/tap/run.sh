@@ -30,19 +30,19 @@ keg_set_container_paths(){
 # Use when adding extra node_modules to keg-core without rebuilding
 keg_run_tap_yarn_setup(){
 
-  # Check if $NM_INSTALL exist, if it doesn't, then return
-  if [[ -z "$NM_INSTALL" ]]; then
+  # Check if $KEG_NM_INSTALL exist, if it doesn't, then return
+  if [[ -z "$KEG_NM_INSTALL" ]]; then
     return
   fi
 
-  if [[ "$NM_INSTALL" != "core" ]]; then
+  if [[ "$KEG_NM_INSTALL" != "core" ]]; then
     # Navigate to the cached directory, and run the yarn install here
     cd $TAP_PATH
     keg_message "Running yarn setup for tap..."
     yarn install
   fi
   
-  if [[ "$NM_INSTALL" ]]; then
+  if [[ "$KEG_NM_INSTALL" ]]; then
     keg_message "Running yarn install for keg-core..."
     cd $DOC_CORE_PATH
     yarn install
@@ -55,7 +55,6 @@ keg_run_the_tap(){
 
   cd $TAP_PATH
 
-  local KEG_EXEC_CMD="$EXEC_CMD"
   if [[ -z "$KEG_EXEC_CMD" ]]; then
     KEG_EXEC_CMD="web"
   fi

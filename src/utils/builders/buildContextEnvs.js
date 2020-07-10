@@ -2,7 +2,7 @@ const { getGitKey } = require('../git/getGitKey')
 const { buildTapContext } = require('./buildTapContext')
 const { getSetting } = require('../globalConfig/getSetting')
 const { getContainerConst } = require('../docker/getContainerConst')
-
+const { convertParamsToEnvs } = require('../task/convertParamsToEnvs')
 
 /**
  * Builds the ENVs for the passed in cmdContext
@@ -19,11 +19,15 @@ const buildContextEnvs = async ({ cmdContext, envs={}, globalConfig, params={}, 
 
   // Get the ENV vars for the command context and merge with any passed in envs
   return {
-    // Experimental docker builds. Makes docker faster and cleaner
-    ...(getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1, COMPOSE_DOCKER_CLI_BUILD: 1 } : {}),
 
     // Get the ENV context for the command
     ...getContainerConst(cmdContext, 'env', {}),
+
+    // Add the passed in custom ENVS to override any of the defaults
+    ...envs
+
+    // Experimental docker builds. Makes docker faster and cleaner
+    ...(getSetting('docker.buildKit') ? { DOCKER_BUILDKIT: 1, COMPOSE_DOCKER_CLI_BUILD: 1 } : {}),
 
     // Get the ENVs for the Tap context if it exists
     ...( tap && tap !== 'tap' && await buildTapContext({
@@ -33,15 +37,11 @@ const buildContextEnvs = async ({ cmdContext, envs={}, globalConfig, params={}, 
         envs
       })),
 
-    // Check if the copy local env should be set
-    // This will copy the local repo into the docker container on image build
-    ...(params.local ? { KEG_COPY_LOCAL: true } : {}),
-
     // Add the git key so we can call github within the image / container
     GIT_KEY: await getGitKey(globalConfig),
-    
-    // Add the passed in custom ENVS to override any of the defaults
-    ...envs
+
+    // Get any params that should be converted into ENVs passed to docker
+    ...convertParamsToEnvs(params),
 
   }
 

@@ -94,7 +94,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     TAP: tap,
     GIT_BRANCH: branch,
     PLATFORM: platform,
-    EXEC_CMD: execCmd,
+    KEG_EXEC_CMD: execCmd,
     NODE_ENV: env,
     ENV: env,
     // Join the envs object to be added as envs to the docker container

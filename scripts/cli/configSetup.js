@@ -285,6 +285,12 @@ const setupSettings = async (globalConf) => {
     default: get(globalConf, `cli.settings.docker.force`, true)
   })
 
+  // Should we auto force docker actions?
+  settingsObj.docker.defaultLocalBuild = await ask.confirm({
+    message: `Default all docker image builds to use local repositories instead of pulling from a remote.`,
+    default: get(globalConf, `cli.settings.docker.defaultLocalBuild`, true)
+  })
+
   // Add the selected settings to the global config
   set(globalConf, `cli.settings`, settingsObj)
 

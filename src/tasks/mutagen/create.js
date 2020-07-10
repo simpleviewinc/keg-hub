@@ -27,14 +27,14 @@ const getSyncParams = async (contextData, { local, remote, name, options }) => {
     contextData.cmdContext,
     contextData.name || contextData.image,
     {
-      alpha: local || get(contextData, 'contextEnvs.CONTEXT_PATH'),
+      alpha: local || get(contextData, 'contextEnvs.KEG_CONTEXT_PATH'),
       beta: remote || get(contextData, 'contextEnvs.DOC_APP_PATH')
     },
     options
   )
 
   !alpha && generalError(
-    `Can not set the local path, missing "CONTEXT_PATH" environment variable!`
+    `Can not set the local path, missing "KEG_CONTEXT_PATH" environment variable!`
   )
   !beta && generalError(
     `Can not set the remote path, missing "DOC_APP_PATH" environment variable!`

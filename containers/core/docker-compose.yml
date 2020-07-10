@@ -6,11 +6,10 @@ services:
     stdin_open: true
     privileged: true
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${CONTEXT_DOCKER_FILE}
+      context: ${KEG_CONTEXT_PATH}
+      dockerfile: ${KEG_DOCKER_FILE}
       args:
         - ENV
-        - EXEC_CMD
         - DOC_APP_PATH
         - DOC_CLI_PATH
         - DOC_CORE_PATH
@@ -25,12 +24,12 @@ services:
         - GIT_RESOLVER_URL
         - GIT_TAP_URL
         - IMAGE_FROM
-        - NM_INSTALL
+        - KEG_EXEC_CMD
+        - KEG_NM_INSTALL
         - NODE_ENV
     container_name: ${CONTAINER_NAME}
     environment:
       - ENV
-      - EXEC_CMD
       - DOC_APP_PATH
       - DOC_CLI_PATH
       - DOC_CORE_PATH
@@ -44,8 +43,9 @@ services:
       - GIT_RESOLVER_URL
       - GIT_TAP_URL
       - IMAGE_FROM
+      - KEG_EXEC_CMD
       - KEG_CORE_PROGRESS
-      - NM_INSTALL
+      - KEG_NM_INSTALL
       - NODE_ENV
     ports:
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}

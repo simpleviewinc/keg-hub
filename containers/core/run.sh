@@ -21,8 +21,8 @@ keg_set_container_paths(){
 # Use when adding extra node_modules to keg-core without rebuilding
 keg_run_yarn_install(){
 
-  # Check if $NM_INSTALL exist, if it doesn't, then return
-  if [[ -z "$NM_INSTALL" ]]; then
+  # Check if $KEG_NM_INSTALL exist, if it doesn't, then return
+  if [[ -z "$KEG_NM_INSTALL" ]]; then
     return
   fi
 
@@ -38,9 +38,6 @@ keg_run_yarn_install(){
 keg_run_from_core(){
 
   cd $DOC_APP_PATH
-
-  # Default to running keg-core in a web-browser
-  local KEG_EXEC_CMD="$EXEC_CMD"
 
   # Set the default yarn command to start
   if [[ -z "$KEG_EXEC_CMD" ]]; then

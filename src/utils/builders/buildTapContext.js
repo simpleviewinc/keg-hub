@@ -13,7 +13,7 @@ const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
  * @function
  * @param {Object} tapPath - Local path to the tap
  *
- * @returns {Object} - ENVs for the context, with the CONTEXT_PATH added if needed
+ * @returns {Object} - ENVs for the context, with the KEG_CONTEXT_PATH added if needed
  */
 const checkTapContainer = async tapPath => {
   const [ err, rep ] =  await stat(path.join(tapPath, 'container'))
@@ -35,10 +35,10 @@ const checkTapContainer = async tapPath => {
  * @param {Object} envs - Group envs passed to docker command being run
  * @param {Object} task - Current task being run
  *
- * @returns {Object} - ENVs for the context, with the CONTEXT_PATH added if needed
+ * @returns {Object} - ENVs for the context, with the KEG_CONTEXT_PATH added if needed
  */
 const buildTapContext = async ({ globalConfig, cmdContext, tap, envs }) => {
-  // If the context is not a tap, or the CONTEXT_PATH is already set, just return
+  // If the context is not a tap, or the KEG_CONTEXT_PATH is already set, just return
   if(cmdContext !== 'tap') return envs
 
   // Should only get here if we are trying to run a tap in docker
@@ -58,7 +58,7 @@ const buildTapContext = async ({ globalConfig, cmdContext, tap, envs }) => {
     ? throwNoTapLink(globalConfig, tap)
     : {
         ...envs,
-        CONTEXT_PATH: tapPath,
+        KEG_CONTEXT_PATH: tapPath,
         ...(tapUrl && { GIT_TAP_URL: tapUrl }),
         // May want to override the container name here
         // This way we can have more then one tap docker container running at a time

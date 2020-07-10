@@ -107,7 +107,6 @@ const startDockerSync = async args => {
     globalConfig,
     task,
     params,
-    envs: convertParamsToEnvs(params)
   })
 
   // Check if the base image exists, and if not then build it

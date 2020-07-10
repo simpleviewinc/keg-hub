@@ -38,16 +38,16 @@ const addComposeFiles = (dockerCmd, context='') => {
   const container = context.toUpperCase()
 
   // Get the default docker compose file
-  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_DEFAULT`)
+  dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_DEFAULT`)
   
   // Get the docker compose file from the repo
-  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_FROM_REPO`)
+  dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_REPO`)
 
   // Get the docker compose file for the environment
-  dockerCmd = addComposeFile(dockerCmd, container, `COMPOSE_${ DOCKER_ENV }`)
+  dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_${ DOCKER_ENV }`)
   
   // Get the docker compose file for the container and ENV
-  return addComposeFile(dockerCmd, container, `COMPOSE_${ container }_${ DOCKER_ENV }`)
+  return addComposeFile(dockerCmd, container, `KEG_COMPOSE_${ container }_${ DOCKER_ENV }`)
 }
 
 /**

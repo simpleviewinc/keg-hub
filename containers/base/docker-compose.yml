@@ -3,8 +3,8 @@ services:
   base:
     image: ${IMAGE}
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${CONTEXT_DOCKER_FILE}
+      context: ${KEG_CONTEXT_PATH}
+      dockerfile: ${KEG_DOCKER_FILE}
       args:
         - GIT_KEY
         - GIT_CLI_URL

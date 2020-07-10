@@ -45,14 +45,13 @@ const copyLocalPackageJson = async (globalConfig, location) => {
  */
 const dockerBuild = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { context, envs={}, core, log } = params
+  const { context, core, log } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
-    envs,
     task,
     params,
     globalConfig,
@@ -99,6 +98,7 @@ module.exports = {
       context: {
         allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
+        example: 'keg docker build --context core',
         enforced: true,
       },
       args: {
@@ -107,6 +107,7 @@ module.exports = {
       },
       cache: {
         description: 'Docker will use build cache when building the image',
+        example: `keg docker build --cache false`,
         default: true
       },
       core: {

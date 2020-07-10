@@ -25,7 +25,6 @@ const buildContainerName = async cmdContext => {
   )
 
   return imgContainer
-
 }
 
 const getImageContext = async (args) => {

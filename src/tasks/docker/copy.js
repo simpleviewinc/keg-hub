@@ -26,7 +26,6 @@ const copy = async args => {
   const { id } = container
     ? { id: container }
     : await buildContainerContext({
-        envs,
         task,
         params,
         globalConfig,

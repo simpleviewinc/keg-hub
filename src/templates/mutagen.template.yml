@@ -1,6 +1,6 @@
 sync:
   app:
-    alpha: {{ CONTEXT_PATH }}
+    alpha: {{ KEG_CONTEXT_PATH }}
     beta: {{ DOC_APP_PATH }}
     mode: 'one-way-safe'
     ignore:
