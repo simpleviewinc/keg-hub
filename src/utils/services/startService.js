@@ -1,4 +1,4 @@
-const { set } = require('@ltipton/jsutils')
+const { get, set } = require('@ltipton/jsutils')
 const { composeService } = require('./composeService')
 const { buildService } = require('./buildService')
 
@@ -15,14 +15,13 @@ const { buildService } = require('./buildService')
  * @returns {*} - Response from the compose service
  */
 const startService = async (args, exArgs) => {
-
   const { context, container, image } = exArgs
 
   // Call the build service to ensure required images are built 
   const isBuilt = await buildService(args, { context, image: image || container })
 
   // Update the build param so we don't rebuild the tap
-  build && set(args, 'params.build', !isBuilt) 
+  get(args, 'params.build') && set(args, 'params.build', !isBuilt) 
 
   // Call and return the compose server
   return composeService(args, exArgs)
