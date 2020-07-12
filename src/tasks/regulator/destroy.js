@@ -1,5 +1,7 @@
 const { destroyService } = require('KegUtils/services')
 
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { SYNC_PREFIXES: { BDD_SERVICE } } = require('KegConst/constants')
 
 /**
  * Removes all docker items related to keg-core

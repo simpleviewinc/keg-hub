@@ -1,8 +1,7 @@
 const {
-  buildService,
-  composeService,
   containerService,
-  serviceOptions
+  serviceOptions,
+  startService,
 } = require('KegUtils/services')
 
 /**
@@ -16,18 +15,12 @@ const {
  * @returns {void}
  */
 const startTap = async (args) => {
-  const { params: { service, tap } } = args
-
-  // Check if a tap image already exists
-  // await checkRemoveImage()
-
-  // Call the build service to ensure required images are built 
-  await buildService(args, { context: 'tap', image: 'tap', tap })
+  const { params: { service, tap, build } } = args
 
   // Check and run the correct service
   const serviceResp = service === 'container'
     ? await containerService(args, { context: 'tap', container: 'tap', tap })
-    : await composeService(args, { context: 'tap', container: 'tap', tap })
+    : await startService(args, { context: 'tap', container: 'tap', tap })
 
   return serviceResp
 

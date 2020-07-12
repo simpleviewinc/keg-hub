@@ -6,7 +6,8 @@ module.exports = {
   ...require('./destroyService'),
   ...require('./mutagenService'),
   ...require('./remoteExecService'),
-  ...require('./stopService'),
   ...require('./serviceOptions'),
+  ...require('./startService'),
+  ...require('./stopService'),
   ...require('./syncService'),
 }

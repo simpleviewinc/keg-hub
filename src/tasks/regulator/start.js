@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { get, checkCall } = require('@ltipton/jsutils')
+const { get, checkCall, set } = require('@ltipton/jsutils')
 const { bddService, buildService, serviceOptions } = require('KegUtils/services')
 const { throwRequired } = require('KegUtils/error/throwRequired')
 const { copyFile } = require('KegFileSys/fileSys')
@@ -38,7 +38,7 @@ const getService = service => {
  */
 const start = async args => {
   // Ensure a context or location was passed
-  const { params: { context, location }, task } = args
+  const { params: { context, location, build }, task } = args
   !context && !location && throwMissingParams(task)
 
   // Copy the run.sh file from the keg-cli/containers/regulator repo
@@ -46,8 +46,10 @@ const start = async args => {
   await copyFile(`${ CONTAINERS_PATH }/regulator/run.sh`, `${ regulatorPath }/run.sh`)
 
   // Call the build service to ensure required images are built
-  await buildService(args, { context: 'regulator', image: 'keg-regulator' })
-
+  const isBuilt = await buildService(args, { context: 'regulator', image: 'keg-regulator' })
+  // Update the build param so we don't rebuild the tap
+  build && set(args, 'params.build', !isBuilt) 
+  
   return checkCall(
     getService(get(args, 'params.service', 'bdd')),
     args,
