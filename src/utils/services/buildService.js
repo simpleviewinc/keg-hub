@@ -10,7 +10,11 @@ const { checkBuildImage } = require('../docker/checkBuildImage')
  *
  * @returns {void}
  */
-const buildService = async (args, { context, image, tap }) => {
+const buildService = async (args, { context, container, image, tap }) => {
+
+  // Ensure the image name exists. If no image, use container name
+  image = image || container
+
   const { params } = args
   const { build, ensure, log, service } = params
 

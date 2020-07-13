@@ -15,10 +15,9 @@ const { buildService } = require('./buildService')
  * @returns {*} - Response from the compose service
  */
 const startService = async (args, exArgs) => {
-  const { context, container, image } = exArgs
 
   // Call the build service to ensure required images are built 
-  const isBuilt = await buildService(args, { context, image: image || container })
+  const isBuilt = await buildService(args, exArgs)
 
   // Update the build param so we don't rebuild the tap
   get(args, 'params.build') && set(args, 'params.build', !isBuilt) 
