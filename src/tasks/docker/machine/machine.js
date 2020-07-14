@@ -1,6 +1,6 @@
 
 const { spawnCmd } = require('KegProc')
-const { DOCKER } = require('KegConst')
+const { DOCKER } = require('KegConst/docker')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { NAME } = DOCKER.MACHINE
 const docker = require('KegDocCli')

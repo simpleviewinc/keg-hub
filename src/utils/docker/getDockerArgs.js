@@ -1,4 +1,4 @@
-const { DOCKER } = require('KegConst')
+const { DOCKER } = require('KegConst/docker')
 const { reduceObj, get, isStr } = require('@ltipton/jsutils')
 const { exists } = require('KegUtils/helpers/exists')
 const docker = require('KegDocCli')

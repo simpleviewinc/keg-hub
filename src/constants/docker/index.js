@@ -1,12 +1,13 @@
 const { deepFreeze } = require('@ltipton/jsutils')
 const containers = require('./containers')
+
 const {
   cliKeyMap,
-  defaultENVs,
   dockerEnv,
   images,
   locationContext,
-  mutagenMap
+  mutagenMap,
+  containersPath,
 } = require('./values')
 
 const DOCKER = {
@@ -17,7 +18,7 @@ const DOCKER = {
   IMAGES: images,
   DOCKER_ENV: dockerEnv,
   LOCATION_CONTEXT: locationContext,
-  CONTAINERS_PATH: defaultENVs.CONTAINERS_PATH,
+  CONTAINERS_PATH: containersPath,
   MUTAGEN_MAP: mutagenMap,
 }
 

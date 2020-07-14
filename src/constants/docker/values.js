@@ -1,22 +1,22 @@
 const path = require('path')
-const { deepFreeze, keyMap } = require('@ltipton/jsutils')
+const { KEG_ENVS } = require('../envs')
 const cliRootDir = path.join(__dirname, '../../../')
-const { getDefaultENVs } = require('./getDefaultENVs')
+const { deepFreeze, keyMap } = require('@ltipton/jsutils')
 const { getFoldersSync, pathExistsSync } = require('../../libs/fileSys/fileSys')
 
 /**
- * Get the default envs for the environment
- * @object
+ * Path to the Keg-CLI containers folder
+ * @string
  */
-const defaultENVs = getDefaultENVs(cliRootDir)
+const containersPath = KEG_ENVS.CONTAINERS_PATH
 
 /**
  * All folders in the CONTAINERS_PATH that have a Dockerfile
  * @array
  */
-const images = getFoldersSync(defaultENVs.CONTAINERS_PATH)
+const images = getFoldersSync(containersPath)
   .filter(folder => pathExistsSync(path.join(
-    defaultENVs.CONTAINERS_PATH,
+    containersPath,
     folder,
     `Dockerfile`
   )))
@@ -55,8 +55,8 @@ module.exports = deepFreeze({
   cliKeyMap,
   mutagenMap,
   cliRootDir,
-  defaultENVs,
   locationContext,
+  containersPath,
   dockerEnv: process.env.DOCKER_ENV || process.env.NODE_ENV || 'local',
 })
 

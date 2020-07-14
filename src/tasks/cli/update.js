@@ -6,7 +6,6 @@ const { stat, requireFile } = require('KegFileSys')
 const { get, isStr, isFunc } = require('@ltipton/jsutils')
 const { CLI_ROOT } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error')
-const { defaultENVs } = require('KegConst/docker/values')
 
 const updateCliError = (message, error) => {
   message = message || `Error running Keg-CLI update!\n`

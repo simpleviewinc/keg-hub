@@ -4,7 +4,7 @@ const { findTask, executeTask } = require('KegUtils/task')
 const { throwExitError } = require('KegUtils/error')
 const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
 const { showHelp } = require('KegLog')
-const { GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 
 /**

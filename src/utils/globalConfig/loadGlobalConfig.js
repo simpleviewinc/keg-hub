@@ -1,6 +1,17 @@
 const { getGlobalConfig } = require('./getGlobalConfig')
-const { configSetup } = require('KegScripts/cli/configSetup')
 const { throwWrap } = require('../error/throwWrap')
+
+/**
+ * Loads then Runs the global config setup script
+ * @function
+ *
+ * @returns {Object} - global config object
+ */
+const doConfigSetup = () => {
+  // Load the configSetup script inline to speed up load times
+  const { configSetup } = require('KegScripts/cli/configSetup')
+  return configSetup()
+}
 
 /**
  * Helpers loads the globalConfig, or kicks off the globalConfig setup
@@ -10,10 +21,8 @@ const { throwWrap } = require('../error/throwWrap')
  */
 const loadGlobalConfig = async () => {
   // Try to load the globalConfig
-  let globalConfig = getGlobalConfig()
-
-  // If no config could be loaded, then call the configSetup script
-  globalConfig = globalConfig || await configSetup()
+  // If no config could be loaded, then doConfigSetup the configSetup script
+  const globalConfig = getGlobalConfig() || await doConfigSetup()
 
   return globalConfig || throwWrap(`Keg CLI global config could not be loaded!`)
 }

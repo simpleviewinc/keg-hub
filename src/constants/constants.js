@@ -3,6 +3,9 @@ const homeDir = require('os').homedir()
 const path = require('path')
 const { KEG_GLOBAL_CONFIG } = process.env
 
+// Cache the root of the CLI for easy access
+const CLI_ROOT = path.join(__dirname, '../../')
+
 // The default global config path
 const CLI_CONFIG = 'cli.config'
 let GLOBAL_CONFIG_FOLDER = path.join(homeDir, '.kegConfig')
@@ -72,7 +75,7 @@ module.exports = deepFreeze({
     ]
   },
 
-  CLI_ROOT: path.join(__dirname, '../../'),
+  CLI_ROOT: CLI_ROOT,
 
   // --- GIT Constants --- //
   // Path the the git ssh key

@@ -1,23 +1,33 @@
 #!/usr/bin/env node
 
 require('module-alias/register')
+const { get } = require('@ltipton/jsutils')
+
+/**
+ * Checks if the Keg-CLI has been updated
+ *
+ * @returns {Promise} - Response from the checkUpdates method
+ */
+const doCheckUpdates = () => {
+  // Load the checkUpdates module inline to speed up load times
+  const { checkUpdates } = require('KegScripts/cli/checkUpdates')
+  return checkUpdates()
+}
 
 ;(async () => {
   try {
 
-    const { loadGlobalConfig } = require('KegUtils/globalConfig/loadGlobalConfig')
-    const { checkUpdates } = require('KegScripts/cli/checkUpdates')
-    const { getSetting } = require('KegUtils/globalConfig/getSetting')
-
     // Load the users global config, or create it on the fly
+    const { loadGlobalConfig } = require('KegUtils/globalConfig/loadGlobalConfig')
     const globalConfig = await loadGlobalConfig()
 
-    // Pull in the runTask method, and call it immediately
+    // // Pull in the runTask method, and call it immediately
     const { runTask } = require('KegRunTask')
     await runTask(globalConfig)
 
-    // Check for Keg CLI updates if setting is true
-    getSetting('checkUpdates') && await checkUpdates()
+    // Check for Keg CLI updates if setting is true, then check for updates
+    get(globalConfig, `cli.settings.checkUpdates`) &&
+      await doCheckUpdates()
 
   }
   catch(e){

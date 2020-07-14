@@ -1,5 +1,5 @@
 const { isArr, get } = require('@ltipton/jsutils')
-const { DOCKER } = require('KegConst')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Finds the tag option in the passed in options array

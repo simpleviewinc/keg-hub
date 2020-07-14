@@ -3,7 +3,7 @@ const {
   gitKeyExists,
   removeGlobalConfigProp,
 } = require('KegUtils')
-const {GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 /**
  * Removes the git key from the global config cli

@@ -1,8 +1,9 @@
 const path = require('path')
 const { deepFreeze, deepMerge, keyMap, get } = require('@ltipton/jsutils')
-const { cliRootDir, dockerEnv, defaultENVs, images } = require('./values')
+const { cliRootDir, containersPath, dockerEnv, images } = require('./values')
 const { checkLoadEnv } = require('KegFileSys/env')
 const { loadYmlSync } = require('KegFileSys/yml')
+const { KEG_ENVS } = require('../envs')
 const { GLOBAL_CONFIG_FOLDER } = require('../constants')
 const { PREFIXED } = require('./machine')
 
@@ -44,7 +45,7 @@ const getEnvFiles = (container) => {
   const envPaths = [
     // ENVs in the container folder based on current environment
     // Example => /containers/core/local.env
-    path.join(defaultENVs.CONTAINERS_PATH, container, `${ dockerEnv }.env`),
+    path.join(containersPath, container, `${ dockerEnv }.env`),
     // ENVs in the global config folder based on current environment
     // Example => ~/.kegConfig/local.env
     path.join(GLOBAL_CONFIG_FOLDER, `${ dockerEnv }.env`),
@@ -75,11 +76,11 @@ const getValuesFiles = container => {
   const ymlPaths = [
     // ENVs in the container folder based on current environment
     // Example => /containers/core/values.yml
-    path.join(defaultENVs.CONTAINERS_PATH, container, 'values.yml'),
+    path.join(containersPath, container, 'values.yml'),
     // ENVs in the container folder based on current environment
     // Example => /containers/core/values_local.yml
-    path.join(defaultENVs.CONTAINERS_PATH, container, `values_${ dockerEnv }.yml`),
-    path.join(defaultENVs.CONTAINERS_PATH, container, `values-${ dockerEnv }.yml`),
+    path.join(containersPath, container, `values_${ dockerEnv }.yml`),
+    path.join(containersPath, container, `values-${ dockerEnv }.yml`),
     // ENVs in the global config folder based on current environment
     // Example => ~/.kegConfig/values_local.yml
     path.join(GLOBAL_CONFIG_FOLDER, `values_${ dockerEnv }.yml`),
@@ -110,7 +111,7 @@ const getValuesFiles = container => {
 const containerConfig = (container) => {
   const upperCase = container.toUpperCase()
 
-  const dockerFile = path.join(defaultENVs.CONTAINERS_PATH, container, `Dockerfile`)
+  const dockerFile = path.join(containersPath, container, `Dockerfile`)
 
   // Merge the container config with the default config and return
   return deepMerge(DEFAULT, {
@@ -120,7 +121,7 @@ const containerConfig = (container) => {
     // Build the ENVs by merging with the default, context, and environment
     ENV: deepMerge(
       PREFIXED,
-      defaultENVs,
+      KEG_ENVS,
       getValuesFiles(container),
       getEnvFiles(container)
     ),

@@ -5,10 +5,10 @@ const {
   gitKeyExists,
   removeGlobalConfigProp,
 } = require('KegUtils')
-const { encrypt, decrypt } = require('KegCrypto')
 const { ask } = require('askIt')
-const {GLOBAL_CONFIG_PATHS } = require('KegConst')
 const { get } = require('@ltipton/jsutils')
+const { encrypt, decrypt } = require('KegCrypto')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 
 const printGitKey = async (args) => {

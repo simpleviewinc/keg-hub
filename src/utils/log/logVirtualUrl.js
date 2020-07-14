@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { TAP_URL } = require('KegConst')
+const { TAP_URL } = require('KegConst/constants')
 
 /**
  * Helper that Gets and logs the Virtual Machines IP address

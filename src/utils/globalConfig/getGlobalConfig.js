@@ -1,5 +1,4 @@
-const { checkCall } = require('@ltipton/jsutils')
-const { requireFile } = require('KegFileSys/fileSys')
+const path = require('path')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
 const { __getGlobalConfig, __updateGlobalConfig } = require('./globalConfigCache')
 
@@ -21,10 +20,10 @@ const getGlobalConfig = () => {
   try {
 
     // Try to load the globalConfig from file
-    const { data, location } = requireFile(GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE)
+    const config = require(path.join(GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE))
 
     // Update the globalConfig cache with the loaded globalConfig
-    data && __updateGlobalConfig(checkCall(data) || data)
+    config && __updateGlobalConfig(config)
 
     // // Return the global config after it's been cached
     return __getGlobalConfig()

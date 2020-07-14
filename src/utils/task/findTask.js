@@ -1,7 +1,7 @@
 const { get } = require('@ltipton/jsutils')
 const { getTask } = require('./getTask')
 const { validateTask } = require('./validateTask')
-const { GLOBAL_CONFIG_PATHS } = require('KegConst')
+const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 const { getParams } = require('./getParams')
 

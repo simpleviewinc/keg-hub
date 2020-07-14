@@ -2,7 +2,7 @@ const { get, isStr } = require('@ltipton/jsutils')
 const { generalError } = require('KegUtils/error')
 const CONSTANTS = require('KegConst/constants')
 const { DOCKER } = require('KegConst/docker')
-const { defaultENVs } = require('KegConst/docker/values')
+const { KEG_ENVS } = require('KegConst/envs')
 const PATTERNS = require('KegConst/docker')
 
 /**
@@ -37,7 +37,7 @@ const printData = async args => {
       break
     }
     case 'env': {
-      toPrint = defaultENVs
+      toPrint = KEG_ENVS
       break
     }
     case 'machine':
