@@ -14,6 +14,7 @@ module.exports = {
     description: 'Keg CLI specific tasks',
     example: 'keg cli <command> <options>',
     tasks: {
+      ...require('./env'),
       ...require('./print'),
       ...require('./update'),
     },

@@ -1,5 +1,5 @@
 const { confirmExec } = require('KegUtils/helpers/confirmExec')
-const { mergeDefaultEnv } = require('KegUtils/helpers/mergeDefaultEnv')
+const { updateDefaultEnv } = require('KegUtils/helpers/updateDefaultEnv')
 const { createGlobalConfig } = require('KegUtils/globalConfig/createGlobalConfig')
 
 /**
@@ -27,7 +27,7 @@ const syncGlobalConfig = async args => {
       await createGlobalConfig(globalConfig, params)
 
       // Merge / create the default.env
-      await mergeDefaultEnv()
+      await updateDefaultEnv()
 
     },
   })
@@ -42,7 +42,7 @@ module.exports = {
     example: 'keg global sync <options>',
     options: {
       merge: {
-        description: 'Merge the repos global config with the User global config ( true )',
+        description: 'Merge the Keg-CLI global config with the User global config ( true )',
         default: true,
       },
       conflict: {

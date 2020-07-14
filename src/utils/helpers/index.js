@@ -7,7 +7,7 @@ module.exports = {
   ...require('./invoke'),
   ...require('./limboify'),
   ...require('./mapEnv'),
-  ...require('./mergeDefaultEnv'),
   ...require('./tryCatch'),
+  ...require('./updateDefaultEnv'),
   ...require('./waitForIt'),
 }
