@@ -154,7 +154,7 @@ keg_auto_load_envs(){
 keg(){
 
   # Check if reloading the bash portion of the keg cli
-  if [[ "$1" == "reload" || "$1" == "rl" || "$1" == "src" ]]; then
+  if [[ "$1" == "reload" || "$1" == "rl" || "$1" == "src" ]] && [[ -z "$2" ]]; then
 
     # Reload this bash script
     keg_message "Reloading Keg CLI..."
@@ -168,12 +168,17 @@ keg(){
     return
 
   # export the git key for the current terminal session
-  elif [[ "$1" == "key" && "$2" == "export" ]]; then
+  elif [[ "$1" == "key" && "$2" == "export" ]] && [[ -z "$3" ]]; then
     keg_export_git_key
     return
 
+  # export the git key for the current terminal session
+  elif [[ "$1" == "home" || "$1" == "hm" ]] && [[ -z "$2" ]]; then
+    cd ~/
+    return
+
   # Ensure docker machine is loaded
-  elif [[ "$1" == "docker_machine" || "$1" == "docm" || "$1" == "dcm" ]]; then
+  elif [[ "$1" == "docker_machine" || "$1" == "docm" || "$1" == "dcm" ]] && [[ -z "$2" ]]; then
     keg_auto_load_envs
     keg_cli_init_docker_machine
     return

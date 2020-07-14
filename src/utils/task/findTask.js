@@ -30,7 +30,9 @@ const checkLinkedTaps = async (globalConfig, tasks, command, options) => {
   // Get the params now instead of in executeTask
   // This way we can make all tap modification in one place
   taskData.params = await getParams({ ...taskData, params: { tap: command } })
-  taskData.options.push(`tap=${ command }`)
+
+  // Add the tap as the second-to-last option incase last option is the help option
+  taskData.options.splice(taskData.options.length - 1, 0, `tap=${ command }`)
 
   return taskData
 }
