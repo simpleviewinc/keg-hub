@@ -105,7 +105,7 @@ const updateStats = (stats, type, params) => {
  *
  * @returns {void}
  */
-const updateDefaultEnv = async params => {
+const updateDefaultEnv = async (params={}) => {
   const { merge=true, conflict='global', force, log } = params
 
   // Get the path to the global ENVs
