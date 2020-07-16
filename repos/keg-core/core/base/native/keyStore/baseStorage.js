@@ -1,4 +1,4 @@
-import { limbo } from 'jsutils'
+import { limbo } from '@ltipton/jsutils'
 const isDev = process.env.NODE_ENV !== 'production'
 
 /**

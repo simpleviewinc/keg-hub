@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store'
 import { BaseStorage } from './baseStorage'
-import { limbo } from 'jsutils'
+import { limbo } from '@ltipton/jsutils'
 
 /**
  * Storage Class for native. Saves and retrieves data from local storage

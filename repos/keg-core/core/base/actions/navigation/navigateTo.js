@@ -1,5 +1,5 @@
 import { navigateToPath } from 'SVNavigation/navigateToPath'
-import { logData } from 'jsutils'
+import { logData } from '@ltipton/jsutils'
 import { getHistory } from 'SVNavigation/history'
 
 /**

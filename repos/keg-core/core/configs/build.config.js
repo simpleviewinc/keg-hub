@@ -5,7 +5,7 @@ const appConf = require('@simpleviewinc/tap-resolver/src/getAppConfig')(
   true,
   false
 )
-const { get, deepMerge } = require('jsutils')
+const { get, deepMerge } = require('@ltipton/jsutils')
 const {
   AWS_BUCKET,
   AWS_ACCESS_KEY_ID,

@@ -1,7 +1,13 @@
-import { applyToCloneOf, isObj, isArr, typeOf, get } from 'jsutils'
+import {
+  applyToCloneOf,
+  exists,
+  isObj,
+  isArr,
+  typeOf,
+  get,
+} from '@ltipton/jsutils'
 import { MakeRequestIssue } from './error'
 import { Values } from 'SVConstants'
-import { exists } from 'SVUtils/helpers/method/exists'
 
 const { IssueTypes } = Values
 

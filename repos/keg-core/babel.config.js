@@ -1,7 +1,7 @@
 const tapPath = require('app-root-path').path
 const getAppConfig = require('@simpleviewinc/tap-resolver/src/resolvers/getAppConfig')
 const tapResolver = require('@simpleviewinc/tap-resolver')
-const { checkCall, deepMerge, set, get, unset } = require('jsutils')
+const { checkCall, deepMerge, set, get, unset } = require('@ltipton/jsutils')
 const tapConfig = getAppConfig(tapPath, false, false)
 const kegConfig = require('./app.json')
 const configOverrides = get(kegConfig, [ 'keg', 'overrides' ])

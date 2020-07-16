@@ -1,4 +1,4 @@
-import { logData } from 'jsutils'
+import { logData } from '@ltipton/jsutils'
 
 /**
  * Helper to log out error messages

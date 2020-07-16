@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { Values } from 'SVConstants'
-import { logData, isStr } from 'jsutils'
+import { logData, isStr } from '@ltipton/jsutils'
 import { networkResponseModel, networkRequestModel } from 'SVModels'
 const { HttpMethods } = Values
 const { GET, ...HttpMethodsWithBody } = HttpMethods

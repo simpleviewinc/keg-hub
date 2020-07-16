@@ -1,5 +1,5 @@
 import { Values } from 'SVConstants'
-import { deepFreeze } from 'jsutils'
+import { deepFreeze } from '@ltipton/jsutils'
 const { IssueTypes } = Values
 
 /**

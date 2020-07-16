@@ -1,4 +1,4 @@
-import { keyMap, deepMerge } from 'jsutils'
+import { keyMap, deepMerge } from '@ltipton/jsutils'
 import { ActionTypes as TapActionTypes } from 'SVConstants/actionTypes'
 
 /**

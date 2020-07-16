@@ -1,4 +1,4 @@
-import { keyMap, deepMerge } from 'jsutils'
+import { keyMap, deepMerge } from '@ltipton/jsutils'
 import { Values as TapValues } from 'SVConstants/values'
 
 export const Values = deepMerge(

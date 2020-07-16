@@ -1,6 +1,6 @@
 import { isValidItemRequest, handleInvalidRequest } from './errorHandler'
 import { ItemsRequestError } from './error'
-import { isArr, omitKeys, omitRange } from 'jsutils'
+import { isArr, omitKeys, omitRange } from '@ltipton/jsutils'
 import '../typedefs'
 
 /**

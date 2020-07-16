@@ -1,6 +1,6 @@
 import { isValidUpsertItemRequest, handleInvalidRequest } from './errorHandler'
 import { ItemsRequestError } from './error'
-import { isArr, isObj, deepMerge } from 'jsutils'
+import { isArr, isObj, deepMerge } from '@ltipton/jsutils'
 import '../typedefs'
 
 /**

@@ -1,4 +1,4 @@
-import { get, softFalsy, isArr } from 'jsutils'
+import { get, softFalsy, isArr } from '@ltipton/jsutils'
 
 /**
  * Creates an error wit the message, path and object

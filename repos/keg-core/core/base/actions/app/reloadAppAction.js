@@ -1,5 +1,5 @@
 import { SVReload } from 'SVNative'
-import { checkCall } from 'jsutils'
+import { checkCall } from '@ltipton/jsutils'
 
 export const reloadAppAction = async tap => {
   try {

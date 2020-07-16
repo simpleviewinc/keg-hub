@@ -1,4 +1,4 @@
-import { isFunc } from 'jsutils'
+import { isFunc } from '@ltipton/jsutils'
 
 const errorHandler = (module, key, method) => {
   return async (...args) => {

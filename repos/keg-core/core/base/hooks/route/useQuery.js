@@ -1,4 +1,4 @@
-import { queryToObj, get } from 'jsutils'
+import { queryToObj, get } from '@ltipton/jsutils'
 import { useLocation } from 'SVComponents'
 import { useState, useEffect } from 'react'
 

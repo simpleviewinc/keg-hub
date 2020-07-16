@@ -10,7 +10,7 @@ import { getStore } from 'SVStore'
 import { initAppAction } from 'SVActions'
 import { AppContainer } from 'SVContainers'
 import { Router } from 'SVComponents'
-import { checkCall, get } from 'jsutils'
+import { checkCall, get } from '@ltipton/jsutils'
 import { theme } from 'SVTheme'
 import { getHistory } from 'SVNavigation'
 
