@@ -1,4 +1,5 @@
 const { destroyService } = require('KegUtils/services')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Removes all docker items for a tap based on the passed in service type
@@ -18,7 +19,9 @@ module.exports = {
   destroy: {
     name: 'destroy',
     alias: [ 'dest', 'des', 'kill', 'down' ],
+    inject: true,
     action: destroyTap,
+    locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Destroys the docker items for a tap`,
     example: 'keg tap destroy <options>',
     options: {

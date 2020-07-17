@@ -1,4 +1,5 @@
 const { stopService } = require('KegUtils/services')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Stop tap docker containers and syncs
@@ -19,6 +20,8 @@ module.exports = {
   stop: {
     name: 'stop',
     alias: [ 'stp', 'halt', 'hlt' ],
+    inject: true,
+    locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     action: stopTap,
     description: `Stops tap docker containers and syncs`,
     example: 'keg tap stop <options>',

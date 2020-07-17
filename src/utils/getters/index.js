@@ -1,7 +1,8 @@
 
 module.exports = {
   ...require('./getContext'),
-  ...require('./getPrefix'),
+  ...require('./getLocationContext'),
   ...require('./getMutagenConfig'),
-  ...require('./getRepoPath')
+  ...require('./getPrefix'),
+  ...require('./getRepoPath'),
 }

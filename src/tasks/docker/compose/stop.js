@@ -15,7 +15,7 @@ const { buildComposeCmd } = require('KegUtils/docker')
 const composeStop = async args => {
   const { globalConfig, __internal, params } = args
   const { log } = params
-  
+
   // Get the context data for the command to be run
   const containerContext = await buildContainerContext(args)
   const { location, cmdContext, contextEnvs } = containerContext

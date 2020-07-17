@@ -1,6 +1,6 @@
 const { get } = require('@ltipton/jsutils')
 const { generalError } = require('KegUtils/error')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { dockerLog } = require('KegUtils/log/dockerLog')
@@ -17,25 +17,30 @@ const { dockerLog } = require('KegUtils/log/dockerLog')
  */
 const getImage = async args => {
 
-  const { params, __skipLog } = args
-  const { force, context, tag } = params
+  const { params, __internal={} } = args
+  const { context, image, tag } = params
 
   // Check the name for a tag ref, or use the passed in name and tag
   let [ nameRef, tagRef ] = context.indexOf(':') !== -1 ? context.split(':') : [ context, tag ]
 
   // Ensure we have an image to remove by checking for a mapped nameRef, or use original
-  let imgRef = get(CONTAINERS, `${nameRef && nameRef.toUpperCase()}.ENV.IMAGE`, nameRef)
-  !imgRef && generalError(`The docker "image remove" command requires a name or tag argument!`)
+  let imgRef = image || get(
+    DOCKER,
+    `CONTAINERS.${nameRef && nameRef.toUpperCase()}.ENV.IMAGE`,
+    nameRef
+  )
+
+  !imgRef && generalError(`The docker "image get" task requires a name or tag argument!`)
 
   imgRef = tagRef ? `${imgRef}:${tagRef}` : imgRef
 
   // Get the image meta data
-  const image = await docker.image.get(imgRef)
+  const foundImg = await docker.image.get(imgRef)
 
   // Log the output of the command
-  __skipLog !== true && Logger.data(image)
+  __internal.skipLog !== true && Logger.data(foundImg)
 
-  return image
+  return foundImg
 
 }
 

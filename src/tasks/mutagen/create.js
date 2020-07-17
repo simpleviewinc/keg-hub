@@ -21,17 +21,19 @@ const {
  *
  * @returns {Object} - Build params for create a mutagen sync
  */
-const getSyncParams = async (contextData, { local, remote, name, options }) => {
+const getSyncParams = async (contextData, params) => {
+  const { local, remote, name, options } = params
 
-  const { alpha, beta, ...config } = await getMutagenConfig(
-    contextData.cmdContext,
-    contextData.name || contextData.image,
-    {
+  const { alpha, beta, ...config } = await getMutagenConfig({
+    options,
+    __injected: params.__injected,
+    context: contextData.cmdContext,
+    service: contextData.name || contextData.image,
+    overrides: {
       alpha: local || get(contextData, 'contextEnvs.KEG_CONTEXT_PATH'),
       beta: remote || get(contextData, 'contextEnvs.DOC_APP_PATH')
     },
-    options
-  )
+  })
 
   !alpha && generalError(
     `Can not set the local path, missing "KEG_CONTEXT_PATH" environment variable!`

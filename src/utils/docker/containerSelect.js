@@ -9,11 +9,16 @@ const { throwNoContainers } = require('KegUtils/error/throwNoContainers')
  *
  * @returns {Object} the selected containers
  */
-const containerSelect = async (filter) => {
+const containerSelect = async (filter, throwNoContainers=true) => {
   const containers = await docker.container.list()
 
-  // If no containers available, then call throwNoContainers
-  !containers.length && throwNoContainers()
+  // If no containers available, then check if we should call throwNoContainers
+  // Otherwise just return null
+  if(!containers.length){
+    return throwNoContainers
+      ? throwNoContainers()
+      : null
+  }
 
   // Filter the containers if filter method passed
   const filtered = checkCall(filter, containers) || containers

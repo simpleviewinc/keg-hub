@@ -1,4 +1,5 @@
-const { gitCli } = require('./commands')
+const { gitCli, gitCmd } = require('./commands')
+const { getLogArgs } = require('./helpers')
 
 class Repo {
 
@@ -9,18 +10,24 @@ class Repo {
 
   clone = async (url, local, options) => {
     return gitCli({
-      opts: [ 'git', 'clone', url, local ],
+      opts: `clone ${ url } ${ local }`,
       ...options,
     })
   }
 
   exists = async (location=process.cwd(), options={}) => {
     const res = await gitCli({
-      opts: [ 'git', 'rev-parse', '--is-inside-work-tree' ],
+      opts: 'rev-parse --is-inside-work-tree',
       ...options,
     }, {}, location)
 
     return Boolean(res)
+  }
+
+  log = ({ location, ...params }) => {
+    const cmdOpts = location ? { cwd: location } : undefined
+
+    return gitCmd(`log ${ getLogArgs(params) }`.trim(), cmdOpts)
   }
 
 }

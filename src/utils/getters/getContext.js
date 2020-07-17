@@ -15,8 +15,8 @@ const askWhenNoContext = async (type) => {
   return type === 'container'
     ? containerSelect(containers => {
         return containers.filter(container => !container.status.includes('Exited'))
-      })
-    : imageSelect()
+      }, false)
+    : imageSelect(false)
 }
 
 /**
@@ -26,15 +26,16 @@ const askWhenNoContext = async (type) => {
  *
  * @returns {Object} - Container, context, and the original with the prefix
  */
-const containerContext = async (toFind, prefixData={}, askFor) => {
-
+const containerContext = async (toFind, prefixData={}, __injected, askFor) => {
   let found = await docker.container.get(toFind)
   found = found || prefixData.prefix && await docker.container.get(prefixData.prefix)
   const container = found || askFor && await askWhenNoContext('container')
 
   return !container
     ? prefixData
-    : { ...container, ...prefixData, ...getPrefixContext(container.name) }
+    : __injected
+      ? { ...container, ...prefixData }
+      : { ...container, ...prefixData, ...getPrefixContext(container.name) }
 
 }
 
@@ -45,7 +46,7 @@ const containerContext = async (toFind, prefixData={}, askFor) => {
  *
  * @returns {Object} - Image, context, and the original with the prefix
  */
-const imageContext = async (toFind, prefixData={}, askFor) => {
+const imageContext = async (toFind, prefixData={}, __injected, askFor) => {
 
   let found = await docker.image.get(toFind)
   found = found || prefixData.prefix && await docker.image.get(prefixData.prefix)
@@ -53,7 +54,9 @@ const imageContext = async (toFind, prefixData={}, askFor) => {
 
   return !image
     ? prefixData
-    : { ...image, ...prefixData, ...getPrefixContext(image.repository) }
+    : __injected
+      ? { ...container, ...prefixData }
+      : { ...image, ...prefixData, ...getPrefixContext(image.repository) }
 
 }
 
@@ -69,18 +72,19 @@ const imageContext = async (toFind, prefixData={}, askFor) => {
  *
  * @returns {Object} - Found context, and prefix if it exists
  */
-const getContext = async ({ context, container, image, tap }, askFor) => {
+const getContext = async (params, askFor) => {
+  const { context, container, image, tap, __injected } = params
   const contextRef = context || container || image || (tap && 'tap')
   const prefixData = isDockerId(contextRef) ? { id: contextRef } : getPrefixContext(contextRef)
 
   const foundContext = container
-    ? await containerContext(container, prefixData, askFor)
+    ? await containerContext(container, prefixData, __injected, askFor)
     : image
-      ? await imageContext(image, prefixData, askFor)
+      ? await imageContext(image, prefixData, __injected, askFor)
       : prefixData
 
-  return tap 
-    ? { tap, context: 'tap', ...foundContext }
+  return context === 'tap'
+    ? { tap, context, ...foundContext }
     : { context, tap: context, ...foundContext }
 
 }

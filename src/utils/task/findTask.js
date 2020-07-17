@@ -4,6 +4,7 @@ const { validateTask } = require('./validateTask')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
 const { getParams } = require('./getParams')
+const { injectService } = require('../services/injectService')
 
 /**
  * Checks if the command is a linked tap, and if so, calls the tap command on that tap
@@ -19,9 +20,9 @@ const checkLinkedTaps = async (globalConfig, tasks, command, options) => {
 
   const tapPath = get(globalConfig, `${ TAP_LINKS }.${ command }`)
   // If no tap path was found, we have no task, so just return
-  if(!tapPath) return {}
+  if(!tapPath) return false
 
-  // Update the options to include the name argument
+  // Create a copy of the options so we don't modify the original
   options = [ ...options ]
 
   // Call getTask, and set the command to be tap
@@ -34,7 +35,15 @@ const checkLinkedTaps = async (globalConfig, tasks, command, options) => {
   // Add the tap as the second-to-last option incase last option is the help option
   taskData.options.splice(taskData.options.length - 1, 0, `tap=${ command }`)
 
-  return taskData
+  // Check if the tap task allows injection
+  // If it does, try to load the taps container folder and inject it
+  return !get(taskData, 'task.inject')
+    ? taskData
+    : await injectService({
+        taskData,
+        app: command,
+        injectPath: tapPath,
+      })
 }
 
 /**
@@ -48,14 +57,15 @@ const checkLinkedTaps = async (globalConfig, tasks, command, options) => {
  * @returns {Object} - Found task and options
  */
 const findTask = async (globalConfig, tasks, command, options) => {
+
+  // First check if the cmd is for a linked task
+  const tapTaskData = await checkLinkedTaps(globalConfig, tasks, command, options)
+  
   // Get the task from available tasks
-  const foundTask = getTask(tasks, command, ...options)
+  const foundTask = tapTaskData || getTask(tasks, command, ...options)
 
   // Ensure we have the taskData
-  // If not, check linked Taps for a tap task
-  const taskData = foundTask && foundTask.task
-    ? foundTask
-    : await checkLinkedTaps(globalConfig, tasks, command, options)
+  const taskData = get(foundTask, 'task') ? foundTask : {}
 
   // Validate the task, and return the taskData
   return validateTask(taskData.task) && taskData

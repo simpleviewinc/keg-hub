@@ -2,6 +2,7 @@ const { Logger } = require('KegLog')
 const { get } = require('@ltipton/jsutils')
 const { mutagenService } = require('./mutagenService')
 const { runInternalTask } = require('../task/runInternalTask')
+const { getServiceArgs } = require('./getServiceArgs')
 
 /**
  * Runs `docker-compose` up command based on the passed in args
@@ -13,35 +14,29 @@ const { runInternalTask } = require('../task/runInternalTask')
  *
  * @returns {*} - Response from the `docker-compose` up task
  */
-const composeService = async (args, { context, tap }) => {
-
+const composeService = async (args, argsExt) => {
+  const { context, tap } = argsExt
+  
   // Build the service arguments
-  const serviceArgs = {
-    ...args,
-    __internal: {
-      ...args.__internal,
-      skipLogs: true
-    },
-    params: {
-      ...args.params,
-      tap: tap || args.params.tap,
-      context: context || args.params.context,
-    },
-  }
+  const serviceArgs = getServiceArgs(args, argsExt)
 
   // Run the docker-compose up task
   const containerContext = await runInternalTask('docker.tasks.compose.tasks.up', serviceArgs)
 
   // Run the mutagen service if needed
   const composeContext = get(args, 'params.service') === 'mutagen'
-    ? await mutagenService(serviceArgs, { context, tap, containerContext })
+    ? await mutagenService(serviceArgs, {
+        containerContext,
+        tap: get(serviceArgs, 'params.tap', tap),
+        context: get(serviceArgs, 'params.context', context),
+      })
     : containerContext
 
   Logger.empty()
 
   Logger.highlight(
     `Started`,
-    `"${ serviceArgs.params.context }"`,
+    `"${ get(serviceArgs, 'params.context', context) }"`,
     `compose environment!`
   )
 
@@ -50,7 +45,6 @@ const composeService = async (args, { context, tap }) => {
   // Check if we should start logging the output of the service
   get(serviceArgs, 'params.follow') &&
     await runInternalTask('docker.tasks.log', serviceArgs)
-
 
   return composeContext
 

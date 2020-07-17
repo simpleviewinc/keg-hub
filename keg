@@ -18,6 +18,13 @@ keg_message(){
 # Otherwise shows warning that virtual-box is not installed
 keg_cli_init_docker_machine(){
 
+  local KEG_IS_WIN="$(keg_is_windows_wsl)"
+  
+  if [[ "$KEG_IS_WIN" == "true" ]]; then
+    keg_message "Docker-machine is not supported on windows machines. Please use the docker for windows app"
+    return
+  fi
+
   # Docker-machine vagrant-drive hangs after the computer goes to sleep
   # Only way to fix is to restart. Need to come up with a better solution
   # The issue is with VirtualBox, not docker-machine
@@ -132,6 +139,13 @@ keg_auto_load_envs(){
 
   fi
 
+  local KEG_IS_WIN="$(keg_is_windows_wsl)"
+  
+  if [[ "$KEG_IS_WIN" == "true" ]]; then
+    export KEG_ENV_LOADED="loaded"
+    return
+  fi
+
   # Ensure Virtual Box is installed before setting the docker-machine env
   if [[ -x "$(command -v VBoxManage)" ]]; then
     keg_cli_init_docker_machine
@@ -146,6 +160,15 @@ keg_auto_load_envs(){
 
   return
 
+}
+
+# Check if we are running in the wsl environment for windows
+keg_is_windows_wsl(){
+  if [[ -z "$WSL_DISTRO_NAME" ]]; then
+    echo "false"
+  else
+    echo "true"
+  fi
 }
 
 # Opening to the keg cli

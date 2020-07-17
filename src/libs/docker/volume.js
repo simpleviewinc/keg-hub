@@ -13,7 +13,7 @@ const { isArr, isStr } = require('@ltipton/jsutils')
 const list = (args={}, opts) => {
   opts = opts || args.opts
   return dockerCli({
-    format: 'json',
+    format: args.format || 'json',
     ...args,
     opts: [ `volume`, `ls` ].concat(
       isArr(opts)

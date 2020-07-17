@@ -1,15 +1,26 @@
 const path = require('path')
+const { KEG_ENVS } = require('../envs')
+const { PREFIXED } = require('./machine')
+const { loadYmlSync } = require('../../libs/fileSys/yml')
+const { checkLoadEnv } = require('../../libs/fileSys/env')
+const { GLOBAL_CONFIG_FOLDER } = require('../constants')
+const { defineProperty } = require('../../utils/helpers/defineProperty')
 const { deepFreeze, deepMerge, keyMap, get } = require('@ltipton/jsutils')
 const { cliRootDir, containersPath, dockerEnv, images } = require('./values')
-const { checkLoadEnv } = require('KegFileSys/env')
-const { loadYmlSync } = require('KegFileSys/yml')
-const { KEG_ENVS } = require('../envs')
-const { GLOBAL_CONFIG_FOLDER } = require('../constants')
-const { PREFIXED } = require('./machine')
 
+/**
+ * Holds each docker containers meta data that can be built by the CLI
+ * @internal
+ * @object
+ */
 let __CONTAINERS
 
-// Default config for all containers
+// 
+/**
+ * Default container meta data for all containers that can be built by the CLI
+ * @internal
+ * @object
+ */
 const DEFAULT = {
   VALUES: {
     clean: '--rm',
@@ -40,7 +51,7 @@ const DEFAULT = {
  *
  * @returns {Object} - Loaded ENVs for the current environment
 */
-const getEnvFiles = (container) => {
+const getEnvFiles = (container, __internalENV) => {
 
   const envPaths = [
     // ENVs in the container folder based on current environment
@@ -51,8 +62,11 @@ const getEnvFiles = (container) => {
     path.join(GLOBAL_CONFIG_FOLDER, `${ dockerEnv }.env`),
     // ENVs in the global config folder based on current container and environment
     // Example => ~/.kegConfig/core-local.env
-    path.join(GLOBAL_CONFIG_FOLDER, `container-${ dockerEnv }.env`),
+    path.join(GLOBAL_CONFIG_FOLDER, `${ container }-${ dockerEnv }.env`),
   ]
+
+  // If an internalENV path is passed in, add it to the paths array
+  __internalENV && envPaths.push(__internalENV)
 
   // Try to load each of the envPaths if then exists
   // Then merge and return them
@@ -71,7 +85,7 @@ const getEnvFiles = (container) => {
  *
  * @returns {Object} - Loaded yaml envs for the current environment
 */
-const getValuesFiles = container => {
+const getValuesFiles = (container, __internalValues) => {
 
   const ymlPaths = [
     // ENVs in the container folder based on current environment
@@ -91,6 +105,9 @@ const getValuesFiles = container => {
     path.join(GLOBAL_CONFIG_FOLDER, `${ container }-values-${ dockerEnv }.yml`),
   ]
 
+  // If an internal values path file is passed in, add it to the array
+  __internalValues && ymlPaths.push(__internalValues)
+
   // Try to load each of the envPaths if then exists
   // Then merge and return them
   return deepMerge(
@@ -101,17 +118,17 @@ const getValuesFiles = container => {
 
 }
 
-/*
+/**
  * Builds a config for a container from the images array
  * @function
  * @param {string} container - Name of the container to build the config for
  *
  * @returns {Object} - Built container config
 */
-const containerConfig = (container) => {
+const containerConfig = (container, __internal={}) => {
   const upperCase = container.toUpperCase()
 
-  const dockerFile = path.join(containersPath, container, `Dockerfile`)
+  const dockerFile = __internal.dockerPath || path.join(containersPath, container, `Dockerfile`)
 
   // Merge the container config with the default config and return
   return deepMerge(DEFAULT, {
@@ -122,23 +139,30 @@ const containerConfig = (container) => {
     ENV: deepMerge(
       PREFIXED,
       KEG_ENVS,
-      getValuesFiles(container),
-      getEnvFiles(container)
+      getValuesFiles(container, __internal.valuesPath),
+      getEnvFiles(container, __internal)
     ),
   })
 
 }
 
-/*
+/**
  * Builds the config for each container in the values images array
  * @function
  *
  * @returns {Object} - Built container config
 */
-const buildContainers = () => {
+const buildContainers = (container, __internal) => {
+  container &&
+    !images.includes(container) &&
+    images.push(container)
+
   // Builds the docker locations for the container and Dockerfile
-  __CONTAINERS = __CONTAINERS || images.reduce((data, container) => {
-    data[ container.toUpperCase() ] = containerConfig(container)
+  __CONTAINERS = images.reduce((data, image) => {
+    
+    data[ image.toUpperCase() ] = image === container
+      ? containerConfig(image, __internal)
+      : containerConfig(image)
 
     return data
   }, {})
@@ -147,9 +171,35 @@ const buildContainers = () => {
 
 }
 
+/**
+ * Gets the __CONTAINERS object or builds it if it does not exist
+ * @function
+ *
+ * @returns {Object} - Built container config
+*/
+const getContainers = () => (__CONTAINERS || buildContainers())
 
-const containersObj = {}
-// Add the CONTAINERS property, with a get function do it only get called when referenced
-Object.defineProperty(containersObj, 'CONTAINERS', { get: buildContainers, enumerable: true })
+/**
+ * Injector helper to build a __CONTAINERS object dynamically
+ * @function
+ * @param {string} container - Name of the container to inject
+ * @param {Object} __internal - Paths to files for the injected container
+ *
+ * @returns {Object} - Built container config
+*/
+const injectContainer = (container, __internal) => buildContainers(container, __internal)
 
-module.exports = containersObj
+/**
+ * Exported object of this containers module
+ * @Object
+ */
+const containersObj = { injectContainer }
+
+/**
+ * Defines the CONTAINERS property on the values object with a get method of getContainers
+ * <br/>Allows the getContainers method to dynamically build the __CONTAINERS object at runtime
+ * @function
+ */
+defineProperty(containersObj, 'CONTAINERS', { get: getContainers })
+
+module.exports = deepFreeze(containersObj)

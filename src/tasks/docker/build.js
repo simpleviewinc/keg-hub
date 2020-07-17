@@ -93,7 +93,7 @@ module.exports = {
     action: dockerBuild,
     description: `Runs docker build command for a container`,
     example: 'keg docker build <options>',
-    location_context: DOCKER.LOCATION_CONTEXT.REPO,
+    locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
       context: {
         allowed: DOCKER.IMAGES,

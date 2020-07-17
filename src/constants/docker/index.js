@@ -12,7 +12,6 @@ const {
 
 const DOCKER = {
   ...require('./machine'),
-  ...require('./run'),
   ...require('./volumes'),
   CLI_KEY_MAP: cliKeyMap,
   IMAGES: images,
@@ -25,4 +24,4 @@ const DOCKER = {
 // Add the CONTAINERS property, with a get function do it only get called when referenced
 Object.defineProperty(DOCKER, 'CONTAINERS', { get: () => containers.CONTAINERS, enumerable: true })
 
-module.exports = deepFreeze({ DOCKER })
+module.exports = { DOCKER }

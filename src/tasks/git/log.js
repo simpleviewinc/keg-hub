@@ -1,26 +1,5 @@
-const { reduceObj } = require('@ltipton/jsutils')
-const { spawnCmd } = require('KegProc')
-
-const gitLogArgs = {
-  abbrev: 'abbrev-commit',
-  pretty: 'pretty=oneline',
-}
-
-/**
-* Finds the arguments that should be passed to the git log command
-* @param {Object} params - Parsed params passed from the command line
-*
-* @returns {string} - Built argument string
-*/
-const getLogArgs = params => {
-  return reduceObj(params, (key, value, joined) => {
-    return gitLogArgs[key] 
-      ? `${joined} --${gitLogArgs[key]}`
-      : value === true
-        ? `${joined} --${key}`
-        : joined
-  }, '').trim()
-}
+const { git } = require('KegGitCli')
+const { getGitPath } = require('KegUtils/git/getGitPath')
 
 /**
  * Git log task
@@ -34,7 +13,13 @@ const getLogArgs = params => {
  */
 const gitLog = async args => {
   const { command, options, params, tasks, globalConfig } = args
-  await spawnCmd(`git log ${getLogArgs(params)}`.trim())
+  const { context, location, ...gitParams } = params
+
+  await git.repo.log({
+    ...gitParams,
+    location: getGitPath(globalConfig, context) || location,
+  })
+
 }
 
 module.exports = {
@@ -43,19 +28,38 @@ module.exports = {
     alias: [ 'lg' ],
     action: gitLog,
     description: `Logs a git repository commit history!`,
-    example: 'keg log <options>',
+    example: 'keg git log <options>',
     options: {
+      context: {
+        alias: [ 'name' ],
+        description: 'Context or name of the repo to log, may also be a linked tap',
+        example: 'keg git log context=core',
+      },
+      location: {
+        alias: [ 'loc' ],
+        description: `Location where the git log command will be run. Use when context option is "undefined"`,
+        example: 'keg git log location=<path/to/git/repo>',
+        default: process.cwd()
+      },
       graph: {
-        description: 'Log commit history as a graph'
+        description: 'Log commit history as a graph',
+        example: 'keg log --graph',
+        default: false,
       },
       decorate: {
-        description: 'Decorate the commit history log'
+        description: 'Decorate the commit history log',
+        example: 'keg log --decorate',
+        default: false,
       },
       pretty: {
-        description: 'Pretty print the commit history'
+        description: 'Pretty print the commit history',
+        example: 'keg log --pretty',
+        default: false,
       },
       abbrev: {
-        description: 'Abbreviate git commit comments'
+        description: 'Abbreviate git commit comments',
+        example: 'keg log --abbrev',
+        default: false,
       }
     }
   }

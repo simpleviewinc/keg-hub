@@ -7,6 +7,8 @@ const docker = require('KegDocCli')
  */
 const imageSelect = async () => {
   const images = await docker.image.list()
+  if(!images.length) return
+
   const items = images.map(img => `${img.rootId} | ${ img.repository } | ${ img.id }`)
   const index = await ask.promptList(
     items,

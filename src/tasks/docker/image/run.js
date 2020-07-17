@@ -70,6 +70,13 @@ const getImageData = async args => {
 
 }
 
+/**
+ * Maps the defined ports in the ENVS to -p docker argument
+ * <br/>This allows those ports to be exposed outside the container
+ * @param {Object} envs - Defined environment variables for the container
+ *
+ * @returns {Array} - ENV ports in docker argument format
+ */
 const addExposedPorts = envs => {
   return Object.keys(envs).reduce((ports, key) => {
     return key.includes('_PORT')

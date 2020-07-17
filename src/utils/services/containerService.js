@@ -4,6 +4,7 @@ const { spawnCmd } = require('KegProc')
 const { logVirtualUrl } = require('KegUtils/log')
 const { buildDockerCmd } = require('../docker/buildDockerCmd')
 const { getGitPath } = require('../git/getGitPath')
+const { getServiceArgs } = require('./getServiceArgs')
 
 /**
  * Starts a docker container for a tap
@@ -16,9 +17,12 @@ const { getGitPath } = require('../git/getGitPath')
  *
  * @returns {void}
  */
-const containerService = ({ globalConfig, params }, { context, container, tap, location }) => {
+const containerService = (args, argsExt) => {
 
-  const { env, docker, mounts } = params
+  // Build the service arguments
+  const { globalConfig, params } = getServiceArgs(args, argsExt)
+  const { context, container, env, docker, location, mounts, tap, } = params
+
   const containerCaps = container.toUpperCase()
   location = location || getGitPath(container, tap)
   

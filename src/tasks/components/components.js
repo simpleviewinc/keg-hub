@@ -27,6 +27,7 @@ module.exports = {
       ...require('./attach'),
       ...require('./build'),
       ...require('./destroy'),
+      ...require('./stop'),
       ...require('./start'),
       ...require('./storybook'),
       ...require('./sync'),

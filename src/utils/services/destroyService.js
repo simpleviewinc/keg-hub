@@ -12,7 +12,6 @@ const { getServiceArgs } = require('./getServiceArgs')
  * @returns {void}
  */
 const destroyService = async (args, argsExt) => {
-  Logger.empty()
 
   // build the internal arguments
   const serviceArgs = getServiceArgs(args, argsExt)

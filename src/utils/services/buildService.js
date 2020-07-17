@@ -3,6 +3,7 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { buildBaseImg } = require('../builders/buildBaseImg')
 const { checkBuildImage } = require('../docker/checkBuildImage')
+const { getServiceArgs } = require('./getServiceArgs')
 
 /**
  * Checks and builds the required images to run the other services
@@ -10,21 +11,22 @@ const { checkBuildImage } = require('../docker/checkBuildImage')
  *
  * @returns {void}
  */
-const buildService = async (args, { context, container, image, tap }) => {
+const buildService = async (args, argsExt) => {
+
+  const serviceArgs = getServiceArgs(args, argsExt)
+  const { params } = serviceArgs
+  const { build, context, container, ensure, log, service, tap } = params
 
   // Ensure the image name exists. If no image, use container name
-  image = image || container
-
-  const { params } = args
-  const { build, ensure, log, service } = params
+  image = params.image || container
 
   // Check if the base image exists, and if not then build it
   log && Logger.info(`Checking base docker image...`)
-  ensure && await buildBaseImg(args)
+  ensure && await buildBaseImg(serviceArgs)
 
   // Check if we should build the container image first
   log && Logger.info(`Checking core docker image...`)
-  ;(ensure || build) && await checkBuildImage(args, context, image, tap)
+  ;(ensure || build) && await checkBuildImage(serviceArgs, context, image, tap)
 
   return true
 

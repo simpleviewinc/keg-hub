@@ -7,7 +7,6 @@ const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { getPortMap } = require('KegUtils/docker/getDockerArgs')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
-const { convertParamsToEnvs } = require('KegUtils/task/convertParamsToEnvs')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 const { PACKAGE } = CONTAINER_PREFIXES
@@ -48,13 +47,13 @@ const checkExists = async container => {
  */
 const dockerPackageRun = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { context, cleanup, package, provider, repo, user, version } = params
+  const { command, context, cleanup, package, provider, repo, user, version } = params
+  const isInjected = params.__injected ? true : false
 
   // TODO: Add check, if a context is provided, and no package
   // Then use the package utils to get a list of all packages for that context
   // Allow the user to select a package from the list
   // Or if a package is provided, build the packageUrl url
-
 
   /*
   * ----------- Step 1 ----------- *
@@ -81,18 +80,15 @@ const dockerPackageRun = async args => {
     provider: true
   })
 
-
   /*
   * ----------- Step 3 ----------- *
   * Build the container context information
   */
   const { cmdContext, contextEnvs, location } = await buildContainerContext({
+    task,
     globalConfig,
-    params: { ...params, context: parsed.image },
-    // Need to add our packaged repo to the allow options so we can run it
-    task: deepMerge(task, { options: { context: { allowed: [ parsed.image ] } } }),
+    params: { ...params, context: isInjected ? context : parsed.image },
   })
-
 
   /*
   * ----------- Step 4 ----------- *
@@ -102,21 +98,29 @@ const dockerPackageRun = async args => {
   const exists = await checkExists(containerName)
   if(exists) return Logger.info(`Exiting "package run" task!`)
 
-
   /*
   * ----------- Step 5 ----------- *
   * Run the image in a container without mounting any volumes
   */
   const opts = [ `-it`, getPortMap('', cmdContext) ]
   cleanup && opts.push(`--rm`)
-  await docker.image.run({
-    ...parsed,
-    opts,
-    location,
-    envs: convertParamsToEnvs(params, contextEnvs),
-    cmd: `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`,
-    name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
-  })
+  const defCmd = `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
+
+  try {
+    await docker.image.run({
+      ...parsed,
+      opts,
+      location,
+      envs: contextEnvs,
+      name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
+      cmd: isInjected ? command : defCmd,
+      overrideDockerfileCmd: Boolean(!isInjected || command),
+    })
+  }
+  catch(err){
+    Logger.error(err.stack)
+    process.exit(1)
+  }
 
 }
 
@@ -139,7 +143,6 @@ module.exports = {
         alias: [ 'cmd' ],
         description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',
         example: 'keg docker package run --command dev ( Runs "yarn dev" )',
-        default: 'web'
       },
       branch: {
         description: 'Name of branch name that exists as the image name',

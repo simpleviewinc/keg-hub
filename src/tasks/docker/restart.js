@@ -68,7 +68,7 @@ module.exports = {
     action: dockerRestart,
     description: `Restarts a docker container`,
     example: 'keg docker restart <options>',
-    location_context: DOCKER.LOCATION_CONTEXT.REPO,
+    locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
       context: {
         description: 'Context, name, or Id of the docker container to restart',

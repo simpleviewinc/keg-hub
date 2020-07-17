@@ -226,7 +226,7 @@ const runImage = async (args) => {
     log,
     name,
     opts=[],
-    overrideCmd=true,
+    overrideDockerfileCmd=true,
     tag
   } = args
 
@@ -243,7 +243,7 @@ const runImage = async (args) => {
   cmdToRun = toContainerEnvs(envs, cmdToRun)
   
   // Get the container run command
-  const containerCmd = overrideCmd && (entry || '/bin/sh') || ''
+  const containerCmd = overrideDockerfileCmd && (entry || '/bin/sh') || ''
 
   // Set / overwrite the entry for the container
   cmdToRun = `${ cmdToRun } ${ names.image } ${ containerCmd }`.trim()

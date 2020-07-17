@@ -7,6 +7,7 @@ module.exports = {
     example: 'keg git remote <options>',
     tasks: {
       ...require('./add'),
+      ...require('./list'),
       ...require('./remove'),
     }
   }

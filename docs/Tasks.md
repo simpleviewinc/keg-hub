@@ -11,7 +11,7 @@
     example: String,
     action: Function,
     description: String,
-    location_context: String,
+    locationContext: String,
   }
   ```
 **Key Descriptions**
@@ -23,7 +23,7 @@
     * See the [terminal documentation](../utils/terminal.md)
 * `options` - Allowed options of the task
   * See options model below for more information
-* `location_context` - **Docker Tasks Only** - Location a docker command should be run from
+* `locationContext` - **Docker Tasks Only** - Location a docker command should be run from
   * `docker-compose` - Commands should be run from the `keg-containers` folder
   * `docker` - 
 * `action` - Function to run for the task **Required**

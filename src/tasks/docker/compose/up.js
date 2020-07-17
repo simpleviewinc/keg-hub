@@ -4,7 +4,6 @@ const { spawnCmd } = require('KegProc')
 const { logVirtualUrl } = require('KegUtils/log')
 const { get, checkCall } = require('@ltipton/jsutils')
 const { buildComposeCmd } = require('KegUtils/docker')
-const { convertParamsToEnvs } = require('KegUtils/task/convertParamsToEnvs')
 const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
 const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
 
@@ -55,7 +54,7 @@ const composeUp = async args => {
   // Run the docker-compose up command
   await spawnCmd(
     `${dockerCmd} ${ contextEnvs.IMAGE }`,
-    { options: { env: convertParamsToEnvs(params, contextEnvs) }},
+    { options: { env: contextEnvs }},
     location,
     !Boolean(__internal),
   )

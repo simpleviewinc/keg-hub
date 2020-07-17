@@ -1,4 +1,5 @@
 const { runInternalTask } = require('../task/runInternalTask')
+const { getServiceArgs } = require('./getServiceArgs')
 
 /**
  * Calls the mutagen create task internally
@@ -8,20 +9,9 @@ const { runInternalTask } = require('../task/runInternalTask')
  *
  * @returns {*} - Response from the mutagen create task
  */
-const mutagenService = async (args, { context, tap, containerContext }) => {
-  const { params } = args
-
+const mutagenService = async (args, argsExt) => {
   // Create the mutagen sync
-  return runInternalTask('mutagen.tasks.create', {
-    ...args,
-    ...(containerContext && { __internal: { containerContext, skipExists: true } }),
-    params: {
-      ...params,
-      tap: tap || params.tap,
-      context: context || params.context,
-    },
-  })
-
+  return runInternalTask('mutagen.tasks.create', getServiceArgs(args, argsExt))
 }
 
 module.exports = {

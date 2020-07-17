@@ -36,7 +36,6 @@
       * Use this find the correct package after the have been pulled from github
 
 ### TODO: 
-  * keg config sync should also sync default.env file
   * compose service should check if an existing compose service is already running
     * If it is, ask the user if if should be destroyed
       * Can not run two compose services at once 
@@ -50,6 +49,4 @@
   * Add tags to tap docker images
     * This will allow us to see if the image for that tap exists or not
   * Look into building tap images without the name tap
-  * Load a containers for form a linked taps directory
-    * This will allow for dynamic docker setups, while still using the keg
 

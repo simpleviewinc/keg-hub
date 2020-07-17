@@ -1,3 +1,4 @@
+const { DOCKER } = require('KegConst/docker')
 const {
   containerService,
   serviceOptions,
@@ -30,6 +31,8 @@ module.exports = {
     name: 'start',
     alias: [ 'st', 'run' ],
     action: startTap,
+    inject: true,
+    locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Runs a tap in a docker container`,
     example: 'keg tap start <options>',
     options: serviceOptions('tap', 'start', {

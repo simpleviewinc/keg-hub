@@ -12,6 +12,16 @@ const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
  */
 const ensureGit = cmd => cmd.trim().indexOf('git') === 0 ? cmd : `git ${cmd}`
 
+
+/**
+ * Ensures git is added to the passed in cmd, and executes the command
+ * @function
+ * @param {string} cmd - Git command to be run
+ *
+ * @returns {string} - Response from the git cli command
+ */
+const gitCmd = (cmd, cmdOpts) => spawnCmd(ensureGit(cmd), cmdOpts)
+
 /**
  * Calls the git cli from the command line and returns the response
  * @function
@@ -94,5 +104,6 @@ const cliError = (error, skip=false) => {
 
 module.exports = {
   gitCli,
+  gitCmd,
   raw,
 }

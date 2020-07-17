@@ -87,6 +87,7 @@ module.exports = {
       ...require('./restart'),
       ...require('./run'),
       ...require('./test'),
+      ...require('./volume'),
     },
     action: dockerTask,
     description: 'Keg Docker specific tasks',

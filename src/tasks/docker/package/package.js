@@ -86,7 +86,6 @@ const dockerPackage = async args => {
     params,
   })
 
-
   const useAuthor = getAuthor(globalConfig, author)
 
   const currentBranch = tag || await getCommitTag(location)
@@ -138,6 +137,8 @@ const dockerPackage = async args => {
   Logger.success(`  Finished pushing docker image "${ imgTag }" to provider!`)
   Logger.empty()
 
+  return true
+
 }
 
 module.exports = {
@@ -147,7 +148,7 @@ module.exports = {
     action: dockerPackage,
     description: `Packages a docker container for deploying to a docker provider`,
     example: 'keg docker package <options>',
-    location_context: DOCKER.LOCATION_CONTEXT.REPO,
+    locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     tasks: {
       ...require('./run'),
     },

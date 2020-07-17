@@ -12,7 +12,10 @@ const getOrBuildImage = async args => {
     ? runInternalTask('tasks.docker.tasks.build', { ...args, command: 'build' })
     : runInternalTask('tasks.docker.tasks.image.tasks.get', {
         ...args,
-        __skipLog: true,
+        __internal: {
+          ...args.__internal,
+          skipLog: true,
+        },
         command: 'get'
       })
 }

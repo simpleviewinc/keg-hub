@@ -64,17 +64,17 @@ const filterBypass = (logs, data) => {
  */
 const handleLog = (eventCb, type, loading, logs, data, procId) => {
   try {
-    const shouldFilter = loading.active
+    const shouldFilter = loading && loading.active
       ? filterBypass(logs, data)
       : filterLog(logs, data)
 
-    loading.active && loading.progress(shouldFilter && 1, data)
+    loading && loading.active && loading.progress(shouldFilter && 1, data)
 
     return !shouldFilter
       ? isFunc(eventCb)
         ? eventCb(data, procId)
         : checkCall(() => {
-          loading.active
+          loading && loading.active
             ? noBypassLog(logs, data)
             : process[type] && process[type].write(data)
         })
@@ -99,7 +99,7 @@ const handleLog = (eventCb, type, loading, logs, data, procId) => {
  */
 const handleExit = (config, loading) => {
   return (...args) => {
-    isFunc(loading.loader.stop) && loading.loader.stop()
+    loading && isFunc(loading.loader.stop) && loading.loader.stop()
     return checkCall(config.onExit, ...args)
   }
 }
@@ -118,7 +118,7 @@ const buildEvents = (config={}, logs, loadingConf) => {
   // If filter set to true, or there's no event callbacks, just return empty
   if(filter !== true && (!onStdOut && !onStdErr)) return {}
 
-  loading = new Loading({}, loadingConf)
+  loading = loadingConf && new Loading({}, loadingConf)
 
   // Create event handler callbacks
   return {

@@ -9,7 +9,6 @@ const { get, checkCall, limbo } = require('@ltipton/jsutils')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { convertParamsToEnvs } = require('KegUtils/task/convertParamsToEnvs')
 
 
 /**

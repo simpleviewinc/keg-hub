@@ -67,7 +67,7 @@ module.exports = {
     action: dockerRun,
     description: `Runs docker run command for a container`,
     example: 'keg docker run <options>',
-    location_context: DOCKER.LOCATION_CONTEXT.REPO,
+    locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     options: {
       context: {
         allowed: DOCKER.IMAGES,

@@ -7,26 +7,6 @@ const { getTapPath } = require('KegUtils/globalConfig/getTapPath')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
 
 /**
- * Checks if there is a container folder in the tap
- * <br/>Then checks if it has the correct files needed to build tap
- * <br/>If it does, then uses that container folder over the keg-cli default
- * @function
- * @param {Object} tapPath - Local path to the tap
- *
- * @returns {Object} - ENVs for the context, with the KEG_CONTEXT_PATH added if needed
- */
-const checkTapContainer = async tapPath => {
-  const [ err, rep ] =  await stat(path.join(tapPath, 'container'))
-
-  err && generalError(err.message)
-
-  if(!rep) return rep
-
-  // TODO: Update to pull in file data from the tapPath/container folder
-
-}
-
-/**
  * Checks if the context is tap, and gets the Tap path if needed
  * @function
  * @param {Object} globalConfig - Global config object for the keg-cli
@@ -49,9 +29,7 @@ const buildTapContext = async ({ globalConfig, cmdContext, tap, envs }) => {
   )
 
   const tapPath = getTapPath(globalConfig, tap)
-  
-  // await checkTapContainer(tapPath)
-  
+
   const tapUrl = tapPath && await getRemoteUrl(tapPath)
 
   return !tapPath

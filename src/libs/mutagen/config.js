@@ -24,7 +24,7 @@ const buildPath = ({ configFolder }, name) => {
 const configDefs = {
   defaultFileMode: '0644',
   defaultDirectoryMode: '0755',
-  syncMode: `two-way-resolved`,
+  syncMode: `one-way-replica`,
   ignoreVcs: true,
   ignore: {
     paths: [

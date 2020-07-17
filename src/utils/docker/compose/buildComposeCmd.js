@@ -21,9 +21,9 @@ const composeArgs = {
  */
 const addComposeFile = (dockerCmd='', container, ENV, composeFile) => {
   const compPath = composeFile || get(CONTAINERS, `${ container }.ENV.${ ENV }`)
-  const addComposeFile = compPath ? `-f ${ compPath }` : ''
+  const addedComposeFile = compPath ? `-f ${ compPath }` : ''
 
-  return `${dockerCmd} ${addComposeFile}`.trim()
+  return `${dockerCmd} ${ addedComposeFile }`.trim()
 }
 
 /**
@@ -34,12 +34,16 @@ const addComposeFile = (dockerCmd='', container, ENV, composeFile) => {
  *
  * @returns {string} - dockerCmd string with the file paths added
  */
-const addComposeFiles = (dockerCmd, context='') => {
+const addComposeFiles = (dockerCmd, context='', __injected={}) => {
+
   const container = context.toUpperCase()
 
-  // Get the default docker compose file
-  dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_DEFAULT`)
-  
+  // Check if the compose file path has been injected
+  // Or get the default docker compose file
+  dockerCmd = __injected.composePath
+    ? addComposeFile(dockerCmd, container, ``, __injected.composePath )
+    : addComposeFile(dockerCmd, container, `KEG_COMPOSE_DEFAULT`)
+
   // Get the docker compose file from the repo
   dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_REPO`)
 
@@ -115,11 +119,11 @@ const getDownArgs = (dockerCmd, remove) => {
  *
  * @returns {string} - Built docker command
  */
-const buildComposeCmd = async (globalConfig, cmd, cmdContext, params) => {
+const buildComposeCmd = async (globalConfig, cmd, cmdContext, params={}) => {
   const { attach, build, remove } = params
 
   let dockerCmd = `docker-compose`
-  dockerCmd = addComposeFiles(dockerCmd, cmdContext)
+  dockerCmd = addComposeFiles(dockerCmd, cmdContext, params.__injected)
   dockerCmd = `${dockerCmd} ${cmd}`
   
   if(cmd === 'up')  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))

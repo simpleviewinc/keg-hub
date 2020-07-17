@@ -1,28 +1,7 @@
 const { checkCall, isStr } = require('@ltipton/jsutils')
 const { gitCli } = require('./commands')
-const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
+const { formatRemotes } = require('./helpers')
 
-/**
- * Formats the gitCli response for remotes into a json object
- * @function
- * @param {string|Array} remotes - text response from the gitCli
- *
- * @returns {Array} - Formatted remote objects
- */
-const formatRemotes = (remotes='') => {
-  const lines = isStr(remotes)
-    ? remotes.split(NEWLINES_MATCH)
-    : remotes
-
-  return lines.reduce((mapped, line) => {
-    return !line.trim()
-      ? mapped
-      : mapped.concat(checkCall(() => {
-          const [ name, url ] = line.split(WHITESPACE_MATCH)
-          return { name, url }
-        }))
-  }, [])
-}
 
 class Remote {
 
@@ -31,23 +10,36 @@ class Remote {
     this.options = options
   }
 
+  add = async () => {
+    
+  }
+
   /**
   * Formats the gitCli response for remotes into a json object
   * @memberof Remote
   * @function
-  * @param {string} location - 
-  * @param {object} options
-  * @param {object} cmdOpts 
+  * @param {string} location - Location of the repo to get the remotes of
+  * @param {object} options - extra git cli options for git remote command
+  * @param {object} cmdOpts - Options to pass the child process
   * 
   * @returns {Promise<Array>} - Formatted remote objects
   */
   list = async (location, options, cmdOpts) => {
     const data = await gitCli({
-      opts: [ 'git', 'remote', '-v' ],
+      opts: 'remote -v',
       ...options,
     }, cmdOpts, location)
 
     return formatRemotes(data)
+  }
+
+  prune = async () => {
+    
+  }
+
+
+  remove = async () => {
+    
   }
 
 

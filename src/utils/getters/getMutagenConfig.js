@@ -5,6 +5,12 @@ const { tryCatch } = require('../helpers')
 const { get, deepMerge, isStr, styleCase, checkCall } = require('@ltipton/jsutils')
 const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
 
+/**
+ * Parses the passed in options and converts them into an object format mutagen lib can handle
+ * @param {String} options - Stringified version of mutagen sync options
+ *
+ * @returns {Object} - Parsed mutagen options object
+ */
 const parseOptions = (options={}) => {
   if(!options || !isStr(options)) return options
   
@@ -34,8 +40,12 @@ const parseOptions = (options={}) => {
  *
  * @returns {Object} - Loaded mutagen config file
  */
-const getMutagenConfig = (context, service, overrides={}, options) => tryCatch(async () => {
-  const ymlConfig = await yml.load(path.join(CONTAINERS_PATH, context, 'mutagen.yml'))
+const getMutagenConfig = (params) => tryCatch(async () => {
+  const { context, service, overrides={}, options, __injected } = params
+
+  const ymlConfig = __injected && __injected.mutagenPath || await yml.load(
+    path.join(CONTAINERS_PATH, context, 'mutagen.yml')
+  )
 
   const config = get(ymlConfig, `sync.${ service }`, {})
 

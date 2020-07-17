@@ -1,6 +1,7 @@
 const { Logger } = require('KegLog')
 const { get } = require('@ltipton/jsutils')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Start a tap with docker-compose
@@ -15,7 +16,10 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const restartTap = async args => {
   return runInternalTask('docker.tasks.compose.tasks.restart', {
     ...args,
-    params: { ...args.params, context: 'tap' },
+    params: {
+      context: 'tap',
+      ...args.params,
+    },
   })
 }
 
@@ -23,7 +27,9 @@ module.exports = {
   restart: {
     name: 'restart',
     alias: [ 'rest', 'rerun', 'rr', 'rst' ],
+    inject: true,
     action: restartTap,
+    locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Runs a tap in a docker container`,
     example: 'keg tap start <options>',
     options: {

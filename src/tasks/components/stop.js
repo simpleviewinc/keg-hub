@@ -10,7 +10,7 @@ const { stopService } = require('KegUtils/services')
  *
  * @returns {void}
  */
-const stopCore = async (args) => {
+const stopComponents = async (args) => {
   return stopService(args, { context: 'components', container: 'keg-components' })
 }
 
@@ -19,7 +19,7 @@ module.exports = {
   stop: {
     name: 'stop',
     alias: [ 'stp', 'halt', 'hlt' ],
-    action: stopCore,
+    action: stopComponents,
     description: `Stops keg-components containers and syncs`,
     example: 'keg components stop',
   }
