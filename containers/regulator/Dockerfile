@@ -1,6 +1,9 @@
 # Allows overwriting where the base image is pulled from
 # Must come before the FROM directive
+ARG KEG_NODE_VERSION
+ARG GIT_STAGE_IMAGE_FROM=node:$KEG_NODE_VERSION
 ARG KEG_IMAGE_FROM=keg-base:latest
+
 FROM $KEG_IMAGE_FROM as builder
 
 WORKDIR /
@@ -56,7 +59,7 @@ RUN cd $DOC_APP_PATH; \
 
 # Use a multi stage build for security
 # This is so GIT_KEY is not accessable in the final image
-FROM node:12.8-alpine
+FROM $GIT_STAGE_IMAGE_FROM as gitBuilder
 WORKDIR /
 
 # Path of the app within the docker container
