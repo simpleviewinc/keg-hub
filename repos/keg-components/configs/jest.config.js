@@ -33,6 +33,7 @@ const assetStubs = [
 const transpileForTests = [
   'react-native',
   '@expo/vector-icons',
+  '@unimodules/.*',
   'expo-font'
 ].join('|')
 

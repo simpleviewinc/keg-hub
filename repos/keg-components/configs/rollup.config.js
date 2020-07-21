@@ -66,12 +66,12 @@ export default Array
       {
         file: `./build/cjs/kegComponents.${platform}.js`,
         format: 'cjs',
-        sourcemaps: true
+        sourcemap: true
       },
       {
         file: `./build/esm/kegComponents.${platform}.js`,
         format: 'esm',
-        sourcemaps: true
+        sourcemap: true
       },
     ],
     plugins: [
