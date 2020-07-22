@@ -33,9 +33,9 @@ module.exports = {
     example: 'keg config editor <options>',
     options: {
       command: {
+        alias: [ 'cmd' ],
         description: 'command that is executed to open the editor!',
         example: 'keg config editor command=code',
-        alias: [ 'cmd' ],
         required: true
       }
     }

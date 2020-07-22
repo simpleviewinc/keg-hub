@@ -12,21 +12,23 @@ const { containerSelect } = require('KegUtils/docker/containerSelect')
  *
  * @returns {Object} - context, and container to exec
  */
-const ensureContext = async ({ context, tap, __injected={} }) => {
+const ensureContext = async ({ context, tap, __injected={} }, { containerContext={} }) => {
 
   // Check if the name already exists from an injected app
   const injectedName = __injected.container || __injected.image
 
   // Get the container / image from the context
-  const name = injectedName
-    ? injectedName
-    : context === 'tap'
-      ? 'tap'
-      : !context
-        ? false
-        : context.includes('keg')
-          ? context
-          : `keg-${context}`
+  const name = containerContext.id
+    ? containerContext.id
+      : injectedName
+      ? injectedName
+      : context === 'tap'
+        ? 'tap'
+        : !context
+          ? false
+          : context.includes('keg')
+            ? context
+            : `keg-${context}`
 
   // Try to get the container from the context
   let container = name && await docker.container.get(name)
@@ -55,9 +57,10 @@ const ensureContext = async ({ context, tap, __injected={} }) => {
  * @returns {void}
  */
 const dockerExec = async args => {
-  const { params, globalConfig, task, command } = args
+  const { params, globalConfig, task, command, __internal={} } = args
   const { cmd, options } = params
-  const { context, container } = await ensureContext(params)
+
+  const { context, container } = await ensureContext(params, __internal)
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
@@ -70,7 +73,12 @@ const dockerExec = async args => {
     prefix,
     tap,
     image
-  } = await buildContainerContext({ globalConfig, task, params: { ...params, context } })
+  } = await buildContainerContext({
+    task,
+    __internal,
+    globalConfig,
+    params: { ...params, context }
+  })
 
   // Get the name of the container to exec
   const containerName = container && container.name || prefix || image
@@ -99,9 +107,10 @@ module.exports = {
         enforced: true,
       },
       cmd: {
-        description: 'Docker container command to run. Default ( /bin/sh )',
-        example: 'keg docker exec ls -ls',
-        default: 'sh'
+        alias: [ 'entry', 'command' ],
+        description: 'Docker container command to run. Default ( /bin/bash )',
+        example: 'keg docker cmd ls -ls',
+        default: '/bin/bash'
       },
       options: {
         alias: [ 'opts' ],

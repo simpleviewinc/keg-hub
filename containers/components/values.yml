@@ -9,6 +9,8 @@ env:
 
   KEG_DOCKER_FILE: "{{ cli.paths.containers }}/components/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.paths.containers }}/components/values.yml"
+  KEG_MUTAGEN_PATH: "{{ cli.paths.containers }}/components/mutagen.yml"
+  
   # The default docker-compose file path
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/components/docker-compose.yml"
   # Can also define other an override compose files

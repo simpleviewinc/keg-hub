@@ -1,9 +1,5 @@
 const { DOCKER } = require('KegConst/docker')
-const {
-  containerService,
-  serviceOptions,
-  startService,
-} = require('KegUtils/services')
+const { serviceOptions, startService } = require('KegUtils/services')
 
 /**
  * Start a tap with docker-compose
@@ -16,20 +12,19 @@ const {
  * @returns {void}
  */
 const startTap = async (args) => {
-  const { params: { service, tap, build } } = args
+  const { params: { tap } } = args
 
-  // Check and run the correct service
-  const serviceResp = service === 'container'
-    ? await containerService(args, { context: 'tap', container: 'tap', tap })
-    : await startService(args, { context: 'tap', container: 'tap', tap })
-
-  return serviceResp
+  return startService(args, {
+    tap,
+    context: 'tap',
+    container: 'tap',
+  })
 
 }
 module.exports = {
   start: {
     name: 'start',
-    alias: [ 'st', 'run' ],
+    alias: [ 'st' ],
     action: startTap,
     inject: true,
     locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,

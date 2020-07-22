@@ -30,6 +30,7 @@
       }
     },
     "settings": {
+      "defaultEnv": "development",
       "docker": {
         "preConfirm": true,
         "buildKit": true,

@@ -1,7 +1,7 @@
 const { throwRequired } = require('../error')
-const { exists, mapEnv } = require('../helpers')
-const { isStr, isBool } = require('@ltipton/jsutils')
-const { BOOL_VALUES } = require('KegConst/constants')
+const { mapEnv } = require('../helpers/mapEnv')
+const { exists, isStr, isBool } = require('@ltipton/jsutils')
+const { BOOL_VALUES, ENV_OPTIONS } = require('KegConst/constants')
 
 const boolOpts = BOOL_VALUES.truthy.concat(BOOL_VALUES.falsy)
 
@@ -73,11 +73,11 @@ const checkContextOption = (task, firstKey, options) => {
  *
  * @returns {*} - The original value or mapped environment value
  */
-const checkEnvKeyValue = (key, value) => {
+const checkEnvKeyValue = (key, value, meta) => {
   // Check if the arg is env, and map it from the env shortcuts
-  return key === 'env' || key === 'environment'
-    ? mapEnv(value)
-    : value
+  return !ENV_OPTIONS.includes(key) 
+    ? value
+    : mapEnv(value, meta)
 }
 
 /**

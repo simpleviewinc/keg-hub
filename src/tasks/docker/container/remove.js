@@ -8,9 +8,32 @@ const { CONTAINERS } = require('KegConst/docker/containers')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
+const { isDockerId } = require('KegUtils/docker/isDockerId')
 
 /**
- * Run a docker container command
+ * Gets the container from a passed in context
+ * @param {Object} context - Context to get the container from
+ *
+ * @returns {void}
+ */
+const getContainerRef = async (context, throwErr) => {
+  // Ensure we have an container to remove by checking for a mapped context, or use original
+  const containerRef = context && getContainerConst(context, `env.image`, context)
+  let container = containerRef && await docker.container.get(containerRef)
+
+  // Use the found container || Ask the user so select the container
+  container = container || await containerSelect(null, throwErr)
+
+  // Return the container meta data
+  // Or if still no container, throw an error
+  return container || (throwErr && generalError(
+    `The docker container with context "${ context }" can not be found!`
+  ))
+
+}
+
+/**
+ * Remove a docker container
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -23,29 +46,24 @@ const removeContainer = async args => {
   const { params, __internal={} } = args
   const { context } = params
 
+  const throwErr = !__internal.skipThrow
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
-  // Ensure we have an container to remove by checking for a mapped context, or use original
-  let containerRef = context && getContainerConst(context, `env.image`)
-  containerRef = containerRef || await containerSelect()
-
-  !containerRef && generalError(`The docker "container remove" command requires a context argument!`)
-
-  // Get the container meta data
-  const container = isStr(containerRef)
-    ? await docker.container.get(containerRef)
-    : containerRef
+  const container = !context
+    ? await containerSelect()
+    : isDockerId(context)
+      ? { id: context }
+      : await getContainerRef(context, throwErr)
 
   // Ensure we have the container meta data, and try to remove by containerId
   // __internal.skipThrow is an internal argument, so it's not documented
   if(!container || !container.id)
-    return __internal.skipThrow !== true &&
-      generalError(`The docker container "${ containerRef }" does not exist!`)
+    return throwErr && generalError(`The docker container "${ containerRef }" can not be found!`)
 
   const res = await docker.container.remove({ item: container.id, force })
 
   // Log the output of the command
-  dockerLog(res, 'container remove')
+  return dockerLog(res, 'container remove')
 
 }
 
@@ -59,7 +77,7 @@ module.exports = {
     options: {
       context: {
         alias: [ 'name' ],
-        description: 'Name of the container to remove',
+        description: 'Name or ID of the container to remove',
         example: 'keg docker container remove --name core',
       },
       force: {

@@ -7,5 +7,5 @@ module.exports = {
   ...require('./buildDockerImage'),
   ...require('./buildDockerLogin'),
   ...require('./buildTapContext'),
-  ...require('./buildTaskAlias'),
+  ...require('./buildTaskData'),
 }

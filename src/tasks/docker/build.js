@@ -44,7 +44,12 @@ const copyLocalPackageJson = async (globalConfig, location) => {
  * @returns {Object} - Build image as a json object
  */
 const dockerBuild = async args => {
-  const { globalConfig, options, params, task, tasks } = args
+  const { globalConfig, options, task, tasks } = args
+
+  // Remove container from the params if it exists
+  // Otherwise it would cause getContext to fail
+  // Because it thinks it needs to ask for the no existent container
+  const { container,  ...params } = args.params
   const { context, core, log } = params
 
   // Ensure we have a content to build the container
@@ -72,7 +77,7 @@ const dockerBuild = async args => {
     context: cmdContext,
     ...(tap && { tap }),
     ...(image && { image }),
-    ...(args && { buildArgs: contextEnvs }),
+    ...(params.args && { buildArgs: contextEnvs }),
   })
 
   Logger.info(`Building docker image "${ image || cmdContext }" ...`)
@@ -102,6 +107,7 @@ module.exports = {
         enforced: true,
       },
       args: {
+        example: 'keg docker build --args false',
         description: 'Add build args from container env files',
         default: true
       },

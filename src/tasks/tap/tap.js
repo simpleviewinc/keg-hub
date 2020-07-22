@@ -33,6 +33,7 @@ module.exports = {
       ...require('./list'),
       ...require('./new'),
       ...require('./package'),
+      ...require('./run'),
       ...require('./restart'),
       ...require('./start'),
       ...require('./stop'),

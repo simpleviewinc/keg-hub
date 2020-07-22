@@ -187,7 +187,7 @@ const exists = async (compare, doCompare) => {
  * Connects to a running container, and runs a command
  * @function
  * @example
- * docker exec -it app /bin/sh
+ * docker exec -it app /bin/bash
  * @param {string} args - Arguments used to connect to the container
  *
  * @returns {void}

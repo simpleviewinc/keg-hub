@@ -2,10 +2,9 @@ const path = require('path')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
-const { buildDockerCmd } = require('KegUtils/docker')
 const { copyFileSync } = require('KegFileSys/fileSys')
-const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 /**
  * Tag options for tag and remove tag tasks

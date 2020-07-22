@@ -99,4 +99,4 @@ WORKDIR /$DOC_APP_PATH
 
 # Run the start script passing in sleep
 # Dont use the array syntax, so we have access to the DOC_CLI_PATH ENV
-CMD /bin/sh $DOC_APP_PATH/run.sh "sleep"
+CMD /bin/bash $DOC_APP_PATH/run.sh "sleep"

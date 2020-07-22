@@ -3,7 +3,6 @@ const containers = require('./containers')
 
 const {
   cliKeyMap,
-  dockerEnv,
   images,
   locationContext,
   mutagenMap,
@@ -15,7 +14,6 @@ const DOCKER = {
   ...require('./volumes'),
   CLI_KEY_MAP: cliKeyMap,
   IMAGES: images,
-  DOCKER_ENV: dockerEnv,
   LOCATION_CONTEXT: locationContext,
   CONTAINERS_PATH: containersPath,
   MUTAGEN_MAP: mutagenMap,

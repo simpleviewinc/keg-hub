@@ -1,4 +1,5 @@
 const docker = require('KegDocCli')
+const { Logger } = require('KegLog')
 const { get } = require('@ltipton/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { getPrefix } = require('../getters/getPrefix')
@@ -45,7 +46,12 @@ const buildContainerContext = async args => {
   // Checks If we already have the containerContext
   const internalContext = get(__internal, 'containerContext')
   const contextObj = internalContext && validateInternal(internalContext, CONTEXT_KEYS)
+
   if(contextObj) return contextObj
+  
+  internalContext &&
+    !contextObj &&
+    Logger.warn(`Found internal container context, but it was invalid!`)
 
   const contextData = await buildCmdContext({
     params,
@@ -56,7 +62,6 @@ const buildContainerContext = async args => {
   })
 
   const { cmdContext, image:img, tap } = contextData
-
   // Get the image name based on the cmdContext if it wasn't found in buildCmdContext
   const image = img || getContainerConst(cmdContext, `env.image`)
 

@@ -56,6 +56,5 @@ RUN if [ "$GIT_KEY" != "INITIAL" ] && [ "$GIT_LETS_ENCRYPT_URL" != "INITIAL" ]; 
     fi
 
 # Add yarn's global bin to path
-RUN echo "export PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin" >> /root/.ashrc
+# RUN echo "export PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin" >> /root/.ashrc
 # Tell the shell to load the shell profile
-ENV ENV="/root/.ashrc"

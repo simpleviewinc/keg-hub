@@ -1,8 +1,11 @@
+const { get } = require('@ltipton/jsutils')
 const { getGitKey } = require('../git/getGitKey')
 const { buildTapContext } = require('./buildTapContext')
 const { getSetting } = require('../globalConfig/getSetting')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { convertParamsToEnvs } = require('../task/convertParamsToEnvs')
+const { getServiceName } = require('../docker/compose/getServiceName')
+const { getKegContext } = require('../getters/getKegContext')
 
 /**
  * Builds the ENVs for the passed in cmdContext
@@ -15,10 +18,14 @@ const { convertParamsToEnvs } = require('../task/convertParamsToEnvs')
  *
  * @returns {Object} - Flat object containing the ENVs for the cmdContext
  */
-const buildContextEnvs = async ({ cmdContext, envs={}, globalConfig, params={}, tap }) => {
+const buildContextEnvs = async (args) => {
+  const { cmdContext, envs={}, globalConfig, params={}, tap } = args
 
   // Get the ENV vars for the command context and merge with any passed in envs
   return {
+
+    // Get the name of the docker-compose service
+    KEG_COMPOSE_SERVICE: await getServiceName({ context: getKegContext(cmdContext) }),
 
     // Get the ENV context for the command
     ...getContainerConst(cmdContext, 'env', {}),

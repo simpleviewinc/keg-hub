@@ -5,6 +5,8 @@ env:
   KEG_CONTEXT_PATH: "{{ cli.paths.proxy }}"
   KEG_DOCKER_FILE: "{{ cli.paths.cli }}/containers/proxy/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.paths.cli }}/containers/proxy/values.yml"
+  KEG_MUTAGEN_PATH: "{{ cli.paths.cli }}/containers/proxy/mutagen.yml"
+
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.cli }}/containers/proxy/docker-compose.yml"
   # Can also define other an override compose files
   # Other compose files can loaded by setting an ENVS as follows:

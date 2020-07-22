@@ -1,6 +1,11 @@
 const { mutagenCli } = require('./commands')
 const { deepMerge, get } = require('@ltipton/jsutils')
-const { buildIgnore, buildMountPath, buildMutagenArgs } = require('./helpers')
+const {
+  buildIgnore,
+  buildMountPath,
+  buildMutagenArgs,
+  cleanPath
+} = require('./helpers')
 
 
 class Sync {
@@ -91,10 +96,11 @@ class Sync {
     const usePaths = Boolean(container && local && remote)
 
     return syncList.find(sync => {
+
       return !usePaths
         ? sync.name === name
-        : get(sync, 'alpha.url') === local &&
-          get(sync, 'beta.url', '').split(container)[1] === remote
+        : cleanPath(get(sync, 'alpha.url', '')) === cleanPath(local) &&
+          cleanPath(get(sync, 'beta.url', '').split(container)[1]) === cleanPath(remote)
     })
 
   }

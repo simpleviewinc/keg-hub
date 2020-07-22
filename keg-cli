@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 require('module-alias/register')
+
+require('KegConst/constants')
 const { get } = require('@ltipton/jsutils')
 
 /**

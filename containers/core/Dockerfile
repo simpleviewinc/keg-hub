@@ -75,7 +75,7 @@ ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 ENV GIT_KEY=""
 
 # Install git for the new stage
-RUN apk add --no-cache git
+RUN apk add --no-cache git bash
 
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
@@ -100,4 +100,4 @@ WORKDIR /$DOC_APP_PATH
 
 # Run the start script
 # Dont use the array syntax, so we have access to the DOC_CLI_PATH ENV
-CMD /bin/sh $DOC_CLI_PATH/containers/core/run.sh
+CMD /bin/bash $DOC_CLI_PATH/containers/core/run.sh

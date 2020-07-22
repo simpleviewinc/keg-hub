@@ -15,18 +15,18 @@ const buildService = async (args, argsExt) => {
 
   const serviceArgs = getServiceArgs(args, argsExt)
   const { params } = serviceArgs
-  const { build, context, container, ensure, log, service, tap } = params
+  const { build, context, container, satisfy, log, service, tap } = params
 
   // Ensure the image name exists. If no image, use container name
   image = params.image || container
 
   // Check if the base image exists, and if not then build it
   log && Logger.info(`Checking base docker image...`)
-  ensure && await buildBaseImg(serviceArgs)
+  satisfy && await buildBaseImg(serviceArgs)
 
   // Check if we should build the container image first
   log && Logger.info(`Checking core docker image...`)
-  ;(ensure || build) && await checkBuildImage(serviceArgs, context, image, tap)
+  ;(satisfy || build) && await checkBuildImage(serviceArgs, context, image, tap)
 
   return true
 

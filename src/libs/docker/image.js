@@ -207,7 +207,7 @@ const clean = async ({ force, opts='', log=false }) => {
  * Runs a built image as a container
  * @function
  * @param {Object} args - Arguments to pass to run the docker run command
- * @param {string} args.entry - Overwrite the default entry of the image
+ * @param {string} args.cmd - Overwrite the default cmd of the image
  * @param {Object} args.envs - Envs to pass to the container when run
  * @param {string|Object} args.image - Image object or image name to be run
  * @param {string} args.location - The location where the docker run command will be executed
@@ -243,10 +243,10 @@ const runImage = async (args) => {
   cmdToRun = toContainerEnvs(envs, cmdToRun)
   
   // Get the container run command
-  const containerCmd = overrideDockerfileCmd && (entry || '/bin/sh') || ''
+  const containerCmd = overrideDockerfileCmd && (entry || '/bin/bash') || ''
 
   // Set / overwrite the entry for the container
-  cmdToRun = `${ cmdToRun } ${ names.image } ${ containerCmd }`.trim()
+  cmdToRun = `${ cmdToRun.trim() } ${ names.image.trim() } ${ containerCmd.trim() }`.trim()
 
   log && Logger.spacedMsg(`  Running command: `, cmdToRun)
 

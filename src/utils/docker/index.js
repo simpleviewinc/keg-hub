@@ -15,4 +15,5 @@ module.exports = {
   ...require('./getOrBuildImage'),
   ...require('./imageSelect'),
   ...require('./isDockerId'),
+  ...require('./mountSocket'),
 }

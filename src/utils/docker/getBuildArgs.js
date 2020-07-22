@@ -3,7 +3,6 @@ const { getGitUrl, getGitKey, getTapPath, exists } = require('KegUtils')
 const { getRemoteUrl } = require('KegUtils/git/getRemoteUrl')
 const docker = require('KegDocCli')
 const { DOCKER } = require('KegConst/docker')
-const { DOCKER_ENV } = DOCKER
 
 /**
  * Adds build args to the a docker the build command
@@ -49,7 +48,7 @@ const getBuildArgs = async (globalConfig, params) => {
         useVal = getGitUrl({ globalConfig, repo: 'components' })
         break
       }
-      case 'GIT_TAP_URL':{
+      case 'GIT_APP_URL':{
         useVal = tapUrl
         break
       }

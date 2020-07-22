@@ -67,9 +67,17 @@ const syncService = async (args, argsExt) => {
   const localPath = getLocalPath(globalConfig, context, local, dependency)
   !localPath && generalError(`Local path could not be found!`)
 
+  // Ensure the path to sync and the context path are not the same
+  // This type of sync gets setup within the start service. We should not create duplicate syncs
   contextPath === localPath && generalError(`Invalid dependency path. The dependency path can not be the same as the context path.\nContext Path: ${ contextPath }\nDependency Path: ${ localPath }`)
 
   const remotePath = getRemotePath(context, dependency, remote)
+
+  const dependencyName = dependency || remotePath
+    .split('/')
+    .pop()
+    .replace('-', '')
+    .replace('_', '')
 
   // Create the mutagen sync
   return runInternalTask('mutagen.tasks.create', {
@@ -81,7 +89,7 @@ const syncService = async (args, argsExt) => {
       container: id,
       local: localPath,
       remote: remotePath,
-      name: `${context}-${ dependency || remotePath.split('/').pop().replace('-', '').replace('_', '') }`
+      name: `${ context }-${ dependencyName }`
     },
   })
 

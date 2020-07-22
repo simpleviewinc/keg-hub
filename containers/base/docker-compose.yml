@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  base:
+  keg-base:
     image: ${IMAGE}
     build:
       context: ${KEG_CONTEXT_PATH}
@@ -44,3 +44,5 @@ services:
       - 8082:8082
       - 8083:8083
       - 60710:60710
+    volumes:
+      - ${KEG_CONFIG_PATH}:/keg/.kegConfig

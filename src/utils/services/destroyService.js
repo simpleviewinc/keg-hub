@@ -3,6 +3,22 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { runInternalTask } = require('../task/runInternalTask')
 const { getServiceArgs } = require('./getServiceArgs')
+const { optionsHasArg } = require('../helpers/optionsHasArg')
+
+/**
+ * Checks if the image option was passed in to remove the image
+ * <br/>If it's found, then call the remove image task
+ * @param {Object} serviceArgs - Merged arguments passed to destroyService
+ *
+ * @returns {void}
+ */
+const checkRemoveImage = serviceArgs => {
+  const { options, params } = serviceArgs
+
+  return !options || !params.image || !optionsHasArg(options, 'image')
+    ? null
+    : runInternalTask('docker.tasks.image.tasks.remove', serviceArgs)
+}
 
 /**
  * Destroys and removes a running docker-compose service
@@ -25,9 +41,8 @@ const destroyService = async (args, argsExt) => {
   // Destroy the docker-container
   await runInternalTask('docker.tasks.container.tasks.remove', serviceArgs)
 
-  // Remove the docker image if image param is passed as true
-  get(args, 'params.image') &&
-    await runInternalTask('docker.tasks.image.tasks.remove', serviceArgs)
+  // Remove the image if option is passed in
+  await checkRemoveImage(serviceArgs)
 
   // Terminate all mutagen sync process for the context type
   await runInternalTask('mutagen.tasks.clean', serviceArgs)

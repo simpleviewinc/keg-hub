@@ -85,7 +85,6 @@ module.exports = {
       ...require('./provider'),
       ...require('./prune'),
       ...require('./restart'),
-      ...require('./run'),
       ...require('./test'),
       ...require('./volume'),
     },

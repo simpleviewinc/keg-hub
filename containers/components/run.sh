@@ -21,6 +21,20 @@ keg_set_container_paths(){
 
 }
 
+# Add .npmrc so node_modules installs does not fail
+keg_add_git_key(){
+  git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/
+  echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc
+  echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc
+}
+
+# Remove .npmrc so git key is not saved
+keg_remove_git_key(){
+  git config --global url.https://github.com/.insteadOf url.https://$GIT_KEY@github.com/
+  rm -rf .npmrc
+}
+
+
 # Runs yarn install at run time
 # Use whnode_modules to keg-components
 keg_run_yarn_install(){
@@ -34,7 +48,9 @@ keg_run_yarn_install(){
   keg_message "Running yarn install for keg-components..."
   keg_message "Switching to keg-components directory..."
   cd $COMPONENTS_PATH
+  keg_add_git_key
   yarn install
+  keg_remove_git_key
 }
 
 # Runs a keg-components repo
@@ -45,7 +61,7 @@ keg_run_components(){
   # Check if no exect command exists, or if it's set to web
   # Then default it to storybook
   if [[ -z "$KEG_EXEC_CMD" || "$KEG_EXEC_CMD" == 'web' ]]; then
-    KEG_EXEC_CMD="storybook"
+    KEG_EXEC_CMD="sb"
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"

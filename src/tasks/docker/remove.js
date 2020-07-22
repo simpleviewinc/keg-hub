@@ -1,8 +1,7 @@
-const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { throwRequired, generalError } = require('KegUtils/error')
-const { buildDockerCmd } = require('KegUtils/docker')
-const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
+const { DOCKER } = require('KegConst/docker')
+const { throwRequired, generalError } = require('KegUtils/error')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 /**
  * Builds a docker container so it can be run

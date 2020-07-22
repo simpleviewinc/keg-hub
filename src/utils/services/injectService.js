@@ -1,8 +1,8 @@
 const path = require('path')
 const { get, isStr } = require('@ltipton/jsutils')
-const { spawnCmd, executeCmd } = require('KegProc')
-const { readDir, pathExists } = require('KegFileSys')
+const { pathExists } = require('KegFileSys')
 const { throwMissingFile } = require('../error/throwMissingFile')
+const { getServiceName } = require('../docker/compose/getServiceName')
 
 /**
  * Checks if the passed in path exists on the local file system
@@ -93,7 +93,7 @@ const checkYmlFile = async (containerPath, fileName) => {
  *
  * @returns {Void}
  */
-const injectData = async ({ app, injectPath }, containerPaths) => {
+const injectData = async ({ app, injectPath }, currentEnv, containerPaths) => {
   const { injectImage } = require('KegConst/docker/values')
   const { injectContainer } = require('KegConst/docker/containers')
 
@@ -101,7 +101,19 @@ const injectData = async ({ app, injectPath }, containerPaths) => {
   injectImage(app)
 
   // Add the app container info to the docker CONTAINERS constants
-  injectContainer(app, containerPaths)
+  injectContainer(app, currentEnv, {
+    ...containerPaths,
+    // Add the KEG ENVS for the correct paths when running docker commands
+    ENVS: {
+      KEG_CONTEXT_PATH: injectPath,
+      KEG_CONTAINER_PATH: containerPaths.containerPath,
+      KEG_MUTAGEN_PATH: containerPaths.mutagenPath,
+      KEG_DOCKER_FILE: containerPaths.dockerPath,
+      KEG_VALUES_FILE: containerPaths.valuesPath,
+      KEG_COMPOSE_DEFAULT: containerPaths.composePath,
+      KEG_COMPOSE_SERVICE: containerPaths.serviceName,
+    }
+  })
 
 }
 
@@ -147,6 +159,9 @@ const checkContainerPaths = async (app, injectPath) => {
   const composePath = await checkYmlFile(containerPath, 'docker-compose')
   !composePath && throwMissingFile(app, containerPath, `docker-compose.yml`)
 
+  // Get the service name from the docker compose file
+  const serviceName = await getServiceName({ composePath })
+
   // Check if there is a values file at in the app container folder
   const valuesPath = await checkYmlFile(containerPath, 'values')
   !valuesPath && throwMissingFile(app, containerPath, `values.yml`)
@@ -154,13 +169,18 @@ const checkContainerPaths = async (app, injectPath) => {
   // Get the mutagen config path. If not config, it uses the taps mutagen config
   const mutagenPath = await getMutagenPath(containerPath)
 
+  // TODO: get .envs path
+  // const envsPath = await getEnvsPath(containerPath)
+
   // If we get to here, all files exist, so return the paths object
   return {
+    serviceName,
     valuesPath,
     dockerPath,
     mutagenPath,
     composePath,
     containerPath,
+    injectPath,
   }
 
 }
@@ -173,7 +193,7 @@ const checkContainerPaths = async (app, injectPath) => {
  *
  * @returns {Object} - Extra params to be added to the tasksData's params object
  */
-const buildOverrideParams = (app, taskOptions) => {
+const buildOverrideParams = (app, taskOptions, serviceName) => {
   const { CONTAINERS } = require('KegConst/docker/containers')
 
   const injectedEnv = get(CONTAINERS, `${ app.toUpperCase() }.ENV`, {})
@@ -181,15 +201,17 @@ const buildOverrideParams = (app, taskOptions) => {
   const container = (isStr(injectedEnv.CONTAINER_NAME) && injectedEnv.CONTAINER_NAME) || image
 
   return {
-    ...(taskOptions.image && { image }),
-    ...(taskOptions.container && { container }),
+    serviceName,
     tap: app,
     context: app,
+    ...(taskOptions.image && { image }),
+    ...(taskOptions.container && { container }),
     __injected: {
-      tap: app,
-      context: app,
       image,
       container,
+      serviceName,
+      tap: app,
+      context: app,
     }
   }
 }
@@ -205,12 +227,11 @@ const buildOverrideParams = (app, taskOptions) => {
  *
  * @returns {Object} - taskData object with the injected location context for the app
  */
-const buildInjectedParams = ({ app, taskData, injectPath }, containerPaths) => {
+const buildInjectedParams = async ({ app, taskData, injectPath }, containerPaths) => {
   // Get the tasks location context
   const taskLocContext = get(taskData, 'task.locationContext')
   // Get the locationContext values
   const { locationContext:locContext } = require('KegConst/docker/values')
-  
   // Build and add image / container name params
   const injectedParams = buildOverrideParams(app, get(taskData, 'task.options'))
 
@@ -238,18 +259,19 @@ const buildInjectedParams = ({ app, taskData, injectPath }, containerPaths) => {
  * Injects the passed in app params into the DOCKER constants
  * <br/>This allows linked app to define their own container folders outside of the Keg-Cli
  * @function
- * @param {string} params.app - Name of the app to inject
- * @param {string} params.injectPath - Local path to the app to be injected
- * @param {Object} - params.taskData used to run the task defined from the command line
+ * @param {string} args.app - Name of the app to inject
+ * @param {string} args.injectPath - Local path to the app to be injected
+ * @param {Object} - args.taskData used to run the task defined from the command line
  *
  * @returns {Object} - Updated taskData used to run the task defined from the command line
  */
-const injectService = async params => {
+const injectService = async args => {
 
   // If the task does no allow injections, then just return
-  if(!get(params, 'taskData.task.inject')) return params.taskData
+  if(!get(args, 'taskData.task.inject')) return args.taskData
 
-  const { app, injectPath, taskData } = params
+  const { app, injectPath, taskData } = args
+  const { params: { env } } = taskData
 
   // Get the container paths for the app
   const containerPaths = await checkContainerPaths(app, injectPath)
@@ -259,10 +281,10 @@ const injectService = async params => {
   if(!containerPaths) return taskData
 
   // Inject the app and it's paths into the docker constants
-  await injectData(params, containerPaths)
+  await injectData(args, env, containerPaths)
 
   // Set the context for where the docker command should be run from
-  return buildInjectedParams(params, containerPaths)
+  return buildInjectedParams(args, containerPaths)
 
 }
 

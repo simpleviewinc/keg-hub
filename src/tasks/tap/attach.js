@@ -33,9 +33,9 @@ module.exports = {
     example: 'keg tap attach',
     options: {
       cmd: {
-        description: 'Docker container command to run. Default ( /bin/sh )',
+        description: 'Docker container command to run. Default ( /bin/bash )',
         example: 'keg tap att --cmd test',
-        default: 'sh'
+        default: 'bash'
       },
       options: {
         alias: [ 'opts' ],

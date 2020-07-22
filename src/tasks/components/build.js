@@ -36,10 +36,10 @@ module.exports = {
     description: `Builds the keg-core docker container`,
     example: 'keg components build <options>',
     options: {
-      envs: {
+      args: {
         description: 'Add build args from container env files',
-        example: `keg components build --envs`,
-        default: false
+        example: `keg components build --args false`,
+        default: true
       },
       cache: {
         description: 'Docker will use build cache when building the image',

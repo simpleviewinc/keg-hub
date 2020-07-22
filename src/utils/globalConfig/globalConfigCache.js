@@ -12,6 +12,8 @@ let __GLOBAL_CONFIG
  *
  * @returns {void}
  */
+// TODO: Might need to loop and update paths when running keg-cli in a docker container
+// The cli.paths will based on the users local paths; not the docker containers paths
 const __updateGlobalConfig = updatedConfig => updatedConfig && (__GLOBAL_CONFIG = updatedConfig)
 
 /**

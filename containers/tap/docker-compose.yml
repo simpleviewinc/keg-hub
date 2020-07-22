@@ -9,7 +9,6 @@ services:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
       args:
-        - ENV
         - DOC_APP_PATH
         - DOC_CLI_PATH
         - DOC_CORE_PATH
@@ -22,7 +21,7 @@ services:
         - GIT_KEY
         - GIT_RETHEME_URL
         - GIT_RESOLVER_URL
-        - GIT_TAP_URL
+        - GIT_APP_URL
         - KEG_IMAGE_FROM
         - KEG_EXEC_CMD
         - KEG_NM_INSTALL
@@ -30,7 +29,6 @@ services:
         - TAP
     container_name: ${CONTAINER_NAME}
     environment:
-      - ENV
       - DOC_APP_PATH
       - DOC_CLI_PATH
       - DOC_CORE_PATH
@@ -42,7 +40,7 @@ services:
       - GIT_COMPONENTS_URL
       - GIT_RETHEME_URL
       - GIT_RESOLVER_URL
-      - GIT_TAP_URL
+      - GIT_APP_URL
       - KEG_EXEC_CMD
       - KEG_NM_INSTALL
       - NODE_ENV

@@ -99,7 +99,7 @@ const checkSyncClean = async (context, contextEnvs, location) => {
 const startDockerSync = async args => {
 
   const { globalConfig, params, options, task, tasks } = args
-  const { build, clean, context, detached, ensure } = params
+  const { build, clean, context, detached, satisfy } = params
 
   // Get the context data for the command to be run
   const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
@@ -109,7 +109,7 @@ const startDockerSync = async args => {
   })
 
   // Check if the base image exists, and if not then build it
-  ensure && await buildBaseImg(args)
+  satisfy && await buildBaseImg(args)
 
   // Check if we should rebuild the container
   if(build || clean) await removeCurrent(cmdContext)
@@ -183,14 +183,10 @@ module.exports = {
       description: 'Runs the docker-sync process in the background',
       default: false
     },
-    env: {
-      description: 'Environment to start the Docker containers in',
-      example: 'keg docker sync start --env=staging ...',
-      default: 'development',
-    },
-    ensure: {
-      description: 'Will check if required images are built, and build them in necessary.',
-      example: "keg docker sync start --ensure false",
+    satisfy: {
+      alias: [ 'sat', 'ensure' ],
+      description: 'Will check if required images are built, and build them if necessary.',
+      example: "keg docker sync start --satisfy false",
       default: true,
     },
     install: {

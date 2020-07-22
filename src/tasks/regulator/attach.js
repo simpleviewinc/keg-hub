@@ -32,9 +32,9 @@ module.exports = {
     example: 'keg regulator attach',
     options: {
       cmd: {
-        description: 'Docker container command to run. Default ( /bin/sh )',
+        description: 'Docker container command to run. Default ( /bin/bash )',
         example: 'keg regulator att --cmd test',
-        default: 'sh'
+        default: 'bash'
       },
       options: {
         alias: [ 'opts' ],

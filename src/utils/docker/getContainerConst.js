@@ -13,7 +13,7 @@ const { DOCKER } = require('KegConst/docker')
 const getContainerConst = (container, key, alt) => {
   return get(
     DOCKER,
-    `CONTAINERS.${container.toUpperCase()}${ isStr(key) ? '.' + key.toUpperCase() : '' }`,
+    `CONTAINERS.${ container.toUpperCase() }${ isStr(key) ? '.' + key.toUpperCase() : '' }`,
     alt
   )
 }

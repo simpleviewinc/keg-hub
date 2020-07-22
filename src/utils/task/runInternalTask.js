@@ -37,7 +37,11 @@ const runInternalTask = async (taskPath, args, task) => {
       __internal,
       globalConfig,
       command: task.name,
-      ...deepClone({ ...taskArgs, params, options: [ ...args.options ] })
+      ...deepClone({
+        ...taskArgs,
+        params,
+        options: [ ...args.options ]
+      })
     })
 
 }

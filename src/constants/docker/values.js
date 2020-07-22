@@ -79,8 +79,7 @@ const values = {
   cliRootDir,
   injectImage,
   locationContext,
-  containersPath,
-  dockerEnv: process.env.DOCKER_ENV || process.env.NODE_ENV || 'local',
+  containersPath
 }
 
 /**

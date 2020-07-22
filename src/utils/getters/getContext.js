@@ -1,7 +1,6 @@
 const docker = require('KegDocCli')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
-const { getKegContext } = require('./getKegContext')
 const { getPrefixContext } = require('./getPrefixContext')
 const { isDockerId } = require('../docker/isDockerId')
 

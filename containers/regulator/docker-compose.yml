@@ -9,7 +9,6 @@ services:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
       args:
-        - ENV
         - DOC_APP_PATH
         - GIT_KEY
         - KEG_IMAGE_FROM
@@ -18,7 +17,6 @@ services:
         - NODE_ENV
     container_name: ${CONTAINER_NAME}
     environment:
-      - ENV
       - DOC_APP_PATH
       - DOC_APP_PORT
       - DOC_FEATURES_PATH

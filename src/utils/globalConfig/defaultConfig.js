@@ -1,6 +1,6 @@
 const path = require('path')
 const { deepMerge } = require('@ltipton/jsutils')
-const { CLI_ROOT } = require('KegConst/constants')
+const { CLI_ROOT, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 
@@ -9,6 +9,7 @@ const cliParent = path.join(CLI_ROOT, '../')
 const defPaths = {
   keg: cliParent,
   cli: CLI_ROOT,
+  kegConfig: GLOBAL_CONFIG_FOLDER,
   containers: path.join(CLI_ROOT, 'containers'),
   components: path.join(cliParent, 'keg-components'),
   core: path.join(cliParent, 'keg-core'),

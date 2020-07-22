@@ -36,10 +36,10 @@ const getSyncParams = async (contextData, params) => {
   })
 
   !alpha && generalError(
-    `Can not set the local path, missing "KEG_CONTEXT_PATH" environment variable!`
+    `Can not set the local path, missing "local" options or "KEG_CONTEXT_PATH" environment variable!`
   )
   !beta && generalError(
-    `Can not set the remote path, missing "DOC_APP_PATH" environment variable!`
+    `Can not set the remote path, missing "remote" option or "DOC_APP_PATH" environment variable!`
   )
 
   return {
@@ -65,7 +65,9 @@ const createMutagenSync = async (args, params, skipExists) => {
 
   // Check if the sync item already exists
   const exists = await mutagen.sync.exists(params)
-  exists && !skipExists && mutagenSyncExists(params, exists, false)
+
+  if(exists && !skipExists)
+    return mutagenSyncExists(params, exists, false)
 
   // Make call to start the mutagen sync
   !exists && await mutagen.sync.create(params)

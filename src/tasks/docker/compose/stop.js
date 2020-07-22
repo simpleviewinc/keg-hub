@@ -2,7 +2,7 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { buildComposeCmd } = require('KegUtils/docker')
+const { buildComposeCmd, buildServiceName } = require('KegUtils/docker/compose')
 
 /**
  * Runs the docker-compose build command
@@ -28,9 +28,12 @@ const composeStop = async args => {
     params
   )
 
-  // Run the docker compose build command
+  // Get the name of the docker-compose service
+  const serviceName = buildServiceName(cmdContext, contextEnvs)
+
+  // Run the docker compose stop command
   await spawnCmd(
-    dockerCmd,
+    `${ dockerCmd } ${ serviceName }`,
     { options: { env: contextEnvs }},
     location,
     !Boolean(__internal),

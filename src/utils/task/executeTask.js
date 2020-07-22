@@ -1,9 +1,8 @@
-const { get, isFunc, isStr } = require('@ltipton/jsutils')
-const { throwNoAction } = require('KegUtils/error')
-const { executeCmd } = require('KegProc')
-const { getParams } = require('./getParams')
-const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
 const { showHelp } = require('KegLog')
+const { getParams } = require('./getParams')
+const { isFunc } = require('@ltipton/jsutils')
+const { throwNoAction } = require('KegUtils/error')
+const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
 
 /**
  * Executes the passed in task.

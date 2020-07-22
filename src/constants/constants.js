@@ -18,6 +18,8 @@ if(KEG_GLOBAL_CONFIG){
   GLOBAL_CONFIG_FOLDER = configPathSplit.join('/')
 }
 
+let GLOBAL_INJECT_FOLDER = path.join(GLOBAL_CONFIG_FOLDER, '.tmp')
+
 module.exports = deepFreeze({
 
   // Tasks settings
@@ -37,14 +39,20 @@ module.exports = deepFreeze({
     TAP_LINKS: `cli.taps.links`,
   },
 
+  CLI_ROOT,
+  GLOBAL_CONFIG_FILE,
+  GLOBAL_INJECT_FOLDER,
+  GLOBAL_CONFIG_FOLDER,
+
   // Sets the command to open an IDE
   GLOBAL_CONFIG_EDITOR_CMD: 'cli.settings.editorCmd',
-  GLOBAL_CONFIG_FOLDER: GLOBAL_CONFIG_FOLDER,
-  GLOBAL_CONFIG_FILE: GLOBAL_CONFIG_FILE,
 
+  // Keg global config file
   CLI_CONFIG: `${ CLI_CONFIG }.json`,
+
+  // Keg Default .env file
   DEFAULT_ENV: `defaults.env`,
-  
+
   // Check if the command should be logged
   // Passed as the last argument to the spawnCmd method
   NO_CMD_LOG: `NO_CMD_LOG`,
@@ -75,8 +83,6 @@ module.exports = deepFreeze({
     ]
   },
 
-  CLI_ROOT: CLI_ROOT,
-
   // --- GIT Constants --- //
   // Path the the git ssh key
   GIT_SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),
@@ -89,12 +95,16 @@ module.exports = deepFreeze({
   ],
 
   // Shortcuts to map env to real environment
+  ENV_OPTIONS: [ 'environment', 'env', 'e' ],
+
+  // Environment keys mapped to their shortcuts 
   ENV_MAP: {
     PRODUCTION: [ 'production', 'prod', 'p' ],
     QA: [ 'qa', 'q' ],
     STAGING: [ 'staging', 'st', 's' ],
     DEVELOPMENT: [ 'development', 'dev', 'd' ],
-    LOCAL: [ 'local', 'loc', 'l' ]
+    LOCAL: [ 'local', 'loc', 'l' ],
+    TEST: [ 'test', 'tst', 't' ]
   },
 
   // Keys in the object that should be returned by

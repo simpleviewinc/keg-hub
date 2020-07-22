@@ -1,9 +1,10 @@
 const path = require('path')
 const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
-const { tryCatch } = require('../helpers')
+const { tryCatch } = require('../helpers/tryCatch')
+const { getContainerConst } = require('../docker/getContainerConst')
 const { get, deepMerge, isStr, styleCase, checkCall } = require('@ltipton/jsutils')
-const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
+const { MUTAGEN_MAP } = DOCKER
 
 /**
  * Parses the passed in options and converts them into an object format mutagen lib can handle
@@ -11,8 +12,8 @@ const { CONTAINERS_PATH, MUTAGEN_MAP } = DOCKER
  *
  * @returns {Object} - Parsed mutagen options object
  */
-const parseOptions = (options={}) => {
-  if(!options || !isStr(options)) return options
+const parseOptions = options => {
+  if(!options || !isStr(options)) return {}
   
   return options.split(' ')
     .reduce((parsed, option) => {
@@ -43,9 +44,13 @@ const parseOptions = (options={}) => {
 const getMutagenConfig = (params) => tryCatch(async () => {
   const { context, service, overrides={}, options, __injected } = params
 
-  const ymlConfig = __injected && __injected.mutagenPath || await yml.load(
-    path.join(CONTAINERS_PATH, context, 'mutagen.yml')
-  )
+  const mutagenPath = __injected &&
+    __injected.mutagenPath ||
+    getContainerConst(context, `ENV.KEG_MUTAGEN_PATH`)
+
+  if(!mutagenPath) return deepMerge(overrides, parseOptions(options))
+
+  const ymlConfig = await yml.load(mutagenPath)
 
   const config = get(ymlConfig, `sync.${ service }`, {})
 

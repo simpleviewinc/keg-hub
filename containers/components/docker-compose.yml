@@ -15,7 +15,6 @@ services:
         - KEG_IMAGE_FROM
     container_name: ${CONTAINER_NAME}
     environment:
-      - ENV
       - DOC_APP_PATH
       - DOC_CLI_PATH
       - DOC_COMPONENTS_PATH

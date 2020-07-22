@@ -8,7 +8,7 @@ const { throwTaskFailed } = require('./throwTaskFailed')
 const throwNoGitBranch = (context) => {
 
   Logger.empty()
-  Logger.error(`  Can not find current git branch for path "${ context }"`)
+  Logger.error(`Can not find current git branch for path "${ context }"`)
   Logger.empty()
 
   throwTaskFailed()

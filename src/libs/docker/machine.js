@@ -35,8 +35,8 @@ const  getEnv = async () => {
     .reduce((config, item) => {
       if(item.indexOf('export') !== 0) return config
 
-      const dockerEnv = item.replace('export', '').trim()
-      const envSplit = dockerEnv.split('=')
+      const machineEnv = item.replace('export', '').trim()
+      const envSplit = machineEnv.split('=')
       config[envSplit[0]] = envSplit[1]
 
       return config

@@ -1,8 +1,4 @@
-const {
-  containerService,
-  serviceOptions,
-  startService,
-} = require('KegUtils/services')
+const { serviceOptions, startService } = require('KegUtils/services')
 
 /**
  * Start a keg-core with docker-compose
@@ -15,14 +11,11 @@ const {
  * @returns {void}
  */
 const startCore = async (args) => {
-  const { params: { service } } = args
 
-  // Check and run the correct service
-  const serviceResp = service === 'container'
-    ? await containerService(args, { context: 'core', container: 'keg-core' })
-    : await startService(args, { context: 'core', container: 'keg-core' })
-
-  return serviceResp
+  return startService(args, {
+    context: 'core',
+    container: 'keg-core',
+  })
 
 }
 

@@ -16,10 +16,13 @@ const { LOCATION_CONTEXT } = DOCKER
  * @returns {string} - The location where a command should be executed
  */
 const getLocationContext = ({ context, globalConfig, __injected={}, tap, task }) => {
-
   // If there's an injectedLocation, use that as the location
   const location = __injected.location
-    ? __injected.location
+    ? task.name ==='build'
+      // If we are building the external app, we want to use the injectionPath
+      ? __injected.injectPath
+      // Otherwise use the default path when calling docker-compose cmds
+      : __injected.location
     : Boolean(task.locationContext !== LOCATION_CONTEXT.REPO)
       // For the docker-compose commands, The context to be the keg-cli/containers folder
       ? `${ getPathFromConfig(globalConfig, 'containers') }/${ context }`

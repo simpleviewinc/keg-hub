@@ -20,7 +20,7 @@ module.exports = {
     name: 'destroy',
     alias: [ 'dest', 'des', 'kill', 'down' ],
     action: destroyComponents,
-    description: `Destroys the docker items for keg-core`,
+    description: `Destroys the docker items for keg-components`,
     example: 'keg components destroy <options>',
     options: {
       image: {

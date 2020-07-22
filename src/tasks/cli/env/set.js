@@ -1,8 +1,6 @@
 const setEnv = args => {
   const { command, options, tasks, globalConfig } = args
 
-  console.log(`---------- cli command ----------`)
-  // TODO: Print cli information here from package JSON
 
 }
 

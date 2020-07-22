@@ -3,7 +3,7 @@ const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
 const { get, checkCall } = require('@ltipton/jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
-const { buildComposeCmd } = require('KegUtils/docker')
+const { buildComposeCmd, buildServiceName } = require('KegUtils/docker')
 const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
 const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
 
@@ -39,9 +39,12 @@ const composeRestart = async args => {
   // Log the virtual url so users know how to access the running containers
   logVirtualUrl(cmdContext)
 
-  // Run the docker-compose up command
+  // Get the name of the docker-compose service
+  const serviceName = buildServiceName(cmdContext, contextEnvs)
+
+  // Run the docker-compose restart command
   await spawnCmd(
-    `${dockerCmd} ${ contextEnvs.IMAGE }`,
+    `${ dockerCmd } ${ serviceName }`,
     { options: { env: contextEnvs }},
     location,
     !Boolean(__internal),
@@ -75,7 +78,7 @@ module.exports = {
       log: {
         description: 'Log the compose command to the terminal',
         example: 'keg docker compose build --log false',
-        default: true,
+        default: false,
       }
     }
   }

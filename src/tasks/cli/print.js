@@ -6,7 +6,7 @@ const { KEG_ENVS } = require('KegConst/envs')
 const PATTERNS = require('KegConst/docker')
 
 /**
- * Builds a docker container so it can be run
+ * Prints internal data of the Keg-CLI
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line

@@ -8,8 +8,15 @@ const { generalError } = require('../error/generalError')
 // Cache holder for our templates
 let __TEMPLATES
 
-// Override the default replace string with  {{ temp variable }}
-template.regex = /{{([^}]*)}}/g
+/**
+ * Override the default replace string with  {{ temp variable }}
+ * @function
+ *
+ * @returns {void}
+ */
+const setTemplateRegex = () => {
+  template.regex = /{{([^}]*)}}/g
+}
 
 /**
  * Loads a template by name, by loading all files in the template folder
@@ -69,6 +76,9 @@ const fillFromPath = async (loc, data, root) => {
  * @returns {string} - Template with the content filled from the passed in data
  */
 const fillTemplate = ({ template:tmp, loc, data={}, root }) => {
+  // Re-set the template regex to ensure it's set
+  setTemplateRegex()
+
   return !tmp && loc
     ? fillFromPath(loc, data, root)
     : tmp && template(tmp, data)

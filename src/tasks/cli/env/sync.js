@@ -1,7 +1,17 @@
 const { confirmExec } = require('KegUtils/helpers/confirmExec')
-const { updateDefaultEnv } = require('KegUtils/helpers/updateDefaultEnv')
+const { updateDefaultEnvFile } = require('KegUtils/defaultEnvs/updateDefaultEnvFile')
 const { createGlobalConfig } = require('KegUtils/globalConfig/createGlobalConfig')
 
+/**
+ * Syncs the global defaults env file with the local
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Initial command being run
+ * @param {Array} args.options - arguments passed from the command line
+ * @param {Object} args.tasks - All registered tasks of the CLI
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ *
+ * @returns {void}
+ */
 const syncEnv = args => {
 
   const { command, globalConfig, options, params } = args
@@ -14,7 +24,7 @@ const syncEnv = args => {
     preConfirm: confirm,
     execute: async () => {
       // Merge / create the default.env
-      await updateDefaultEnv(params)
+      await updateDefaultEnvFile(params)
     },
   })
 

@@ -7,6 +7,7 @@ const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { getPortMap } = require('KegUtils/docker/getDockerArgs')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
+const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 const { PACKAGE } = CONTAINER_PREFIXES
@@ -47,7 +48,7 @@ const checkExists = async container => {
  */
 const dockerPackageRun = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { command, context, cleanup, package, provider, repo, user, version } = params
+  const { command, context, cleanup, package, provider, repo, user, version, volumes } = params
   const isInjected = params.__injected ? true : false
 
   // TODO: Add check, if a context is provided, and no package
@@ -100,11 +101,17 @@ const dockerPackageRun = async args => {
 
   /*
   * ----------- Step 5 ----------- *
-  * Run the image in a container without mounting any volumes
+  * Run the image in a container
   */
-  const opts = [ `-it`, getPortMap('', cmdContext) ]
+  let opts = await getServiceValues({
+    volumes,
+    contextEnvs,
+    opts: [ `-it` ],
+    composePath: get(params, '__injected.composePath'),
+  })
+
   cleanup && opts.push(`--rm`)
-  const defCmd = `/bin/sh ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
+  const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
   try {
     await docker.image.run({
@@ -176,8 +183,13 @@ module.exports = {
         example: 'keg docker package run --user gituser',
       },
       version: {
-        description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
+        description: 'The version of the image to use',
         example: 'keg docker package run --version 0.0.1',
+      },
+      volumes: {
+        description: 'Mount the local volumes defined in the docker-compose config.yml.',
+        example: 'keg docker package run --volumes',
+        default: false
       },
     }
   }

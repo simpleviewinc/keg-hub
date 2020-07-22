@@ -1,7 +1,7 @@
 const { ask } = require('askIt')
 const docker = require('KegDocCli')
 const { checkCall } = require('@ltipton/jsutils')
-const { throwNoContainers } = require('KegUtils/error/throwNoContainers')
+const { throwNoContainers } = require('../error/throwNoContainers')
 
 /**
  * Prompts user to select a container from the current docker containers
@@ -9,13 +9,13 @@ const { throwNoContainers } = require('KegUtils/error/throwNoContainers')
  *
  * @returns {Object} the selected containers
  */
-const containerSelect = async (filter, throwNoContainers=true) => {
+const containerSelect = async (filter, throwError=true) => {
   const containers = await docker.container.list()
 
-  // If no containers available, then check if we should call throwNoContainers
+  // If no containers available, then check if we should call throwError
   // Otherwise just return null
   if(!containers.length){
-    return throwNoContainers
+    return throwError
       ? throwNoContainers()
       : null
   }

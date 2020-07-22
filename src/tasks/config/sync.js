@@ -1,5 +1,5 @@
 const { confirmExec } = require('KegUtils/helpers/confirmExec')
-const { updateDefaultEnv } = require('KegUtils/helpers/updateDefaultEnv')
+const { updateDefaultEnvFile } = require('KegUtils/defaultEnvs/updateDefaultEnvFile')
 const { createGlobalConfig } = require('KegUtils/globalConfig/createGlobalConfig')
 
 /**
@@ -27,7 +27,7 @@ const syncGlobalConfig = async args => {
       await createGlobalConfig(globalConfig, params)
 
       // Merge / create the default.env
-      await updateDefaultEnv()
+      await updateDefaultEnvFile()
 
     },
   })

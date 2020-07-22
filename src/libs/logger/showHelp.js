@@ -48,6 +48,7 @@ const showHelpHeader = (header, subHeader) => {
 const showTaskHeader = (key, header, spacer, dblSpacer) => {
   const subSpacer = header && spacer || dblSpacer
 
+  Logger.empty()
   console.log(
     colors.gray(`${subSpacer}Command:`),
     colors.brightGreen.bold(`${key}`)

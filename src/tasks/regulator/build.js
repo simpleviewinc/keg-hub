@@ -42,10 +42,10 @@ module.exports = {
     description: `Builds the docker image for the keg-regulator repo`,
     example: 'keg regulator build <options>',
     options: {
-      envs: {
+      args: {
         description: 'Add build args from container env files',
-        example: `keg regulator build --envs`,
-        default: false
+        example: `keg regulator build --args false`,
+        default: true
       },
       cache: {
         description: 'Docker will use build cache when building the image',

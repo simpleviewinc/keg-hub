@@ -11,6 +11,7 @@ env:
   KEG_CONTEXT_PATH: "{{ cli.paths.core }}"
   KEG_DOCKER_FILE: "{{ cli.paths.containers }}/core/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.paths.containers }}/core/values.yml"
+  KEG_MUTAGEN_PATH: "{{ cli.paths.containers }}/core/mutagen.yml"
 
   # The default docker-compose file path
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/docker-compose.yml"

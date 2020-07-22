@@ -28,8 +28,6 @@ module.exports = {
     action: tapContainer,
     description: `Injects a tap container folder into the docker constants`,
     example: 'keg tap container <options>',
-    options: {
-      
-    },
+    options: {},
   }
 }

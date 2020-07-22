@@ -87,7 +87,7 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
 
   // Temp helper to map port 80 to the DOC_APP_PORT
   // This should be removed when keg-proxy is setup
-  dockerCmd = getPortMap(dockerCmd, context)
+  // dockerCmd = getPortMap(dockerCmd, context)
 
   // Add the env to the docker command
   dockerCmd = addContainerEnv(dockerCmd, {
@@ -95,8 +95,6 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     GIT_BRANCH: branch,
     PLATFORM: platform,
     KEG_EXEC_CMD: execCmd,
-    NODE_ENV: env,
-    ENV: env,
     // Join the envs object to be added as envs to the docker container
     ...(isObj(envs) && envs),
   })
@@ -166,6 +164,7 @@ const buildDockerCmd = (globalConfig, params) => {
   // Figure out which docker command to run
   return cmd === 'build'
     ? createBuildCmd(globalConfig, dockerCmd, params)
+    // createRunCmd not currently used!
     : createRunCmd(globalConfig, dockerCmd, params)
 
 }

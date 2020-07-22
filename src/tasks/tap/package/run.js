@@ -32,11 +32,6 @@ module.exports = {
     description: `Package a running tap container into an image and push to the docker provider`,
     example: 'keg tap package run <options>',
     options: {
-      tap: { 
-        description: 'Name of the tap to run. Must be a tap linked in the global config',
-        example: 'keg tap package run --tap my-tap',
-        required: true,
-      },
       package: {
         description: 'Pull request package url or name',
         example: `keg tap package run --package simpleviewinc/keg-packages/my-app:bug-fixes`,
@@ -50,6 +45,11 @@ module.exports = {
         description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',
         example: 'keg tap package run run --command dev ( Runs "yarn dev" )',
         default: false
+      },
+      tap: { 
+        description: 'Name of the tap to run. Must be a tap linked in the global config',
+        example: 'keg tap package run --tap my-tap',
+        required: true,
       },
     }
   }

@@ -1,12 +1,14 @@
 
-const { get } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
 const { spawnCmd } = require('KegProc')
-const { HTTP_PORT_ENV } = require('KegConst/constants')
+const { get } = require('@ltipton/jsutils')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
-const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+const { getContainerConst } = require('KegUtils/docker/getContainerConst')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
+const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
+const { throwDupContainerName } = require('KegUtils/error/throwDupContainerName')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { IMAGE } = CONTAINER_PREFIXES
 
 const buildContainerName = async cmdContext => {
@@ -32,16 +34,16 @@ const getImageContext = async (args) => {
   const { tag } = params
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, image, location, tap } = await buildContainerContext({
+  const containerContext = await buildContainerContext({
     globalConfig,
     task,
     params,
   })
 
   // Build the name for the container
-  const container = await buildContainerName(cmdContext)
+  const container = await buildContainerName(containerContext.cmdContext)
 
-  return { container, contextEnvs, image, location, tag, tap }
+  return { ...containerContext, container, tag }
 }
 
 const getImageData = async args => {
@@ -71,20 +73,19 @@ const getImageData = async args => {
 }
 
 /**
- * Maps the defined ports in the ENVS to -p docker argument
- * <br/>This allows those ports to be exposed outside the container
- * @param {Object} envs - Defined environment variables for the container
+ * Called when the container to run already exists
+ * Default is to throw an error, unless skipError is true
+ * @param {string} container - Name of container that exists
+ * @param {Object} exists - Container json object data
+ * @param {Object} imageContext - Meta data about the image to be run
+ * @param {boolean} skipError - True the throwing an error should be skipped
  *
- * @returns {Array} - ENV ports in docker argument format
+ * @returns {Object} - Joined imageContext and exists object
  */
-const addExposedPorts = envs => {
-  return Object.keys(envs).reduce((ports, key) => {
-    return key.includes('_PORT')
-      ? key === HTTP_PORT_ENV
-        ? ports.concat([ `-p 80:${envs[key]}` ])
-        : ports.concat([ `-p ${envs[key]}:${envs[key]}` ])
-      : ports
-  }, [])
+const handelContainerExists = (container, exists, imageContext, skipExists) => {
+  return skipExists
+    ? { ...imageContext, ...exists, }
+    : throwDupContainerName(container)
 }
 
 /**
@@ -98,8 +99,8 @@ const addExposedPorts = envs => {
  * @returns {void}
  */
 const runDockerImage = async args => {
-  const { globalConfig, params, task } = args
-  const { context, cleanup, entry, log, options } = params
+  const { globalConfig, params, task, __internal={} } = args
+  const { context, connect, cleanup, cmd, log, options, volumes } = params
 
   const imageContext = context
     ? await getImageContext(args)
@@ -107,20 +108,45 @@ const runDockerImage = async args => {
 
   const { tag, location, contextEnvs, container, image } = imageContext
 
-  let opts = options.concat([ `-it` ])
+  const exists = await docker.container.get(container)
+
+  if(exists)
+    return handelContainerExists(
+      container,
+      exists,
+      imageContext,
+      __internal.skipExists
+    )
+
+
+  let opts = connect
+    ? options.concat([ `-it` ])
+    : options.concat([ `-d` ])
+
   cleanup && opts.push(`--rm`)
-  opts = opts.concat(addExposedPorts(contextEnvs))
+
+  opts = await getServiceValues({
+    opts,
+    volumes,
+    contextEnvs,
+    composePath: get(params, '__injected.composePath'),
+  })
 
   await docker.image.run({
     tag,
     log,
     opts,
-    entry,
+    entry: cmd,
     image,
     location,
     envs: contextEnvs,
     name: container,
   })
+
+  const runningContainer = await docker.container.get(container)
+  return runningContainer
+    ? { ...imageContext, ...runningContainer }
+    : imageContext
 
 }
 
@@ -143,6 +169,12 @@ module.exports = {
         example: `keg docker image run  --cleanup false`,
         default: true
       },
+      connect: {
+        alias: [ 'conn', 'con', 'it' ],
+        description: 'Auto connects to the docker containers stdio',
+        example: 'keg docker image run --connect false',
+        default: true
+      },
       image: {
         description: 'Image id of the image to run',
         example: 'keg docker image run --image <id>'
@@ -153,10 +185,11 @@ module.exports = {
         example: `keg docker image run --options \\"-p 80:19006 -e MY_ENV=data\\"`,
         default: []
       },
-      entry: {
-        description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bas h)',
-        example: 'keg docker image run --entry \\"node index.js\\"',
-        default: '/bin/sh'
+      cmd: {
+        alias: [ 'command', 'entry' ],
+        description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bash )',
+        example: 'keg docker image run --cmd \\"node index.js\\"',
+        default: '/bin/bash'
       },
       log: {
         description: 'Log the docker run command to the terminal',
@@ -166,7 +199,12 @@ module.exports = {
       tag: {
         description: 'Tag of the image to be run',
         example: 'keg docker image run --context core --tag updates',
-      }
+      },
+      volumes: {
+        description: 'Mount the local volumes defined in the docker-compose config.yml.',
+        example: 'keg docker package run --volumes false',
+        default: true
+      },
     },
   }
 }

@@ -25,11 +25,7 @@ const copy = async args => {
   // Get the context data for the command to be run
   const { id } = container
     ? { id: container }
-    : await buildContainerContext({
-        task,
-        params,
-        globalConfig,
-      })
+    : await buildContainerContext(args)
 
   // If using a tap, and no location is found, throw an error
   cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)

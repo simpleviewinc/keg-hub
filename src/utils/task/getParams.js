@@ -178,6 +178,8 @@ const findParam = ({ key, meta={}, index, task, ...args }) => {
 const ensureParam = async (task, params, key, meta) => {
 
   params[key] = checkBoolValue(params[key])
+  params[key] = checkEnvKeyValue(key, params[key], meta)
+
   if(exists(params[key])) return params
 
   let value = await optionsAsk(key, meta)
@@ -232,11 +234,8 @@ const loopTaskKeys = (task, taskKeys, options, mappedParams) => {
       options,
     })
 
-    // Check if the arg is env, and map it from the env shortcuts
-    const val = checkEnvKeyValue(key, value)
-
     // If we get a value back, add it to the params object
-    exists(val) && ( params[key] = val )
+    exists(value) && ( params[key] = value )
 
     // Ensure the param exists if needed, and return
     return ensureParam(task, params, key, meta)
@@ -309,9 +308,6 @@ const getParams = async ({ options=[], task, params={} }) => {
   // This is used later to compare the keys with the passed in options
   const taskKeys = isObj(task.options) && Object.keys(task.options)
 
-  // If no task keys to loop, just return empty
-  if(!taskKeys || !taskKeys.length) return ensureParams(task, params)
-
   // Short circuit the options parsing if there's only one option passed, and it's not a pair (=)
   const doOptsLoop = options.length !== 1 || hasKeyIdentifier(options[0])
 
@@ -319,10 +315,7 @@ const getParams = async ({ options=[], task, params={} }) => {
   // Otherwise set it as the first key in the task options object
   return doOptsLoop
     ? taskKeys && await loopTaskOptions(task, taskKeys, options, params)
-    : ensureParams(task, { 
-        ...params,
-        [ taskKeys[0] ]: checkEnvKeyValue(taskKeys[0], options[0])
-      })
+    : ensureParams(task, {  ...params, [ taskKeys[0] ]: options[0] })
 
 }
 

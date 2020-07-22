@@ -4,6 +4,7 @@ module.exports = {
   ...require('./findTask'),
   ...require('./getParams'),
   ...require('./getTask'),
+  ...require('./globalOptions'),
   ...require('./optionsAsk'),
   ...require('./runInternalTask'),
   ...require('./validateTask'),

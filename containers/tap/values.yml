@@ -10,6 +10,8 @@ env:
   # Docker / Docker Compose paths
   KEG_DOCKER_FILE: "{{ cli.paths.containers }}/tap/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.paths.containers }}/tap/values.yml"
+  KEG_MUTAGEN_PATH: "{{ cli.paths.containers }}/tap/mutagen.yml"
+
   # The default docker-compose file path
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/tap/docker-compose.yml"
   # Can also define other an override compose files
@@ -41,4 +43,4 @@ env:
   CONTAINER_NAME: tap
 
   # Git tap url in github
-  GIT_TAP_URL: INITIAL
+  GIT_APP_URL: INITIAL

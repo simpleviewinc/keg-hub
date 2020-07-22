@@ -1,39 +1,42 @@
 const { isObj, isFunc, reduceObj } = require('@ltipton/jsutils')
-const { buildTaskAlias } = require('../utils/builders/buildTaskAlias')
+const { buildTaskData } = require('../utils/builders/buildTaskData')
 
 /**
  * Initializes tasks for the CLI. Loads all default and custom tasks
- * @param {Object|Function} tasks - CLI tasks to load
- * @param {Object} config - CLI global config object
+ * @param {Object|Function} name - Name of the task file to load
+ * @param {Object} globalConfig - CLI global config object
  *
  * @returns {Object} - All loaded CLI tasks
  */
-const initialize = (tasks, name, config) => {
-  const parentTasks = isFunc(tasks) ? tasks(config) : isObj(tasks) ? tasks : {}
+const initialize = (name, globalConfig) => {
+  const tasks = require(`./${ name }`)
+
+  const parentTasks = isFunc(tasks) ? tasks(globalConfig) : isObj(tasks) ? tasks : {}
 
   return reduceObj(parentTasks, (key, value, updates) => {
-    const parentTask = parentTasks[key]
+    const task = parentTasks[key]
     return {
       ...updates,
-      ...buildTaskAlias(parentTask, name),
+      ...buildTaskData(task, name),
     }
   }, {})
 
 }
 
-module.exports = config => {
+module.exports = globalConfig => {
   return {
-    ...initialize(require('./cli'), 'cli', config),
-    ...initialize(require('./components'), 'components', config),
-    ...initialize(require('./config'), 'config', config),
-    ...initialize(require('./core'), 'core', config),
-    ...initialize(require('./docker'), 'docker', config),
-    ...initialize(require('./git'), 'git', config),
-    ...initialize(require('./global'), 'global', config),
-    ...initialize(require('./generate'), 'generate', config),
-    ...initialize(require('./mutagen'), 'mutagen', config),
-    ...initialize(require('./network'), 'network', config),
-    ...initialize(require('./regulator'), 'regulator', config),
-    ...initialize(require('./tap'), 'tap', config),
+    ...initialize('base', globalConfig),
+    ...initialize('cli', globalConfig),
+    ...initialize('components', globalConfig),
+    ...initialize('config', globalConfig),
+    ...initialize('core', globalConfig),
+    ...initialize('docker', globalConfig),
+    ...initialize('git', globalConfig),
+    ...initialize('global', globalConfig),
+    ...initialize('generate', globalConfig),
+    ...initialize('mutagen', globalConfig),
+    ...initialize('network', globalConfig),
+    ...initialize('regulator', globalConfig),
+    ...initialize('tap', globalConfig),
   }
 }

@@ -46,9 +46,10 @@ const serviceOptions = (task='', action='', overrides={}) => {
       example: 'keg ${ task } ${ action } --env staging',
       default: 'development',
     },
-    ensure: {
+    satisfy: {
+      alias: [ 'sat', 'ensure' ],
       description: 'Will check if required images are built, and build them in necessary.',
-      example: "keg ${ task } ${ action } --ensure false",
+      example: "keg ${ task } ${ action } --satisfy false",
       default: true,
     },
     follow: {

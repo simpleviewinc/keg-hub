@@ -36,6 +36,8 @@ const checkUpdates = async () => {
     Logger.colors.brightWhite(gitVersion),
   )
   Logger.empty()
+  Logger.highlight(`Please pull down the latest version, then run`, `"keg cli update"`),
+  Logger.empty()
 
   // TODO: Ask if the user wants to upgrade, then do it if yes
   // Need to add an upgrade Task before this can happen

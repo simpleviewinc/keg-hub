@@ -1,8 +1,4 @@
-const {
-  containerService,
-  serviceOptions,
-  startService,
-} = require('KegUtils/services')
+const { serviceOptions, startService } = require('KegUtils/services')
 
 
 /**
@@ -16,14 +12,11 @@ const {
  * @returns {void}
  */
 const startComponents = async (args) => {
-  const { params: { service } } = args
 
-  // Check and run the correct service
-  const serviceResp = service === 'container'
-    ? await containerService(args, { context: 'components', container: 'keg-components' })
-    : await startService(args, { context: 'components', container: 'keg-components' })
-
-  return serviceResp
+  return startService(args, {
+    context: 'components',
+    container: 'keg-components',
+  })
 
 }
 

@@ -212,10 +212,17 @@ const buildMutagenArgs = ({ ignore, mode, ...args }) => {
   return `${ mutagenArgs } ${ buildIgnore(ignore) }`.trim()
 }
 
+const cleanPath = (toClean='') => {
+  return toClean[ toClean.length - 1 ] === '/'
+    ? toClean.slice(0, -1).trim()
+    : toClean.trim()
+}
+
 module.exports = {
   buildIgnore,
   buildMountPath,
   buildMutagenArgs,
+  cleanPath,
   cliError,
   cliSuccess,
 }

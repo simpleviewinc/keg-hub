@@ -11,7 +11,10 @@ const { getServiceArgs } = require('./getServiceArgs')
  */
 const mutagenService = async (args, argsExt) => {
   // Create the mutagen sync
-  return runInternalTask('mutagen.tasks.create', getServiceArgs(args, argsExt))
+  return runInternalTask('mutagen.tasks.create', getServiceArgs(
+    { ...args, __internal: { ...args.__internal, skipExists: true } },
+    argsExt
+  ))
 }
 
 module.exports = {
