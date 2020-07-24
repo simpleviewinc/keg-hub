@@ -1,106 +1,139 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { TouchableOpacity, Animated } from 'react-native'
 import PropTypes from 'prop-types'
-import { useThemeWithHeight } from 'KegHooks'
+import { useThemePath, useFromToAnimation } from 'KegHooks'
 import { View } from 'KegView'
 import { noOp } from 'KegUtils'
 import { Dimensions } from 'react-native'
-import { get } from 'jsutils'
-import { isValidComponent } from 'KegUtils'
+import { isFunc } from 'jsutils'
 
 /**
- * Modal wrapper to allow caller to pass in custom animation and styles
- * @param {object} props
- * @param {Component} props.ModalContainer custom component with its own animation and styles
- * @param {Object} props.modalStyles default modal styles used if no ModalContainer is passed in
- * @param {Component} props.children children components
+ * Default Slide animated View for modal
+ * @param {Object} props
+ * @param {Object=} props.defaultStyle - default style coming from theme
+ * @param {Boolean} props.visible - if true, show the modal, else hide it
+ * @param {Component} props.children - the component(s) to render inside the modal
+ * @param {Function=} props.onAnimationFinish - the function to execute when the an animation is complete
  */
-const DefaultAnimationView = ({ ModalContainer, modalStyles, children }) => {
-  if (isValidComponent(ModalContainer))
-    return <ModalContainer>{ children }</ModalContainer>
+const SlideAnimatedView = ({
+  defaultStyle,
+  visible,
+  children,
+  onAnimationFinish,
+}) => {
+  // setup anim value to start/end offscreen
+  const windowHeight = Dimensions.get('window').height
+  const bottomOfScreen = windowHeight
+  const origin = 0
 
-  // use the state to keep track of whether the modal has animated yet
-  const [ animated, setAnimated ] = useState(false)
-  let slideVal = new Animated.Value(0)
-
-  // Set default duration; second argument is empty array so animation function
-  // only runs on initial render; when finished with animation, call setAnimated to set flag to true
-  useEffect(() => {
-    Animated.timing(slideVal, {
-      toValue: 1,
-      duration: 500,
-    }).start(() => setAnimated(true))
-  }, [])
-
-  // get modal style default height to set initial animation offset
-  const animationOffset =
-    get(modalStyles, 'content.height', Dimensions.get('window').height) / 2
-  const slideUp = slideVal.interpolate({
-    inputRange: [ 0, 1 ],
-    outputRange: [ Dimensions.get('window').height + animationOffset, 0 ],
-  })
+  const [slide] = useFromToAnimation(
+    {
+      from: visible ? bottomOfScreen : origin,
+      to: visible ? origin : bottomOfScreen,
+      onFinish: onAnimationFinish,
+    },
+    [visible]
+  )
 
   return (
     <Animated.View
-      style={{
-        ...modalStyles.content,
-        transform: animated ? null : [{ translateY: slideUp }],
-      }}
+      style={{ ...defaultStyle, transform: [{ translateY: slide }] }}
     >
       { children }
     </Animated.View>
   )
 }
 
+const hideModalStyle = { height: 0, width: 0, overflow: 'hidden' }
+
 /**
  * Simple popup modal using fixed positioning.
  * @param {Object} props
  * @param {Boolean} props.visible - if true, show the modal, else hide it
- * @param {Object} props.styles - styles object which overrides default theme styles
- * @param {Function} props.onBackdropTouch - the function to execute when the user selects/touches outside the modal; defaults to noOp
+ * @param {Object=} props.styles - styles object which overrides default theme styles
+ * @param {Function=} props.onBackdropTouch - the function to execute when the user selects/touches outside the modal; defaults to noOp
+ * @param {Function=} props.onAnimateIn - the function to execute when animation on visible is done
+ * @param {Function=} props.onAnimateOut - the function to execute when animation on not visible is done
  * @param {Component} props.children - the component(s) to render inside the modal
- * @param {String} props.themePath - path to a theme file containing the following properties:
- *  - main: styles for the modal
- *  - backdrop: styles for the background behind the modal
- * @param {String} props.type - type of modal (points to styles in theme file with that type); default is 'default'
- * @param {Number} props.activeOpacity - changes opacity of background when touched/clicked; default is 1
- * @param {Component} props.ModalContainer - pass a custom component to completely override the modal content
+ * @param {String=} props.themePath
+ * @param {String=} props.type - type of modal (points to styles in theme file with that type); default is 'default'
+ * @param {Number=} props.activeOpacity - changes opacity of background when touched/clicked; default is 1
+ * @param {Component=} props.AnimatedComponent - Custom animated component if you want to override our default animations
  */
 export const Modal = props => {
-  if (!props.visible) return null
-
   const {
     styles,
     onBackdropTouch = noOp,
     themePath,
     type = 'default',
     activeOpacity = 1,
+    visible,
+    AnimatedComponent = SlideAnimatedView,
+    onAnimateIn,
+    onAnimateOut,
+    children,
   } = props
 
-  const [modalStyles] = useThemeWithHeight(
-    themePath || `modal.${type}`,
-    styles,
-    'main'
-  )
+  const [ renderModal, setRenderModal ] = useState(false)
+  if (props.visible && !renderModal) setRenderModal(true)
+  const [modalStyles] = useThemePath(themePath || `modal.${type}`, styles)
+
+  useEffect(() => {
+    if (global.document && visible) {
+      // lock scrolling on web if a modal exists
+      global.document.body.style.overflow = 'hidden'
+      // enable scrolling when unmounted
+      return () => {
+        global.document.body.style.overflow = ''
+      }
+    }
+  }, [visible])
+
+  // animation callback
+  // we change the wrapper dimensions to 0 AFTER animationOut finishes
+  const cb = useCallback(() => {
+    if (!visible) {
+      setRenderModal(false)
+      if (isFunc(onAnimateOut)) onAnimateOut()
+    }
+    else if (isFunc(onAnimateIn)) onAnimateIn()
+  }, [ onAnimateOut, onAnimateIn ])
 
   return (
-    <View style={modalStyles.main}>
+    // change the wrapper dimensions to 0 when visible is set to false
+    <View
+      data-class='modal-main'
+      style={renderModal ? modalStyles.main : hideModalStyle}
+    >
       <TouchableOpacity
+        data-class='modal-backdrop'
         style={modalStyles.backdrop}
-        onPressOut={onBackdropTouch}
+        onPress={onBackdropTouch}
         activeOpacity={activeOpacity}
       />
-      <DefaultAnimationView
-        modalStyles={modalStyles}
-        {...props}
-      />
+      <AnimatedComponent
+        data-class='modal-content'
+        onAnimationFinish={cb}
+        visible={visible}
+        defaultStyle={modalStyles.content}
+      >
+        { children }
+      </AnimatedComponent>
     </View>
   )
 }
 
 Modal.propTypes = {
+  themePath: PropTypes.string,
+  type: PropTypes.string,
   visible: PropTypes.bool,
   styles: PropTypes.object,
+  activeOpacity: PropTypes.number,
   onBackdropTouch: PropTypes.func,
-  ModalContainer: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
+  onAnimateIn: PropTypes.func,
+  onAnimateOut: PropTypes.func,
+  AnimatedComponent: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.elementType,
+  ]),
 }

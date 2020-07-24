@@ -1,4 +1,3 @@
-import { modal as defaults } from '../defaults.json'
 import { flex } from '../flex'
 import { helpers } from '../helpers'
 import { colors } from '../colors'
@@ -6,23 +5,24 @@ import { colors } from '../colors'
 export const modal = {
   default: {
     main: {
+      zIndex: 9998,
       ...flex.center,
-      ...helpers.abs,
       position: 'fixed',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      alignItems: 'stretch',
     },
     backdrop: {
-      zIndex: 100000,
       ...helpers.abs,
-      position: 'fixed',
       backgroundColor: 'rgba(1,1,1,0.2)',
     },
     content: {
       $xsmall: {
-        zIndex: 100010,
-        width: defaults.width,
-        maxWidth: '90%',
-        padding: 0,
-        borderRadius: 4,
+        position: 'absolute',
+        zIndex: 9999,
+        alignSelf: 'center',
         backgroundColor: colors.palette.white01,
       },
       $medium: {
