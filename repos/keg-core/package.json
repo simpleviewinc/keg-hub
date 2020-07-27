@@ -1,7 +1,7 @@
 {
   "name": "@simpleviewinc/keg-core",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
@@ -51,7 +51,7 @@
     "@babel/core": "7.10.5",
     "@babel/runtime": "7.10.5",
     "@expo/webpack-config": "^0.12.16",
-    "@simpleviewinc/keg-components": "0.5.0",
+    "@simpleviewinc/keg-components": "0.6.0",
     "@simpleviewinc/re-theme": "2.0.0",
     "@simpleviewinc/tap-resolver": "1.0.1",
     "@testing-library/react-hooks": "^3.2.1",
