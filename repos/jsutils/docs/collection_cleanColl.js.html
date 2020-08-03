@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>collection/cleanColl.js - JS Utils</title>
+    
+    <meta name="description" content="common javascript utils" />
+    
+        <meta name="keywords" content="utils, javascript, helpers, lodash, underscore" />
+        <meta name="keyword" content="utils, javascript, helpers, lodash, underscore" />
+    
+    
+    
+    <meta property="og:title" content="JS Utils"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content=""/>
+    <meta property="og:site_name" content="jsutils"/>
+    <meta property="og:url" content="https://lancetipton.github.io/jsutils/"/>
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/lancetipton/jsutils" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h3>Modules</h3><ul><li><a href="module-array.html">array</a><ul class='methods'><li data-type='method'><a href="module-array.html#.cloneArr">cloneArr</a></li><li data-type='method'><a href="module-array.html#.eitherArr">eitherArr</a></li><li data-type='method'><a href="module-array.html#.flatMap">flatMap</a></li><li data-type='method'><a href="module-array.html#.isArr">isArr</a></li><li data-type='method'><a href="module-array.html#.omitRange">omitRange</a></li><li data-type='method'><a href="module-array.html#.randomArr">randomArr</a></li><li data-type='method'><a href="module-array.html#.randomizeArr">randomizeArr</a></li><li data-type='method'><a href="module-array.html#.uniqArr">uniqArr</a></li><li data-type='method'><a href="module-array.html#~Returnsthemaximumelementinarr">Returns the maximum element in arr</a></li><li data-type='method'><a href="module-array.html#~Returnstheminimumelementinarr">Returns the minimum element in arr</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-boolean.html">boolean</a><ul class='methods'><li data-type='method'><a href="module-boolean.html#.convertToStrBool">convertToStrBool</a></li><li data-type='method'><a href="module-boolean.html#.isBool">isBool</a></li><li data-type='method'><a href="module-boolean.html#.isStrBool">isStrBool</a></li><li data-type='method'><a href="module-boolean.html#.softFalsy">softFalsy</a></li><li data-type='method'><a href="module-boolean.html#.toBool">toBool</a></li></ul></li><li></li><li></li><li></li><li></li><li><a href="module-collection.html">collection</a><ul class='methods'><li data-type='method'><a href="module-collection.html#.cleanColl">cleanColl</a></li><li data-type='method'><a href="module-collection.html#.deepClone">deepClone</a></li><li data-type='method'><a href="module-collection.html#.deepEqual">deepEqual</a></li><li data-type='method'><a href="module-collection.html#.get">get</a></li><li data-type='method'><a href="module-collection.html#.isColl">isColl</a></li><li data-type='method'><a href="module-collection.html#.isEmptyColl">isEmptyColl</a></li><li data-type='method'><a href="module-collection.html#.mapColl">mapColl</a></li><li data-type='method'><a href="module-collection.html#.reduceColl">reduceColl</a></li><li data-type='method'><a href="module-collection.html#.repeat">repeat</a></li><li data-type='method'><a href="module-collection.html#.set">set</a></li><li data-type='method'><a href="module-collection.html#.shallowEqual">shallowEqual</a></li><li data-type='method'><a href="module-collection.html#.unset">unset</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-command.html">command</a><ul class='methods'><li data-type='method'><a href="module-command.html#~cmd">cmd</a></li><li data-type='method'><a href="module-command.html#~copyFile">copyFile</a></li><li data-type='method'><a href="module-command.html#~ensureFolderPath">ensureFolderPath</a></li><li data-type='method'><a href="module-command.html#~getArgs">getArgs</a></li><li data-type='method'><a href="module-command.html#~loadByType">loadByType</a></li><li data-type='method'><a href="module-command.html#~loadModule">loadModule</a></li><li data-type='method'><a href="module-command.html#~logMessage">logMessage</a></li><li data-type='method'><a href="module-command.html#~loopLoad">loopLoad</a></li><li data-type='method'><a href="module-command.html#~requireModule">requireModule</a></li><li data-type='method'><a href="module-command.html#~validateArgs">validateArgs</a></li><li data-type='method'><a href="module-command.html#~writeFile">writeFile</a></li></ul></li><li></li><li><a href="module-functions.html">functions</a><ul class='methods'><li data-type='method'><a href="module-functions.html#.applyToFunc">applyToFunc</a></li><li data-type='method'><a href="module-functions.html#.checkCall">checkCall</a></li><li data-type='method'><a href="module-functions.html#.cloneFunc">cloneFunc</a></li><li data-type='method'><a href="module-functions.html#.debounce">debounce</a></li><li data-type='method'><a href="module-functions.html#.doIt">doIt</a></li><li data-type='method'><a href="module-functions.html#.eitherFunc">eitherFunc</a></li><li data-type='method'><a href="module-functions.html#.isFunc">isFunc</a></li><li data-type='method'><a href="module-functions.html#.limbo">limbo</a></li><li data-type='method'><a href="module-functions.html#.match">match</a></li><li data-type='method'><a href="module-functions.html#.memorize">memorize</a></li><li data-type='method'><a href="module-functions.html#.pipeline">pipeline</a></li><li data-type='method'><a href="module-functions.html#.throttle">throttle</a></li><li data-type='method'><a href="module-functions.html#.throttleLast">throttleLast</a></li><li data-type='method'><a href="module-functions.html#.uuid">uuid</a></li><li data-type='method'><a href="module-functions.html#.waitForIt">waitForIt</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-Helpers.html">Helpers</a><ul class='methods'><li data-type='method'><a href="module-Helpers.html#.either">either</a></li><li data-type='method'><a href="module-Helpers.html#.exists">exists</a></li><li data-type='method'><a href="module-Helpers.html#.isEmpty">isEmpty</a></li><li data-type='method'><a href="module-Helpers.html#.isSame">isSame</a></li><li data-type='method'><a href="module-Helpers.html#.isValidDate">isValidDate</a></li><li data-type='method'><a href="module-Helpers.html#.strToType">strToType</a></li><li data-type='method'><a href="module-Helpers.html#.typeOf">typeOf</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-log.html">log</a><ul class='methods'><li data-type='method'><a href="module-log.html#.logData">logData</a></li><li data-type='method'><a href="module-log.html#.resetLogs">resetLogs</a></li><li data-type='method'><a href="module-log.html#.setLogs">setLogs</a></li></ul></li><li><a href="module-method.html">method</a><ul class='methods'><li data-type='method'><a href="module-method.html#~Afunctionthatsimplyreturnsitsinput">A function that simply returns its input</a></li><li data-type='method'><a href="module-method.html#~Returnsanewfunctionthatisthecomplementofpredicatefunction%2560predicate%2560">Returns a new function that is the complement of predicate function `predicate`</a></li></ul></li><li></li><li></li><li><a href="module-number.html">number</a><ul class='methods'><li data-type='method'><a href="module-number.html#.equalsNaN">equalsNaN</a></li><li data-type='method'><a href="module-number.html#.getNums">getNums</a></li><li data-type='method'><a href="module-number.html#.isFloat">isFloat</a></li><li data-type='method'><a href="module-number.html#.isInt">isInt</a></li><li data-type='method'><a href="module-number.html#.isNegative">isNegative</a></li><li data-type='method'><a href="module-number.html#.isNonNegative">isNonNegative</a></li><li data-type='method'><a href="module-number.html#.isNum">isNum</a></li><li data-type='method'><a href="module-number.html#.isPositive">isPositive</a></li><li data-type='method'><a href="module-number.html#.nth">nth</a></li><li data-type='method'><a href="module-number.html#.toFloat">toFloat</a></li><li data-type='method'><a href="module-number.html#.toInt">toInt</a></li><li data-type='method'><a href="module-number.html#.toNum">toNum</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-object.html">object</a><ul class='methods'><li data-type='method'><a href="module-object.html#.applyToCloneOf">applyToCloneOf</a></li><li data-type='method'><a href="module-object.html#.clearObj">clearObj</a></li><li data-type='method'><a href="module-object.html#.cloneJson">cloneJson</a></li><li data-type='method'><a href="module-object.html#.deepFreeze">deepFreeze</a></li><li data-type='method'><a href="module-object.html#.deepMerge">deepMerge</a></li><li data-type='method'><a href="module-object.html#.eitherObj">eitherObj</a></li><li data-type='method'><a href="module-object.html#.everyEntry">everyEntry</a></li><li data-type='method'><a href="module-object.html#.filterObj">filterObj</a></li><li data-type='method'><a href="module-object.html#.hasOwn">hasOwn</a></li><li data-type='method'><a href="module-object.html#.isEntry">isEntry</a></li><li data-type='method'><a href="module-object.html#.isObj">isObj</a></li><li data-type='method'><a href="module-object.html#.jsonEqual">jsonEqual</a></li><li data-type='method'><a href="module-object.html#.keyMap">keyMap</a></li><li data-type='method'><a href="module-object.html#.mapEntries">mapEntries</a></li><li data-type='method'><a href="module-object.html#.mapKeys">mapKeys</a></li><li data-type='method'><a href="module-object.html#.mapObj">mapObj</a></li><li data-type='method'><a href="module-object.html#.omitKeys">omitKeys</a></li><li data-type='method'><a href="module-object.html#.pickKeys">pickKeys</a></li><li data-type='method'><a href="module-object.html#.reduceObj">reduceObj</a></li><li data-type='method'><a href="module-object.html#.sanitizeCopy">sanitizeCopy</a></li><li data-type='method'><a href="module-object.html#.someEntry">someEntry</a></li><li data-type='method'><a href="module-object.html#.toObj">toObj</a></li><li data-type='method'><a href="module-object.html#.trimStringFields">trimStringFields</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-promise.html">promise</a><ul class='methods'><li data-type='method'><a href="module-promise.html#.promisify">promisify</a></li><li data-type='method'><a href="module-promise.html#.promisifyAll">promisifyAll</a></li><li data-type='method'><a href="module-promise.html#.wait">wait</a></li></ul></li><li></li><li></li><li><a href="module-string.html">string</a><ul class='methods'><li data-type='method'><a href="module-string.html#.buildPath">buildPath</a></li><li data-type='method'><a href="module-string.html#.camelCase">camelCase</a></li><li data-type='method'><a href="module-string.html#.capitalize">capitalize</a></li><li data-type='method'><a href="module-string.html#.cleanStr">cleanStr</a></li><li data-type='method'><a href="module-string.html#.containsStr">containsStr</a></li><li data-type='method'><a href="module-string.html#.delimitString">delimitString</a></li><li data-type='method'><a href="module-string.html#.eitherStr">eitherStr</a></li><li data-type='method'><a href="module-string.html#.isEmail">isEmail</a></li><li data-type='method'><a href="module-string.html#.isLowerCase">isLowerCase</a></li><li data-type='method'><a href="module-string.html#.isPhone">isPhone</a></li><li data-type='method'><a href="module-string.html#.isStr">isStr</a></li><li data-type='method'><a href="module-string.html#.isUpperCase">isUpperCase</a></li><li data-type='method'><a href="module-string.html#.isUrl">isUrl</a></li><li data-type='method'><a href="module-string.html#.isUuid">isUuid</a></li><li data-type='method'><a href="module-string.html#.mapString">mapString</a></li><li data-type='method'><a href="module-string.html#.parseJSON">parseJSON</a></li><li data-type='method'><a href="module-string.html#.plural">plural</a></li><li data-type='method'><a href="module-string.html#.removeDot">removeDot</a></li><li data-type='method'><a href="module-string.html#.sanitize">sanitize</a></li><li data-type='method'><a href="module-string.html#.singular">singular</a></li><li data-type='method'><a href="module-string.html#.snakeCase">snakeCase</a></li><li data-type='method'><a href="module-string.html#.styleCase">styleCase</a></li><li data-type='method'><a href="module-string.html#.template">template</a></li><li data-type='method'><a href="module-string.html#.toStr">toStr</a></li><li data-type='method'><a href="module-string.html#.trainCase">trainCase</a></li><li data-type='method'><a href="module-string.html#.wordCaps">wordCaps</a></li></ul></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li><a href="module-url.html">url</a><ul class='methods'><li data-type='method'><a href="module-url.html#.isValidUrl">isValidUrl</a></li><li data-type='method'><a href="module-url.html#.objToQuery">objToQuery</a></li><li data-type='method'><a href="module-url.html#.queryToObj">queryToObj</a></li></ul></li><li></li><li></li><li><a href="module-validation.html">validation</a><ul class='methods'><li data-type='method'><a href="module-validation.html#.validate">validate</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#isOrderable">isOrderable</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">collection/cleanColl.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module collection */
+
+import { isObj } from '../object/isObj'
+import { isColl } from './isColl'
+
+/**
+ * Cleans a collection by creating a new collection
+ * With the null and undefined values removed
+ * @function
+ * @param {Object|Array} coll - Collection to remove empty values from
+ * @param {boolean} [recursive=true] - Should recursively clean child values
+ *
+ * @returns {Object|Array} - Cleaned collection
+ */
+export const cleanColl = (coll, recursive=true) => {
+  return isColl(coll)
+    ? Object.keys(coll)
+      .reduce((cleaned, key) => {
+        const value = coll[key]
+        if(value === null || value === undefined) return cleaned
+
+        cleaned[key] = recursive &amp;&amp; isColl(value)
+          ? cleanColl(value)
+          : value
+
+        return cleaned
+      }, isObj(coll) &amp;&amp; {} || [])
+    : console.error(`cleanColl requires a collection as the first argument`) || coll
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Aug 03 2020 15:19:51 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+
+</body>
+</html>
