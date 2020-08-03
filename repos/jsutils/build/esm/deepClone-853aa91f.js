@@ -1,7 +1,7 @@
 import { i as isArr } from './isArr-a4420764.js';
 import { i as isFunc } from './isFunc-40ceeef8.js';
-import { u as updateColl } from './get-e0378510.js';
-import { c as cloneFunc } from './cloneFunc-1aaa9008.js';
+import { u as updateColl } from './get-8e62f069.js';
+import { c as cloneFunc } from './cloneFunc-8a9b7642.js';
 
 const set = (obj, path, val) => updateColl(obj, path, 'set', val);
 

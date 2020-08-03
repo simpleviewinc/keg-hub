@@ -5,10 +5,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var isArr = require('./isArr-39234014.js');
 require('./isObj-6b3aa807.js');
 require('./isFunc-f93803cb.js');
-var isNum = require('./isNum-c7164b50.js');
-var isBool = require('./isBool-aa6af74e.js');
 var isStr = require('./isStr-8a57710e.js');
 var isColl = require('./isColl-5757310a.js');
+var isBool = require('./isBool-aa6af74e.js');
+var isNum = require('./isNum-c7164b50.js');
 var reduceObj = require('./reduceObj-33ce053a.js');
 
 const queryToObj = string => {

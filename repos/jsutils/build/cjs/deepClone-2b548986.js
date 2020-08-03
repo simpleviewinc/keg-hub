@@ -2,8 +2,8 @@
 
 var isArr = require('./isArr-39234014.js');
 var isFunc = require('./isFunc-f93803cb.js');
-var get = require('./get-711365f4.js');
-var cloneFunc = require('./cloneFunc-6f1b4c75.js');
+var get = require('./get-bfcf4646.js');
+var cloneFunc = require('./cloneFunc-30c0acdd.js');
 
 const set = (obj, path, val) => get.updateColl(obj, path, 'set', val);
 

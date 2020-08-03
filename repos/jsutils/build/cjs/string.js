@@ -6,9 +6,9 @@ require('./isArr-39234014.js');
 var isFunc = require('./isFunc-f93803cb.js');
 var isStr = require('./isStr-8a57710e.js');
 var toStr$1 = require('./toStr-8e499966.js');
-var isColl = require('./isColl-5757310a.js');
-var get = require('./get-711365f4.js');
 var sanitize = require('./sanitize-0a18302d.js');
+var isColl = require('./isColl-5757310a.js');
+var get = require('./get-bfcf4646.js');
 
 const buildPath = (...args) => {
   const built = args.reduce((path, arg) => {

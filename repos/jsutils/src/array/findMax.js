@@ -1,6 +1,6 @@
 /** @module array */
 import { identity, compareTo } from '../method'
-import { findExtrema } from './'
+import { findExtrema } from './findExtrema'
 
 /**
  * @function

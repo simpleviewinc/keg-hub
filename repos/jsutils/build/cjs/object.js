@@ -5,21 +5,21 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var isArr = require('./isArr-39234014.js');
 var isObj = require('./isObj-6b3aa807.js');
 var isFunc = require('./isFunc-f93803cb.js');
-var isNum = require('./isNum-c7164b50.js');
-require('./isBool-aa6af74e.js');
-require('./toBool-cb75ca6a.js');
+var hasOwn = require('./hasOwn-7999ca65.js');
 var isStr = require('./isStr-8a57710e.js');
 require('./toStr-8e499966.js');
-var isColl = require('./isColl-5757310a.js');
-require('./get-711365f4.js');
-var deepClone = require('./deepClone-24b52c1a.js');
-var cloneFunc = require('./cloneFunc-6f1b4c75.js');
-require('./toNum-eeb2e51e.js');
-var strToType = require('./strToType-56d619a5.js');
-var log = require('./log.js');
-var hasOwn = require('./hasOwn-7999ca65.js');
-var reduceObj = require('./reduceObj-33ce053a.js');
 var sanitize = require('./sanitize-0a18302d.js');
+var isColl = require('./isColl-5757310a.js');
+require('./get-bfcf4646.js');
+require('./isBool-aa6af74e.js');
+require('./toBool-cfb8a7ec.js');
+var isNum = require('./isNum-c7164b50.js');
+require('./toNum-990ff777.js');
+var cloneFunc = require('./cloneFunc-30c0acdd.js');
+var deepClone = require('./deepClone-2b548986.js');
+var strToType = require('./strToType-23818aee.js');
+var log = require('./log.js');
+var reduceObj = require('./reduceObj-33ce053a.js');
 
 const cloneJson = obj => {
   try {
@@ -28,34 +28,6 @@ const cloneJson = obj => {
     log.logData(e.message, 'error');
     return null;
   }
-};
-
-const isEntry = maybeEntry => isArr.isArr(maybeEntry) && maybeEntry.length === 2 && (isNum.isNum(maybeEntry[0]) || isStr.isStr(maybeEntry[0]));
-
-const mapEntries = (obj, cb) => {
-  if (!isArr.isArr(obj) && !isObj.isObj(obj)) {
-    console.error(obj, `Expected array or object for obj. Found ${typeof obj}`);
-    return obj;
-  }
-  if (!isFunc.isFunc(cb)) {
-    console.error(`Expected function for cb. Found ${typeof cb}`);
-    return obj;
-  }
-  const entries = Object.entries(obj);
-  const initialValue = isArr.isArr(obj) ? [] : {};
-  return entries.reduce((obj, [key, value]) => {
-    const result = cb(key, value);
-    if (!isEntry(result)) {
-      console.error(`Callback function must return entry. Found: ${result}. Using current entry instead.`);
-      return deepClone.set(obj, key, value);
-    }
-    return deepClone.set(obj, result[0], result[1]);
-  }, initialValue);
-};
-
-const mapKeys = (obj, keyMapper) => {
-  if (!isObj.isObj(obj) || !isFunc.isFunc(keyMapper)) return obj;
-  return mapEntries(obj, (key, value) => [keyMapper(key), value]);
 };
 
 const clearObj = (obj, filter) => {
@@ -111,6 +83,34 @@ const jsonEqual = (one, two) => {
   } catch (e) {
     return false;
   }
+};
+
+const isEntry = maybeEntry => isArr.isArr(maybeEntry) && maybeEntry.length === 2 && (isNum.isNum(maybeEntry[0]) || isStr.isStr(maybeEntry[0]));
+
+const mapEntries = (obj, cb) => {
+  if (!isArr.isArr(obj) && !isObj.isObj(obj)) {
+    console.error(obj, `Expected array or object for obj. Found ${typeof obj}`);
+    return obj;
+  }
+  if (!isFunc.isFunc(cb)) {
+    console.error(`Expected function for cb. Found ${typeof cb}`);
+    return obj;
+  }
+  const entries = Object.entries(obj);
+  const initialValue = isArr.isArr(obj) ? [] : {};
+  return entries.reduce((obj, [key, value]) => {
+    const result = cb(key, value);
+    if (!isEntry(result)) {
+      console.error(`Callback function must return entry. Found: ${result}. Using current entry instead.`);
+      return deepClone.set(obj, key, value);
+    }
+    return deepClone.set(obj, result[0], result[1]);
+  }, initialValue);
+};
+
+const mapKeys = (obj, keyMapper) => {
+  if (!isObj.isObj(obj) || !isFunc.isFunc(keyMapper)) return obj;
+  return mapEntries(obj, (key, value) => [keyMapper(key), value]);
 };
 
 const mapObj = (obj, cb) => isObj.isObj(obj) && isFunc.isFunc(cb) && Object.entries(obj).map(([key, value]) => cb(key, value)) || obj;

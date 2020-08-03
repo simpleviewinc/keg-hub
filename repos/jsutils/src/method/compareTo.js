@@ -1,7 +1,7 @@
 /** @module method */
 
 import { isStr } from '../string'
-import { isOrderable } from './'
+import { isOrderable } from './isOrderable'
 import { validate } from '../validation'
 
 /**

@@ -2,11 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var isNum = require('./isNum-c7164b50.js');
-var isNonNegative = require('./isNonNegative-9959647c.js');
 require('./isStr-8a57710e.js');
 require('./toStr-8e499966.js');
-var toNum = require('./toNum-eeb2e51e.js');
+var isNum = require('./isNum-c7164b50.js');
+var toNum = require('./toNum-990ff777.js');
+
+const isNonNegative = val => isNum.isNum(val) && val >= 0;
+
+const isNegative = x => isNum.isNum(x) && x < 0;
+
+const isPositive = x => isNum.isNum(x) && x > 0;
 
 const isFloat = val => isNum.isNum(val) && val % 1 !== 0;
 
@@ -39,11 +44,13 @@ const toInt = val => val && !isNum.equalsNaN(val) && parseInt(isNum.isNum(val) &
 
 exports.equalsNaN = isNum.equalsNaN;
 exports.isNum = isNum.isNum;
-exports.isNonNegative = isNonNegative.isNonNegative;
 exports.getNums = toNum.getNums;
 exports.toNum = toNum.toNum;
 exports.isFloat = isFloat;
 exports.isInt = isInt;
+exports.isNegative = isNegative;
+exports.isNonNegative = isNonNegative;
+exports.isPositive = isPositive;
 exports.nth = nth;
 exports.toFloat = toFloat;
 exports.toInt = toInt;

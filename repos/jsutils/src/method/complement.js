@@ -1,7 +1,7 @@
 /** @module method */
 
 import { validate } from '../validation'
-import { isFunc } from '../method'
+import { isFunc } from '../method/isFunc'
 
 /**
  * @function

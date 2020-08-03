@@ -1,10 +1,12 @@
-import { g as get } from './get-e0378510.js';
+'use strict';
+
+var get = require('./get-bfcf4646.js');
 
 const cloneFunc = func => {
   const funcClone = function (...args) {
     return func instanceof funcClone ? (() => {
       return new func(...args);
-    })() : get(func.prototype, 'constructor.name') ? new func(...args) : func.apply(func, args);
+    })() : get.get(func.prototype, 'constructor.name') ? new func(...args) : func.apply(func, args);
   };
   for (let key in func) func.hasOwnProperty(key) && (funcClone[key] = func[key]);
   Object.defineProperty(funcClone, 'name', {
@@ -15,4 +17,4 @@ const cloneFunc = func => {
   return funcClone;
 };
 
-export { cloneFunc as c };
+exports.cloneFunc = cloneFunc;

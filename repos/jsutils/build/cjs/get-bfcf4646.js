@@ -15,7 +15,7 @@ const updateColl = (obj, path, type, val) => {
     const next = obj[prop];
     isColl.isColl(next) || isFunc.isFunc(next) ? obj = next : (() => {
       if (type === 'set') obj[prop] = {};else breakPath = true;
-      obj = next;
+      obj = obj[prop];
     })();
     if (breakPath) return val;
   }
