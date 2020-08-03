@@ -12,14 +12,14 @@ describe('loadModule', () => {
     const packageConfig = loadModule(packagePath)
     
     expect(typeof packageConfig).toBe('object')
-    expect(packageConfig.name).toBe('jsutils')
+    expect(packageConfig.name).toBe('@ltipton/jsutils')
   })
 
   it('should accept an array as the first argument', () => {
     const packageConfig = loadModule([packagePath])
     
     expect(typeof packageConfig).toBe('object')
-    expect(packageConfig.name).toBe('jsutils')
+    expect(packageConfig.name).toBe('@ltipton/jsutils')
   })
 
   it('should load the first found module in the array', () => {
@@ -31,7 +31,7 @@ describe('loadModule', () => {
     ])
     
     expect(typeof packageConfig).toBe('object')
-    expect(packageConfig.name).toBe('jsutils')
+    expect(packageConfig.name).toBe('@ltipton/jsutils')
 
     const loadedModule = loadModule([
       // Bad Path
@@ -71,7 +71,7 @@ describe('loadModule', () => {
     const packageConfig = loadModule('./package.json', { rootDir })
     
     expect(typeof packageConfig).toBe('object')
-    expect(packageConfig.name).toBe('jsutils')
+    expect(packageConfig.name).toBe('@ltipton/jsutils')
 
   })
 

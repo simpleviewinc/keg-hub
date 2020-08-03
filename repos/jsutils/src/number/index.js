@@ -1,4 +1,6 @@
 export * from './isNonNegative'
+export * from './isNegative'
+export * from './isPositive'
 export * from './equalsNaN'
 export * from './getNums'
 export * from './isFloat'

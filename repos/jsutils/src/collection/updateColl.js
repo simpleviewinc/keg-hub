@@ -31,7 +31,7 @@ export const updateColl = (obj, path, type, val) => {
       : (() => {
           if(type === 'set') obj[prop] = {}
           else breakPath = true
-          obj = next
+          obj = obj[prop]
         })()
 
     if (breakPath) return val

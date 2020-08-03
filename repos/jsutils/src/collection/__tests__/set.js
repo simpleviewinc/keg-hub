@@ -1,6 +1,4 @@
 const Coll = require('../')
-const { isArr } = require('../../array/isArr')
-const { isObj } = require('../../object/isObj')
 
 describe('set', () => {
 
@@ -29,4 +27,46 @@ describe('set', () => {
     expect(setObj === res).toBe(true)
   })
 
+  it ('should create a path if it doesn\'t exist', () => {
+    const path = 'data.foo.bar'
+    const res = Coll.set({}, path, 55)
+
+    expect(res).toEqual({
+      data: {
+        foo: {
+          bar: 55
+        }
+      }
+    })
+  })
+
+  it ('should overwrite a path if it already exists', () => {
+    const path = 'data.foo.bar'
+    const res = Coll.set({ data: { foo: { bar: 55 }}}, path, 77)
+
+    expect(res).toEqual({
+      data: {
+        foo: {
+          bar: 77
+        }
+      }
+    })
+  })
+
+  it ('should create a path even if the value isn\'t an object!', () => {
+    const path = 'path.to.thing'
+    const obj = { path: 'not-an-object' }
+
+    const res = Coll.set(obj, path, 99)
+
+    expect(res).toEqual({
+      path: {
+        to: {
+          thing: 99
+        }
+      }
+    })
+
+
+  })
 })
