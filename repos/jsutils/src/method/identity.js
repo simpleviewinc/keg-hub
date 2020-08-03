@@ -1,8 +1,8 @@
-/** @module method */
+/** @module functions */
 
 /**
- * @function
  * A function that simply returns its input
+ * @function
  * @param {*} x 
  * @returns {*} the input
  */

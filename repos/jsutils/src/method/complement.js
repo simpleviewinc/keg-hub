@@ -1,11 +1,11 @@
-/** @module method */
+/** @module functions */
 
 import { validate } from '../validation'
 import { isFunc } from '../method/isFunc'
 
 /**
- * @function
  * Returns a new function that is the complement of predicate function `predicate`
+ * @function
  * @param {Function} predicate 
  * @returns {Function?} the complement of `predicate`, if it's a function, otherwise null
  * @example

@@ -3,8 +3,8 @@ import { identity, compareTo } from '../method'
 import { findExtrema } from './findExtrema'
 
 /**
- * @function
  * Returns the maximum element in arr
+ * @function
  * @param {Array<Object>} arr
  * @param {Function?} propSelector - optional property selector for choosing the property to compare with
  * @example
