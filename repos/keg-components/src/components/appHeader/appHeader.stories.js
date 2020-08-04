@@ -1,49 +1,104 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { AppHeader, Button, View, Text, Icon } from '../..'
+import { AppHeader, Button, View, Image } from '../..'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
+import { TouchableOpacity } from 'react-native'
 
+const buttonStyles = {
+  main: { backgroundColor: 'transparent' },
+  content: { color: 'black', fontWeight: 'bold' },
+}
+const CustomComponentButtons = () => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingRight: 5,
+      }}
+    >
+      <Button
+        onClick={action('About Clicked!')}
+        styles={buttonStyles}
+      >
+        About
+      </Button>
+      <Button
+        onClick={action('Contacts Clicked!')}
+        styles={buttonStyles}
+      >
+        Contacts
+      </Button>
+      <Button
+        onClick={action('Careers Clicked!')}
+        styles={buttonStyles}
+      >
+        Careers
+      </Button>
+    </View>
+  )
+}
+
+const SVIcon = () => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={action('Image clicked')}
+    >
+      <Image
+        styles={{
+          resizeMode: 'contain',
+          paddingLeft: 20,
+          height: 40,
+          width: 200,
+          alignSelf: 'center',
+        }}
+        src='https://www.trilogyed.com/blog/wp-content/uploads/2020/07/simpleview_primary-696x110.png'
+      />
+    </TouchableOpacity>
+  )
+}
+
+const headerStyles = {
+  main: { height: 90, backgroundColor: '#bebebe', paddingHorizontal: '20px' },
+  content: {
+    right: {
+      main: {
+        maxWidth: '50%',
+        justifyContent: 'flex-end',
+      },
+    },
+  },
+}
+const headerStyles2 = {
+  main: { height: 70, backgroundColor: '#00A4E4' },
+  content: {
+    center: {
+      content: {
+        title: { color: 'black' },
+      },
+    },
+  },
+}
 storiesOf('Display | AppHeader', module)
-  .add('AppHeader', () => (
+  .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
       <AppHeader
-        title={
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-        }
-      />
-
-      <p />
-
-      <AppHeader
-        title={'Styled Title & height'}
-        styles={{
-          container: { height: 100 },
-          center: {
-            content: {
-              title: {
-                color: '#1e6073',
-                fontStyle: 'italic',
-                fontWeight: 'bold',
-              },
-            },
-          },
-        }}
-        RightComponent={
-          <Button onClick={action('right button clicked')}>
-            custom right button
-          </Button>
-        }
-        leftIcon={'arrow-left'}
-        onLeftClick={action('Left Section Clicked!')}
+        data-class='overwrite-data-class-name'
+        styles={headerStyles}
+        shadow
+        LeftComponent={<SVIcon />}
+        RightComponent={<CustomComponentButtons />}
       />
 
       <p />
 
       <AppHeader
         shadow
-        title={'With Shadow, Custom Icon, no left action'}
-        styles={{ container: { height: 70, backgroundColor: 'red' } }}
+        title={'Custom Icons, no left action'}
+        styles={headerStyles2}
         leftIcon={'android'}
         rightIcon={'search'}
         onRightClick={action('Right Section Clicked!')}
@@ -52,29 +107,24 @@ storiesOf('Display | AppHeader', module)
   ))
   .add('Plain', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
-      <AppHeader />
-    </StoryWrap>
-  ))
-  .add('Custom Sections', () => (
-    <StoryWrap style={{ paddingTop: 30 }}>
       <AppHeader
-        title={'Title'}
-        LeftComponent={
-          <View
-            style={{ backgroundColor: 'blue', width: '100%', height: '100%' }}
-          >
-            <Text> Custom left section </Text>
-          </View>
+        shadow
+        title={'Keg Components'}
+      />
+      <p />
+
+      <AppHeader
+        shadow
+        title={
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
         }
-        RightComponent={<Icon name={'beer'} />}
-        CenterComponent={
-          <Button
-            themePath='button.contained.secondary'
-            onClick={action(' Center Button Clicked!')}
-          >
-            Custom center section btn
-          </Button>
-        }
+      />
+
+      <p />
+      <AppHeader
+        title={'Clickable left icon'}
+        leftIcon={'arrow-left'}
+        onLeftClick={action('Left Section Clicked!')}
       />
     </StoryWrap>
   ))

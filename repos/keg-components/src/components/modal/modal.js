@@ -37,6 +37,7 @@ const SlideAnimatedView = ({
 
   return (
     <Animated.View
+      dataSet={Modal.dataSet.content}
       style={{ ...defaultStyle, transform: [{ translateY: slide }] }}
     >
       { children }
@@ -102,17 +103,16 @@ export const Modal = props => {
   return (
     // change the wrapper dimensions to 0 when visible is set to false
     <View
-      data-class='modal-main'
+      dataSet={Modal.dataSet.main}
       style={renderModal ? modalStyles.main : hideModalStyle}
     >
       <TouchableOpacity
-        data-class='modal-backdrop'
+        dataSet={Modal.dataSet.backdrop}
         style={modalStyles.backdrop}
         onPress={onBackdropTouch}
         activeOpacity={activeOpacity}
       />
       <AnimatedComponent
-        data-class='modal-content'
         onAnimationFinish={cb}
         visible={visible}
         defaultStyle={modalStyles.content}
@@ -121,6 +121,12 @@ export const Modal = props => {
       </AnimatedComponent>
     </View>
   )
+}
+
+Modal.dataSet = {
+  main: { class: 'modal-main' },
+  backdrop: { class: 'modal-backdrop' },
+  content: { class: 'modal-content' },
 }
 
 Modal.propTypes = {

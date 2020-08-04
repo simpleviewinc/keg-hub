@@ -7,32 +7,32 @@ const defaultSectionStyle = {
   backgroundColor: 'transparent',
 }
 
+const sideContentMainStyle = {
+  ...defaultSectionStyle,
+  justifyContent: 'center',
+  paddingLeft: 0,
+}
+
 const defaultSideSectionStyle = {
   main: {
     ...defaultSectionStyle,
     flexDirection: 'row',
     maxWidth: '20%',
+    ...flex.align.center,
   },
   content: {
-    container: {
-      ...defaultSectionStyle,
+    button: {
+      main: {
+        ...sideContentMainStyle,
+      },
+    },
+    main: {
+      ...sideContentMainStyle,
     },
     icon: {
-      container: {},
-      icon: {
-        alignSelf: 'center',
-        padding: 10,
-        color: '#111111',
-        fontSize: 30,
-      },
-    },
-  },
-  native: {
-    content: {
-      container: {
-        ...flex.center,
-        flex: 0,
-      },
+      paddingHorizontal: 10,
+      color: '#111111',
+      fontSize: 30,
     },
   },
 }
@@ -43,84 +43,43 @@ export const appHeader = {
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.5,
-      shadowRadius: 1,
+      shadowRadius: 2,
     },
-    container: {
+    main: {
       $all: {
-        ...flex.justify.center,
-        ...flex.align.left,
-        flex: 0,
+        justifyContent: 'center',
         backgroundColor: get(colors, 'surface.primary.colors.dark'),
         height: 70,
         width: '100%',
-        ...flex.left,
-        ...flex.row,
+        flexDirection: 'row',
       },
     },
-    side: {
+    content: {
       left: {
-        $all: {
-          main: {
-            ...flex.left,
-            ...defaultSideSectionStyle.main,
-            ...flex.align.center,
-          },
-          content: {
-            ...defaultSideSectionStyle.content,
-          },
+        main: {
+          ...flex.left,
+          ...defaultSideSectionStyle.main,
         },
-        $web: {
-          content: {
-            container: {
-              ...flex.left,
-            },
-          },
-        },
-        $native: {
-          ...defaultSideSectionStyle.native,
-        },
+        content: defaultSideSectionStyle.content,
       },
       right: {
-        $all: {
-          main: {
-            ...flex.right,
-            ...defaultSideSectionStyle.main,
-            ...flex.align.center,
-          },
-          content: {
-            ...defaultSideSectionStyle.content,
-          },
+        main: {
+          ...flex.right,
+          ...defaultSideSectionStyle.main,
         },
-        $web: {
-          content: {
-            container: {
-              ...flex.right,
-            },
-          },
-        },
-        $native: {
-          ...defaultSideSectionStyle.native,
-        },
+        content: defaultSideSectionStyle.content,
       },
-    },
-    center: {
-      $native: {
-        main: {},
-        content: {
-          title: {},
-        },
-      },
-      $web: {
-        main: {},
-        content: {},
-      },
-      $all: {
+      center: {
         main: {
           ...flex.center,
           ...defaultSectionStyle,
           width: '60%',
         },
-        content: {},
+        content: {
+          title: {
+            color: 'white',
+          },
+        },
       },
     },
   },
