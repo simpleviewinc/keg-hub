@@ -2060,10 +2060,10 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@simpleviewinc/keg-components@0.5.0":
-  version "0.5.0"
-  resolved "https://npm.pkg.github.com/download/@simpleviewinc/keg-components/0.5.0/3666805bb76cc80bd46aeefaffcf9a8c96445f46a1b43645b88e527d820f9b9f#a2a75e3880dbcf052cd49572fb665260408aa897"
-  integrity sha512-5OBgVzP2OT1gQzKo9ECOGJBjfB3md4n7mRAcpir+sWGPkB35Z8deX5cPucEQIXwwcsoptL4EKLa2SgJD0t5tIw==
+"@simpleviewinc/keg-components@0.6.1":
+  version "0.6.1"
+  resolved "https://npm.pkg.github.com/download/@simpleviewinc/keg-components/0.6.1/65f11d12a7382da5420a1578dabadf014d23d31fdb8c230a9bde525b67cbedb8#406cb7d6efc7769c012fc5a3b1b5258e489d6de2"
+  integrity sha512-ZhNEkpktFo4RNEiln+WrFIuqTX/BuGZUvTGikRCgp0y8Kl7PCnVI8hUSC1nQzhsAh9O65OnMX8TzjD5WLnkcbQ==
 
 "@simpleviewinc/re-theme@2.0.0":
   version "2.0.0"
@@ -7060,7 +7060,7 @@ husky@4.2.5:
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
 
-hyphenate-style-name@^1.0.2:
+hyphenate-style-name@^1.0.2, hyphenate-style-name@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
@@ -7206,7 +7206,7 @@ ini@^1.3.5, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
-inline-style-prefixer@^5.0.3:
+inline-style-prefixer@^5.1.0:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/inline-style-prefixer/-/inline-style-prefixer-5.1.2.tgz#e5a5a3515e25600e016b71e39138971228486c33"
   integrity sha512-PYUF+94gDfhy+LsQxM0g3d6Hge4l1pAqOSOiZuHWzMvQEGsbRQ/ck2WioLqrY2ZkHyPgVUXxn+hrkF7D6QUGbA==
@@ -11319,18 +11319,18 @@ react-native-svg@12.1.0:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
 
-react-native-web@0.11.7:
-  version "0.11.7"
-  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.11.7.tgz#d173d5a9b58db23b6d442c4bc4c81e9939adac23"
-  integrity sha512-w1KAxX2FYLS2GAi3w3BnEZg/IUu7FdgHnLmFKHplRnHMV3u1OPB2EVA7ndNdfu7ds4Rn2OZjSXoNh6F61g3gkA==
+react-native-web@0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.13.3.tgz#fe6799a1a341b60a617194b51042c40f57bfb34c"
+  integrity sha512-szUf/qDMZileJKglUmMT5UdPYltmmF2ywZ0OFeW7/6XmYDJP+Bepo3eGaCwm1bMcopLBq+lNdbn854CHfU8yBw==
   dependencies:
     array-find-index "^1.0.2"
     create-react-class "^15.6.2"
     debounce "^1.2.0"
     deep-assign "^3.0.0"
     fbjs "^1.0.0"
-    hyphenate-style-name "^1.0.2"
-    inline-style-prefixer "^5.0.3"
+    hyphenate-style-name "^1.0.3"
+    inline-style-prefixer "^5.1.0"
     normalize-css-color "^1.0.2"
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.4"
