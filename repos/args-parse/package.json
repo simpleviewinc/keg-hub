@@ -2,7 +2,7 @@
   "name": "args-parse",
   "version": "1.0.0",
   "description": "Parse command line arguments",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "https://github.com/lancetipton/argsParse.git",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
