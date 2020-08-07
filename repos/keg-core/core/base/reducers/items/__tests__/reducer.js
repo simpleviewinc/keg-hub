@@ -386,6 +386,14 @@ describe('items reducer', () => {
   describe('error handling', () => {
     const initialState = undefined
 
+    const expectError = () => {
+      expect(console.error).toHaveBeenCalled()
+    }
+    let orig = console.error
+    beforeAll(() => (console.error = jest.fn()))
+    afterEach(() => expectError())
+    afterAll(() => (console.error = orig))
+
     it('should set an error for a missing key on setItem', () => {
       let state = setUsers({})
       state = setUser(charlie, undefined, state)
@@ -415,20 +423,6 @@ describe('items reducer', () => {
       })
       expect(state.error).toBeInstanceOf(ItemsRequestError)
       expect(state.error.hasIssue(IssueTypes.InvalidItemsType)).toBe(true)
-    })
-
-    it('should set errors for attempting to add items to nonexistent categories', () => {
-      let state = upsertUsers([])
-      state = itemsReducer(initialState, {
-        type: ActionTypes.UPSERT_ITEM,
-        payload: {
-          category: 'cars',
-          item: 'ferrari',
-          key: 'id',
-        },
-      })
-      expect(state.error).toBeInstanceOf(ItemsRequestError)
-      expect(state.error.hasIssue(IssueTypes.MissingCategory)).toBe(true)
     })
 
     it('should set errors for upsert item without key or item', () => {

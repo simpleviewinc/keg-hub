@@ -1,4 +1,4 @@
-import { limbo } from '@ltipton/jsutils'
+import { limbo, isStr, isEmpty, validate } from '@ltipton/jsutils'
 const isDev = process.env.NODE_ENV !== 'production'
 
 /**
@@ -45,6 +45,19 @@ class BaseStorage {
         }
       })
     )
+
+  /**
+   * Validates the key for a storage function
+   * @param {*} key
+   */
+  validateKey = key => {
+    const [valid] = validate(
+      { key },
+      { key: key => isStr(key) && !isEmpty(key) }
+    )
+
+    return valid
+  }
 
   /**
    * Logs a message to the console when not in production

@@ -9,6 +9,9 @@ const { HttpMethods } = Values
  * Tests networkRequest on GET & POST calls on zerista API
  */
 describe('request: GET', () => {
+  const orig = console.error
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = orig))
   it('GET request without querystring', async () => {
     global.testMocks.axios = {
       response: {
@@ -58,6 +61,9 @@ describe('request: GET', () => {
 })
 
 describe('request: POST', () => {
+  const orig = console.error
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = orig))
   it('POST request with body', async () => {
     const params = {
       user: {
@@ -90,6 +96,9 @@ describe('request: POST', () => {
 })
 
 describe('request: DELETE', () => {
+  const orig = console.error
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = orig))
   it('DELETE with mock', async () => {
     global.testMocks.axios = {
       response: {
@@ -113,6 +122,9 @@ describe('request: DELETE', () => {
 })
 
 describe('request: PUT', () => {
+  const orig = console.error
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = orig))
   it('PUT with mock', async () => {
     global.testMocks.axios = {
       response: {
@@ -143,6 +155,9 @@ describe('request: PUT', () => {
 })
 
 describe('request: PATCH', () => {
+  const orig = console.error
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = orig))
   it('PATCH with mock', async () => {
     global.testMocks.axios = {
       response: {
@@ -173,6 +188,9 @@ describe('request: PATCH', () => {
 })
 
 describe('failed Request', () => {
+  const orig = console.error
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = orig))
   it('failed GET request', async () => {
     global.testMocks.axios = {
       response: {

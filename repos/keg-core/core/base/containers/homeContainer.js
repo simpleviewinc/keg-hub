@@ -1,31 +1,19 @@
 import React from 'react'
-import { View, H5, Button, Text, Row, AppHeader } from 'SVComponents'
+import { View, H5, Text, Row } from 'SVComponents'
 import { useTheme } from '@simpleviewinc/re-theme'
 import { get } from '@ltipton/jsutils'
 import { isNative, isStandalonePWA, isIOSWeb } from 'SVUtils'
 
-export const AppContainer = props => {
+export const HomeContainer = props => {
   const theme = useTheme()
   const margin = { margin: get(theme, 'margin.size') }
 
   return (
     <>
-      <AppHeader
-        shadow
-        title={'Keg-Core'}
-        leftIcon={'beer'}
-      />
-
       <View style={{ flexDirection: 'column', ...margin }}>
         <H5 style={{ ...margin, alignItems: 'center', textAlign: 'center' }}>
           Welcome to the Keg
         </H5>
-        <Button
-          themePath='button.contained.primary'
-          styles={{ main: margin }}
-        >
-          Click Me
-        </Button>
         <Row style={margin}>
           <Text>Is Native: { isNative().toString() }</Text>
         </Row>

@@ -7,12 +7,13 @@ import {
   setDefaultTheme,
 } from '@simpleviewinc/re-theme'
 import { getStore } from 'SVStore'
-import { initAppAction } from 'SVActions'
-import { AppContainer } from 'SVContainers'
+import { initAppAction, navigateTo } from 'SVActions'
+import { AppHeader, Select, Option } from 'SVComponents'
 import { Router } from 'SVComponents'
 import { checkCall, get } from '@ltipton/jsutils'
 import { theme } from 'SVTheme'
 import { getHistory } from 'SVNavigation'
+import { ContainerRoutes } from 'SVNavigation/containerRoutes'
 
 setDefaultTheme(theme)
 
@@ -21,8 +22,41 @@ const checkAppInit = setInit => {
   checkCall(initAppAction)
 }
 
+// These demo core are defined here, and not in app.json, so that they are not
+// merged with tap routes. Taps would define their routes in tap.json
+const routes = Object.freeze({
+  '/': 'HomeContainer',
+  '/plugins': 'PluginsContainer',
+})
+
+/**
+ * Dropdown for switching between the demo containers
+ * @param {Object} param
+ * @param {Object} routes - routes nav object
+ */
+const RouteDropdown = ({ routes }) => {
+  const paths = Object.entries(routes)
+  const [ currentPath, setPath ] = useState(getHistory().location.pathname)
+  const onSelect = path => setPath(path) || navigateTo(path)
+  return (
+    <Select
+      style={{ margin: 35, padding: 0, width: '90%' }}
+      onValueChange={onSelect}
+      value={currentPath}
+    >
+      { paths.map(([ path, name ]) => (
+        <Option
+          key={path}
+          label={name}
+          value={path}
+        />
+      )) }
+    </Select>
+  )
+}
+
 const App = props => {
-  const [ activeTheme, switchTheme ] = useState(getDefaultTheme())
+  const [activeTheme] = useState(getDefaultTheme())
   const [ init, setInit ] = useState(false)
 
   useEffect(() => {
@@ -49,7 +83,14 @@ const App = props => {
               theme={activeTheme}
               merge={false}
             >
-              <AppContainer switchTheme={switchTheme} />
+              <AppHeader
+                shadow
+                title={'Keg-Core'}
+                leftIcon={'beer'}
+                RightComponent={<RouteDropdown routes={routes} />}
+              />
+
+              <ContainerRoutes navigationConfigs={routes} />
             </ReThemeProvider>
           </Provider>
         </SafeAreaView>

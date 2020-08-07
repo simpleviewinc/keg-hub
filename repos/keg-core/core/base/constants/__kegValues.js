@@ -1,5 +1,6 @@
 import { keyMap, deepMerge } from '@ltipton/jsutils'
 import { Values as TapValues } from 'SVConstants/values'
+import { PluginValues } from './__kegPluginValues'
 
 export const Values = deepMerge(
   {
@@ -29,5 +30,6 @@ export const Values = deepMerge(
      */
     ...keyMap(['PageNotFoundContainer'], false),
   },
-  TapValues
+  TapValues,
+  PluginValues
 )

@@ -21,4 +21,9 @@ collection of utilities for simplifying development, including:
 
 ## Architecture
 
+### Store
+
 * [Reducers](core/base/reducers/README.md)
+* [Plugins](core/base/store/plugins/README.md)
+
+

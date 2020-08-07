@@ -20,7 +20,9 @@ class Storage extends BaseStorage {
    *
    * @returns {Promise} - Will reject if an error occurred while retrieving the value
    */
-  getItem = async (key, value, options) => {
+  getItem = async (key, options) => {
+    if (!this.validateKey(key)) return
+
     const [ err, response ] = await limbo(SecureStore.getItemAsync(key, options))
 
     return err ? this.logMessage('error', err.stack) : response
@@ -37,6 +39,8 @@ class Storage extends BaseStorage {
    * @returns {Promise} - Will reject if value cannot be stored on the device.
    */
   setItem = async (key, value, options) => {
+    if (!this.validateKey(key)) return
+
     const [ err, response ] = await limbo(
       SecureStore.setItemAsync(key, value, options)
     )
@@ -54,6 +58,8 @@ class Storage extends BaseStorage {
    * @returns {Promise} - Will reject if the value couldn't be deleted.
    */
   removeItem = async (key, options) => {
+    if (!this.validateKey(key)) return
+
     const [ err, response ] = await limbo(
       SecureStore.deleteItemAsync(key, options)
     )

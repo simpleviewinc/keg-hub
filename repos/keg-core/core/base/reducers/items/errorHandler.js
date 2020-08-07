@@ -33,14 +33,6 @@ export const isValidItemRequest = (state, category, key, item) => {
     issues.push(issue)
   }
 
-  if (!state[category]) {
-    const issue = MakeRequestIssue[IssueTypes.MissingCategory](
-      category,
-      Object.keys(state)
-    )
-    issues.push(issue)
-  }
-
   if (key === undefined && item === undefined) {
     const issue = MakeRequestIssue[IssueTypes.InvalidItemAndKey](item, key)
     issues.push(issue)
@@ -168,8 +160,10 @@ export const isValidUpsertItemsRequest = (state, category, items) => {
  * @param {*} error - an Error object representing an invalid request
  * @returns clone of state with error inserted
  */
-export const handleInvalidRequest = (state, category, error) =>
-  stateWithError(state, category, error)
+export const handleInvalidRequest = (state, category, error) => {
+  error && console.error(error)
+  return stateWithError(state, category, error)
+}
 
 /* Helpers */
 /**

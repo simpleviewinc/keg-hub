@@ -25,5 +25,7 @@ const STORE = { dispatch, getState, subscribe }
 const getStore = jest.fn(() => STORE)
 // Helpers to get the dispatch
 const getDispatch = jest.fn(() => dispatch)
+// Helper to get data from the store
+const useSelector = jest.fn(selector => selector(STATE))
 
-export { dispatch, getDispatch, getStore, setState, STATE, STORE }
+export { dispatch, getDispatch, getStore, setState, useSelector, STATE, STORE }
