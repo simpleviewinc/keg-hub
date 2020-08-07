@@ -5,8 +5,8 @@ const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
 const path = require('path')
 const { get } = require('@ltipton/jsutils')
 
-const testYmlPath = path.join(__dirname, './test.yml')
-const testYmlWrite = path.join(__dirname, './writeTest.yml')
+const testYmlPath = path.join(__dirname, './parseTemplateTest.yml')
+const testYmlWrite = path.join(__dirname, './parseTemplateWriteTest.yml')
 
 const writeToYml = async (file, data) => {
   await removeYmlFile(file)

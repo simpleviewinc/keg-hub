@@ -14,7 +14,6 @@ const defPaths = {
   components: path.join(cliParent, 'keg-components'),
   core: path.join(cliParent, 'keg-core'),
   proxy: path.join(cliParent, 'keg-proxy'),
-  regulator: path.join(cliParent, 'keg-regulator'),
   resolver: path.join(cliParent, 'tap-resolver'),
   retheme: path.join(cliParent, 're-theme'),
 }

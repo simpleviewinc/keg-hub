@@ -36,7 +36,6 @@ module.exports = globalConfig => {
     ...initialize('generate', globalConfig),
     ...initialize('mutagen', globalConfig),
     ...initialize('network', globalConfig),
-    ...initialize('regulator', globalConfig),
     ...initialize('tap', globalConfig),
   }
 }

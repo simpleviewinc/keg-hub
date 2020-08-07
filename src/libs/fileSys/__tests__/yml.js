@@ -8,8 +8,8 @@ const { pathExistsSync } = require('../fileSys')
 const path = require('path')
 const { isArr, isObj, isStr } = require('@ltipton/jsutils')
 
-const testYmlPath = path.join(__dirname, './test.yml')
-const testYmlWrite = path.join(__dirname, './writeTest.yml')
+const testYmlPath = path.join(__dirname, './ymlTest.yml')
+const testYmlWrite = path.join(__dirname, './ymlWriteTest.yml')
 
 const writeToYml = async (file, data) => {
   await removeYmlFile(file)
@@ -97,7 +97,6 @@ describe('Yaml Lib', () => {
       await writeToYml(testYmlWrite, { test: 'data', foo: [ 'bar', 'baz' ] })
 
       const merged = await yml.merge(testYmlWrite, testYmlPath)
-
       expect(isObj(merged)).toBe(true)
       expect(isArr(merged.test)).toBe(true)
 

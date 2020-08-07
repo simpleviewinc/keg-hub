@@ -25,7 +25,7 @@
     "clean:lock": "rimraf ./yarn.lock && rimraf ./package.lock",
     "keg": "./keg",
     "init:bash": "/bin/bash ./scripts/setup/mac-init.sh",
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest --no-cache",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "update:cli": "bash ./scripts/cli/updates/1.2.0.sh",
     "view:reports": "open reports/coverage/lcov-report/index.html"

@@ -82,7 +82,7 @@ const getContext = async (params, askFor) => {
       ? await imageContext(image, prefixData, __injected, askFor)
       : prefixData
 
-  return context === 'tap'
+  return contextRef === 'tap'
     ? { tap, context, ...foundContext }
     : { context, tap: context, ...foundContext }
 

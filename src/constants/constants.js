@@ -139,8 +139,6 @@ module.exports = deepFreeze({
     comp: 'keg-components',
     components: 'keg-components',
     core: 'keg-core',
-    regulator: 'keg-regulator',
-    reg: 'keg-regulator',
   },
 
   // Map shortcuts and variations between the container cmdContext and the container
@@ -153,10 +151,6 @@ module.exports = deepFreeze({
     'keg-components': 'components',
     kegcore: 'core',
     'keg-core': 'core',
-    kegregulator: 'regulator',
-    'kegreg': 'regulator',
-    'keg-regulator': 'regulator',
-    'keg-reg': 'regulator',
   },
 
 })

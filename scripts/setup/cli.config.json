@@ -21,7 +21,6 @@
         "components": "keg-components",
         "proxy": "keg-proxy",
         "resolver": "tap-resolver",
-        "regulator": "keg-regulator",
         "retheme": "re-theme"
       }
     },
