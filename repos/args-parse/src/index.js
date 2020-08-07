@@ -1,1 +1,1 @@
-module.exports = rquire('./argsParse')
+module.exports = require('./argsParse')
