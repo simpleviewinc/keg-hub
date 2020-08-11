@@ -100,7 +100,7 @@ const handelContainerExists = (container, exists, imageContext, skipExists) => {
  */
 const runDockerImage = async args => {
   const { globalConfig, params, task, __internal={} } = args
-  const { context, connect, cleanup, cmd, log, options, volumes } = params
+  const { context, connect, cleanup, cmd, log, network, options, volumes } = params
 
   const imageContext = context
     ? await getImageContext(args)
@@ -124,6 +124,7 @@ const runDockerImage = async args => {
     : options.concat([ `-d` ])
 
   cleanup && opts.push(`--rm`)
+  network && opts.push(`--network ${ network }`)
 
   opts = await getServiceValues({
     opts,
@@ -195,6 +196,11 @@ module.exports = {
         description: 'Log the docker run command to the terminal',
         example: 'keg docker image run --log',
         default: false,
+      },
+      network: {
+        alias: [ 'net' ],
+        description: 'Set the docker run --network option to this value',
+        example: 'keg docker package run --network host'
       },
       tag: {
         description: 'Tag of the image to be run',

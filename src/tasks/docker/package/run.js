@@ -48,7 +48,19 @@ const checkExists = async container => {
  */
 const dockerPackageRun = async args => {
   const { globalConfig, options, params, task, tasks } = args
-  const { command, context, cleanup, package, provider, repo, user, version, volumes } = params
+  const {
+    command,
+    context,
+    cleanup,
+    network,
+    package,
+    provider,
+    repo,
+    user,
+    version,
+    volumes
+  } = params
+
   const isInjected = params.__injected ? true : false
 
   // TODO: Add check, if a context is provided, and no package
@@ -111,6 +123,8 @@ const dockerPackageRun = async args => {
   })
 
   cleanup && opts.push(`--rm`)
+  network && opts.push(`--network ${ network }`)
+  
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
   try {
@@ -167,6 +181,11 @@ module.exports = {
         description: 'Auto remove the docker container after exiting',
         example: `keg docker package run --cleanup false`,
         default: true
+      },
+      network: {
+        alias: [ 'net' ],
+        description: 'Set the docker run --network option to this value',
+        example: 'keg docker package run --network host'
       },
       provider: {
         alias: [ 'pro' ],
