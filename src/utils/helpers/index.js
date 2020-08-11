@@ -4,7 +4,6 @@ module.exports = {
   ...require('./exists'),
   ...require('./findPathByName'),
   ...require('./hasHelpArg'),
-  ...require('./invoke'),
   ...require('./limboify'),
   ...require('./mapEnv'),
   ...require('./optionsHasArg'),
