@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from '@simpleviewinc/re-theme'
 import { H5 } from '../../components'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 
 // type
 // key

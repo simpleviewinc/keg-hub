@@ -5,7 +5,7 @@ import { fireThemeEvent } from './themeEvent'
 import { getTheme, joinTheme } from '../helpers'
 import { Constants } from '../constants'
 import { getMergeSizes, getSize } from '../dimensions'
-import { isObj, deepMerge } from 'jsutils'
+import { isObj, deepMerge } from '@ltipton/jsutils'
 import { restructureTheme } from './restructureTheme'
 
 /**

@@ -1,4 +1,4 @@
-import { deepMerge, get, isArr, isObj, isStr } from 'jsutils'
+import { deepMerge, get, isArr, isObj, isStr } from '@ltipton/jsutils'
 
 /**
  * Merges the styles from the passed in sources

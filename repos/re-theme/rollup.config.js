@@ -8,7 +8,7 @@ import alias from '@rollup/plugin-alias'
 import buildHook from './buildHook'
 
 const shared = platform => ({
-  external: ['react', 'react-dom', 'react-native', 'jsutils' ],
+  external: ['react', 'react-dom', 'react-native', '@ltipton/jsutils' ],
   watch: {
     clearScreen: false
   },

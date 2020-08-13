@@ -1,6 +1,6 @@
 {
   "name": "@simpleviewinc/re-theme",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Simple Theme switcher / builder for React and React Native",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -53,7 +53,7 @@
     "gh-pages": "^2.2.0",
     "husky": "4.2.5",
     "jest": "24.7.1",
-    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
+    "@ltipton/jsutils": "5.1.0",
     "lint-staged": "10.2.10",
     "nodemon": "^2.0.4",
     "onchange": "7.0.2",
@@ -74,7 +74,7 @@
     "rollup-plugin-terser": "5.1.2"
   },
   "peerDependencies": {
-    "jsutils": "^git+https://github.com/lancetipton/jsutils.git#v3.2.1",
+    "@ltipton/jsutils": "^git+https://github.com/lancetipton/jsutils.git#v3.2.1",
     "react": "^16.9.0"
   },
   "jest": {

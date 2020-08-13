@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
-import { get, isFunc } from 'jsutils'
+import { get, isFunc } from '@ltipton/jsutils'
 import { useTheme } from '@simpleviewinc/re-theme'
 
 const getHeight = (height, toggled) => {

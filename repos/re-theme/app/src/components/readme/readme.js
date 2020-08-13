@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import marked from "marked"
-import { get } from "jsutils"
+import marked from 'marked'
+import { get } from '@ltipton/jsutils'
 import readmePath from '../../Readme.md';
 import { withTheme } from '@simpleviewinc/re-theme'
 

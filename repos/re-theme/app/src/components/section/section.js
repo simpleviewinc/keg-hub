@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { isArr, get } from 'jsutils'
+import { isArr, get } from '@ltipton/jsutils'
 import {
   Grid,
   Header,

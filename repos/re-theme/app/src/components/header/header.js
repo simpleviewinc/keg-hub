@@ -1,7 +1,7 @@
 import React from 'react'
 import { useThemeHover, useTheme } from '@simpleviewinc/re-theme'
 import { H2 } from '../../components'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 

@@ -1,5 +1,5 @@
 import { testTheme } from '../../mocks'
-import { get, deepClone } from 'jsutils'
+import { get, deepClone } from '@ltipton/jsutils'
 
 jest.resetModules()
 

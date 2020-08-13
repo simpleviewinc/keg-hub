@@ -1,4 +1,4 @@
-import { isNum, isStr, capitalize, isArr } from 'jsutils'
+import { isNum, isStr, capitalize, isArr } from '@ltipton/jsutils'
 
 const allSides = [ 'left', 'right', 'top', 'bottom' ]
 let defUnits = 'px'

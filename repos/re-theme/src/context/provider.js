@@ -12,7 +12,7 @@ import {
   removeThemeEvent,
 } from '../theme'
 import { Constants } from '../constants'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 
 /**
  * Holds the current theme after it's built

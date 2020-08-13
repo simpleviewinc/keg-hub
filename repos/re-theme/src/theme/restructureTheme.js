@@ -4,7 +4,14 @@
 import { getSizeMap } from '../dimensions'
 import { Constants } from '../constants'
 import { RePlatform, getRNPlatform } from 'RePlatform'
-import { isObj, deepMerge, reduceObj, isEmpty, unset, get } from 'jsutils'
+import {
+  isObj,
+  deepMerge,
+  reduceObj,
+  isEmpty,
+  unset,
+  get,
+} from '@ltipton/jsutils'
 
 // Default platforms to use when restructuring the theme
 // Use array, so we don't lose the order

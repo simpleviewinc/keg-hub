@@ -9,7 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "5.12.0",
     "@fortawesome/react-fontawesome": "0.1.8",
     "core-js": "^3.6.4",
-    "jsutils": "git+https://github.com/lancetipton/jsutils.git#v3.2.1",
+    "@ltipton/jsutils": "5.1.0",
     "raw-loader": "4.0.0",
     "@simpleviewinc/re-theme": "1.1.0",
     "react": "16.12.0",

@@ -1,5 +1,5 @@
 import { Constants } from '../constants'
-import { isObj } from 'jsutils'
+import { isObj } from '@ltipton/jsutils'
 const RePlatform = Constants.PLATFORM.WEB
 
 const Platform = {

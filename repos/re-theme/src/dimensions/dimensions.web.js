@@ -1,6 +1,6 @@
 /** @module dimensions */
 
-import { debounce, isArr, isFunc, checkCall } from 'jsutils'
+import { debounce, isArr, isFunc, checkCall } from '@ltipton/jsutils'
 import { Constants } from '../constants'
 
 const DEBOUNCE_RATE = 100
