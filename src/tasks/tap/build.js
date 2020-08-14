@@ -39,22 +39,22 @@ module.exports = {
       tap: {
         alias: [ 'name' ],
         description: 'Name of the tap to build a Docker image for',
-        example: 'keg tap --tap visitapps',
+        example: 'keg tap build --tap visitapps',
         required: true
       },
       args: {
         description: 'Add docker build arguments from container env files',
-        example: 'keg tap --args false',
+        example: 'keg tap build --args false',
         default: true
       },
       cache: {
         description: 'Docker will use build cache when building the image',
-        example: 'keg tap --cache false',
+        example: 'keg tap build --cache false',
         default: true
       },
       core: {
         description: 'Use the local keg-core package.json when install node_modules during the build',
-        example: `keg tap --core`,
+        example: `keg tap build --core`,
         default: false,
       },
       local: {

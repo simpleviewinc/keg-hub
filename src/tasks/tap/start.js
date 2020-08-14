@@ -36,6 +36,11 @@ module.exports = {
         example: 'keg tap start --tap events-force',
         required: true,
       },
+      core: {
+        description: 'Use the local keg-core package.json when install node_modules during the build',
+        example: `keg tap start --core true`,
+        default: false,
+      },
     }),
   }
 }

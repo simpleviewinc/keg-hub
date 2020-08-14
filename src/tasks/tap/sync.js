@@ -11,7 +11,7 @@ const { DOCKER } = require('KegConst/docker')
  *
  * @returns {void}
  */
-const sync = args => {  
+const sync = args => {
   return syncService(args, { container: 'tap', ...args.params })
 }
 
@@ -44,6 +44,11 @@ module.exports = {
         alias: [ 'to' ],
         description: 'Path on the keg-components container to sync to',
         enforced: true
+      },
+      syncForce: {
+        alias: [ 'force', 'sf' ],
+        description: 'Force creating a sync even if a sync may already exists',
+        default: false,
       }
     }
   }

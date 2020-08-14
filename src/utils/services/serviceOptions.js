@@ -40,12 +40,6 @@ const serviceOptions = (task='', action='', overrides={}) => {
       description: `Extra docker arguments to pass to the 'docker run command'`,
       example: 'keg ${ task } ${ action } --docker "-e MY_EXTRA_ENV=foo"'
     },
-    env: {
-      alias: [ 'environment' ],
-      description: 'Environment to start the Docker service in',
-      example: 'keg ${ task } ${ action } --env staging',
-      default: 'development',
-    },
     satisfy: {
       alias: [ 'sat', 'ensure' ],
       description: 'Will check if required images are built, and build them in necessary.',
@@ -77,6 +71,12 @@ const serviceOptions = (task='', action='', overrides={}) => {
     mounts: {
       description: `List of key names or folder paths to mount into the docker container. Only used when service === 'container'`,
       example: 'keg ${ task } ${ action } --mounts cli,retheme',
+    },
+    sync: {
+      alias: [ 'syncs', 'sy' ],
+      type: 'array',
+      description: 'List of key names or folder paths to sync through mutagen into the docker container.',
+      example: 'keg ${ task } ${ action } --sync cli,retheme',
     },
     service: {
       allowed: [ 'compose', 'container', 'mutagen' ],

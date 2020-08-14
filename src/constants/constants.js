@@ -100,6 +100,7 @@ module.exports = deepFreeze({
   // Environment keys mapped to their shortcuts 
   ENV_MAP: {
     PRODUCTION: [ 'production', 'prod', 'p' ],
+    CI: [ 'ci', 'c' ],
     QA: [ 'qa', 'q' ],
     STAGING: [ 'staging', 'st', 's' ],
     DEVELOPMENT: [ 'development', 'dev', 'd' ],

@@ -1,6 +1,7 @@
 const { throwRequired } = require('../error')
 const { mapEnv } = require('../helpers/mapEnv')
-const { exists, isStr, isBool } = require('@ltipton/jsutils')
+const { parseJSON } = require('../helpers/parseJSON')
+const { exists, isStr, isBool, toNum } = require('@ltipton/jsutils')
 const { BOOL_VALUES, ENV_OPTIONS } = require('KegConst/constants')
 
 const boolOpts = BOOL_VALUES.truthy.concat(BOOL_VALUES.falsy)
@@ -80,6 +81,33 @@ const checkEnvKeyValue = (key, value, meta) => {
     : mapEnv(value, meta)
 }
 
+const checkValueType = (key, value, meta) => {
+  if(!meta.type) return value
+
+  switch(meta.type.toLowerCase()){
+    case 'arr':
+    case 'array': {
+      return parseJSON(value, false) || value.split(',')
+    }
+    case 'obj':
+    case 'object': {
+      return parseJSON(value, false)
+    }
+    case 'num':
+    case 'number': {
+      return toNum(value)
+    }
+    case 'boolean':
+    case 'bool': {
+      return toBool(checkBoolValue(value))
+    }
+    default: {
+      return value
+    }
+  }
+
+}
+
 /**
  * Checks the current argument for a starting "
  * If found, adds all other options until and end " is found
@@ -115,7 +143,6 @@ const checkQuotedOptions = (argument, options, index) => {
   }, argument)
 }
 
-
 /**
  * Checks for a required option, and throws if it does not exist
  * @param {string|number|boolean} value
@@ -127,7 +154,7 @@ const checkQuotedOptions = (argument, options, index) => {
  * @returns {Void}
  */
 const checkRequired = (task, key, meta) => {
-(meta.require || meta.required) && throwRequired(task, key, meta)
+  (meta.require || meta.required) && throwRequired(task, key, meta)
 }
 
 /**
@@ -214,6 +241,7 @@ module.exports = {
   checkEnvKeyValue,
   checkQuotedOptions,
   checkRequired,
+  checkValueType,
   hasKeyIdentifier,
   isOptionKey,
   optionsHasIdentifiers,

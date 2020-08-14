@@ -14,6 +14,7 @@ const {
   checkEnvKeyValue,
   checkQuotedOptions,
   checkRequired,
+  checkValueType,
   hasKeyIdentifier,
   isOptionKey,
   optionsHasIdentifiers,
@@ -179,6 +180,7 @@ const ensureParam = async (task, params, key, meta) => {
 
   params[key] = checkBoolValue(params[key])
   params[key] = checkEnvKeyValue(key, params[key], meta)
+  params[key] = checkValueType(key, params[key], meta)
 
   if(exists(params[key])) return params
 
@@ -296,13 +298,16 @@ const loopTaskOptions = (task, taskKeys, options, params) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const getParams = async ({ options=[], task, params={} }) => {
+const getParams = async (args) => {
+  const { options=[], task, params={} } = args
 
+  // Make copy of options, so we have access to them in the tasks
+  // This allows us to know the order of the passed in options
+  args.originalOptions = Array.from(options)
+  
   // If no options to parse, Add the defaults and return it
   if(!options.length) return ensureParams(task, params)
 
-  // Make copy of options, so we don't affect the original
-  const optsCopy = Array.from(options)
 
   // Get all the name of the options for the task
   // This is used later to compare the keys with the passed in options

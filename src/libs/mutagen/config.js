@@ -28,7 +28,7 @@ const configDefs = {
   ignoreVcs: true,
   ignore: {
     paths: [
-      '/node_modules',
+      'node_modules',
       '/core/base/assets/*',
       '/.*',
       '!/.storybook',

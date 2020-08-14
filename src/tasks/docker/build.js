@@ -3,7 +3,7 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { buildDockerCmd } = require('KegUtils/docker')
-const { copyFileSync } = require('KegFileSys/fileSys')
+const { copyFileSync, removeFileSync } = require('KegFileSys/fileSys')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError, throwNoTapLoc } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
@@ -26,6 +26,26 @@ const copyLocalPackageJson = async (globalConfig, location) => {
 
   // Copy the file to the temp folder
   copyFileSync(corePackage, tapCorePackage)
+
+}
+
+/**
+ * Removes the copied keg-core package.json from the taps temp folder
+ * @function
+ * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {string} location - Location of the tap on the host machine
+ *
+ * @returns {void}
+ */
+const removeLocalPackageJson = async (globalConfig, location) => {
+  const corePath = getPathFromConfig(globalConfig, 'core')
+  !corePath && generalError(`Could not find keg-core path in globalConfig`)
+
+  // Get the temp path for the keg-core package.json
+  const tapCorePackage = path.join(location, `temp/core-package.json`)
+
+  // Remove the keg-core file from the temp path
+  return removeFileSync(tapCorePackage)
 
 }
 
@@ -84,6 +104,9 @@ const dockerBuild = async args => {
 
   // Run the built docker command
   await docker.raw(dockerCmd, { log, options: { env: contextEnvs }}, location)
+
+    // Check if we should also copy the keg-core package.json
+  tap && core && await removeLocalPackageJson(globalConfig, location)
 
   // Return the built image as a json object
   // This is needed for internal keg-cli calls

@@ -24,7 +24,7 @@ class Repo {
     return Boolean(res)
   }
 
-  log = ({ location, ...params }) => {
+  log = ({ location, env, ...params }) => {
     const cmdOpts = location ? { cwd: location } : undefined
 
     return gitCmd(`log ${ getLogArgs(params) }`.trim(), cmdOpts)
