@@ -43,7 +43,7 @@ const gitCli = async (args={}, cmdOpts={}, location) => {
   const options = isArr(opts) ? opts.join(' ').trim() : toStr(opts)
   const useForce = force ? '--force' : ''
   const cmdToRun = ensureGit(`${ options } ${ useForce }`.trim())
-  log && Logger.spacedMsg(`  Running command: `, cmdToRun)
+  log && Logger.spacedMsg(`Running command: `, cmdToRun)
 
   const { error, data } = await executeCmd(cmdToRun, cmdOpts, location)
 
@@ -73,7 +73,7 @@ const raw = async (cmd, args={}, loc=process.cwd(), log) => {
 
   error && !data
     ? cliError(error)
-    : log && Logger.success(`  Finished running Git CLI command!`)
+    : log && Logger.success(`Finished running Git CLI command!`)
   
   return data
 }
@@ -96,8 +96,8 @@ const cliError = (error, skip=false) => {
       : toStr(error)
 
   Logger.empty()
-  Logger.error(`  Git CLI Error:`)
-  Logger.error(` `, toLog.split(NEWLINES_MATCH).join('\n  '))
+  Logger.error(`Git CLI Error:`)
+  Logger.error(toLog.split(NEWLINES_MATCH).join('\n  '))
   Logger.empty()
 
 }

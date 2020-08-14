@@ -24,6 +24,11 @@ class Repo {
     return Boolean(res)
   }
 
+  name = () => {
+    // TODO: Get the name of the current repo from git
+    
+  }
+
   log = ({ location, env, ...params }) => {
     const cmdOpts = location ? { cwd: location } : undefined
 

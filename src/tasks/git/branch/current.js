@@ -25,12 +25,12 @@ const currentBranch = async args => {
   const { context, path: repoPath, tap } = params
 
   // Get the path to the repo
-  const location = repoPath || context && getGitPath(globalConfig, tap || context)
+  let location = repoPath || context && getGitPath(globalConfig, tap || context)
 
   // // Ensure a repo path could be found
-  !location && throwNoGitBranch(repoPath || context)
+  ;(repoPath || context) && !location && throwNoGitBranch(repoPath || context)
 
-  const curBranch = await git.branch.current(location)
+  const curBranch = await git.branch.current({ location: location || process.cwd()})
 
   // If no current branch, then throw error
   // Otherwise log the current branch

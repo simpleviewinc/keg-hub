@@ -1,5 +1,7 @@
-const { mapObj, reduceObj, checkCall } = require('@ltipton/jsutils')
+const { Logger } = require('KegLog')
 const { gitCli } = require('./commands')
+const { mapObj, reduceObj, checkCall } = require('@ltipton/jsutils')
+const { buildCmdOpts, ensureGitRemote, ensureGitBranch } = require('./helpers')
 const { NEWLINES_MATCH, SPACE_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 
 /**
@@ -74,6 +76,36 @@ const buildName = (name, remoteNames=[]) => {
 }
 
 /**
+ * Runs a git action based on passed in params
+ * @function
+ * @param {Class} git - Root Git Class object
+ * @param {Array} gitCmd - Current git action to run
+ * @param {Object} args - Arguments that define the command to run
+ * @param {Object} cmdOpts - Options to pass to the spawnCmd
+ *
+ * @returns {Object} - Response from git cli
+ */
+const doGitAction = async (git, action, args, cmdOpts) => {
+
+  if(!action) return Logger.error(`Git action is require to run a git command!`)
+    
+  // Ensure the location is set to run the command
+  // Default to the current working directory
+  args.location = args.location || process.cwd()
+  args.action = action
+
+  const gitCmd = [ 'git', action ]
+  const remote = await ensureGitRemote(git, args)
+  args.remote = args.remote
+  remote && gitCmd.push(remote)
+
+  const pushTo = await ensureGitBranch(git, args)
+  gitCmd.push(pushTo)
+
+  return gitCmd(gitCmd, buildCmdOpts(cmdOpts, args))
+}
+
+/**
  * Builds the branch object by spliting the passed in line info an object
  * @function
  * @param {string} line - Contains the branch information returned form the gitCli
@@ -130,13 +162,65 @@ class Branch {
   *
   * @returns {Object} - Current branch object
   */
-  current = async (location=process.cwd(), branches) => {
+  current = async ({ location=process.cwd(), branches }) => {
     branches = branches || await this.list(location)
 
     return branches && branches.reduce((current, branch) => {
       return !current && branch && branch.current ? branch : current
     }, null)
 
+  }
+
+  /**
+  * Gets the name of the current branch
+  * @memberof Branch
+  * @param {Array} { location } - Location of the git repo to get the branch name from
+  *
+  * @returns {string} - Name of current branch
+  */
+  name = async ({ location=process.cwd() }) => {
+    const current = await this.current(location)
+    return current && current.name
+  }
+
+  /**
+  * Pushes the current branch to a remove
+  * @memberof Branch
+  * @param {string} [args.remote="origin"] - Name of the remote
+  * @param {boolean} args.force - Should force push to the remove
+  * @param {string} args.location - Local location where the repo exists
+  *
+  * @returns {Object} - Current branch object
+  */
+  checkout = (args, cmdOpts={}) => {
+    return doGitAction(this.git, `checkout`, args, cmdOpts)
+  }
+
+  /**
+  * Pushes the current branch to a remove
+  * @memberof Branch
+  * @param {string} [args.remote="origin"] - Name of the remote
+  * @param {boolean} args.force - Should force push to the remove
+  * @param {string} args.location - Local location where the repo exists
+  * @param {Object} cmdOpts - Options to pass to the spawnCmd
+  *
+  * @returns {Object} - Current branch object
+  */
+  push = (args, cmdOpts={}) => {
+    return doGitAction(this.git, `push`, args, cmdOpts)
+  }
+
+  /**
+  * Pull branches from a remote
+  * @memberof Branch
+  * @param {string} [args.remote="origin"] - Name of the remote
+  * @param {string} args.location - Local location where the repo exists
+  * @param {Object} cmdOpts - Options to pass to the spawnCmd
+  *
+  * @returns {Object} - Current branch object
+  */
+  pull = (args, cmdOpts={}) => {
+    return doGitAction(this.git, `pull`, args, cmdOpts)
   }
 
 }

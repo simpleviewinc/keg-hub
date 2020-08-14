@@ -28,7 +28,7 @@ const getAuthor = (globalConfig, author) => {
  * @returns {string} - Name of the current branch
  */
 const getCommitTag = async location => {
-  const currentBr = await git.branch.current(location)
+  const currentBr = await git.branch.current({ location })
   return currentBr && currentBr.name
 }
 
