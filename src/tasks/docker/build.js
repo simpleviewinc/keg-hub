@@ -68,7 +68,7 @@ const dockerBuild = async args => {
 
   // Remove container from the params if it exists
   // Otherwise it would cause getContext to fail
-  // Because it thinks it needs to ask for the no existent container
+  // Because it thinks it needs to ask for the non-existent container
   const { container,  ...params } = args.params
   const { context, core, log } = params
 
@@ -76,11 +76,14 @@ const dockerBuild = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const { cmdContext, contextEnvs, location, tap, image } = await buildContainerContext({
-    task,
-    params,
-    globalConfig,
-  })
+  const {
+    tap,
+    image,
+    location,
+    cmdContext,
+    contextEnvs,
+  } = await buildContainerContext({ ...args, params })
+
 
   // If using a tap, and no location is found, throw an error
   cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)

@@ -13,7 +13,7 @@ const { getGitPath } = require('KegUtils/git/getGitPath')
  */
 const gitLog = async args => {
   const { command, options, params, tasks, globalConfig } = args
-  const { context, location, ...gitParams } = params
+  const { context, location, env, ...gitParams } = params
 
   await git.repo.log({
     ...gitParams,

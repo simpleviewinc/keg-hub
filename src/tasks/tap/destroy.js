@@ -1,5 +1,6 @@
-const { destroyService } = require('KegUtils/services')
+const { get } = require('@ltipton/jsutils')
 const { DOCKER } = require('KegConst/docker')
+const { destroyService } = require('KegUtils/services')
 
 /**
  * Removes all docker items for a tap based on the passed in service type
@@ -12,7 +13,13 @@ const { DOCKER } = require('KegConst/docker')
  * @returns {void}
  */
 const destroyTap = async (args) => {
-  return destroyService(args, { context: 'tap', container: 'tap', tap: args.params.tap })
+  return destroyService(args, {
+    context: 'tap',
+    container: 'tap',
+    tap: get(args, 'params.tap'),
+    // TODO: fix this for injected apps
+    ...(get(args, 'params.image') && { image: 'tap' }),
+  })
 }
 
 module.exports = {

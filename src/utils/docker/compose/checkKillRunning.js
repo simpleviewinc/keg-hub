@@ -27,9 +27,12 @@ const checkKillRunning = async (args, filter) => {
           : checkCall(async () => {
               await Promise.all(
                 alreadyRunning.map(container => {
+                  const exArgs = { context: container.context, container: container.id }
+                  container.context === 'tap' && (exArgs.tap = container.name)
+
                   return stopService(
                     { ...args, params: { ...container }, },
-                    { context: container.context, container: container.id }
+                    exArgs
                   )
                 })
               )

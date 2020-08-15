@@ -1,5 +1,3 @@
-const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
-
 
 const dockerCli = jest.fn((params, cmdOpts) => {
   const { opts, errResponse, log, skipError, format='', force } = params

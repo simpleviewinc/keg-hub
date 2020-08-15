@@ -31,6 +31,7 @@ module.exports = {
       ...require('./destroy'),
       ...require('./link'),
       ...require('./list'),
+      ...require('./log'),
       ...require('./new'),
       ...require('./package'),
       ...require('./run'),

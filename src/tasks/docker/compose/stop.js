@@ -31,9 +31,15 @@ const composeStop = async args => {
   // Get the name of the docker-compose service
   const serviceName = buildServiceName(cmdContext, contextEnvs)
 
+  // Ensure we have a valid context path for the container
+  // If it's set to INITIAL, the it has not been set
+  // If must be a valid location, so set it to the default location
+  if(contextEnvs.KEG_CONTEXT_PATH === 'INITIAL')
+    contextEnvs.KEG_CONTEXT_PATH = location
+
   // Run the docker compose stop command
   await spawnCmd(
-    `${ dockerCmd } ${ serviceName }`,
+    dockerCmd,
     { options: { env: contextEnvs }},
     location,
     !Boolean(__internal),

@@ -1,6 +1,7 @@
 const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { getServiceArgs } = require('KegUtils/services')
+const { buildService, getServiceArgs } = require('KegUtils/services')
+const { generalError } = require('KegUtils/error/generalError')
 
 /**
  * Start a tap with docker-compose
@@ -14,10 +15,12 @@ const { getServiceArgs } = require('KegUtils/services')
  */
 const runTap = async (args) => {
 
-  return runInternalTask(
-    'docker.tasks.image.tasks.run',
-    getServiceArgs(args, { context: 'tap', tap: args.params.tap, image: 'tap', container: 'tap' })
-  )
+  const exArgs = { context: 'tap', tap: args.params.tap, image: 'tap' }
+  const isBuilt = await buildService(args, exArgs)
+
+  return isBuilt 
+  ? runInternalTask( 'docker.tasks.image.tasks.run', getServiceArgs(args, { ...exArgs, container: 'tap' }))
+  : generalError(`The ${ args.params.tap } image must be built before it can be run, but the image could not be built!`)
 
 }
 module.exports = {
@@ -52,6 +55,12 @@ module.exports = {
         description: 'Overwrite entry of the image. Use escaped quotes for spaces ( bin/bash)',
         example: 'keg tap run --cmd \\"node index.js\\"',
         default: '/bin/bash'
+      },
+      satisfy: {
+        alias: [ 'sat', 'ensure' ],
+        description: 'Will check if required images are built, and build them in necessary.',
+        example: "keg ${ task } ${ action } --satisfy false",
+        default: true,
       },
       log: {
         description: 'Log the docker run command to the terminal',

@@ -50,3 +50,6 @@
     * This will allow us to see if the image for that tap exists or not
   * Look into building tap images without the name tap
 
+BUG: 
+* Sometimes when killing a service,
+* After killing the service it asks for a container, figure out why?

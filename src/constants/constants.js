@@ -6,10 +6,9 @@ const { KEG_GLOBAL_CONFIG } = process.env
 // Cache the root of the CLI for easy access
 const CLI_ROOT = path.join(__dirname, '../../')
 
-// The default global config path
-const CLI_CONFIG = 'cli.config'
+// The default global config path and config file
 let GLOBAL_CONFIG_FOLDER = path.join(homeDir, '.kegConfig')
-let GLOBAL_CONFIG_FILE = CLI_CONFIG
+let GLOBAL_CONFIG_FILE = 'cli.config.json'
 
 // If the global config path is passed in as an ENV, use that instead
 if(KEG_GLOBAL_CONFIG){
@@ -47,8 +46,6 @@ module.exports = deepFreeze({
   // Sets the command to open an IDE
   GLOBAL_CONFIG_EDITOR_CMD: 'cli.settings.editorCmd',
 
-  // Keg global config file
-  CLI_CONFIG: `${ CLI_CONFIG }.json`,
 
   // Keg Default .env file
   DEFAULT_ENV: `defaults.env`,

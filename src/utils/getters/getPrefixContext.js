@@ -1,6 +1,6 @@
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { getKegContext } = require('./getKegContext')
-const { checkCall } = require('@ltipton/jsutils')
+const { checkCall, isStr } = require('@ltipton/jsutils')
 /**
  * Check if it's a prefixed context, and if so parse the context from it
  * @function
@@ -9,6 +9,8 @@ const { checkCall } = require('@ltipton/jsutils')
  * @returns {Object} - Context without a prefix, and the original with the prefix
  */
 const getPrefixContext = toCheck => {
+  if(!isStr(toCheck)) return {}
+
   // Loop the prefixes and check if the context has a prefix
   const hasPrefix = Object.values(CONTAINER_PREFIXES)
     .reduce((hasPrefix, value) => {

@@ -87,7 +87,7 @@ const checkValueType = (key, value, meta) => {
   switch(meta.type.toLowerCase()){
     case 'arr':
     case 'array': {
-      return parseJSON(value, false) || value.split(',')
+      return parseJSON(value, false) || value && value.split(',')
     }
     case 'obj':
     case 'object': {

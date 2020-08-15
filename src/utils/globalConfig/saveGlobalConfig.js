@@ -24,7 +24,7 @@ const saveGlobalConfig = async config => {
   // Write the temp config file
   validateGlobalConfig(config) &&
     await writeFile(
-      path.join(GLOBAL_CONFIG_FOLDER, `${GLOBAL_CONFIG_FILE}.json`),
+      path.join(GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE),
       JSON.stringify(config, null, 2),
     )
 

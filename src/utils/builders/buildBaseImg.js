@@ -35,13 +35,18 @@ const buildBaseImg = async args => {
 
   if(exists) return checkForLatestTag(exists, args)
 
-  Logger.info(`  Keg base image does not exist, building now...`)
   Logger.empty()
+  Logger.info(`Keg base image does not exist...`)
 
   return runInternalTask(`tasks.docker.tasks.build`, {
     ...args,
-    params: { ...args.params, context: 'base', tap: undefined },
-  })
+    __internal: { ...args.__internal },
+    params: {
+    ...args.params,
+    tap: undefined,
+    context: 'base',
+    image: 'keg-base',
+  }})
 
 }
 

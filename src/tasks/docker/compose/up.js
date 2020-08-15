@@ -16,15 +16,16 @@ const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
  * @returns {void}
  */
 const composeUp = async args => {
-  const { globalConfig, __internal, params, task } = args
+  const { envs, globalConfig, __internal, params, task } = args
   const { detached, build, context, log } = params
 
   // Get the context data for the command to be run
   const containerContext = await buildContainerContext({
-    globalConfig,
+    envs,
     task,
     params,
     __internal,
+    globalConfig,
   })
   const { location, cmdContext, contextEnvs, tap, image } = containerContext
 
@@ -56,7 +57,7 @@ const composeUp = async args => {
 
   // Run the docker-compose up command
   await spawnCmd(
-    `${ dockerCmd } ${ serviceName }`,
+    dockerCmd,
     { options: { env: contextEnvs }},
     location,
     !Boolean(__internal),

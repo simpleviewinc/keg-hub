@@ -1,6 +1,5 @@
 const docker = require('KegDocCli')
 const { isStr, get, checkCall } = require('@ltipton/jsutils')
-const { DOCKER } = require('KegConst/docker')
 const { Logger } = require('KegLog')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, throwContainerNotFound } = require('KegUtils/error')
@@ -45,7 +44,6 @@ module.exports = {
     example: 'keg docker prune <options>',
     options: {
       context: {
-        allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to log',
         example: `keg docker log --context core`,
         enforced: true,

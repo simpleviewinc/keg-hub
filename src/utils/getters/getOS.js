@@ -8,11 +8,11 @@ const os = require('os')
  */
 const getOS = () => {
   const system = (process.platform || os.platform()).toLowerCase()
-  return system == "darwin"
+  return system === "darwin"
     ? "mac"
-    : system == "win32" || system == "win64"
+    : system === "win32" || system === "win64"
       ? "win"
-      : system == "linux"
+      : system === "linux"
         ? "lin"
         : false
 }

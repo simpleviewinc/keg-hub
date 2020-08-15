@@ -1,4 +1,4 @@
-#!/usr/bin/bash 
+#!/bin/bash 
 
 # Check if the keg root dir has been set. If not, then set it
 if [[ -z "$KEG_ROOT_DIR" ]]; then
@@ -18,9 +18,9 @@ keg_message(){
 # Otherwise shows warning that virtual-box is not installed
 keg_cli_init_docker_machine(){
 
-  local KEG_IS_WIN="$(keg_is_windows_wsl)"
+  local KEG_USE_MACH="$(keg_use_docker_machine)"
   
-  if [[ "$KEG_IS_WIN" == "true" ]]; then
+  if [[ "$KEG_USE_MACH" == "false" ]]; then
     keg_message "Docker-machine is not supported on windows machines. Please use the docker for windows app"
     return
   fi
@@ -139,9 +139,9 @@ keg_auto_load_envs(){
 
   fi
 
-  local KEG_IS_WIN="$(keg_is_windows_wsl)"
-  
-  if [[ "$KEG_IS_WIN" == "true" ]]; then
+  local KEG_USE_MACH="$(keg_use_docker_machine)"
+
+  if [[ "$KEG_USE_MACH" == "false" ]]; then
     export KEG_ENV_LOADED="loaded"
     return
   fi
@@ -163,11 +163,11 @@ keg_auto_load_envs(){
 }
 
 # Check if we are running in the wsl environment for windows
-keg_is_windows_wsl(){
-  if [[ -z "$WSL_DISTRO_NAME" ]]; then
-    echo "false"
-  else
+keg_use_docker_machine(){
+  if [[ -z "$WSL_DISTRO_NAME" ]] && [[ -z "$KEG_NO_MACHINE" ]]; then
     echo "true"
+  else
+    echo "false"
   fi
 }
 
@@ -236,4 +236,3 @@ keg(){
 if [[ -z "$KEG_CLI_AUTO_LOAD" ]]; then
   keg_message "Loaded!"
 fi
-

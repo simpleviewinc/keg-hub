@@ -15,11 +15,9 @@ const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
  *
  * @returns {Object} - The removed image
  */
-const askForImage = async force => {
+const askRemoveImage = async force => {
   const image = await imageSelect()
-  !image && generalError(`The docker "image remove" requires a context, name or tag argument!`)
-
-  await docker.image.remove({ item: image.id, force })
+  image && await docker.image.remove({ item: image.id, force })
 
   return image
 }
@@ -41,7 +39,7 @@ const removeDockerImage = async args => {
 
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
-  if(!imageParam && !tag && !context)  return askForImage(force)
+  if(!imageParam && !tag && !context)  return askRemoveImage(force)
 
   // Get the image name from the context, or use the passed in context
   const imgRef = imageParam || context &&
@@ -57,7 +55,7 @@ const removeDockerImage = async args => {
       })
 
   // If we still don't have an image with an id, then again ask for the image
-  if(!image || !image.id) return askForImage(force)
+  if(!image || !image.id) return askRemoveImage(force)
 
   // If we have an image, then remove it
   const res = await docker.image.remove({ item: image.id, force })

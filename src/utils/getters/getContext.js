@@ -1,8 +1,9 @@
 const docker = require('KegDocCli')
-const { containerSelect } = require('KegUtils/docker/containerSelect')
-const { imageSelect } = require('KegUtils/docker/imageSelect')
-const { getPrefixContext } = require('./getPrefixContext')
+const { isStr } = require('@ltipton/jsutils')
 const { isDockerId } = require('../docker/isDockerId')
+const { getPrefixContext } = require('./getPrefixContext')
+const { imageSelect } = require('KegUtils/docker/imageSelect')
+const { containerSelect } = require('KegUtils/docker/containerSelect')
 
 /**
  * If no context can be found, ask the user when container they want to use
@@ -74,7 +75,18 @@ const imageContext = async (toFind, prefixData={}, __injected, askFor) => {
 const getContext = async (params, askFor) => {
   const { context, container, image, tap, __injected } = params
   const contextRef = context || container || image || (tap && 'tap')
-  const prefixData = isDockerId(contextRef) ? { id: contextRef } : getPrefixContext(contextRef)
+
+  // There is a bug in the options parsing that causes context to sometimes be true
+  // It the task is called task --context tap --tap my-tap
+  // Then the params will look like { context: true, tap: true  }
+  // When it should be { context: 'tap', tap: 'my-tap' }
+  // The parsing is finding the second options `tap`, as a param key,
+  // If should instead set it as the value of the `context` param key
+  const prefixData = isDockerId(contextRef)
+    ? { id: contextRef }
+    : isStr(contextRef)
+      ? getPrefixContext(contextRef)
+      : {}
 
   const foundContext = container
     ? await containerContext(container, prefixData, __injected, askFor)
@@ -82,9 +94,9 @@ const getContext = async (params, askFor) => {
       ? await imageContext(image, prefixData, __injected, askFor)
       : prefixData
 
-  return contextRef === 'tap'
+  return context === 'tap'
     ? { tap, context, ...foundContext }
-    : { context, tap: context, ...foundContext }
+    : { context, tap: tap || context, ...foundContext }
 
 }
 

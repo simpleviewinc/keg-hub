@@ -1,3 +1,4 @@
+const { get } = require('@ltipton/jsutils')
 const { destroyService } = require('KegUtils/services')
 
 
@@ -12,7 +13,11 @@ const { destroyService } = require('KegUtils/services')
  * @returns {void}
  */
 const destroyComponents = async (args) => {
-  return destroyService(args, { context: 'components', container: 'keg-components' })
+  return destroyService(args, {
+    context: 'components',
+    container: 'keg-components',
+    ...(get(args, 'params.image') && { image: 'keg-components' }),
+  })
 }
 
 module.exports = {
