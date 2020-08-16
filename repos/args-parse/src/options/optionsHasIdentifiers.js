@@ -8,9 +8,7 @@ const { hasKeyIdentifier } = require('../utils/hasKeyIdentifier')
  * @returns {boolean} - T/F if an option has a key identifier
  */
 const optionsHasIdentifiers = (options=[]) => {
-  return options
-    .map(option => hasKeyIdentifier(option))
-    .indexOf(true) !== -1
+  return options.map(option => hasKeyIdentifier(option)).includes(true)
 }
 
 module.exports = {

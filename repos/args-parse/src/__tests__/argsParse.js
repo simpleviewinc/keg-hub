@@ -1,5 +1,8 @@
+const { testTask1, testTask2 } = require('../__mocks__/testTasks')
+const Ask = require('../__mocks__/ask')
+jest.setMock('askIt', Ask)
+
 const { argsParse } = require('../argsParse')
-const { testTask1 } = require('../__mocks__/testTasks')
 
 describe('argsParse', () => {
 
@@ -14,6 +17,26 @@ describe('argsParse', () => {
     
     expect(parsed.foo).toBe('test')
     expect(parsed.doo).toBe(false)
+
+  })
+
+  it('should not parse value matching the next key as the key', async () => {
+
+    const parsed = await argsParse({
+      args: [ '--context', 'tap', '--tap', 'test' ],
+      task: testTask2,
+    })
+
+    expect(parsed.context).toBe('tap')
+    expect(parsed.tap).toBe('test')
+
+    const parsed2 = await argsParse({
+      args: [ '-c', 'tap', '-t', 'test' ],
+      task: testTask2,
+    })
+
+    expect(parsed2.context).toBe('tap')
+    expect(parsed2.tap).toBe('test')
 
   })
 
@@ -69,7 +92,6 @@ describe('argsParse', () => {
     expect(parsed.not).toBe(undefined)
 
   })
-
 
   it('should parse args with -- or =', async () => {
 
@@ -142,7 +164,6 @@ describe('argsParse', () => {
 
   })
 
-
   it('should allow passing an env argument always', async () => {
 
     const parsed = await argsParse({
@@ -150,6 +171,35 @@ describe('argsParse', () => {
       task: testTask1,
     })
 
+    expect(parsed.env).toBe('development')
+
+  })
+
+  it('should call askIt when no value is passed and task.ask is exist', async () => {
+
+    expect(Ask.ask).not.toHaveBeenCalled()
+    expect(Ask.buildModel).not.toHaveBeenCalled()
+
+    const parsed = await argsParse({
+      args: [ '--context', 'tap' ],
+      task: testTask2,
+    })
+
+    expect(Ask.ask).toHaveBeenCalled()
+    expect(Ask.buildModel).toHaveBeenCalled()
+
+  })
+
+  it('should map the options to the keys when no identifiers are used', async () => {
+
+    const parsed = await argsParse({
+      args: [ 'test', 'try', 'duper' ],
+      task: testTask1,
+    })
+
+    expect(parsed.doo).toBe('test')
+    expect(parsed.foo).toBe('try')
+    expect(parsed.baz).toBe('duper')
     expect(parsed.env).toBe('development')
 
   })

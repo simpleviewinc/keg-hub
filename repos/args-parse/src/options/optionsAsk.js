@@ -1,5 +1,6 @@
 const { isObj, isStr, get } = require('@ltipton/jsutils')
 const { ask, buildModel } = require('askIt')
+const { getConfig } = require('../utils/getConfig')
 
 /**
  * Checks if we should ask the user for the missing value to an option
@@ -9,9 +10,11 @@ const { ask, buildModel } = require('askIt')
  *
  * @returns {Object} - Response from ask lib
  */
-const optionsAsk = async (key, meta, askForValue) => {
+const optionsAsk = async (key, meta) => {
+  const config = getConfig()
+
   // Check if we should ask for the meta value
-  if(!meta.ask || !askForValue) return meta.default
+  if(!meta.ask || !get(config, 'settings.task.optionsAsk')) return meta.default
   
   // Build the default model for options
   // Default type to input

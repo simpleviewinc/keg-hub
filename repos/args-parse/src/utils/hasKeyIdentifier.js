@@ -10,9 +10,9 @@ const { isStr } = require('@ltipton/jsutils')
 const hasKeyIdentifier = arg => {
   return isStr(arg) && 
     arg.length && (
-      arg.includes('"') ||
       arg.includes('=') ||
-      arg.indexOf('-') === 0
+      arg.indexOf('--') === 0 ||
+      (arg.indexOf('-') === 0 && arg.length === 2)
     )
 }
 

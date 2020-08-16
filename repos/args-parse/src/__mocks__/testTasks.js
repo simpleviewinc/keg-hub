@@ -14,5 +14,17 @@ module.exports = {
         description: 'The baz with bas',
       },
     }
+  },
+  testTask2: {
+    options: {
+      context: {
+        description: "context of the task",
+        require: true,
+      },
+      tap: {
+        description: "Name of the tap",
+        ask: 'Please enter the name of the tap?',
+      },
+    }
   }
 }

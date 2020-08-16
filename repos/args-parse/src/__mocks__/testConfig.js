@@ -1,3 +1,9 @@
 module.exports = {
-  test : {}
+  test : {},
+  settings: {
+    defaultEnv: 'test',
+    task: {
+      optionsAsk: true
+    }
+  }
 }

@@ -1,5 +1,4 @@
 
-
 module.exports = {
 
   // Option values that will be converted into booleans
@@ -31,7 +30,8 @@ module.exports = {
       test: [ 'test', 'tst', 't' ]
     },
   },
-  
+
+  // Global default task options that get added to every task
   defaultArgs: {
     env: {
       alias: [ 'environment' ],
@@ -40,4 +40,13 @@ module.exports = {
       default: 'development',
     },
   },
+  
+  // Task parsing settings
+  settings: {
+    defaultEnv: 'development',
+    task: {
+      optionsAsk: true
+    }
+  }
+
 }

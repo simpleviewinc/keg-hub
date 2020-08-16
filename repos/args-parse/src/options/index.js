@@ -3,7 +3,6 @@ module.exports = {
   ...require('./checkBoolValue'),
   ...require('./checkQuotedOptions'),
   ...require('./getOptionMeta'),
-  ...require('./isOptionKey'),
   ...require('./optionsAsk'),
   ...require('./optionsHasIdentifiers'),
   ...require('./removeOption')

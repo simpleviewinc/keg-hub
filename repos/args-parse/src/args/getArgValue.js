@@ -6,7 +6,7 @@ const {
 const { checkQuotedOptions } = require('../options/checkQuotedOptions')
 const { splitEqualsMatch } = require('../utils/splitEqualsMatch')
 const { buildMatchTypes } = require('../utils/buildMatchTypes')
-const { isOptionKey } = require('../options/isOptionKey')
+const { hasKeyIdentifier } = require('../utils/hasKeyIdentifier')
 
 /**
  * Matches the option against the passed in matchTypes
@@ -33,9 +33,9 @@ const matchArgType = (matchTypes, option, value, optionSchemas) => {
   // and b as 2. If the value doesn't conform to the pattern x=y, this just sets possibleKey to value
   const possibleKey = isStr(value) && value.split('=')[0]
 
-  // If there's a match, and it's not a taskKey return the value
-  // If there's a match, but no value or is a task option key match, return true
-  return value && !isOptionKey(possibleKey, optionSchemas)
+  // If there's a match and it's not a taskKey, return the value
+  // If there's a match but no value, return true
+  return value && !hasKeyIdentifier(value)
     ? value
     : true
 }

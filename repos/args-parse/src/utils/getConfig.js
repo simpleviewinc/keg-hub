@@ -1,6 +1,8 @@
 const path = require('path')
 const parseRoot = path.join(__dirname, '../../')
 const appRoot = require('app-root-path').path
+const defConfig = require('../../configs/parse.config.js')
+const { deepMerge } = require('@ltipton/jsutils')
 
 /**
  * Placeholder variable to cache the loaded config
@@ -14,14 +16,16 @@ let __CONFIG
  *
  * @returns {Object} - Loaded config object
  */
-const loadConfig = () => {
+const loadConfig = inlineConfig => {
   const { PARSE_CONFIG_PATH } = process.env
-  
-  const configPath = PARSE_CONFIG_PATH
-    ? path.join(appRoot, PARSE_CONFIG_PATH)
-    : path.join(parseRoot, 'configs/parse.config.js')
+  const configPath = path.join(appRoot, PARSE_CONFIG_PATH || 'configs/parse.config.js')
 
-  return require(configPath)
+  let customConfig
+  try { customConfig = require(configPath)  }
+  catch(err){ customConfig = {} }
+
+  return deepMerge(defConfig, customConfig, inlineConfig)
+
 }
 
 /**
@@ -30,8 +34,8 @@ const loadConfig = () => {
  *
  * @returns {Object} - Loaded config object
  */
-const getConfig = () => {
-  __CONFIG = __CONFIG || loadConfig()
+const getConfig = inlineConfig => {
+  __CONFIG = __CONFIG || loadConfig(inlineConfig)
 
   return __CONFIG
 }

@@ -1,14 +1,12 @@
-const {
-  exists,
-  isObj,
-} = require('@ltipton/jsutils')
-const { getOptionMeta } = require('./options/getOptionMeta')
-const { optionsHasIdentifiers } = require('./options/optionsHasIdentifiers')
-const { hasKeyIdentifier } = require('./utils/hasKeyIdentifier')
 const { findArg } = require('./args/findArg')
-const { addDefaultOptions } = require('./options/addDefaultOptions')
-const { ensureArg, ensureArgs } = require('./args/ensureArgs')
+const { getConfig } = require('./utils/getConfig')
+const { exists, isObj } = require('@ltipton/jsutils')
 const { mapKeysToArgs } = require('./args/mapKeysToArgs')
+const { getOptionMeta } = require('./options/getOptionMeta')
+const { ensureArg, ensureArgs } = require('./args/ensureArgs')
+const { hasKeyIdentifier } = require('./utils/hasKeyIdentifier')
+const { addDefaultOptions } = require('./options/addDefaultOptions')
+const { optionsHasIdentifiers } = require('./options/optionsHasIdentifiers')
 
 /**
  * Loops the task options looking to a match in the passed in options array
@@ -71,7 +69,9 @@ const loopTaskOptions = (task, taskKeys, options, params) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const argsParse = async ({ args=[], task, params={} }) => {
+const argsParse = async ({ args=[], task, params={}, config }) => {
+  // Initialize the config by calling it in the beginning
+  getConfig(config)
 
   // Add the default options to the task
   task.options = addDefaultOptions(task.options)
