@@ -1,10 +1,10 @@
 {
-  "name": "args-parse",
-  "version": "1.0.0",
+  "name": "@ltipton/args-parse",
+  "version": "0.0.0",
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
-    "url": "https://github.com/lancetipton/argsParse.git",
+    "url": "git+https://github.com/lancetipton/argsParse.git",
     "type": "git"
   },
   "author": "lancetipton <lancetipton04@gmail.com>",
@@ -44,7 +44,7 @@
     "transformIgnorePatterns": [
       ".*"
     ],
-   "collectCoverageFrom": [
+    "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/index.{js,jsx,ts,tsx}",
       "!src/**/__mocks__/**/*.{js}",
@@ -63,5 +63,14 @@
     "testURL": "http://localhost/",
     "coverageDirectory": "reports/coverage",
     "setupFilesAfterEnv": []
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/lancetipton/argsParse/issues"
+  },
+  "homepage": "https://github.com/lancetipton/argsParse#readme",
+  "keywords": [
+    "arguments",
+    "parse",
+    "cli"
+  ]
 }
