@@ -1,4 +1,4 @@
-const { testTask1, testTask2 } = require('../__mocks__/testTasks')
+const { testTask1, testTask2, testTask3 } = require('../__mocks__/testTasks')
 const Ask = require('../__mocks__/ask')
 jest.setMock('askIt', Ask)
 
@@ -172,6 +172,45 @@ describe('argsParse', () => {
     })
 
     expect(parsed.env).toBe('development')
+
+  })
+
+  it('should convert the value type when the type field is set', async () => {
+    
+    const testObj = JSON.stringify({
+      test: 'object'
+    })
+    const testArr = JSON.stringify([ 'foo', 'bar' ])
+
+    const parsed = await argsParse({
+      args: [
+        `number=5`,
+        `num=0`,
+        `object=${ testObj }`,
+        `obj=${ testObj }`,
+        `array=${ testArr }`,
+        `arr=1,2,3`,
+        `boolean=true`,
+        `bool=false`,
+      ],
+      task: testTask3,
+    })
+
+    expect(parsed.number).toBe(5)
+    expect(parsed.num).toBe(0)
+    expect(typeof parsed.object).toBe('object')
+    expect(parsed.object.test).toBe('object')
+    expect(typeof parsed.obj).toBe('object')
+    expect(parsed.obj.test).toBe('object')
+    expect(Array.isArray(parsed.array)).toBe(true)
+    expect(parsed.array[0]).toBe('foo')
+    expect(parsed.array[1]).toBe('bar')
+    expect(Array.isArray(parsed.arr)).toBe(true)
+    expect(parsed.arr[0]).toBe('1')
+    expect(parsed.arr[1]).toBe('2')
+    expect(parsed.arr[2]).toBe('3')
+    expect(parsed.boolean).toBe(true)
+    expect(parsed.bool).toBe(false)
 
   })
 

@@ -1,8 +1,9 @@
-const { exists, reduceObj } = require('@ltipton/jsutils')
-const { optionsAsk } = require('../options/optionsAsk')
-const { checkBoolValue } = require('../options/checkBoolValue')
 const { checkEnvArg } = require('./checkEnvArg')
+const { optionsAsk } = require('../options/optionsAsk')
+const { exists, reduceObj } = require('@ltipton/jsutils')
 const { checkRequired } = require('../utils/checkRequired')
+const { checkBoolValue } = require('../options/checkBoolValue')
+const { checkValueType } = require('../options/checkValueType')
 
 /**
  * Ensures a param value exists as needed
@@ -19,7 +20,8 @@ const ensureArg = async (task, args, key, meta) => {
 
   args[key] = checkBoolValue(args[key])
   args[key] = checkEnvArg(key, args[key], meta.default)
-
+  args[key] = checkValueType(key, args[key], meta)
+  
   if(exists(args[key])) return args
 
   let value = await optionsAsk(key, meta)

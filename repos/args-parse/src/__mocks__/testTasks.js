@@ -26,5 +26,41 @@ module.exports = {
         ask: 'Please enter the name of the tap?',
       },
     }
+  },
+  testTask3: {
+    options: {
+      number: {
+        description: "Is a number",
+        type: 'number',
+      },
+      num: {
+        description: "Is a number",
+        type: 'num',
+      },
+      object: {
+        description: "Is an object",
+        type: 'Object',
+      },
+      obj: {
+        description: "Is an object",
+        type: 'Obj',
+      },
+      array: {
+        description: "Is an array",
+        type: 'array',
+      },
+      arr: {
+        description: "Is an array",
+        type: 'arr',
+      },
+      boolean: {
+        description: "Is an boolean",
+        type: 'boolean',
+      },
+      bool: {
+        description: "Is an boolean",
+        type: 'bool',
+      },
+    }
   }
 }

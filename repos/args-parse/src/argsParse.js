@@ -69,9 +69,14 @@ const loopTaskOptions = (task, taskKeys, options, params) => {
  *
  * @returns {Object} - Mapped arguments object
  */
-const argsParse = async ({ args=[], task, params={}, config }) => {
+const argsParse = async (toParse, config) => {
+  const { args=[], task, params={} } = toParse
+
   // Initialize the config by calling it in the beginning
   getConfig(config)
+
+  // Make copy of args, which allows us to know the order at a later time
+  toParse.originalOptions = Array.from(args)
 
   // Add the default options to the task
   task.options = addDefaultOptions(task.options)
