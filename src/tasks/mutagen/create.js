@@ -23,12 +23,13 @@ const {
  */
 const getSyncParams = async (contextData, params) => {
   const { local, remote, name, options } = params
+  const service = contextData.name || contextData.image
 
   const { alpha, beta, ...config } = await getMutagenConfig({
     options,
     __injected: params.__injected,
     context: contextData.cmdContext,
-    service: contextData.name || contextData.image,
+    configPath: `sync.${ service }`,
     overrides: {
       alpha: local || get(contextData, 'contextEnvs.KEG_CONTEXT_PATH'),
       beta: remote || get(contextData, 'contextEnvs.DOC_APP_PATH')
@@ -46,6 +47,7 @@ const getSyncParams = async (contextData, params) => {
     config: config,
     local: alpha,
     remote: beta,
+    service: service,
     container: contextData.id,
     name: name || contextData.cmdContext,
   }
@@ -59,7 +61,10 @@ const getSyncParams = async (contextData, params) => {
  *
  * @returns {void}
  */
-const createMutagenSync = async (args, params, skipExists) => {
+const createMutagenSync = async (args, params, __internal={}) => {
+
+  const { skipExists, skipLog } = __internal
+
   // Make sure the mutagen daemon is running
   await runInternalTask('mutagen.tasks.daemon.tasks.start', args)
 
@@ -72,10 +77,12 @@ const createMutagenSync = async (args, params, skipExists) => {
   // Make call to start the mutagen sync
   !exists && await mutagen.sync.create(params)
 
-  // If we started the sync, log to let the user know
-  ;(!exists || skipExists) && Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
+  return skipLog
+    ? true
+    : exists
+      ? Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
+      : Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `already exists!`)
 
-  return true
 }
 
 /**
@@ -111,14 +118,10 @@ const mutagenCreate = async args => {
   const syncParams = await getSyncParams(contextData, params)
 
   // Create the sync
-  await createMutagenSync(args, syncParams, __internal.skipExists)
+  await createMutagenSync(args, syncParams, __internal)
 
   // Return the context, and built sync params
   return { ...contextData, mutagen: syncParams }
-
-  // TODO: Create sync for each repo based on the cmdContext
-  // If cmdContext === core
-  // Create sync for core / re-theme (node_modules) / tap-resolver (node_modules) / etc...
 
 }
 

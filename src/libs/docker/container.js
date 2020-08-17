@@ -193,15 +193,22 @@ const exists = async (compare, doCompare) => {
  * @returns {void}
  */
 const exec = async (args, cmdOpts={}) => {
-  const { cmd, container, item, location, opts } = args
-  const options = isArr(opts) ? opts.join(' ') : opts
-  const cont = container || item
+  const { cmd, container, detach, item, location, opts, workdir } = args
 
-  return raw(
-    `exec ${ options } ${ cont } ${ cmd }`.trim(),
-    cmdOpts,
-    location
-  )
+  // Ensure a container is passed
+  const cont = container || item
+  if(!cont) return noItemError('exec')
+  
+  // Ensure options is an array
+  const options = isArr(opts) ? opts : [ opts ]
+
+  // Add any extra options passed
+  detach && options.push(`--detach`)
+  workdir && options.push(`--workdir ${ workdir }`)
+
+  const toRun = `exec ${ options.join(' ').trim() } ${ cont } ${ cmd }`.trim()
+
+  return raw(toRun, cmdOpts, location)
 
 }
 

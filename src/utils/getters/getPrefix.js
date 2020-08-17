@@ -1,4 +1,5 @@
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
+const { isStr } = require('@ltipton/jsutils')
 
 /**
  * Gets the prefixed version of a container if it exists
@@ -9,13 +10,14 @@ const { CONTAINER_PREFIXES } = require('KegConst/constants')
  */
 const getPrefix = toCheck => {
     // Loop the prefixes and check if the context has a prefix
-  const hasPrefix = Object.values(CONTAINER_PREFIXES)
-    .reduce((hasPrefix, value) => {
-      return hasPrefix || toCheck.indexOf(value) === 0
-    }, false)
+  const hasPrefix = isStr(toCheck) &&
+    Object.values(CONTAINER_PREFIXES)
+      .reduce((hasPrefix, value) => {
+        return hasPrefix || toCheck.indexOf(value) === 0
+      }, false)
 
-  return hasPrefix && toCheck
-}
+    return hasPrefix && toCheck
+  }
 
 module.exports = {
   getPrefix

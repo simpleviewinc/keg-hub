@@ -6,7 +6,7 @@ sync:
     ignore:
       vcs: true
       paths:
-        - "/node_modules"
+        - "node_modules"
         - "/core/base/assets/*"
         - "/.*"
         - "!/.storybook"
@@ -20,6 +20,14 @@ sync:
         - "/docs"
 actions:
   retheme:
-    - "cd /keg/keg-components/node_modules/@simpleviewinc/re-theme"
-    - "yarn install"
-    - "yarn dev"
+    install:
+      location: "/keg/keg-components/node_modules/@simpleviewinc/re-theme"
+      privileged: true
+      cmds:
+        - "yarn install"
+    start:
+      location: "/keg/keg-components/node_modules/@simpleviewinc/re-theme"
+      privileged: true
+      detach: true
+      cmds:
+        - "yarn dev"

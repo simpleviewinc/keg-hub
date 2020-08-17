@@ -13,19 +13,25 @@ const { getServiceArgs } = require('./getServiceArgs')
  *
  * @returns {Array} - An array of promises for each sync being setup
  */
-const createSyncs = (args, containerContext) => {
+const createSyncs = async (args, containerContext) => {
   const { params: { sync, tap, context } } = args
   const { cmdContext, container, id } = containerContext
   const dockerContainer = container || id || cmdContext || context
 
-  return isArr(sync) && Promise.all(
-    sync.map(dependency => {
-      return syncService(
-        { ...args, params: { dependency, tap, context } },
-        { container: dockerContainer, dependency }
+  const syncs = isArr(sync) && await Promise.all(
+    await sync.reduce(async (toResolve, dependency) => {
+      const resolved = await toResolve
+      resolved.push(
+        await syncService(
+          { ...args, params: { dependency, tap, context } },
+          { container: dockerContainer, dependency }
+        )
       )
-    })
+      return resolved
+    }, Promise.resolve([]))
   )
+
+  return syncs
 }
 
 /**

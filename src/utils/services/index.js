@@ -11,5 +11,6 @@ module.exports = {
   ...require('./startService'),
   ...require('./stopService'),
   ...require('./syncService'),
+  ...require('./syncActionService'),
   ...require('./runService'),
 }

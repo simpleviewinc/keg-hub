@@ -64,22 +64,6 @@ module.exports = deepFreeze({
     '--h',
   ],
 
-  // Option values that will be converted into booleans
-  BOOL_VALUES: {
-    truthy: [
-      'true',
-      't',
-      'yes',
-      'y',
-    ],
-    falsy: [
-      'false',
-      'f',
-      'no',
-      'n'
-    ]
-  },
-
   // --- GIT Constants --- //
   // Path the the git ssh key
   GIT_SSH_KEY_PATH: path.join(homeDir, '.ssh/github'),

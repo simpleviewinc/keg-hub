@@ -33,8 +33,6 @@ keg_remove_git_key(){
   git config --global url.https://github.com/.insteadOf url.https://$GIT_KEY@github.com/
   rm -rf .npmrc
 }
-
-
 # Runs yarn install at run time
 # Use whnode_modules to keg-components
 keg_run_yarn_install(){
@@ -67,6 +65,12 @@ keg_run_components(){
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"
   yarn $KEG_EXEC_CMD
 
+}
+
+# Keeps the docker container running
+keg_sleep_keep_alive(){
+  tail -f /dev/null
+  exit 0
 }
 
 # Checks for path overrides of the core, tap paths with passed in ENVs

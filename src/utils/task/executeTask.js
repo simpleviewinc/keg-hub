@@ -1,7 +1,7 @@
 const { showHelp } = require('KegLog')
-const { getParams } = require('./getParams')
 const { isFunc } = require('@ltipton/jsutils')
 const { throwNoAction } = require('KegUtils/error')
+const { parseArgs } = require('KegUtils/helpers/parseArgs')
 const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
 
 /**
@@ -17,13 +17,13 @@ const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
  * @returns {Any} - response from the task.action function
  */
 const executeTask = async (args) => {
-  const { command, task, tasks, options } = args
+  const { globalConfig, command, task, tasks, options } = args
 
   // Check is the help should be printed
   if(hasHelpArg(options[ options.length -1 ])) return showHelp({ task, options })
 
   // Get the params for the task if they have not already been parsed
-  const params = args.params || await getParams(args)
+  const params = args.params || await parseArgs(args, globalConfig)
 
   return isFunc(task.action)
     ? task.action({ ...args, params })

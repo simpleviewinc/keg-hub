@@ -1,7 +1,7 @@
 const { checkCall, get, isObj, isFunc, isStr, deepClone } = require('@ltipton/jsutils')
 const { throwNoAction, throwNoTask } = require('../error')
 const { validateTask } = require('./validateTask')
-const { ensureParams } = require('./getParams')
+const { ensureArgs } = require('../helpers/parseArgs')
 
 /**
  * Runs an internal task based on passed in arguments
@@ -27,7 +27,7 @@ const runInternalTask = async (taskPath, args, task) => {
   task = isStr(task) && get(args, `tasks.${ task }.${taskPath}`) || task
 
   // Ensure the defaults are added, and all required params are passed
-  const params = await ensureParams(task, args.params)
+  const params = await ensureArgs(task, args.params)
 
   // Validate the task, then call it's action
   return validateTask(task, taskPath)

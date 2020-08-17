@@ -31,7 +31,8 @@
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "dependencies": {
-    "@ltipton/jsutils": "^5.0.0",
+    "@ltipton/args-parse": "1.0.0",
+    "@ltipton/jsutils": "5.1.0",
     "askIt": "git+https://github.com/lancetipton/askIt.git",
     "axios": "0.19.2",
     "cli-progress": "3.8.2",

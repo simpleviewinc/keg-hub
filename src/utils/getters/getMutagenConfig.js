@@ -42,7 +42,8 @@ const parseOptions = options => {
  * @returns {Object} - Loaded mutagen config file
  */
 const getMutagenConfig = (params) => tryCatch(async () => {
-  const { context, service, overrides={}, options, __injected } = params
+
+  const { context, options, configPath, __injected, overrides={} } = params
 
   const mutagenPath = __injected &&
     __injected.mutagenPath ||
@@ -52,7 +53,9 @@ const getMutagenConfig = (params) => tryCatch(async () => {
 
   const ymlConfig = await yml.load(mutagenPath)
 
-  const config = get(ymlConfig, `sync.${ service }`, {})
+  if(!configPath) return ymlConfig
+
+  const config = get(ymlConfig, configPath, {})
 
   const mappedConf = Object.keys(config)
     .reduce((conf, key) => {
@@ -65,7 +68,6 @@ const getMutagenConfig = (params) => tryCatch(async () => {
 }, () => (overrides))
 
 
-
 module.exports = {
-  getMutagenConfig
+  getMutagenConfig,
 }

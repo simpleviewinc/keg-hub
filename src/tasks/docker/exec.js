@@ -58,8 +58,7 @@ const ensureContext = async ({ context, tap, __injected={} }, { containerContext
  */
 const dockerExec = async args => {
   const { params, globalConfig, task, command, __internal={} } = args
-  const { cmd, options } = params
-
+  const { cmd, detach, options, workdir } = params
   const { context, container } = await ensureContext(params, __internal)
 
   // Ensure we have a content to build the container
@@ -85,7 +84,7 @@ const dockerExec = async args => {
 
   // Run the command on the container
   await docker.container.exec(
-    { cmd, container: containerName, opts: options },
+    { cmd, container: containerName, opts: options, workdir, detach },
     { options: { env: contextEnvs } },
     location
   )
@@ -109,8 +108,25 @@ module.exports = {
       cmd: {
         alias: [ 'entry', 'command' ],
         description: 'Docker container command to run. Default ( /bin/bash )',
-        example: 'keg docker cmd ls -ls',
+        example: 'keg docker exec --cmd "ls"',
         default: '/bin/bash'
+      },
+      workdir: {
+        alias: [  'location', 'loc', 'dir', 'd' ],
+        description: 'Directory in the docker container where the command should be run',
+        example: 'keg docker exec --workdir /app',
+      },
+      detach: {
+        alias: [ 'detached' ],
+        description: 'Run the docker exec task in detached mode',
+        example: 'keg docker exec --detach',
+        default: false,
+      },
+      privileged: {
+        alias: [ 'priv', 'pri' ],
+        description: 'Run the docker exec task in privileged mode',
+        example: 'keg docker exec --privileged',
+        default: false,
       },
       options: {
         alias: [ 'opts' ],

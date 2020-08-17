@@ -78,6 +78,11 @@ const serviceOptions = (task='', action='', overrides={}) => {
       description: 'List of key names or folder paths to sync through mutagen into the docker container.',
       example: 'keg ${ task } ${ action } --sync cli,retheme',
     },
+    detach: {
+      alias: [ 'detached' ],
+      description: 'Force run sync actions in detached mode. Only valid when sync option is passed. Overrides the value defined in the sync action',
+      example: 'keg ${ task } ${ action } --sync retheme --detach',
+    },
     service: {
       allowed: [ 'compose', 'container', 'mutagen' ],
       description: 'What docker service to build the tap with. Must be on of ( sync || container ). Same as passing options "--attached sync "',

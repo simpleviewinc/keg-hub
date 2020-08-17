@@ -1,45 +1,14 @@
-const { get } = require('@ltipton/jsutils')
-const docker = require('KegDocCli')
-const { DOCKER } = require('KegConst/docker')
 const { Logger } = require('KegLog')
+const { get } = require('@ltipton/jsutils')
 const { getGitPath } = require('../git/getGitPath')
-const { buildContainerContext } = require('../builders/buildContainerContext')
-const { runInternalTask } = require('../task/runInternalTask')
-const { generalError } = require('../error/generalError')
 const { getServiceArgs } = require('./getServiceArgs')
-
-/**
- * Gets the path in the docker container the sync will use
- * @param {string} context - Context or name of the container to get the remote path from
- * @param {string} dependency - Name contained in an ENV that defines the path in docker
- * @param {string} remote - Path in the docker container where the sync will be created
- *
- * @returns {string}
- */
-const getRemotePath = (context, dependency, remote) => {
-  return remote || get(
-    DOCKER,
-    `CONTAINERS.${ context.toUpperCase() }.ENV.DOC_${ dependency.toUpperCase() }_PATH`
-  )
-}
-
-/**
- * Gets the local path the sync will use
- * @param {Object} args.globalConfig - Global config object for the keg-cli
- * @param {string} context - Context or name of the container to get the remote path from
- * @param {string} local - Local path where the sync will be created
- * @param {string} dependency - Name contained in an ENV that defines the path in docker
- *
- * @returns {string}
- */
-const getLocalPath = (globalConfig, context, local, dependency) => {
-  return local || get(
-    DOCKER,
-    `CONTAINERS.${ context.toUpperCase() }.ENV.${ dependency.toUpperCase() }_PATH`,
-    getGitPath(globalConfig, dependency)
-  )
-}
-
+const { generalError } = require('../error/generalError')
+const { getLocalPath } = require('../getters/getLocalPath')
+const { syncActionService } = require('./syncActionService')
+const { getRemotePath } = require('../getters/getRemotePath')
+const { runInternalTask } = require('../task/runInternalTask')
+const { findDependencyName } = require('../helpers/findDependencyName')
+const { buildContainerContext } = require('../builders/buildContainerContext')
 
 /**
  * Ensure the path to sync and the context path are not the same
@@ -76,31 +45,36 @@ const syncService = async (args, argsExt) => {
   const serviceArgs = getServiceArgs(args, argsExt)
 
   const { globalConfig, params } = serviceArgs
-  
-  const { dependency, local, remote, syncForce, tap } = params
+  const { local, remote, syncForce, tap } = params
+
+  const [ dependency, syncAction ] = params.dependency.includes(':')
+    ? params.dependency.split(':')
+    : [ params.dependency ]
 
   const containerContext = await buildContainerContext(serviceArgs)
   const { context, id } = containerContext
 
   const contextPath = getGitPath(globalConfig, tap || context)
 
-  const localPath = getLocalPath(globalConfig, context, local, dependency)
+  const localPath = getLocalPath(globalConfig, context, dependency, local)
   !localPath && generalError(`Local path could not be found!`)
 
   if(!checkSyncPaths(syncForce, contextPath, localPath)) return
 
   const remotePath = getRemotePath(context, dependency, remote)
 
-  const dependencyName = dependency || remotePath
-    .split('/')
-    .pop()
-    .replace('-', '')
-    .replace('_', '')
+  const dependencyName = findDependencyName(dependency, remotePath)
 
   // Create the mutagen sync
-  return runInternalTask('mutagen.tasks.create', {
+  const mutagenContext = await runInternalTask('mutagen.tasks.create', {
     ...serviceArgs,
-    ...(containerContext && { __internal: { containerContext, skipExists: true } }),
+    ...(containerContext && {
+      __internal: {
+        containerContext,
+        skipExists: true,
+        skipLog: true
+      }
+    }),
     params: {
       ...serviceArgs.params,
       context,
@@ -111,11 +85,21 @@ const syncService = async (args, argsExt) => {
     },
   })
 
+  // Run any sync actions for the mutagen sync
+  await syncActionService({
+    ...serviceArgs,
+    __internal: {
+      ...serviceArgs.__internal,
+      containerContext: mutagenContext
+    },
+    params: {
+      ...serviceArgs.params,
+      dependency,
+      syncAction,
+    }
+  })
 
-  // TODO: after creating the sync,
-  // Should connect to the container
-  // Run yarn install, then ( yarn start | dev)
-  
+  return mutagenContext
 
 }
 

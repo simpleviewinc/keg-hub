@@ -68,5 +68,6 @@ const addGlobalOptions = (namedTask, name, parent) => {
 }
 
 module.exports = {
-  addGlobalOptions
+  addGlobalOptions,
+  getGlobalOptions,
 }
