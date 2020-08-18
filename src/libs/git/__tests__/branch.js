@@ -22,7 +22,7 @@ describe('branch', () => {
     it('should return an array of  branch objects matching the correct model', async done => {
 
       const res = await git.branch.list(cliRoot)
-      const keys = [ 'commit', 'remote', 'name', 'current', 'message' ]
+      const keys = [ 'commit', 'name', 'current', 'message' ]
 
       res.map(branch => keys.map(key => expect(key in branch).toBe(true)))
 

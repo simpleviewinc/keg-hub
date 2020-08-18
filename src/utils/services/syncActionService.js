@@ -3,7 +3,7 @@ const { getServiceArgs } = require('./getServiceArgs')
 const { generalError } = require('../error/generalError')
 const { getRemotePath } = require('../getters/getRemotePath')
 const { runInternalTask } = require('../task/runInternalTask')
-const { get, isArr, isStr, isBool } = require('@ltipton/jsutils')
+const { get, isArr, isStr, isBool, isObj } = require('@ltipton/jsutils')
 const { findDependencyName } = require('../helpers/findDependencyName')
 const { getMutagenConfig } = require('KegUtils/getters/getMutagenConfig')
 const { buildContainerContext } = require('../builders/buildContainerContext')
@@ -121,10 +121,12 @@ const runSyncActions = (serviceArgs, cmdContext, dependency, actions) => {
  *
  * @returns {Array} - Array actions to run
  */
-const getSyncActions = (actions, action) => {
+const getSyncActions = (actions, action, dependency) => {
   return action
-    ? [ { ...actions[action], name: action } ]
-    : Object.entries(actions)
+    ? !isObj(actions[action])
+      ? Logger.error(`\nSync action "${action}" does not exist for "${ dependency }"\n`)
+      : [ { ...actions[action], name: action } ]
+    : isObj(actions) && Object.entries(actions)
       .reduce((allActions, [ name, meta ]) => {
         return allActions.concat({ ...meta, name })
       }, [])
@@ -163,10 +165,10 @@ const syncActionService = async (args, argsExt) => {
   const { container, dependencyName, syncAction } = normalizeSyncData(serviceArgs)
 
   // Get the actions to run based on the dependency
-  const actions = getSyncActions(syncActions[dependencyName], syncAction)
+  const actions = getSyncActions(syncActions[dependencyName], syncAction, dependencyName)
 
   // If there's no container or actions, then just return
-  if(!container || !isArr(actions) ) return serviceArgs
+  if(!container || !isArr(actions) ) return actionContext
 
   // Run the actions for the dependency
   await runSyncActions(serviceArgs, cmdContext, dependencyName, actions)

@@ -88,9 +88,6 @@ const dockerBuild = async args => {
   // If using a tap, and no location is found, throw an error
   cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)
 
-  // Check if we should also copy the keg-core package.json
-  tap && core && await copyLocalPackageJson(globalConfig, location)
-
   // Build the docker build command with options
   const dockerCmd = await buildDockerCmd(globalConfig, {
     ...params,
@@ -107,9 +104,6 @@ const dockerBuild = async args => {
 
   // Run the built docker command
   await docker.raw(dockerCmd, { log, options: { env: contextEnvs }}, location)
-
-    // Check if we should also copy the keg-core package.json
-  tap && core && await removeLocalPackageJson(globalConfig, location)
 
   // Return the built image as a json object
   // This is needed for internal keg-cli calls
