@@ -17,7 +17,7 @@ const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
  * @returns {Any} - response from the task.action function
  */
 const executeTask = async (args) => {
-  const { globalConfig, command, task, tasks, options } = args
+  const { globalConfig, task, options } = args
 
   // Check is the help should be printed
   if(hasHelpArg(options[ options.length -1 ])) return showHelp({ task, options })

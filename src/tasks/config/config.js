@@ -8,6 +8,7 @@ module.exports = {
       ...require('./print'),
       ...require('./set'),
       ...require('./sync'),
+      ...require('./unset'),
       ...require('./update'),
     },
     description: 'Keg CLI config specific tasks',

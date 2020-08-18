@@ -1,6 +1,6 @@
-const { addGlobalConfigProp } = require('KegUtils/globalConfig')
-const { confirmExec } = require('KegUtils/helpers')
-const { softFalsy, set, get } = require('@ltipton/jsutils')
+const { addGlobalConfigProp } = require('KegUtils/globalConfig/addGlobalConfigProp')
+const { confirmExec } = require('KegUtils/helpers/confirmExec')
+const { softFalsy, get } = require('@ltipton/jsutils')
 
 /**
  * Sets a value in the global config, and then saves it
@@ -16,7 +16,7 @@ const { softFalsy, set, get } = require('@ltipton/jsutils')
  * @returns {void}
  */
 const setConfigValue = args => {
-  const { command, globalConfig, options, params } = args
+  const { globalConfig, params } = args
   const { key, value, confirm } = params
 
   const confirmText = softFalsy(get(globalConfig, key))

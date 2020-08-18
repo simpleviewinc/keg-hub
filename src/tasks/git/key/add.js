@@ -2,14 +2,13 @@ const {
   addGlobalConfigProp,
   confirmExec,
   gitKeyExists,
-  removeGlobalConfigProp,
 } = require('KegUtils')
 const { throwRequired } = require('KegUtils/error')
 const { getSetting } = require('KegUtils/globalConfig')
-const { encrypt, decrypt } = require('KegCrypto')
+const { encrypt } = require('KegCrypto')
 const { ask } = require('askIt')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
-const { get } = require('@ltipton/jsutils')
+
 /**
  * Encrypts then adds a git key to the global config.
  * @param {Object} globalConfig - Global config object for the keg-cli

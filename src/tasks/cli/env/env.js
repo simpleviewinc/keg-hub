@@ -16,6 +16,7 @@ module.exports = {
     tasks: {
       ...require('./set'),
       ...require('./sync'),
+      ...require('./unset'),
     },
   }
 }

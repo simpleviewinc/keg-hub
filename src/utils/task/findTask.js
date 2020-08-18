@@ -3,9 +3,9 @@ const { get } = require('@ltipton/jsutils')
 const { validateTask } = require('./validateTask')
 const { parseArgs } = require('KegUtils/helpers/parseArgs')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
+const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')
 const { injectService } = require('../services/injectService')
 const { TAP_LINKS } = GLOBAL_CONFIG_PATHS
-
 /**
  * Checks if the command is a linked tap, and if so, calls the tap command on that tap
  * @function
@@ -71,7 +71,11 @@ const findTask = async (globalConfig, tasks, command, options) => {
   const taskData = get(foundTask, 'task') ? foundTask : {}
 
   // Validate the task, and return the taskData
-  return validateTask(taskData.task) && taskData
+  return validateTask(
+    taskData.task,
+    null,
+    hasHelpArg(options[ options.length -1 ]),
+  ) && taskData
 
 }
 

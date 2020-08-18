@@ -6,7 +6,7 @@ sync:
     ignore:
       vcs: true
       paths:
-        - "/node_modules"
+        - "node_modules"
         - "/core/base/assets/*"
         - "/.*"
         - "!/.storybook"
@@ -18,3 +18,9 @@ sync:
         - "/reports"
         - "/build"
         - "/docs"
+actions:
+  core:
+    install: 
+      location: /keg/tap/node_modules/keg-core
+      cmds:
+        - yarn install

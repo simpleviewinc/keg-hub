@@ -1,14 +1,11 @@
-const { get, isStr } = require('@ltipton/jsutils')
 const docker = require('KegDocCli')
-const { Logger } = require('KegLog')
-const { exists } = require('KegUtils/helpers')
+const { exists } = require('@ltipton/jsutils')
 const { generalError } = require('KegUtils/error')
 const { dockerLog } = require('KegUtils/log/dockerLog')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { isDockerId } = require('KegUtils/docker/isDockerId')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')
-const { isDockerId } = require('KegUtils/docker/isDockerId')
 
 /**
  * Gets the container from a passed in context

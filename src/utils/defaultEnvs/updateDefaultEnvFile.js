@@ -2,11 +2,11 @@ const path = require('path')
 const { Logger } = require('KegLog')
 const { ask } = require('askIt')
 const packConf = require('KegRoot/package.json')
-const { deepMerge, exists, capitalize } = require('@ltipton/jsutils')
+const { capitalize } = require('@ltipton/jsutils')
 const { parseContent } = require('KegFileSys/env')
-const { writeFile, readFile } = require('KegFileSys/fileSys')
+const { readFile } = require('KegFileSys/fileSys')
+const { saveDefaultsEnv } = require('./saveDefaultsEnv')
 const { CLI_ROOT, DEFAULT_ENV, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
-
 
 /**
  * Logs the changes to the global Defaults.env
@@ -30,7 +30,6 @@ const askForUpdate = async (stats, force, conflict) => {
 
 /**
  * Saves the Defaults.env file to the global config folder path
- * @param {string} globalEnvsPath - Path where to save the global Defaults config file
  * @param {string} envsToAdd - ENVs to add to the file
  * @param {string} existingEnvs - Current ENVs that already exist
  * @param {boolean} log - Should log any updates
@@ -38,7 +37,7 @@ const askForUpdate = async (stats, force, conflict) => {
  * @returns {void}
  */
 const saveENVFile = async params => {
-  const { conflict, globalEnvsPath, envsToAdd, existingEnvs, force, stats, log } = params
+  const { conflict, envsToAdd, existingEnvs, force, stats, log } = params
 
   const doUpdate = await askForUpdate(stats, force, conflict)
   if(!doUpdate) return Logger.warn(`\nCanceling Defaults.env sync!`)
@@ -53,10 +52,7 @@ const saveENVFile = async params => {
   // Write the file to disk, overwriting the current defaults.env 
   log && Logger.info(`Updating global ${ DEFAULT_ENV } file!\n`)
 
-  await writeFile(
-    globalEnvsPath,
-    `${ existingEnvs }\n${ updatedENVs }`
-  )
+  await saveDefaultsEnv(`${ existingEnvs }\n${ updatedENVs }`)
 
   Logger.success('\nGlobal ENVs synced!')
 
@@ -178,7 +174,6 @@ const updateDefaultEnvFile = async (params={}) => {
     force,
     conflict,
     envsToAdd,
-    globalEnvsPath,
     existingEnvs: globalEnvStr,
   })
 

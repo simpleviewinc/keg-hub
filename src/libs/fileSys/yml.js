@@ -1,7 +1,7 @@
 const yaml = require('js-yaml')
 const { ask } = require('askIt')
 const writeYamlFile = require('write-yaml-file')
-const { confirmExec } = require('KegUtils/helpers')
+const { confirmExec } = require('KegUtils/helpers/confirmExec')
 const { parseTemplate } = require('./parseTemplate')
 const { limbo, deepMerge, isStr } = require('@ltipton/jsutils')
 const { throwNoFileExists, generalError } = require('KegUtils/error')
