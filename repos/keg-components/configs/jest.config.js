@@ -1,6 +1,6 @@
 const ROOT_DIR = require('app-root-path').path
 const { aliases } = require('./aliases.config.js')
-const { reduceObj } = require('jsutils')
+const { reduceObj } = require('@ltipton/jsutils')
 
 const { PLATFORM, RE_PLATFORM } = process.env
 const platform = PLATFORM || RE_PLATFORM

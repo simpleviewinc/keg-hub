@@ -1,7 +1,7 @@
 import { useDimensions } from '@simpleviewinc/re-theme'
 import { useLayoutEffect, useState } from 'react'
 import { useThemePath } from './useThemePath'
-import { deepMerge } from 'jsutils'
+import { deepMerge } from '@ltipton/jsutils'
 import { Dimensions } from 'react-native'
 const windowHeight = Dimensions.get('window').height
 const heightStyles = { height: windowHeight }

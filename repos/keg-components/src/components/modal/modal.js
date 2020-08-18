@@ -5,7 +5,7 @@ import { useThemePath, useFromToAnimation } from 'KegHooks'
 import { View } from 'KegView'
 import { noOp } from 'KegUtils'
 import { Dimensions } from 'react-native'
-import { isFunc } from 'jsutils'
+import { isFunc } from '@ltipton/jsutils'
 
 /**
  * Default Slide animated View for modal

@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { aliases } = require('./aliases.config')
 const babelConfig = require('./babel.config.js')
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
 const ENV = process.env.NODE_ENV || process.env.ENV || 'development'
 

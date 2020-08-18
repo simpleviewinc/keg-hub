@@ -3,7 +3,7 @@ import { useTheme } from '@simpleviewinc/re-theme'
 import { useThemePath } from '../../hooks'
 import { Clipboard, Text, View } from 'react-native'
 import { TouchableIcon } from '../icon'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import PropTypes from 'prop-types'
 
 /**

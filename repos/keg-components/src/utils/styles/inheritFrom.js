@@ -1,5 +1,5 @@
 import { platformFlatten } from './platformFlatten'
-import { deepMerge, isObj } from 'jsutils'
+import { deepMerge, isObj } from '@ltipton/jsutils'
 
 /**
  * Flattens each passed in object and

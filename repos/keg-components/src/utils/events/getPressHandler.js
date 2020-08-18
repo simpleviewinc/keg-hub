@@ -1,4 +1,4 @@
-import { isFunc } from 'jsutils'
+import { isFunc } from '@ltipton/jsutils'
 
 export const getPressHandler = (isWeb, onClick, onPress) => {
   const action = onClick || onPress

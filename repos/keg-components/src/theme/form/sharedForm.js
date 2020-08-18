@@ -1,5 +1,5 @@
 import defaults from '../defaults.json'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import { colors } from '../colors'
 import { padding } from '../padding'
 

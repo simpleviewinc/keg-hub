@@ -1,7 +1,7 @@
 import { colors } from './colors'
 import { margin } from './margin'
 import defaults from './defaults.json'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 
 const fontDefs = get(defaults, 'font', {})
 

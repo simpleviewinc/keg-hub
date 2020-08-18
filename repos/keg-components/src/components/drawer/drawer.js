@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import { useTheme } from '@simpleviewinc/re-theme'
 import { View } from 'KegView'
 

@@ -1,5 +1,5 @@
 import { colors } from '../colors'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 
 const container = {
   display: 'flex',

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import { useTheme } from '@simpleviewinc/re-theme'
-import { reduceObj } from 'jsutils'
+import { reduceObj } from '@ltipton/jsutils'
 import domMap from './domMap'
 
 const domAttrKeys = Object.keys(domMap.attrKeyMap.web)

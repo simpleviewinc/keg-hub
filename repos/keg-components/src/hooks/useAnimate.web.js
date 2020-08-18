@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { isFunc } from 'jsutils'
+import { isFunc } from '@ltipton/jsutils'
 
 export const useAnimate = ({ ref, animation, config, startCb, startDelay }) => {
   const aniRef = useRef(ref)

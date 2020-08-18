@@ -1,5 +1,5 @@
 import React from 'react'
-import { isStr, checkCall } from 'jsutils'
+import { isStr, checkCall } from '@ltipton/jsutils'
 import { TouchableOpacity, Linking } from 'react-native'
 import { LinkWrapper } from './link.wrapper'
 import { KegText } from 'KegText'

@@ -1,6 +1,6 @@
 import { flex } from '../flex'
 import { colors } from '../colors'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 
 const defaultSectionStyle = {
   height: '100%',

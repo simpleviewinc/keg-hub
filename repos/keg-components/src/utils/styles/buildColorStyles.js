@@ -1,6 +1,6 @@
 import { colors } from '../../theme/colors'
 import defaults from '../../theme/defaults.json'
-import { get, checkCall } from 'jsutils'
+import { get, checkCall } from '@ltipton/jsutils'
 const colorSurface = get(colors, 'surface', {})
 
 const colorStyles = (type, states, cb) => {

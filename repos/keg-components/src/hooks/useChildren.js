@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { reduceObj } from 'jsutils'
+import { reduceObj } from '@ltipton/jsutils'
 
 /**
  * Joins the default child components with the passed in overrides

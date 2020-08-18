@@ -3,7 +3,7 @@ import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
 import { useTheme } from '@simpleviewinc/re-theme'
-import { isArr, get } from 'jsutils'
+import { isArr, get } from '@ltipton/jsutils'
 
 /**
  * Builds the styles based on the passed in isCenter param

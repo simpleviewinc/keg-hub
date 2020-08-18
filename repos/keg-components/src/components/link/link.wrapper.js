@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
 import { getPressHandler, getTarget } from '../../utils'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import PropTypes from 'prop-types'
 
 const getSpacer = isWeb => {

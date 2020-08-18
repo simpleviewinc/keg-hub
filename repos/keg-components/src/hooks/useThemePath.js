@@ -8,7 +8,7 @@ import {
   checkCall,
   isEmptyColl,
   jsonEqual,
-} from 'jsutils'
+} from '@ltipton/jsutils'
 
 /**
  * Checks if two style object are valid and the same

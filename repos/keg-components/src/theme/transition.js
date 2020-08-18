@@ -1,4 +1,4 @@
-import { isArr, isNum, trainCase } from 'jsutils'
+import { isArr, isNum, trainCase } from '@ltipton/jsutils'
 
 export const transition = (prop = 'all', amount = '1s', type = 'ease') => {
   prop = (isArr(prop) && prop.join(', ')) || prop

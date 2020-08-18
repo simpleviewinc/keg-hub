@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import { validateFunctions } from '../utils'
 
 /**

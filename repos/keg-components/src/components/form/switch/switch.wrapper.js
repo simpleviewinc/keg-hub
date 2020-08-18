@@ -3,7 +3,7 @@ import { useTheme } from '@simpleviewinc/re-theme'
 import { Text } from '../../typography'
 import { View } from 'KegView'
 import { useThemePath } from '../../../hooks'
-import { get, isStr, toBool, checkCall } from 'jsutils'
+import { get, isStr, toBool, checkCall } from '@ltipton/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import PropTypes from 'prop-types'
 

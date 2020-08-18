@@ -1,6 +1,6 @@
 import { colors } from '../../colors'
 import { contained } from './contained'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import { buildTheme } from '../../../utils/styles'
 import defaults from '../../defaults.json'
 

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { P } from '../typography'
 import { Button } from 'KegButton'
 import { View } from 'KegView'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 
 /**
  * A component for selecting files from the user's system. Looks better than a basic input element,

@@ -3,7 +3,7 @@ import { addDecorator } from '@storybook/react'
 import { View } from 'KegView'
 import { ReThemeProvider } from '@simpleviewinc/re-theme'
 import { theme } from '../src/theme'
-import { isStr } from 'jsutils'
+import { isStr } from '@ltipton/jsutils'
 
 const IGNORE_WARN = [
   'Ignored an update',

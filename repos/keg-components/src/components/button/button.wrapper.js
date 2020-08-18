@@ -1,7 +1,7 @@
 import React from 'react'
 import { useThemeHover, useThemeActive } from '@simpleviewinc/re-theme'
 import { useThemePath } from '../../hooks'
-import { get } from 'jsutils'
+import { get } from '@ltipton/jsutils'
 import PropTypes from 'prop-types'
 import { Text } from '../typography/text'
 import { getActiveOpacity, getPressHandler, renderFromType } from '../../utils'

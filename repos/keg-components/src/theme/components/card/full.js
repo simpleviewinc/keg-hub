@@ -1,4 +1,4 @@
-import { deepMerge } from 'jsutils'
+import { deepMerge } from '@ltipton/jsutils'
 import { contained } from './contained'
 import { padding } from '../../padding'
 
