@@ -4,6 +4,7 @@ import { AppHeader, Button, View, Image } from '../..'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
 import { TouchableOpacity } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
 
 const buttonStyles = {
   main: { backgroundColor: 'transparent' },
@@ -99,6 +100,7 @@ storiesOf('Display | AppHeader', module)
         shadow
         title={'Custom Icons, no left action'}
         styles={headerStyles2}
+        IconComponent={FontAwesome}
         leftIcon={'android'}
         rightIcon={'search'}
         onRightClick={action('Right Section Clicked!')}
@@ -123,6 +125,7 @@ storiesOf('Display | AppHeader', module)
       <p />
       <AppHeader
         title={'Clickable left icon'}
+        IconComponent={FontAwesome}
         leftIcon={'arrow-left'}
         onLeftClick={action('Left Section Clicked!')}
       />

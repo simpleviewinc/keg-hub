@@ -1,9 +1,15 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { Icon } from 'KegIcon'
+import { Icon as KegIcon } from 'KegIcon'
 import { TouchableIcon } from './touchableIcon'
 import { StoryWrap } from 'StoryWrap'
+import { FontAwesome } from '@expo/vector-icons'
+
+const Icon = props => <KegIcon
+  Element={FontAwesome}
+  {...props}
+/>
 
 const wrapStyles = { textAlign: 'center' }
 
@@ -32,6 +38,7 @@ storiesOf('Display | Icon', module)
   .add('Touchable', () => (
     <StoryWrap style={wrapStyles}>
       <TouchableIcon
+        Element={FontAwesome}
         onPress={action('Icon pressed')}
         name={'copy'}
         size={35}

@@ -1,6 +1,5 @@
 import React from 'react'
 import { IconWrapper } from './icon.wrapper'
-import { FontAwesome } from '@expo/vector-icons'
 
 /**
  * Icon
@@ -12,12 +11,12 @@ import { FontAwesome } from '@expo/vector-icons'
  * @property {String} props.size - Size of the icon ( if undefined, ( theme || style).fontSize is used )
  * @property {Object} props.style - custom style
  * @property {string} props.type - Icon type
- *
+ * @property {String} props.Element - the icon set component to use
  */
 export const Icon = props => (
   <IconWrapper
     {...props}
-    Element={props.Element || FontAwesome}
+    Element={props.Element}
     isWeb={true}
   />
 )

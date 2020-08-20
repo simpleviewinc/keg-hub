@@ -29,7 +29,6 @@ const shared = {
     '@ltipton/jsutils',
     '@simpleviewinc/re-theme',
     'prop-types',
-    '@expo/vector-icons',
     'expo-fonts'
   ],
   watch: {

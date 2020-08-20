@@ -3,6 +3,7 @@ import React from 'react'
 import renderer from 'react-test-renderer'
 import { theme } from '../../../theme'
 import { ReThemeProvider } from '@simpleviewinc/re-theme'
+import { Indicator } from '../../indicator/indicator.native'
 
 const { Loading } = require('../loading')
 
@@ -13,7 +14,10 @@ describe('Loading', () => {
         theme={theme}
         merge={false}
       >
-        <Loading text={'Test Loading'} />
+        <Loading
+          indicator={Indicator}
+          text={'Test Loading'}
+        />
       </ReThemeProvider>
     )
   })

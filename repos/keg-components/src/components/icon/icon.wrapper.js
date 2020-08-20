@@ -18,7 +18,7 @@ import { useThemePath } from 'KegHooks'
  * @property {String|Number} props.size - size of the Icon
  * @property {Object} props.styles - custom styles
  * @property {string} props.type - Type of icons to use
- *
+ * @property {String} props.Element - the icon set component to use
  */
 export const IconWrapper = React.forwardRef((props, ref) => {
   const theme = useTheme()
@@ -66,6 +66,11 @@ export const IconWrapper = React.forwardRef((props, ref) => {
 })
 
 IconWrapper.propTypes = {
+  Element: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.func,
+    PropTypes.elementType,
+  ]),
   color: PropTypes.string,
   name: PropTypes.string.isRequired,
   ref: PropTypes.object,
