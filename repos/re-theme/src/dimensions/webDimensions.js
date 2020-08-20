@@ -2,20 +2,10 @@
 
 import { debounce, isArr, isFunc, checkCall } from '@ltipton/jsutils'
 import { Constants } from '../constants'
+import { setRNDimensions } from './dimensions'
+import { hasDomAccess } from '../helpers/hasDomAccess'
 
 const DEBOUNCE_RATE = 100
-
-/**
- * Checks if there is access to the dom
- */
-const hasDomAccess = () =>
-  !!(
-    typeof window !== 'undefined' &&
-    window.document &&
-    window.document.createElement
-  )
-
-const domAccess = hasDomAccess()
 
 /**
  * Gets the window object if it's available
@@ -30,6 +20,8 @@ const getWindow = () => {
         devicePixelRatio: undefined,
         innerHeight: undefined,
         innerWidth: undefined,
+        width: undefined,
+        height: undefined,
         screen: {
           height: undefined,
           width: undefined,
@@ -154,15 +146,20 @@ const removeEventListener = (type, removeListener) => {
     ))
 }
 
-domAccess &&
-  addListener(window, Constants.RESIZE_EVENT, debounce(update, DEBOUNCE_RATE))
+// Check if we have access to the DOM, and if so add a resize event listener
+hasDomAccess() &&
+  checkCall(() =>
+    addListener(window, Constants.RESIZE_EVENT, debounce(update, DEBOUNCE_RATE))
+  )
 
-export const setRNDimensions = () => {}
-
-export const Dimensions = {
+const Dimensions = {
   get,
   set,
   update,
   addEventListener,
   removeEventListener,
 }
+
+setRNDimensions(Dimensions)
+
+export { Dimensions, setRNDimensions }

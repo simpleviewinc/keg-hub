@@ -6,7 +6,7 @@ jest.clearAllMocks()
 
 const dimKeys = [ 'fontScale', 'height', 'scale', 'width' ]
 
-const { Dimensions } = require('../dimensions.web.js')
+const { Dimensions } = require('../webDimensions.js')
 
 jest.resetModules()
 

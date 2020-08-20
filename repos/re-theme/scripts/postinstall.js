@@ -35,6 +35,6 @@ const setupApp = async () => {
 }
 
 if (!__dirname.includes('node_modules')) {
-  setupAssumeUnchange('build')
+  !process.env.DOC_APP_PATH && setupAssumeUnchange('build')
   setupApp()
 }

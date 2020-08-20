@@ -1,0 +1,48 @@
+sync:
+  retheme:
+    alpha: "/keg/app"
+    beta: "docker://tap/keg/app"
+    mode: "one-way-replica"
+    ignore:
+      vcs: true
+      paths:
+        - "node_modules"
+        - "/app/node_modules"
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "/retheme.log"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "!/README.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"
+actions:
+  retheme:
+    install:
+      location: /keg/app
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/app
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/app
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+    app:
+      location: /keg/app
+      privileged: true
+      detach: true
+      cmds:
+        - yarn app

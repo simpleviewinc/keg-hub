@@ -21,14 +21,14 @@
   "scripts": {
     "app:install": "cd app && yarn install",
     "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
-    "build": "yarn clean:build; rollup -c rollup.config.js",
+    "build": "yarn clean:build; rollup -c ./configs/rollup.config.js",
     "build:app": "cd app; yarn build",
     "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
     "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
     "deploy": "gh-pages -d docs -o upstream",
-    "dev": "nodemon --watch ./configs --exec 'rollup -c rollup.config.js -w'",
+    "dev": "nodemon --watch ./configs --exec 'rollup -c ./configs/rollup.config.js -w'",
     "app": "cd app; yarn start",
-    "start": "yarn dev",
+    "start": "yarn copy:indexes; yarn dev",
     "test": "NODE_ENV=test jest --no-cache --verbose",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html",
@@ -42,7 +42,6 @@
     "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.6.3",
-    "@rollup/plugin-alias": "2.2.0",
     "app-root-path": "3.0.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
@@ -50,19 +49,19 @@
     "eslint-plugin-jest": "23.13.2",
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-native": "3.8.1",
-    "gh-pages": "^2.2.0",
+    "gh-pages": "2.2.0",
     "husky": "4.2.5",
     "jest": "24.7.1",
     "@ltipton/jsutils": "5.1.0",
     "lint-staged": "10.2.10",
-    "nodemon": "^2.0.4",
+    "nodemon": "2.0.4",
     "onchange": "7.0.2",
     "prettier": "2.0.5",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-native": "0.61.1",
     "react-native-web": "0.11.7",
-    "rimraf": "^3.0.2",
+    "rimraf": "3.0.2",
     "rollup": "1.20.3",
     "rollup-jest": "0.0.2",
     "rollup-plugin-babel": "4.3.3",
@@ -74,16 +73,11 @@
     "rollup-plugin-terser": "5.1.2"
   },
   "peerDependencies": {
-    "@ltipton/jsutils": "^git+https://github.com/lancetipton/jsutils.git#v3.2.1",
+    "@ltipton/jsutils": "5.1.0",
     "react": "^16.9.0"
   },
   "jest": {
     "preset": "rollup-jest",
-    "moduleNameMapper": {
-      "ReDimensions": "<rootDir>/src/dimensions/dimensions.web.js",
-      "RePlatform": "<rootDir>/src/context/platform.web.js",
-      "ReJoinTheme": "<rootDir>/src/cache/joinTheme.web.js"
-    },
     "transform": {
       "^.+\\.js$": "babel-jest"
     },

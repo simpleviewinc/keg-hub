@@ -2,7 +2,7 @@
 'use strict'
 
 import { useState, useEffect } from 'react'
-import { Dimensions } from 'ReDimensions'
+import { Dimensions } from './dimensions'
 
 // Get the original window dimensions
 

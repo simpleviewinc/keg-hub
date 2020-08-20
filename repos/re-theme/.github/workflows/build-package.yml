@@ -16,7 +16,7 @@ jobs:
 
     - name: Setup, build and publish
       env:
-        GIT_KEY: ${{ secrets.GITHUB_TOKEN }}
+        PUBLIC_GIT_KEY: ${{ secrets.PUBLIC_GIT_KEY }}
       run: |
         cd $GITHUB_WORKSPACE
         yarn install

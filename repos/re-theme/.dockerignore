@@ -2,6 +2,7 @@ Dockerfile
 .git
 .cache
 *.md
+!README.md
 .expo/*
 npm-debug.*
 *.jks

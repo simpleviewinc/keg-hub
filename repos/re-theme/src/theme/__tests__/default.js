@@ -1,4 +1,4 @@
-import { testTheme } from '../../mocks'
+import { testTheme, TestDimensions } from '../../mocks'
 import { deepClone } from '@ltipton/jsutils'
 import * as Dimensions from '../../dimensions'
 
@@ -7,12 +7,14 @@ jest.resetModules()
 const Dims = {
   getMergeSizes: jest.fn(Dimensions.getMergeSizes),
   getSize: jest.fn(Dimensions.getSize),
+  setSizes: jest.fn(Dimensions.getSizes),
   getSizeMap: jest.fn(Dimensions.getSizeMap),
 }
 const buildTheme = jest.fn(theme => theme)
 
 jest.setMock('../../dimensions', Dims)
 jest.setMock('../buildTheme', { buildTheme })
+jest.setMock('../../dimensions/dimensions', { Dimensions: TestDimensions })
 
 let themeClone = deepClone(testTheme)
 
@@ -25,11 +27,13 @@ describe('Theme', () => {
     })
 
     it('should get the default theme', () => {
-      expect(typeof Theme.getDefaultTheme()).toBe('object')
+      const defTheme = Theme.getDefaultTheme()
+      expect(typeof defTheme).toBe('object')
+      expect(defTheme).not.toBe(themeClone)
 
-      const defTheme = Theme.setDefaultTheme(themeClone)
+      const setTheme = Theme.setDefaultTheme(themeClone)
 
-      expect(Theme.getDefaultTheme()).toBe(defTheme)
+      expect(Theme.getDefaultTheme()).toBe(setTheme)
     })
   })
 

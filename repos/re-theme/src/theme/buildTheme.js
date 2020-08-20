@@ -2,11 +2,13 @@
 'use strict'
 
 import { fireThemeEvent } from './themeEvent'
-import { getTheme, joinTheme } from '../helpers'
 import { Constants } from '../constants'
 import { getMergeSizes, getSize } from '../dimensions'
 import { isObj, deepMerge } from '@ltipton/jsutils'
 import { restructureTheme } from './restructureTheme'
+import { updateCurrentTheme } from './manageTheme'
+import { getTheme } from '../helpers/getTheme'
+import { joinTheme } from '../helpers/joinTheme'
 
 /**
  * Joins themes from different sizes together based on the index of the sizeKey
@@ -94,9 +96,11 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
     : extraTheme
 
   builtTheme.RTMeta = { key, size, width, height }
-  builtTheme.join = builtTheme.join || joinTheme
-  builtTheme.get = builtTheme.get || getTheme.bind(builtTheme)
 
+  builtTheme.get = getTheme
+  builtTheme.join = joinTheme
+
+  updateCurrentTheme(builtTheme)
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme)
 
   return builtTheme

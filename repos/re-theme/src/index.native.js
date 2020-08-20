@@ -1,4 +1,5 @@
 import { ReThemeContext, ReThemeProvider } from './context'
+import { setRNPlatform } from './context/platform'
 import {
   getSize,
   getSizeMap,
@@ -6,8 +7,7 @@ import {
   setSizes,
   useDimensions,
 } from './dimensions'
-import { setRNDimensions } from 'ReDimensions'
-import { setRNPlatform } from 'RePlatform'
+import { setRNDimensions } from './dimensions/dimensions'
 import { helpers } from './helpers'
 
 import {
@@ -19,7 +19,13 @@ import {
   withTheme,
 } from './theme'
 
-import { useTheme, useThemeActive, useThemeFocus, useThemeHover } from 'ReHooks'
+import {
+  useStylesCallback,
+  useTheme,
+  useThemeActive,
+  useThemeFocus,
+  useThemeHover,
+} from './hooks/index.native.js'
 
 export {
   // Dimensions exports
@@ -38,6 +44,7 @@ export {
   setDefaultTheme,
   withTheme,
   // Theme hooks
+  useStylesCallback,
   useTheme,
   useThemeActive,
   useThemeFocus,

@@ -1,3 +1,5 @@
+import { TestDimensions } from '../../mocks'
+
 jest.resetModules()
 jest.resetAllMocks()
 jest.clearAllMocks()
@@ -12,6 +14,7 @@ const useEffect = jest.fn(func => {
 })
 
 jest.setMock('react', { useState, useEffect })
+jest.setMock('../dimensions.js', { Dimensions: TestDimensions })
 
 const { useDimensions } = require('../useDimensions')
 

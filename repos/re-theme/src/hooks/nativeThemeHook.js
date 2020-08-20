@@ -29,6 +29,6 @@ export const nativeThemeHook = (offValue, onValue, options) => {
     !checkEqual(offValue, value) && setValue(value)
   }, [ offValue, onValue ])
 
-  // Return an array metching the same format as on web
+  // Return an array matching the same format as on web
   return [ hookRef, offValue, setValue ]
 }

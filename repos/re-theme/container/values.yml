@@ -1,0 +1,30 @@
+env:
+
+  # --- KEG-CLI ENV CONTEXT --- #
+
+  # Set the paths to the linked external app
+  # The app should be linked to the keg-cli with `kee`
+  # Example command to link the app => `keg tap link kee`
+  KEG_DOCKER_FILE: "{{ cli.paths.retheme }}/container/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.paths.retheme }}/container/values.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.paths.retheme }}/container/docker-compose.yml"
+
+  # The KEG_CONTEXT_PATH env should be the location of the external app being run
+  KEG_CONTEXT_PATH: "{{ cli.paths.retheme }}"
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  # Default location of the app in the docker container
+  DOC_APP_PATH: /keg/app
+  DOC_RETHEME_PATH: /keg/app
+
+  # Default port of the app to expose from the container
+  DOC_APP_PORT: 5000
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image/Container Build information
+  # IMAGE and CONTAINER_NAME should be the same
+  IMAGE: retheme
+  CONTAINER_NAME: retheme
+  VERSION: "0.0.1"

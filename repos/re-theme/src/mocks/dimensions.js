@@ -1,10 +1,6 @@
-let RNDimensions
+import { Dimensions as RNDimensions } from '../dimensions/webDimensions'
 
-export const setRNDimensions = dims => {
-  RNDimensions = dims
-}
-
-export const Dimensions = {
+export const TestDimensions = {
   get: (...params) => {
     return RNDimensions ? RNDimensions.get(...params) : { width: 0, height: 0 }
   },

@@ -12,10 +12,11 @@
     "@ltipton/jsutils": "5.1.0",
     "raw-loader": "4.0.0",
     "@simpleviewinc/re-theme": "1.1.0",
+    "nodemon": "2.0.4",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-scripts": "3.2.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "3.0.2"
   },
   "scripts": {
     "build": "yarn copy:build; yarn clean:docs; yarn copy:readme; react-scripts build; yarn copy:docs",
@@ -24,7 +25,8 @@
     "copy:docs": "node scripts/copyDocs.js",
     "copy:build": "node scripts/copyBuild.js",
     "eject": "react-scripts eject",
-    "start": "yarn copy:build; yarn copy:readme; react-scripts start; yarn",
+    "dev": "PORT=${DOC_APP_PORT:-5000} nodemon --watch ../build/esm --watch ../configs --watch ../package.json --watch ./package.json --watch ./env --exec 'react-scripts start'",
+    "start": "yarn copy:build; yarn copy:readme; yarn dev",
     "test": "yarn copy:build; react-scripts test"
   },
   "browserslist": {

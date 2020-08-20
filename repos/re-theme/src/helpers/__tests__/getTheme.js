@@ -3,28 +3,30 @@ import { isObj, get } from '@ltipton/jsutils'
 
 jest.resetModules()
 
+const manageMock = { getCurrentTheme: jest.fn(() => theme) }
+jest.setMock('../../theme/manageTheme', manageMock)
+
 const { getTheme } = require('../getTheme')
-theme.get = getTheme
 
 describe('getTheme', () => {
   describe('getTheme', () => {
     afterEach(() => jest.clearAllMocks())
 
     it('should return an object', () => {
-      const styles = theme.get([ 'components', 'button', 'default' ], {
+      const styles = getTheme([ 'components', 'button', 'default' ], {
         width: 200,
         height: 40,
       })
 
       expect(isObj(styles)).toBe(true)
-      expect(isObj(theme.get())).toBe(true)
-      expect(isObj(theme.get(null))).toBe(true)
-      expect(isObj(theme.get(true))).toBe(true)
-      expect(isObj(theme.get(''))).toBe(true)
+      expect(isObj(getTheme())).toBe(true)
+      expect(isObj(getTheme(null))).toBe(true)
+      expect(isObj(getTheme(true))).toBe(true)
+      expect(isObj(getTheme(''))).toBe(true)
     })
 
     it('should return a joined styles object', () => {
-      const styles = theme.get([ 'components', 'button', 'default' ], {
+      const styles = getTheme([ 'components', 'button', 'default' ], {
         width: 200,
         height: 40,
       })
@@ -38,7 +40,7 @@ describe('getTheme', () => {
     })
 
     it('should join the passed in items, with last overwriting first', () => {
-      const styles = theme.get(
+      const styles = getTheme(
         [ 'components', 'button', 'default' ],
         { width: 30, height: 40, $web: { padding: 20 } },
         { width: 200, height: 0 }
@@ -52,7 +54,7 @@ describe('getTheme', () => {
     })
 
     it('should pull paths from the theme when a string or array is passed in', () => {
-      const styles = theme.get(
+      const styles = getTheme(
         [ 'components', 'button', 'default', '$web' ],
         'components.button.default.$native',
         { fontSize: 40 }
@@ -67,6 +69,14 @@ describe('getTheme', () => {
       expect(styles.color).toBe('#ffffff')
       expect(styles.padding).toBe(12)
       expect(styles.fontSize).toBe(40)
+    })
+
+    it('should call getCurrentTheme to get the latest theme', () => {
+      expect(manageMock.getCurrentTheme).not.toHaveBeenCalled()
+
+      getTheme([ 'components', 'button', 'default' ], {})
+
+      expect(manageMock.getCurrentTheme).toHaveBeenCalled()
     })
   })
 })

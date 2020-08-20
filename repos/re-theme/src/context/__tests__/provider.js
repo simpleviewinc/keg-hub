@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions } from 'ReDimensions'
+import { Dimensions } from '../../dimensions/webDimensions'
 import { testTheme, isReactComp, dimensionData } from '../../mocks'
 import * as Theme from '../../theme'
 
@@ -39,7 +39,7 @@ const addEventListener = jest.fn((type, addCB) => {
   addEventCB = addCB
 })
 const removeEventListener = jest.fn()
-jest.setMock('ReDimensions', {
+jest.setMock('../../dimensions/dimensions', {
   Dimensions: { ...Dimensions, addEventListener, removeEventListener },
 })
 

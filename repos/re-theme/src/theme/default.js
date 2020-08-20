@@ -2,7 +2,7 @@
 'use strict'
 
 import { deepMerge, isObj } from '@ltipton/jsutils'
-import { Dimensions } from 'ReDimensions'
+import { Dimensions } from '../dimensions/dimensions'
 import { buildTheme } from './buildTheme'
 
 /**

@@ -1,3 +1,3 @@
 export * from './provider'
 export * from './context'
-export * from 'RePlatform'
+export * from './platform'
