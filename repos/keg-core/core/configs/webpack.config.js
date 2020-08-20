@@ -7,6 +7,32 @@ const getExpoConfig = require('@expo/webpack-config')
 const babelConfig = require(path.join(kegPath, './babel.config'))()
 const { NODE_ENV } = process.env
 
+/**
+  * Dependencies to be resolved to keg-core/node_modules/<repo name>
+  */
+const resolveCoreAlias = {
+  'react': 'react',
+  'react-native': 'react-native-web',
+  'react-native-web': 'react-native-web',
+  '@expo/vector-icons': '@expo/vector-icons',
+  'react-native-vector-icons': 'react-native-vector-icons',
+  '@simpleviewinc/re-theme': '@simpleviewinc/re-theme/build/esm/reTheme.js',
+  '@simpleviewinc/keg-components': '@simpleviewinc/keg-components/build/esm/kegComponents.native.js',
+}
+
+/**
+  * Maps the core resolve alias to the node_modules path in keg-core
+  * This ensures other repos pull from keg-cores node_modules for these dependencies
+  */
+const buildResolveCoreAlias = (curAlias={}) => {
+  return Object.entries(resolveCoreAlias)
+    .reduce((allAlias, [ name, aliasPath ]) => {
+      allAlias[name] = path.join(kegPath, 'node_modules', aliasPath)
+      
+      return allAlias
+    }, curAlias)
+}
+
 module.exports = rootDir => {
   return async (env, argv) => {
     /**
@@ -43,6 +69,11 @@ module.exports = rootDir => {
       path.resolve(tapPath, 'node_modules'),
       path.resolve(kegPath, 'node_modules'),
     ]
+
+    /**
+     * Define aliases to the core versions of node_modules
+     */
+    config.resolve.alias = buildResolveCoreAlias(config.resolve.alias)
 
     return config
   }

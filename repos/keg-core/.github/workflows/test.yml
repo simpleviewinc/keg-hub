@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GIT_KEY: ${{ secrets.GITHUB_TOKEN }}
+      PUBLIC_GIT_KEY: ${{ secrets.PUBLIC_GIT_KEY }}
 
     strategy:
       matrix:
@@ -25,3 +25,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
     - run: yarn test 
+
