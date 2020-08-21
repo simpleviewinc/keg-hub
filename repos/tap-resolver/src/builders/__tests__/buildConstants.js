@@ -5,7 +5,7 @@ const {
   kegPath,
   tapAssetsPath,
 } = require('../../mocks')
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 
 // Helpers to allow calling the setup function in a test env
 const buildAliases = jest.fn(() => {

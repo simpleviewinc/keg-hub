@@ -1,5 +1,5 @@
 const path = require('path')
-const { get } = require('jsutils')
+const { get } = require('@ltipton/jsutils')
 const { FS, Rimraf, config, options, kegPath } = require('../../mocks')
 
 // Helpers to allow calling the setup function in a test env

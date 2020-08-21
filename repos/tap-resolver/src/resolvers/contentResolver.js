@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { logData, get } = require('jsutils')
+const { logData, get } = require('@ltipton/jsutils')
 const { validateApp, isDirectory } = require('../helpers')
 const { LOG } = process.env
 

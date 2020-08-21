@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { isObj, isStr } = require('jsutils')
+const { isObj, isStr } = require('@ltipton/jsutils')
 
 /**
  * Checks is a path is a directory

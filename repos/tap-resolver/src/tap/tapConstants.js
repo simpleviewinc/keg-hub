@@ -1,4 +1,4 @@
-const { keyMap, deepFreeze } = require('jsutils')
+const { keyMap, deepFreeze } = require('@ltipton/jsutils')
 
 /**
  * Tap Resolver Constants

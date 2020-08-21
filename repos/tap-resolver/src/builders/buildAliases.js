@@ -1,5 +1,5 @@
 const path = require('path')
-const { isFunc } = require('jsutils')
+const { isFunc } = require('@ltipton/jsutils')
 const { validateApp } = require('../helpers')
 /**
  * Adds dynamic content to the aliasMap of base content if a tap is set

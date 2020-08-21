@@ -1,5 +1,5 @@
 const path = require('path')
-const { cloneArr, get, isObj, reduceObj } = require('jsutils')
+const { cloneArr, get, isObj, reduceObj } = require('@ltipton/jsutils')
 const buildAssets = require('./buildAssets')
 const { validateApp } = require('../helpers')
 const { setupTap, tapConstants } = require('../tap')

@@ -1,6 +1,6 @@
 const runSetup = require('./src/runSetup')
 const { getPlatformData, getResolverFile, validateBabel } = require('./src/babel')
-const { PLATFORM, NODE_ENV } = process.env
+const { PLATFORM, NODE_ENV, KEG_COMPONENT_RESOLVER } = process.env
 
 /**
  * Sets up the babel config based on the PLATFORM ENV and the passed in options
@@ -24,9 +24,15 @@ const babelSetup = options => {
   // Get custom or default resolver files
   const contentResolver = getResolverFile(options, 'contentResolver')
   const webResolver = getResolverFile(options, 'webResolver')
+  const componentResolver = getResolverFile(options, 'componentResolver')
+
+  // If isWeb, then use the componentResolver for all direct alias calls
+  // This is used for rollup, where this works
+  // When using webpack, it will call the resolvePath function, which is set to webResolver
+  const useResolver = options.isWeb ? KEG_COMPONENT_RESOLVER && componentResolver : contentResolver
 
   // Run the setup to get tap extensions, and alias helper
-  const { buildAliases, EXTENSIONS } = runSetup(options, contentResolver)
+  const { buildAliases, EXTENSIONS } = runSetup(options, useResolver)
 
   // Get custom or default babel platform options
   const babelOpts = getPlatformData(options, 'babel')

@@ -1,4 +1,4 @@
-const { isObj, isEmpty, isStr, get } = require('jsutils')
+const { isObj, isEmpty, isStr, get } = require('@ltipton/jsutils')
 const { requireFile } = require('../helpers')
 const tapConstants = require('../tap/tapConstants')
 

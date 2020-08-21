@@ -1,4 +1,4 @@
-const { get, isObj } = require('jsutils')
+const { get, isObj } = require('@ltipton/jsutils')
 const { checkTapKegPath } = require('../helpers')
 
 /**

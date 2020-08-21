@@ -1,4 +1,4 @@
-const { deepFreeze, unset, set, get, deepMerge } = require('jsutils')
+const { deepFreeze, unset, set, get, deepMerge } = require('@ltipton/jsutils')
 const appJson = require('../app.json')
 const tapJson = require('../taps/test/app.json')
 const configOverrides = get(appJson, [ 'keg', 'overrides' ])

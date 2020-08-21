@@ -1,5 +1,5 @@
 const { options } = require('../mocks')
-const { isArr, isFunc } = require('jsutils')
+const { isArr, isFunc } = require('@ltipton/jsutils')
 
 // Helpers to allow calling the setup function in a test env
 const buildAliases = jest.fn(() => {
