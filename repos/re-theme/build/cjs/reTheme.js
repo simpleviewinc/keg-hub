@@ -24,46 +24,53 @@ var Constants = jsutils.deepFreeze({
 });
 
 var RNDimensions;
+var checkDimensions = function checkDimensions(callBack) {
+  return function () {
+    return RNDimensions ? callBack.apply(void 0, arguments) : console.error("[ ReTheme ERROR ] - Missing Dimensions", "\n   - You must initialize 'Dimensions' before using the 'ReThemeProvider'", "\n   - Do this by calling 'setRNDimensions(Dimensions)'", "\n   - The first argument must be the 'Dimensions' export of 'react-native'", "\n   - Or an Object with a matching API");
+  };
+};
 var setRNDimensions = function setRNDimensions(dims) {
-  RNDimensions = dims;
+  return RNDimensions = dims;
 };
 var Dimensions = {
-  get: function get() {
+  get: checkDimensions(function () {
     var _RNDimensions;
     return RNDimensions ? (_RNDimensions = RNDimensions).get.apply(_RNDimensions, arguments) : {
       width: 0,
       height: 0
     };
-  },
-  set: function set() {
+  }),
+  set: checkDimensions(function () {
     var _RNDimensions2;
     RNDimensions && (_RNDimensions2 = RNDimensions).set.apply(_RNDimensions2, arguments);
-  },
-  update: function update() {
+  }),
+  update: checkDimensions(function () {
     var _RNDimensions3;
     RNDimensions && (_RNDimensions3 = RNDimensions).update.apply(_RNDimensions3, arguments);
-  },
-  addEventListener: function addEventListener() {
+  }),
+  addEventListener: checkDimensions(function () {
     var _RNDimensions4;
     RNDimensions && (_RNDimensions4 = RNDimensions).addEventListener.apply(_RNDimensions4, arguments);
-  },
-  removeEventListener: function removeEventListener() {
+  }),
+  removeEventListener: checkDimensions(function () {
     var _RNDimensions5;
     RNDimensions && (_RNDimensions5 = RNDimensions).removeEventListener.apply(_RNDimensions5, arguments);
-  }
+  })
 };
 
-var DEBOUNCE_RATE = 100;
 var hasDomAccess = function hasDomAccess() {
   return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 };
-var domAccess = hasDomAccess();
+
+var DEBOUNCE_RATE = 100;
 var getWindow = function getWindow() {
   var winAccess = !hasDomAccess();
   return winAccess ? {
     devicePixelRatio: undefined,
     innerHeight: undefined,
     innerWidth: undefined,
+    width: undefined,
+    height: undefined,
     screen: {
       height: undefined,
       width: undefined
@@ -123,7 +130,9 @@ var removeEventListener = function removeEventListener(type, removeListener) {
     return listener !== removeListener;
   }));
 };
-domAccess && addListener(window, Constants.RESIZE_EVENT, jsutils.debounce(update, DEBOUNCE_RATE));
+hasDomAccess() && jsutils.checkCall(function () {
+  return addListener(window, Constants.RESIZE_EVENT, jsutils.debounce(update, DEBOUNCE_RATE));
+});
 var Dimensions$1 = {
   get: get,
   set: set,
@@ -381,7 +390,7 @@ var getDefaultPlatforms = function getDefaultPlatforms() {
   var Platform = getRNPlatform();
   var stylePlatforms = ['$' + jsutils.get(Platform, 'OS')];
   if (jsutils.get(Platform, 'OS') !== 'web') stylePlatforms.push('$native');
-  return stylePlatforms.concat(Constants.PLATFORM.ALL);
+  return stylePlatforms.concat([Constants.PLATFORM.ALL]);
 };
 var buildPlatforms = function buildPlatforms(usrPlatforms) {
   var platsToUse = Object.keys(usrPlatforms).filter(function (key) {
@@ -435,6 +444,31 @@ var getCurrentTheme = function getCurrentTheme() {
 var updateCurrentTheme = function updateCurrentTheme(updatedTheme) {
   return currentTheme = updatedTheme;
 };
+
+var getTheme = function getTheme() {
+  var theme = getCurrentTheme();
+  for (var _len = arguments.length, sources = new Array(_len), _key = 0; _key < _len; _key++) {
+    sources[_key] = arguments[_key];
+  }
+  return jsutils.deepMerge.apply(void 0, _toConsumableArray(sources.reduce(function (toMerge, source) {
+    var styles = jsutils.isObj(source) ? source : jsutils.isStr(source) || jsutils.isArr(source) ? jsutils.get(theme, source) : null;
+    styles && toMerge.push(styles);
+    return toMerge;
+  }, [])));
+};
+
+var hasManyFromTheme = function hasManyFromTheme(arg1, arg2) {
+  return jsutils.isObj(arg1) && jsutils.isObj(arg1.RTMeta);
+};
+var joinTheme = function joinTheme(arg1, arg2) {
+  for (var _len = arguments.length, sources = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    sources[_key - 2] = arguments[_key];
+  }
+  return hasManyFromTheme(arg1) ? getTheme.apply(void 0, _toConsumableArray(!jsutils.isArr(arg2) ? arg2 : arg2.map(function (arg) {
+    return jsutils.isObj(arg) && arg || arg && jsutils.get(arg1, arg);
+  })).concat(sources)) : getTheme.apply(void 0, [arg1, arg2].concat(sources));
+};
+
 var joinThemeSizes = function joinThemeSizes(theme, sizeKey) {
   var extraTheme = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   var sizesToMerge = getMergeSizes(sizeKey);
@@ -469,6 +503,8 @@ var buildTheme = function buildTheme(theme, width, height, defaultTheme, usrPlat
     width: width,
     height: height
   };
+  builtTheme.get = getTheme;
+  builtTheme.join = joinTheme;
   updateCurrentTheme(builtTheme);
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme);
   return builtTheme;
@@ -613,12 +649,13 @@ var useTheme = function useTheme() {
   return React.useContext(ReThemeContext);
 };
 
-var useStyles = function useStyles(stylesCb, customStyles) {
+var useStylesCallback = function useStylesCallback(stylesCb, cbDependencies, customStyles) {
+  var cb = React.useCallback(stylesCb, cbDependencies || []);
   var styles = !customStyles || !jsutils.isObj(customStyles) || jsutils.isEmptyColl(customStyles) ? false : customStyles;
   var theme = useTheme();
   return React.useMemo(function () {
-    return jsutils.checkCall(stylesCb, theme, styles);
-  }, [theme, stylesCb, styles]);
+    return jsutils.checkCall(cb, theme, styles) || {};
+  }, [theme, cb, styles]);
 };
 
 var updateListeners = function updateListeners(element, type, events, methods) {
@@ -726,7 +763,7 @@ exports.setRNDimensions = setRNDimensions;
 exports.setRNPlatform = setRNPlatform;
 exports.setSizes = setSizes;
 exports.useDimensions = useDimensions;
-exports.useStyles = useStyles;
+exports.useStylesCallback = useStylesCallback;
 exports.useTheme = useTheme;
 exports.useThemeActive = useThemeActive;
 exports.useThemeFocus = useThemeFocus;

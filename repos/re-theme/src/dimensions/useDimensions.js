@@ -20,7 +20,6 @@ export const useDimensions = () => {
   const onChange = ({ window: win }) => {
     // Pull out the relevant items form the window object
     const { width, height, scale, fontScale } = win
-
     // Update the state with the updated dimensions data
     setDimensions({ width, height, scale, fontScale })
   }
@@ -33,7 +32,10 @@ export const useDimensions = () => {
     Dimensions.addEventListener('change', onChange)
 
     // Return a function to remove the event listener
-    return () => Dimensions.removeEventListener('change', onChange)
+    return () => {
+      onChange.shouldUnmount = true
+      return Dimensions.removeEventListener('change', onChange)
+    }
   }, [])
 
   // Return the current dimensions

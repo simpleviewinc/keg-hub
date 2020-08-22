@@ -115,7 +115,9 @@ const update = () => {
   dimensions.screen = setScreen(winDim)
 
   isArr(listeners[Constants.CHANGE_EVENT]) &&
-    listeners[Constants.CHANGE_EVENT].forEach(listener => listener(dimensions))
+    listeners[Constants.CHANGE_EVENT].forEach(
+      listener => !listener.shouldUnmount && listener(dimensions)
+    )
 }
 
 /**
