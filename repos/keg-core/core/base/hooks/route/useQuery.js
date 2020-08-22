@@ -1,5 +1,5 @@
+import { useLocation } from 'SVComponents/router/router'
 import { queryToObj, get } from '@ltipton/jsutils'
-import { useLocation } from 'SVComponents'
 import { useState, useEffect } from 'react'
 
 /**

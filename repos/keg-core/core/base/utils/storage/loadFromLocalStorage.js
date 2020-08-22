@@ -1,5 +1,5 @@
 import { KeyStore } from 'SVNative/keyStore'
-import { validate, get, set } from 'jsutils'
+import { validate, get, set } from '@ltipton/jsutils'
 import { isValidStoragePath, isValidKeyStore } from './validators'
 import { upsert } from 'SVActions/items'
 import { Values } from 'SVConstants'

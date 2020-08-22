@@ -1,7 +1,6 @@
 import * as reducers from 'SVReducers'
 import { combineReducers, createStore } from 'redux'
 import * as Plugins from './plugins'
-import { devToolsEnhancer } from 'redux-devtools-extension'
 
 const appReducers = combineReducers(reducers)
 
@@ -10,7 +9,13 @@ const rootReducer = (state, action) => {
   return appReducers(state, processedAction)
 }
 
-const Store = createStore(rootReducer, devToolsEnhancer())
+// exclude dev middleware in production build
+const devMiddleware =
+  process.env.NODE_ENV !== 'production'
+    ? require('redux-devtools-extension').devToolsEnhancer()
+    : undefined
+
+const Store = createStore(rootReducer, devMiddleware)
 
 export const getStore = () => Store
 export const getDispatch = () => Store.dispatch
