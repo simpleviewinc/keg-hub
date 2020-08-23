@@ -1,5 +1,5 @@
 const { buildModel } = require('../models/buildModel')
-const { isStr, isObj } = require('@ltipton/jsutils')
+const { isStr, isObj } = require('@svkeg/jsutils')
 
 const defModel = {
   type: 'confirm',

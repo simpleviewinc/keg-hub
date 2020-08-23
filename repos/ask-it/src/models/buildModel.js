@@ -1,4 +1,4 @@
-const { isStr, isObj } = require('@ltipton/jsutils')
+const { isStr, isObj } = require('@svkeg/jsutils')
 const models = require('./models')
 
 /**

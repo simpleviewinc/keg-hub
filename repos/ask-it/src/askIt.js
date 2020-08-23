@@ -1,4 +1,4 @@
-const { isArr } = require('@ltipton/jsutils')
+const { isArr } = require('@svkeg/jsutils')
 const inquirer = require('inquirer')
 const { input } = require('./prompts/input')
 const { confirm } = require('./prompts/confirm')
