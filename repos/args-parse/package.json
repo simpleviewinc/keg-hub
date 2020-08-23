@@ -1,6 +1,6 @@
 {
   "name": "@svkeg/args-parse",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
@@ -22,9 +22,9 @@
     "README.md"
   ],
   "dependencies": {
+    "@svkeg/ask-it": "0.0.1",
     "@svkeg/jsutils": "0.0.1",
-    "app-root-path": "3.0.0",
-    "@svkeg/ask-it": "0.0.1"
+    "app-root-path": "3.0.0"
   },
   "devDependencies": {
     "jest": "24.8.0",
