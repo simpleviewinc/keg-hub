@@ -1,6 +1,6 @@
 const { testTask1, testTask2, testTask3, testTask4 } = require('../__mocks__/testTasks')
 const Ask = require('../__mocks__/ask')
-jest.setMock('askIt', Ask)
+jest.setMock('@svkeg/ask-it', Ask)
 
 const { argsParse } = require('../argsParse')
 
