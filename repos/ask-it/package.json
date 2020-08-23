@@ -1,12 +1,14 @@
 {
-  "name": "askit",
-  "version": "0.0.1",
+  "name": "@svkeg/ask-it",
+  "version": "0.0.0",
   "description": "Node CLI helper for asking questions",
   "main": "src/index.js",
-  "repository": "https://github.com/lancetipton/askIt",
+  "repository": "https://github.com/lancetipton/ask-it",
   "author": "Lance Tipton",
   "license": "MIT",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">= 12.15.0"
   },
@@ -23,7 +25,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@ltipton/jsutils": "^5.0.0",
+    "@svkeg/jsutils": "0.0.1",
     "colors": "1.4.0",
     "inquirer": "7.0.6"
   },
