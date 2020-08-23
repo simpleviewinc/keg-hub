@@ -1,5 +1,5 @@
 const { checkBoolValue } = require('./checkBoolValue')
-const { toBool, toNum } = require('@ltipton/jsutils')
+const { toBool, toNum } = require('@svkeg/jsutils')
 
 /**
  * Convert JSON string into object, wrapped in a try / catch.

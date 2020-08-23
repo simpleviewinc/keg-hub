@@ -2,7 +2,7 @@ const path = require('path')
 const parseRoot = path.join(__dirname, '../../')
 const appRoot = require('app-root-path').path
 const defConfig = require('../../configs/parse.config.js')
-const { deepMerge } = require('@ltipton/jsutils')
+const { deepMerge } = require('@svkeg/jsutils')
 
 /**
  * Placeholder variable to cache the loaded config

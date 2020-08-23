@@ -1,6 +1,6 @@
 const { checkEnvArg } = require('./checkEnvArg')
 const { optionsAsk } = require('../options/optionsAsk')
-const { exists, reduceObj } = require('@ltipton/jsutils')
+const { exists, reduceObj } = require('@svkeg/jsutils')
 const { checkRequired } = require('../utils/checkRequired')
 const { checkBoolValue } = require('../options/checkBoolValue')
 const { checkValueType } = require('../options/checkValueType')

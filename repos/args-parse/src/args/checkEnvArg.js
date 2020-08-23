@@ -1,4 +1,4 @@
-const { reduceObj } = require('@ltipton/jsutils')
+const { reduceObj } = require('@svkeg/jsutils')
 const { getConfig } = require('../utils/getConfig')
 
 /**

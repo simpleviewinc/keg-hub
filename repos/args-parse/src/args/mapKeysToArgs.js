@@ -1,4 +1,4 @@
-const { exists } = require('@ltipton/jsutils')
+const { exists } = require('@svkeg/jsutils')
 const { getOptionMeta } = require('../options/getOptionMeta')
 const { ensureArg } = require('./ensureArgs')
 

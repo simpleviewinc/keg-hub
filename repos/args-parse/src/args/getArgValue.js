@@ -2,7 +2,7 @@ const {
   exists,
   isArr,
   isStr,
-} = require('@ltipton/jsutils')
+} = require('@svkeg/jsutils')
 const { splitEqualsMatch } = require('../utils/splitEqualsMatch')
 const { buildMatchTypes } = require('../utils/buildMatchTypes')
 const { hasKeyIdentifier } = require('../utils/hasKeyIdentifier')

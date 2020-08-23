@@ -1,4 +1,4 @@
-const { isObj } = require('@ltipton/jsutils')
+const { isObj } = require('@svkeg/jsutils')
 
 /**
  * Gets the option meta data for a key from a task

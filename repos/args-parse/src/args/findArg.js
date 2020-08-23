@@ -1,7 +1,7 @@
 const {
   exists,
   isArr,
-} = require('@ltipton/jsutils')
+} = require('@svkeg/jsutils')
 const { getArgValue } = require('./getArgValue')
 const { removeOption } = require('../options/removeOption')
 

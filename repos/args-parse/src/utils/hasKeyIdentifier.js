@@ -1,4 +1,4 @@
-const { isStr } = require('@ltipton/jsutils')
+const { isStr } = require('@svkeg/jsutils')
 
 /**
  * Checks if the passed in data string has an options key identifier

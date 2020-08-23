@@ -1,6 +1,6 @@
 const { findArg } = require('./args/findArg')
 const { getConfig } = require('./utils/getConfig')
-const { exists, isObj } = require('@ltipton/jsutils')
+const { exists, isObj } = require('@svkeg/jsutils')
 const { mapKeysToArgs } = require('./args/mapKeysToArgs')
 const { getOptionMeta } = require('./options/getOptionMeta')
 const { ensureArg, ensureArgs } = require('./args/ensureArgs')

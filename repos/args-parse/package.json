@@ -1,6 +1,6 @@
 {
-  "name": "@ltipton/args-parse",
-  "version": "1.1.0",
+  "name": "@svkeg/args-parse",
+  "version": "0.0.0",
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
@@ -9,7 +9,9 @@
   },
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "NODE_ENV=test jest --no-cache",
     "test:report": "yarn test --coverage"
@@ -20,9 +22,9 @@
     "README.md"
   ],
   "dependencies": {
-    "@ltipton/jsutils": "^5.0.0",
-    "app-root-path": "^3.0.0",
-    "askIt": "git+https://github.com/lancetipton/askIt.git"
+    "@svkeg/jsutils": "0.0.1",
+    "app-root-path": "3.0.0",
+    "@svkeg/ask-it": "0.0.1"
   },
   "devDependencies": {
     "jest": "24.8.0",
