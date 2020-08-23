@@ -1,4 +1,4 @@
-const { limbo, isStr, get } = require('jsutils')
+const { limbo, isStr, get } = require('@svkeg/jsutils')
 const shellExec = require('shell-exec')
 const { errorHandler } = require('./utils')
 const rootDir = require('app-root-path').path

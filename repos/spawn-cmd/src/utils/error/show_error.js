@@ -1,4 +1,4 @@
-const { logData } = require('jsutils')
+const { logData } = require('@svkeg/jsutils')
 
 module.exports =  (err, exit) => {
   err.message && logData(err.message, 'error')

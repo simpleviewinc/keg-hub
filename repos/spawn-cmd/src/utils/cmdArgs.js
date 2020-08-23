@@ -1,4 +1,4 @@
-const { isArr, isStr, isObj, get } = require('jsutils')
+const { isArr, isStr, isObj, get } = require('@svkeg/jsutils')
 const rootDir = require('app-root-path').path
 const { errorHandler } = require('./error')
 

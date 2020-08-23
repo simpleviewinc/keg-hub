@@ -1,4 +1,4 @@
-const { limbo } = require('jsutils')
+const { limbo } = require('@svkeg/jsutils')
 const spawnCmd = require('../spawnCmd')
 const path = require('path')
 

@@ -3,7 +3,7 @@ const spawn = require('cross-spawn')
 const killProc = require('tree-kill')
 const rootDir = require('app-root-path').path
 const { exitError, errorHandler } = require('./utils')
-const { logData, mapObj, reduceObj, checkCall, deepMerge, isFunc } = require('jsutils')
+const { logData, mapObj, reduceObj, checkCall, deepMerge, isFunc } = require('@svkeg/jsutils')
 
 /**
  * Cache to hold child processes

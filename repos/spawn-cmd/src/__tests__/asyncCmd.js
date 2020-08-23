@@ -1,4 +1,4 @@
-const { limbo } = require('jsutils')
+const { limbo } = require('@svkeg/jsutils')
 const asyncCmd = require('../asyncCmd')
 const path = require('path')
 
