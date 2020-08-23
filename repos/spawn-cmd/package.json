@@ -1,6 +1,6 @@
 {
   "name": "@svkeg/spawn-cmd",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Cross platform child_process execution in Node",
   "repository": "https://github.com/lancetipton/spawn-cmd",
   "main": "index.js",
@@ -13,9 +13,9 @@
     "test": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
+    "@svkeg/jsutils": "0.0.1",
     "app-root-path": "3.0.0",
     "cross-spawn": "7.0.3",
-    "@svkeg/jsutils": "0.0.1",
     "shell-exec": "1.0.2",
     "tree-kill": "1.2.1"
   },
