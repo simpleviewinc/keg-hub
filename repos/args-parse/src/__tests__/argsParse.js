@@ -221,7 +221,7 @@ describe('argsParse', () => {
 
   })
 
-  it('should call askIt when no value is passed and task.ask is exist', async () => {
+  it('should call @svkeg/ask-it when no value is passed and task.ask is exist', async () => {
 
     expect(Ask.ask).not.toHaveBeenCalled()
     expect(Ask.buildModel).not.toHaveBeenCalled()

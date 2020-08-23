@@ -1,5 +1,5 @@
 const { isObj, isStr, get } = require('@svkeg/jsutils')
-const { ask, buildModel } = require('askIt')
+const { ask, buildModel } = require('@svkeg/ask-it')
 const { getConfig } = require('../utils/getConfig')
 
 /**
