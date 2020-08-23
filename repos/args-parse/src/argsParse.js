@@ -7,7 +7,7 @@ const { ensureArg, ensureArgs } = require('./args/ensureArgs')
 const { hasKeyIdentifier } = require('./utils/hasKeyIdentifier')
 const { addDefaultOptions } = require('./options/addDefaultOptions')
 const { optionsHasIdentifiers } = require('./options/optionsHasIdentifiers')
-
+const { parseQuotes } = require('./utils/parseQuotes')
 /**
  * Loops the task options looking to a match in the passed in options array
  * @function
@@ -70,7 +70,10 @@ const loopTaskOptions = (task, taskKeys, options, params) => {
  * @returns {Object} - Mapped arguments object
  */
 const argsParse = async (toParse, config) => {
-  const { args=[], task, params={} } = toParse
+  const { task, params={} } = toParse
+
+  // Check for any quoted arguments and join them together as a single argument
+  const args = parseQuotes(toParse.args)
 
   // Initialize the config by calling it in the beginning
   getConfig(config)

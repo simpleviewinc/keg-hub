@@ -148,7 +148,7 @@ describe('argsParse', () => {
       task: testTask1,
     })
 
-    expect(parsed.doo).toBe("\"I am a long quoted string value\"")
+    expect(parsed.doo).toBe("I am a long quoted string value")
 
   })
 
@@ -175,7 +175,7 @@ describe('argsParse', () => {
 
   })
 
-  it('should convert the value type when the type field is set', async () => {
+  it.only('should convert the value type when the type field is set', async () => {
     
     const testObj = JSON.stringify({
       test: 'object'
@@ -187,11 +187,16 @@ describe('argsParse', () => {
         `number=5`,
         `num=0`,
         `object=${ testObj }`,
-        `obj=${ testObj }`,
+        `--obj`,
+        `${ testObj }`,
         `array=${ testArr }`,
         `arr=1,2,3`,
-        `boolean=true`,
+        `--boolean`,
+        'true',
         `bool=false`,
+        `--quoted`,
+        `"Quoted`,
+        `string"`
       ],
       task: testTask3,
     })
@@ -211,6 +216,7 @@ describe('argsParse', () => {
     expect(parsed.arr[2]).toBe('3')
     expect(parsed.boolean).toBe(true)
     expect(parsed.bool).toBe(false)
+    expect(parsed.quoted).toBe('Quoted string')
 
   })
 

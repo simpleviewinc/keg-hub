@@ -61,6 +61,10 @@ module.exports = {
         description: "Is an boolean",
         type: 'bool',
       },
+      quoted: {
+        description: 'Is a quoted string',
+        type: 'string',
+      }
     }
   }
 }
