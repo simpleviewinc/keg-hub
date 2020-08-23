@@ -4,7 +4,7 @@
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
-    "url": "git+https://github.com/lancetipton/argsParse.git",
+    "url": "git+https://github.com/lancetipton/args-parse.git",
     "type": "git"
   },
   "author": "lancetipton <lancetipton04@gmail.com>",
