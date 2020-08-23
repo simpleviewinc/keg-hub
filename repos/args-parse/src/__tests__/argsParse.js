@@ -1,4 +1,4 @@
-const { testTask1, testTask2, testTask3 } = require('../__mocks__/testTasks')
+const { testTask1, testTask2, testTask3, testTask4 } = require('../__mocks__/testTasks')
 const Ask = require('../__mocks__/ask')
 jest.setMock('askIt', Ask)
 
@@ -144,11 +144,12 @@ describe('argsParse', () => {
   it('should parse quoted string values', async () => {
 
     const parsed = await argsParse({
-      args: [ '-d', "\"I am a long quoted string value\"" ],
+      args: [ '-d', "\"I am a long quoted string value\"", '--foo', '\'single quotes\'' ],
       task: testTask1,
     })
 
     expect(parsed.doo).toBe("I am a long quoted string value")
+    expect(parsed.foo).toBe("single quotes")
 
   })
 
@@ -175,7 +176,7 @@ describe('argsParse', () => {
 
   })
 
-  it.only('should convert the value type when the type field is set', async () => {
+  it('should convert the value type when the type field is set', async () => {
     
     const testObj = JSON.stringify({
       test: 'object'
@@ -246,6 +247,18 @@ describe('argsParse', () => {
     expect(parsed.foo).toBe('try')
     expect(parsed.baz).toBe('duper')
     expect(parsed.env).toBe('development')
+
+  })
+
+  it('should return only the default options when task has no options', async () => {
+
+    const parsed = await argsParse({
+      args: [],
+      task: testTask4,
+    })
+
+    expect(Object.keys(parsed).length).toBe(1)
+    expect(Boolean(parsed.env)).toBe(true)
 
   })
 

@@ -3,7 +3,6 @@ const {
   isArr,
   isStr,
 } = require('@ltipton/jsutils')
-const { checkQuotedOptions } = require('../options/checkQuotedOptions')
 const { splitEqualsMatch } = require('../utils/splitEqualsMatch')
 const { buildMatchTypes } = require('../utils/buildMatchTypes')
 const { hasKeyIdentifier } = require('../utils/hasKeyIdentifier')
@@ -61,7 +60,7 @@ const getArgValue = ({ options, long, short, alias, optionSchemas }) => {
     options.reduce((argument, option, index) => {
 
       // If the value was already found, check for quoted string and return it 
-      if (exists(argument)) return checkQuotedOptions(argument, options, index)
+      if (exists(argument)) return argument
 
       const nextOpt = options[ index + 1 ]
 

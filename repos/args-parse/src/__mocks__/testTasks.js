@@ -1,5 +1,6 @@
 module.exports = {
   testTask1: {
+    name: 'testTask1',
     options: {
       doo: {
         description: "dew the doo",
@@ -16,6 +17,7 @@ module.exports = {
     }
   },
   testTask2: {
+    name: 'testTask2',
     options: {
       context: {
         description: "context of the task",
@@ -28,6 +30,7 @@ module.exports = {
     }
   },
   testTask3: {
+    name: 'testTask3',
     options: {
       number: {
         description: "Is a number",
@@ -66,5 +69,8 @@ module.exports = {
         type: 'string',
       }
     }
-  }
+  },
+  testTask4: {
+    name: 'testTask4',
+  },
 }

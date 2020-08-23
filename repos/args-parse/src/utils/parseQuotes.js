@@ -18,19 +18,7 @@ const MATCHER = new RegExp(`(${BAREWORD}|${SINGLE_QUOTE}|${DOUBLE_QUOTE})*`, 'g'
 
 const SQ = "'"
 const DQ = '"'
-const BS = '\\'
 
-/**
- * Gets the next char in the match, and returns it based on it's quote state
- * @function
- * @param {string} match - string part that matches the MATCHER regex
- *
- * @returns {string} - next char or next char with \\ added to it
- */
-const setNextChar = (match, index) => {
-  const char = match.charAt(index)
-  return char === DQ || char === BS ? char : BS + char
-}
 
 /**
  * Checks if the match argument is a stringified object or array
@@ -79,30 +67,18 @@ const parseQuotes = args => {
       if(checkForObj(match)) return match
 
       let quote = false
-      let esc = false
       let out = ''
 
       for (let i = 0, length = match.length; i < length; i++) {
         let char = match.charAt(i)
 
-        esc
-          ? (() => {
-              out += char
-              esc = false
-            })()
-          : quote
-            ? char === quote
-              ? (quote = false)
-              : quote == SQ
-                ? (out += char)
-                : char !== BS
-                  ? (out += char)
-                  : (out += setNextChar(match, i += 1))
-            : char === DQ || char === SQ
-              ? (quote = char)
-              : char === BS
-                ? (esc = true)
-                : (out += char)
+        quote
+          ? char === quote
+            ? (quote = false)
+            : (out += char)
+          : char === DQ || char === SQ
+            ? (quote = char)
+            : (out += char)
       }
 
       return out
