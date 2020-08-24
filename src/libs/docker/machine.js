@@ -1,5 +1,5 @@
 const { executeCmd } = require('KegProc')
-const { get, isStr } = require('@ltipton/jsutils')
+const { get, isStr } = require('@svkeg/jsutils')
 const { apiError } = require('./helpers')
 const { MACHINE } = require('KegConst/docker/machine')
 const { NAME } = MACHINE

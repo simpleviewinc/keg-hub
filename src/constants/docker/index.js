@@ -1,4 +1,4 @@
-const { deepFreeze } = require('@ltipton/jsutils')
+const { deepFreeze } = require('@svkeg/jsutils')
 const containers = require('./containers')
 
 const {

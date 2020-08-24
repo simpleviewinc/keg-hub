@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { gitCli } = require('./commands')
-const { mapObj, reduceObj, checkCall } = require('@ltipton/jsutils')
+const { mapObj, reduceObj, checkCall } = require('@svkeg/jsutils')
 const { buildCmdOpts, ensureGitRemote, ensureGitBranch } = require('./helpers')
 const { NEWLINES_MATCH, SPACE_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 

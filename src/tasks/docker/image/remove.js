@@ -1,6 +1,6 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { get, isStr } = require('@ltipton/jsutils')
+const { get, isStr } = require('@svkeg/jsutils')
 const { generalError } = require('KegUtils/error')
 const { exists } = require('KegUtils/helpers/exists')
 const { dockerLog } = require('KegUtils/log/dockerLog')

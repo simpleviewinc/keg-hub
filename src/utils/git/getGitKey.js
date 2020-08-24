@@ -1,5 +1,5 @@
-const { get } = require('@ltipton/jsutils')
-const { ask } = require('askIt')
+const { get } = require('@svkeg/jsutils')
+const { ask } = require('@svkeg/ask-it')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
 const { getSetting } = require('../globalConfig/getSetting')

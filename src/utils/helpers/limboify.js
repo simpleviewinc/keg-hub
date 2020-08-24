@@ -1,7 +1,7 @@
-const { limbo, isFunc, reduceObj } = require('@ltipton/jsutils')
+const { limbo, isFunc, reduceObj } = require('@svkeg/jsutils')
 
 /**
- * Converts all convert functions into a limbo function from @ltipton/jsutils
+ * Converts all convert functions into a limbo function from @svkeg/jsutils
  * @param {Object} obj - object to add limbo to child functions
  *
  * @returns {Object} - Object with all functions wrapped with limbo

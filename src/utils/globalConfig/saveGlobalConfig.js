@@ -1,5 +1,5 @@
 const path = require('path')
-const { isObj, checkCall } = require('@ltipton/jsutils')
+const { isObj, checkCall } = require('@svkeg/jsutils')
 const { throwExitError } = require('../error/throwExitError')
 const { __updateGlobalConfig } = require('./globalConfigCache')
 const { validateGlobalConfig } = require('./validateGlobalConfig')

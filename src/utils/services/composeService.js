@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { get, isArr } = require('@ltipton/jsutils')
+const { get, isArr } = require('@svkeg/jsutils')
 const { mutagenService } = require('./mutagenService')
 const { syncService } = require('./syncService')
 const { runInternalTask } = require('../task/runInternalTask')

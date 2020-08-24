@@ -2,7 +2,7 @@ const { Sync } = require('./sync')
 const { Config } = require('./config')
 const { mutagenCli } = require('./commands')
 const { GLOBAL_CONFIG_FOLDER, CLI_ROOT } = require('KegConst/constants')
-const { deepMerge } = require('@ltipton/jsutils')
+const { deepMerge } = require('@svkeg/jsutils')
 const { executeCmd } = require('KegProc')
 
 /**

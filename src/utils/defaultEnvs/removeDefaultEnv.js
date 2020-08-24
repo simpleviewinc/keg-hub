@@ -1,5 +1,5 @@
 const path = require('path')
-const { isStr } = require('@ltipton/jsutils')
+const { isStr } = require('@svkeg/jsutils')
 const { Logger } = require('KegLog')
 const { parseContent } = require('KegFileSys/env')
 const { readFile } = require('KegFileSys/fileSys')

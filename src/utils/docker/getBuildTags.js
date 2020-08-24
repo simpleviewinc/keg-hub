@@ -1,4 +1,4 @@
-const { isArr, get } = require('@ltipton/jsutils')
+const { isArr, get } = require('@svkeg/jsutils')
 const { DOCKER } = require('KegConst/docker')
 
 /**

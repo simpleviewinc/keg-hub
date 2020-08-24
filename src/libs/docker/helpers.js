@@ -11,7 +11,7 @@ const {
   snakeCase,
   toStr,
   reduceObj
-} = require('@ltipton/jsutils')
+} = require('@svkeg/jsutils')
 
 /**
  * Throws an error with the passed in message

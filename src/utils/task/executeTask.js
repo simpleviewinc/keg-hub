@@ -1,5 +1,5 @@
 const { showHelp } = require('KegLog')
-const { isFunc } = require('@ltipton/jsutils')
+const { isFunc } = require('@svkeg/jsutils')
 const { throwNoAction } = require('KegUtils/error')
 const { parseArgs } = require('KegUtils/helpers/parseArgs')
 const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')

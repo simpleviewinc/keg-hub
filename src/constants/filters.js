@@ -1,4 +1,4 @@
-const { deepFreeze } = require('@ltipton/jsutils')
+const { deepFreeze } = require('@svkeg/jsutils')
 
 // Pattern matching (RegEx)
 module.exports = deepFreeze({

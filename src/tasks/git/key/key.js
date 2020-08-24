@@ -1,6 +1,6 @@
 const { executeTask } = require('KegUtils/task')
 const { throwWrap } = require('KegUtils/error')
-const { isStr } = require('@ltipton/jsutils')
+const { isStr } = require('@svkeg/jsutils')
 
 /**
  * Git key tasks

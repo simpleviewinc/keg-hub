@@ -2,7 +2,7 @@ const fs = require('fs')
 const { DOCKER } = require('KegConst/docker')
 const { getPathFromConfig } = require('KegUtils')
 const { getContainerConst } = require('./getContainerConst')
-const { reduceObj, isStr, isArr, get } = require('@ltipton/jsutils')
+const { reduceObj, isStr, isArr, get } = require('@svkeg/jsutils')
 
 /**
  * Adds location as a mounted volume to the dockerCmd

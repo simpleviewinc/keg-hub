@@ -1,5 +1,5 @@
 const { ENV_MAP } = require('KegConst/constants')
-const { deepMerge, get, set } = require('@ltipton/jsutils')
+const { deepMerge, get, set } = require('@svkeg/jsutils')
 
 /**
  * All env shortcuts mapped to a single array

@@ -1,6 +1,6 @@
 
 const { Logger } = require('KegLog')
-const { get, checkCall, deepMerge, isFunc, isArr } = require('@ltipton/jsutils')
+const { get, checkCall, deepMerge, isFunc, isArr } = require('@svkeg/jsutils')
 const cliProgress = require('cli-progress')
 const cliSpinners = require('cli-spinners')
 const logUpdate = require('log-update')

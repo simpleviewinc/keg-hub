@@ -1,6 +1,6 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { getPrefix } = require('../getters/getPrefix')
 const { CONTEXT_KEYS } = require('KegConst/constants')

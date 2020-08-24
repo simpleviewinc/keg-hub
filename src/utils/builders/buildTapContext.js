@@ -1,4 +1,4 @@
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { readDir, stat } = require('KegFileSys')
 const { generalError, throwNoTapLink } = require('../error')

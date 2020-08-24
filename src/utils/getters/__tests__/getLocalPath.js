@@ -15,8 +15,8 @@ describe('getLocalPath', () => {
 
   it('should get the local path from the context and dependency', async () => {
 
-    const localPath = getLocalPath(globalConfig, 'core', 'retheme')
-    expect(localPath).toBe(globalConfig.cli.paths.retheme)
+    const localPath = getLocalPath(globalConfig, 'core', 'cli')
+    expect(localPath).toBe(globalConfig.cli.paths.cli)
 
   })
 

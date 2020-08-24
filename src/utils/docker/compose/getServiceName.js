@@ -1,4 +1,4 @@
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { throwNoComposeService } = require('../../error/throwNoComposeService')
 const { loadComposeConfig } = require('./loadComposeConfig')
 

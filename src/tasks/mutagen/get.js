@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { mutagen } = require('KegMutagen')
-const { isObj } = require('@ltipton/jsutils')
+const { isObj } = require('@svkeg/jsutils')
 
 /**
  * Start the mutagen daemon

@@ -3,7 +3,7 @@ const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
 const { tryCatch } = require('../helpers/tryCatch')
 const { getContainerConst } = require('../docker/getContainerConst')
-const { get, deepMerge, isStr, styleCase, checkCall } = require('@ltipton/jsutils')
+const { get, deepMerge, isStr, styleCase, checkCall } = require('@svkeg/jsutils')
 const { MUTAGEN_MAP } = DOCKER
 
 /**

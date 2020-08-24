@@ -1,4 +1,4 @@
-const { get, set } = require('@ltipton/jsutils')
+const { get, set } = require('@svkeg/jsutils')
 const { composeService } = require('./composeService')
 const { buildService } = require('./buildService')
 

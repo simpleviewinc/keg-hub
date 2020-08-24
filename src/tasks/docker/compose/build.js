@@ -1,4 +1,4 @@
-const { get, reduceObj } = require('@ltipton/jsutils')
+const { get, reduceObj } = require('@svkeg/jsutils')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { buildComposeCmd, buildServiceName } = require('KegUtils/docker')

@@ -1,5 +1,5 @@
 const path = require('path')
-const { isArr, isStrBool, toBool } = require('@ltipton/jsutils')
+const { isArr, isStrBool, toBool } = require('@svkeg/jsutils')
 const { KEY_VAL_MATCH, NEWLINE, NEWLINES_MATCH, NEWLINES_ESC } = require('KegConst/patterns')
 const { parseTemplate } = require('./parseTemplate')
 const { pathExistsSync, readFileSync } = require('./fileSys')

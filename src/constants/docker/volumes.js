@@ -1,4 +1,4 @@
-const { deepFreeze, deepMerge, keyMap } = require('@ltipton/jsutils')
+const { deepFreeze, deepMerge, keyMap } = require('@svkeg/jsutils')
 const { cliRootDir, images } = require('./values')
 
 // TODO: Updated this to use DefaultENVs object

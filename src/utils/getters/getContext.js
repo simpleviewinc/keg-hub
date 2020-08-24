@@ -1,5 +1,5 @@
 const docker = require('KegDocCli')
-const { isStr } = require('@ltipton/jsutils')
+const { isStr } = require('@svkeg/jsutils')
 const { isDockerId } = require('../docker/isDockerId')
 const { getPrefixContext } = require('./getPrefixContext')
 const { imageSelect } = require('KegUtils/docker/imageSelect')

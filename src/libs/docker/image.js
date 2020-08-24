@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { isArr, toStr, isStr } = require('@ltipton/jsutils')
+const { isArr, toStr, isStr } = require('@svkeg/jsutils')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { buildNames, compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 

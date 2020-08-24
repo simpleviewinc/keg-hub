@@ -1,4 +1,4 @@
-const { ask } = require('askIt')
+const { ask } = require('@svkeg/ask-it')
 const { throwPackageError } = require('../error/throwPackageError')
 
 /**

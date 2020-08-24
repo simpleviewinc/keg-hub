@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
-const { get, set, isObj } = require('@ltipton/jsutils')
-const { ask } = require('askIt')
+const { get, set, isObj } = require('@svkeg/jsutils')
+const { ask } = require('@svkeg/ask-it')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { addGlobalConfigProp, getTapPath } = require('KegUtils')
 
@@ -11,10 +11,10 @@ const { addGlobalConfigProp, getTapPath } = require('KegUtils')
  *
  * @returns {boolean} - If the link should be added
  */
-const ensureAddLink = async (globalConfig, tapName) => {
+const ensureAddLink = async (globalConfig, tapName, silent) => {
   const exists = getTapPath(globalConfig, tapName)
   return exists
-    ? ask.confirm(`Overwrite tap link '${tapName}' => '${exists}'?`)
+    ? !silent && ask.confirm(`Overwrite tap link '${tapName}' => '${exists}'?`)
     : true
 }
 
@@ -59,15 +59,15 @@ const addTapLink = (globalConfig, name, path) => {
  */
 const linkTap = async args => {
   const { command, globalConfig, options, params, tasks } = args
-  const { name, path } = params
+  const { name, location, silent } = params
 
   // Check if the link alread exists, and if we should overwrite it
-  const addLink = await ensureAddLink(globalConfig, name)
+  const addLink = await ensureAddLink(globalConfig, name, silent)
 
   // Check if we should add the link, or log that the link was canceled!
   addLink
-    ? addTapLink(globalConfig, name, path)
-    : Logger.warn(`Tap link canceled!`) || Logger.empty()
+    ? addTapLink(globalConfig, name, location)
+    : !silent && (Logger.warn(`Tap link canceled!`) || Logger.empty())
 
 }
 
@@ -83,9 +83,15 @@ module.exports = {
         description: 'Name used to access the linked tap',
         required: true,
       },
-      path: {
-        description: `Path to the local tap directory. Example => /Users/developer/taps/my-tap`,
+      location: {
+        alias: [ 'path', 'loc' ],
+        description: `Location or path to the local tap directory. Example => /Users/developer/taps/my-tap`,
         default: process.cwd(),
+      },
+      silent: {
+        description: 'Will fail silently if any errors occure',
+        example: 'keg tap link --silent',
+        default: false
       }
     }
   }

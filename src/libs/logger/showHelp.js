@@ -1,4 +1,4 @@
-const { get, isStr, isObj, mapObj, isArr } = require('@ltipton/jsutils')
+const { get, isStr, isObj, mapObj, isArr } = require('@svkeg/jsutils')
 const { Logger } = require('./logger')
 const colors = require('colors/safe')
 

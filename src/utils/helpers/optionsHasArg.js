@@ -1,5 +1,5 @@
-const { isArr, isStr, isBool } = require('@ltipton/jsutils')
-const { checkBoolValue } = require('@ltipton/args-parse/src/options/checkBoolValue')
+const { isArr, isStr, isBool } = require('@svkeg/jsutils')
+const { checkBoolValue } = require('@svkeg/args-parse/src/options/checkBoolValue')
 
 /**
  * Checks if the passed in arg is in the options array

@@ -2,7 +2,7 @@ require('module-alias/register')
 
 const axios = require('axios')
 const { Logger } = require('KegLog')
-const { get, limbo, keyMap } = require('@ltipton/jsutils')
+const { get, limbo, keyMap } = require('@svkeg/jsutils')
 const localPackage = require('../../package.json')
 const localVersion = get(localPackage, 'version')
 

@@ -6,7 +6,7 @@ const { yml } = require('../yml')
 const { pathExistsSync } = require('../fileSys')
 
 const path = require('path')
-const { isArr, isObj, isStr } = require('@ltipton/jsutils')
+const { isArr, isObj, isStr } = require('@svkeg/jsutils')
 
 const testYmlPath = path.join(__dirname, './ymlTest.yml')
 const testYmlWrite = path.join(__dirname, './ymlWriteTest.yml')

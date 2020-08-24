@@ -5,7 +5,7 @@ const { loadYmlSync } = require('../../libs/fileSys/yml')
 const { checkLoadEnv } = require('../../libs/fileSys/env')
 const { GLOBAL_CONFIG_FOLDER } = require('../constants')
 const { defineProperty } = require('../../utils/helpers/defineProperty')
-const { deepFreeze, deepMerge, keyMap, get } = require('@ltipton/jsutils')
+const { deepFreeze, deepMerge, keyMap, get } = require('@svkeg/jsutils')
 const { cliRootDir, containersPath, images } = require('./values')
 
 /**

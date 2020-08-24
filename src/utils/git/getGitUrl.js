@@ -1,4 +1,4 @@
-const { get, isUrl } = require('@ltipton/jsutils')
+const { get, isUrl } = require('@svkeg/jsutils')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 /**

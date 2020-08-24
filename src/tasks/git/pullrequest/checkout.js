@@ -1,4 +1,4 @@
-const { reduceObj, isInt, toInt } = require('@ltipton/jsutils')
+const { reduceObj, isInt, toInt } = require('@svkeg/jsutils')
 const { exists } = require('KegUtils/helpers/exists')
 const { spawnCmd } = require('KegProc')
 const { getGitPath } = require('KegUtils/git/getGitPath')

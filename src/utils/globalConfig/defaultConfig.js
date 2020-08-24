@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepMerge } = require('@ltipton/jsutils')
+const { deepMerge } = require('@svkeg/jsutils')
 const { CLI_ROOT, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')

@@ -1,4 +1,4 @@
-const { isFunc } = require('@ltipton/jsutils')
+const { isFunc } = require('@svkeg/jsutils')
 const { executeTask } = require('KegUtils/task')
 
 

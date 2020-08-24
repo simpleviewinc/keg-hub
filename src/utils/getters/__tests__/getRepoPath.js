@@ -1,4 +1,4 @@
-const { deepClone } = require('@ltipton/jsutils')
+const { deepClone } = require('@svkeg/jsutils')
 
 const orgGlobalConfig = global.getGlobalCliConfig()
 const globalConfig = deepClone(orgGlobalConfig)

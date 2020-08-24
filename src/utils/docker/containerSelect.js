@@ -1,6 +1,6 @@
-const { ask } = require('askIt')
+const { ask } = require('@svkeg/ask-it')
 const docker = require('KegDocCli')
-const { checkCall } = require('@ltipton/jsutils')
+const { checkCall } = require('@svkeg/jsutils')
 const { throwNoContainers } = require('../error/throwNoContainers')
 
 /**

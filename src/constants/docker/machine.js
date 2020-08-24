@@ -1,5 +1,5 @@
 const path = require('path')
-const { deepFreeze, reduceObj } = require('@ltipton/jsutils')
+const { deepFreeze, reduceObj } = require('@svkeg/jsutils')
 const { cliRootDir } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 

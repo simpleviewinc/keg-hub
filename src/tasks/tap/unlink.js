@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
-const { get, set, isObj } = require('@ltipton/jsutils')
-const { ask } = require('askIt')
+const { get, set, isObj } = require('@svkeg/jsutils')
+const { ask } = require('@svkeg/ask-it')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { removeGlobalConfigProp, getTapPath } = require('KegUtils')
 

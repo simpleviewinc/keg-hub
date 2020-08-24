@@ -2,7 +2,7 @@ const path = require('path')
 const { KegTpl } = require('KegTpl')
 const { readFile, readFileSync, getFiles } = require('KegFileSys')
 const { CLI_ROOT } = require('KegConst/constants')
-const { get, mapObj, template } = require('@ltipton/jsutils')
+const { get, mapObj, template } = require('@svkeg/jsutils')
 const { generalError } = require('../error/generalError')
 
 // Cache holder for our templates

@@ -1,7 +1,7 @@
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
-const { get, checkCall } = require('@ltipton/jsutils')
+const { get, checkCall } = require('@svkeg/jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
 const { buildComposeCmd, buildServiceName } = require('KegUtils/docker')
 const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')

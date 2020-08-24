@@ -1,4 +1,4 @@
-const { ask } = require('askIt')
+const { ask } = require('@svkeg/ask-it')
 const { getProcessesUsingPort, printProcesses, kill } = require('KegUtils')
 const { generalError } = require('KegUtils/error')
 

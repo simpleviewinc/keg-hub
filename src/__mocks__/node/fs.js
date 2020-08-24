@@ -1,4 +1,4 @@
-const { isFunc, get, checkCall } = require('@ltipton/jsutils')
+const { isFunc, get, checkCall } = require('@svkeg/jsutils')
 
 const testFs = method => get(global, [ 'testMocks', 'fs', method ])
 

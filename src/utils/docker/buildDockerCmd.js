@@ -1,4 +1,4 @@
-const { isObj } = require('@ltipton/jsutils')
+const { isObj } = require('@svkeg/jsutils')
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount, getAppMount, getVolumeMounts } = require('./buildDockerMounts')
 const { getDockerImg } = require('./getDockerImg')

@@ -3,7 +3,7 @@ const pkg = require('KegPackage')
 const { spawnProc } = require('KegProc')
 const CONSTANTS = require('KegConst/constants')
 const { stat, requireFile } = require('KegFileSys')
-const { get, isStr, isFunc } = require('@ltipton/jsutils')
+const { get, isStr, isFunc } = require('@svkeg/jsutils')
 const { CLI_ROOT } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error')
 

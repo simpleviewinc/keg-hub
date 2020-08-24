@@ -31,9 +31,10 @@
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "dependencies": {
-    "@ltipton/args-parse": "1.0.0",
-    "@ltipton/jsutils": "5.1.0",
-    "askIt": "git+https://github.com/lancetipton/askIt.git",
+    "@svkeg/args-parse": "0.0.1",
+    "@svkeg/ask-it": "0.0.1",
+    "@svkeg/jsutils": "0.0.1",
+    "@svkeg/spawn-cmd": "0.0.1",
     "axios": "0.19.2",
     "cli-progress": "3.8.2",
     "cli-spinners": "2.3.0",
@@ -42,7 +43,6 @@
     "log-update": "4.0.0",
     "module-alias": "2.2.2",
     "rimraf": "2.6.3",
-    "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git",
     "write-yaml-file": "4.0.0"
   },
   "devDependencies": {

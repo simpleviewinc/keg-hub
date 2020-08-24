@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { getGitPath } = require('../git/getGitPath')
 const { getServiceArgs } = require('./getServiceArgs')
 const { generalError } = require('../error/generalError')

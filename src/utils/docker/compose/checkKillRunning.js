@@ -1,6 +1,6 @@
-const { ask } = require('askIt')
+const { ask } = require('@svkeg/ask-it')
 const { Logger } = require('KegLog')
-const { isArr, checkCall } = require('@ltipton/jsutils')
+const { isArr, checkCall } = require('@svkeg/jsutils')
 const { checkRunningContainers } = require('../checkRunningContainers')
 const { stopService } = require('../../services/stopService')
 

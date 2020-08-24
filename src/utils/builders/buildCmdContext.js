@@ -1,4 +1,4 @@
-const { reduceObj } = require('@ltipton/jsutils')
+const { reduceObj } = require('@svkeg/jsutils')
 const { generalError } = require('../error/generalError')
 const { getTapPath } = require('../globalConfig/getTapPath')
 const { getContext } = require('../getters/getContext')

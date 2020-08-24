@@ -7,7 +7,7 @@ const {
   shouldLog
 } = require('./helpers')
 const { Logger } = require('KegLog')
-const { isArr, toStr } = require('@ltipton/jsutils')
+const { isArr, toStr } = require('@svkeg/jsutils')
 const { addMachineSSH } = require('./machine')
 const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 

@@ -1,7 +1,7 @@
 const path = require('path')
 const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { throwNoComposeService } = require('../../error/throwNoComposeService')
 const { getContainerConst } = require('../getContainerConst')
 

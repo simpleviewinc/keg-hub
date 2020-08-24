@@ -1,4 +1,4 @@
-const { isArr, isStr, toStr, isObj } = require('@ltipton/jsutils')
+const { isArr, isStr, toStr, isObj } = require('@svkeg/jsutils')
 const { Logger } = require('KegLog')
 const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')

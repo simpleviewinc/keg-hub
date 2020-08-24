@@ -1,4 +1,4 @@
-const { get, template } = require('@ltipton/jsutils')
+const { get, template } = require('@svkeg/jsutils')
 const { getComposeConfig } = require('./getComposeConfig')
 const { HTTP_PORT_ENV } = require('KegConst/constants')
 

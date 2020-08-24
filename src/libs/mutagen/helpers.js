@@ -10,7 +10,7 @@ const {
   checkCall,
   uniqArr,
   isArr,
-} = require('@ltipton/jsutils')
+} = require('@svkeg/jsutils')
 const { Logger } = require('KegLog')
 
 /**

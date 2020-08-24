@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { throwTaskFailed } = require('./throwTaskFailed')
 

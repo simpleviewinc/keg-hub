@@ -1,7 +1,7 @@
 const path = require('path')
 const { KEG_ENVS } = require('../envs')
 const cliRootDir = path.join(__dirname, '../../../')
-const { deepFreeze, keyMap, isStr } = require('@ltipton/jsutils')
+const { deepFreeze, keyMap, isStr } = require('@svkeg/jsutils')
 const { defineProperty } = require('../../utils/helpers/defineProperty')
 const { getFoldersSync, pathExistsSync } = require('../../libs/fileSys/fileSys')
 

@@ -1,4 +1,4 @@
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { throwRequired, generalError } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig')
 const { dockerLog } = require('KegUtils/log/dockerLog')

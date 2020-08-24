@@ -1,5 +1,5 @@
 const docker = require('KegDocCli')
-const { get, isFunc } = require('@ltipton/jsutils')
+const { get, isFunc } = require('@svkeg/jsutils')
 const { generalError } = require('KegUtils/error')
 
 /**

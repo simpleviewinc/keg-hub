@@ -1,4 +1,4 @@
-const { get, mapObj, isObj } = require('@ltipton/jsutils')
+const { get, mapObj, isObj } = require('@svkeg/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')

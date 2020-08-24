@@ -1,4 +1,4 @@
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 
 /**
  * Default keg-core task, when a sub-task can not be found

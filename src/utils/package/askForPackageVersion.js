@@ -1,6 +1,6 @@
 const { throwPackageError } = require('../error/throwPackageError')
-const { get } = require('@ltipton/jsutils')
-const { ask } = require('askIt')
+const { get } = require('@svkeg/jsutils')
+const { ask } = require('@svkeg/ask-it')
 
 /**
  * Asks the user which version of the package to use

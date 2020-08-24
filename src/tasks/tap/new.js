@@ -1,6 +1,6 @@
 /*
   * What newTap method should do
-    1. Use askIt to get all needed into to create a new tap
+    1. Use @svkeg/ask-it to get all needed into to create a new tap
     2. Clone the base tap repo from github locally
       * Still needs to be created
     3. Fill any templates in the base tap repo with data from step 1

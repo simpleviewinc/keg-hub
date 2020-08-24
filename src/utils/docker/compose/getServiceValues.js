@@ -1,4 +1,4 @@
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const { getBoundServicePorts } = require('./getServicePorts')
 const { getServiceVolumes } = require('./getServiceVolumes')
 const { getComposeConfig } = require('./getComposeConfig')

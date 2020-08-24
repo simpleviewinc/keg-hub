@@ -1,4 +1,4 @@
-const { isNum } = require('@ltipton/jsutils')
+const { isNum } = require('@svkeg/jsutils')
 
 const { getInternalIp } = require('../getInternalIp')
 

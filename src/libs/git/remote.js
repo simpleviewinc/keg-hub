@@ -1,4 +1,4 @@
-const { checkCall, isStr } = require('@ltipton/jsutils')
+const { checkCall, isStr } = require('@svkeg/jsutils')
 const { gitCli } = require('./commands')
 const { formatRemotes } = require('./helpers')
 

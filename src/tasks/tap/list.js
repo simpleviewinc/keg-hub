@@ -1,7 +1,7 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { requireFile } = require('KegFileSys')
-const { get, mapObj, wordCaps, checkCall, isObj } = require('@ltipton/jsutils')
+const { get, mapObj, wordCaps, checkCall, isObj } = require('@svkeg/jsutils')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 
 const pkgVals = [

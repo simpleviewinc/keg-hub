@@ -1,4 +1,4 @@
-const { ensureArgs, argsParse } = require('@ltipton/args-parse')
+const { ensureArgs, argsParse } = require('@svkeg/args-parse')
 const { getGlobalConfig } = require('../globalConfig/getGlobalConfig')
 const { getGlobalOptions } = require('../task/globalOptions')
 

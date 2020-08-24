@@ -1,9 +1,9 @@
 const yaml = require('js-yaml')
-const { ask } = require('askIt')
+const { ask } = require('@svkeg/ask-it')
 const writeYamlFile = require('write-yaml-file')
 const { confirmExec } = require('KegUtils/helpers/confirmExec')
 const { parseTemplate } = require('./parseTemplate')
-const { limbo, deepMerge, isStr } = require('@ltipton/jsutils')
+const { limbo, deepMerge, isStr } = require('@svkeg/jsutils')
 const { throwNoFileExists, generalError } = require('KegUtils/error')
 const { pathExistsSync, pathExists, removeFile, readFileSync, readFile } = require('./fileSys')
 
