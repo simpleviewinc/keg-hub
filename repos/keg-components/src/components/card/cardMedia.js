@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { Image } from 'KegImg'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import { useStyle } from 'KegHooks'
 import { CardMediaTitle } from './cardMediaTitle'
 

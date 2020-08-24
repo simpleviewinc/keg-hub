@@ -3,7 +3,7 @@ import { margin } from '../../margin'
 import { padding } from '../../padding'
 import { flex } from '../../flex'
 import { helpers } from '../../helpers'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 
 const opacity05 = get(colors, 'opacity._05')
 const colorPalette = get(colors, 'palette')

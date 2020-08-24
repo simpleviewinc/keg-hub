@@ -10,7 +10,7 @@ const buttonStyle = { width: 125, marginRight: 10, margin: 'auto' }
 
 storiesOf('Button | Text', module)
   .add('Standard', () => (
-    <StoryWrap style={{ textAlign: 'center' }}>
+    <StoryWrap style={{ textAlign: 'center', flexDirection: 'row' }}>
       <Button
         themePath='button.text.default'
         styles={{ main: buttonStyle }}
@@ -48,7 +48,7 @@ storiesOf('Button | Text', module)
     </StoryWrap>
   ))
   .add('Disabled', () => (
-    <StoryWrap style={{ textAlign: 'center' }}>
+    <StoryWrap style={{ textAlign: 'center', flexDirection: 'row' }}>
       <Button
         disabled
         themePath='button.text.default'

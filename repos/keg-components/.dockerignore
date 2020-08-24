@@ -27,4 +27,3 @@ logs
 **/.git
 **/.DS_Store
 core/base/assets/index.js
-.npmrc

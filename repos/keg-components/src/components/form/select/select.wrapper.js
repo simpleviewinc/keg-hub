@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import { useThemePath } from '../../../hooks'
 import {
   getValueFromChildren,

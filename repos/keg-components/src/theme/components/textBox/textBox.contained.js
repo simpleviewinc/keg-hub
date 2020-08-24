@@ -1,5 +1,5 @@
 import { wrapper } from './defaults'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import { colors } from '../../colors'
 const { surface, palette } = colors
 

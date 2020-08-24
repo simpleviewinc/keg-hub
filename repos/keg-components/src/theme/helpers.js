@@ -1,4 +1,4 @@
-import { isNum, isStr, capitalize, isArr } from '@ltipton/jsutils'
+import { isNum, isStr, capitalize, isArr } from '@svkeg/jsutils'
 import { colors } from './colors'
 import defaults from './defaults.json'
 

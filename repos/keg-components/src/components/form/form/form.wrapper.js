@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import PropTypes from 'prop-types'
 
 const buildStyles = (theme, type, elType) => {

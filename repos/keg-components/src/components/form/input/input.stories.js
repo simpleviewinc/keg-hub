@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { Input } from '../../'
+import { Input, Label } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
@@ -12,7 +12,13 @@ storiesOf('Form | Input', module)
   ))
   .add('On Value Change', () => (
     <StoryWrap>
-      <Input onValueChange={action('Value Change!')} />
+      <Label>onValueChange prop</Label>
+      <Input
+        style={{ marginBottom: 15 }}
+        onValueChange={action('Value Change!')}
+      />
+
+      <Label>onChangeText prop</Label>
       <Input onChangeText={action('Changed text!')} />
     </StoryWrap>
   ))

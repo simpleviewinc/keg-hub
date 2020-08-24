@@ -1,9 +1,9 @@
 import React from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import { useThemePath } from '../../hooks'
 import { Clipboard, Text, View } from 'react-native'
 import { TouchableIcon } from '../icon'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import PropTypes from 'prop-types'
 
 /**

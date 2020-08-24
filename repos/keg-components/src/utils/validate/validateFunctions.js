@@ -1,4 +1,4 @@
-import { mapEntries, isFunc, isObj } from '@ltipton/jsutils'
+import { mapEntries, isFunc, isObj } from '@svkeg/jsutils'
 /**
  * Validates each function in the functionObj
  * @param {Object} functionObj - object with functions as entries

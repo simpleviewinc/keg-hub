@@ -1,7 +1,7 @@
 import { colors } from './colors'
 import { margin } from './margin'
 import defaults from './defaults.json'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 
 const fontDefs = get(defaults, 'font', {})
 
@@ -27,34 +27,34 @@ export const typography = {
   },
   h1: {
     fontWeight: '300',
-    fontSize: 96,
+    fontSize: 40,
     letterSpacing: -1.5,
   },
   h2: {
     fontWeight: '300',
-    fontSize: 60,
+    fontSize: 32,
     letterSpacing: -0.5,
   },
   h3: {
     color: colors.opacity._60,
-    fontSize: 48,
+    fontSize: 28,
   },
   h4: {
-    fontSize: 34,
+    fontSize: 24,
     letterSpacing: 0.25,
   },
   h5: {
-    fontSize: 24,
+    fontSize: 20,
   },
   h6: {
     color: colors.opacity._60,
-    fontSize: 20,
+    fontSize: 16,
     letterSpacing: 0.15,
     fontWeight: '500',
   },
   label: {
     minWidth: '100%',
-    fontSize: 11,
+    fontSize: 14,
     letterSpacing: 0.15,
     fontWeight: '700',
     marginBottom: margin.size / 4,
@@ -64,7 +64,7 @@ export const typography = {
     letterSpacing: 0.5,
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 14,
     letterSpacing: fontDefs.spacing || 0.15,
   },
 }

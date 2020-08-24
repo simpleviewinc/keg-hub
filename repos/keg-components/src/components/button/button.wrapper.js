@@ -1,7 +1,7 @@
 import React from 'react'
-import { useThemeHover, useThemeActive } from '@simpleviewinc/re-theme'
+import { useThemeHover, useThemeActive } from '@svkeg/re-theme'
 import { useThemePath } from '../../hooks'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import PropTypes from 'prop-types'
 import { Text } from '../typography/text'
 import { getActiveOpacity, getPressHandler, renderFromType } from '../../utils'
@@ -68,8 +68,8 @@ export const ButtonWrapper = props => {
       ref={themeRef}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}
       children={getChildren(children || content, themeStyles)}
-      {...getPressHandler(isWeb, onClick, onPress)}
-      {...getActiveOpacity(isWeb, props, btnStyles)}
+      {...getPressHandler(false, onClick, onPress)}
+      {...getActiveOpacity(false, props, btnStyles)}
     />
   )
 }

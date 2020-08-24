@@ -1,6 +1,6 @@
 import { contained } from './textBox.contained'
 import { inheritFrom } from '../../../utils'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import { colors } from '../../colors'
 const { surface } = colors
 

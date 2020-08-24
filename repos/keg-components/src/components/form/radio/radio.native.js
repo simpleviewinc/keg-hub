@@ -1,6 +1,6 @@
 import React from 'react'
-import { withTheme } from '@simpleviewinc/re-theme'
-import { get } from '@ltipton/jsutils'
+import { withTheme } from '@svkeg/re-theme'
+import { get } from '@svkeg/jsutils'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography/text'
 

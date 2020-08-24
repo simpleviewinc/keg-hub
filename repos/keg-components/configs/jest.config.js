@@ -1,9 +1,7 @@
 const ROOT_DIR = require('app-root-path').path
 const { aliases } = require('./aliases.config.js')
-const { reduceObj } = require('@ltipton/jsutils')
-
-const { PLATFORM, RE_PLATFORM } = process.env
-const platform = PLATFORM || RE_PLATFORM
+const { reduceObj } = require('@svkeg/jsutils')
+const platform = process.env.RE_PLATFORM || process.env.PLATFORM || 'web'
 
 const mappedNames = reduceObj(aliases, (key, value, updated) => {
   updated[key] = `${ROOT_DIR}/${value}`
@@ -34,7 +32,8 @@ const transpileForTests = [
   'react-native',
   '@expo/vector-icons',
   '@unimodules/.*',
-  'expo-font'
+  'expo-font',
+  '@svkeg/re-theme'
 ].join('|')
 
 module.exports = {

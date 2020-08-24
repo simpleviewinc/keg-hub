@@ -1,10 +1,13 @@
 import React from 'react'
 import { ButtonWrapper } from './button.wrapper'
+import { getPlatform } from 'KegGetPlatform'
 import {
   Platform,
   TouchableOpacity,
   TouchableNativeFeedback,
 } from 'react-native'
+
+const isWeb = getPlatform() === 'web'
 const Touchable =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
@@ -29,9 +32,12 @@ const Element = React.forwardRef((props, ref) => {
   />
 })
 
-export const Button = props => <ButtonWrapper
-  {...props}
-  Element={Element}
-/>
+export const Button = props => (
+  <ButtonWrapper
+    {...props}
+    Element={Element}
+    isWeb={isWeb}
+  />
+)
 
 Button.propTypes = { ...Touchable.propTypes, ...ButtonWrapper.propTypes }

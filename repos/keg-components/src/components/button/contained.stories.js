@@ -10,7 +10,7 @@ const buttonStyle = { width: 125, marginRight: 10 }
 
 storiesOf('Button | Contained', module)
   .add('Standard', () => (
-    <StoryWrap style={{ textAlign: 'center' }}>
+    <StoryWrap style={{ textAlign: 'center', flexDirection: 'row' }}>
       <Button
         themePath='button.contained.default'
         styles={{ main: buttonStyle }}
@@ -48,7 +48,7 @@ storiesOf('Button | Contained', module)
     </StoryWrap>
   ))
   .add('Disabled', () => (
-    <StoryWrap style={{ textAlign: 'center' }}>
+    <StoryWrap style={{ textAlign: 'center', flexDirection: 'row' }}>
       <Button
         disabled
         themePath='button.contained.default'

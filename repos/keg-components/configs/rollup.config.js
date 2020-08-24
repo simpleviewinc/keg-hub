@@ -26,8 +26,8 @@ const shared = {
     'react',
     'react-dom',
     'react-native',
-    '@ltipton/jsutils',
-    '@simpleviewinc/re-theme',
+    '@svkeg/jsutils',
+    '@svkeg/re-theme',
     'prop-types',
     'expo-fonts'
   ],
@@ -58,25 +58,30 @@ const shared = {
 
 export default Array
   .from([ 'web', 'native' ])
-  .map((platform => ({
-    ...shared,
-    input: `./src/index.js`,
-    output: [
-      {
-        file: `./build/cjs/kegComponents.${platform}.js`,
-        format: 'cjs',
-        sourcemap: true
-      },
-      {
-        file: `./build/esm/kegComponents.${platform}.js`,
-        format: 'esm',
-        sourcemap: true
-      },
-    ],
-    plugins: [
-      ...shared.plugins(platform),
-      alias({
-        entries: getAliases(platform),
-      })
-    ]
-  })))
+  .map(platform => {
+    const ext = platform !== 'web' ? `${platform}.js` : 'js'
+    return {
+      ...shared,
+      input: `./src/index.js`,
+      output: [
+        {
+          file: `./build/cjs/kegComponents.${ext}`,
+          format: 'cjs',
+          sourcemap: true
+        },
+        {
+          file: `./build/esm/kegComponents.${ext}`,
+          format: 'esm',
+          sourcemap: true
+        },
+      ],
+      ...(process.env.DOC_APP_PATH && { watch: { chokidar: false } } || {}),
+      plugins: [
+        ...shared.plugins(platform),
+        alias({
+          entries: getAliases(platform),
+        })
+      ]
+    }
+  })
+

@@ -1,7 +1,7 @@
 import React from 'react'
-import { useTheme, useThemeHover } from '@simpleviewinc/re-theme'
+import { useTheme, useThemeHover } from '@svkeg/re-theme'
 import { getPressHandler, getTarget } from '../../utils'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import PropTypes from 'prop-types'
 
 const getSpacer = isWeb => {
@@ -25,13 +25,13 @@ export const LinkWrapper = props => {
 
   const linkStyle = theme.get(
     'typography.font.family',
-    'components.link.default',
-    type && `components.link.${type}`
+    'link.default',
+    type && `link.${type}`
   )
 
   const [ ref, themeStyle ] = useThemeHover(
     theme.join(linkStyle, style),
-    get(theme, `components.link.hover`)
+    get(theme, `link.hover`)
   )
 
   const spacer = space && getSpacer(space, isWeb)

@@ -1,4 +1,4 @@
-import { get, isFunc, isArr } from '@ltipton/jsutils'
+import { get, isFunc, isArr } from '@svkeg/jsutils'
 
 /**
  * Gets the correct key name based on the platform and available onChange functions

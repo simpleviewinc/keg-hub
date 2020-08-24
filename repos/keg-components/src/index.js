@@ -1,2 +1,6 @@
 export * from './components'
+export * from './hocs'
 export * from './theme'
+export * from './hooks'
+export * from './utils/components/renderFromType'
+export * from './utils/validate/isValidComponent'

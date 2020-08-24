@@ -13,7 +13,7 @@ storiesOf('Form | Checkbox', module)
   .add('Custom', () => (
     <StoryWrap>
       <Checkbox
-        SwitchComponent={<Switch onChange={action('Switch Click!')} />}
+        CheckboxComponent={<Switch onChange={action('Switch Click!')} />}
       />
     </StoryWrap>
   ))

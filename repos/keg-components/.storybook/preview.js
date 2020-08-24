@@ -1,9 +1,13 @@
 import React from 'react'
+import { Dimensions, Platform } from 'react-native'
 import { addDecorator } from '@storybook/react'
 import { View } from 'KegView'
-import { ReThemeProvider } from '@simpleviewinc/re-theme'
+import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@svkeg/re-theme'
 import { theme } from '../src/theme'
-import { isStr } from '@ltipton/jsutils'
+import { isStr } from '@svkeg/jsutils'
+
+setRNPlatform(Platform)
+setRNDimensions(Dimensions)
 
 const IGNORE_WARN = [
   'Ignored an update',

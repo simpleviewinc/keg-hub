@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import {
   get,
   deepMerge,
@@ -8,7 +8,7 @@ import {
   checkCall,
   isEmptyColl,
   jsonEqual,
-} from '@ltipton/jsutils'
+} from '@svkeg/jsutils'
 
 /**
  * Checks if two style object are valid and the same

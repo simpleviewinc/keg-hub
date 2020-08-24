@@ -5,7 +5,7 @@ import {
   useInputHandlers,
   usePressHandlers,
 } from '../../../hooks'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import PropTypes from 'prop-types'
 
 /**

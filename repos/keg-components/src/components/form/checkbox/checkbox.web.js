@@ -6,7 +6,7 @@ import { Icon } from 'KegIcon'
 const Element = React.forwardRef(
   ({ elProps, styles, icon, checked, ...props }, ref) => {
     return (
-      <View style={styles.wrapper}>
+      <View style={styles.main}>
         <View style={styles.area}></View>
         { checked && <Icon
           styles={styles.indicator}

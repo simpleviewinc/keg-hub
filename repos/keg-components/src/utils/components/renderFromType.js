@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFunc, isArr } from '@ltipton/jsutils'
+import { isFunc, isArr } from '@svkeg/jsutils'
 import { isValidComponent } from '../validate/isValidComponent'
 
 /**

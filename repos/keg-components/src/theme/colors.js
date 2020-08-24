@@ -1,6 +1,6 @@
-import { get, isArr, isStr, reduceObj } from '@ltipton/jsutils'
+import { get, isArr, isStr, reduceObj } from '@svkeg/jsutils'
 import defaults from './defaults.json'
-import { helpers } from '@simpleviewinc/re-theme'
+import { helpers } from '@svkeg/re-theme'
 
 const defPalette = get(defaults, 'colors.palette', {})
 const defTypes = get(defaults, 'colors.types', {})

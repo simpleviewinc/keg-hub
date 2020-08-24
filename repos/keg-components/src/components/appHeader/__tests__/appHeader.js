@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { theme } from '../../../theme'
-import { ReThemeProvider } from '@simpleviewinc/re-theme'
+import { ReThemeProvider } from '@svkeg/re-theme'
 
 const { AppHeader } = require('../appHeader')
 

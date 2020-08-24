@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react'
-import { useThemeHover } from '@simpleviewinc/re-theme'
-import { checkCall } from '@ltipton/jsutils'
+import { useThemeHover } from '@svkeg/re-theme'
+import { checkCall } from '@svkeg/jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'
 import { View } from 'KegView'
@@ -67,7 +67,7 @@ export const ImageWrapper = forwardRef((props, ref) => {
         alt={alt}
         style={loading ? loadingStyles : builtStyles.image}
         {...getPressHandler(isWeb, onClick, onPress)}
-        {...getImgSrc(isWeb, src, source)}
+        {...getImgSrc(false, src, source)}
         {...getOnLoad(
           isWeb,
           onLoadEvent(setLoading, props, setStyle, elementStyle)

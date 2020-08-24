@@ -1,6 +1,6 @@
 import defaults from '../../theme/defaults'
 import { platformFlatten } from './platformFlatten'
-import { isFunc, isObj, validate, deepMerge, flatMap } from '@ltipton/jsutils'
+import { isFunc, isObj, validate, deepMerge, flatMap } from '@svkeg/jsutils'
 
 const defaultColorTypes = Object.keys(defaults.colors.types)
 const defaultStateTypes = Object.keys(defaults.states.types)

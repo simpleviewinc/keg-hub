@@ -1,11 +1,11 @@
-import { isArr, isNum, trainCase } from '@ltipton/jsutils'
+import { isArr, isNum, trainCase } from '@svkeg/jsutils'
 
 export const transition = (prop = 'all', amount = '1s', type = 'ease') => {
-  prop = (isArr(prop) && prop.join(', ')) || prop
+  prop = isArr(prop) ? prop : [prop]
   amount = (isNum(amount) && `${amount}s`) || amount
 
   return {
-    transitionProperty: trainCase(prop),
+    transitionProperty: prop.map(trainCase),
     transitionDuration: amount,
     transitionTimingFunction: type,
   }

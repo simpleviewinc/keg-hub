@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@simpleviewinc/re-theme'
-import { get } from '@ltipton/jsutils'
+import { useTheme } from '@svkeg/re-theme'
+import { get } from '@svkeg/jsutils'
 import { View } from 'KegView'
 
 export const Divider = ({ style, ...props }) => {

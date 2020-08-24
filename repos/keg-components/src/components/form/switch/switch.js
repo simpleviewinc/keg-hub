@@ -3,6 +3,8 @@ import React from 'react'
 import { SwitchWrapper } from './switch.wrapper'
 import { Switch as RNSwitch, TouchableOpacity } from 'react-native'
 import { View } from 'KegView'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * Gets the custom Native Switch colors from the passed in styles
@@ -52,8 +54,9 @@ const Element = React.forwardRef((props, ref) => {
   } = props
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.main}>
       <RNSwitch
+        style={styles.switch}
         {...getSwitchColors(thumbColor, trackColor, styles)}
         {...elProps}
         {...attrs}
@@ -68,6 +71,7 @@ export const Switch = props => (
     {...props}
     elType={'switch'}
     Element={Element}
+    isWeb={isWeb}
   />
 )
 

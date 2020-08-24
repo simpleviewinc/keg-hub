@@ -1,8 +1,8 @@
 import React from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import { View } from 'KegView'
 import { Text } from '../typography/text'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 
 export const CardMediaTitle = ({ subtitle, title, styles }) => {
   const theme = useTheme()

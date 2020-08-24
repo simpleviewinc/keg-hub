@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { Animated } from 'react-native'
 import { noOp } from 'KegUtils'
-import { isArr } from '@ltipton/jsutils'
+import { isArr } from '@svkeg/jsutils'
 
 /**
  * A hook for running an animation from an origin (from) point to a destination (to) point

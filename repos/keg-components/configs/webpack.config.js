@@ -2,14 +2,14 @@ const path = require('path')
 const webpack = require('webpack')
 const { aliases } = require('./aliases.config')
 const babelConfig = require('./babel.config.js')
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
 const ENV = process.env.NODE_ENV || process.env.ENV || 'development'
 
 // Hard coded plugins
 const addPlugins = [
   // Find the DefinePlugin, and add the ENV
-  new webpack.DefinePlugin({ RE_PLATFORM: platform })
+  new webpack.DefinePlugin({ RE_PLATFORM: platform, PLATFORM: platform })
 ]
 
 // Hard coded aliases
@@ -30,7 +30,7 @@ const addRules = [
     test: /\.(js|jsx)$/,
     include: [
       path.resolve(__dirname, "../node_modules/@expo/vector-icons"),
-      path.resolve(__dirname, "../node_modules/@simpleviewinc/re-theme"),
+      path.resolve(__dirname, "../node_modules/@svkeg/re-theme"),
     ],
     use: {
       loader: "babel-loader",
@@ -57,10 +57,10 @@ const customAliases = wpAliases => {
   const updated = Object
     .keys(aliases)
     .reduce((updatedAliases, key) => {
-    updatedAliases[key] = path.resolve(__dirname, `../${aliases[key]}`)
+      updatedAliases[key] = path.resolve(__dirname, `../${aliases[key]}`)
 
-    return updatedAliases
-  }, {})
+      return updatedAliases
+    }, {})
 
   // Return updated aliases with the addAliases
   return {
@@ -79,7 +79,8 @@ const customPlugins = plugins => {
     get(plugin, 'constructor.name') === 'DefinePlugin' &&
       (plugin.definitions['process.env'] = {
           ...plugin.definitions['process.env'],
-          RE_PLATFORM: JSON.stringify(platform)
+          RE_PLATFORM: JSON.stringify(platform),
+          PLATFORM: JSON.stringify(platform),
       })
 
     return plugin

@@ -44,7 +44,7 @@ storiesOf('Form | Form', module).add('Default', () => (
 
       <Label>Switch Me</Label>
       <Switch
-        style={inputStyles}
+        styles={{ main: { marginBottom: 15 } }}
         close
         RightComponent={"I'm a Switch"}
       />
@@ -53,7 +53,7 @@ storiesOf('Form | Form', module).add('Default', () => (
 
       <Label>Click Me</Label>
       <Checkbox
-        style={inputStyles}
+        style={{ main: { marginBottom: 15 } }}
         close
         RightComponent={"I'm a Checkbox"}
       />

@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import { Text } from '../../typography'
 import { View } from 'KegView'
 import { useThemePath } from '../../../hooks'
-import { get, isStr, toBool, checkCall } from '@ltipton/jsutils'
+import { get, isStr, toBool, checkCall } from '@svkeg/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import PropTypes from 'prop-types'
 
@@ -19,13 +19,15 @@ const useCheckedState = (isChecked, themeStyles) => {
   const theme = useTheme()
   return useMemo(() => {
     return theme.join(themeStyles, {
-      area: {
-        ...get(themeStyles, 'area.off'),
-        ...(isChecked && get(themeStyles, 'area.on')),
-      },
-      indicator: {
-        ...get(themeStyles, 'indicator.off'),
-        ...(isChecked && get(themeStyles, 'indicator.on')),
+      content: {
+        area: {
+          ...get(themeStyles, 'content.area.off'),
+          ...(isChecked && get(themeStyles, 'content.area.on')),
+        },
+        indicator: {
+          ...get(themeStyles, 'content.indicator.off'),
+          ...(isChecked && get(themeStyles, 'content.indicator.on')),
+        },
       },
     })
   }, [isChecked])
@@ -111,28 +113,31 @@ export const SwitchWrapper = props => {
 
   return (
     (children && (
-      <View style={activeStyles.container}>
+      <View style={activeStyles.main}>
         <ChildrenComponent children={children} />
       </View>
     )) || (
-      <View style={activeStyles.container}>
+      <View style={activeStyles.main}>
         { LeftComponent && (
           <SideComponent
             Component={LeftComponent}
-            style={activeStyles.left}
+            style={activeStyles.content.left}
           />
         ) }
 
         { SwitchComponent ? (
-          renderFromType(SwitchComponent, { ...props, styles: activeStyles })
+          renderFromType(SwitchComponent, {
+            ...props,
+            styles: activeStyles.content,
+          })
         ) : (
           <Element
             elProps={elProps}
             disabled={disabled}
-            styles={activeStyles}
-            {...getChecked(isWeb, isChecked)}
+            styles={activeStyles.content}
+            {...getChecked(false, isChecked)}
             {...getOnChangeHandler(
-              isWeb,
+              false,
               setCheckedValue(isChecked, setChecked, onChange || onValueChange)
             )}
           />
@@ -141,7 +146,7 @@ export const SwitchWrapper = props => {
         { RightComponent && (
           <SideComponent
             Component={RightComponent}
-            style={activeStyles.right}
+            style={activeStyles.content.right}
           />
         ) }
       </View>

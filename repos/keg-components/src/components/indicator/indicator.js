@@ -2,6 +2,8 @@ import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import { IndicatorWrapper } from './indicator.wrapper'
 import { View } from 'KegView'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 const Element = ({ style = {}, size, color, ...attrs }) => {
   return (
@@ -23,6 +25,7 @@ export const Indicator = ({ alt, size, color, styles, ...props }) => {
       color={color}
       Element={Element}
       styles={styles}
+      isWeb={isWeb}
     />
   )
 }

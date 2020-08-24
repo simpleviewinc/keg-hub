@@ -6,7 +6,7 @@ import {
   TouchableNativeFeedback,
 } from 'react-native'
 import { useThemePath } from '../hooks'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 import PropTypes from 'prop-types'
 
 const TouchableWithFeedback =

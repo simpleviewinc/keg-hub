@@ -1,4 +1,4 @@
-import { isObj, isStr } from '@ltipton/jsutils'
+import { isObj, isStr } from '@svkeg/jsutils'
 
 export const getImgSrc = (isWeb, src, source, uri) => {
   const imgSrc = src || source || uri

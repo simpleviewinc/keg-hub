@@ -5,6 +5,7 @@ export const input = {
     $all: {
       ...sharedForm.border,
       ...sharedForm.inputs,
+      ...sharedForm.derivedInput,
     },
     $web: {
       width: '100%',

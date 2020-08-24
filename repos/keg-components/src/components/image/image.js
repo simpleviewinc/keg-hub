@@ -1,6 +1,9 @@
 import React, { forwardRef } from 'react'
+import { Image as RNImage } from 'react-native'
 import PropTypes from 'prop-types'
 import { ImageWrapper } from './image.wrapper'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * Image
@@ -9,18 +12,16 @@ import { ImageWrapper } from './image.wrapper'
  * @param {Object} props - see buttonPropTypes
  * @property {string} props.alt - Alternate text when image fails to load
  * @property {Function} props.onPress - function to do when image is pressed
- * @property {Object} props.ref - reference to native element
  * @property {String} props.src - Source url of the image
  * @property {Object} props.style - custom style
  * @property {string} props.type - image type
  *
  */
-const Element = forwardRef(({ attrs, alt, onPress, ...props }, ref) => (
-  <img
-    alt={alt}
+const Element = forwardRef(({ attrs, src, ...props }, ref) => (
+  <RNImage
+    ref={ref}
     {...attrs}
     {...props}
-    ref={ref}
   />
 ))
 
@@ -29,7 +30,7 @@ export const Image = forwardRef((props, ref) => (
     {...props}
     ref={ref}
     Element={Element}
-    isWeb={true}
+    isWeb={isWeb}
   />
 ))
 

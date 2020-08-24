@@ -1,6 +1,6 @@
 import React from 'react'
-import { useTheme } from '@simpleviewinc/re-theme'
-import { get } from '@ltipton/jsutils'
+import { useTheme } from '@svkeg/re-theme'
+import { get } from '@svkeg/jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
 

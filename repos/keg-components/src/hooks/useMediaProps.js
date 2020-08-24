@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { isValidComponent } from 'KegUtils'
-import { get, reduceObj, isStr, deepMerge, isObj } from '@ltipton/jsutils'
+import { get, reduceObj, isStr, deepMerge, isObj } from '@svkeg/jsutils'
 
 const getMediaType = (mediaTypes, styles) => {
   return reduceObj(
