@@ -1,4 +1,4 @@
-const { isObj, isStr } = require('@ltipton/jsutils')
+const { isObj, isStr } = require('@svkeg/jsutils')
 
 /**
  * Validates the required data to create the babel config

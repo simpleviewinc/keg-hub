@@ -1,4 +1,4 @@
-const { setLogs } = require('@ltipton/jsutils')
+const { setLogs } = require('@svkeg/jsutils')
 const buildAliases = require('./builders/buildAliases')
 const buildConstants = require('./builders/buildConstants')
 const { validateApp } = require('./helpers')

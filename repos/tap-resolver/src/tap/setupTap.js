@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const rimraf = require('rimraf')
-const { logData, get } = require('@ltipton/jsutils')
+const { logData, get } = require('@svkeg/jsutils')
 const {
   validateApp,
   ensureDirSync,

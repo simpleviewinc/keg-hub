@@ -1,6 +1,6 @@
 const { appConfig } = require('../../mocks')
 const path = require('path')
-const { isFunc } = require('@ltipton/jsutils')
+const { isFunc } = require('@svkeg/jsutils')
 
 // Helpers to allow calling the setup function in a test env
 const aliasMap = {

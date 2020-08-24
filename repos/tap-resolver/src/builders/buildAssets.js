@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { get, isStr } = require('@ltipton/jsutils')
+const { get, isStr } = require('@svkeg/jsutils')
 const { isDirectory, ensureDirSync } = require('../helpers')
 const tapConstants = require('../tap/tapConstants')
 
