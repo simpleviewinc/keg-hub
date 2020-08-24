@@ -1,9 +1,11 @@
-import 'react-native'
+import { Dimensions } from 'react-native'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { theme } from '../../../theme'
-import { ReThemeProvider } from '@svkeg/re-theme'
+import { setRNDimensions, ReThemeProvider } from '@svkeg/re-theme'
 import { Indicator } from '../../indicator/indicator'
+
+setRNDimensions(Dimensions)
 
 const { Loading } = require('../loading')
 

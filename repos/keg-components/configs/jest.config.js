@@ -33,7 +33,6 @@ const transpileForTests = [
   '@expo/vector-icons',
   '@unimodules/.*',
   'expo-font',
-  '@svkeg/re-theme'
 ].join('|')
 
 module.exports = {

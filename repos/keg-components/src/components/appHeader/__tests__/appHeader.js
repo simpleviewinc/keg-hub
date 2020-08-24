@@ -1,9 +1,10 @@
-import 'react-native'
+import { Dimensions } from 'react-native'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { theme } from '../../../theme'
-import { ReThemeProvider } from '@svkeg/re-theme'
+import { setRNDimensions, ReThemeProvider } from '@svkeg/re-theme'
 
+setRNDimensions(Dimensions)
 const { AppHeader } = require('../appHeader')
 
 describe('AppHeader', () => {
