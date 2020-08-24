@@ -1,4 +1,4 @@
-import { isObj } from '@ltipton/jsutils'
+import { isObj } from '@svkeg/jsutils'
 
 const setupTest = mockGet => {
   jest.resetModules()

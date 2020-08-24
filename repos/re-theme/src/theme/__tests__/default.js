@@ -1,5 +1,5 @@
 import { testTheme, TestDimensions } from '../../mocks'
-import { deepClone } from '@ltipton/jsutils'
+import { deepClone } from '@svkeg/jsutils'
 import * as Dimensions from '../../dimensions'
 
 jest.resetModules()

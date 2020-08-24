@@ -1,5 +1,5 @@
 import { testTheme as theme } from '../../mocks'
-import { isObj, get } from '@ltipton/jsutils'
+import { isObj, get } from '@svkeg/jsutils'
 
 jest.resetModules()
 

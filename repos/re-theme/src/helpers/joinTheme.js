@@ -1,4 +1,4 @@
-import { isArr, isObj, get } from '@ltipton/jsutils'
+import { isArr, isObj, get } from '@svkeg/jsutils'
 import { getTheme } from './getTheme'
 
 /**

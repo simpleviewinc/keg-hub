@@ -1,4 +1,4 @@
-import { deepFreeze } from '@ltipton/jsutils'
+import { deepFreeze } from '@svkeg/jsutils'
 
 export const Constants = deepFreeze({
   BUILD_EVENT: 'build',

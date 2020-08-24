@@ -1,4 +1,4 @@
-import { isObj, isArr, isStr } from '@ltipton/jsutils'
+import { isObj, isArr, isStr } from '@svkeg/jsutils'
 
 const convertToPercent = (num, percent) =>
   parseInt((num * (100 + percent)) / 100)

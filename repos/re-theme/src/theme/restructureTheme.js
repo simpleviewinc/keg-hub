@@ -11,7 +11,7 @@ import {
   isEmpty,
   unset,
   get,
-} from '@ltipton/jsutils'
+} from '@svkeg/jsutils'
 
 // Default platforms to use when restructuring the theme
 // Use array, so we don't lose the order

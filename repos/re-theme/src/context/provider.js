@@ -7,7 +7,7 @@ import { Dimensions } from '../dimensions/dimensions'
 import { getSize } from '../dimensions/sizeMap'
 import { buildTheme, getDefaultTheme } from '../theme'
 import { getCurrentTheme } from '../theme/manageTheme'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 
 /**
  * Context Provider used to set the theme.

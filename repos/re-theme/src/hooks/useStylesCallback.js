@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import { useTheme } from './useTheme'
-import { checkCall, isObj, isEmptyColl } from '@ltipton/jsutils'
+import { checkCall, isObj, isEmptyColl } from '@svkeg/jsutils'
 
 /**
  * Create a custom hook for building the styles that are memoized

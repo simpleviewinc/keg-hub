@@ -1,4 +1,4 @@
-import { deepMerge, isArr, isObj, isStr, get } from '@ltipton/jsutils'
+import { deepMerge, isArr, isObj, isStr, get } from '@svkeg/jsutils'
 
 export const join = (arg1, arg2, ...sources) => {
   return isObj(arg1) && isArr(arg2) && (isStr(arg2[0]) || isArr(arg2[0]))

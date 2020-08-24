@@ -71,7 +71,7 @@ ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
 # Install git for the new stage
 RUN apk add --no-cache git bash sudo; \
-    echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf; \
+    echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
     rm -rf /var/cache/apk/*; \

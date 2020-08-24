@@ -1,5 +1,5 @@
 import { useRef, useState, useLayoutEffect } from 'react'
-import { get, jsonEqual } from '@ltipton/jsutils'
+import { get, jsonEqual } from '@svkeg/jsutils'
 
 /**
  * Checks it two passed in objects are equal pointers or equal as json strings

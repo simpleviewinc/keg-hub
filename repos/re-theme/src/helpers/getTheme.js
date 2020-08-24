@@ -1,4 +1,4 @@
-import { deepMerge, get, isArr, isObj, isStr } from '@ltipton/jsutils'
+import { deepMerge, get, isArr, isObj, isStr } from '@svkeg/jsutils'
 import { getCurrentTheme } from '../theme/manageTheme'
 
 /**

@@ -3,7 +3,7 @@ import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
 import { withTheme } from '@simpleviewinc/re-theme'
-import { isArr } from '@ltipton/jsutils'
+import { isArr } from '@svkeg/jsutils'
 
 // alignItems = y-axis
 // justifyContent = x-axis

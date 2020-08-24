@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { withTheme } from '@simpleviewinc/re-theme'
-import { get } from '@ltipton/jsutils'
+import { get } from '@svkeg/jsutils'
 import PropTypes from 'prop-types'
 import {
   ExampleCode,

@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { isFunc, isObj, isColl, deepMerge, checkCall } from '@ltipton/jsutils'
+import { isFunc, isObj, isColl, deepMerge, checkCall } from '@svkeg/jsutils'
 import { Constants } from '../constants'
 
 /**

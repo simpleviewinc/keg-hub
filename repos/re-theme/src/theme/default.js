@@ -1,7 +1,7 @@
 /** @module theme */
 'use strict'
 
-import { deepMerge, isObj } from '@ltipton/jsutils'
+import { deepMerge, isObj } from '@svkeg/jsutils'
 import { Dimensions } from '../dimensions/dimensions'
 import { buildTheme } from './buildTheme'
 

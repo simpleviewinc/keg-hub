@@ -1,14 +1,7 @@
 /** @module dimensions */
 'use strict'
 
-import {
-  mapObj,
-  isObj,
-  toNum,
-  isNum,
-  softFalsy,
-  logData,
-} from '@ltipton/jsutils'
+import { mapObj, isObj, toNum, isNum, softFalsy, logData } from '@svkeg/jsutils'
 
 /**
  * Default sizes for a screen width
