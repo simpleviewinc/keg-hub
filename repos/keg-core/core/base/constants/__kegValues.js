@@ -1,4 +1,4 @@
-import { keyMap, deepMerge } from '@ltipton/jsutils'
+import { keyMap, deepMerge } from '@svkeg/jsutils'
 import { Values as TapValues } from 'SVConstants/values'
 import { PluginValues } from './__kegPluginValues'
 

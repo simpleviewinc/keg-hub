@@ -1,4 +1,4 @@
-import { logData } from '@ltipton/jsutils'
+import { logData } from '@svkeg/jsutils'
 
 let KegEventEmitter
 

@@ -1,1 +1,1 @@
-export * from '@simpleviewinc/keg-components'
+export * from '@svkeg/keg-components'

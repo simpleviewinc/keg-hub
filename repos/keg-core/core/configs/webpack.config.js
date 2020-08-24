@@ -16,9 +16,9 @@ const resolveCoreAlias = {
   'react-native-web': 'react-native-web',
   '@expo/vector-icons': '@expo/vector-icons',
   'react-native-vector-icons': 'react-native-vector-icons',
-  '@simpleviewinc/re-theme': '@simpleviewinc/re-theme/build/esm/reTheme.js',
-  '@simpleviewinc/keg-components':
-    '@simpleviewinc/keg-components/build/esm/kegComponents.native.js',
+  '@svkeg/re-theme': '@svkeg/re-theme/build/esm/reTheme.js',
+  '@svkeg/keg-components':
+    '@svkeg/keg-components/build/esm/kegComponents.native.js',
 }
 
 /**

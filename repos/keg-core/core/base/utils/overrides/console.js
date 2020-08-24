@@ -1,5 +1,5 @@
 import './platform'
-import { isStr } from '@ltipton/jsutils'
+import { isStr } from '@svkeg/jsutils'
 
 const logMethods = {
   ...console,

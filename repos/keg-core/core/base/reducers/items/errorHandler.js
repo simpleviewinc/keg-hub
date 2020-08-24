@@ -5,7 +5,7 @@ import {
   isArr,
   typeOf,
   get,
-} from '@ltipton/jsutils'
+} from '@svkeg/jsutils'
 import { MakeRequestIssue } from './error'
 import { Values } from 'SVConstants'
 

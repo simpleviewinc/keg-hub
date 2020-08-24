@@ -1,7 +1,7 @@
 import { resetMocks } from './resetMocks'
 
 const path = require('path')
-const { isObj, mapObj } = require('@ltipton/jsutils')
+const { isObj, mapObj } = require('@svkeg/jsutils')
 const BASE_PATH = path.join('../../base')
 const packageConf = require('../../../package.json')
 const TESTS_FOLDER = '/__tests__/'

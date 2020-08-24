@@ -5,12 +5,12 @@ import {
   ReThemeProvider,
   getDefaultTheme,
   setDefaultTheme,
-} from '@simpleviewinc/re-theme'
+} from '@svkeg/re-theme'
 import { getStore } from 'SVStore'
 import { initAppAction, navigateTo } from 'SVActions'
 import { AppHeader, Select, Option } from 'SVComponents'
 import { Router } from 'SVComponents'
-import { checkCall, get } from '@ltipton/jsutils'
+import { checkCall, get } from '@svkeg/jsutils'
 import { theme } from 'SVTheme'
 import { getHistory } from 'SVNavigation'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'

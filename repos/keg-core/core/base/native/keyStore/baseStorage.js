@@ -1,4 +1,4 @@
-import { limbo, isStr, isEmpty, validate } from '@ltipton/jsutils'
+import { limbo, isStr, isEmpty, validate } from '@svkeg/jsutils'
 const isDev = process.env.NODE_ENV !== 'production'
 
 /**

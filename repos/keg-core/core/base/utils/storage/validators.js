@@ -1,4 +1,4 @@
-import { isStr, isObj, isFunc } from '@ltipton/jsutils'
+import { isStr, isObj, isFunc } from '@svkeg/jsutils'
 
 /**
  * @param {string} path

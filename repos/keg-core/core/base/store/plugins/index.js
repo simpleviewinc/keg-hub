@@ -1,4 +1,4 @@
-import { pipeline, isObj, isFunc, validate, get } from '@ltipton/jsutils'
+import { pipeline, isObj, isFunc, validate, get } from '@svkeg/jsutils'
 import * as KegPlugins from './plugins'
 
 /**

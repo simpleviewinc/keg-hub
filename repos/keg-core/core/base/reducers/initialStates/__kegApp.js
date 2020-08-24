@@ -1,4 +1,4 @@
-import { deepMerge } from '@ltipton/jsutils'
+import { deepMerge } from '@svkeg/jsutils'
 import { appState as state } from 'SVReducers/initialStates/app'
 
 export const appState = deepMerge(

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, H5, Text, Row } from 'SVComponents'
-import { useStylesCallback } from '@simpleviewinc/re-theme'
-import { get } from '@ltipton/jsutils'
+import { useStylesCallback } from '@svkeg/re-theme'
+import { get } from '@svkeg/jsutils'
 import { isNative, isStandalonePWA, isIOSWeb } from 'SVUtils'
 
 const buildStyles = (theme, styles) => {

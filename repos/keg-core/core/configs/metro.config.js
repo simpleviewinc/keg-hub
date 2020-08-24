@@ -1,5 +1,5 @@
 const path = require('path')
-const { get } = require('@ltipton/jsutils')
+const { get } = require('@svkeg/jsutils')
 const tapPath = require('app-root-path').path
 const tapPackage = require(path.resolve(tapPath, 'package.json'))
 const kegPath = path.join(__dirname, '../../')
