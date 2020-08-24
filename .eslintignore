@@ -1,0 +1,13 @@
+# Ignore everything:
+/*
+
+# Repos
+!/repos/**/src
+!/repos/**/scripts
+!/repos/**/app/src
+!/repos/**/app/scrtips
+!/repos/keg-core/core
+
+# Taps
+!/taps/**/src
+!/taps/**/App.js
