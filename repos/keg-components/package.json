@@ -1,5 +1,5 @@
 {
-  "name": "@simpleviewinc/keg-components",
+  "name": "@svkeg/keg-components",
   "version": "0.0.1",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
