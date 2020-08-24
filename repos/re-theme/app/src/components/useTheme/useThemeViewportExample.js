@@ -1,6 +1,6 @@
 import React from 'react'
 import { Example } from '../../components'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 
 const codeText = `
   {

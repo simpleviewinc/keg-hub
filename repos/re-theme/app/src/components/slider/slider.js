@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
 import { get, isFunc } from '@svkeg/jsutils'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 
 const getHeight = (height, toggled) => {
   return toggled

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import marked from 'marked'
 import { get } from '@svkeg/jsutils'
 import readmePath from '../../Readme.md';
-import { withTheme } from '@simpleviewinc/re-theme'
+import { withTheme } from '@svkeg/re-theme'
 
 export const Readme = withTheme(props => {
 

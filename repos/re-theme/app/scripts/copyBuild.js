@@ -9,7 +9,7 @@ const path = require('path')
     const build = path.join(__dirname, '../../build')
 
     // Path to app node_modules build
-    const nmBuild = path.join(__dirname, '../node_modules/@simpleviewinc/re-theme/build')
+    const nmBuild = path.join(__dirname, '../node_modules/@svkeg/re-theme/build')
 
     // Copy over the new build from the parent folder
     copy(build, nmBuild)

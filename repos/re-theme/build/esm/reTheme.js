@@ -1,4 +1,4 @@
-import { deepFreeze, checkCall, debounce, isArr, isFunc, isNum, isObj, logData, mapObj, softFalsy, toNum, reduceObj, deepMerge, unset, isEmpty, get as get$1, isStr, isEmptyColl, isColl } from '@ltipton/jsutils';
+import { deepFreeze, checkCall, debounce, isArr, isFunc, isNum, isObj, logData, mapObj, softFalsy, toNum, reduceObj, deepMerge, unset, isEmpty, get as get$1, isStr, isEmptyColl, isColl } from '@svkeg/jsutils';
 import React, { useState, useEffect, useContext, useCallback, useMemo, useRef } from 'react';
 
 var Constants = deepFreeze({
@@ -110,7 +110,7 @@ var update = function update() {
   dimensions.window = setWin(winDim);
   dimensions.screen = setScreen(winDim);
   isArr(listeners[Constants.CHANGE_EVENT]) && listeners[Constants.CHANGE_EVENT].forEach(function (listener) {
-    return listener(dimensions);
+    return !listener.shouldUnmount && listener(dimensions);
   });
 };
 var addEventListener = function addEventListener(type, listener) {
@@ -358,6 +358,7 @@ var useDimensions = function useDimensions() {
   useEffect(function () {
     Dimensions.addEventListener('change', onChange);
     return function () {
+      onChange.shouldUnmount = true;
       return Dimensions.removeEventListener('change', onChange);
     };
   }, []);

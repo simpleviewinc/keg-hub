@@ -44,7 +44,7 @@ keg_retheme_watch_build(){
 # Uses yarn link, to link the re-theme lib to the local app
 keg_setup_retheme_link(){
 
-  local BUILD_PATH=$APP_PATH/app/node_modules/@simpleviewinc/re-theme/build
+  local BUILD_PATH=$APP_PATH/app/node_modules/@svkeg/re-theme/build
   rm -rf $BUILD_PATH
 
   # Symlink the re-theme build dir to the app node_module build dir

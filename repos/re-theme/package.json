@@ -1,6 +1,6 @@
 {
   "name": "@svkeg/re-theme",
-  "version": "2.1.1",
+  "version": "2.1.3",
   "description": "Simple Theme switcher / builder for React and React Native",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",

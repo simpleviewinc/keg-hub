@@ -3,7 +3,7 @@ const path = require('path')
 const { promisify } = require('util')
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
-const reThemeNM = `node_modules/@simpleviewinc/re-theme/`
+const reThemeNM = `node_modules/@svkeg/re-theme/`
 const { DOC_APP_PATH, DOC_RETHEME_PATH } = process.env
 
 const runCmd = async (cmd) => {

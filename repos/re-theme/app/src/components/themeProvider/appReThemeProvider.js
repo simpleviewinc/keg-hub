@@ -1,4 +1,4 @@
-import { ReThemeProvider } from '@simpleviewinc/re-theme'
+import { ReThemeProvider } from '@svkeg/re-theme'
 import appTheme from './path/to/theme'
 
 export const ReThemeApp = () => {

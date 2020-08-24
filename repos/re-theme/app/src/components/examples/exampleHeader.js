@@ -1,6 +1,6 @@
 import React from 'react'
 import { H4, Header } from '../../components'
-import { useTheme } from '@simpleviewinc/re-theme'
+import { useTheme } from '@svkeg/re-theme'
 
 export const ExampleHeader = props => {
 

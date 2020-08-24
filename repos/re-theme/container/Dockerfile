@@ -41,8 +41,6 @@ COPY *.lock $DOC_APP_PATH/
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
-    echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc; \
-    echo "//npm.pkg.github.com/:_authToken=${PUBLIC_GIT_KEY}" >> .npmrc; \
     yarn install --ignore-engines; \
     cd $DOC_APP_PATH/app; \
     yarn install --ignore-engines; \

@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppScreen } from './screens'
 import { theme } from './theme'
-import { ReThemeProvider } from '@simpleviewinc/re-theme'
+import { ReThemeProvider } from '@svkeg/re-theme'
 
 function App() {
   return (

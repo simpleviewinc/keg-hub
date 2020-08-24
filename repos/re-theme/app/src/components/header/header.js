@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeHover, useTheme } from '@simpleviewinc/re-theme'
+import { useThemeHover, useTheme } from '@svkeg/re-theme'
 import { H2 } from '../../components'
 import { get } from '@svkeg/jsutils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

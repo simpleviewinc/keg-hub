@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from '@simpleviewinc/re-theme'
+import { withTheme } from '@svkeg/re-theme'
 
 export const WithThemeButton = withTheme(props => {
   const { theme } = props
