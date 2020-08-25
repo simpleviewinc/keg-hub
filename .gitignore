@@ -186,6 +186,7 @@ taps/tap-release-client/container/.env
 taps/tap-release-client/container/run.sh
 taps/tap-release-client/run.sh
 taps/tap-release-client/kc-touch.js
+taps/tap-release-client/temp
 taps/tap-release-client/__generated__
 taps/tap-release-client/retheme-hook.js
 taps/tap-release-client/re-theme-touch.js

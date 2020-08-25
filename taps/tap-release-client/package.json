@@ -22,13 +22,10 @@
     "build:ios": "cd node_modules/keg-core; yarn build:ios",
     "build:web": "cd node_modules/keg-core; yarn build:web",
     "clean": "cd node_modules/keg-core; yarn clean",
-    "clean:full": "yarn clean; yarn clean:nm; yarn install",
+    "clean:full": "yarn clean; yarn clean:nm",
+    "clean:install": "yarn clean:full; yarn install",
     "clean:nm": "rimraf ./yarn.lock; rimraf ./package.lock; rimraf node_modules",
     "clean:rn": "yarn keg clean:rn",
-    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix",
-    "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
-    "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
-    "format": "yarn format:prettier && yarn format:eslint",
     "ios": "cd node_modules/keg-core; yarn ios",
     "keg": "cd node_modules/keg-core; yarn",
     "start": "cd node_modules/keg-core; expo start",
@@ -42,20 +39,6 @@
   "devDependencies": {
     "@svkeg/jsutils": "0.0.1",
     "@svkeg/spawn-cmd": "0.0.1",
-    "babel-eslint": "10.1.0",
-    "onchange": "7.0.2",
-    "prettier": "2.0.5",
-    "eslint": "7.4.0",
-    "eslint-plugin-jest": "23.13.2",
-    "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-native": "3.8.1",
-    "husky": "4.2.5",
-    "lint-staged": "10.2.10",
     "rimraf": "3.0.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged --config ./configs/lint-staged.config.js"
-    }
   }
 }
