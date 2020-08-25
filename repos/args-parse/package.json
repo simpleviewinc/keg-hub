@@ -4,9 +4,13 @@
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
-    "url": "git+https://github.com/lancetipton/args-parse.git",
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
   "publishConfig": {
@@ -66,10 +70,6 @@
     "coverageDirectory": "reports/coverage",
     "setupFilesAfterEnv": []
   },
-  "bugs": {
-    "url": "https://github.com/lancetipton/argsParse/issues"
-  },
-  "homepage": "https://github.com/lancetipton/argsParse#readme",
   "keywords": [
     "arguments",
     "parse",
