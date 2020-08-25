@@ -42,6 +42,7 @@
     "collectCoverageFrom": [
       "<rootDir>/src/index.js"
     ],
+    "coverageDirectory": "reports/coverage",
     "moduleFileExtensions": [
       "js",
       "json",

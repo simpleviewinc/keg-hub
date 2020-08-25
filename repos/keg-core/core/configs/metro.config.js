@@ -1,10 +1,9 @@
 const path = require('path')
-const { get, deepMerge } = require('@svkeg/jsutils')
+const { get } = require('@svkeg/jsutils')
 const tapPath = require('app-root-path').path
 const tapPackage = require(path.resolve(tapPath, 'package.json'))
 const kegPath = path.join(__dirname, '../../')
 const kegPackage = require(path.resolve(kegPath, 'package.json'))
-const { createMetroConfiguration } = require('expo-yarn-workspaces');
 
 /**
  * Modules names to not be included in the extraNodeModules config
@@ -59,16 +58,14 @@ const getNodeModules = () => {
  * @return {Object} - metro config object
  */
 const buildMetroConfig = rootPath => {
-  const workspaceConfig = createMetroConfiguration(rootPath)
-
-  return (metroConf = deepMerge(workspaceConfig, {
+  return (metroConf = {
     resolver: {
       extraNodeModules: getNodeModules(),
     },
     projectRoot: kegPath,
     resetCache: true,
     watchFolders: [ tapPath, kegPath ],
-  }))
+  })
 }
 
 module.exports = buildMetroConfig
