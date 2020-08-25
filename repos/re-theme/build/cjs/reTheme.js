@@ -635,6 +635,7 @@ var transition = function transition() {
 };
 
 var colors = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   hexToRgba: hexToRgba,
   opacity: opacity,
   shadeHex: shadeHex,
@@ -770,3 +771,4 @@ exports.useThemeActive = useThemeActive;
 exports.useThemeFocus = useThemeFocus;
 exports.useThemeHover = useThemeHover;
 exports.withTheme = withTheme;
+//# sourceMappingURL=reTheme.js.map

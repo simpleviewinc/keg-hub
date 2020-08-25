@@ -17,6 +17,11 @@
     "access": "public"
   },
   "scripts": {
+    "clean": "yarn clean:nm",
+    "clean:cache": "yarn cache clean",
+    "clean:full": "yarn clean; yarn clean:cache",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "test": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
@@ -27,7 +32,8 @@
     "tree-kill": "1.2.1"
   },
   "devDependencies": {
-    "jest": "24.9.0"
+    "jest": "24.9.0",
+    "rimraf": "3.0.2"
   },
   "jest": {
     "testMatch": [
@@ -36,6 +42,7 @@
     "collectCoverageFrom": [
       "<rootDir>/src/index.js"
     ],
+    "coverageDirectory": "reports/coverage",
     "moduleFileExtensions": [
       "js",
       "json",

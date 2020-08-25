@@ -26,9 +26,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "packagerOpts": {
-      "config": "metro.config.js"
     }
   },
   "keg": {

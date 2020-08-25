@@ -5,16 +5,7 @@
   "main": "babel.config.js",
   "author": "Lance Tipton",
   "license": "MIT",
-  "scripts": {
-    "clean": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules ",
-    "test": "NODE_ENV=resolver-test jest",
-    "test:reports": "yarn test --coverage && yarn view:reports",
-    "view:reports": "open reports/coverage/lcov-report/index.html",
-    "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
-    "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
-    "format": "yarn format:prettier && yarn format:eslint",
-    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix"
-  },
+  "private": true,
   "publishConfig": {
     "access": "public"
   },
@@ -26,6 +17,20 @@
     "url": "https://github.com/simpleviewinc/keg-hub/issues"
   },
   "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
+  "scripts": {
+    "clean": "yarn clean:nm",
+    "clean:cache": "yarn cache clean",
+    "clean:full": "yarn clean; yarn clean:cache",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
+    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix",
+    "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
+    "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
+    "format": "yarn format:prettier && yarn format:eslint",
+    "test": "NODE_ENV=resolver-test jest",
+    "test:reports": "yarn test --coverage && yarn view:reports",
+    "view:reports": "open reports/coverage/lcov-report/index.html"
+  },
   "dependencies": {
     "@babel/cli": "7.8.4",
     "@babel/core": "7.10.5",
@@ -40,14 +45,13 @@
     "babel-preset-expo": "8.1.0",
     "babel-preset-react-native": "4.0.1",
     "core-js": "3.6.4",
-    "metro-react-native-babel-preset": "0.62.0",
-    "rimraf": "3.0.2"
+    "metro-react-native-babel-preset": "0.62.0"
   },
   "devDependencies": {
     "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
     "eslint": "7.4.0",
-    "eslint-plugin-jest": "23.13.2",
+    "eslint-plugin-jest": "23.18.0",
     "eslint-plugin-react": "7.20.0",
     "husky": "4.2.5",
     "jest": "24.9.0",
@@ -55,7 +59,8 @@
     "lint-staged": "10.2.10",
     "onchange": "7.0.2",
     "prettier": "2.0.5",
-    "react-test-renderer": "16.12.0"
+    "react-test-renderer": "16.12.0",
+    "rimraf": "3.0.2"
   },
   "husky": {
     "hooks": {

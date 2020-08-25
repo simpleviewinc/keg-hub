@@ -55,7 +55,7 @@ const buildConfig = (type, extra={}) => {
     output: extra.output || {
       dir: `${buildPath}/${type}`,
       format: type,
-      sourcemaps: true,
+      sourcemap: true,
       ...extra.output
     },
     plugins: buildPlugins(type, extra),
@@ -73,7 +73,7 @@ export default Array.from([ 'umd', 'cjs', 'esm' ])
             name: 'jsutils',
             file: `${buildPath}/${type}/index.js`,
             format: type,
-            sourcemaps: true,
+            sourcemap: true,
             esModule: false,
           },
           plugins: [

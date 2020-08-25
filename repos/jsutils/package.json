@@ -30,7 +30,11 @@
     "build": "yarn build:clean && yarn build:rollup",
     "build:clean": "rimraf ./build/esm && rimraf ./build/umd && rimraf ./build/cjs",
     "build:rollup": "NODE_ENV=production rollup -c ./configs/rollup.config.js",
-    "clean": "yarn cache clean && rimraf yarn.lock && rimraf node_modules && yarn install --force",
+    "clean": "yarn clean:nm",
+    "clean:full": "yarn clean; yarn clean:cache",
+    "clean:cache": "yarn cache clean",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "deploy": "yarn build && yarn docs && gh-pages -d docs",
     "dev": "rollup -c ./configs/rollup.config.js -w",
     "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc -c ./configs/jsdoc.json",
@@ -67,7 +71,7 @@
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-cleanup": "3.1.1",
     "rollup-plugin-sourcemaps": "0.6.2",
-    "rollup-plugin-terser": "5.1.2"
+    "rollup-plugin-terser": "6.1.0"
   },
   "directories": {
     "doc": "docs"

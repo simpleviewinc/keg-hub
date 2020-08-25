@@ -26,6 +26,12 @@
     "src/"
   ],
   "scripts": {
+    "build": "exit 0",
+    "clean": "yarn clean:nm",
+    "clean:full": "yarn clean:nm; yarn clean:cache",
+    "clean:cache": "yarn cache clean",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "validate": "node ./scripts/validate.js",
     "test": "NODE_ENV=test jest",
     "test:reports": "yarn test --coverage && yarn view:reports"
@@ -38,7 +44,8 @@
   },
   "devDependencies": {
     "jest": "24.9.0",
-    "jest-cli": "24.8.0"
+    "jest-cli": "24.8.0",
+    "rimraf": "3.0.2"
   },
   "jest": {
     "testEnvironment": "node",
