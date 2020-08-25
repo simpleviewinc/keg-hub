@@ -7,7 +7,7 @@ It comes preconfigured to target both web and mobile, and it contains a
 collection of utilities for simplifying development, including:
   * built-in routing and navigation
   * a reducer based on the relational data model
-  * dynamic theming via [re-theme](https://github.com/simpleviewinc/re-theme)
+  * dynamic theming via re-theme
   * cross platform persistent storage
 
 <br/>
