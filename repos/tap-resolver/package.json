@@ -19,9 +19,13 @@
     "access": "public"
   },
   "repository": {
-    "url": "ssh://git@github.com/simpleviewinc/tap-resolver.git",
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "dependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",

@@ -8,10 +8,13 @@
     "access": "public"
   },
   "repository": {
-    "url": "ssh://git@github.com/simpleviewinc/re-theme.git",
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
-  "homepage": "https://simpleviewinc.github.io/re-theme",
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "author": "Lance Tipton",
   "license": "MIT",
   "files": [
