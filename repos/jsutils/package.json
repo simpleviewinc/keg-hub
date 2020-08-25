@@ -10,9 +10,16 @@
     "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "files": [
     "build"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "keg",
     "keg-hub",
@@ -62,10 +69,6 @@
     "rollup-plugin-sourcemaps": "0.4.2",
     "rollup-plugin-terser": "5.1.2"
   },
-  "bugs": {
-    "url": "https://github.com/simpleviewinc/keg-hub/issues"
-  },
-  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "directories": {
     "doc": "docs"
   }

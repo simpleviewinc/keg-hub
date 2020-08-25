@@ -1,9 +1,20 @@
 {
-  "name": "keg-regulator",
+  "name": "@svkeg/keg-regulator",
   "description": "Automated web testing for the keg and its associated repos",
   "version": "1.0.0",
   "license": "MIT",
   "main": "index.js",
+  "repository": {
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "archive": "bash tests/scripts/archive.sh ./tests/reports",
     "cli": "node ./scripts/cli.js",
@@ -25,7 +36,7 @@
   "dependencies": {
     "chokidar": "^3.4.0",
     "open": "^7.0.4",
-    "askIt": "git+https://github.com/lancetipton/askIt.git",
-    "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git"
+    "@svkeg/ask-it": "0.0.1",
+    "@svkeg/spawn-cmd": "0.0.1"
   }
 }

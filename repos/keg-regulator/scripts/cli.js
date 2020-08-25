@@ -1,7 +1,7 @@
 const path = require("path")
-const { ask } = require("askIt")
-const { spawnCmd } = require('spawn-cmd')
-const { Logger } = require("askIt/src/logger")
+const { ask } = require("@svkeg/ask-it")
+const { spawnCmd } = require('@svkeg/spawn-cmd')
+const { Logger } = require("@svkeg/ask-it/src/logger")
 const regulatorRoot = path.join(__dirname, '../')
 const testsRoot = path.join(__dirname, '../tests')
 
