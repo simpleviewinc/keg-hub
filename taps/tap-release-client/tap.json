@@ -1,0 +1,23 @@
+{
+  "name": "tap-release-client",
+  "displayName": "Tap Release Client",
+  "keg": {
+    "cli": {
+      "link": {
+        "name": "rc"
+      }
+    },
+    "routes": {
+      "/": "RootContainer"
+    },
+    "tapResolver": {
+      "paths": {
+        "tapSrc": "./src"
+      }
+    }
+  },
+  "expo": {
+    "name": "tap-release-client",
+    "slug": "tap-release-client"
+  }
+}

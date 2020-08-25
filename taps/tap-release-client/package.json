@@ -1,0 +1,61 @@
+{
+  "name": "@keg-hub/tap-release-client",
+  "version": "1.0.1",
+  "description": "Tap Release Client",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "author": "Lance Tipton <lancetipton04@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "android": "cd node_modules/keg-core; yarn android",
+    "build:android": "cd node_modules/keg-core; yarn build:android",
+    "build:ios": "cd node_modules/keg-core; yarn build:ios",
+    "build:web": "cd node_modules/keg-core; yarn build:web",
+    "clean": "cd node_modules/keg-core; yarn clean",
+    "clean:full": "yarn clean; yarn clean:nm; yarn install",
+    "clean:nm": "rimraf ./yarn.lock; rimraf ./package.lock; rimraf node_modules",
+    "clean:rn": "yarn keg clean:rn",
+    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix",
+    "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
+    "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
+    "format": "yarn format:prettier && yarn format:eslint",
+    "ios": "cd node_modules/keg-core; yarn ios",
+    "keg": "cd node_modules/keg-core; yarn",
+    "start": "cd node_modules/keg-core; expo start",
+    "setup": "yarn install; cd node_modules/keg-core; yarn postinstall",
+    "postinstall": "node scripts/postinstall.js",
+    "web": "cd node_modules/keg-core; yarn web"
+  },
+  "dependencies": {
+    "keg-core": "https://github.com/simpleviewinc/keg-core.git#master"
+  },
+  "devDependencies": {
+    "@svkeg/jsutils": "0.0.1",
+    "@svkeg/spawn-cmd": "0.0.1",
+    "babel-eslint": "10.1.0",
+    "onchange": "7.0.2",
+    "prettier": "2.0.5",
+    "eslint": "7.1.0",
+    "eslint-plugin-jest": "23.13.2",
+    "eslint-plugin-react": "7.20.0",
+    "eslint-plugin-react-native": "3.8.1",
+    "husky": "4.2.5",
+    "lint-staged": "10.2.10",
+    "rimraf": "3.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged --config ./configs/lint-staged.config.js"
+    }
+  }
+}

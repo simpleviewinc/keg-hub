@@ -158,6 +158,11 @@ reports
 repos/**/containers/**/.env
 repos/**/container/.env
 
+taps/**/*
+!taps/tap-release-client/
+!taps/tap-release-client/**/*
+taps/tap-release-client/node_modules
+
 !/**/.gitkeep
 !.gitkeep
 jsconfig.json

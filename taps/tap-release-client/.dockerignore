@@ -1,0 +1,26 @@
+Dockerfile
+.git
+.cache
+*.md
+.expo/*
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+web-report/
+yarn-error.log
+reports/
+core/base/assets/index.js
+# macOS
+.DS_Store
+.vscode
+tmp
+.expo-shared
+node_modules
+logs
+**/.git
+**/.DS_Store

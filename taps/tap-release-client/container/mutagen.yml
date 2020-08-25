@@ -1,0 +1,76 @@
+sync:
+  rc:
+    alpha: "/keg/tap"
+    beta: "docker://tap/keg/tap"
+    mode: "one-way-replica"
+    ignore:
+      vcs: true
+      paths:
+        - "node_modules"
+        - "/app/node_modules"
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "/retheme.log"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "!/README.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"
+actions:
+  rc:
+    install:
+      location: /keg/tap
+      privileged: true
+      cmds:
+        - yarn setup
+    start:
+      location: /keg/tap
+      privileged: true
+      cmds:
+        - yarn web
+  core:
+    install:
+      location: /keg/tap/node_modules/keg-core
+      privileged: true
+      cmds:
+        - yarn install
+  retheme:
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+  components:
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
