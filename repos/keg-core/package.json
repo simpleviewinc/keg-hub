@@ -3,12 +3,16 @@
   "main": "node_modules/expo/AppEntry.js",
   "version": "0.2.0",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "access": "public"
   },
   "repository": {
-    "url": "ssh://git@github.com/simpleviewinc/keg-core.git",
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "license": "MIT",
   "scripts": {
     "android": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -c --android --dev",
