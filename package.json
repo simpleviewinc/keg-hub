@@ -9,7 +9,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build:all": "lerna run build",
-    "clean:full": "lerna run clean:full --stream",
+    "clean:full": "lerna clean --yes; rm -Rf node_modules; rm -Rf yarn.lock",
     "core:android": "lerna --scope=keg-core run android --stream --",
     "core:ios": "lerna --scope=keg-core run ios --stream --",
     "core:web": "lerna --scope=keg-core run web --stream --",
@@ -18,7 +18,7 @@
     "test": "lerna run test --stream"
   },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "3.22.1"
   },
   "workspaces": {
     "packages": [
@@ -28,9 +28,7 @@
       "**/react-native",
       "**/react-native/**",
       "**/expo",
-      "**/expo/**",
-      "**/keg-core",
-      "**/keg-core/**"
+      "**/expo/**"
     ]
   }
 }

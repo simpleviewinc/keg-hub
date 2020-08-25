@@ -77,15 +77,15 @@
     "babel-preset-react-native": "4.0.1",
     "eslint": "7.4.0",
     "eslint-plugin-jest": "23.18.0",
-    "eslint-plugin-react": "7.20.3",
+    "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-native": "3.8.1",
     "expo": "38.0.0",
     "expo-font": "8.2.1",
     "husky": "4.2.5",
-    "jest": "26.1.0",
+    "jest": "24.9.0",
     "jest-expo": "38.0.2",
     "lint-staged": "10.2.11",
-    "nodemon": "^2.0.4",
+    "nodemon": "2.0.4",
     "onchange": "7.0.2",
     "prettier": "2.0.5",
     "react": "16.12.0",
@@ -96,7 +96,7 @@
     "react-scripts": "3.4.1",
     "react-test-renderer": "16.12.0",
     "rimraf": "3.0.2",
-    "rollup": "2.21.0",
+    "rollup": "2.23.1",
     "rollup-jest": "0.0.2",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-cleanup": "3.1.1",
@@ -112,11 +112,11 @@
     }
   },
   "peerDependencies": {
-    "@svkeg/jsutils": "0.0.1",
-    "@svkeg/re-theme": "2.1.2",
+    "@svkeg/jsutils": "^0.0.1",
+    "@svkeg/re-theme": "^2.1.2",
     "expo": "^38.0.0",
     "expo-font": "^8.0.0",
-    "react": "^16.9.0"
+    "react": "^16.12.0"
   },
   "browserslist": {
     "production": [

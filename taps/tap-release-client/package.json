@@ -45,13 +45,13 @@
     "babel-eslint": "10.1.0",
     "onchange": "7.0.2",
     "prettier": "2.0.5",
-    "eslint": "7.1.0",
+    "eslint": "7.4.0",
     "eslint-plugin-jest": "23.13.2",
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-native": "3.8.1",
     "husky": "4.2.5",
     "lint-staged": "10.2.10",
-    "rimraf": "3.0.1"
+    "rimraf": "3.0.2"
   },
   "husky": {
     "hooks": {

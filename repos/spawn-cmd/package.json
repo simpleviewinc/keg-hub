@@ -27,7 +27,7 @@
     "tree-kill": "1.2.1"
   },
   "devDependencies": {
-    "jest": "^25.1.0"
+    "jest": "24.9.0"
   },
   "jest": {
     "testMatch": [

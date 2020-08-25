@@ -5,17 +5,8 @@
       "yes": true
     }
   },
-  "packages": [
-    "repos/*"
-  ],
   "private": true,
   "version": "independent",
   "npmClient": "yarn",
-  "useWorkspaces": true,
-  "nohoist": [
-    "**/react-native",
-    "**/react-native/**",
-    "**/expo",
-    "**/expo/**"
-  ]
+  "useWorkspaces": true
 }
