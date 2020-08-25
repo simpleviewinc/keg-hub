@@ -10,9 +10,13 @@
     "build"
   ],
   "repository": {
-    "url": "ssh://git@github.com/simpleviewinc/keg-components.git",
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "license": "MIT",
   "scripts": {
     "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
