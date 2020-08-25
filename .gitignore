@@ -20,6 +20,10 @@ reports/
 # macOS
 .DS_Store
 
+!/**/.gitkeep
+!.gitkeep
+jsconfig.json
+
 .vscode
 core/base/assets/index.js
 kc-touch.js
@@ -157,12 +161,38 @@ reports
 # Any local ENV files in the docker container folder
 repos/**/containers/**/.env
 repos/**/container/.env
+repos/**/container/run.sh
+repos/**/run.sh
+repos/keg-core/core/base/assets
+repos/keg-core/core/base/assets/index.js
+repos/**/kc-touch.js
+repos/**/__generated__
+repos/**/retheme-hook.js
+repos/**/re-theme-touch.js
+repos/**/tests/reports/cucumber/*
+!repos/**/tests/reports/cucumber/.gitkeep
+repos/**/tests/reports/archive/*
+!repos/**/tests/reports/archive/.gitkeep
+repos/**/test/reports/*.json
+repos/**/test/reports/*.html
+repos/**/tests/node_modules
 
+# Taps and tap-release-client
 taps/**/*
 !taps/tap-release-client/
 !taps/tap-release-client/**/*
 taps/tap-release-client/node_modules
-
-!/**/.gitkeep
-!.gitkeep
-jsconfig.json
+taps/tap-release-client/container/.env
+taps/tap-release-client/container/run.sh
+taps/tap-release-client/run.sh
+taps/tap-release-client/kc-touch.js
+taps/tap-release-client/__generated__
+taps/tap-release-client/retheme-hook.js
+taps/tap-release-client/re-theme-touch.js
+taps/tap-release-client/tests/reports/cucumber/*
+!taps/tap-release-client/tests/reports/cucumber/.gitkeep
+taps/tap-release-client/tests/reports/archive/*
+!taps/tap-release-client/tests/reports/archive/.gitkeep
+taps/tap-release-client/test/reports/*.json
+taps/tap-release-client/test/reports/*.html
+taps/tap-release-client/tests/node_modules

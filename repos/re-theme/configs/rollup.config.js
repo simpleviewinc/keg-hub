@@ -40,12 +40,12 @@ export default Array
         {
           file: `./build/cjs/reTheme.${ext}`,
           format: 'cjs',
-          sourcemaps: true
+          sourcemap: true
         },
         {
           file: `./build/esm/reTheme.${ext}`,
           format: 'esm',
-          sourcemaps: true
+          sourcemap: true
         },
       ],
       ...(process.env.DOC_APP_PATH && { watch: { chokidar: false } } || {}),

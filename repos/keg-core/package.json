@@ -2,6 +2,7 @@
   "name": "@svkeg/keg-core",
   "main": "__generated__/AppEntry.js",
   "version": "0.2.0",
+  "private": true,
   "publishConfig": {
     "access": "public"
   },
@@ -21,11 +22,11 @@
     "build:web": "yarn clean:web:build && NODE_ENV=production PLATFORM=web expo build:web --no-pwa",
     "clean": "yarn clean:cache && yarn clean:nm",
     "clean:babel": "rimraf ./node_modules/.cache/@babel",
-    "clean:cache": "yarn clean:rn && yarn clean:babel",
-    "clean:dev": "yarn clean:rn && yarn clean:babel && yarn clean:nm && yarn install",
+    "clean:cache": "yarn clean:rn && yarn clean:babel; yarn cache clean",
+    "clean:dev": "yarn clean:rn; yarn clean:babel; yarn clean:web:build; yarn clean:nm",
     "clean:full": "rimraf yarn.lock && yarn clean:dev",
-    "clean:lock": "rimraf ./yarn.lock && rimraf ./package.lock",
-    "clean:nm": "yarn cache clean && rimraf node_modules && npm cache clean --force",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "clean:rn": "yarn cache clean && watchman watch-del-all && rimraf $TMPDIR/react-* && rimraf $TMPDIR/metro-bundler-cache-*",
     "clean:web:build": "rimraf ./web-build",
     "ios": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -clear --ios --dev",

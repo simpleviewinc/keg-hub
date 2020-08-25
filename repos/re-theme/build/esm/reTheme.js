@@ -628,6 +628,7 @@ var transition = function transition() {
 };
 
 var colors = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   hexToRgba: hexToRgba,
   opacity: opacity,
   shadeHex: shadeHex,
@@ -743,3 +744,4 @@ var useThemeFocus = hookFactory({
 });
 
 export { ReThemeContext, ReThemeProvider, addThemeEvent, fireThemeEvent, getDefaultTheme, getMergeSizes, getSize, getSizeMap, helpers, removeThemeEvent, setDefaultTheme, setRNDimensions, setRNPlatform, setSizes, useDimensions, useStylesCallback, useTheme, useThemeActive, useThemeFocus, useThemeHover, withTheme };
+//# sourceMappingURL=reTheme.js.map

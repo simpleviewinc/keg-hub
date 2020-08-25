@@ -18,6 +18,11 @@
   "scripts": {
     "archive": "bash tests/scripts/archive.sh ./tests/reports",
     "cli": "node ./scripts/cli.js",
+    "clean": "yarn clean:nm",
+    "clean:full": "yarn clean:nm; yarn clean:cache",
+    "clean:cache": "yarn cache clean",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "start": "yarn archive && bash scripts/start.sh",
     "stop": "yarn archive && yarn down",
     "restart:all": "yarn down && yarn start",
@@ -34,9 +39,12 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "chokidar": "^3.4.0",
-    "open": "^7.0.4",
     "@svkeg/ask-it": "0.0.1",
-    "@svkeg/spawn-cmd": "0.0.1"
+    "@svkeg/spawn-cmd": "0.0.1",
+    "chokidar": "3.4.0",
+    "open": "^7.0.4"
+  },
+  "devDependencies": {
+    "rimraf": "3.0.2"
   }
 }

@@ -4,6 +4,7 @@
   "description": "Simple Theme switcher / builder for React and React Native",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
+  "private": true,
   "publishConfig": {
     "access": "public"
   },
@@ -22,23 +23,26 @@
     "build/esm/*"
   ],
   "scripts": {
+    "app": "cd app; yarn start",
     "app:install": "cd app && yarn install",
-    "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
     "build": "yarn clean:build; rollup -c ./configs/rollup.config.js",
     "build:app": "cd app; yarn build",
     "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
+    "clean:full": "yarn clean:nm; clean:build",
+    "clean:install": "yarn clean:full; yarn install --force",
+    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
     "deploy": "gh-pages -d docs -o upstream",
     "dev": "nodemon --watch ./configs --exec 'rollup -c ./configs/rollup.config.js -w'",
-    "app": "cd app; yarn start",
-    "start": "yarn copy:indexes; yarn dev",
-    "test": "NODE_ENV=test jest --no-cache --verbose",
-    "test:reports": "yarn test --coverage && yarn view:reports",
-    "view:reports": "open reports/coverage/lcov-report/index.html",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
-    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix"
+    "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix",
+    "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
+    "start": "yarn copy:indexes; yarn dev",
+    "test": "NODE_ENV=test jest --no-cache --verbose",
+    "test:reports": "yarn test --coverage && yarn view:reports",
+    "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "devDependencies": {
     "@babel/core": "7.10.5",
