@@ -1,19 +1,21 @@
 {
-  "name": "@ltipton/jsutils",
-  "version": "5.1.0",
-  "description": "common javascript utils",
+  "name": "@svkeg/jsutils",
+  "version": "0.0.1",
+  "description": "Keg common javascript utils",
   "main": "build/umd/index.js",
   "module": "build/esm/index.js",
   "author": "lancetipton <lancetipton04@gmail.com>",
   "license": "MIT",
   "repository": {
-    "url": "git+https://github.com/lancetipton/jsutils.git",
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
     "type": "git"
   },
   "files": [
     "build"
   ],
   "keywords": [
+    "keg",
+    "keg-hub",
     "utils",
     "helpers"
   ],
@@ -61,9 +63,9 @@
     "rollup-plugin-terser": "5.1.2"
   },
   "bugs": {
-    "url": "https://github.com/lancetipton/jsutils/issues"
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
   },
-  "homepage": "https://github.com/lancetipton/jsutils#readme",
+  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "directories": {
     "doc": "docs"
   }

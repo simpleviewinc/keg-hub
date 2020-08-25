@@ -1,9 +1,8 @@
 {
-  "name": "sv-keg",
+  "name": "keg-hub",
   "version": "0.0.0",
   "description": "Mono Repo for the Keg and associated repositories",
-  "main": "index.js",
-  "repository": "ssh://git@github.com/simpleviewinc/sv-keg.git",
+  "repository": "ssh://git@github.com/simpleviewinc/keg-hub.git",
   "author": "Lance Tipton",
   "license": "MIT",
   "private": true,
