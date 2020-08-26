@@ -4,7 +4,7 @@ const { getServiceVolumes } = require('./getServiceVolumes')
 const { getComposeConfig } = require('./getComposeConfig')
 
 /**
- * Gets values form the docker-compose.yml config based on service name
+ * Gets values from the docker-compose.yml config based on service name
  * @param {string=} composePath - Path to the docker-compose.yml file to load
  * @param {Object} contextEnvs - Defined environment variables for the container
  * @param {Array} opts - Already added docker command arguments 
@@ -18,7 +18,7 @@ const getServiceValues = async ({ composePath, contextEnvs, opts=[], volumes }) 
 
   const ports = await getBoundServicePorts(contextEnvs, composeConfig)
   opts = opts.concat(ports)
-  
+
   if(!volumes) return opts
 
   const vols = await getServiceVolumes(contextEnvs, composeConfig)

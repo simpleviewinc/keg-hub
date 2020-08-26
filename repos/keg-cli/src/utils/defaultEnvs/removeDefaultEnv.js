@@ -30,11 +30,10 @@ const removeDefaultEnv = async (key, log, comment) => {
   let globalEnvStr = globalEnvString
 
   // Load the contents of the Global ENV file
-  const globalEnvs = await parseContent(
-    globalEnvsPath,
-    'utf8',
-    false
-  )
+  const globalEnvs = parseContent({
+    file: globalEnvsPath,
+    fill: false
+  })
 
   const curENVStr = `${ removeKey }=${ globalEnvs[removeKey] }`
   const replace = new RegExp(`${curENVStr}`, 'g')

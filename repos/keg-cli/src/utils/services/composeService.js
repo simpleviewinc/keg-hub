@@ -1,10 +1,12 @@
 const { Logger } = require('KegLog')
-const { get, isArr } = require('@svkeg/jsutils')
-const { mutagenService } = require('./mutagenService')
+const { get, isArr, set } = require('@svkeg/jsutils')
 const { syncService } = require('./syncService')
-const { runInternalTask } = require('../task/runInternalTask')
+const { mutagenService } = require('./mutagenService')
 const { getServiceArgs } = require('./getServiceArgs')
-
+const { runInternalTask } = require('../task/runInternalTask')
+const { buildExecParams } = require('../docker/buildExecParams')
+const { getContainerCmd } = require('../docker/getContainerCmd')
+const { KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 /**
  * Runs `docker-compose` up command based on the passed in args
  * @function
@@ -77,10 +79,15 @@ const composeService = async (args, exArgs) => {
   Logger.empty()
 
 
-  await createSyncs(serviceArgs, containerContext, exArgs)
+  await createSyncs(serviceArgs, composeContext, exArgs)
+
+  // Set a keg-compose service ENV 
+  // This is added so we can know when were running the exec start command over
+  // the initial docker run command
+  // In cases where the container starts and runs for ever with tail -f dev/null
+  set(composeContext, `contextEnvs.${KEG_DOCKER_EXEC}`, KEG_EXEC_OPTS.start)
 
   /**
-  * TODO:
   * Get the start command from the compose file or the Dockerfile
   * Update the default start cmd to just tail dev/null
   * Then run the real start command here
@@ -88,20 +95,24 @@ const composeService = async (args, exArgs) => {
   * prior to running the app in the container
   * Connect to the service and run the start cmd
   */
-  // return runInternalTask('tasks.docker.tasks.exec', {
-  //   ...args,
-  //   __internal: { containerContext },
-  //   params: {
-  //     ...params,
-  //  
-  //     cmd: < RUN START COMMAND HERE >
-  //     context: cmdContext,
-  //   },
-  // })
+  const { cmdContext, image } = composeContext
+  return runInternalTask('tasks.docker.tasks.exec', {
+    ...args,
+    __internal: { containerContext: composeContext },
+    params: {
+      ...params,
+      ...buildExecParams(
+        serviceArgs.params,
+        { detach: Boolean(get(serviceArgs, 'params.detach')) },
+      ),
+      cmd: await getContainerCmd({ context: cmdContext, image }),
+      context: cmdContext,
+    },
+  })
 
   // Check if we should start logging the output of the service
-  get(serviceArgs, 'params.follow') &&
-    await runInternalTask('docker.tasks.log', serviceArgs)
+  // get(serviceArgs, 'params.follow') &&
+  //   await runInternalTask('docker.tasks.log', serviceArgs)
 
   return composeContext
 

@@ -6,7 +6,6 @@ services:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
       args:
-        - GIT_KEY
         - GIT_CLI_URL
         - GIT_CORE_URL
         - GIT_COMPONENTS_URL
@@ -19,8 +18,12 @@ services:
         - DOC_RETHEME_PATH
         - DOC_RESOLVER_PATH
         - DOC_PROXY_PATH
+        - PUBLIC_GIT_KEY
     container_name: ${CONTAINER_NAME}
     environment:
+      - CADDY_HOST
+      - CADDY_PROXY_PARAMS
+      - CADDY_BASIC_AUTH
       - EXPO_DEBUG_PORT
       - EXPO_APP_PORT
       - GIT_CLI_URL
@@ -35,6 +38,7 @@ services:
       - DOC_RETHEME_PATH
       - DOC_RESOLVER_PATH
       - DOC_PROXY_PATH
+      - PUBLIC_GIT_KEY
     ports: 
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
       - ${EXPO_APP_PORT}:${EXPO_APP_PORT}

@@ -27,6 +27,7 @@ module.exports = {
     tasks: {
       ...require('./env'),
       ...require('./print'),
+      ...require('./test'),
       ...require('./update'),
     },
   }

@@ -1,26 +1,31 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { ask } = require('@svkeg/ask-it')
-const { DOCKER } = require('KegConst/docker')
-const { isUrl, get, deepMerge } = require('@svkeg/jsutils')
-const { CONTAINER_PREFIXES } = require('KegConst/constants')
-const { getPortMap } = require('KegUtils/docker/getDockerArgs')
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { isUrl, get } = require('@svkeg/jsutils')
+const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 const { PACKAGE } = CONTAINER_PREFIXES
 
+/**
+ * Checks if a docker container already exists
+ * <br/>If it does, asks user if they want to remove it
+ * @function
+ * @param {string} container - Name of the container that already exists
+ *
+ * @returns {string} - Name of the current branch
+ */
 const checkExists = async container => {
   const exists = await docker.container.get(container)
   if(!exists) return false
   
   Logger.empty()
   Logger.print(
-    Logger.colors.brightYellow(` A docker container already exists with the name`),
+    Logger.colors.brightYellow(`A docker container already exists with the name`),
     Logger.colors.cyan(`"${ container }"\n`),
-    Logger.colors.brightRed(`The container must be removed before this container can be run!`)
+    Logger.colors.brightRed(`Running container must be removed before this container can be run!`)
   )
 
   Logger.empty()
@@ -132,7 +137,7 @@ const dockerPackageRun = async args => {
       ...parsed,
       opts,
       location,
-      envs: contextEnvs,
+      envs: { ...contextEnvs, [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun },
       name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
       cmd: isInjected ? command : defCmd,
       overrideDockerfileCmd: Boolean(!isInjected || command),

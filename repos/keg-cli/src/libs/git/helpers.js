@@ -7,8 +7,23 @@ const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 *
 */
 const gitLogArgs = {
-  abbrev: 'abbrev-commit',
-  pretty: 'pretty=oneline',
+  abbrev: '--abbrev-commit',
+  pretty: '--pretty=oneline',
+}
+
+const gitFetchArgs = {
+  all: '--all',
+  prune: '-p -P',
+  force: '-f',
+  sub: '--recurse-submodules',
+}
+
+const gitCheckoutArgs = {
+  force: '-f',
+  ours: '--ours',
+  theirs: '--theirs',
+  merge: '-m',
+  sub: '--recurse-submodules',
 }
 
 
@@ -37,6 +52,26 @@ const gitSSHEnv = keyPath => {
 
 }
 
+
+/**
+* Maps the passed in params to the git method arguments
+* @function
+* @param {Object} params - Parsed params passed from the command line
+*
+* @returns {string} - Built argument string
+*/
+const mapParamsToArgs = (params, args) => {
+  return reduceObj(params, (key, value, joined) => {
+    return !value
+      ? joined
+      : isStr(args[key])
+        ? `${joined} ${args[key]}`.trim()
+        : `${joined} ${key}`.trim()
+
+  }, '').trim()
+}
+
+
 /**
 * Finds the arguments that should be passed to the git log command
 * @function
@@ -44,15 +79,37 @@ const gitSSHEnv = keyPath => {
 *
 * @returns {string} - Built argument string
 */
-const getLogArgs = params => {
-  return reduceObj(params, (key, value, joined) => {
-    return !value
-      ? joined
-      : gitLogArgs[key]
-        ? `${joined} --${gitLogArgs[key]}`
-        : `${joined} --${key}`
+const getLogArgs = params => mapParamsToArgs(params, gitLogArgs)
 
-  }, '').trim()
+/**
+* Finds the arguments that should be passed to the git fetch command
+* @function
+* @param {Object} params - Parsed params passed from the command line
+*
+* @returns {string} - Built argument string
+*/
+const getFetchArgs = params => mapParamsToArgs(params, gitFetchArgs)
+
+/**
+* Finds the arguments that should be passed to the git checkout command
+* @function
+* @param {Object} params - Parsed params passed from the command line
+*
+* @returns {string} - Built argument string
+*/
+const getCheckoutArgs = ({ branch, newBranch, remote='origin', track, ...params }) => {
+  let mappedArgs = mapParamsToArgs(params, gitCheckoutArgs)
+
+  // If it's a new branch add it with the -b
+  // Otherwise just set branch as the first argument
+  mappedArgs = newBranch
+    ? `-b ${newBranch} ${mappedArgs}`.trim()
+    : `${branch} ${mappedArgs}`.trim()
+
+  // If it's a new branch, and should track the remove version of the branch
+  newBranch && track && (mappedArgs += `---track ${remote}/${newBranch}`.trim())
+
+  return mappedArgs
 }
 
 /**
@@ -118,6 +175,8 @@ module.exports = {
   buildCmdOpts,
   formatRemotes,
   gitSSHEnv,
+  getCheckoutArgs,
   getLogArgs,
+  getFetchArgs,
   ensureGitRemote,
 }

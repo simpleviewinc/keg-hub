@@ -4,13 +4,16 @@ const { DOCKER } = require('KegConst/docker')
 const { CLI_KEY_MAP } = DOCKER
 const {
   camelCase,
+  checkCall,
+  deepMerge,
   isArr,
   isFunc,
   isObj,
   isStr,
   snakeCase,
   toStr,
-  reduceObj
+  reduceObj,
+  uniqArr,
 } = require('@svkeg/jsutils')
 
 /**
@@ -143,6 +146,10 @@ const apiSuccess = (data, format, skipError) => {
  * @returns {Object} - Formatted docker output as an object
  */
 const jsonOutput = (data, skipError) => {
+  // Caches the index of an image ID within the built array
+  // This allows us to check for duplicates and merge them to gether
+  const indexMap = {}
+
   return data.split('\n')
     .reduce((items, item) => {
       if(!item.trim()) return items
@@ -156,12 +163,31 @@ const jsonOutput = (data, skipError) => {
           built[camelCase(snakeCase(useKey))] = parsed[key]
         })
 
+        built.tags = isArr(built.tags) ? built.tags : [ built.tag ]
+
       // Adds rootId key, which removes and docker repository content
       // This allows us to pull from a remote provider, and compare just the original image name
         if(built.repository)
           built.rootId = built.repository.indexOf('/') !== -1
             ? built.repository.split('/').pop()
             : built.repository
+
+        const existing = indexMap[built.id] && items[ indexMap[built.id] ]
+
+        // De-dupes the returned images
+        // And images the same id, get merged together
+        return !existing
+          ? checkCall(() => {
+              indexMap[built.id] = items.length
+              return items.concat([ built ])
+            })
+          : checkCall(() => {
+              const merged = deepMerge(existing, built)
+              merged.tags = uniqArr(merged.tags)
+              items[ indexMap[built.id] ] = merged
+
+              return items
+            })
 
         return items.concat([ built ])
       }

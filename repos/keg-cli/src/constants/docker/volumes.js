@@ -18,7 +18,6 @@ const mountPaths = {
   components: {
     components: '/keg/keg-components',
     comps: '/keg/keg-components',
-    retheme: `/keg/keg-components/node_modules/@simpleviewinc/re-theme`,
   },
   proxy: {
     proxy: '/keg/keg-proxy',
@@ -50,7 +49,6 @@ const VOLUMES = images.reduce((data, image) => {
     PATHS: {
       components: `${corePath}/node_modules/@simpleviewinc/keg-components`,
       resolver: `${corePath}/node_modules/@simpleviewinc/tap-resolver`,
-      retheme: `${corePath}/node_modules/@simpleviewinc/re-theme`,
     },
   })
 

@@ -10,10 +10,17 @@ const { DOCKER } = require('KegConst/docker')
  *
  * @returns {Object} - Constants container object data
  */
-const getContainerConst = (container, key, alt) => {
+const getContainerConst = (container, key='', alt) => {
+  let [ mainKey, ...subKeys ] = key.split('.')
+  mainKey = mainKey.toUpperCase()
+
+  const constPath = mainKey === 'ARGS' || mainKey === 'ENV'
+    ? `.${ key.toUpperCase() }`
+    : `.${ mainKey.toUpperCase() }.${ subKeys.join('.') }`
+
   return get(
     DOCKER,
-    `CONTAINERS.${ container.toUpperCase() }${ isStr(key) ? '.' + key.toUpperCase() : '' }`,
+    `CONTAINERS.${ container.toUpperCase() }${ constPath }`,
     alt
   )
 }

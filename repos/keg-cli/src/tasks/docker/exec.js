@@ -1,8 +1,6 @@
 const docker = require('KegDocCli')
-const { isStr, get, checkCall } = require('@svkeg/jsutils')
-const { DOCKER } = require('KegConst/docker')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { throwRequired, generalError } = require('KegUtils/error')
+const { throwRequired } = require('KegUtils/error')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
 
 /**
@@ -12,7 +10,7 @@ const { containerSelect } = require('KegUtils/docker/containerSelect')
  *
  * @returns {Object} - context, and container to exec
  */
-const ensureContext = async ({ context, tap, __injected={} }, { containerContext={} }) => {
+const ensureContainerAndContext = async ({ context, tap, __injected={} }, { containerContext={} }) => {
 
   // Check if the name already exists from an injected app
   const injectedName = __injected.container || __injected.image
@@ -39,9 +37,11 @@ const ensureContext = async ({ context, tap, __injected={} }, { containerContext
   })
 
   // If no context, use the container image to find the context
-  const useContext = tap
-    ? 'tap'
-    : context|| container && container.image.replace('keg', '').split(':')[0]
+  const useContext = __injected.context
+    ? __injected.context
+    : tap
+      ? 'tap'
+      : context|| container && container.image.replace('keg', '').split(':')[0]
 
   return { container, context: useContext }
 
@@ -57,25 +57,24 @@ const ensureContext = async ({ context, tap, __injected={} }, { containerContext
  * @returns {void}
  */
 const dockerExec = async args => {
-  const { params, globalConfig, task, command, __internal={} } = args
+  const { params, task, __internal={} } = args
   const { cmd, detach, options, workdir } = params
-  const { context, container } = await ensureContext(params, __internal)
+  const { context, container } = await ensureContainerAndContext(params, __internal)
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
   const {
-    cmdContext,
     contextEnvs,
     location,
     prefix,
     tap,
     image
   } = await buildContainerContext({
+    ...args,
     task,
     __internal,
-    globalConfig,
     params: { ...params, context }
   })
 
@@ -85,7 +84,7 @@ const dockerExec = async args => {
   // Run the command on the container
   await docker.container.exec(
     { cmd, container: containerName, opts: options, workdir, detach },
-    { options: { env: contextEnvs } },
+    { options: { env: { ...contextEnvs, KEG_EXEC: true } } },
     location
   )
 
@@ -100,7 +99,6 @@ module.exports = {
     example: 'keg docker exec <options>',
     options: {
       context: {
-        allowed: DOCKER.IMAGES,
         description: 'Context or name of the container to run the command on',
         example: 'keg docker exec --context core',
         enforced: true,

@@ -45,7 +45,7 @@ const getDefaultENVs = cliRootDir => {
 
   // Try to load the default envs
   tryCatch(
-    () => { __DEFAULT_ENVS = loadENV(globalDefEnv) },
+    () => { __DEFAULT_ENVS = loadENV({ envPath: globalDefEnv }) },
     err => {
       // Log the error when no ENVs can be loaded
       noENVLog(err)
@@ -54,7 +54,7 @@ const getDefaultENVs = cliRootDir => {
       copyFileSync(path.join(cliRootDir, 'scripts/setup/', DEFAULT_ENV), globalDefEnv)
 
       // Load the default envs
-      __DEFAULT_ENVS = loadENV(globalDefEnv)
+      __DEFAULT_ENVS = loadENV({ envPath: globalDefEnv })
     }
   )
 

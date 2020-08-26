@@ -2,6 +2,9 @@ const path = require('path')
 
 const homeDir = require('os').homedir()
 const cliRoot = path.join(__dirname, '../../../')
+const kegHub = path.join(homeDir, '/keg-hub')
+const kegRepos = path.join(kegHub, 'repos')
+const kegTaps = path.join(kegHub, 'taps')
 
 module.exports = {
   version: '1.0.0',
@@ -17,26 +20,23 @@ module.exports = {
       orgName: 'simpleviewinc',
       orgUrl: 'https://github.com/simpleviewinc',
       repos: {
-        cli: 'keg-cli',
-        core: 'keg-core',
-        components: 'keg-components',
-        retheme: 're-theme',
-        base: 'keg-core',
-        resolver: 'tap-resolver',
-        proxy: 'keg-proxy'
+        hub: "keg-hub",
+        rc: 'tap-release-client',
       },
       sshKey: path.join(homeDir, '.ssh/github'),
       key: '123456789'
     },
     paths: {
-      cli: path.join(homeDir, '/keg-hub/repos/keg-cli'),
-      components: path.join(homeDir, '/keg-hub/repos/keg-components'),
-      containers: path.join(homeDir, '/keg-hub/repos/keg-cli/containers'),
-      core: path.join(homeDir, '/keg-hub/repos/keg-core'),
-      keg: path.join(homeDir, '/keg'),
-      proxy: path.join(homeDir, '/keg-hub/repos/keg-proxy'),
-      resolver: path.join(homeDir, '/keg-hub/repos/tap-resolver'),
-      retheme: path.join(homeDir, '/keg-hub/repos/re-theme'),
+      keg: kegHub,
+      hub: kegHub,
+      repos: kegRepos,
+      taps: kegTaps,
+      cli: path.join(kegRepos, 'keg-cli'),
+      components: path.join(kegRepos, 'keg-components'),
+      containers: path.join(kegRepos, 'keg-cli/containers'),
+      core: path.join(kegRepos, 'keg-core'),
+      proxy: path.join(kegRepos, 'keg-proxy'),
+      resolver: path.join(kegRepos, 'tap-resolver'),
       customTasks: ''
     },
     settings: {

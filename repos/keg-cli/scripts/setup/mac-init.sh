@@ -21,7 +21,8 @@ KEG_GROUP="$(id -g -n $KEG_USER)"
 KEG_EXIT=""
 
 # Size of the docker-machien virtual box hhd
-KEG_VB_SIZE=48576
+KEG_VB_SIZE=51200
+KEG_VB_MEMORY=4096
 
 # Prints a message to the terminal through stderr
 keg_message(){
@@ -65,27 +66,6 @@ keg_brew_install(){
     #  Install brew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
-}
-
-# Checks who owns the Ruby gems folder, and updates the owner if needed
-keg_check_ruby_gem_owner(){
-
-  local GEM_PATH=/Library/Ruby/Gems
-  local GEM_OWNER="$(ls -ld "$GEM_PATH" | awk '{print $3}')"
-
-  # Check if the gem owner is the same as the current user
-  if [[ "$KEG_USER" != $GEM_OWNER ]]; then
-    local ANSWER=$(keg_ask_question "Current user $KEG_USER does not own ruby gems path $GEM_PATH. Would you like to update it? (y/N):")
-
-    if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
-      keg_message "Updating Ruby Gems folder owner..."
-      sudo chown -R $KEG_USER:$KEG_GROUP $GEM_PATH
-
-    else
-      KEG_EXIT="Exiting because user does not own ruby gem path. Please update and run this script again!"
-    fi
-  fi
-
 }
 
 # Checks and install docker / docker-machine / docker-compose
@@ -145,7 +125,7 @@ keg_setup_docker_machine(){
   fi
 
   keg_message "Creating docker-machine instance..."
-  docker-machine create --driver virtualbox --virtualbox-memory $KEG_VB_SIZE $KEG_DOCKER_NAME
+  docker-machine create --driver virtualbox --virtualbox-memory $KEG_VB_MEMORY --virtualbox-disk-size $KEG_VB_SIZE $KEG_DOCKER_NAME
 
   keg_message "Updating docker-machine environment..."
   docker-machine env $KEG_DOCKER_NAME
@@ -259,6 +239,10 @@ keg_install_cli_dependencies(){
 
     # Install the dependencies
     yarn install
+
+    # Makes publishing to npm super easy
+    # Used in the `keg global publish` task
+    yarn global add np
 
     # Navigate back to the original directory
     cd $CUR_DIR
@@ -650,15 +634,6 @@ keg_setup(){
   #  * Running `bash mac-init.sh init` will do the same thing
   if [[ -z "$SETUP_TYPE" || "$SETUP_TYPE" == "init" ]]; then
     INIT_SETUP="true"
-  fi
-
-  # Validate the ruby gems owner
-  # To run:
-  # bash mac-init.sh gem
-  #  * Runs only the gem portion of this script
-  if [[ -z "$KEG_EXIT" ]] && [[ -z "$INIT_SETUP" || "$SETUP_TYPE" == "gem" ]]; then
-    keg_message "Checking for gem path owner..."
-    keg_check_ruby_gem_owner
   fi
 
   # Setup and install brew

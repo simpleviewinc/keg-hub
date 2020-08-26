@@ -1,13 +1,12 @@
 const { Logger } = require('KegLog')
 const { getServiceArgs } = require('./getServiceArgs')
-const { generalError } = require('../error/generalError')
 const { getRemotePath } = require('../getters/getRemotePath')
 const { runInternalTask } = require('../task/runInternalTask')
-const { get, isArr, isStr, isBool, isObj } = require('@svkeg/jsutils')
+const { get, isArr, isStr, isObj } = require('@svkeg/jsutils')
+const { buildExecParams } = require('../docker/buildExecParams')
 const { findDependencyName } = require('../helpers/findDependencyName')
 const { getMutagenConfig } = require('KegUtils/getters/getMutagenConfig')
 const { buildContainerContext } = require('../builders/buildContainerContext')
-
 /**
  * Normalizes the sync arguments to pass to the sync action
  * @function
@@ -33,27 +32,6 @@ const normalizeSyncData = serviceArgs => {
 }
 
 /**
- * Gets the arguments to pass to the docker exec command
- * @function
- * @param {Boolean} serviceArgs.detach - Should the action run in detached mode
- * @param {Object} action - Sync action to run
- *
- * @returns {Array} - Array of Promises of each sync action
- */
-const getExecParams = ({ detach }, action) => {
-  const { workdir, location, ...actionParams } = action
-  const detachMode = isBool(detach) ? detach : actionParams.detach
-
-  return {
-    ...actionParams,
-    detach: detachMode,
-    workdir: workdir || location,
-    options: detachMode ? '' : '-it',
-  }
-
-}
-
-/**
  * Runs the sync actions defined in the mutagen.yml sync config
  * <br/>Runs each cmd in series, one after the other
  * @function
@@ -70,6 +48,7 @@ const runSyncCmds = (serviceArgs, cmdContext, dependency, action) => {
 
   // Normalize the cmds array
   const allCmds = isArr(cmds) ? cmds : isStr(cmds) ? [ cmds ] : []
+  isStr(cmd) && allCmds.unshift(cmd)
 
   return allCmds.reduce(async (toResolve, cmd) => {
     await toResolve
@@ -82,7 +61,7 @@ const runSyncCmds = (serviceArgs, cmdContext, dependency, action) => {
       params: {
         ...serviceArgs.params,
         context: cmdContext,
-        ...getExecParams(
+        ...buildExecParams(
           serviceArgs.params,
           actionParams
         ),
@@ -121,15 +100,22 @@ const runSyncActions = (serviceArgs, cmdContext, dependency, actions) => {
  *
  * @returns {Array} - Array actions to run
  */
-const getSyncActions = (actions, action, dependency) => {
-  return action
-    ? !isObj(actions[action])
-      ? Logger.error(`\nSync action "${action}" does not exist for "${ dependency }"\n`)
-      : [ { ...actions[action], name: action } ]
-    : isObj(actions) && Object.entries(actions)
-      .reduce((allActions, [ name, meta ]) => {
-        return allActions.concat({ ...meta, name })
-      }, [])
+const getSyncActions = (actions, syncActions, dependency) => {
+  return !isArr(syncActions) || !syncActions.length || !isObj(actions)
+    ? null
+    : syncActions.includes('all')
+      ? Object.entries(actions)
+          .reduce((allActions, [ name, meta ]) => {
+            return allActions.concat({ ...meta, name })
+          }, [])
+      : syncActions.reduce((runActions, action) => {
+          const valid = isObj(actions[action])
+          !valid && Logger.error(`\nAction "${action}" does not exist for "${ dependency }"\n`)
+
+          return valid
+            ? runActions.concat([ { ...actions[action], name: action } ])
+            : runActions
+        }, [])
 }
 
 /**
@@ -153,19 +139,19 @@ const syncActionService = async (args, argsExt) => {
   const { globalConfig, params } = serviceArgs
 
   // Get the actions for the sync
-  const syncActions = await getMutagenConfig({
+  const configActions = await getMutagenConfig({
     __injected: params.__injected,
     context: cmdContext,
     configPath: 'actions'
   })
 
-  if(!syncActions) return
+  if(!configActions) return
 
   // Get the container, and the repo to be synced
-  const { container, dependencyName, syncAction } = normalizeSyncData(serviceArgs)
+  const { container, dependencyName, syncActions } = normalizeSyncData(serviceArgs)
 
   // Get the actions to run based on the dependency
-  const actions = getSyncActions(syncActions[dependencyName], syncAction, dependencyName)
+  const actions = getSyncActions(configActions[dependencyName], syncActions, dependencyName)
 
   // If there's no container or actions, then just return
   if(!container || !isArr(actions) ) return actionContext

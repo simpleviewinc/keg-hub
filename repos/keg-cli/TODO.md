@@ -3,10 +3,6 @@
 **Taps**
   * Create a default init template for a tap - `create-react-tap`
 
-**Docker**
-  * Allow mounting of sub-repos
-    * `re-theme`, `tap-resolver`, `keg-components`
-
 **Install**
 * Keg cli should be installed through `yarn global` || `npm global`
   * Should run `/scripts/setup/setup-<platform>`
@@ -36,10 +32,6 @@
       * Use this find the correct package after the have been pulled from github
 
 ### TODO: 
-  * compose service should check if an existing compose service is already running
-    * If it is, ask the user if if should be destroyed
-      * Can not run two compose services at once 
-    * This is only temporary until keg-proxy is setup
   * Keg repos should be installed through an install command
     * Should use the globalConfig to set the install location
     * Should allow overwriting the globalConfig location
@@ -53,3 +45,5 @@
 BUG: 
 * Sometimes when killing a service,
 * After killing the service it asks for a container, figure out why?
+* Fix tests to no rely on globalConfig values
+  * Users can customize their config values, which means tests will fail

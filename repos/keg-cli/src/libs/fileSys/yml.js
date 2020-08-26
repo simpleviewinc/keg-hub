@@ -28,7 +28,10 @@ const stripBom = content => (
  *
  * @returns {Object} - Parse YAML file as a JS Object
  */
-const loadTemplateYml = content => yaml.safeLoad(parseTemplate({ template: stripBom(content) }))
+const loadTemplateYml = (content, data) => yaml.safeLoad(parseTemplate({
+  template: stripBom(content),
+  data,
+}))
 
 /**
  * Read the content of a yml file
@@ -38,10 +41,10 @@ const loadTemplateYml = content => yaml.safeLoad(parseTemplate({ template: strip
  *
  * @returns {Object} - Parse YAML file
  */
-const loadYamlFile = async (filePath, throwError=true) => {
+const loadYamlFile = async (filePath, throwError=true, data) => {
   const [ err, content ] = await readFile(filePath)
   return !err
-    ? loadTemplateYml(content)
+    ? loadTemplateYml(content, data)
     : throwError
       ? throwNoFileExists(filePath, `Could not load YAML file!`)
       : {}
@@ -56,9 +59,9 @@ const loadYamlFile = async (filePath, throwError=true) => {
  *
  * @returns {Object} - Parse YAML file
  */
-const loadYmlSync = (filePath, throwError=true) => {
+const loadYmlSync = (filePath, throwError=true, data) => {
   return pathExistsSync(filePath)
-    ? loadTemplateYml(readFileSync(filePath))
+    ? loadTemplateYml(readFileSync(filePath), data)
     : throwError ? throwNoFileExists(filePath, `Could not load YAML file!`) : {}
 }
 
@@ -71,15 +74,15 @@ const loadYmlSync = (filePath, throwError=true) => {
  *
  * @returns {Object} - Parse YAML file
  */
-const loadYml = async (filePath, throwError=true) => {
+const loadYml = async (filePath, throwError=true, data) => {
   const [ err, _ ] = await limbo(pathExists(filePath))
-  const data = !err
-    ? await loadYamlFile(filePath, throwError)
+  const content = !err
+    ? await loadYamlFile(filePath, throwError, data)
     : throwError
       ? throwNoFileExists(filePath, `Could not load YAML file!`) 
       : {}
 
-  return data
+  return content
 }
 
 /**

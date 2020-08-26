@@ -112,18 +112,16 @@ const updateDefaultEnvFile = async (params={}) => {
   let globalEnvStr = globalEnvString
 
   // Load the contents of the Global ENV file
-  const globalEnvs = await parseContent(
-    globalEnvsPath,
-    'utf8',
-    false
-  )
+  const globalEnvs = parseContent({
+    file: globalEnvsPath,
+    fill: false
+  })
 
   // Load the local Keg-CLI defaults ENV file
-  const localEnvs = parseContent(
-    path.join(CLI_ROOT, 'scripts/setup/', DEFAULT_ENV),
-    'utf8',
-    false
-  )
+  const localEnvs = parseContent({
+    file: path.join(CLI_ROOT, 'scripts/setup/', DEFAULT_ENV),
+    fill: false
+  })
 
   const stats = { conflict: [], add: [] }
 

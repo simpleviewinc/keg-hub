@@ -70,7 +70,6 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     env,
     envs={},
     execCmd,
-    location,
     context,
     branch,
     image,

@@ -70,18 +70,18 @@ const serviceOptions = (task='', action='', overrides={}) => {
     },
     mounts: {
       description: `List of key names or folder paths to mount into the docker container. Only used when service === 'container'`,
-      example: 'keg ${ task } ${ action } --mounts cli,retheme',
+      example: 'keg ${ task } ${ action } --mounts cli,components',
     },
     sync: {
       alias: [ 'syncs', 'sy' ],
       type: 'array',
       description: 'List of key names or folder paths to sync through mutagen into the docker container.',
-      example: 'keg ${ task } ${ action } --sync cli,retheme',
+      example: 'keg ${ task } ${ action } --sync cli,components',
     },
     detach: {
       alias: [ 'detached' ],
       description: 'Force run sync actions in detached mode. Only valid when sync option is passed. Overrides the value defined in the sync action',
-      example: 'keg ${ task } ${ action } --sync retheme --detach',
+      example: 'keg ${ task } ${ action } --sync components --detach',
     },
     service: {
       allowed: [ 'compose', 'container', 'mutagen' ],

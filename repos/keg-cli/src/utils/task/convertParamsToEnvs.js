@@ -8,7 +8,7 @@ const { getSetting } = require('../globalConfig/getSetting')
  * @param {object} contextEnv - context env for the container to run
  * @returns {object}
  */
-const convertParamsToEnvs = ({ env, command, install, local }, contextEnv) => {
+const convertParamsToEnvs = ({ env, command, install, local }, contextEnv={}) => {
   const extraENVs = {}
 
   env && ( extraENVs.NODE_ENV = env )

@@ -5,7 +5,7 @@ FROM $BASE_IMAGE_FROM AS builder
 
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
-ARG GIT_KEY
+ARG PUBLIC_GIT_KEY
 ARG GIT_CLI_URL=INITIAL
 
 # Should we use the local copy of the keg-core repo when building
@@ -28,7 +28,7 @@ COPY . /keg-temp/
 # Update git calls to github to include the key so private repos can be pulled
 # Pull down the keg-cli locally if GIT_CLI_URL
 # Otherwise copy over the local version from keg-temp
-RUN git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/; \
+RUN git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
     if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
       git clone $GIT_CLI_URL $DOC_CLI_PATH; \
     else \
@@ -42,7 +42,6 @@ COPY . $DOC_CLI_PATH/
 # ------- New Build Stage ------- #
 
 # Use a multi stage build for security
-# This is so GIT_KEY is not accessable in the final image
 FROM $BASE_IMAGE_FROM AS gitBuilder
 WORKDIR /
 
@@ -59,7 +58,12 @@ ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
 # Install git and bash for the new stage
 # This is so Dockerfiles that uses "FROM keg-base", don't have to install these packages
-RUN apk add --no-cache git bash nano
+RUN apk add --no-cache git bash nano; \
+    echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
+    sudo sysctl -p; \
+    git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
+    rm -rf /var/cache/apk/*; \
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
 
 # Copy over the globally installed modules from above
 COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
@@ -70,14 +74,5 @@ COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
 # Expose the container ports to allow connecting to it externally
 EXPOSE 80
 EXPOSE 443
-EXPOSE 873
-EXPOSE 8080
-EXPOSE 8081
-EXPOSE 8082
-EXPOSE 19000
-EXPOSE 19001
-EXPOSE 19002
-EXPOSE 19006
-EXPOSE 60710
 
 WORKDIR /keg

@@ -48,7 +48,7 @@ const dockerCli = async (params={}, cmdOpts={}) => {
 
   const cmdToRun = ensureDocker(`${ options } ${ useForce } ${ useFormat }`.trim())
 
-  log && Logger.spacedMsg(`  Running command: `, cmdToRun)
+  log && Logger.spacedMsg(`Running command: `, cmdToRun)
 
   const { error, data } = await executeCmd(
     // TODO: validate running all docker command on the docker-machine instance
@@ -186,7 +186,7 @@ const raw = async (cmd, args={}, loc=process.cwd()) => {
   // Add docker if needed
   const cmdToRun = ensureDocker(cmd)
 
-  log && Logger.spacedMsg(`  Running command: `, cmdToRun)
+  log && Logger.spacedMsg(`Running command: `, cmdToRun)
 
   // Run the docker command
   const resp = await spawnProc(cmdToRun, cmdArgs, loc)
@@ -196,7 +196,7 @@ const raw = async (cmd, args={}, loc=process.cwd()) => {
 
   error && !data
     ? apiError(error)
-    : Logger.success(`  Finished running Docker CLI command!`)
+    : Logger.success(`Finished running Docker CLI command!`)
   
   return data
 }

@@ -44,10 +44,11 @@ const checkSyncPaths = (syncForce, contextPath, localPath) => {
 const syncService = async (args, argsExt) => {
   const serviceArgs = getServiceArgs(args, argsExt)
 
-  const { globalConfig, params } = serviceArgs
+  const { globalConfig, params, __internal={} } = serviceArgs
   const { local, remote, syncForce, tap } = params
+  const { actionOnly } = __internal
 
-  const [ dependency, syncAction ] = params.dependency.includes(':')
+  const [ dependency, ...syncActions ] = params.dependency.includes(':')
     ? params.dependency.split(':')
     : [ params.dependency ]
 
@@ -59,8 +60,6 @@ const syncService = async (args, argsExt) => {
   const localPath = getLocalPath(globalConfig, context, dependency, local)
   !localPath && generalError(`Local path could not be found!`)
 
-  if(!checkSyncPaths(syncForce, contextPath, localPath)) return
-
   const remotePath = getRemotePath(context, dependency, remote)
 
   const dependencyName = findDependencyName(dependency, remotePath)
@@ -70,6 +69,7 @@ const syncService = async (args, argsExt) => {
     ...serviceArgs,
     ...(containerContext && {
       __internal: {
+        actionOnly,
         containerContext,
         skipExists: true,
         skipLog: true
@@ -95,7 +95,7 @@ const syncService = async (args, argsExt) => {
     params: {
       ...serviceArgs.params,
       dependency,
-      syncAction,
+      syncActions: syncActions.length ? syncActions : undefined,
     }
   })
 

@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { isArr, toStr, isStr } = require('@svkeg/jsutils')
+const { isArr, isStr, isObj } = require('@svkeg/jsutils')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { buildNames, compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 
@@ -256,6 +256,53 @@ const runImage = async (args) => {
 }
 
 /**
+ * Gets the last Cmd of a built docker image
+ * @function
+ * @param {Object} args - Arguments to pass to the docker image command
+ * @param {string} args.image - Reference to the docker image
+ * @param {string} args.envs - ENVs to pass to the child process
+ * @param {string} args.location - Location where the docker command should be run
+ *
+ * @returns {string|Array} - Response from docker cli
+ */
+const getCmd = async (args={}) => {
+  return args.image
+    ? inspect({ ...args, filter: '-f {{.Config.Cmd}}' })
+    : Logger.error(`Docker image reference is required to run the image get command method!`) || ''
+}
+
+/**
+ * Runs docker image inspect for the passed in image
+ * @function
+ * @param {Object} args - Arguments to pass to the docker image command
+ * @param {string} args.image - Reference to the docker image
+ * @param {string} args.filter - Filter the returned results
+ * @param {string} [args.format=json] - Format the of the response
+ *
+ * @returns {string|Object} - Docker image information
+ */
+const inspect = async ({ envs, image, filter, format='json', location }) => {
+  let cmdToRun = `docker image inspect `
+  filter && (cmdToRun += `${filter}`.trim())
+  image && (cmdToRun += `${image}`.trim())
+
+  const imgInfo = image && await dockerCli(
+    { opts: cmdToRun },
+    { options: { env: envs }, cwd: location },
+  )
+
+  try {
+    const parsed = JSON.parse(imgInfo)
+    return isArr(parsed) ? parsed[0] : isObj(parsed) ? parsed : {}
+  }
+  catch(error){
+    console.error(error)
+    process.exit(1)
+  }
+
+}
+
+/**
  * Root docker image method to run docker image commands
  * @function
  * @param {string} args - Arguments to pass to the docker image command
@@ -270,6 +317,8 @@ Object.assign(image, {
   exists,
   get: getImage,
   getByTag,
+  getCmd,
+  inspect,
   list: listImages,
   run: runImage,
   remove: removeImage,

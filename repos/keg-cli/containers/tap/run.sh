@@ -26,19 +26,6 @@ keg_set_container_paths(){
 
 }
 
-# Add .npmrc so node_modules installs does not fail
-keg_add_git_key(){
-  git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/
-  echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc
-  echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc
-}
-
-# Remove .npmrc so git key is not saved
-keg_remove_git_key(){
-  git config --global url.https://github.com/.insteadOf url.https://$GIT_KEY@github.com/
-  rm -rf .npmrc
-}
-
 # Runs yarn install at run time
 # Use when adding extra node_modules to keg-core without rebuilding
 keg_run_tap_yarn_setup(){
@@ -51,18 +38,14 @@ keg_run_tap_yarn_setup(){
   if [[ "$KEG_NM_INSTALL" != "core" ]]; then
     # Navigate to the cached directory, and run the yarn install here
     cd $TAP_PATH
-    keg_add_git_key
     keg_message "Running yarn setup for tap..."
     yarn install
-    keg_remove_git_key
   fi
   
   if [[ "$KEG_NM_INSTALL" ]]; then
     keg_message "Running yarn install for keg-core..."
     cd $DOC_CORE_PATH
-    keg_add_git_key
     yarn install
-    keg_remove_git_key
   fi
 
 }
@@ -73,7 +56,7 @@ keg_run_the_tap(){
   cd $TAP_PATH
 
   if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="web"
+    KEG_EXEC_CMD="tap:start"
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"
@@ -81,11 +64,20 @@ keg_run_the_tap(){
 
 }
 
-# Checks for path overrides of the core, tap paths with passed in ENVs
-keg_set_container_paths
+# If the no KEG_DOCKER_EXEC env is set, just sleep forever
+# This is to keep our container running forever
+if [[ -z "$KEG_DOCKER_EXEC" ]]; then
+  tail -f /dev/null
+  exit 0
 
-# Run yarn setup for any extra node_modules to be installed
-keg_run_tap_yarn_setup
+else
 
-# Start the keg core instance
-keg_run_the_tap
+  # Checks for path overrides of the core, tap paths with passed in ENVs
+  keg_set_container_paths
+
+  # Run yarn setup for any extra node_modules to be installed
+  keg_run_tap_yarn_setup
+
+  # Start the keg core instance
+  keg_run_the_tap
+fi

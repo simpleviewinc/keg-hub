@@ -21,7 +21,8 @@ const { generalError } = require('KegUtils/error')
  */
 const currentBranch = async args => {
 
-  const { params,  globalConfig, __skipLog } = args
+  const { params,  globalConfig, __internal={} } = args
+  const { skipLog } = __internal
   const { context, path: repoPath, tap } = params
 
   // Get the path to the repo
@@ -36,7 +37,7 @@ const currentBranch = async args => {
   // Otherwise log the current branch
   !curBranch.current
     ? generalError(`Could not get the current branch for ${ tap || context || repoPath }`)
-    : !__skipLog && Logger.spacedMsg(`Current Branch:`, curBranch.name)
+    : !skipLog && Logger.spacedMsg(`Current Branch:`, curBranch.name)
 
   // // Return the current branch
   return curBranch
@@ -60,7 +61,11 @@ module.exports = {
       path: {
         description: `Full path location of a repository to get the current branch from. Overrides "context" option`,
         enforce: true
-      }
+      },
+      tap: {
+        description: 'Name of the tap to build a Docker image for',
+        example: 'keg git current --tap visitapps',
+      },
     }
   }
 }
