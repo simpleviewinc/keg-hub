@@ -3,7 +3,7 @@ start: /bin/bash /keg/keg-cli/containers/tap/run.sh
 env:
   # --- LOCAL ENV CONTEXT --- #
   COMPONENTS_PATH: "{{ cli.paths.components }}"
-  RETHEME_PATH: "{{ cli.paths.retheme }}"
+  RETHEME_PATH: "{{ cli.taps.links.retheme }}"
   RESOLVER_PATH: "{{ cli.paths.resolver }}"
   CLI_PATH: "{{ cli.paths.cli }}"
   

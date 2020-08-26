@@ -3,7 +3,7 @@ start: /bin/bash /keg/keg-cli/containers/core/run.sh
 env:
   # --- LOCAL ENV CONTEXT --- #
   COMPONENTS_PATH: "{{ cli.paths.components }}"
-  RETHEME_PATH: "{{ cli.paths.retheme }}"
+  RETHEME_PATH: "{{ cli.taps.links.retheme }}"
   RESOLVER_PATH: "{{ cli.paths.resolver }}"
 
   # --- CORE ENV CONTEXT --- #
