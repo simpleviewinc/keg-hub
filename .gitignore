@@ -22,6 +22,8 @@ reports/
 
 !/**/.gitkeep
 !.gitkeep
+.kegConfig/**
+!.kegConfig/.gitkeep
 jsconfig.json
 
 .vscode
