@@ -28,8 +28,8 @@ const doCheckUpdates = () => {
     await runTask(globalConfig)
 
     // Check for Keg CLI updates if setting is true, then check for updates
-    get(globalConfig, `cli.settings.checkUpdates`) &&
-      await doCheckUpdates()
+    // get(globalConfig, `cli.settings.checkUpdates`) &&
+    //   await doCheckUpdates()
 
   }
   catch(e){
