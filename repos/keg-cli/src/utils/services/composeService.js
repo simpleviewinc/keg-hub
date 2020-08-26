@@ -113,8 +113,7 @@ const composeService = async (args, exArgs) => {
   // Check if we should start logging the output of the service
   // get(serviceArgs, 'params.follow') &&
   //   await runInternalTask('docker.tasks.log', serviceArgs)
-
-  return composeContext
+  // return composeContext
 
 }
 

@@ -2,6 +2,7 @@ const docker = require('KegDocCli')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired } = require('KegUtils/error')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
+const { KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 
 /**
  * Gets the correct context for the command
@@ -65,28 +66,32 @@ const dockerExec = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
-  const {
-    contextEnvs,
-    location,
-    prefix,
-    tap,
-    image
-  } = await buildContainerContext({
+  const execContext = await buildContainerContext({
     ...args,
     task,
     __internal,
     params: { ...params, context }
   })
 
-  // Get the name of the container to exec
+  const { contextEnvs, location, prefix, image } = execContext
+
+  // Get the name of the container to run the docker exec cmd on
   const containerName = container && container.name || prefix || image
 
-  // Run the command on the container
-  await docker.container.exec(
-    { cmd, container: containerName, opts: options, workdir, detach },
-    { options: { env: { ...contextEnvs, KEG_EXEC: true } } },
-    location
-  )
+  const execArgs = { cmd, container: containerName, opts: options, location }
+  workdir && (execArgs.workdir = workdir)
+  detach && (execArgs.detach = detach)
+
+  // Run the exec command on the container
+  await docker.container
+    .exec(execArgs, { options: { env: {
+      // Add the default KEG_DOCKER_EXEC ENV
+      [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.dockerExec,
+      // contextEnvs should already have the KEG_DOCKER_EXEC set to override it if needed
+      ...contextEnvs
+    }}})
+
+  return execContext
 
 }
 

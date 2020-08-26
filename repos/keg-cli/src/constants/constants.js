@@ -140,6 +140,7 @@ module.exports = deepFreeze({
   KEG_EXEC_OPTS: {
     start: 'compose-start',
     packageRun: 'package-run',
+    dockerExec: 'docker-exec',
   }
 
 })
