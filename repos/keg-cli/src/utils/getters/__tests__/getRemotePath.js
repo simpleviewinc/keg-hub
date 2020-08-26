@@ -11,7 +11,7 @@ describe('getRemotePath', () => {
 
   it('should get the remote path from the context and dependency', async () => {
     const remotePath = getRemotePath('core', 'components')
-    expect(remotePath).toBe('/keg/keg-core/node_modules/@simpleviewinc/keg-components')
+    expect(remotePath).toBe('/keg/keg-core/node_modules/@svkeg/keg-components')
   })
 
   it('should return undefined when no path is found', async () => {

@@ -32,9 +32,9 @@ env:
   DOC_APP_PATH: /keg/tap
   DOC_APP_PORT: 19006
   DOC_CORE_PATH: /keg/tap/node_modules/keg-core
-  DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@simpleviewinc/keg-components
-  DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@simpleviewinc/re-theme
-  DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@simpleviewinc/tap-resolver
+  DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+  DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+  DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@svkeg/tap-resolver
 
   # --- KEG-PROXY ENVs --- #
   # See https://github.com/whitestrake/caddy-gen for more information
