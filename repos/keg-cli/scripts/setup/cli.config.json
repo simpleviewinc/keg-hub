@@ -1,0 +1,50 @@
+{
+  "name": "keg-cli",
+  "displayName": "Keg CLI",
+  "docker": {
+    "providerUrl": "docker.pkg.github.com",
+    "namespace": "simpleviewinc/keg-packages",
+    "user": "",
+    "token": ""
+  },
+  "cli": {
+    "paths": {
+      "customTasks": ""
+    },
+    "git": {
+      "orgName": "simpleviewinc",
+      "orgUrl": "https://github.com/simpleviewinc",
+      "provider": "https://github.com",
+      "repos": {
+        "cli": "keg-cli",
+        "core": "keg-core",
+        "components": "keg-components",
+        "proxy": "keg-proxy",
+        "resolver": "tap-resolver",
+        "retheme": "re-theme"
+      }
+    },
+    "taps": {
+      "links": {
+      }
+    },
+    "settings": {
+      "defaultEnv": "development",
+      "docker": {
+        "preConfirm": true,
+        "buildKit": true,
+        "force": true,
+        "defaultLocalBuild": true
+      },
+      "checkUpdates": false,
+      "editorCmd": false,
+      "errorStack": false,
+      "git": {
+        "secure": false
+      },
+      "task": {
+        "optionsAsk": true
+      }
+    }
+  }
+}

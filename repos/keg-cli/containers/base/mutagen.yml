@@ -1,0 +1,20 @@
+sync:
+  keg-base:
+    alpha: "/keg/keg-cli"
+    beta: "docker://keg/keg-cli"
+    mode: "one-way-replica"
+    ignore:
+      vcs: true
+      paths:
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"

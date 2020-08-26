@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  keg-base:
+    image: ${IMAGE}
+    build:
+      context: ${KEG_CONTEXT_PATH}
+      dockerfile: ${KEG_DOCKER_FILE}
+      args:
+        - GIT_KEY
+        - GIT_CLI_URL
+        - GIT_CORE_URL
+        - GIT_COMPONENTS_URL
+        - GIT_RETHEME_URL
+        - GIT_RESOLVER_URL
+        - GIT_PROXY_URL
+        - DOC_CLI_PATH
+        - DOC_CORE_PATH
+        - DOC_COMPONENTS_PATH
+        - DOC_RETHEME_PATH
+        - DOC_RESOLVER_PATH
+        - DOC_PROXY_PATH
+    container_name: ${CONTAINER_NAME}
+    environment:
+      - EXPO_DEBUG_PORT
+      - EXPO_APP_PORT
+      - GIT_CLI_URL
+      - GIT_CORE_URL
+      - GIT_COMPONENTS_URL
+      - GIT_RETHEME_URL
+      - GIT_RESOLVER_URL
+      - GIT_PROXY_URL
+      - DOC_CLI_PATH
+      - DOC_CORE_PATH
+      - DOC_COMPONENTS_PATH
+      - DOC_RETHEME_PATH
+      - DOC_RESOLVER_PATH
+      - DOC_PROXY_PATH
+    ports: 
+      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
+      - ${EXPO_APP_PORT}:${EXPO_APP_PORT}
+      - 873:873
+      - 8080:8080
+      - 8081:8081
+      - 8082:8082
+      - 8083:8083
+      - 60710:60710
+    volumes:
+      - ${KEG_CONFIG_PATH}:/keg/.kegConfig

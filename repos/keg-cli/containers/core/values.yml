@@ -1,0 +1,41 @@
+
+env:
+  # --- LOCAL ENV CONTEXT --- #
+  COMPONENTS_PATH: "{{ cli.paths.components }}"
+  RETHEME_PATH: "{{ cli.paths.retheme }}"
+  RESOLVER_PATH: "{{ cli.paths.resolver }}"
+
+  # --- CORE ENV CONTEXT --- #
+
+  # Docker data
+  KEG_CONTEXT_PATH: "{{ cli.paths.core }}"
+  KEG_DOCKER_FILE: "{{ cli.paths.containers }}/core/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.paths.containers }}/core/values.yml"
+  KEG_MUTAGEN_PATH: "{{ cli.paths.containers }}/core/mutagen.yml"
+
+  # The default docker-compose file path
+  KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/core/docker-compose.yml"
+  # Can also define other an override compose files
+  # Other compose files can loaded by setting an ENVS as follows:
+    # KEG_COMPOSE_REPO="/path/to/override.yml"
+    # KEG_COMPOSE_CORE_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  DOC_APP_PATH: "/keg/keg-core"
+  DOC_APP_PORT: 19006
+  DOC_CORE_PATH: "/keg/keg-core"
+  DOC_COMPONENTS_PATH: "/keg/keg-core/node_modules/@simpleviewinc/keg-components"
+  DOC_RETHEME_PATH: "/keg/keg-core/node_modules/@simpleviewinc/re-theme"
+  DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@simpleviewinc/tap-resolver"
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image Build information
+  IMAGE: "keg-core"
+  VERSION: "0.0.1"
+  CONTAINER_NAME: "keg-core"
+
+  # --- Override the default progress output for expo-webpack in keg-core --- #
+  KEG_CORE_PROGRESS: true

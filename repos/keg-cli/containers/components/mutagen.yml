@@ -1,0 +1,33 @@
+sync:
+  keg-components:
+    alpha: "/keg/keg-components"
+    beta: "docker://keg-components/keg/keg-components"
+    mode: "one-way-replica"
+    ignore:
+      vcs: true
+      paths:
+        - "node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"
+actions:
+  retheme:
+    install:
+      location: "/keg/keg-components/node_modules/@simpleviewinc/re-theme"
+      privileged: true
+      cmds:
+        - "yarn install"
+    start:
+      location: "/keg/keg-components/node_modules/@simpleviewinc/re-theme"
+      privileged: true
+      detach: true
+      cmds:
+        - "yarn dev"

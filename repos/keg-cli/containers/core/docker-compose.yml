@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  keg-core:
+    image: ${IMAGE}
+    tty: true
+    stdin_open: true
+    privileged: true
+    build:
+      context: ${KEG_CONTEXT_PATH}
+      dockerfile: ${KEG_DOCKER_FILE}
+      args:
+        - DOC_APP_PATH
+        - DOC_CLI_PATH
+        - DOC_CORE_PATH
+        - DOC_COMPONENTS_PATH
+        - DOC_RESOLVER_PATH
+        - DOC_RETHEME_PATH
+        - GIT_CLI_URL
+        - GIT_CORE_URL
+        - GIT_COMPONENTS_URL
+        - GIT_KEY
+        - GIT_RETHEME_URL
+        - GIT_RESOLVER_URL
+        - GIT_APP_URL
+        - KEG_IMAGE_FROM
+        - KEG_EXEC_CMD
+        - KEG_NM_INSTALL
+        - NODE_ENV
+    container_name: ${CONTAINER_NAME}
+    environment:
+      - DOC_APP_PATH
+      - DOC_CLI_PATH
+      - DOC_CORE_PATH
+      - DOC_COMPONENTS_PATH
+      - DOC_RESOLVER_PATH
+      - DOC_RETHEME_PATH
+      - GIT_CLI_URL
+      - GIT_CORE_URL
+      - GIT_COMPONENTS_URL
+      - GIT_RETHEME_URL
+      - GIT_RESOLVER_URL
+      - GIT_APP_URL
+      - KEG_IMAGE_FROM
+      - KEG_EXEC_CMD
+      - KEG_CORE_PROGRESS
+      - KEG_NM_INSTALL
+      - NODE_ENV
+    ports:
+      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
+      - 80:${DOC_APP_PORT}

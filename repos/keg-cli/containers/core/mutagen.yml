@@ -1,0 +1,26 @@
+sync:
+  keg-core:
+    alpha: "/keg/keg-core"
+    beta: "docker://keg-core/keg/keg-core"
+    mode: "one-way-replica"
+    ignore:
+      vcs: true
+      paths:
+        - "node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"
+actions:
+  core:
+    install: 
+      location: /keg/tap/node_modules/keg-core
+      cmds:
+        - yarn install

@@ -1,0 +1,19 @@
+sync:
+  app:
+    alpha: {{ KEG_CONTEXT_PATH }}
+    beta: {{ DOC_APP_PATH }}
+    mode: 'one-way-safe'
+    ignore:
+      vcs: true
+      paths:
+        - "/node_modules"
+        - "/core/base/assets/*"
+        - "/.*"
+        - "!/.storybook"
+        - "*.lock"
+        - "*.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"

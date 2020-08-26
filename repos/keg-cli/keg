@@ -1,0 +1,238 @@
+#!/bin/bash 
+
+# Check if the keg root dir has been set. If not, then set it
+if [[ -z "$KEG_ROOT_DIR" ]]; then
+  export KEG_ROOT_DIR=$HOME/keg
+fi
+
+# Set the KEG-CLI path based on the keg root directory
+export KEG_CLI_PATH=$KEG_ROOT_DIR/keg-cli
+
+# Prints message to stderr so we can do returns with echo to stdout
+keg_message(){
+  echo "[ KEG CLI ] $@" >&2
+  return
+}
+
+# Checks if VBoxManage cli exists, and it so loads docker-machine
+# Otherwise shows warning that virtual-box is not installed
+keg_cli_init_docker_machine(){
+
+  local KEG_USE_MACH="$(keg_use_docker_machine)"
+  
+  if [[ "$KEG_USE_MACH" == "false" ]]; then
+    keg_message "Docker-machine is not supported on windows machines. Please use the docker for windows app"
+    return
+  fi
+
+  # Docker-machine vagrant-drive hangs after the computer goes to sleep
+  # Only way to fix is to restart. Need to come up with a better solution
+  # The issue is with VirtualBox, not docker-machine
+  # Running any docker-machine cmd will make the terminal hang
+  # Potential Fix
+  # sudo route -d add -net 192.168.99.1/24 -interface vboxnet0
+  #   - Find the interface by running command " VBoxManage list hostonlyifs "
+  #   - Find the interface with the IPAddress of 192.168.99.1
+  #   - The first "Name" Above the IPAddress should be the interface name
+  #   - Example name would be "vboxnet0"
+  local KEG_STATUS="$(timeout 5s docker-machine status $KEG_DOCKER_NAME)"
+
+  if [[ -z "$KEG_STATUS" ]]; then
+
+    keg_message "Docker-machine is not responding!"
+    keg_message "Would you like to restart docker-machine?"
+    keg_message "[ WARNING ] This will kill all running virtual-box processes!"
+
+    read -p "" INPUT;
+    local ANSWER="${INPUT:0:1}"
+
+    if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
+      keg_message "Killing virtual-box and docker-machine processes!"
+      kill $(ps -e | grep VBox | awk '{ print $1 }')
+    else
+      keg_message "Could not init docker-machine. Please ensure it is running properly!"
+      exit 1
+    fi
+  fi
+
+  # Ensure docker-machine is running
+  if [[ "$KEG_STATUS" != "Running" ]]; then
+    keg_message "Docker-machine status is $KEG_STATUS"
+    keg_message "Starting docker-machine $KEG_DOCKER_NAME"
+    docker-machine start $KEG_DOCKER_NAME
+  fi
+
+  # Load the docker machine env, pipe to dev/null so we don't see the output
+  eval "$(docker-machine env $KEG_DOCKER_NAME)" >/dev/null 2>&1
+
+}
+
+# Exports the stored GIT_KEY from the globalConfig
+# First calls the getGitKey method then sets as an ENV with export
+keg_export_git_key(){
+  local CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getGitKey.js)"
+  if [[ "$CMD_OUTPUT" ]]; then
+    if [[ -z "$1" ]]; then
+      keg_message "Setting GIT_KEY env!"
+    fi
+    export GIT_KEY=$CMD_OUTPUT
+  else
+    if [[ -z "$1" ]]; then
+      keg_message "Could not add GIT_KEY to the current environment!"
+    fi
+  fi
+}
+
+# Navigates to a directory based on the passed in params
+keg_cli_move_directory(){
+
+  local CMD_OUTPUT
+
+  # If no arguments, then $KEG_DOCKER_NAME to keg path
+  if [[ "$#" == "0" ]]; then
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getConfigPath.js keg)"
+  else
+    CMD_OUTPUT="$(node $KEG_CLI_PATH/scripts/cli/getConfigPath.js $@)"
+  fi
+
+  # Convert the ouput to an array
+  IFS=$'\n'
+  local OUTPUT_ARR=($CMD_OUTPUT)
+  unset IFS
+
+  # Get the second line containing the path to move to
+  local MOVE_TO_PATH="${OUTPUT_ARR[1]}"
+
+  if [[ "$MOVE_TO_PATH" ]]; then
+    echo "${OUTPUT_ARR[0]}"
+    cd $MOVE_TO_PATH
+    echo ""
+    return 0
+  fi
+
+  return 1
+}
+
+# Auto loads the GIT_KEY and docker-machine envs
+keg_auto_load_envs(){
+
+  # Check if GIT_KEY is already loaded
+  if [[ -z "$GIT_KEY" ]]; then
+    # Auto set the GIT_KEY
+    keg_export_git_key "NO-MESSAGE"
+  fi
+
+  # Check if $KEG_DOCKER_NAME is already loaded
+  if [[ -z "$KEG_DOCKER_NAME" ]]; then
+
+    # Build the path to the docker-machine envs
+    local KEG_DM_ENVS=$KEG_CLI_PATH/scripts/setup/docker-machine.env
+
+    # Ensure the file exists
+    if [[ -f "$KEG_DM_ENVS" ]]; then
+      # Load the docker-machine ENVs, but route the output to dev/null
+      # This way nothing is printed to the terminal
+      set -o allexport
+      source $KEG_DM_ENVS >/dev/null 2>&1
+      set +o allexport
+    fi
+
+  fi
+
+  local KEG_USE_MACH="$(keg_use_docker_machine)"
+
+  if [[ "$KEG_USE_MACH" == "false" ]]; then
+    export KEG_ENV_LOADED="loaded"
+    return
+  fi
+
+  # Ensure Virtual Box is installed before setting the docker-machine env
+  if [[ -x "$(command -v VBoxManage)" ]]; then
+    keg_cli_init_docker_machine
+  else
+    keg_message "Error loading 'docker-machine'; virtual-box is not installed!"
+    return
+  fi
+
+  # Set the keg auto loaded to true, so we don't call the auto load again
+  # for any future keg-cli commands
+  export KEG_ENV_LOADED="loaded"
+
+  return
+
+}
+
+# Check if we are running in the wsl environment for windows
+keg_use_docker_machine(){
+  if [[ -z "$WSL_DISTRO_NAME" ]] && [[ -z "$KEG_NO_MACHINE" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
+
+# Opening to the keg cli
+# For navigation commands, calls keg_cli_move_directory
+# All other commands call keg-cli node script
+keg(){
+
+  # Check if reloading the bash portion of the keg cli
+  if [[ "$1" == "reload" || "$1" == "rl" || "$1" == "src" ]] && [[ -z "$2" ]]; then
+
+    # Reload this bash script
+    keg_message "Reloading Keg CLI..."
+    source $KEG_CLI_PATH/keg
+    return
+
+  # Run the keg-cli bash script
+  elif [[ "$1" == "init" ]]; then
+    keg_message "Running init scrpt"
+    /bin/bash $KEG_CLI_PATH/scripts/setup/mac-init.sh "${@:2}"
+    return
+
+  # export the git key for the current terminal session
+  elif [[ "$1" == "key" && "$2" == "export" ]] && [[ -z "$3" ]]; then
+    keg_export_git_key
+    return
+
+  # export the git key for the current terminal session
+  elif [[ "$1" == "home" || "$1" == "hm" ]] && [[ -z "$2" ]]; then
+    cd ~/
+    return
+
+  # Ensure docker machine is loaded
+  elif [[ "$1" == "docker_machine" || "$1" == "docm" || "$1" == "dcm" ]] && [[ -z "$2" ]]; then
+    keg_auto_load_envs
+    keg_cli_init_docker_machine
+    return
+
+  # Check if this is a move directory command
+  elif [[ "$#" == "0" || "$#" == "1" ]]; then
+
+    # # Check if this is a change dir command
+    keg_cli_move_directory $@
+    # Get the return code from the move dir command
+    local KEG_MOVE_DIR=$?
+
+    # If 0 is returned, then we changed dirs, so check and exit
+    if [[ "$KEG_MOVE_DIR" == 0 ]]; then
+      return 0
+    fi
+  fi
+
+  if [[ -z "$KEG_ENV_LOADED" ]]; then
+    # Auto load the envs before running the keg-cli cmd
+    keg_auto_load_envs
+  fi
+
+  # All other commands get passed on to the node keg-cli script
+  node $KEG_CLI_PATH/keg-cli $@
+
+}
+
+# Checks if we should print the Keg-CLI loaded message
+# KEG_CLI_AUTO_LOAD should only be set on servers that are ssh'ed into
+# If it's a local machine, then print the loaded message to we know the keg-cli was loaded
+if [[ -z "$KEG_CLI_AUTO_LOAD" ]]; then
+  keg_message "Loaded!"
+fi

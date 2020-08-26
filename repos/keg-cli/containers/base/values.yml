@@ -1,0 +1,25 @@
+
+env:
+  # --- BASE ENV CONTEXT --- #
+
+  KEG_CONTEXT_PATH: "{{ cli.paths.cli }}"
+  KEG_DOCKER_FILE: "{{ cli.paths.containers }}/base/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.paths.containers }}/base/values.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/base/docker-compose.yml"
+
+  # Can also define other an override compose files
+  # Other compose files can loaded by setting an ENVS as follows:
+    # KEG_COMPOSE_REPO="/path/to/override.yml"
+    # KEG_COMPOSE_BASE_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  DOC_APP_PATH: /keg/keg-cli
+
+  # Image ENVs
+  IMAGE: keg-base
+  VERSION: "0.0.1"
+
+  # Container ENVs
+  CONTAINER_NAME: keg-base
