@@ -64,22 +64,29 @@ const getPackageJson = (repoPath, repo) => {
  *
  * @returns {*} - Formatted repo information
  */
-const buildRepo = (repo, hubReposPath, { format }) => {
+const buildRepo = (repo, hubReposPath, args) => {
+  const { format, callback } = args
 
   const repoPath =  path.join(hubReposPath, repo)
   const package = getPackageJson(repoPath, repo)
 
-  return !package
-    ? false
-    : convertFormat({
+  return isFunc(callback)
+    ? callback(
         repo,
-        location: repoPath,
-        ...pickKeys(package, [
-          'name',
-          'version',
-          'description'
-        ])
-      }, package, format)
+        package,
+        { ...args, location: repoPath, reposPath: hubReposPath }
+      )
+    : !package
+      ? false
+      : convertFormat({
+          repo,
+          location: repoPath,
+          ...pickKeys(package, [
+            'name',
+            'version',
+            'description'
+          ])
+        }, package, format)
 }
 
 /**
@@ -93,11 +100,10 @@ const buildRepo = (repo, hubReposPath, { format }) => {
  * @returns {Array} - Group of promises resolving to formatted repo information
  */
 const getHubRepos = async (args={}) => {
-  const { callback, context:filter } = args
+  const { context:filter } = args
 
   const hubReposPath = path.join(getRepoPath('hub'), 'repos')
   const { data, error } = await executeCmd(findSubNodeModules, { cwd: hubReposPath })
-  cb = isFunc(callback) ? callback : buildRepo
 
   return error
     ? generalError(error.stack)
@@ -108,7 +114,7 @@ const getHubRepos = async (args={}) => {
 
             const repoData = filter !== 'all' && !repo.includes(filter)
               ? false
-              : cb(repo, hubReposPath, args)
+              : buildRepo(repo, hubReposPath, args)
 
             return repoData
               ? repos.concat([ repoData ])
