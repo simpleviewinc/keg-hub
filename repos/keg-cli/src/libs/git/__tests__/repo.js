@@ -21,7 +21,7 @@ describe('repo', () => {
 
 
     it('should return false if the location is not a git repo', async done => {
-      const res = await repo.exists(kegRoot)
+      const res = await repo.exists(path.join(kegRoot, '../../'))
 
       expect(res).toBe(false)
       done()
