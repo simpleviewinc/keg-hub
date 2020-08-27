@@ -1,27 +1,4 @@
-actions:
-  retheme:
-    install:
-      location: /keg/keg-components/node_modules/@svkeg/re-theme
-      privileged: true
-      cmds:
-        - yarn install
-    start:
-      location: /keg/keg-components/node_modules/@svkeg/re-theme
-      privileged: true
-      detach: true
-      cmds:
-        - yarn dev
-  components:
-    run:
-      location: /keg/keg-cli/containers/tap
-      privileged: true
-      cmds:
-        - /bin/bash run.sh
-    start:
-      location: /keg/keg-components
-      privileged: true
-      cmds:
-        - yarn web
+
 env:
   # --- LOCAL ENV CONTEXT --- #
 

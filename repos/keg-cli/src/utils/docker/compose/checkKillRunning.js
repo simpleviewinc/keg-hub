@@ -23,7 +23,7 @@ const checkKillRunning = async (args, filter) => {
         const shouldKill = await ask.confirm(`Would you like to kill them first?`)
 
         return !shouldKill
-          ? Logger.error('Canceling task, User said NOT to kill current services!') && true
+          ? (Logger.error('Canceling task, User said NOT to kill current services!') && true) || true
           : checkCall(async () => {
               await Promise.all(
                 alreadyRunning.map(container => {

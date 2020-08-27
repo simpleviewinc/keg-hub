@@ -81,8 +81,8 @@ const dockerOutput = {
   image: {
     list: `{"Containers":"N/A","CreatedAt":"2020-06-25 16:25:31 -0700 MST","CreatedSince":"2 hours ago","Digest":"\u003cnone\u003e","ID":"054ad4eab1a5","Repository":"keg-core","SharedSize":"N/A","Size":"833MB","Tag":"0.0.1","UniqueSize":"N/A","VirtualSize":"832.9MB"}\n{"Containers":"N/A","CreatedAt":"2020-06-25 16:25:31 -0700 MST","CreatedSince":"2 hours ago","Digest":"\u003cnone\u003e","ID":"054ad4eab1a5","Repository":"keg-core","SharedSize":"N/A","Size":"833MB","Tag":"latest","UniqueSize":"N/A","VirtualSize":"832.9MB"}\n{"Containers":"N/A","CreatedAt":"2020-06-25 16:21:57 -0700 MST","CreatedSince":"2 hours ago","Digest":"\u003cnone\u003e","ID":"67957d546e40","Repository":"keg-base","SharedSize":"N/A","Size":"408MB","Tag":"0.0.1","UniqueSize":"N/A","VirtualSize":"407.9MB"}\n{"Containers":"N/A","CreatedAt":"2020-06-25 16:21:57 -0700 MST","CreatedSince":"2 hours ago","Digest":"\u003cnone\u003e","ID":"67957d546e40","Repository":"keg-base","SharedSize":"N/A","Size":"408MB","Tag":"latest","UniqueSize":"N/A","VirtualSize":"407.9MB"}\n{"Containers":"N/A","CreatedAt":"2020-06-24 18:34:06 -0700 MST","CreatedSince":"24 hours ago","Digest":"\u003cnone\u003e","ID":"2e038b36c4b0","Repository":"keg-core","SharedSize":"N/A","Size":"841MB","Tag":"zen-301-fix-multiple-assets-error","UniqueSize":"N/A","VirtualSize":"841.3MB"}\n{"Containers":"N/A","CreatedAt":"2020-06-24 18:34:06 -0700 MST","CreatedSince":"24 hours ago","Digest":"\u003cnone\u003e","ID":"2e038b36c4b0","Repository":"docker.pkg.github.com/simpleviewinc/keg-packages/keg-core","SharedSize":"N/A","Size":"841MB","Tag":"zen-301-fix-multiple-assets-error","UniqueSize":"N/A","VirtualSize":"841.3MB"}`,
     getCmd: {
-      'keg-base': '[node]',
-      tap: '[/bin/sh -c /bin/bash $DOC_CLI_PATH/containers/tap/run.sh "sleep"]'
+      'keg-base': 'node',
+      tap: '/bin/sh -c /bin/bash $DOC_CLI_PATH/containers/tap/run.sh "sleep"'
     },
   }
 }
