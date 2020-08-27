@@ -1,4 +1,3 @@
-export * from './appHeader'
 export * from './box'
 export * from './button'
 export * from './card'

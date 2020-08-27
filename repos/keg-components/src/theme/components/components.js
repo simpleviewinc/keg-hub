@@ -1,4 +1,3 @@
-import { appHeader } from './appHeader'
 import { button } from './button'
 import { card } from './card'
 import { divider } from './divider'
@@ -15,7 +14,6 @@ import { modal } from './modal'
 import { header } from './header'
 
 export const components = {
-  appHeader,
   button,
   card,
   divider,
