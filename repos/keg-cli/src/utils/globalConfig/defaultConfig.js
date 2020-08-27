@@ -23,6 +23,11 @@ const defPaths = {
   taps: kegTaps,
 }
 
+const defRepos = {
+  hub: 'keg-hub',
+  rc: 'tap-release-client',
+}
+
 /**
  * Builds the keg repo paths on the local machine
  * @param {Object} paths - Custom paths to keg repos
@@ -58,4 +63,5 @@ const defaultConfig = (args={}) => {
 module.exports = {
   defaultConfig,
   defPaths,
+  defRepos,
 }

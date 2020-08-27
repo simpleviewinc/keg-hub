@@ -8,10 +8,9 @@ const { encrypt } = require('KegCrypto')
 const packageJson = require('KegRoot/package.json')
 const { getGitUrl } = require('KegUtils/git/getGitUrl')
 const { requireFile } = require('KegFileSys/fileSys')
-const { throwNoTask } = require('KegUtils/error/throwNoTask')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 const { throwExitError } = require('KegUtils/error/throwExitError')
-const { defPaths } = require('KegUtils/globalConfig/defaultConfig')
+const { defPaths, defRepos } = require('KegUtils/globalConfig/defaultConfig')
 const { deepMerge, mapObj, reduceObj, get, set } = require('@svkeg/jsutils')
 const { saveGlobalConfig } = require('KegUtils/globalConfig/saveGlobalConfig')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
@@ -72,7 +71,7 @@ const getRepoName = repo => {
  * Mapping of repos to paths and names
  * @object
  */
-const defRepos = reduceObj(defPaths, (key, defPath, defRepoInfo) => {
+const defLocalRepos = reduceObj(defPaths, (key, defPath, defRepoInfo) => {
   // Create a repo map for git
   gitRepoMap[key] = getRepoName(defPath) 
   // Return the mapped repo object
@@ -120,7 +119,7 @@ const setupGit = async (globalConf) => {
   })
 
   // Add the repo map of local names to git repo names
-  set(gitObj, 'repos', gitRepoMap)
+  set(gitObj, 'repos', defRepos)
 
   // Add the git object to the globalConfig
   set(globalConf, `cli.git`, gitObj)
@@ -146,7 +145,7 @@ const setupRepos = async (globalConf) => {
       return usePaths
     }
 
-    const { name, location } = defRepos[key]
+    const { name, location } = defLocalRepos[key]
 
     // Ask the user where they want it installed
     usePaths[key] = await ask.input({
@@ -299,6 +298,17 @@ const setupSettings = async (globalConf) => {
 }
 
 /**
+ * Sets up default taps and links them
+ * @param {Object} globalConf - CLI config object being built
+ *
+ */
+const setupTaps = async (globalConf) => {
+  set(globalConf, 'cli.taps.links.retheme', `${defPaths.repos}/re-theme`)
+  set(globalConf, 'cli.taps.links.rc', `${defPaths.taps}/tap-release-client`)
+  set(globalConf, 'cli.taps.links.evf', `${defPaths.taps}/tap-events-force`)
+}
+
+/**
  * Saves the global config to the local machine
  * @param {Object} globalConf - CLI config object being built
  *
@@ -339,6 +349,9 @@ const configSetup = async () => {
 
     // Setup the KEG-CLI settings
     await setupSettings(globalConf)
+
+    // Setup the default Taps
+    await setupTaps(globalConf)
 
     // Install the keg git repos from github
     // await installRepos(globalConf)
