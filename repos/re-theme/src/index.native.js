@@ -9,6 +9,7 @@ import {
 } from './dimensions'
 import { setRNDimensions } from './dimensions/dimensions'
 import { helpers } from './helpers'
+import { styleSheetParser } from './styleParser'
 
 import {
   addThemeEvent,
@@ -54,4 +55,5 @@ export {
   ReThemeProvider,
   // Style Helpers
   helpers,
+  styleSheetParser,
 }
