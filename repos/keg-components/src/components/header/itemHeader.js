@@ -36,9 +36,15 @@ export const ItemHeader = props => {
 ItemHeader.dataSet = {
   main: { class: 'item-header-main' },
   content: {
-    left: { class: 'item-header-content-left' },
-    right: { class: 'item-header-content-right' },
-    center: { class: 'item-header-content-center' },
+    left: {
+      main: { class: 'item-header-content-left-main' },
+    },
+    right: {
+      main: { class: 'item-header-content-right-main' },
+    },
+    center: {
+      main: { class: 'item-header-content-center-main' },
+    },
   },
 }
 

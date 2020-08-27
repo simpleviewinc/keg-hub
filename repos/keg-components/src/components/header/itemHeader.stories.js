@@ -87,8 +87,12 @@ const headerStyles2 = {
 const customDataSet = {
   main: { class: 'custom-header-main' },
   content: {
-    left: { class: 'custom-data-set-left' },
-    center: { class: 'custom-data-set-center' },
+    left: {
+      main: { class: 'custom-data-set-left' },
+    },
+    center: {
+      main: { class: 'custom-data-set-center' },
+    },
   },
 }
 storiesOf('Header | ItemHeader', module)

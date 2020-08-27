@@ -97,9 +97,15 @@ export const BaseHeader = props => {
 BaseHeader.dataSet = {
   main: { class: 'base-header-main' },
   content: {
-    left: { class: 'base-header-content-left' },
-    right: { class: 'base-header-content-right' },
-    center: { class: 'base-header-content-center' },
+    left: {
+      main: { class: 'base-header-content-left-main' },
+    },
+    right: {
+      main: { class: 'base-header-content-right-main' },
+    },
+    center: {
+      main: { class: 'base-header-content-center-main' },
+    },
   },
 }
 
@@ -152,11 +158,12 @@ const Center = props => {
 
   return (
     <View
-      dataSet={dataSet}
+      dataSet={dataSet?.main}
       style={styles.main}
     >
       { (children && renderFromType(children, {}, null)) || (
         <H6
+          dataSet={dataSet?.content}
           ellipsis={ellipsis}
           style={styles.content.title}
         >
@@ -206,13 +213,14 @@ const Side = props => {
 
   return (
     <View
-      dataSet={dataSet}
+      dataSet={dataSet?.main}
       style={get(styles, [ position, 'main' ])}
     >
       { /* if 'action' is passed in, use a button to wrap the icon */ }
       { (children && renderFromType(children, {}, null)) ||
         (action ? (
           <Button
+            dataSet={dataSet?.content}
             styles={contentStyles.button}
             onClick={action}
           >
@@ -220,7 +228,10 @@ const Side = props => {
           </Button>
         ) : (
           showIcon && (
-            <View style={contentStyles.main}>
+            <View
+              dataSet={dataSet?.content}
+              style={contentStyles.main}
+            >
               <CustomIcon {...iconProps} />
             </View>
           )
