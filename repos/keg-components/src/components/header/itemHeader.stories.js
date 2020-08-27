@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { AppHeader, Button, View, Image } from '../..'
+import { ItemHeader, Button, View, Image } from '../..'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
 import { TouchableOpacity } from 'react-native'
@@ -83,10 +83,18 @@ const headerStyles2 = {
     },
   },
 }
-storiesOf('Display | AppHeader', module)
+
+const customDataSet = {
+  main: { class: 'custom-header-main' },
+  content: {
+    left: { class: 'custom-data-set-left' },
+    center: { class: 'custom-data-set-center' },
+  },
+}
+storiesOf('Header | ItemHeader', module)
   .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
-      <AppHeader
+      <ItemHeader
         data-class='overwrite-data-class-name'
         styles={headerStyles}
         shadow
@@ -96,7 +104,7 @@ storiesOf('Display | AppHeader', module)
 
       <p />
 
-      <AppHeader
+      <ItemHeader
         shadow
         title={'Custom Icons, no left action'}
         styles={headerStyles2}
@@ -109,13 +117,14 @@ storiesOf('Display | AppHeader', module)
   ))
   .add('Plain', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
-      <AppHeader
+      <ItemHeader
+        dataSet={customDataSet}
         shadow
         title={'Keg Components'}
       />
       <p />
 
-      <AppHeader
+      <ItemHeader
         shadow
         title={
           "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
@@ -123,7 +132,7 @@ storiesOf('Display | AppHeader', module)
       />
 
       <p />
-      <AppHeader
+      <ItemHeader
         title={'Clickable left icon'}
         IconComponent={FontAwesome}
         leftIcon={'arrow-left'}

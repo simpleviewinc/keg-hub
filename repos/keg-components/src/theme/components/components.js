@@ -12,6 +12,7 @@ import { loading } from './loading'
 import { section } from './section'
 import { textBox } from './textBox'
 import { modal } from './modal'
+import { header } from './header'
 
 export const components = {
   appHeader,
@@ -28,4 +29,5 @@ export const components = {
   section,
   textBox,
   modal,
+  header,
 }

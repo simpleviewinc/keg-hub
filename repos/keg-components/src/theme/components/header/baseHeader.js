@@ -1,5 +1,5 @@
-import { flex } from '../flex'
-import { colors } from '../colors'
+import { flex } from '../../flex'
+import { colors } from '../../colors'
 import { get } from '@svkeg/jsutils'
 
 const defaultSectionStyle = {
@@ -37,7 +37,7 @@ const defaultSideSectionStyle = {
   },
 }
 
-export const appHeader = {
+export const baseHeader = {
   main: {
     $all: {
       shadow: {
