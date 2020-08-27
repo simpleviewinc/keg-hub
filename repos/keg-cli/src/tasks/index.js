@@ -34,6 +34,7 @@ module.exports = globalConfig => {
     ...initialize('git', globalConfig),
     ...initialize('global', globalConfig),
     ...initialize('generate', globalConfig),
+    ...initialize('hub', globalConfig),
     ...initialize('mutagen', globalConfig),
     ...initialize('network', globalConfig),
     ...initialize('tap', globalConfig),

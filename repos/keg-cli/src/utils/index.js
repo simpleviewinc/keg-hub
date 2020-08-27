@@ -6,6 +6,7 @@ module.exports = {
   ...require('./globalConfig'),
   ...require('./getters'),
   ...require('./helpers'),
+  ...require('./hub'),
   ...require('./process'),
   ...require('./log'),
   ...require('./network'),

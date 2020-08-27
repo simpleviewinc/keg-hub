@@ -2,11 +2,11 @@
 
 # Check if the keg root dir has been set. If not, then set it
 if [[ -z "$KEG_ROOT_DIR" ]]; then
-  export KEG_ROOT_DIR=$HOME/keg
+  export KEG_ROOT_DIR=$HOME/keg-hub
 fi
 
 # Set the KEG-CLI path based on the keg root directory
-export KEG_CLI_PATH=$KEG_ROOT_DIR/keg-cli
+export KEG_CLI_PATH=$KEG_ROOT_DIR/repos/keg-cli
 
 # Prints message to stderr so we can do returns with echo to stdout
 keg_message(){

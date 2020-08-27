@@ -29,14 +29,14 @@ module.exports = {
       key: '123456789'
     },
     paths: {
-      cli: path.join(homeDir, '/keg/keg-cli'),
-      components: path.join(homeDir, '/keg/keg-components'),
-      containers: path.join(homeDir, '/keg/keg-cli/containers'),
-      core: path.join(homeDir, '/keg/keg-core'),
+      cli: path.join(homeDir, '/keg-hub/repos/keg-cli'),
+      components: path.join(homeDir, '/keg-hub/repos/keg-components'),
+      containers: path.join(homeDir, '/keg-hub/repos/keg-cli/containers'),
+      core: path.join(homeDir, '/keg-hub/repos/keg-core'),
       keg: path.join(homeDir, '/keg'),
-      proxy: path.join(homeDir, '/keg/keg-proxy'),
-      resolver: path.join(homeDir, '/keg/tap-resolver'),
-      retheme: path.join(homeDir, '/keg/re-theme'),
+      proxy: path.join(homeDir, '/keg-hub/repos/keg-proxy'),
+      resolver: path.join(homeDir, '/keg-hub/repos/tap-resolver'),
+      retheme: path.join(homeDir, '/keg-hub/repos/re-theme'),
       customTasks: ''
     },
     settings: {
