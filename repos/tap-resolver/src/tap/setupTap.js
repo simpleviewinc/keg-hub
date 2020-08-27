@@ -123,11 +123,12 @@ const buildJoinedConfigs = (config, TAP_PATH, TEMP_FOLDER_PATH) => {
   // Rebuild the temp folder path
   fs.mkdirSync(TEMP_FOLDER_PATH)
 
+  // make temp file name, ensuring it has the same name as the source but with .json extension
+  const srcConfigName = config[configKeys.TAP_RESOLVER_FILE]
+  const tempConfigName = `${path.parse(srcConfigName).name}.json`
+
   // Build the temp config path with the temp folder path and the name of the config file
-  const TEMP_CONFIG_PATH = path.join(
-    TEMP_FOLDER_PATH,
-    config[configKeys.TAP_RESOLVER_FILE]
-  )
+  const TEMP_CONFIG_PATH = path.join(TEMP_FOLDER_PATH, tempConfigName)
 
   // Write the temp config file
   fs.writeFileSync(TEMP_CONFIG_PATH, JSON.stringify(config, null, 2), 'utf8')
