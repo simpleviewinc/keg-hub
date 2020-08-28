@@ -7,8 +7,9 @@ import { jsToCss } from '../styleParser/jsToCss'
 
 const helmetKey = uuid()
 
+
 // TODO: need to handle sub style classes
-/*
+/* 
 styles = {
   main: {
     ...style rules

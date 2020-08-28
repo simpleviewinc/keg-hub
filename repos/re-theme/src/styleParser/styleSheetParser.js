@@ -19,8 +19,8 @@ const convertToDataClass = (cssRule, rootSelector, formatted) => {
   const dataClass = `[data-class~="${selectorRef}"]`
   const dataRule = cssRule.cssText.replace(rootSelector, dataClass)
 
-  formatted.objRef[selectorRef] = dataClass
   formatted.asObj[dataClass] = cssToJs(dataRule, formatted.asObj[dataClass])
+  formatted.dataClass[selectorRef] = formatted.asObj[dataClass]
   formatted.asStr += `${dataRule}\n`
 
   return formatted
@@ -75,7 +75,7 @@ export const styleSheetParser = (args) => {
     // Have to convert all styleSheets form the DOM into an array to loop over them
     Array.from(document.styleSheets).reduce(
       (formatted, sheet) => loopSheetCssRules(formatted, sheet, classNames, callback),
-      { asStr: '', asObj: {}, objRef: {} }
+      { asStr: '', asObj: {}, dataClass: {} }
     )
 
   toDom && stylesText && addToDom(parsedStyles.asStr)
