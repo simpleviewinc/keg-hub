@@ -15,9 +15,11 @@ import { cssToJs } from './cssToJs'
  */
 const convertToDataClass = (cssRule, rootSelector, formatted) => {
 
-  const dataClass = `[data-class~="${rootSelector.substring(1)}"]`
+  const selectorRef = rootSelector.substring(1)
+  const dataClass = `[data-class~="${selectorRef}"]`
   const dataRule = cssRule.cssText.replace(rootSelector, dataClass)
 
+  formatted.objRef[selectorRef] = dataClass
   formatted.asObj[dataClass] = cssToJs(dataRule, formatted.asObj[dataClass])
   formatted.asStr += `${dataRule}\n`
 
@@ -73,7 +75,7 @@ export const styleSheetParser = (args) => {
     // Have to convert all styleSheets form the DOM into an array to loop over them
     Array.from(document.styleSheets).reduce(
       (formatted, sheet) => loopSheetCssRules(formatted, sheet, classNames, callback),
-      { asStr: '', asObj: {} }
+      { asStr: '', asObj: {}, objRef: {} }
     )
 
   toDom && stylesText && addToDom(parsedStyles.asStr)
@@ -82,4 +84,8 @@ export const styleSheetParser = (args) => {
 
 }
 
+// TODO: These the data class data should be stored in a look up
+// Then in the useCss hook, it uses that look up to find the styles
+// That way the styles do not need to be passed around to components
+// Instead a components can just pass in the dataClass Id, and get back the styles
 

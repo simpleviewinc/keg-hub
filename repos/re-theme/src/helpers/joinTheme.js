@@ -21,12 +21,12 @@ const hasManyFromTheme = (arg1, arg2) => isObj(arg1) && isObj(arg1.RTMeta)
  * @returns {Object} - Joined theme rules
  */
 export const joinTheme = (arg1, arg2, ...sources) => {
+
+  sources = !isArr(arg2)
+    ? [arg2].concat(sources)
+    : [ ...(arg2.map(arg => (isObj(arg) && arg) || (arg && get(arg1, arg)))), ...sources ]
+
   return hasManyFromTheme(arg1, arg2)
-    ? getTheme(
-        ...(!isArr(arg2)
-          ? arg2
-          : arg2.map(arg => (isObj(arg) && arg) || (arg && get(arg1, arg)))),
-        ...sources
-      )
-    : getTheme(arg1, arg2, ...sources)
+    ? getTheme(...sources)
+    : getTheme(arg1, ...sources)
 }
