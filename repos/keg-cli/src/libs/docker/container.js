@@ -1,4 +1,11 @@
-const { compareItems, noItemError, cmdSuccess, portAsJSON, getCmdParams } = require('./helpers')
+const {
+  compareItems,
+  noItemError,
+  cmdSuccess,
+  portAsJSON,
+  getCmdParams,
+  toContainerEnvs
+} = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { isArr, toStr, isStr, deepMerge, checkCall } = require('@svkeg/jsutils')
 
@@ -195,6 +202,9 @@ const exists = async (compare, doCompare) => {
 const exec = async (args, cmdOpts={}) => {
   const { cmd, container, detach, item, location, opts, workdir } = args
 
+  const { options:cmdOptions } = cmdOpts
+  const execEnvs = cmdOptions && cmdOptions.env && toContainerEnvs(cmdOptions.env) || ''
+
   // Ensure a container is passed
   const cont = container || item
   if(!cont) return noItemError('exec')
@@ -206,7 +216,8 @@ const exec = async (args, cmdOpts={}) => {
   detach && options.push(`--detach`)
   workdir && options.push(`--workdir ${ workdir }`)
 
-  const toRun = `exec ${ options.join(' ').trim() } ${ cont } ${ cmd }`.trim()
+  const execOpts = `${ execEnvs } ${ options.join(' ').trim() }`.trim()
+  const toRun = `exec ${ execOpts } ${ cont } ${ cmd }`.trim()
 
   return raw(toRun, cmdOpts, location)
 

@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { isArr, toStr, isStr } = require('@svkeg/jsutils')
+const { isArr, isStr, isObj } = require('@svkeg/jsutils')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { buildNames, compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 
@@ -256,6 +256,76 @@ const runImage = async (args) => {
 }
 
 /**
+ * Gets the last Cmd of a built docker image
+ * @function
+ * @param {Object} args - Arguments to pass to the docker image command
+ * @param {string} args.image - Reference to the docker image
+ * @param {string} args.envs - ENVs to pass to the child process
+ * @param {string} args.clean - Cleans the returned cmd string 
+ * 
+ * @param {string} args.location - Location where the docker command should be run
+ *
+ * @returns {string|Array} - Response from docker cli
+ */
+const getCmd = async ({ clean, ...args }) => {
+  const rawCmd = args.image
+    ? await inspect({ ...args, parse: false, filter: '-f {{.Config.Cmd}}' })
+    : Logger.error(`Docker image reference is required to run the image get command method!`) || ''
+
+  const cmd = rawCmd.replace('\n', '')
+  if(!clean) return cmd
+
+  const cleaned = cmd[0] === '[' ? cmd.substr(1) : cmd
+
+  // TODO: May need to add `.replace(',', '')` to cleaned.slice(0, -1)
+  // This is for cases where the CMD is an array. Need to investigate
+  return cleaned[ cleaned.length -1 ] === ']'
+    ? cleaned.slice(0, -1)
+    : cleaned
+
+}
+
+/**
+ * Runs docker image inspect for the passed in image
+ * @function
+ * @param {Object} args - Arguments to pass to the docker image command
+ * @param {string} args.image - Reference to the docker image
+ * @param {string} args.filter - Filter the returned results
+ * @param {string} [args.format=json] - Format the of the response
+ *
+ * @returns {string|Object} - Docker image information
+ */
+const inspect = async ({ envs, image, filter, format='json', location, parse=true }) => {
+  let cmdToRun = [ `docker image inspect` ]
+  filter && (cmdToRun.push(filter))
+  image && (cmdToRun.push(image))
+
+  const imgInfo = image && await dockerCli(
+    { opts: cmdToRun },
+    { options: { env: envs }, cwd: location },
+  )
+
+  // Check if we should auto parse the response, If not return response
+  if(!parse) return imgInfo
+
+  try {
+    const parsed = JSON.parse(imgInfo)
+    return isArr(parsed) ? parsed[0] : isObj(parsed) ? parsed : {}
+  }
+  catch(error){
+
+    Logger.error(error.stack)
+    Logger.empty()
+
+    Logger.info(`Docker Inspect Response:`)
+    Logger.data(imgInfo)
+
+    process.exit(1)
+  }
+
+}
+
+/**
  * Root docker image method to run docker image commands
  * @function
  * @param {string} args - Arguments to pass to the docker image command
@@ -270,6 +340,8 @@ Object.assign(image, {
   exists,
   get: getImage,
   getByTag,
+  getCmd,
+  inspect,
   list: listImages,
   run: runImage,
   remove: removeImage,

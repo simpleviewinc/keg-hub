@@ -13,11 +13,11 @@ const { getGitPath } = require('KegUtils/git/getGitPath')
  */
 const gitLog = async args => {
   const { command, options, params, tasks, globalConfig } = args
-  const { context, location, env, ...gitParams } = params
+  const { context, location, env, tap, ...gitParams } = params
 
   await git.repo.log({
     ...gitParams,
-    location: getGitPath(globalConfig, context) || location,
+    location: getGitPath(globalConfig, tap || context) || location,
   })
 
 }
@@ -40,6 +40,10 @@ module.exports = {
         description: `Location where the git log command will be run. Use when context option is "undefined"`,
         example: 'keg git log location=<path/to/git/repo>',
         default: process.cwd()
+      },
+      tap: {
+        description: 'Name of the tap to build a Docker image for',
+        example: 'keg git log --tap visitapps',
       },
       graph: {
         description: 'Log commit history as a graph',

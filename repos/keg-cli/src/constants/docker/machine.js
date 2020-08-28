@@ -4,7 +4,9 @@ const { cliRootDir } = require('./values')
 const { loadENV } = require('KegFileSys/env')
 
 // Load the docker-machine ENVs from same file as setup script
-const machineEnvs = loadENV(path.join(cliRootDir, 'scripts/setup/docker-machine.env'))
+const machineEnvs = loadENV({
+  envPath: path.join(cliRootDir, 'scripts/setup/docker-machine.env'),
+})
 
 /*
  * Builds the docker machine config

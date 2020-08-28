@@ -19,8 +19,43 @@ sync:
         - "/build"
         - "/docs"
 actions:
-  core:
-    install: 
-      location: /keg/tap/node_modules/keg-core
+  retheme:
+    install:
+      location: /keg/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
       cmds:
         - yarn install
+    build:
+      location: /keg/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+  components:
+    install: 
+      location: /keg/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+  core:
+    start:
+      location: /keg/keg-core
+      privileged: true
+      cmds:
+        - yarn web

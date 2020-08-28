@@ -10,7 +10,7 @@ const originalComponentsPath = orgGlobalConfig.cli.paths.components
 const testComponentsPath = 'test/components/path'
 globalConfig.cli.paths = {
   ...globalConfig.cli.paths,
-  components: 'test/components/path'
+  components: testComponentsPath
 }
 
 globalConfig.cli.taps.links = {
@@ -23,7 +23,7 @@ describe('getRepoPath', () => {
   afterAll(() => jest.resetAllMocks())
 
   it('should get the repo path from the repo when passed in', () => {
-    expect(getRepoPath('retheme')).toBe(globalConfig.cli.paths.retheme)
+    expect(getRepoPath('cli')).toBe(globalConfig.cli.paths.cli)
     expect(getRepoPath('core')).toBe(globalConfig.cli.paths.core)
   })
 

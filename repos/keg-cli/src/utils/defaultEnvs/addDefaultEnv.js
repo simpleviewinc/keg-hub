@@ -30,11 +30,10 @@ const addDefaultEnv = async (key, value, log) => {
   const [ err, globalEnvString ] = await readFile(globalEnvsPath)
 
   // Load the contents of the Global ENV file
-  const globalEnvs = await parseContent(
-    globalEnvsPath,
-    'utf8',
-    false
-  )
+  const globalEnvs = parseContent({
+    file: globalEnvsPath,
+    fill: false
+  })
 
   const doUpdate = globalEnvs[addKey]
     ? await ask.confirm(`The Key ${addKey} already exists with value ${ globalEnvs[addKey] }. Do you want to overwrite it?`)

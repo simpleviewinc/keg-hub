@@ -1,8 +1,9 @@
 
+start: /bin/bash /keg/keg-cli/containers/core/run.sh
 env:
   # --- LOCAL ENV CONTEXT --- #
   COMPONENTS_PATH: "{{ cli.paths.components }}"
-  RETHEME_PATH: "{{ cli.paths.retheme }}"
+  RETHEME_PATH: "{{ cli.taps.links.retheme }}"
   RESOLVER_PATH: "{{ cli.paths.resolver }}"
 
   # --- CORE ENV CONTEXT --- #
@@ -26,9 +27,20 @@ env:
   DOC_APP_PATH: "/keg/keg-core"
   DOC_APP_PORT: 19006
   DOC_CORE_PATH: "/keg/keg-core"
-  DOC_COMPONENTS_PATH: "/keg/keg-core/node_modules/@simpleviewinc/keg-components"
-  DOC_RETHEME_PATH: "/keg/keg-core/node_modules/@simpleviewinc/re-theme"
-  DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@simpleviewinc/tap-resolver"
+  DOC_COMPONENTS_PATH: "/keg/keg-core/node_modules/@svkeg/keg-components"
+  DOC_RETHEME_PATH: "/keg/keg-core/node_modules/@svkeg/re-theme"
+  DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@svkeg/tap-resolver"
+
+
+  # --- KEG-PROXY ENVs --- #
+  # See https://github.com/whitestrake/caddy-gen for more information
+  CADDY_HOST: core.kegdev.xyz
+  CADDY_PROXY_PARAMS: transparent,websocket
+
+  # Uncomment to lock down a folder path on the server
+  # Format [path]:[user]:[pass], where [path] is the directory to protect
+  # Declare multiple by separating them with commas.
+  # CADDY_BASIC_AUTH: /:foo:bar
 
   # --- GENERAL CONTEXT ENVs --- #
 
@@ -36,6 +48,7 @@ env:
   IMAGE: "keg-core"
   VERSION: "0.0.1"
   CONTAINER_NAME: "keg-core"
+  CHOKIDAR_USEPOLLING: 1
 
   # --- Override the default progress output for expo-webpack in keg-core --- #
   KEG_CORE_PROGRESS: true

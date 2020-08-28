@@ -24,7 +24,7 @@ const checkBuildImage = async (args, context, defImgName, tap) => {
   // Otherwise print message about the build, then do it
   exists
     ? Logger.info(`Force building image ${ imageName }...`)
-    : Logger.info(`Image ${ imageName } does not exist, building now...`)
+    : Logger.info(`Image ${ imageName } does not exist...`)
 
   Logger.empty()
 

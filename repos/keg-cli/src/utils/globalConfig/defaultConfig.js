@@ -1,21 +1,31 @@
 const path = require('path')
 const { deepMerge } = require('@svkeg/jsutils')
-const { CLI_ROOT, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
+const { GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
 const packageJson = require('KegRoot/package.json')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
+const homeDir = require('os').homedir()
 
-const cliParent = path.join(CLI_ROOT, '../')
+const kegHub = path.join(homeDir, '/keg-hub')
+const kegRepos = path.join(kegHub, 'repos')
+const kegTaps = path.join(kegHub, 'taps')
 
 const defPaths = {
-  keg: cliParent,
-  cli: CLI_ROOT,
-  kegConfig: GLOBAL_CONFIG_FOLDER,
-  containers: path.join(CLI_ROOT, 'containers'),
-  components: path.join(cliParent, 'keg-components'),
-  core: path.join(cliParent, 'keg-core'),
-  proxy: path.join(cliParent, 'keg-proxy'),
-  resolver: path.join(cliParent, 'tap-resolver'),
-  retheme: path.join(cliParent, 're-theme'),
+  cli: path.join(kegRepos, 'keg-cli'),
+  components: path.join(kegRepos, 'keg-components'),
+  containers: path.join(kegRepos, 'keg-cli/containers'),
+  core: path.join(kegRepos, 'keg-core'),
+  hub: kegHub,
+  keg: kegHub,
+  config: GLOBAL_CONFIG_FOLDER,
+  repos: kegRepos,
+  resolver: path.join(kegRepos, 'tap-resolver'),
+  proxy: path.join(kegRepos, 'keg-proxy'),
+  taps: kegTaps,
+}
+
+const defRepos = {
+  hub: 'keg-hub',
+  rc: 'tap-release-client',
 }
 
 /**
@@ -40,47 +50,18 @@ const buildInstallPaths = (paths={}) => {
  * @returns {Object} - Default global config
  */
 const defaultConfig = (args={}) => {
-  const { paths={} } = args
-
-  const usePaths = buildInstallPaths(paths)
-  
-  
-  const config = {
+  return deepMerge({
     version: packageJson.version,
     name: packageJson.name,
-    displayName: "Keg CLI",
-    docker: {
-      providerUrl: "docker.pkg.github.com",
-      user: "",
-      token: ""
-    },
     cli: {
-      git: {
-        orgName: 'simpleviewinc',
-        orgUrl: "https://github.com/simpleviewinc",
-        repos: {
-          cli: "keg-cli",
-          core: "keg-core",
-          components: "keg-components",
-          retheme: "re-theme",
-          resolver: "tap-resolver",
-        }
-      },
-      paths: usePaths,
-      settings: {
-        docker: { preConfirm: false },
-        git: { secure: false },
-        editorCmd: "code"
-      },
-      taps: { links: {} },
+      paths: buildInstallPaths(args.paths || {})
     }
-  }
-
-  return deepMerge(config, cliJson)
+  }, cliJson)
 }
 
 
 module.exports = {
   defaultConfig,
   defPaths,
+  defRepos,
 }

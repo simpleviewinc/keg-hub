@@ -8,6 +8,7 @@ module.exports = {
     example: 'keg global <command> <options>',
     tasks: {
       ...require('./open'),
+      ...require('./publish'),
       ...require('./setup'),
       ...require('./validate'),
     }

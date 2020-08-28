@@ -21,18 +21,6 @@ keg_set_container_paths(){
 
 }
 
-# Add .npmrc so node_modules installs does not fail
-keg_add_git_key(){
-  git config --global url.https://$GIT_KEY@github.com/.insteadOf https://github.com/
-  echo "@simpleviewinc:registry=https://npm.pkg.github.com/" > .npmrc
-  echo "//npm.pkg.github.com/:_authToken=${GIT_KEY}" >> .npmrc
-}
-
-# Remove .npmrc so git key is not saved
-keg_remove_git_key(){
-  git config --global url.https://github.com/.insteadOf url.https://$GIT_KEY@github.com/
-  rm -rf .npmrc
-}
 # Runs yarn install at run time
 # Use whnode_modules to keg-components
 keg_run_yarn_install(){
@@ -46,9 +34,7 @@ keg_run_yarn_install(){
   keg_message "Running yarn install for keg-components..."
   keg_message "Switching to keg-components directory..."
   cd $COMPONENTS_PATH
-  keg_add_git_key
   yarn install
-  keg_remove_git_key
 }
 
 # Runs a keg-components repo
@@ -67,17 +53,21 @@ keg_run_components(){
 
 }
 
-# Keeps the docker container running
-keg_sleep_keep_alive(){
+# If the no KEG_DOCKER_EXEC env is set, just sleep forever
+# This is to keep our container running forever
+if [[ -z "$KEG_DOCKER_EXEC" ]]; then
   tail -f /dev/null
   exit 0
-}
 
-# Checks for path overrides of the core, tap paths with passed in ENVs
-keg_set_container_paths
+else
 
-# Run yarn install for any extra node_modules from the mounted components package.json
-keg_run_yarn_install
+  # Checks for path overrides of the core, tap paths with passed in ENVs
+  keg_set_container_paths
 
-# Start the keg core instance
-keg_run_components
+  # Run yarn install for any extra node_modules from the mounted components package.json
+  keg_run_yarn_install
+
+  # Start the keg core instance
+  keg_run_components
+
+fi

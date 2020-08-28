@@ -25,6 +25,7 @@ module.exports = {
     description: 'Keg CLI tap specific tasks',
     example: 'keg tap <command> <options>',
     tasks: {
+      ...require('./action'),
       ...require('./attach'),
       ...require('./build'),
       ...require('./container'),

@@ -20,7 +20,7 @@ const ensureGit = cmd => cmd.trim().indexOf('git') === 0 ? cmd : `git ${cmd}`
  *
  * @returns {string} - Response from the git cli command
  */
-const gitCmd = (cmd, cmdOpts) => spawnCmd(ensureGit(cmd), cmdOpts)
+const gitCmd = (cmd, cmdOpts, log) => spawnCmd(ensureGit(cmd), cmdOpts, log)
 
 /**
  * Calls the git cli from the command line and returns the response

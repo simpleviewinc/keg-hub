@@ -54,13 +54,13 @@ const parseValue = toParse => {
  *
  * @returns {Object} - Parse .env file content
  */
-const parseContent = (envPath, encoding='utf8', fillTemplate=true) => {
+const parseContent = ({ file, fill=true, data }) => {
 
   // Parse the env file as a template to replace any template strings
   // Or just load the text content
-  const content = fillTemplate
-    ? parseTemplate({ filePath: envPath })
-    : readFileSync(envPath)
+  const content = fill
+    ? parseTemplate({ filePath: file, data })
+    : readFileSync(file)
 
     // Split each line to isolate the keg value pair
     return content && content.split(NEWLINES_MATCH)
@@ -72,7 +72,7 @@ const parseContent = (envPath, encoding='utf8', fillTemplate=true) => {
         if(!parsed) return obj
 
         // Add the key to the object and parse the value
-        obj[ parsed[1] ] = fillTemplate
+        obj[ parsed[1] ] = fill
           ? parseValue(parsed[2] || '')
           : parsed[2]
 
@@ -88,10 +88,14 @@ const parseContent = (envPath, encoding='utf8', fillTemplate=true) => {
  *
  * @returns {Object} - response from the parseContent method
  */
-const loadENV = (envPath, encoding='utf8') => {
+const loadENV = ({ envPath, encoding='utf8', data }) => {
   // If the file has not been parsed already, load it and parse it
   !parseENVCache[envPath] &&
-    ( parseENVCache[envPath] = parseContent(envPath, encoding) )
+    ( parseENVCache[envPath] = parseContent({
+      data,
+      fill: true,
+      file: envPath,
+    }))
 
   // Return the parsed data
   return parseENVCache[envPath]
@@ -105,8 +109,8 @@ const loadENV = (envPath, encoding='utf8') => {
  *
  * @returns {Object} - response from the loadENV method || empty object
  */
-const checkLoadEnv = (envPath) => {
-  return pathExistsSync(envPath) ? loadENV(envPath) : {}
+const checkLoadEnv = (envPath, data) => {
+  return pathExistsSync(envPath) ? loadENV({ envPath, data }) : {}
 }
 
 module.exports = {

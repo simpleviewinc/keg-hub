@@ -1,5 +1,5 @@
 const { get } = require('@svkeg/jsutils')
-const { getGitKey } = require('../git/getGitKey')
+const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { buildTapContext } = require('./buildTapContext')
 const { getSetting } = require('../globalConfig/getSetting')
 const { getContainerConst } = require('../docker/getContainerConst')
@@ -45,7 +45,7 @@ const buildContextEnvs = async (args) => {
       })),
 
     // Add the git key so we can call github within the image / container
-    GIT_KEY: await getGitKey(globalConfig),
+    PUBLIC_GIT_KEY: await getPublicGitKey(globalConfig),
 
     // Get any params that should be converted into ENVs passed to docker
     ...convertParamsToEnvs(params),

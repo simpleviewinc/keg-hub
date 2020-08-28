@@ -1,6 +1,8 @@
 #!/bin/bash 
 
 # Check if the keg root dir has been set. If not, then set it
+# TODO: make this more dynamic
+# Add some type of search funciton to get the location of the keg-root-dir
 if [[ -z "$KEG_ROOT_DIR" ]]; then
   export KEG_ROOT_DIR=$HOME/keg-hub
 fi

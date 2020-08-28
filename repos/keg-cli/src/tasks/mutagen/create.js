@@ -98,6 +98,7 @@ const createMutagenSync = async (args, params, __internal={}) => {
 const mutagenCreate = async args => {
   const { command, globalConfig, params, task, __internal={} } = args
   const { context, container } = params
+  const { actionOnly } = __internal
 
   // Ensure we have a content to build the container
   !context && !container && throwRequired(task, 'context', task.options.context)
@@ -118,7 +119,7 @@ const mutagenCreate = async args => {
   const syncParams = await getSyncParams(contextData, params)
 
   // Create the sync
-  await createMutagenSync(args, syncParams, __internal)
+  !actionOnly && await createMutagenSync(args, syncParams, __internal)
 
   // Return the context, and built sync params
   return { ...contextData, mutagen: syncParams }

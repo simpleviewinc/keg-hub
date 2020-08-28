@@ -1,5 +1,5 @@
 const { get } = require('@svkeg/jsutils')
-const { generalError } = require('KegUtils/error')
+const { throwNoDockerImg } = require('KegUtils/error/throwNoDockerImg')
 const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
@@ -30,7 +30,7 @@ const getImage = async args => {
     nameRef
   )
 
-  !imgRef && generalError(`The docker "image get" task requires a name or tag argument!`)
+  !imgRef && throwNoDockerImg(null, `The docker "image get" task requires a name or tag argument!`)
 
   imgRef = tagRef ? `${imgRef}:${tagRef}` : imgRef
 

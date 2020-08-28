@@ -1,12 +1,10 @@
 const path = require('path')
 const { KEG_ENVS } = require('../envs')
 const { PREFIXED } = require('./machine')
-const { loadYmlSync } = require('../../libs/fileSys/yml')
-const { checkLoadEnv } = require('../../libs/fileSys/env')
-const { GLOBAL_CONFIG_FOLDER } = require('../constants')
+const { loadValuesFiles, loadEnvFiles } = require('./loaders')
+const { containersPath, images } = require('./values')
 const { defineProperty } = require('../../utils/helpers/defineProperty')
-const { deepFreeze, deepMerge, keyMap, get } = require('@svkeg/jsutils')
-const { cliRootDir, containersPath, images } = require('./values')
+const { deepFreeze, deepMerge, keyMap } = require('@svkeg/jsutils')
 
 /**
  * Holds each docker containers meta data that can be built by the CLI
@@ -44,100 +42,6 @@ const DEFAULT = {
   BUILD_ARGS_FILTER: [],
 }
 
-/*
- * Checks if an ENV file exists for the current currentEnv and loads it
- * @function
- * @param {string} container - Name of the container to build the config for
- *
- * @returns {Object} - Loaded ENVs for the current environment
-*/
-const getEnvFiles = (container, currentEnv, __internal={}) => {
-
-  const envPaths = [
-    // ENVs in the container folder based on current environment
-    // Example => /containers/core/local.env
-    path.join(containersPath, container, `${ currentEnv }.env`),
-    // ENVs in the global config folder based on current environment
-    // Example => ~/.kegConfig/local.env
-    path.join(GLOBAL_CONFIG_FOLDER, `${ currentEnv }.env`),
-    // ENVs in the global config folder based on current container and environment
-    // Example => ~/.kegConfig/core-local.env
-    path.join(GLOBAL_CONFIG_FOLDER, `${ container }-${ currentEnv }.env`),
-  ]
-
-  // If an internal ENV path is passed in, add it to the paths array
-  const { envsPath } = __internal
-  envsPath && envPaths.push(envsPath)
-
-  // Try to load each of the envPaths if then exists
-  // Then merge and return them
-  return deepMerge(
-    ...envPaths.reduce((envs, envPath) => {
-      return envs.concat([ checkLoadEnv(envPath) ])
-    }, [])
-  )
-
-}
-
-/*
- * Checks if a yml file exists for the current currentEnv and loads it's env values
- * @function
- * @param {string} container - Name of the container to build the config for
- *
- * @returns {Object} - Loaded yaml envs for the current environment
-*/
-const getValuesFiles = (container, currentEnv, __internal={}) => {
-  const { valuesPath, containerPath } = __internal
-
-  const globalPaths = [
-    // ENVs in the global config folder based on current environment
-    // Example => ~/.kegConfig/values_local.yml
-    path.join(GLOBAL_CONFIG_FOLDER, `values_${ currentEnv }.yml`),
-    path.join(GLOBAL_CONFIG_FOLDER, `values-${ currentEnv }.yml`),
-
-    // ENVs in the global config folder based on current container and environment
-    // Example => ~/.kegConfig/core_values_local.yml
-    path.join(GLOBAL_CONFIG_FOLDER, `${ container }_values_${ currentEnv }.yml`),
-    path.join(GLOBAL_CONFIG_FOLDER, `${ container }-values-${ currentEnv }.yml`),
-  ]
-
-  // If it's an injected app, load the injected values fiels
-  // Otherwise load the internal values paths
-  const ymlPaths = containerPath
-  ? [
-      // Load the global values before the external values
-      // This allows apps to overwrite global defaults
-      ...globalPaths,
-      // Add the main injected values path first
-      valuesPath,
-      // Also try to load an injected ENV values file that override the default
-      containerPath && path.join(containerPath, `values_${ currentEnv }.yml`),
-      containerPath && path.join(containerPath, `values-${ currentEnv }.yml`),
-    ]
-  : [
-      // ENVs in the container folder based on current environment
-      // Example => /containers/core/values.yml
-      path.join(containersPath, container, 'values.yml'),
-      // ENVs in the container folder based on current environment
-      // Example => /containers/core/values_local.yml
-      path.join(containersPath, container, `values_${ currentEnv }.yml`),
-      path.join(containersPath, container, `values-${ currentEnv }.yml`),
-      // Load the global values after the internal values
-      // This allows global defaults to overwrite internal values
-      ...globalPaths
-    ]
-
-  // Try to load each of the envPaths if it exists, then merge and return them
-  return deepMerge(
-    ...ymlPaths.reduce((ymls, ymlPath) => {
-      return ymlPath
-        ? ymls.concat([ loadYmlSync(ymlPath, false).env ])
-        : ymls
-    }, [])
-  )
-
-}
-
 /**
  * Builds a config for a container from the images array
  * @function
@@ -147,7 +51,6 @@ const getValuesFiles = (container, currentEnv, __internal={}) => {
 */
 const containerConfig = (container, currentEnv, __internal={}) => {
   const upperCase = container.toUpperCase()
-
   const dockerFile = __internal.dockerPath || path.join(containersPath, container, `Dockerfile`)
 
   // Merge the container config with the default config and return
@@ -163,8 +66,8 @@ const containerConfig = (container, currentEnv, __internal={}) => {
       PREFIXED,
       KEG_ENVS,
       __internal.ENVS,
-      getValuesFiles(container, currentEnv, __internal),
-      getEnvFiles(container, currentEnv, __internal)
+      loadValuesFiles({ container, __internal, env: currentEnv, loadPath: 'env' }),
+      loadEnvFiles({ container, __internal, env: currentEnv })
     ),
   })
 
@@ -177,14 +80,12 @@ const containerConfig = (container, currentEnv, __internal={}) => {
  * @returns {Object} - Built container config
 */
 const buildContainers = (container, currentEnv, __internal) => {
-
   container &&
     !images.includes(container) &&
     images.push(container)
 
   // Builds the docker locations for the container and Dockerfile
   __CONTAINERS = images.reduce((data, image) => {
-    
     data[ image.toUpperCase() ] = image === container
       ? containerConfig(image, currentEnv, __internal)
       : containerConfig(image, currentEnv)

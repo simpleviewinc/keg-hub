@@ -18,16 +18,34 @@ sync:
         - "/reports"
         - "/build"
         - "/docs"
+
+# TODO: Remove once the actions service is complete
 actions:
   retheme:
     install:
-      location: "/keg/keg-components/node_modules/@simpleviewinc/re-theme"
+      location: /keg/keg-components/node_modules/@svkeg/re-theme
       privileged: true
       cmds:
-        - "yarn install"
+        - yarn install
+    build:
+      location: /keg/keg-components/node_modules/@svkeg/re-theme
+      privileged: true
+      cmds:
+        - yarn build
     start:
-      location: "/keg/keg-components/node_modules/@simpleviewinc/re-theme"
+      location: /keg/keg-components/node_modules/@svkeg/re-theme
       privileged: true
       detach: true
       cmds:
-        - "yarn dev"
+        - yarn dev
+  components:
+    install:
+      location: /keg/keg-components
+      privileged: true
+      cmds:
+        - yarn install
+    start:
+      location: /keg/keg-components
+      privileged: true
+      cmds:
+        - yarn web

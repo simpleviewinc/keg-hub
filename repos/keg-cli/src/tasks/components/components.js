@@ -22,6 +22,7 @@ module.exports = {
     name: 'components',
     alias: [ 'comps', 'comp' ],
     tasks: {
+      ...require('./action'),
       ...require('./add'),
       ...require('./attach'),
       ...require('./build'),

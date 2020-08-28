@@ -110,7 +110,7 @@ const dockerPackage = async args => {
           tag: imgTag,
         })
 
-        Logger.info(`  Finished creating image!`)
+        Logger.info(`Finished creating image!`)
       })
 
   /*
@@ -134,7 +134,7 @@ const dockerPackage = async args => {
     }
   )
 
-  Logger.success(`  Finished pushing docker image "${ imgTag }" to provider!`)
+  Logger.success(`Finished pushing docker image "${ imgTag }" to provider!`)
   Logger.empty()
 
   return true
@@ -155,7 +155,6 @@ module.exports = {
     options: {
       context: {
         alias: [ 'name' ],
-        allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
         example: 'keg docker package --context core',
         enforced: true,

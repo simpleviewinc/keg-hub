@@ -5,6 +5,8 @@ services:
     tty: true
     stdin_open: true
     privileged: true
+    volumes:
+      - ${CLI_PATH}:${DOC_CLI_PATH}
     build:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
@@ -18,7 +20,6 @@ services:
         - GIT_CLI_URL
         - GIT_CORE_URL
         - GIT_COMPONENTS_URL
-        - GIT_KEY
         - GIT_RETHEME_URL
         - GIT_RESOLVER_URL
         - GIT_APP_URL
@@ -26,9 +27,14 @@ services:
         - KEG_EXEC_CMD
         - KEG_NM_INSTALL
         - NODE_ENV
+        - PUBLIC_GIT_KEY
         - TAP
     container_name: ${CONTAINER_NAME}
     environment:
+      - CHOKIDAR_USEPOLLING
+      - CADDY_HOST
+      - CADDY_PROXY_PARAMS
+      - CADDY_BASIC_AUTH
       - DOC_APP_PATH
       - DOC_CLI_PATH
       - DOC_CORE_PATH
@@ -42,8 +48,10 @@ services:
       - GIT_RESOLVER_URL
       - GIT_APP_URL
       - KEG_EXEC_CMD
+      - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL
       - NODE_ENV
+      - PUBLIC_GIT_KEY
       - TAP
     ports:
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}

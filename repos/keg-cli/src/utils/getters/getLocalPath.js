@@ -15,6 +15,9 @@ const getLocalPath = (globalConfig, context, dependency, local) => {
   return local || get(
     DOCKER,
     `CONTAINERS.${ context.toUpperCase() }.ENV.${ dependency.toUpperCase() }_PATH`,
+    // TODO: seems like this is not returning the path from the globalConfig
+    // keg-components sync retheme did not work when RETHEME_PATH was not 
+    // defined in default.envs
     getGitPath(globalConfig, dependency)
   )
 }

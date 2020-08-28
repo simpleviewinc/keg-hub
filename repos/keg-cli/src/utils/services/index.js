@@ -1,10 +1,10 @@
 module.exports = {
+  ...require('./actionService'),
   ...require('./buildService'),
   ...require('./composeService'),
   ...require('./destroyService'),
   ...require('./getServiceArgs'),
   ...require('./mutagenService'),
-  ...require('./remoteExecService'),
   ...require('./packageService'),
   ...require('./restartService'),
   ...require('./serviceOptions'),

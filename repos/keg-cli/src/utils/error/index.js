@@ -11,6 +11,7 @@ module.exports = {
   ...require('./throwNoComposeService'),
   ...require('./throwNoConfigPath'),
   ...require('./throwNoContainers'),
+  ...require('./throwNoDockerImg'),
   ...require('./throwNoFileExists'),
   ...require('./throwNoGitBranch'),
   ...require('./throwNoPathExists'),

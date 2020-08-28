@@ -1,11 +1,12 @@
 
 module.exports = {
   ...require('./buildGitSSH'),
+  ...require('./getGitConfigItem'),
   ...require('./getGitKey'),
   ...require('./getGitPath'),
   ...require('./getGitUrl'),
+  ...require('./getPublicGitKey'),
   ...require('./getRemoteUrl'),
-  ...require('./getGitConfigItem'),
+  ...require('./gitKeyExists'),
   ...require('./printGitBranches'),
-  ...require('./gitKeyExists')
 }

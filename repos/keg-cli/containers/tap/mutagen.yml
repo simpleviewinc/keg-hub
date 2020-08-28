@@ -6,7 +6,7 @@ sync:
     ignore:
       vcs: true
       paths:
-        - "/node_modules"
+        - "node_modules"
         - "/core/base/assets/*"
         - "/.*"
         - "!/.storybook"
@@ -18,3 +18,50 @@ sync:
         - "/reports"
         - "/build"
         - "/docs"
+actions:
+  core:
+    install: 
+      location: /keg/tap/node_modules/keg-core
+      privileged: true
+      cmds:
+        - yarn install
+  retheme:
+    install: 
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/re-theme
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+  components:
+    install: 
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@svkeg/keg-components
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+  tap:
+    start:
+      location: /keg/tap
+      privileged: true
+      cmds:
+        - yarn tap:start
