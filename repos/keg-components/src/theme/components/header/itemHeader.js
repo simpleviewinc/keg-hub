@@ -37,7 +37,7 @@ const defaultSideSectionStyle = {
   },
 }
 
-export const baseHeader = {
+export const itemHeader = {
   main: {
     $all: {
       shadow: {

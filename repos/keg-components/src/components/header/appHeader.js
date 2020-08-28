@@ -1,5 +1,5 @@
 import React from 'react'
-import { BaseHeader } from './baseHeader'
+import { ItemHeader } from './itemHeader'
 import { deepMerge } from '@svkeg/jsutils'
 
 /**
@@ -10,7 +10,7 @@ import { deepMerge } from '@svkeg/jsutils'
 export const AppHeader = props => {
   const { dataSet, ...otherProps } = props
   return (
-    <BaseHeader
+    <ItemHeader
       dataSet={deepMerge(AppHeader.dataSet, dataSet)}
       {...otherProps}
     />

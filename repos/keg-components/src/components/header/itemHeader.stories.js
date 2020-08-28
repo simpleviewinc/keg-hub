@@ -99,7 +99,6 @@ storiesOf('Header | ItemHeader', module)
   .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
       <ItemHeader
-        data-class='overwrite-data-class-name'
         styles={headerStyles}
         shadow
         LeftComponent={<SVIcon />}
