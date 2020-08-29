@@ -1,13 +1,14 @@
 /** @module context */
 'use strict'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { ReThemeContext } from './context'
 import { Dimensions } from '../dimensions/dimensions'
 import { getSize } from '../dimensions/sizeMap'
 import { buildTheme, getDefaultTheme } from '../theme'
 import { getCurrentTheme } from '../theme/manageTheme'
 import { get } from '@keg-hub/jsutils'
+import { Helmet } from 'ReHelmet'
 
 /**
  * Context Provider used to set the theme.
@@ -72,17 +73,29 @@ export const ReThemeProvider = props => {
 
   logRenders && console.log(`---------- RE-THEME RE-RENDER ----------`)
 
+  const builtTheme = useMemo(() => {
+    return buildTheme(
+      theme,
+      dimensions.width,
+      dimensions.height,
+      merge && getDefaultTheme(),
+      platforms
+    ) 
+  }, [
+    theme,
+    dimensions.width,
+    dimensions.height,
+    merge,
+    platforms,
+  ])
+
   return (
     <ReThemeContext.Provider
-      value={buildTheme(
-        theme,
-        dimensions.width,
-        dimensions.height,
-        merge && getDefaultTheme(),
-        platforms
-      )}
+      value={builtTheme}
     >
+      <Helmet />
       { children }
     </ReThemeContext.Provider>
   )
+
 }

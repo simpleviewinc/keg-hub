@@ -1,29 +1,45 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import replace from 'rollup-plugin-replace'
-import commonjs from 'rollup-plugin-commonjs'
-import cleanup from 'rollup-plugin-cleanup'
-import sourcemaps from 'rollup-plugin-sourcemaps';
 import buildHook from './buildHook'
+import babel from '@rollup/plugin-babel'
+import alias from '@rollup/plugin-alias'
+import cleanup from 'rollup-plugin-cleanup'
+import replace from '@rollup/plugin-replace'
+import { terser } from "rollup-plugin-terser"
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+const isProd = process.env.NODE_ENV === 'production'
 
-const shared = platform => ({
-  external: ['react', 'react-dom', 'react-native', 'jsutils', '@keg-hub/jsutils' ],
+const shared = (platform, ext) => ({
+  external: ['react', 'react-dom', 'react-native', 'jsutils', '@keg-hub/jsutils', 'react-helmet' ],
   watch: {
     clearScreen: false
   },
   plugins: [
     buildHook(platform),
     replace({
-      "process.env.NODE_ENV": JSON.stringify('production')
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+    }),
+    alias({
+      entries: {
+        ReHelmet: `src/helmet/helmet.${ext}`,
+      },
     }),
     resolve(),
-    babel({ 
+    babel({
+      babelrc: false,
+      sourceMaps: true,
+      inputSourceMap: true,
+      babelHelpers: 'bundled',
       exclude: 'node_modules/**',
       presets: ['@babel/env', '@babel/preset-react']
     }),
-    sourcemaps(),
     commonjs(),
     cleanup(),
+    // isProd && terser({
+    //   mangle: {
+    //     keep_fnames: true,
+    //     keep_classnames: true,
+    //   }
+    // }),
   ],
 })
 
@@ -32,7 +48,7 @@ export default Array
   .map(platform => {
     const ext = platform !== 'web' ? `${platform}.js` : 'js'
 
-    const sharedConfig = shared(platform)
+    const sharedConfig = shared(platform, ext)
     return {
       ...sharedConfig,
       input: `./src/index.${ext}`,

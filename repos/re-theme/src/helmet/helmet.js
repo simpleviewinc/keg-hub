@@ -1,58 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import cssProperties from './cssProperties'
 import { Helmet as ReactHelmet } from 'react-helmet'
 import { checkCall, deepMerge, isArr, get, omitKeys, pickKeys, isObj, uuid } from '@svkeg/jsutils'
-import cssProperties from './cssProperties'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { jsToCss } from '../styleParser/jsToCss'
 
+/**
+ * Constant key to ensue React keeps the same reference to the component internally
+ * @string
+ *
+ */
 const helmetKey = uuid()
 
-
-// TODO: need to handle sub style classes
-/* 
-styles = {
-  main: {
-    ...style rules
-  },
-  // Current code expects a flat object
-  // But styles can come in at any level
-  // Need to check for that and handel it properly
-  content: {
-    main: {
-      ...style rules
-    },
-    content: {
-      ...style rules
-    }
-  }
-}
-
-// Update re-theme to dynamicly create the dataSet based on the $class prop
-SessionTime.dataSet = {
-  main: { class: 'session-time-main' },
-  clockIcon: { class: 'ef-sessions-date-time' },
-  timeText: { class: 'ef-sessions-date-time' },
-}
-
-theme = {
-  sessionTime: {
-    main: {
-      $class: "events-force-main",
-      color: ''
-    },
-    clockIcon: { color: '' },
-    timeText: { color: '' },
-  }
-}
-
-theme.sessionTime.dataSet = {
-  main: {
-    class: "events-force-main",
-  }
-}
-*/
-
-
+/**
+ * Builds a fresh childRefs Object, merging with the passed in customRefs
+ * @function
+ * @param {Object} customRefs - Should match the same format as the childRefs object
+ *
+ * @returns {void}
+ */
 const getElementRefs = (customRefs={}) => {
   return deepMerge({
     link: [],
@@ -62,19 +28,28 @@ const getElementRefs = (customRefs={}) => {
   }, customRefs)
 }
 
+/**
+ * Checks the type of the passed in element
+ * If it matches one of the valid Helmet Elements, then is content is parsed and used
+ * @function
+ * @param {Component} element - Valid Helmet Child Components
+ * @param {Object} parsedRefs - Perviously parsed Child Components
+ * 
+ * @returns {Object} parsedRefs - Updated with the passed in elements content
+ */
 const getRefByType = (element, parsedRefs) => {
     switch (element.type) {
-      case 'title': {
+      case Title: {
         parsedRefs.title = element.props.children || ''
         break
       }
-      case 'style': {
+      case Style: {
         parsedRefs.style.push({
           cssText: element.props.children
         })
         break
       }
-      case 'meta': {
+      case Meta: {
         parsedRefs.meta.push(pickKeys(
           element.props,
           'name',
@@ -83,7 +58,7 @@ const getRefByType = (element, parsedRefs) => {
         ))
         break
       }
-      case 'link': {
+      case Link: {
         parsedRefs.link.push(pickKeys(
           element.props,
           'rel',
@@ -95,7 +70,7 @@ const getRefByType = (element, parsedRefs) => {
         ))
         break
       }
-      case 'script': {
+      case Script: {
         script = omitKeys(element.props, 'children')
         element.props.type === 'application/ld+json' &&
           (script.innerHTML = element.props.children)
@@ -108,41 +83,124 @@ const getRefByType = (element, parsedRefs) => {
   return parsedRefs
 }
 
-const parseChildReferences = (children, customRefs) => {
+/**
+ * Loops through the passed in children, and trys to parse their content
+ * @function
+ * @param {Array} children - Array of Valid Helmet Child Components
+ * @param {Object} customRefs - Should match the same format as the childRefs object
+ *
+ * @returns {Object} parsedRefs - Updated with the passed in childrens content
+ */
+const parseChildRefs = (children, customRefs) => {
   const elements = isArr(children) ? children : [children]
 
   return elements.reduce((parsedRefs, element) => {
 
     return isArr(element)
-      ? parseChildReferences(element, parsedRefs)
+      ? parseChildRefs(element, parsedRefs)
       : element.type === React.Fragment
-        ? parseChildReferences(element.props.children, parsedRefs)
+        ? parseChildRefs(element.props.children, parsedRefs)
         : getRefByType(element, parsedRefs)
 
   }, getElementRefs(customRefs))
 }
 
+/**
+ * Simple helper to get a consistent Id for the Helmet Component
+ * If the location.pathname fails then uses a constant helmetKey
+ * @function
+ *
+ * @returns {string} window.location.pathname (browser url) || helmetKey (uuid)
+ */
 const getLocationPath = () => {
   return !hasDomAccess()
     ? helmetKey
     : checkCall(() => (get(window, 'location.pathname', helmetKey))) 
 }
 
-export const Helmet = ({ children, references, id, styles }) => {
 
-  const childRefs = parseChildReferences(children, references)
-  isObj(styles) && childRefs.style.unshift({ cssText: jsToCss(styles) })
+let __RefsManager = {}
+/**
+ * Updates the childRefs use in the Helmet componet
+ * Merges with the current __RefsManager.childRefs
+ * @function
+ * @param {Object} childRefs - Valid Helmet React Components as children
+ *
+ * @returns {void}
+ */
+const updateChildRefs = (childRefs) => {
+  checkCall(
+    __RefsManager.setChildRefs,
+    parseChildRefs(childRefs, __RefsManager.childRefs)
+  )
+}
+
+/**
+ * Calls updateChildRefs with the passed in childRefs
+ * @function
+ * @param {Array} childRefs - Valid Helmet React Components as children
+ *
+ * @returns {void}
+ */
+export const PortalHelmet = childRefs => {
+  hasDomAccess() &&  updateChildRefs(childRefs)
+}
+
+/**
+ * Valid Helmet Child Components
+ * Other component types will not be rendered
+ * @function
+ * 
+ * @returns {Component} - React Component
+ */
+export const Style = props => (<style type="text/css" {...props} />)
+export const Link = props => <link {...props} />
+export const Meta = props => <meta {...props} />
+export const Title = props => <title {...props} />
+export const Script = props => <script {...props} />
+
+
+/**
+ * Wraps the ReactHelmet component
+ * Converts passed in child props into proper format
+ * @function
+ * @param {Object} props - Props to pass on to the React Helmet Component
+ * @param {Array} props.children - Valid Helmet React Components as children
+ * @param {Object} props.references - Pre-Formatted React Helmet Component props
+ * @param {string|number} props.id - Key used by react internally
+ * @param {string|number} props.styles - Custom Css Styles in CssInJs format
+ * 
+ *
+ * @returns {Component} ReactHelmet - React Helmet Component
+ */
+export const Helmet = props => {
+  const { children, references, id, styles } = props
+  
+  // Create the child references in the format required by React Helmet Component
+  const refs = children &&
+    parseChildRefs(children, references)
+
+  // If a styles CssInJs object is passed, we have to convert it to a css string
+  refs &&
+    isObj(styles) &&
+    refs.style.unshift({ cssText: jsToCss(styles) })
+
+  // Store the child refs on the state, so we can refernece them later
+  const [ childRefs, setChildRefs ] = useState(refs)
+
+  // Use the useEffect hook to externalize the childRefs and setChildRefs
+  // This allows us to update the childRefs from outside of react
+  useEffect(() => {
+    Object.assign(__RefsManager, { childRefs, setChildRefs })
+    return () => { __RefsManager = {} }
+  })
 
   return (
     <ReactHelmet
       {...childRefs}
-      keg={ id || getLocationPath() }
+      key={ id || getLocationPath() }
     />
   )
 }
 
-export const style = props => (<style type="text/css" {...props} />)
-export const link = props => <link {...props} />
-export const meta = props => <meta {...props} />
-export const title = props => <title {...props} />
-export const script = props => <script {...props} />
+

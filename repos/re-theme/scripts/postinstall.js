@@ -13,7 +13,7 @@ const setupApp = async () => {
     await exec(`cd ${rootDir} && yarn app:install`)
   }
   catch (error) {
-    console.log(error)
+    console.error(error.stderr)
   }
 }
 

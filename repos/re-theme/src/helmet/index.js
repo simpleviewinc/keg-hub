@@ -1,1 +1,1 @@
-export * from './helmet'
+export * from 'ReHelmet'
