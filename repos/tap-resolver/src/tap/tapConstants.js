@@ -6,8 +6,14 @@ const { keyMap, deepFreeze } = require('@svkeg/jsutils')
 module.exports = deepFreeze({
   /**
    * Locations where the tap resolver config could be located.
+   * Tap resolver will look for the first item in this array, 
+   * and if it doesn't find it, then it tries the next, etc.
    */
-  configNames: [ 'tap.config.json', 'tap.json', 'app.json', 'package.json' ],
+  configNames: [ 
+    'tap.config.js', 'tap.js', 'tap.config.json', 'tap.json', 
+    'app.config.js', 'app.js', 'app.config.json', 'app.json',  
+    'package.json' 
+  ],
   /**
    * Constants added to temp config files for reference
    */
