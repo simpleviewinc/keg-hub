@@ -17,7 +17,7 @@ const getStyleContent = styleStr => {
 /**
  * Converts from css formatted name to js Object format
  * @example
- * cssToJs(".my-class { color: blue }") === { '.my-class': { color: blue } }
+ * cssToJs("{ color: blue; font-size: 12px; }") === { color: 'blue', fontSize: '12px' }
  * @function
  * @param {string} styleStr - Css styles in string format
  * @param {Object} styleObj - Holds the converted styles
