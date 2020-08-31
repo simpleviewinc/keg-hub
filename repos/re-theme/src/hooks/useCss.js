@@ -231,9 +231,11 @@ export const useCss = (themeRef, customStyles, config={}) => {
     // This allows using css sudo classes like :hover
     return {
       cssProps,
-      id: hashId,
-      // Only build the styles if the hashId does not all ready exist
-      children: head.hasHash(hashId) ? '' : jsToCss(webContent.styles, hashId),
+      styleProps: {
+        id: hashId,
+        // Only build the styles if the hashId does not all ready exist
+        children: head.hasHash(hashId) ? '' : jsToCss(webContent.styles, hashId),
+      }
     }
 
   }, [ themeStyles, customStyles, rootClass, inline, selector, id ])
