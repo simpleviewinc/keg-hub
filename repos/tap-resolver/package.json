@@ -5,7 +5,6 @@
   "main": "babel.config.js",
   "author": "Lance Tipton",
   "license": "MIT",
-  "private": true,
   "publishConfig": {
     "access": "public"
   },
