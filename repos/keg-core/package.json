@@ -101,6 +101,22 @@
     "rimraf": "3.0.2",
     "rollup": "2.23.1"
   },
+  "nodemonConfig": {
+    "ext": "js",
+    "ignore": [
+      "/keg/tap/src",
+      "/keg/tap/node_modules/*",
+      "/keg/tap/node_modules/keg-core/node_modules/*",
+      "/keg/tap/node_modules/keg-core/core"
+    ],
+    "watch": [
+      "/keg/tap/configs",
+      "/keg/tap/package.json",
+      "/keg/tap/node_modules/keg-core/package.json",
+      "/keg/tap/node_modules/keg-core/core/configs"
+    ],
+    "delay": "2"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged --config ./core/configs/lint-staged.config.js"

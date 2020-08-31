@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { Provider } from './headContext'
 import { hasDomAccess } from '../helpers/hasDomAccess'
-import { isArr, checkCall } from '@svkeg/jsutils'
 
 export class HeadProvider extends Component {
 
-  indices = new Map()
   ids = new Map()
 
   canUseDOM = hasDomAccess()
@@ -32,7 +30,11 @@ export class HeadProvider extends Component {
       !tags.length
         ? this.ids.delete(id)
         : this.ids.set(id, tags)
+    },
 
+    hasHash: hash => {
+      const tags = this.ids.get(hash)
+      return Boolean(tags && tags.length)
     },
 
     hasId: (tag, id) => {

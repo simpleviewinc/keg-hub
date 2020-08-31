@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react'
+import { useContext } from 'react'
+import { HeadContext } from '../head/headContext'
 import { useTheme } from './useTheme'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { getRNPlatform } from '../context/platform'
-import { checkCall, get, isStr, isObj, exists, reduceObj } from '@svkeg/jsutils'
+import { checkCall, get, isStr, isObj, exists, reduceObj, uniqArr } from '@svkeg/jsutils'
 import { noOpObj } from '../helpers/noOp'
 import { jsToCss } from '../styleParser/jsToCss'
 
@@ -26,13 +28,16 @@ let __webPlatform
  * @returns {string} - Hashed version of the string
  */
 const hasher = (str, maxLength=0) => {
-  if (str.length == 0) return 0
+  str = str.split('').reverse().join('')
+  
+  if (!isStr(str) || str.length == 0) return 0
   
   let hash = 0
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i)
     hash = ((hash<<5) - hash) + char
-    hash = hash & hash // Convert to 32bit integer
+    // Convert to positive 32bit integer
+    hash = `${ Math.abs(hash & hash) }`
   }
 
   return maxLength ? hash.slice(0, maxLength) : hash
@@ -88,7 +93,14 @@ const checkWebPlatform = inline => {
         })
 }
 
-
+/**
+ * Builds the selector used to select the web dom element and apply styles to it
+ * @function
+ * @param {Object} selector - Default selector to be used
+ * @param {string} config - Define how the selector is built
+ *
+ * @returns {string} - Built selector
+ */
 const buildWebSelector = (selector, config) => {
   const hasRef = selector.indexOf('.') === 0 ||
     selector.indexOf('#') === 0 ||
@@ -153,9 +165,9 @@ const buildDataSet = (rootClass, cssStyles, webContent, customStyles, config={})
           if(webContent){
             const webSelector = webContent && buildWebSelector(rootClass, config)
             // Use the rootCall, because that's the parent of the style object being created
-            webContent.styles[webSelector] = webContent[webSelector] || {}
+            webContent.styles[webSelector] = webContent.styles[webSelector] || {}
             webContent.styles[webSelector][key] = isObj(customStyles) && customStyles[key] || value
-            webContent.hash += `-${hasher(webSelector, 8)}`
+            webContent.hash.push(hasher(webSelector))
           }
           else {
             // Add the style key, to be applied directly to the component in React Native
@@ -181,10 +193,11 @@ const buildDataSet = (rootClass, cssStyles, webContent, customStyles, config={})
  * 
  * @returns { Object } - Current theme
  */
-export const useCss = (themeRef, customStyles=noOpObj, config={}) => {
+export const useCss = (themeRef, customStyles, config={}) => {
   const { rootClass, inline, selector, id } = config
   
   const theme = useTheme()
+  const head = useContext(HeadContext)
 
   // Check if the themeRef is a theme path as a string
   // Or it could be an style object from the theme
@@ -201,7 +214,7 @@ export const useCss = (themeRef, customStyles=noOpObj, config={}) => {
     config.selector = config.selector.replace(/\s/g, '')
     
     // Check if we should add the styles to the Dom
-    const webContent = checkWebPlatform(inline) && { styles: {}, hash: '' }
+    const webContent = checkWebPlatform(inline) && { styles: {}, hash: [] }
     const cssProps = buildDataSet(
       className,
       cssStyle,
@@ -210,11 +223,18 @@ export const useCss = (themeRef, customStyles=noOpObj, config={}) => {
       config,
     )
 
+    if(!webContent) return { cssProps, children: '' }
+
+    const hashId = webContent && uniqArr(webContent.hash).join('-')
+
     // When on web, add the styles to a Dom <style> element using React-Helmet
     // This allows using css sudo classes like :hover
-    return webContent
-      ? { cssProps, children: jsToCss(webContent.styles, webContent.hash), id: webContent.hash }
-      : { cssProps, children: '' }
+    return {
+      cssProps,
+      id: hashId,
+      // Only build the styles if the hashId does not all ready exist
+      children: head.hasHash(hashId) ? '' : jsToCss(webContent.styles, hashId),
+    }
 
   }, [ themeStyles, customStyles, rootClass, inline, selector, id ])
 }
