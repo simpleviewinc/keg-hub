@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { spawnCmd } = require('spawn-cmd')
+const { spawnCmd } = require('@svkeg/spawn-cmd')
 const reports_path="src/reports/cucumber/index.html" 
 const polling_interval=500
 

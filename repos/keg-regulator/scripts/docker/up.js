@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { argsParse } = require("argsParse")
+const { argsParse } = require("@svkeg/args-parse")
 const { compose, runCmd } = require("./docker")
 
 // TODO: Add options to task for a location argument

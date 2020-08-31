@@ -42,7 +42,8 @@
   "dependencies": {
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/spawn-cmd": "0.0.1",
-    "@keg-hub/jsutils": "5.1.0",
+    "@keg-hub/jsutils": "0.0.1",
+    "@keg-hub/args-parse": "0.0.1",
     "chokidar": "3.4.0",
     "cucumber": "6.0.5",
     "dotenv": "^8.2.0",
@@ -50,7 +51,6 @@
     "multiple-cucumber-html-reporter": "1.16.3",
     "open": "7.0.4",
     "selenium-webdriver": "4.0.0-alpha.7",
-    "shelljs": "0.8.4",
-    "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git"
+    "shelljs": "0.8.4"
   }
 }
