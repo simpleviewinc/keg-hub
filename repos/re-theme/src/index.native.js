@@ -1,4 +1,5 @@
-import { ReThemeContext, ReThemeProvider } from './context'
+import { ReThemeContext } from './context/reThemeContext'
+import { ReThemeProvider } from './context/reThemeProvider'
 import { setRNPlatform } from './context/platform'
 import {
   getSize,
@@ -9,7 +10,6 @@ import {
 } from './dimensions'
 import { setRNDimensions } from './dimensions/dimensions'
 import { helpers } from './helpers'
-import { styleSheetParser } from './styleParser'
 
 import {
   addThemeEvent,
@@ -57,5 +57,4 @@ export {
   ReThemeProvider,
   // Style Helpers
   helpers,
-  styleSheetParser,
 }

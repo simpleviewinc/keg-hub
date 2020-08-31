@@ -2,13 +2,12 @@
 'use strict'
 
 import React, { useEffect, useState, useMemo } from 'react'
-import { ReThemeContext } from './context'
+import { ReThemeContext } from './reThemeContext'
 import { Dimensions } from '../dimensions/dimensions'
 import { getSize } from '../dimensions/sizeMap'
 import { buildTheme, getDefaultTheme } from '../theme'
 import { getCurrentTheme } from '../theme/manageTheme'
 import { get } from '@keg-hub/jsutils'
-import { Helmet } from 'ReHelmet'
 
 /**
  * Context Provider used to set the theme.
@@ -93,7 +92,6 @@ export const ReThemeProvider = props => {
     <ReThemeContext.Provider
       value={builtTheme}
     >
-      <Helmet />
       { children }
     </ReThemeContext.Provider>
   )

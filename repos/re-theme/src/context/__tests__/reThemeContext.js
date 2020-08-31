@@ -13,7 +13,7 @@ const getDefaultTheme = jest.fn(() => {
 jest.setMock('react', { createContext })
 jest.setMock('../../theme/default', { getDefaultTheme })
 
-const { ReThemeContext } = require('../context')
+const { ReThemeContext } = require('../reThemeContext')
 
 describe('ReThemeContext', () => {
   it('should return react context object', () => {
