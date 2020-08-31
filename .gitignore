@@ -166,6 +166,7 @@ repos/**/container/.env
 repos/**/container/run.sh
 !repos/**/build
 repos/**/run.sh
+!repos/keg-regulator/run.sh
 repos/keg-core/core/base/assets
 repos/keg-core/core/base/assets/index.js
 repos/**/kc-touch.js
