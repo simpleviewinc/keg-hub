@@ -1,3 +1,8 @@
+const { Logger } = require('KegLog')
+const { git } = require('KegGitCli')
+const { exists } = require('@svkeg/jsutils')
+const { getGitPath } = require('KegUtils/git')
+const { generalError } = require('KegUtils/error')
 
 /**
  * Git pull task
@@ -9,8 +14,18 @@
  *
  * @returns {void}
  */
-const gitPullRepo = args => {
-  console.log(`--- gitPullRepo ---`)
+const gitPullRepo = async args => {
+  const { params,  globalConfig, __internal={} } = args
+  const { skipLog } = __internal
+  const { context, location: repoPath, tap, env, log, ...pullParams } = params
+  const location = repoPath || context && getGitPath(globalConfig, tap || context) || process.cwd()
+  
+  const { data, exitCode } = await git.branch.pull({ ...pullParams, log: exists(skipLog) && !skipLog || log, location })
+
+  // Log the outcome of the git pull command
+  exitCode === 0
+    ? !skipLog && log && Logger.spacedMsg(`Finished pulling branch!`)
+    : generalError(data || `Failed pulling git branche.\nExit with code "${ resp }"`)
 }
 
 module.exports = {
@@ -18,6 +33,34 @@ module.exports = {
     name: 'pull',
     action: gitPullRepo,
     description: `Pulls a git repository from github!`,
-    example: 'keg pull <options>'
+    example: 'keg pull <options>',
+    options: {
+      context: {
+        alias: [ 'name' ],
+        description: `Name or context to use when finding the current git branch`,
+      },
+      location: {
+        alias: [ 'path', 'loc' ],
+        description: `Full path location of a repository to get the current branch from. Overrides "context" option`,
+      },
+      tap: {
+        description: 'Name of the tap to build a Docker image for',
+        example: 'keg git current --tap visitapps',
+      },
+      force: {
+        description: `Force the git fetch action, including pruning local branches`,
+        default: false
+      },
+      sub: {
+        alias: [ 'submodules', 'modules', 'recurse' ],
+        description: `Recursively fetch submodules`,
+        default: false
+      },
+      log: {
+        alias: [ 'lg' ],
+        description: `Logs the git command being run`,
+        default: false
+      },
+    }
   }
 }

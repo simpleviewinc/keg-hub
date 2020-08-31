@@ -1,4 +1,8 @@
-
+const { Logger } = require('KegLog')
+const { git } = require('KegGitCli')
+const { exists } = require('@svkeg/jsutils')
+const { getGitPath } = require('KegUtils/git')
+const { generalError } = require('KegUtils/error')
 
 /**
  * Git push task
@@ -10,8 +14,18 @@
  *
  * @returns {void}
  */
-const gitPushRepo = args => {
-  console.log(`--- gitPushRepo ---`)
+const gitPushRepo = async args => {
+  const { params,  globalConfig, __internal={} } = args
+  const { skipLog } = __internal
+  const { context, location: repoPath, tap, env, log, ...pushParams } = params
+  const location = repoPath || context && getGitPath(globalConfig, tap || context) || process.cwd()
+  
+  const { data, exitCode } = await git.branch.push({ ...pushParams, log: exists(skipLog) && !skipLog || log, location })
+  
+  // Log the outcome of the git push command
+  exitCode === 0
+    ? !skipLog && log && Logger.spacedMsg(`Finished pulling branch!`)
+    : generalError(data || `Failed pulling git branche.\nExit with code "${ resp }"`)
 }
 
 module.exports = {
@@ -19,6 +33,29 @@ module.exports = {
     name: 'push',
     action: gitPushRepo,
     description: `Push local changes to a remote branch`,
-    example: 'keg push <options>'
+    example: 'keg push <options>',
+    options: {
+      context: {
+        alias: [ 'name' ],
+        description: `Name or context to use when finding the current git branch`,
+      },
+      location: {
+        alias: [ 'path', 'loc' ],
+        description: `Full path location of a repository to get the current branch from. Overrides "context" option`,
+      },
+      tap: {
+        description: 'Name of the tap to build a Docker image for',
+        example: 'keg git current --tap visitapps',
+      },
+      force: {
+        description: `Force the git fetch action, including pruning local branches`,
+        default: false
+      },
+      log: {
+        alias: [ 'lg' ],
+        description: `Logs the git command being run`,
+        default: false
+      },
+    }
   }
 }

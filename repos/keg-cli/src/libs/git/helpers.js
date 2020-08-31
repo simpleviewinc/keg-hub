@@ -1,4 +1,5 @@
 const { checkCall, reduceObj, isStr, deepMerge } = require('@keg-hub/jsutils')
+const { Logger } = require('KegLog')
 const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 
 /**
@@ -165,10 +166,27 @@ const ensureGitRemote = async (git, { action, remote, location }) => {
   return remote || 'origin'
 }
 
-const ensureGitBranch = async (git, { action, branch, location, remote, to }) => {
-  // TODO: make call to get list all branches
-  // Ensure the branch exists, if no branch exists, ensure the remote exists
-  return to || branch
+const ensureGitBranch = async (git, args) => {
+  const { branch, location, remote, to } = args
+
+  const useBranch = args.to || args.branch
+  const useCurrent = !useBranch
+
+  const branches = await git.branch.list(location)
+  const foundBranch = branches.reduce((found, branch) => {
+    return found
+      ? found
+      : (useCurrent && branch.current) || branch.name === useBranch
+        ? branch
+        : found
+  }, null)
+  
+  ;(!foundBranch || !foundBranch.name) && Logger.error(`No git branch found for location ${ location }`)
+
+  return foundBranch
+    ? foundBranch.name
+    : false
+
 }
 
 module.exports = {
@@ -179,4 +197,5 @@ module.exports = {
   getLogArgs,
   getFetchArgs,
   ensureGitRemote,
+  ensureGitBranch,
 }
