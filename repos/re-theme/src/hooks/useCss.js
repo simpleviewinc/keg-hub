@@ -13,6 +13,30 @@ import { jsToCss } from '../styleParser/jsToCss'
  */
 let __webPlatform
 
+/**
+ * Creates a hash from a passed in string consistently
+ * <br/>Not intended to be secure
+ * <br/>Value comes from being a pure function
+ * <br/>Given the same input, it will always return the same output
+ * <br/>There is no expectation to convert back from the hash to the original string
+ * @function
+ * @param {string} str - String to be hashed
+ * @param {number=} maxLength - Max length of the returned hash
+ *
+ * @returns {string} - Hashed version of the string
+ */
+const hasher = (str, maxLength=0) => {
+  if (str.length == 0) return 0
+  
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash<<5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+
+  return maxLength ? hash.slice(0, maxLength) : hash
+}
 
 /**
  * Validates the passed in theme style object to ensure the key value pairs are style rules
@@ -93,32 +117,32 @@ const buildWebSelector = (selector, config) => {
  * 
  * @param {string} rootClass - Name to use as the root data-class attribute
  * @param {Object} cssStyles - CssInJs style object
- * @param {Object} webStyles - Empty object to hold the styles when in on a Web Platform
+ * @param {Object} webContent - Empty object to hold the styles when in on a Web Platform
  * @param {Object} [customStyles={}] - Custom styles to merge with the theme css
  * 
  * @returns {Object} - cssProps Object, containing style and dataSet keys
  */
-const buildDataSet = (rootClass, cssStyles, webStyles, customStyles, config={}) => {
+const buildDataSet = (rootClass, cssStyles, webContent, customStyles, config={}) => {
   return reduceObj(cssStyles, (key, value, cssProps) => {
 
     // Check if value is an object
     // If it is, we know the key should be added to the dataSet
     isObj(value)
       ? checkCall(() => {
-          // Build the class name to be used in the dataSet and webStyles
+          // Build the class name to be used in the dataSet and webContent
           const className = `${rootClass}-${key}`
           // Recursively call buildDataSet on each child object of the original cssProps
           cssProps[key] = buildDataSet(
             className,
             value,
-            webStyles,
+            webContent,
             isObj(customStyles) && customStyles[key] || noOpObj,
             config,
           )
 
           // If a style or className was added, then add the dataSet too
           const hasStyle = Boolean(cssProps[key].style ||
-            webStyles[buildWebSelector(className, config)])
+            (webContent && webContent.styles[buildWebSelector(className, config)]) )
             
           hasStyle && ( cssProps[key].dataSet = { class: className } )
 
@@ -126,11 +150,12 @@ const buildDataSet = (rootClass, cssStyles, webStyles, customStyles, config={}) 
       : checkCall(() => {
           // If it's not an object, it must by style rules
           // So add the styles to the correct object based on platform
-          if(webStyles){
-            const webSelector = webStyles && buildWebSelector(rootClass, config)
+          if(webContent){
+            const webSelector = webContent && buildWebSelector(rootClass, config)
             // Use the rootCall, because that's the parent of the style object being created
-            webStyles[webSelector] = webStyles[webSelector] || {}
-            webStyles[webSelector][key] = isObj(customStyles) && customStyles[key] || value
+            webContent.styles[webSelector] = webContent[webSelector] || {}
+            webContent.styles[webSelector][key] = isObj(customStyles) && customStyles[key] || value
+            webContent.hash += `-${hasher(webSelector, 8)}`
           }
           else {
             // Add the style key, to be applied directly to the component in React Native
@@ -176,19 +201,19 @@ export const useCss = (themeRef, customStyles=noOpObj, config={}) => {
     config.selector = config.selector.replace(/\s/g, '')
     
     // Check if we should add the styles to the Dom
-    const webStyles = checkWebPlatform(inline) && {}
+    const webContent = checkWebPlatform(inline) && { styles: {}, hash: '' }
     const cssProps = buildDataSet(
       className,
       cssStyle,
-      webStyles,
+      webContent,
       customStyles,
       config,
     )
 
     // When on web, add the styles to a Dom <style> element using React-Helmet
     // This allows using css sudo classes like :hover
-    return webStyles
-      ? { cssProps, children: jsToCss(webStyles, id), id }
+    return webContent
+      ? { cssProps, children: jsToCss(webContent.styles, webContent.hash), id: webContent.hash }
       : { cssProps, children: '' }
 
   }, [ themeStyles, customStyles, rootClass, inline, selector, id ])

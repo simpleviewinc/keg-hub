@@ -16,7 +16,7 @@ const resolveCoreAlias = {
   'react-native-web': 'react-native-web',
   '@expo/vector-icons': '@expo/vector-icons',
   'react-native-vector-icons': 'react-native-vector-icons',
-  '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/reTheme.js',
+  '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/web',
   '@keg-hub/keg-components':
     '@keg-hub/keg-components/build/esm/kegComponents.native.js',
 }
