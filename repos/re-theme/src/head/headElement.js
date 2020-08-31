@@ -1,39 +1,42 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useRef } from 'react'
 import * as ReactDOM from 'react-dom'
 import { Consumer } from './headContext'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 
-export class HeadElement extends Component {
+const canUseDOM = hasDomAccess()
 
-  headTags = null
-  index = -1
-  canUseDOM = hasDomAccess()
+export const HeadElement = props => {
 
-  componentDidMount() {
-    const { tag, name, property } = this.props
-    this.index = this.headTags.addTag(tag, name || property)
-  }
+  const { tag: Tag, style, id, ...tagProps } = props
+  const { tag, name, property } = tagProps
 
-  componentWillUnmount() {
-    const { tag } = this.props
-    this.headTags.removeTag(tag, this.index)
-  }
+  const indexRef = useRef(-1)
+  const headTagsRef = useRef(null)
+  const children = Tag === 'style' && style || props.children
 
-  render() {
-    const { tag: Tag, ...rest } = this.props
+  useEffect(() => {
+    indexRef.current = headTagsRef.current.addTag(tag, id)
 
-    return (
-      <Consumer>
-        {headTags => {
+    return () => {
+      headTagsRef.current.removeTag(tag, indexRef.current, id)
+    }
 
-          this.headTags = headTags
+  }, [ tag, name, property, style ])
 
-          return this.canUseDOM &&
-            headTags.shouldRender(Tag, this.index) &&
-            ReactDOM.createPortal(<Tag {...rest} />, document.head)
+  return (
+    <Consumer>
+      {headTags => {
+        headTagsRef.current = headTags
 
-        }}
-      </Consumer>
-    )
-  }
+        return canUseDOM &&
+          headTags.shouldRender(Tag, indexRef.current, id) &&
+          ReactDOM.createPortal(
+            <Tag {...tagProps} id={id} children={ children } />,
+            document.head
+          )
+
+      }}
+    </Consumer>
+  )
+
 }

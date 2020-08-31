@@ -24,7 +24,7 @@ const inputs = {
   head: './src/head/index.js',
 }
 
-const buildConfig = (type, ext, config) => {
+const buildConfig = (type, ext, platform, config) => {
   return {
     ...config,
     input: {
@@ -32,7 +32,7 @@ const buildConfig = (type, ext, config) => {
       ...inputs
     },
     output: {
-      dir: `${buildPath}/${type}`,
+      dir: `${buildPath}/${type}/${platform}`,
       format: type,
       sourcemap: true,
     },
@@ -44,7 +44,7 @@ const buildConfig = (type, ext, config) => {
 }
 
 const shared = (platform, ext) => ({
-  external: ['react', 'react-dom', 'react-native', 'jsutils', '@keg-hub/jsutils', 'react-helmet' ],
+  external: ['react', 'react-dom', 'react-native', 'jsutils', '@keg-hub/jsutils' ],
   watch: {
     clearScreen: false
   },
@@ -55,7 +55,7 @@ const shared = (platform, ext) => ({
     }),
     alias({
       entries: {
-        ReHelmet: `src/helmet/helmet.${ext}`,
+        ReHead: `src/head/index.${ext}`,
       },
     }),
     resolve(),
@@ -93,7 +93,7 @@ export default Array.from([ 'web', 'native' ])
     // Loop over the export types of cjs and esm
     // Most bundler use esm, but include cjs just incase
     const configs = Array.from([ 'cjs', 'esm' ])
-      .map(type => buildConfig(type, ext, sharedConfig))
+      .map(type => buildConfig(type, ext, platform, sharedConfig))
 
     // Configs is an array of our export types
     // apps if an array of the platform types

@@ -1,4 +1,5 @@
 import { isNum, isObj } from '@svkeg/jsutils'
+import cssProperties from './cssProperties'
 
 /**
  * Converts JS CSS rule into CSS string

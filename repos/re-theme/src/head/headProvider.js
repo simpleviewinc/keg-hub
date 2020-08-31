@@ -3,45 +3,49 @@ import { Provider } from './headContext'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { isArr, checkCall } from '@svkeg/jsutils'
 
-const cascadingTags = ['title', 'meta']
-
 export class HeadProvider extends Component {
 
   indices = new Map()
+  ids = new Map()
 
   canUseDOM = hasDomAccess()
 
   state = {
 
-    addTag: (tag, name) => {
-      if (cascadingTags.indexOf(tag) === -1) return -1
+    addTag: (tag, id) => {
+      const tags = this.ids.get(id) || []
+      tags.push(tag)
+      this.ids.set(id, tags)
 
-      this.setState(state => ({ [tag]: [ ...(state[tag] || []), name ] }))
-
-      const { indices } = this
-      const index = indices.has(tag) ? indices.get(tag) + 1 : 0
-      indices.set(tag, index)
-
-      return index
+      return tags.length - 1
     },
 
-    shouldRender: (tag, index) => {
-      if (cascadingTags.indexOf(tag) === -1) return true
-    
-      // check if the tag is the last one of similar
-      const names = this.state[tag]
-      return names && names.lastIndexOf(names[index]) === index
+    shouldRender: (tag, index, id) => {
+      return !this.state.hasId(tag, id)
     },
 
-    removeTag: (tag, index) => {
-      this.setState(state => {
-        if(!state[tag]) return null
+    removeTag: (tag, index, id) => {
+      let tags = this.ids.get(id)
+      index = index || tags.indexOf(tag)
+      tags = index >= -1 && tags.splice(index, 1)
 
-        state[tag][index] = null
+      !tags.length
+        ? this.ids.delete(id)
+        : this.ids.set(id, tags)
 
-        return { [tag]: state[tag] }
-      })
     },
+
+    hasId: (tag, id) => {
+      const tags = this.ids.get(id) || []
+
+      if(tags.includes(tag)) return id
+
+      // Have to add the tag here, otherwise other components
+      // that use the same Id will not know it's already been registered
+      this.state.addTag(tag, id)
+
+      return false
+    }
   }
 
   render() {

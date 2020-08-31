@@ -1,15 +1,10 @@
 import React, { useMemo } from 'react'
 import { useTheme } from './useTheme'
-import { PortalHelmet, Style } from '../helmet'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { getRNPlatform } from '../context/platform'
 import { checkCall, get, isStr, isObj, exists, reduceObj } from '@svkeg/jsutils'
-
-/**
- * Consistent object which can be reused to keep it's identity
- * @object
- */
-const noOp = Object.freeze({})
+import { noOpObj } from '../helpers/noOp'
+import { jsToCss } from '../styleParser/jsToCss'
 
 /**
  * Cache holder for quick check if we're using web styles or not
@@ -18,30 +13,6 @@ const noOp = Object.freeze({})
  */
 let __webPlatform
 
-
-/**
- * Adds styles to the dom through react-helmet
- * <br/>All selectors are converted into data-class selectors for versatility
- * @function
- * @param {Object} cssProps - Response from the buildDataSet method containing the dataSet selectors
- * @param {Object} webStyles - Single level (flat) CssInJs style object
- *                             Contains selectors as keys, and a style objects as the values
- *
- * @returns {Object} - Passed in cssProps to be applied to the React Components directly
- */
-const addStylesToDom = (cssProps, webStyles) => {
-
-  // TODO: Update this to dynamically build the passed in web styles into a joined string
-  PortalHelmet([
-    <Style key={'1'} >
-    {`
-      body { background-color: #111111; }
-    `}
-    </Style>
-  ])
-
-  return cssProps
-}
 
 /**
  * Validates the passed in theme style object to ensure the key value pairs are style rules
@@ -93,6 +64,20 @@ const checkWebPlatform = inline => {
         })
 }
 
+
+const buildWebSelector = (selector, config) => {
+  const hasRef = selector.indexOf('.') === 0 ||
+    selector.indexOf('#') === 0 ||
+    selector.indexOf('[') === 0
+
+  return hasRef
+    ? selector
+    : config.prefix && selector.indexOf(config.prefix) === 0
+      ? `${ config.selector.replace('{{selector}}', selector) }`
+      : selector
+
+}
+
 /**
  * Builds the cssProps to be returned to the calling component
  * <br/> The method returns valid component props, which means
@@ -113,7 +98,7 @@ const checkWebPlatform = inline => {
  * 
  * @returns {Object} - cssProps Object, containing style and dataSet keys
  */
-const buildDataSet = (rootClass, cssStyles, webStyles, customStyles) => {
+const buildDataSet = (rootClass, cssStyles, webStyles, customStyles, config={}) => {
   return reduceObj(cssStyles, (key, value, cssProps) => {
 
     // Check if value is an object
@@ -127,11 +112,14 @@ const buildDataSet = (rootClass, cssStyles, webStyles, customStyles) => {
             className,
             value,
             webStyles,
-            isObj(customStyles) && customStyles[key] || noOp,
+            isObj(customStyles) && customStyles[key] || noOpObj,
+            config,
           )
 
           // If a style or className was added, then add the dataSet too
-          const hasStyle = Boolean(cssProps[key].style || webStyles[className])
+          const hasStyle = Boolean(cssProps[key].style ||
+            webStyles[buildWebSelector(className, config)])
+            
           hasStyle && ( cssProps[key].dataSet = { class: className } )
 
         })
@@ -139,9 +127,10 @@ const buildDataSet = (rootClass, cssStyles, webStyles, customStyles) => {
           // If it's not an object, it must by style rules
           // So add the styles to the correct object based on platform
           if(webStyles){
+            const webSelector = webStyles && buildWebSelector(rootClass, config)
             // Use the rootCall, because that's the parent of the style object being created
-            webStyles[rootClass] = webStyles[rootClass] || {}
-            webStyles[rootClass][key] = isObj(customStyles) && customStyles[key] || value
+            webStyles[webSelector] = webStyles[webSelector] || {}
+            webStyles[webSelector][key] = isObj(customStyles) && customStyles[key] || value
           }
           else {
             // Add the style key, to be applied directly to the component in React Native
@@ -167,21 +156,24 @@ const buildDataSet = (rootClass, cssStyles, webStyles, customStyles) => {
  * 
  * @returns { Object } - Current theme
  */
-export const useCss = (themeRef, customStyles=noOp, rootClass, inline) => {
-
+export const useCss = (themeRef, customStyles=noOpObj, config={}) => {
+  const { rootClass, inline, selector, id } = config
+  
   const theme = useTheme()
 
   // Check if the themeRef is a theme path as a string
   // Or it could be an style object from the theme
-  const themeStyles = isStr(themeRef) ? get(theme, themeRef, noOp) : (themeRef || noOp)
+  const themeStyles = isStr(themeRef) ? get(theme, themeRef, noOpObj) : (themeRef || noOpObj)
 
   return useMemo(() => {
     // Extract the $class and $className from the themeStyles
-    const { $class, $className, ...cssStyle } = (themeStyles || noOp)
+    const { $class, $className, ...cssStyle } = (themeStyles || noOpObj)
     const className = rootClass || $className || $class
 
     const isValid = validTheme(themeStyles, className)
-    if(!validTheme(themeStyles, className)) return noOp
+    if(!validTheme(themeStyles, className)) return noOpObj
+    
+    config.selector = config.selector.replace(/\s/g, '')
     
     // Check if we should add the styles to the Dom
     const webStyles = checkWebPlatform(inline) && {}
@@ -190,13 +182,14 @@ export const useCss = (themeRef, customStyles=noOp, rootClass, inline) => {
       cssStyle,
       webStyles,
       customStyles,
+      config,
     )
 
     // When on web, add the styles to a Dom <style> element using React-Helmet
     // This allows using css sudo classes like :hover
     return webStyles
-      ? addStylesToDom(cssProps, webStyles)
-      : cssProps
+      ? { cssProps, children: jsToCss(webStyles, id), id }
+      : { cssProps, children: '' }
 
-  }, [ themeStyles, customStyles, rootClass, inline ])
+  }, [ themeStyles, customStyles, rootClass, inline, selector, id ])
 }

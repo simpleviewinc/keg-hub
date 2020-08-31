@@ -68,10 +68,18 @@ const loopSheetCssRules = (formatted, sheet, classNames, callback) => {
  * @returns {Object|string} - CssInJs object or string of the converted styles
  */
 export const styleSheetParser = (args) => {
-  const { classNames, callback, toDom=true, format, valid } = validateArguments(args, convertToDataClass)
+
+  const {
+    classNames,
+    callback,
+    toDom=true,
+    format,
+    valid
+  } = validateArguments(args, convertToDataClass)
+
   if(valid === false) return {}
 
-  const parsedStyles = isArr(classNames) && 
+  const parsedStyles = isArr(classNames) &&
     // Have to convert all styleSheets form the DOM into an array to loop over them
     Array.from(document.styleSheets).reduce(
       (formatted, sheet) => loopSheetCssRules(formatted, sheet, classNames, callback),
