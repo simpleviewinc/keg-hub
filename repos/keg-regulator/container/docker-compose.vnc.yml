@@ -1,0 +1,63 @@
+version: "3.8"
+services:
+  keg-regulator:
+    build:
+      args:
+        - KEG_COPY_LOCAL=true
+        - SELENIUM_VNC=-debug
+    environment:
+      - DOC_FEATURES_PATH
+      - DOC_STEPS_PATH
+      - VNC_NO_PASSWORD=1
+      - SELENIUM_VNC=-debug
+      - NO_VNC_HOST
+      - NO_VNC_CHROME_PORT
+      - NO_VNC_CHROME_URL
+      - NO_VNC_FIREFOX_PORT
+      - NO_VNC_FIREFOX_URL
+      - HEADLESS=false
+    ports:
+    - ${NO_VNC_CHROME_PORT}:${NO_VNC_CHROME_PORT}
+    - ${NO_VNC_FIREFOX_PORT}:${NO_VNC_FIREFOX_PORT}
+
+  selenium-hub:
+    image: selenium/hub:${SELENIUM_VERSION}
+    container_name: ${SELENIUM_CONTAINER}
+    ports:
+      - ${HUB_PORT}:${HUB_PORT}
+
+  chrome:
+    image: selenium/node-chrome-debug:${SELENIUM_VERSION}
+    container_name: ${CHROME_CONTAINER}
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - ${SELENIUM_CONTAINER}
+    environment:
+      - HUB_HOST
+      - HUB_PORT
+      - VNC_NO_PASSWORD=1
+      - WINDOW_HEIGHT
+      - WINDOW_WIDTH
+      - HEADLESS=false
+    ports:
+      - ${CHROME_PORT}:${DOC_BROWSER_PORT}
+      - ${CHROME_VNC_PORT}:${DOC_VNC_PORT}
+
+  firefox:
+    image: selenium/node-firefox-debug:${SELENIUM_VERSION}
+    container_name: ${FIREFOX_CONTAINER}
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - ${SELENIUM_CONTAINER}
+    environment:
+      - HUB_HOST
+      - HUB_PORT
+      - VNC_NO_PASSWORD=1
+      - WINDOW_HEIGHT
+      - WINDOW_WIDTH
+      - HEADLESS=false
+    ports:
+      - ${FIREFOX_PORT}:${DOC_BROWSER_PORT}
+      - ${FIREFOX_VNC_PORT}:${DOC_VNC_PORT}

@@ -3,7 +3,7 @@ const { ask } = require("@keg-hub/ask-it")
 const { spawnCmd } = require('@keg-hub/spawn-cmd')
 const { Logger } = require("@keg-hub/ask-it/src/logger")
 const regulatorRoot = path.join(__dirname, '../')
-const testsRoot = path.join(__dirname, '../tests')
+const testsRoot = path.join(__dirname, '../src')
 
 // TODO: Add ability to load a config based on an ENV
 // This way each environment could have a different config
@@ -29,16 +29,6 @@ const cliConfig = {
 const exitCLI = () => {
   Logger.spacedMsg(`Have a good day!`)
   process.exit(0)
-}
-
-/**
- * Clears the terminal
- * @type function
- *
- * @returns {void}
- */
-const clearTerminal = () => {
-  process.stdout.write('\033c')
 }
 
 /**
@@ -90,9 +80,9 @@ const checkAutoArchive = () => {
   // Run the archive script if autoArchive is set to true
   return cliConfig.autoArchive
     ? spawnCmd(`bash`, {
-      args: [ `./scripts/archive.sh`, cliConfig.archiveDir ],
-      cwd: testsRoot
-    })
+        args: [ `./src/lib/archive.sh`, cliConfig.archiveDir ],
+        cwd: regulatorRoot
+      })
     : true
 }
 
@@ -119,8 +109,8 @@ const runTests = askWrap(async (cmd, options) => {
 
   // Execute the script
   await spawnCmd(`bash`, {
-    args: [ `./scripts/${ script }.sh` ],
-    cwd: testsRoot,
+    args: [ `./src/lib/${ script }.sh` ],
+    cwd: regulatorRoot,
     ...(opts && { options: opts })
   })
 
@@ -162,12 +152,11 @@ const archiveTests = askWrap(() => {
   if(cliConfig.firstRun)
     return Logger.warn(`Tests must be run before they can be archived!`)
 
-  clearTerminal()
   Logger.empty()
 
   return spawnCmd(`bash`, {
-    args: [ `./scripts/archive.sh`, cliConfig.archiveDir ],
-    cwd: testsRoot
+    args: [ `./src/lib/archive.sh`, cliConfig.archiveDir ],
+    cwd: regulatorRoot
   })
 
 })
@@ -188,18 +177,35 @@ const unknownCmd = askWrap(cmd => {
 })
 
 
-// TODO: Allow running tests by tag
-// command should run something like -> node_modules\.bin\cucumber-js --tags @tag_name
-
 /**
  * List of available commands that can be run
  * @type Object
  */
 const commandList = {
-  ar: { name: 'Archive', action: archiveTests, description: `Archive pervious tests results` },
-  auto: { name: 'Auto', action: autoArchiveTests, description: `Toggle automatic archive of tests results on every run` },
-  test: { name: 'test', action: runTests, description: `Run Keg-Regulator BDD tests` },
-  q: { name: 'Quit', action: exitCLI, description: `Exit Keg-Regulator` },
+  archive: {
+    name: 'Archive',
+    alias: [ 'ar' ],
+    action: archiveTests,
+    description: `Archive pervious tests results`
+  },
+  auto: {
+    name: 'Auto',
+    alias: [ 'au' ],
+    action: autoArchiveTests,
+    description: `Toggle automatic archive of tests results on every run`
+  },
+  test: {
+    name: 'test',
+    alias: [ 't' ],
+    action: runTests,
+    description: `Run Keg-Regulator BDD tests`
+  },
+  quit: {
+    name: 'Quit',
+    alias: [ 'q' ],
+    action: exitCLI,
+    description: `Exit Keg-Regulator`
+  },
 }
 
 /**
@@ -218,6 +224,8 @@ const printCommands = () => {
     Logger.print(
       `  ${ Logger.colors.brightWhite('Command:') }`,
       `${ Logger.colors.brightCyan(cmd) }\n`, 
+      ` ${ Logger.colors.brightWhite('Alias:') }`,
+      `${ Logger.colors.brightCyan(meta.alias.join(', ')) }\n`, 
       ` ${ Logger.colors.brightWhite(`Description:`) }`,
       `${ Logger.colors.brightCyan(meta.description) }\n`,
     )
@@ -248,6 +256,31 @@ const printHeader = () => {
 }
 
 /**
+ * Gets the cmd meta data from the passed in input
+ * @type function
+ * @param {string} input - text input passed from the use through terminal
+ *
+ * @returns {Object} - Contains the full command name, and it's meta data
+ */
+const getCmdData = input => {
+  // If no input return empty
+  if(!input) return { cmd: input }
+
+  // If exact match, return the input, and meta for the command
+  if(commandList[input]) return { cmd: input, meta: commandList[input] }
+
+  // Otherwise check for an alias from the input
+  return Object.entries(commandList)
+    .reduce((cmdData, [ name, metaData ]) => {
+      // If the cmd meta was already found, or there's no alias match, then return
+      return cmdData.meta || !metaData.alias || !metaData.alias.includes(input)
+        ? cmdData
+        : { cmd: name, meta: metaData }
+    }, {})
+
+}
+
+/**
  * Asks the user to input a command
  * <br/>Then calls the function tied to the entered command
  * @type function
@@ -258,10 +291,8 @@ const askForCommand = async () => {
 
   const command = await ask.input(`Enter a command`)
 
-  const [ cmd, ...options ] = command.split(' ')
-
-  // Get the meta data for the entered command
-  const meta = commandList[cmd]
+  const [ input, ...options ] = command.split(' ')
+  const { cmd, meta } = getCmdData(input)
 
   // If no meta, then run the unknown cmd method
   // Otherwise call the action for the cmd
@@ -296,5 +327,4 @@ const renderUI = async () => {
 
 }
 
-clearTerminal()
 renderUI()

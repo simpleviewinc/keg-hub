@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  keg-regulator:
+    environment:
+      - HEADLESS=true
+
+  selenium-hub:
+    image: selenium/hub:${SELENIUM_VERSION}
+    container_name: ${SELENIUM_CONTAINER}
+    ports:
+      - ${HUB_PORT}:${HUB_PORT}
+
+  chrome:
+    image: selenium/node-chrome:${SELENIUM_VERSION}
+    container_name: ${CHROME_CONTAINER}
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - ${SELENIUM_CONTAINER}
+    environment:
+      - HUB_HOST
+      - HUB_PORT
+    ports:
+      - ${CHROME_PORT}:${DOC_BROWSER_PORT}
+
+  firefox:
+    image: selenium/node-firefox:${SELENIUM_VERSION}
+    container_name: ${FIREFOX_CONTAINER}
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - ${SELENIUM_CONTAINER}
+    environment:
+      - HUB_HOST
+      - HUB_PORT
+    ports:
+      - ${FIREFOX_PORT}:${DOC_BROWSER_PORT}

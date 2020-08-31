@@ -1,0 +1,16 @@
+node_modules
+
+src/reports/cucumber/*
+!src/reports/cucumber/.gitkeep
+
+src/reports/archive/*
+!src/reports/archive/.gitkeep
+
+src/reports/*.json
+src/reports/*.html
+
+src/node_modules
+
+*.log
+src/*.log
+.DS_Store

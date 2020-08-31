@@ -1,39 +1,40 @@
 {
-  "name": "@keg-hub/keg-regulator",
+  "name": "keg-regulator",
   "description": "Automated web testing for the keg and its associated repos",
   "version": "1.0.0",
   "license": "MIT",
   "main": "index.js",
-  "repository": {
-    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
-    "type": "git"
-  },
-  "bugs": {
-    "url": "https://github.com/simpleviewinc/keg-hub/issues"
-  },
-  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "archive": "bash tests/scripts/archive.sh ./tests/reports",
-    "cli": "node ./scripts/cli.js",
-    "clean": "yarn clean:nm",
-    "clean:full": "yarn clean:nm; yarn clean:cache",
-    "clean:cache": "yarn cache clean",
-    "clean:install": "yarn clean:full; yarn install --force",
-    "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "start": "yarn archive && bash scripts/start.sh",
-    "stop": "yarn archive && yarn down",
-    "restart:all": "yarn down && yarn start",
-    "restart:tests": "yarn archive && bash scripts/restart.sh",
-    "up": "docker-compose -f ./docker-compose.yml -f ./docker-compose.local.yml up",
-    "down": "docker-compose -f ./docker-compose.yml -f ./docker-compose.local.yml down -v",
-    "status": "docker container list",
-    "logs": "docker container logs $(docker ps -aqf \"name=keg-regulator\") --follow",
-    "enter": "docker exec -it $(docker ps -aqf \"name=keg-regulator\") bash",
-    "report": "node ./scripts/openURL.js tests/reports/cucumber/index.html",
-    "console": "open http://${KEG_DOCKER_IP:-$(docker-machine ip ${KEG_DOCKER_NAME:-docker-keg})}:4444/grid/console"
+    "attach": "yarn docker:attach",
+    "cli": "yarn docker:cli",
+    "logs": "yarn docker:logs",
+    "rerun": "yarn docker:rerun",
+    "restart": "yarn docker:restart",
+    "status": "yarn docker:status",
+    "start": "yarn docker:up",
+    "stop": "yarn docker:stop",
+    "docker:attach": "node scripts/docker/attach.js",
+    "docker:cli": "node scripts/docker/cli.js",
+    "docker:down": "node scripts/docker/down.js",
+    "docker:logs": "node scripts/docker/logs.js",
+    "docker:restart": "yarn docker:down && yarn docker:up",
+    "docker:rerun": "yarn test:archive && node scripts/docker/restart.js",
+    "docker:status": "node scripts/docker/status.js",
+    "docker:stop": "yarn test:archive && yarn docker:down",
+    "docker:up": "node scripts/docker/up.js",
+    "report:generate": "node src/lib/generateReport.js",
+    "reports:open": "open src/reports/cucumber/index.html",
+    "report:serve": "http-server src/reports/cucumber/ --port ${DOC_APP_PORT:-4000} --silent",
+    "report:watch": "node scripts/watchForReport.js",
+    "report:view": "node scripts/openURL.js src/reports/cucumber/index.html",
+    "test:archive": "bash src/lib/archive.sh src/reports",
+    "test:chrome": "BROWSER=chrome yarn test:cucumber",
+    "test:cli": "node scripts/cli.js",
+    "test:cucumber": "node_modules/.bin/cucumber-js --require 'src/support/**/*.js' --format json:src/reports/cucumber/${BROWSER:-chrome}.json src/features",
+    "test:firefox": "BROWSER=firefox yarn test:cucumber",
+    "test:local": "src/lib/test.sh; yarn report:view;",
+    "test:grid": "bash src/lib/testGrid.sh",
+    "test:rerun": "src/lib/rerun.sh"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -41,10 +42,15 @@
   "dependencies": {
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/spawn-cmd": "0.0.1",
+    "@keg-hub/jsutils": "5.1.0",
     "chokidar": "3.4.0",
-    "open": "^7.0.4"
-  },
-  "devDependencies": {
-    "rimraf": "3.0.2"
+    "cucumber": "6.0.5",
+    "dotenv": "^8.2.0",
+    "http-server": "0.12.3",
+    "multiple-cucumber-html-reporter": "1.16.3",
+    "open": "7.0.4",
+    "selenium-webdriver": "4.0.0-alpha.7",
+    "shelljs": "0.8.4",
+    "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git"
   }
 }

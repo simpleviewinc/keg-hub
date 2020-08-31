@@ -12,8 +12,7 @@
     * Tap ( Client Application )
       * Gets deployed to a CDN
       * URL would like this => tap.staging.kegdev.xyz
-    * Keg-Tests
-      * Does not include Unit Testing
+    * Keg-Regulator
       * Frameworks
         * Cucumber
         * webdriver
@@ -72,7 +71,3 @@
     * Unit tests are validated
   * On feature branch merge into develop
   * Ticket gets sent to QA Queue
-
-
-# Keg-Test Repo
-

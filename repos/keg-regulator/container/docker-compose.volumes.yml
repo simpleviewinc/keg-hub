@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  keg-regulator:
+    volumes:
+      - ${KEG_FEATURES_PATH}:/keg/keg-regulator/src/features
+      - ${KEG_STEPS_PATH}:/keg/keg-regulator/src/steps
+      - ${KEG_REPORTS_PATH}:/keg/keg-regulator/src/reports
