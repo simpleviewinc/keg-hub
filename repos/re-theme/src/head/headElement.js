@@ -8,20 +8,20 @@ const canUseDOM = hasDomAccess()
 export const HeadElement = props => {
 
   const { tag: Tag, style, id, ...tagProps } = props
-  const { tag, name, property } = tagProps
+  const { name, property } = tagProps
 
   const indexRef = useRef(-1)
   const headTagsRef = useRef(null)
-  const children = Tag === 'style' && style || props.children
+  const children = Tag === 'style' && (style || props.children)
 
   useEffect(() => {
-    indexRef.current = headTagsRef.current.addTag(tag, id)
+    indexRef.current = headTagsRef.current.addTag(Tag, id)
 
     return () => {
-      headTagsRef.current.removeTag(tag, indexRef.current, id)
+      headTagsRef.current.removeTag(Tag, indexRef.current, id)
     }
 
-  }, [ tag, name, property, style ])
+  }, [ Tag, name, property, style ])
 
   return (
     <Consumer>

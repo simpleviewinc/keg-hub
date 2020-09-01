@@ -1,12 +1,12 @@
 import { useTheme } from './useTheme'
 import { noOpObj } from '../helpers/noOp'
+import { useContext, useMemo } from 'react'
 import { jsToCss } from '../styleParser/jsToCss'
 import { HeadContext } from '../head/headContext'
-import React, { useContext, useMemo } from 'react'
 import { getRNPlatform } from '../context/platform'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { generateDataSet } from '../styleParser/generateDataSet'
-import { checkCall, get, isStr, isObj, exists, uniqArr, isEmpty } from '@svkeg/jsutils'
+import { checkCall, get, isStr, isObj, exists, uniqArr, isEmptyColl } from '@svkeg/jsutils'
 
 /**
  * Cache holder for quick check if we're using web styles or not
@@ -23,13 +23,13 @@ let __webPlatform
  * <br/>Bypassed when in production
  * @function
  * @param {Object} style - CssInJs style object
- * @param {string} className - Root class name for build the sub-data-call attributes
+ * @param {string} selector - Root class name for build the sub-data-call attributes
  *
  * @returns {boolean} - If themeStyles is a valid styles object
  */
-const validTheme = (themeStyles, className) => {
+const validTheme = (themeStyles, selector) => {
   return process.env.NODE_ENV === 'production' ||
-    Boolean(isObj(themeStyles) && className) ||
+    Boolean(isObj(themeStyles) && selector) ||
     console.error(
       `[ ReTheme ERROR ] - Invalid styleRef`,
       `\n   - useCss hook requires a valid theme reference of type 'Object' || 'string'`,
@@ -67,7 +67,7 @@ const checkWebPlatform = inline => {
 }
 
 /**
- * Create a custom hook for adding styles to the Dom in a web context
+ * Custom hook for adding styles to the Dom in a web context
  * When on native, will return a dataSet and style prop to be applied to the element
  * @example
  * const { cssProps, styleProps } = useCss(styleRef, customStyles, rootClass)
@@ -77,7 +77,11 @@ const checkWebPlatform = inline => {
  * @param {Object|string} styleRef - CssInJs style object with a $class || $className key
  *                                   Or a dot separate string path within the main Theme
  * @param {Object} [customStyles={}] - Custom styles to merge with the theme css
- * @param {string} rootClass - Name to use as the root data-class attribute
+ * @param {Object} config - Defines how the hook should build the dataSet and styles
+ * @param {boolean} [config.inline=false] - Always return inline styles
+ * @param {string} [config.selector=styleRef.$class] - Root css selector to use for all dataSet props overrides $class in theme
+ * @param {string} config.prefix - Filters only theme objects that start with this prefix
+ * @param {string|function} config.format - Template for building the css selector
  * 
  * @returns { Object } - Current theme
  */
@@ -89,17 +93,21 @@ export const useCss = (styleRef, customStyles, config={}) => {
 
   // Check if the styleRef is a theme path as a string
   // Or it could be an style object from the theme
-  const themeStyles = isStr(styleRef) ? get(theme, styleRef, noOpObj) : (styleRef || noOpObj)
+  const themeStyles = useMemo(() => {
+    return isStr(styleRef) ? get(theme, styleRef, noOpObj) : (styleRef || noOpObj)
+  }, [ styleRef, theme ])
   
   // Ensure the custom styles are an object and not empty
-  const custom = isEmpty(customStyles) || !isObj(customStyles) ? noOpObj : customStyles
+  const custom = !customStyles || !isObj(customStyles) || isEmptyColl(customStyles)
+    ? noOpObj
+    : customStyles
 
   return useMemo(() => {
     // Extract the $class and $className from the themeStyles
     const { $class, $className, ...cssStyle } = (themeStyles || noOpObj)
-    const className = rootClass || $className || $class || id
+    const selector = rootClass || $className || $class || id
 
-    if(!validTheme(themeStyles, className)) return noOpObj
+    if(!validTheme(themeStyles, selector)) return noOpObj
 
     // Check if we should add the styles to the Dom
     const webContent = checkWebPlatform(inline) && { styles: {}, hash: [] }
@@ -110,7 +118,7 @@ export const useCss = (styleRef, customStyles, config={}) => {
       webContent,
       cssStyle,
       custom,
-      { className, ...config }
+      { selector, ...config }
     )
 
     if(!web) return { cssProps, styleProps: {} }
@@ -119,7 +127,7 @@ export const useCss = (styleRef, customStyles, config={}) => {
     // Need to update to use the hash based on custom styles
     const hashId = web && uniqArr(web.hash).join('-')
 
-    // When on web, add the styles to a Dom <style> element using React-Helmet
+    // When on web, add the styles to a Dom <style> element
     // This allows using css sudo classes like :hover
     return {
       cssProps,

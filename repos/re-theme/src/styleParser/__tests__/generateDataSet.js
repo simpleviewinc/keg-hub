@@ -29,9 +29,9 @@ const webDataSetProp = [
   themeStyles, // cssProps
   {}, // custom style
   { 
-    className: webClass,
+    selector: webClass,
     prefix: 'web',
-    selector: `[data-class~="{{ selector }}"]`,
+    format: `[data-class~="{{ selector }}"]`,
   }, // config
 ]
 
@@ -41,9 +41,9 @@ const nativeDataSetProp = [
   themeStyles, // cssProps
   {}, // custom style
   {
-    className: nativeClass,
+    selector: nativeClass,
     prefix: 'native',
-    selector: `[data-class~="{{ selector }}"]`,
+    format: `[data-class~="{{ selector }}"]`,
   }, // config
 ]
 

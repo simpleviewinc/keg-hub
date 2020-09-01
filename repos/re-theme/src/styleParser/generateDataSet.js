@@ -70,20 +70,20 @@ const buildDataSet = (current, config, key, value) => {
   const custom = isObj(current.custom) && current.custom[key] || noOpObj
 
   // Build the class name to be used in the dataSet and web
-  const className = `${config.className}-${key}`
+  const selector = `${config.selector}-${key}`
 
   // Recursively call buildDataSet on each child object of the original cssProps
   const built = generateDataSet(
     web,
     value,
     custom,
-    { ...config, className },
+    { ...config, selector },
   )
 
   // Set the sub-cssProps to the key of the parent cssProps
   cssProps[key] = built.cssProps
 
-  addDataSet(web, cssProps, key, built.selector, { class: className })
+  addDataSet(web, cssProps, key, built.selector, { class: selector })
 
   // Merge web styles and return web and cssProps
   return { cssProps, web: web && { ...web, ...built.web } }
