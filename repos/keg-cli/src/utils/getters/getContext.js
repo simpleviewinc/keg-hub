@@ -28,7 +28,7 @@ const askWhenNoContext = async (type) => {
  */
 const containerContext = async (toFind, prefixData={}, __injected, askFor) => {
   let found = await docker.container.get(toFind)
-  found = found || prefixData.prefix && await docker.container.get(prefixData.prefix)
+  found = found || prefixData.withPrefix && await docker.container.get(prefixData.withPrefix)
   const container = found || askFor && await askWhenNoContext('container')
 
   return !container
@@ -49,7 +49,7 @@ const containerContext = async (toFind, prefixData={}, __injected, askFor) => {
 const imageContext = async (toFind, prefixData={}, __injected, askFor) => {
 
   let found = await docker.image.get(toFind)
-  found = found || prefixData.prefix && await docker.image.get(prefixData.prefix)
+  found = found || prefixData.withPrefix && await docker.image.get(prefixData.withPrefix)
   const image = found || askFor && await askWhenNoContext('image')
 
   return !image
@@ -57,6 +57,21 @@ const imageContext = async (toFind, prefixData={}, __injected, askFor) => {
     : __injected
       ? { ...container, ...prefixData }
       : { ...image, ...prefixData, ...getPrefixContext(image.repository) }
+
+}
+
+const contextFromPrefix = async prefixData => {
+
+  let context = {}
+  const dockerRef = prefixData.id || prefixData.withPrefix
+
+  const container = await docker.container.get(dockerRef)
+  if(container) context = { container }
+
+  const image = !container || await docker.image.get(dockerRef)
+  if(image) context = { image }
+
+  return { ...prefixData, ...context }
 
 }
 
@@ -76,12 +91,6 @@ const getContext = async (params, askFor) => {
   const { context, container, image, tap, __injected } = params
   const contextRef = context || container || image || (tap && 'tap')
 
-  // There is a bug in the options parsing that causes context to sometimes be true
-  // It the task is called task --context tap --tap my-tap
-  // Then the params will look like { context: true, tap: true  }
-  // When it should be { context: 'tap', tap: 'my-tap' }
-  // The parsing is finding the second options `tap`, as a param key,
-  // If should instead set it as the value of the `context` param key
   const prefixData = isDockerId(contextRef)
     ? { id: contextRef }
     : isStr(contextRef)
@@ -92,7 +101,9 @@ const getContext = async (params, askFor) => {
     ? await containerContext(container, prefixData, __injected, askFor)
     : image
       ? await imageContext(image, prefixData, __injected, askFor)
-      : prefixData
+      : prefixData.withPrefix || prefixData.id
+        ? await contextFromPrefix(prefixData)
+        : prefixData
 
   return context === 'tap'
     ? { tap, context, ...foundContext }

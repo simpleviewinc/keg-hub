@@ -11,7 +11,7 @@ const docker = require('KegDocCli')
  */
 const hasMatch = (containerContext, container) => (
   containerContext.image === container.image ||
-    containerContext.prefix === container.name ||
+    containerContext.withPrefix === container.name ||
     containerContext.context === container.name
 )
 

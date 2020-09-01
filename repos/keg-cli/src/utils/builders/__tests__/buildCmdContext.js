@@ -89,7 +89,7 @@ describe('buildCmdContext', () => {
       askFor: false
     })
 
-    expect(res.prefix).toBe('img-keg-components')
+    expect(res.withPrefix).toBe('img-keg-components')
 
     const res2 = await buildCmdContext({
       globalConfig,
@@ -97,7 +97,7 @@ describe('buildCmdContext', () => {
       askFor: false
     })
 
-    expect(res2.prefix).toBe('img-keg-components')
+    expect(res2.withPrefix).toBe('img-keg-components')
 
     const res3 = await buildCmdContext({
       globalConfig,
@@ -105,7 +105,7 @@ describe('buildCmdContext', () => {
       askFor: false
     })
 
-    expect(res2.prefix).toBe('img-keg-components')
+    expect(res2.withPrefix).toBe('img-keg-components')
 
   })
 

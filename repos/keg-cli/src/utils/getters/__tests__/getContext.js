@@ -14,7 +14,7 @@ describe('getContext', () => {
     const res = await getContext({ container: container.id }, true)
 
     expect(res.context).toBe('core')
-    expect(res.prefix).toBe('img-keg-core')
+    expect(res.withPrefix).toBe('img-keg-core')
     expect(res.image).toBe('keg-core')
 
   })
@@ -24,7 +24,7 @@ describe('getContext', () => {
     const res = await getContext({ context: 'keg-core' })
 
     expect(res.context).toBe('core')
-    expect(res.prefix).toBe(undefined)
+    expect(res.withPrefix).toBe(undefined)
     expect(res.image).toBe(undefined)
 
   })
