@@ -6,7 +6,7 @@ import React, { useContext, useMemo } from 'react'
 import { getRNPlatform } from '../context/platform'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { generateDataSet } from '../styleParser/generateDataSet'
-import { checkCall, get, isStr, isObj, exists, uniqArr } from '@svkeg/jsutils'
+import { checkCall, get, isStr, isObj, exists, uniqArr, isEmpty } from '@svkeg/jsutils'
 
 /**
  * Cache holder for quick check if we're using web styles or not
@@ -90,6 +90,9 @@ export const useCss = (styleRef, customStyles, config={}) => {
   // Check if the styleRef is a theme path as a string
   // Or it could be an style object from the theme
   const themeStyles = isStr(styleRef) ? get(theme, styleRef, noOpObj) : (styleRef || noOpObj)
+  
+  // Ensure the custom styles are an object and not empty
+  const custom = isEmpty(customStyles) || !isObj(customStyles) ? noOpObj : customStyles
 
   return useMemo(() => {
     // Extract the $class and $className from the themeStyles
@@ -103,16 +106,18 @@ export const useCss = (styleRef, customStyles, config={}) => {
 
     // Builds the dataSet prop dynamically form 
     // The passed in cssStyle object
-    const cssProps = generateDataSet(
+    const { cssProps, web } = generateDataSet(
       webContent,
       cssStyle,
-      customStyles,
+      custom,
       { className, ...config }
     )
 
-    if(!webContent) return { cssProps, children: '' }
+    if(!web) return { cssProps, styleProps: {} }
 
-    const hashId = webContent && uniqArr(webContent.hash).join('-')
+    // TODO: this it not currently being handled after the refactor
+    // Need to update to use the hash based on custom styles
+    const hashId = web && uniqArr(web.hash).join('-')
 
     // When on web, add the styles to a Dom <style> element using React-Helmet
     // This allows using css sudo classes like :hover
@@ -121,9 +126,9 @@ export const useCss = (styleRef, customStyles, config={}) => {
       styleProps: {
         id: hashId,
         // Only build the styles if the hashId does not all ready exist
-        children: head.hasHash(hashId) ? '' : jsToCss(webContent.styles, hashId),
+        children: head.hasHash(hashId) ? '' : jsToCss(web.styles, hashId),
       }
     }
 
-  }, [ themeStyles, rootClass, inline, selector, id ])
+  }, [ themeStyles, custom, rootClass, inline, selector, id ])
 }
