@@ -1,7 +1,20 @@
 #!/usr/bin/env node
 
+const path = require("path")
+const fs = require("fs")
 const { argsParse } = require("@svkeg/args-parse")
 const { compose, runCmd } = require("./docker")
+
+
+const getLocationPath = (location, type, ENV) => {
+  const fullPath = location ? path.join(location, type) : ENV
+
+  return Boolean(fs.statSync(fullPath).isDirectory())
+    ? fullPath
+    : (() => {
+        throw new Error(`Error loading path for type ${type}. Location ${fullPath} is not a directory!`)
+      })()
+}
 
 // TODO: Add options to task for a location argument
 // This should be the path of the features / steps / reports folders to be mounted
@@ -10,13 +23,19 @@ const { compose, runCmd } = require("./docker")
 // - KEG_STEPS_PATH - Set the steps path
 // - KEG_REPORTS_PATH - Set the reports path
 const buildEnvs = location => {
-  // Add the KEG_*_PATH envs here based on the passed in location
-  return {}
+  let { KEG_FEATURES_PATH, KEG_STEPS_PATH, KEG_REPORTS_PATH } = process.env
+  
+  return {
+    KEG_FEATURES_PATH: getLocationPath(location, 'features', KEG_FEATURES_PATH),
+    KEG_STEPS_PATH: getLocationPath(location, 'steps', KEG_STEPS_PATH),
+    KEG_REPORTS_PATH: getLocationPath(location, 'reports', KEG_REPORTS_PATH),
+  }
+
 }
 
 const composeUp = async (args) => {
   const { params } = args
-  const { build, cli, env, location, vnc } = params
+  const { build, env, location, vnc } = params
 
   await compose([
     '-f',
@@ -48,8 +67,8 @@ const startTask = {
     },
     build: {
       description: 'Auto builds the docker containers when the command is run',
-      example: '--build false',
-      default: true
+      example: '--build',
+      default: false
     },
     cli: {
       description: 'Runs the keg-regulator CLI',
