@@ -1,11 +1,12 @@
-import React, { useContext, useMemo } from 'react'
-import { HeadContext } from '../head/headContext'
 import { useTheme } from './useTheme'
-import { hasDomAccess } from '../helpers/hasDomAccess'
-import { getRNPlatform } from '../context/platform'
-import { checkCall, get, isStr, isObj, exists, uniqArr } from '@svkeg/jsutils'
 import { noOpObj } from '../helpers/noOp'
 import { jsToCss } from '../styleParser/jsToCss'
+import { HeadContext } from '../head/headContext'
+import React, { useContext, useMemo } from 'react'
+import { getRNPlatform } from '../context/platform'
+import { hasDomAccess } from '../helpers/hasDomAccess'
+import { generateDataSet } from '../styleParser/generateDataSet'
+import { checkCall, get, isStr, isObj, exists, uniqArr } from '@svkeg/jsutils'
 
 /**
  * Cache holder for quick check if we're using web styles or not
@@ -96,15 +97,13 @@ export const useCss = (styleRef, customStyles, config={}) => {
     const className = rootClass || $className || $class || id
 
     if(!validTheme(themeStyles, className)) return noOpObj
-    
-    config.selector = config.selector.replace(/\s\n\t/g, '')
-    
+
     // Check if we should add the styles to the Dom
     const webContent = checkWebPlatform(inline) && { styles: {}, hash: [] }
 
     // Builds the dataSet prop dynamically form 
     // The passed in cssStyle object
-    const cssProps = buildDataSet(
+    const cssProps = generateDataSet(
       webContent,
       cssStyle,
       customStyles,

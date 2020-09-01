@@ -1,7 +1,7 @@
 import { noOpObj } from '../helpers/noOp'
 import { stringHasher } from '../helpers/stringHasher'
 import { getCssSelector } from '../helpers/getCssSelector'
-import { checkCall, isStr, isObj, reduceObj, set } from '@svkeg/jsutils'
+import { checkCall, isStr, isObj, reduceObj, get, set } from '@svkeg/jsutils'
 
 /**
  * Adds a value to the passed in styleObj at the passed in rulePath
@@ -27,19 +27,20 @@ const addRuleToStyles = (styleObj, rulePath, value) => {
  *
  * @returns {string} - Hashed version of the string
  */
-const buildStyleRules = (web, cssProps, rule, value, config) => {
+const buildStyleRules = (current, config, rule, value) => {
+  const { web, cssProps, custom } = current
+  const cssValue = isObj(custom) && custom[rule] || value
+
   const selector = getCssSelector(config)
-  const rulePath = web 
-    ? `styles.${selector}.${rule}`
-    : `style.${rule}`,
-  
-  addRuleToStyles(web || cssProps, rulePath, value)
+  const rulePath = web ? `styles.${selector}.${rule}` : `style.${rule}`
+
+  addRuleToStyles(web || cssProps, rulePath, cssValue)
 
   return { web, cssProps, selector }
 }
 
 /**
- * Calls addRuleToStyles passing props based on the web || cssProps existence
+ * Adds the dataSet to the cssProps object
  * @function
  * @param {Object} web - Object that stores web Styles
  * @param {Object} cssProps - Object that stores native Styles and the dataSet object
@@ -48,10 +49,9 @@ const buildStyleRules = (web, cssProps, rule, value, config) => {
  *
  * @returns {string} - Hashed version of the string
  */
-const addDataSet = (web, cssProps, key, selector, className) => {
-  web && get(web, `styles.${selector}`) ||
-    get(cssProps, `${key}.style`) &&
-    set(cssProps, `${key}.dataSet`,  { class: className })
+const addDataSet = (web, cssProps, key, selector, dataSet) => {
+  (web && get(web, `styles.${selector}`) || get(cssProps, `${key}.style`)) &&
+    set(cssProps, `${key}.dataSet`,  dataSet)
 }
 
 /**
@@ -65,24 +65,28 @@ const addDataSet = (web, cssProps, key, selector, className) => {
  *
  * @returns {string} - Built child style object
  */
-const createDataSet = (web, cssProps, custom, config, key, value) => {
+const buildDataSet = (current, config, key, value) => {
+  const { web, cssProps } = current
+  const custom = isObj(current.custom) && current.custom[key] || noOpObj
 
   // Build the class name to be used in the dataSet and web
   const className = `${config.className}-${key}`
 
   // Recursively call buildDataSet on each child object of the original cssProps
-  const built = buildDataSet(
+  const built = generateDataSet(
     web,
     value,
-    isObj(custom) && custom[key] || noOpObj,
-    { className, ...config },
+    custom,
+    { ...config, className },
   )
 
   // Set the sub-cssProps to the key of the parent cssProps
   cssProps[key] = built.cssProps
 
+  addDataSet(web, cssProps, key, built.selector, { class: className })
+
   // Merge web styles and return web and cssProps
-  return { web: { ...web, ...built.web }, cssProps }
+  return { cssProps, web: web && { ...web, ...built.web } }
 
 }
 
@@ -106,29 +110,26 @@ const createDataSet = (web, cssProps, custom, config, key, value) => {
  * 
  * @returns {Object} - cssProps Object, containing style and dataSet keys
  */
-export const buildDataSet = (web, css, custom, config={}) => {
-  return reduceObj(css, (key, value, cssProps) => {
+export const generateDataSet = (web, css, custom, config={}) => {
 
+  return reduceObj(css, (key, value, built) => {
     // Check if value is an object
     return isObj(value)
       // If it is, we know the key should be added to the dataSet
-      ? createDataSet(
-          web,
-          cssProps,
-          custom,
+      ? buildDataSet(
+          built,
           config,
           key,
-          value
+          value,
         )
       // If it's not an object, it must by style rules
-      // So make call to add it to the platform Object
+      // So make call to add it to the styles object
       : buildStyleRules(
-          web,
-          cssProps,
-          rule,
-          isObj(custom) && custom[rule] || value,
-          config
+          built,
+          config,
+          key,
+          value,
         )
 
-  })
+  }, { cssProps: {}, web, custom })
 }
