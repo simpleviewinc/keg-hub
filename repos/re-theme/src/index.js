@@ -2,7 +2,6 @@ import { setRNDimensions } from './dimensions/webDimensions'
 import { ReThemeContext } from './context/reThemeContext'
 import { ReThemeProvider } from './context/reThemeProvider'
 import { setRNPlatform } from './context/platform'
-import { helpers } from './helpers'
 
 import {
   getSize,
@@ -56,6 +55,5 @@ export {
   // Context Exports
   ReThemeContext,
   ReThemeProvider,
-  // Style Helpers
-  helpers,
+
 }

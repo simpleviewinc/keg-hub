@@ -1,7 +1,7 @@
 import { isObj, isArr, isStr } from '@keg-hub/jsutils'
 
-const convertToPercent = (num, percent) =>
-  parseInt((num * (100 + percent)) / 100)
+const convertToPercent = (num, percent) => parseInt((num * (100 + percent)) / 100)
+
 const checkColorMax = num => (num < 255 ? num : 255)
 
 const convertToColor = (num, percent) => {
@@ -102,17 +102,19 @@ export const toRgb = (red, green, blue, alpha) => {
  * @param {number} [speed=250] - Speed of the transition
  * @param {string} [timingFunc='ease'] - Type of transition animation to use
  *
- * @returns {string} - Built CSS transition rule
+ * @returns {Object} - Built CSS transition rule
  */
 export const transition = (props = [], speed = 250, timingFunc = 'ease') => {
   return typeof props === 'string'
-    ? `${props} ${speed}ms ${timingFunc}`
+    ? { transition: `${props} ${speed}ms ${timingFunc}` }
     : isArr(props)
-      ? props
-          .reduce((trans, prop) => {
-            trans.push(`${prop} ${speed}ms ${timingFunc}`)
-            return trans
-          }, [])
-          .join(', ')
+      ? {
+          transition: props
+            .reduce((trans, prop) => {
+              trans.push(`${prop} ${speed}ms ${timingFunc}`)
+              return trans
+            }, [])
+            .join(', ')
+        }
       : null
 }

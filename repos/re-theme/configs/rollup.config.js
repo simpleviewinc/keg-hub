@@ -22,6 +22,7 @@ const buildPath = `./build`
 const inputs = {
   styleParser: './src/styleParser/index.js',
   head: './src/head/index.js',
+  colors: './src/helpers/colors.js',
 }
 
 const buildConfig = (type, ext, platform, config) => {
