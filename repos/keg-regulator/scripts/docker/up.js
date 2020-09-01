@@ -62,8 +62,8 @@ const startTask = {
   options: {
     vnc: {
       description: 'Run keg-regulator with vnc support to allow viewing tests within a browser',
-      example: '--vnc',
-      default: false
+      example: '--vnc false',
+      default: true
     },
     build: {
       description: 'Auto builds the docker containers when the command is run',
