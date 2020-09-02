@@ -25,7 +25,7 @@ const themeStyles = {
 
 const webClass = 'web-test-root-class'
 const webDataSetProp = [
-  {}, // web
+  { hash: [] }, // web
   themeStyles, // cssProps
   {}, // custom style
   { 

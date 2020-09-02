@@ -86,7 +86,7 @@ const buildDataSet = (current, config, key, value) => {
   addDataSet(web, cssProps, key, built.selector, { class: selector })
 
   // Create a hash of the selector to identify it later in in the HeadProvider
-  web.hash.push(stringHasher(selector))
+  web && web.hash.push(stringHasher(selector))
 
   // Merge web styles and return web and cssProps
   return { cssProps, web: web && { ...web, ...built.web } }

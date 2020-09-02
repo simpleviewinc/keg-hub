@@ -8,7 +8,7 @@ import { getTheme } from './getTheme'
  *
  * @returns {boolean} - T/F if the passed in arguments match
  */
-const hasManyFromTheme = (arg1, arg2) => isObj(arg1) && isObj(arg1.RTMeta)
+const hasManyFromTheme = arg1 => isObj(arg1) && isObj(arg1.RTMeta)
 
 /**
  * Joins rules from the theme together. Accepts unlimited rules objects
@@ -29,4 +29,5 @@ export const joinTheme = (arg1, arg2, ...sources) => {
   return hasManyFromTheme(arg1, arg2)
     ? getTheme(...sources)
     : getTheme(arg1, ...sources)
+
 }
