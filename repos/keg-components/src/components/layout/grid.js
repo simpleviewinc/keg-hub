@@ -2,8 +2,8 @@ import React from 'react'
 import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
-import { useTheme } from '@svkeg/re-theme'
-import { isArr, get } from '@svkeg/jsutils'
+import { useTheme } from '@keg-hub/re-theme'
+import { isArr, get } from '@keg-hub/jsutils'
 
 /**
  * Builds the styles based on the passed in isCenter param

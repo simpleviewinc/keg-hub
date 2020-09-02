@@ -2,9 +2,9 @@ import React from 'react'
 import { Dimensions, Platform } from 'react-native'
 import { addDecorator } from '@storybook/react'
 import { View } from 'KegView'
-import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@svkeg/re-theme'
+import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 import { theme } from '../src/theme'
-import { isStr } from '@svkeg/jsutils'
+import { isStr } from '@keg-hub/jsutils'
 
 setRNPlatform(Platform)
 setRNDimensions(Dimensions)

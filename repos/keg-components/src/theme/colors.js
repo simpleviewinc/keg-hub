@@ -1,6 +1,6 @@
-import { get, isArr, isStr, reduceObj } from '@svkeg/jsutils'
+import { get, isArr, isStr, reduceObj } from '@keg-hub/jsutils'
 import defaults from './defaults.json'
-import { helpers } from '@svkeg/re-theme'
+import { helpers } from '@keg-hub/re-theme'
 
 const defPalette = get(defaults, 'colors.palette', {})
 const defTypes = get(defaults, 'colors.types', {})

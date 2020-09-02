@@ -4,7 +4,7 @@ import { View } from 'KegView'
 import { Text } from '../typography/text'
 import { Divider } from '../divider/divider'
 import { renderFromType } from '../../utils'
-import { get, deepMerge } from '@svkeg/jsutils'
+import { get, deepMerge } from '@keg-hub/jsutils'
 
 const HeaderWrap = ({ numberOfLines, styles, children }) => {
   const textProps = { style: get(styles, 'header.text') }

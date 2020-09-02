@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import { validateFunctions } from '../utils'
 
 /**

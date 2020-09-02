@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { getPlatform, getPressHandler } from '../../utils'
-import { pickKeys } from '@svkeg/jsutils'
+import { pickKeys } from '@keg-hub/jsutils'
 
 /**
  * Checks the for width styles in the props styles object

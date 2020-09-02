@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { get } from '@svkeg/jsutils'
-import { useTheme } from '@svkeg/re-theme'
+import { get } from '@keg-hub/jsutils'
+import { useTheme } from '@keg-hub/re-theme'
 import { View } from 'KegView'
 
 /**

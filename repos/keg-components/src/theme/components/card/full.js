@@ -1,4 +1,4 @@
-import { deepMerge } from '@svkeg/jsutils'
+import { deepMerge } from '@keg-hub/jsutils'
 import { contained } from './contained'
 import { padding } from '../../padding'
 

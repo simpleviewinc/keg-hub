@@ -1,6 +1,6 @@
 import React from 'react'
 import { ItemHeader } from './itemHeader'
-import { deepMerge } from '@svkeg/jsutils'
+import { deepMerge } from '@keg-hub/jsutils'
 
 /**
  * AppHeader

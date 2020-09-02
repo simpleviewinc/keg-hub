@@ -1,4 +1,4 @@
-import { mapEntries, isFunc, isObj } from '@svkeg/jsutils'
+import { mapEntries, isFunc, isObj } from '@keg-hub/jsutils'
 /**
  * Validates each function in the functionObj
  * @param {Object} functionObj - object with functions as entries

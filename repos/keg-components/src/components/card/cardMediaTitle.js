@@ -1,8 +1,8 @@
 import React from 'react'
-import { useTheme } from '@svkeg/re-theme'
+import { useTheme } from '@keg-hub/re-theme'
 import { View } from 'KegView'
 import { Text } from '../typography/text'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 
 export const CardMediaTitle = ({ subtitle, title, styles }) => {
   const theme = useTheme()

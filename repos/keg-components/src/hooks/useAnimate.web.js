@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { isFunc } from '@svkeg/jsutils'
+import { isFunc } from '@keg-hub/jsutils'
 
 export const useAnimate = ({ ref, animation, config, startCb, startDelay }) => {
   const aniRef = useRef(ref)

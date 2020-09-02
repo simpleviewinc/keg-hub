@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react'
-import { useThemeHover } from '@svkeg/re-theme'
-import { checkCall } from '@svkeg/jsutils'
+import { useThemeHover } from '@keg-hub/re-theme'
+import { checkCall } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'
 import { View } from 'KegView'

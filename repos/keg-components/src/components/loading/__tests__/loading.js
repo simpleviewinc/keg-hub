@@ -2,7 +2,7 @@ import { Dimensions } from 'react-native'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { theme } from '../../../theme'
-import { setRNDimensions, ReThemeProvider } from '@svkeg/re-theme'
+import { setRNDimensions, ReThemeProvider } from '@keg-hub/re-theme'
 import { Indicator } from '../../indicator/indicator'
 
 setRNDimensions(Dimensions)

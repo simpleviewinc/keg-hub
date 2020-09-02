@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { reduceObj } from '@svkeg/jsutils'
+import { reduceObj } from '@keg-hub/jsutils'
 
 /**
  * Joins the default child components with the passed in overrides

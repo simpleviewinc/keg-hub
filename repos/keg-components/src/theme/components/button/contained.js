@@ -1,6 +1,6 @@
 import { colors } from '../../colors'
 import { transition } from '../../transition'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import { buildTheme } from '../../../utils/styles'
 import defaults from '../../defaults.json'
 

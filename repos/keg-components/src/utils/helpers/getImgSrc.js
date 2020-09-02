@@ -1,4 +1,4 @@
-import { isObj, isStr } from '@svkeg/jsutils'
+import { isObj, isStr } from '@keg-hub/jsutils'
 
 export const getImgSrc = (isWeb, src, source, uri) => {
   const imgSrc = src || source || uri

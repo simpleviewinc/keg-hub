@@ -1,4 +1,4 @@
-import { isNum, isStr, capitalize, isArr } from '@svkeg/jsutils'
+import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
 import { colors } from './colors'
 import defaults from './defaults.json'
 
