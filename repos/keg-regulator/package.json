@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/keg-regulator",
+  "name": "@keg-hub/keg-regulator",
   "description": "Automated web testing for the keg and its associated repos",
   "version": "1.0.0",
   "license": "MIT",

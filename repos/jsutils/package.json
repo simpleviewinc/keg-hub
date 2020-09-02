@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/jsutils",
+  "name": "@keg-hub/jsutils",
   "version": "0.0.1",
   "description": "Keg common javascript utils",
   "main": "build/umd/index.js",

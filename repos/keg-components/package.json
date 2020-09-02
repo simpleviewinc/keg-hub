@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/keg-components",
+  "name": "@keg-hub/keg-components",
   "version": "0.1.0",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",

@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/spawn-cmd",
+  "name": "@keg-hub/spawn-cmd",
   "version": "0.0.1",
   "description": "Cross platform child_process execution in Node",
   "repository": {

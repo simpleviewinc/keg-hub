@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/tap-resolver",
+  "name": "@keg-hub/tap-resolver",
   "version": "1.1.0",
   "description": "Resolves tap files within the SV-Keg",
   "main": "babel.config.js",

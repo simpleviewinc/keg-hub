@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/ask-it",
+  "name": "@keg-hub/ask-it",
   "version": "0.0.1",
   "description": "Node CLI helper for asking questions",
   "main": "src/index.js",

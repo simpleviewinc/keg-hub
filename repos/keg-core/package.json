@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/keg-core",
+  "name": "@keg-hub/keg-core",
   "main": "node_modules/expo/AppEntry.js",
   "version": "0.2.0",
   "publishConfig": {
