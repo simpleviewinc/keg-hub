@@ -7,7 +7,7 @@ import { Dimensions } from '../dimensions/dimensions'
 import { getSize } from '../dimensions/sizeMap'
 import { buildTheme, getDefaultTheme } from '../theme'
 import { getCurrentTheme } from '../theme/manageTheme'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 
 /**
  * Context Provider used to set the theme.

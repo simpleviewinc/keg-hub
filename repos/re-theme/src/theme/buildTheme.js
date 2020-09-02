@@ -4,7 +4,7 @@
 import { fireThemeEvent } from './themeEvent'
 import { Constants } from '../constants'
 import { getMergeSizes, getSize } from '../dimensions'
-import { isObj, deepMerge } from '@svkeg/jsutils'
+import { isObj, deepMerge } from '@keg-hub/jsutils'
 import { restructureTheme } from './restructureTheme'
 import { updateCurrentTheme } from './manageTheme'
 import { getTheme } from '../helpers/getTheme'

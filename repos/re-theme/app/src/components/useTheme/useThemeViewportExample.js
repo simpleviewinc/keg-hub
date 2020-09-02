@@ -1,6 +1,6 @@
 import React from 'react'
 import { Example } from '../../components'
-import { useTheme } from '@svkeg/re-theme'
+import { useTheme } from '@keg-hub/re-theme'
 
 const codeText = `
   {

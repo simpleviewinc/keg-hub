@@ -1,4 +1,4 @@
-import { ReThemeProvider } from '@svkeg/re-theme'
+import { ReThemeProvider } from '@keg-hub/re-theme'
 import appTheme from './path/to/theme'
 
 export const ReThemeApp = () => {

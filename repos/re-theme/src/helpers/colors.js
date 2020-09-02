@@ -1,4 +1,4 @@
-import { isObj, isArr, isStr } from '@svkeg/jsutils'
+import { isObj, isArr, isStr } from '@keg-hub/jsutils'
 
 const convertToPercent = (num, percent) =>
   parseInt((num * (100 + percent)) / 100)

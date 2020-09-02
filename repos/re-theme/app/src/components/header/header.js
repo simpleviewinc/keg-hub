@@ -1,7 +1,7 @@
 import React from 'react'
-import { useThemeHover, useTheme } from '@svkeg/re-theme'
+import { useThemeHover, useTheme } from '@keg-hub/re-theme'
 import { H2 } from '../../components'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 

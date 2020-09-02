@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import marked from 'marked'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import readmePath from '../../Readme.md';
-import { withTheme } from '@svkeg/re-theme'
+import { withTheme } from '@keg-hub/re-theme'
 
 export const Readme = withTheme(props => {
 

@@ -1,7 +1,7 @@
 /** @module theme */
 'use strict'
 
-import { deepMerge, isObj } from '@svkeg/jsutils'
+import { deepMerge, isObj } from '@keg-hub/jsutils'
 import { Dimensions } from '../dimensions/dimensions'
 import { buildTheme } from './buildTheme'
 

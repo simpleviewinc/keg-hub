@@ -1,4 +1,4 @@
-import { isObj } from '@svkeg/jsutils'
+import { isObj } from '@keg-hub/jsutils'
 
 const webDefPlatform = {
   OS: 'web',

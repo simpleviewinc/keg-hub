@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from '@svkeg/re-theme'
+import { useTheme } from '@keg-hub/re-theme'
 
 export const UseThemeButton = props => {
   const theme = useTheme()

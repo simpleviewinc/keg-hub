@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeActive, useTheme } from '@svkeg/re-theme'
+import { useThemeActive, useTheme } from '@keg-hub/re-theme'
 
 export const UseThemeActiveButton = props => {
   const { components: { button } } = useTheme()
