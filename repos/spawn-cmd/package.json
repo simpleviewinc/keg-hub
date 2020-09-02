@@ -25,7 +25,7 @@
     "test": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
-    "@svkeg/jsutils": "0.0.1",
+    "@keg-hub/jsutils": "0.0.1",
     "app-root-path": "3.0.0",
     "cross-spawn": "7.0.3",
     "shell-exec": "1.0.2",

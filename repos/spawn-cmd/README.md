@@ -3,7 +3,7 @@
 
 ### Dependencies
 * [app-root-path](https://github.com/inxilpro/node-app-root-path)
-* [@svkeg/jsutils](https://github.com/lancetipton/@svkeg/jsutils)
+* [@keg-hub/jsutils](https://github.com/lancetipton/@keg-hub/jsutils)
 * [tree-kill](https://github.com/pkrumins/node-tree-kill)
 
 ## Install
