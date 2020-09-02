@@ -21,7 +21,7 @@ export const HeadElement = props => {
 
   const indexRef = useRef(-1)
   const headTagsRef = useRef(null)
-  const children = Tag === 'style' && (style || props.children)
+  const children = (Tag === 'style' && style) || props.children
 
   useEffect(() => {
     indexRef.current = headTagsRef.current.addTag(Tag, id)
