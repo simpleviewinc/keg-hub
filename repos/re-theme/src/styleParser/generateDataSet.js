@@ -1,7 +1,7 @@
 import { noOpObj } from '../helpers/noOp'
 import { stringHasher } from '../helpers/stringHasher'
 import { getCssSelector } from '../helpers/getCssSelector'
-import { checkCall, isStr, isObj, reduceObj, get, set } from '@svkeg/jsutils'
+import { isObj, reduceObj, get, set } from '@svkeg/jsutils'
 
 /**
  * Adds a value to the passed in styleObj at the passed in rulePath
@@ -84,6 +84,9 @@ const buildDataSet = (current, config, key, value) => {
   cssProps[key] = built.cssProps
 
   addDataSet(web, cssProps, key, built.selector, { class: selector })
+
+  // Create a hash of the selector to identify it later in in the HeadProvider
+  web.hash.push(stringHasher(selector))
 
   // Merge web styles and return web and cssProps
   return { cssProps, web: web && { ...web, ...built.web } }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Provider } from './headContext'
 import { hasDomAccess } from '../helpers/hasDomAccess'
+import { isArr } from '@svkeg/jsutils'
 
 /**
  * HeadProvider - Component used to apply styles to the Dom when on a web Platform
@@ -56,6 +57,8 @@ export class HeadProvider extends Component {
      */
     removeTag: (tag, index, id) => {
       let tags = this.ids.get(id)
+      if(!isArr(tags)) return
+
       index = index || tags.indexOf(tag)
       tags = index >= -1 && tags.splice(index, 1)
 
