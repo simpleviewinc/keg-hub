@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { isObj, isStr } = require('@svkeg/jsutils')
+const { isObj, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Checks is a path is a directory

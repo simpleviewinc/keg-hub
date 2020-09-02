@@ -1,13 +1,13 @@
 const path = require('path')
-const { isStr } = require('@svkeg/jsutils')
+const { isStr } = require('@keg-hub/jsutils')
 const tapConstants = require('./tapConstants')
 const { configNames } = tapConstants
 
 /**
  * Validates that the source config file name is one of the accepted values in tapConstants.configNames
- * @param {string} srcConfigName 
+ * @param {string} srcConfigName
  */
-const validateConfigName = (srcConfigName) => {
+const validateConfigName = srcConfigName => {
   const errorMessage = 'Error: Incorrect App config file name.'
 
   if (!isStr(srcConfigName))
@@ -17,7 +17,7 @@ const validateConfigName = (srcConfigName) => {
       \t - Found: "${typeof srcConfigName}"
     `)
 
-  const matchesSrc = s => (s === srcConfigName)
+  const matchesSrc = src => src === srcConfigName
   if (!configNames.some(matchesSrc)) {
     throw new Error(`
       ${errorMessage}
@@ -29,11 +29,11 @@ const validateConfigName = (srcConfigName) => {
 }
 
 /**
- * Make temp file name, ensuring it has the same name as the 
+ * Make temp file name, ensuring it has the same name as the
  * source but with .json extension
  * @param {string} srcConfigName - the file name of the source config.
  */
-const buildTempConfigName = (srcConfigName) => {
+const buildTempConfigName = srcConfigName => {
   validateConfigName(srcConfigName)
   const pathResults = path.parse(srcConfigName)
   return `${pathResults.name}.json`

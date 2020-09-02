@@ -1,4 +1,4 @@
-const { setLogs } = require('@svkeg/jsutils')
+const { setLogs } = require('@keg-hub/jsutils')
 const buildAliases = require('./builders/buildAliases')
 const buildConstants = require('./builders/buildConstants')
 const { validateApp } = require('./helpers')

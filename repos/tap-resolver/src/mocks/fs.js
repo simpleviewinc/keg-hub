@@ -1,4 +1,4 @@
-const { isFunc, get } = require('@svkeg/jsutils')
+const { isFunc, get } = require('@keg-hub/jsutils')
 
 const testFs = method => get(global, [ 'testMocks', 'fs', method ])
 

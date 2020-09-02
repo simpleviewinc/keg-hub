@@ -1,4 +1,4 @@
-const { isObj, isEmpty, isStr, get } = require('@svkeg/jsutils')
+const { isObj, isEmpty, isStr, get } = require('@keg-hub/jsutils')
 const { requireFile } = require('../helpers')
 const tapConstants = require('../tap/tapConstants')
 

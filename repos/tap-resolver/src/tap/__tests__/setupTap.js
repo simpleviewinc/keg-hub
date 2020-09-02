@@ -1,5 +1,5 @@
 const path = require('path')
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { FS, Rimraf, config, options, kegPath } = require('../../mocks')
 
 // Helpers to allow calling the setup function in a test env
