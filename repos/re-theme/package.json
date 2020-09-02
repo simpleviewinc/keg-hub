@@ -105,6 +105,9 @@
       "__DEV__": true
     },
     "testEnvironment": "jsdom",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/mocks"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/setupTests.js"
     ]
