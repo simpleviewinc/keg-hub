@@ -5,7 +5,7 @@ import {
   isArr,
   typeOf,
   get,
-} from '@svkeg/jsutils'
+} from '@keg-hub/jsutils'
 import { MakeRequestIssue } from './error'
 import { Values } from 'SVConstants'
 

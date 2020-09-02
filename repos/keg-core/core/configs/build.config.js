@@ -1,11 +1,11 @@
 const path = require('path')
 const rootDir = require('app-root-path').path
-const appConf = require('@svkeg/tap-resolver/src/getAppConfig')(
+const appConf = require('@keg-hub/tap-resolver/src/getAppConfig')(
   rootDir,
   true,
   false
 )
-const { get, deepMerge } = require('@svkeg/jsutils')
+const { get, deepMerge } = require('@keg-hub/jsutils')
 const {
   AWS_BUCKET,
   AWS_ACCESS_KEY_ID,

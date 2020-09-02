@@ -1,6 +1,6 @@
 import { isValidSetItemRequest, handleInvalidRequest } from './errorHandler'
 import { ItemsRequestError } from './error'
-import { isArr } from '@svkeg/jsutils'
+import { isArr } from '@keg-hub/jsutils'
 import '../typedefs'
 
 /**

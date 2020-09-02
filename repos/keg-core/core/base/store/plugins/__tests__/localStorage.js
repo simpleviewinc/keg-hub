@@ -1,5 +1,5 @@
 import { Mocks } from 'SVMocks'
-import { set } from '@svkeg/jsutils'
+import { set } from '@keg-hub/jsutils'
 
 const mockKeyStore = {
   setItem: jest.fn(),

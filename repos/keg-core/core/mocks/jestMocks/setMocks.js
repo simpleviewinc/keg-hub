@@ -1,7 +1,7 @@
 import { resetMocks } from './resetMocks'
 
 const path = require('path')
-const { isObj, mapObj } = require('@svkeg/jsutils')
+const { isObj, mapObj } = require('@keg-hub/jsutils')
 const BASE_PATH = path.join('../../base')
 const packageConf = require('../../../package.json')
 const TESTS_FOLDER = '/__tests__/'

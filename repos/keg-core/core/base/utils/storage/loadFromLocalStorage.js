@@ -1,5 +1,5 @@
 import { KeyStore } from 'SVNative/keyStore'
-import { validate, get, set } from '@svkeg/jsutils'
+import { validate, get, set } from '@keg-hub/jsutils'
 import { isValidStoragePath, isValidKeyStore } from './validators'
 import { upsert } from 'SVActions/items'
 import { Values } from 'SVConstants'

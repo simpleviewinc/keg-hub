@@ -1,5 +1,5 @@
 import { useLocation } from 'SVComponents/router/router'
-import { queryToObj, get } from '@svkeg/jsutils'
+import { queryToObj, get } from '@keg-hub/jsutils'
 import { useState, useEffect } from 'react'
 
 /**

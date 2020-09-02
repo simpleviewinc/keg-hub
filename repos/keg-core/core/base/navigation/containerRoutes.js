@@ -2,7 +2,7 @@ import React from 'react'
 import { RouterSwitch, Route } from 'SVComponents'
 import * as containers from 'SVContainers'
 import { PageNotFoundContainer } from '../containers/pageNotFound'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 
 /**
  * builds the react-router component based on the passed in configs

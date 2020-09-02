@@ -1,5 +1,5 @@
 import './platform'
-import { isStr } from '@svkeg/jsutils'
+import { isStr } from '@keg-hub/jsutils'
 
 const logMethods = {
   ...console,
