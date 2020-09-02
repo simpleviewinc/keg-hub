@@ -26,8 +26,7 @@ const containedStyles = (state, colorType) => {
       $native: {},
     },
     content: {
-      $small: {
-        color:
+      color:
         state === 'disabled'
           ? get(colors, 'opacity._50')
           : get(colors, 'palette.white01'),
@@ -38,10 +37,6 @@ const containedStyles = (state, colorType) => {
         $web: {
           ...transition(['color'], 0.15),
         },
-      },
-      $medium: {
-        fontSize: 20
-      }
     },
   }
 }
