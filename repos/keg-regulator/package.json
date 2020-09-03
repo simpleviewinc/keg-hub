@@ -39,8 +39,8 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@svkeg/ask-it": "0.0.1",
-    "@svkeg/spawn-cmd": "0.0.1",
+    "@keg-hub/ask-it": "0.0.1",
+    "@keg-hub/spawn-cmd": "0.0.1",
     "chokidar": "3.4.0",
     "open": "^7.0.4"
   },
