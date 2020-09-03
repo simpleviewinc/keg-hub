@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useLayoutEffect } from 'react'
 import { isFunc, isObj, isColl, deepMerge, checkCall } from '@svkeg/jsutils'
 import { Constants } from '../constants'
 
@@ -141,11 +141,19 @@ export const hookFactory = events =>
     const hookRef = ref || useRef()
     // Set the default value as off
     const [ value, setValue ] = useState(offValue)
+    const [ valueOn, setValueOn ] = useState(onValue)
 
     // Set default joinedOnOff, to allow comparing against later
-    const [activeValue] = useState(
-      checkJoinValues(offValue, onValue, onValue, noMerge)
+    const [ activeValue, setActiveValue ] = useState(
+      checkJoinValues(offValue, valueOn, valueOn, noMerge)
     )
+
+    useLayoutEffect(() => {
+      if (onValue !== valueOn) {
+        setValueOn(onValue)
+        setActiveValue(checkJoinValues(offValue, onValue, onValue, noMerge))
+      }
+    }, [ onValue, valueOn, offValue, noMerge ])
 
     // Create the callback ref ( i.e. function ref )
     // Which gets the node the ref is attached to as an argument

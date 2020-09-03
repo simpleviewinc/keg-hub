@@ -53,13 +53,13 @@ export const ButtonWrapper = props => {
   const [ hoverRef, hoverStyles ] = useThemeHover(
     get(btnStyles, 'default', {}),
     get(btnStyles, 'hover'),
-    { ref, noMerge: true }
+    { ref }
   )
 
   const [ themeRef, themeStyles ] = useThemeActive(
     hoverStyles,
     get(btnStyles, 'active'),
-    { ref: hoverRef, noMerge: true }
+    { ref: hoverRef }
   )
 
   return (
