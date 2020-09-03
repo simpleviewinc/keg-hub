@@ -15,17 +15,17 @@ const tunnel = async args => {
   const { params } = args
   const { qr, source, port } = params
 
-  const ip = process.env.KEG_DOCKER_IP
+  const dockerIP = process.env.KEG_DOCKER_IP
 
   Logger.header('Starting tunnel...', 'white')
 
-  const url = await ngrok.connect(source || port || ip)
+  const tunnelUrl = await ngrok.connect(source || port || dockerIP)
 
-  Logger.spacedMsg('Source:', Logger.color('magenta', ip))
-  Logger.spacedMsg('Tunnel:', Logger.color('green', url))
+  Logger.spacedMsg('Source:', Logger.color('magenta', source || port || dockerIP))
+  Logger.spacedMsg('Tunnel:', Logger.color('green', tunnelUrl))
 
   // show a qr code on the terminal that the user can use to quickly access the tunnel on a mobile device
-  qr && qrcode.generate(url, { small: false })
+  qr && qrcode.generate(tunnelUrl, { small: false })
 }
 
 module.exports = {
