@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
-const { get, set, isObj } = require('@svkeg/jsutils')
-const { ask } = require('@svkeg/ask-it')
+const { get, set, isObj } = require('@keg-hub/jsutils')
+const { ask } = require('@keg-hub/ask-it')
 const { GLOBAL_CONFIG_PATHS } = require('KegConst/constants')
 const { addGlobalConfigProp, getTapPath } = require('KegUtils')
 

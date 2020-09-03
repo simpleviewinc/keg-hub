@@ -1,4 +1,4 @@
-const { reduceObj } = require('@svkeg/jsutils')
+const { reduceObj } = require('@keg-hub/jsutils')
 const { ENV_MAP } = require('KegConst/constants')
 
 /**

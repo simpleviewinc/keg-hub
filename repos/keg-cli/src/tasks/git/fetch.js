@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { git } = require('KegGitCli')
-const { exists } = require('@svkeg/jsutils')
+const { exists } = require('@keg-hub/jsutils')
 const { getGitPath } = require('KegUtils/git')
 const { generalError } = require('KegUtils/error')
 

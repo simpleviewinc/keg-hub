@@ -1,4 +1,4 @@
-const { set } = require('@svkeg/jsutils')
+const { set } = require('@keg-hub/jsutils')
 const { exists } = require('../helpers/exists')
 const { saveGlobalConfig } = require('./saveGlobalConfig')
 const { validateGlobalConfig } = require('./validateGlobalConfig')

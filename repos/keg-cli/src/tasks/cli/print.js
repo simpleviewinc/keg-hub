@@ -1,4 +1,4 @@
-const { get, isStr } = require('@svkeg/jsutils')
+const { get, isStr } = require('@keg-hub/jsutils')
 const { generalError } = require('KegUtils/error')
 const CONSTANTS = require('KegConst/constants')
 const { DOCKER } = require('KegConst/docker')

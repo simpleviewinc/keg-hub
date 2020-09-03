@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { getGlobalConfig } = require('./getGlobalConfig')
 const {git} = require('KegGitCli')
 const { getTapPath } = require('./getTapPath')

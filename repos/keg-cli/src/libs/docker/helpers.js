@@ -14,7 +14,7 @@ const {
   toStr,
   reduceObj,
   uniqArr,
-} = require('@svkeg/jsutils')
+} = require('@keg-hub/jsutils')
 
 /**
  * Throws an error with the passed in message

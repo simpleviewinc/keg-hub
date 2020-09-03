@@ -7,7 +7,7 @@ const {
   toContainerEnvs
 } = require('./helpers')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
-const { isArr, toStr, isStr, deepMerge, checkCall } = require('@svkeg/jsutils')
+const { isArr, toStr, isStr, deepMerge, checkCall } = require('@keg-hub/jsutils')
 
 // Container commands the require an item argument of the container id or name
 const containerItemCmds = [

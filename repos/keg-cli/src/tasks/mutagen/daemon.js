@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { mutagen } = require('KegMutagen')
-const { isObj } = require('@svkeg/jsutils')
+const { isObj } = require('@keg-hub/jsutils')
 
 /**
  * Default daemon task options

@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { get, isArr, set } = require('@svkeg/jsutils')
+const { get, isArr, set } = require('@keg-hub/jsutils')
 const { syncService } = require('./syncService')
 const { mutagenService } = require('./mutagenService')
 const { getServiceArgs } = require('./getServiceArgs')

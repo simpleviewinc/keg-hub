@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { get, limbo, keyMap } = require('@svkeg/jsutils')
+const { get, limbo, keyMap } = require('@keg-hub/jsutils')
 const { generalError } = require('KegUtils/error')
 const { buildDockerLogin } = require('KegUtils/builders/buildDockerLogin')
 const { getRepoName } = require('KegUtils/globalConfig/getRepoName')

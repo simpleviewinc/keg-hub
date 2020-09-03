@@ -1,7 +1,7 @@
 
 const docker = require('KegDocCli')
 const { spawnCmd } = require('KegProc')
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
 const { getContainerConst } = require('KegUtils/docker/getContainerConst')

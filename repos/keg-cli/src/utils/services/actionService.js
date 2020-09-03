@@ -9,7 +9,7 @@ const { runInternalTask } = require('../task/runInternalTask')
 const { buildExecParams } = require('../docker/buildExecParams')
 const { findDependencyName } = require('../helpers/findDependencyName')
 
-const { get, isArr, isStr, isObj, checkCall } = require('@svkeg/jsutils')
+const { get, isArr, isStr, isObj, checkCall } = require('@keg-hub/jsutils')
 const { buildContainerContext } = require('../builders/buildContainerContext')
 
 /**

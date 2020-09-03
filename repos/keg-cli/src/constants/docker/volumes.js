@@ -1,4 +1,4 @@
-const { deepFreeze, deepMerge, keyMap } = require('@svkeg/jsutils')
+const { deepFreeze, deepMerge, keyMap } = require('@keg-hub/jsutils')
 const { cliRootDir, images } = require('./values')
 
 // TODO: Updated this to use DefaultENVs object
@@ -47,8 +47,8 @@ const VOLUMES = images.reduce((data, image) => {
   const corePath = mountPaths[image].core
   data[image.toUpperCase()] = deepMerge(DEFAULT, {
     PATHS: {
-      components: `${corePath}/node_modules/@svkeg/keg-components`,
-      resolver: `${corePath}/node_modules/@svkeg/tap-resolver`,
+      components: `${corePath}/node_modules/@keg-hub/keg-components`,
+      resolver: `${corePath}/node_modules/@keg-hub/tap-resolver`,
     },
   })
 

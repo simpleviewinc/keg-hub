@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { askForPackage } = require('./askForPackage')
 const { formatPackage } = require('./formatPackage')
 const { getAllPackages } = require('./getAllPackages')

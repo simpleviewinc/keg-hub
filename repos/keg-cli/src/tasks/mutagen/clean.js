@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { mutagen } = require('KegMutagen')
-const { isArr, get } = require('@svkeg/jsutils')
+const { isArr, get } = require('@keg-hub/jsutils')
 
 /**
  * Clean up and remove orphaned mutagen syncs

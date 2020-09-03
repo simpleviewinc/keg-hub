@@ -1,4 +1,4 @@
-const { deepFreeze, keyMap } = require('@svkeg/jsutils')
+const { deepFreeze, keyMap } = require('@keg-hub/jsutils')
 
 // Pattern matching (RegEx)
 module.exports = deepFreeze({

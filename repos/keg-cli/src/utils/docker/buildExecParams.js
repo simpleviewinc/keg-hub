@@ -1,4 +1,4 @@
-const { isBool } = require('@svkeg/jsutils')
+const { isBool } = require('@keg-hub/jsutils')
 
 /**
  * Gets the arguments to pass to the docker exec command

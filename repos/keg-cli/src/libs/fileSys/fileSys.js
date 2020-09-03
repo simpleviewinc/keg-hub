@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { checkCall, limbo, isFunc } = require('@svkeg/jsutils')
+const { checkCall, limbo, isFunc } = require('@keg-hub/jsutils')
 const { generalError } = require('KegUtils/error')
 
 /**

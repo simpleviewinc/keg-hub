@@ -1,5 +1,5 @@
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
-const { isStr } = require('@svkeg/jsutils')
+const { isStr } = require('@keg-hub/jsutils')
 
 /**
  * Gets the prefixed version of a container if it exists

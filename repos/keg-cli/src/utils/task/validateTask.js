@@ -1,4 +1,4 @@
-const { isObj, isFunc } = require('@svkeg/jsutils')
+const { isObj, isFunc } = require('@keg-hub/jsutils')
 const { throwNoAction, throwNoTask } = require('../error')
 
 /**

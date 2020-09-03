@@ -1,4 +1,4 @@
-const { deepMerge } = require('@svkeg/jsutils')
+const { deepMerge } = require('@keg-hub/jsutils')
 const { spawnCmd } = require('KegProc')
 const { getPathFromConfig } = require('KegUtils')
 

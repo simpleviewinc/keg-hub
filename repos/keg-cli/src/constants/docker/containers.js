@@ -4,7 +4,7 @@ const { PREFIXED } = require('./machine')
 const { loadValuesFiles, loadEnvFiles } = require('./loaders')
 const { containersPath, images } = require('./values')
 const { defineProperty } = require('../../utils/helpers/defineProperty')
-const { deepFreeze, deepMerge, keyMap } = require('@svkeg/jsutils')
+const { deepFreeze, deepMerge, keyMap } = require('@keg-hub/jsutils')
 
 /**
  * Holds each docker containers meta data that can be built by the CLI

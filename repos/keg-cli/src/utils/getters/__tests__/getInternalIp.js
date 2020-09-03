@@ -1,4 +1,4 @@
-const { isNum } = require('@svkeg/jsutils')
+const { isNum } = require('@keg-hub/jsutils')
 
 const { getInternalIp } = require('../getInternalIp')
 

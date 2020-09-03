@@ -1,6 +1,6 @@
 
 const { Logger } = require('KegLog')
-const { ask } = require('@svkeg/ask-it')
+const { ask } = require('@keg-hub/ask-it')
 
 /**
  * Setup task for keg-cli

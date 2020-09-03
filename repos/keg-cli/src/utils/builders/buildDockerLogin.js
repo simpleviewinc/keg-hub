@@ -1,4 +1,4 @@
-const { get, reduceObj } = require('@svkeg/jsutils')
+const { get, reduceObj } = require('@keg-hub/jsutils')
 const { getGlobalConfig } = require('../globalConfig/getGlobalConfig')
 const { getGitKey } = require('../git/getGitKey')
 const { getGitConfigItem } = require('../git/getGitConfigItem')

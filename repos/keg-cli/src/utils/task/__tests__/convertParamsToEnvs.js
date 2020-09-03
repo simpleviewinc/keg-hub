@@ -1,4 +1,4 @@
-const { deepClone, isObj } = require('@svkeg/jsutils')
+const { deepClone, isObj } = require('@keg-hub/jsutils')
 
 const defArgs = { env: 'development', command: 'run', install: true, local: true }
 const contextEnv = { KEG_FOO: 'BAR', KEG_BAZ: 'BAS' }

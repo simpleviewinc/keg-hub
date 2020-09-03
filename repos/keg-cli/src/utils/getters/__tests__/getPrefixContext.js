@@ -1,4 +1,4 @@
-const { deepClone } = require('@svkeg/jsutils')
+const { deepClone } = require('@keg-hub/jsutils')
 const orgGlobalConfig = global.getGlobalCliConfig()
 const globalConfig = deepClone(orgGlobalConfig)
 

@@ -10,7 +10,7 @@ const {
   checkCall,
   uniqArr,
   isArr,
-} = require('@svkeg/jsutils')
+} = require('@keg-hub/jsutils')
 const { Logger } = require('KegLog')
 
 /**

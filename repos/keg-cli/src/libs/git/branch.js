@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { gitCli, gitCmd } = require('./commands')
-const { checkCall } = require('@svkeg/jsutils')
+const { checkCall } = require('@keg-hub/jsutils')
 const { buildCmdOpts, ensureGitRemote, ensureGitBranch } = require('./helpers')
 const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 

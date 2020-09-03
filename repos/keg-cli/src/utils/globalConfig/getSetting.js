@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { __getGlobalConfig } = require('./globalConfigCache')
 /**
  * Gets a setting from the global config

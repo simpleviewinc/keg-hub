@@ -1,4 +1,4 @@
-const { isArr, isStr, toStr, isObj } = require('@svkeg/jsutils')
+const { isArr, isStr, toStr, isObj } = require('@keg-hub/jsutils')
 const { Logger } = require('KegLog')
 const { executeCmd, spawnCmd, spawnProc } = require('KegProc')
 const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')

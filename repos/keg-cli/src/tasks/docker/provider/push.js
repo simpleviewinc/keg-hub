@@ -1,6 +1,6 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { get, mapObj } = require('@svkeg/jsutils')
+const { get, mapObj } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { generalError, throwRequired, throwNoRepo, throwWrap } = require('KegUtils/error')

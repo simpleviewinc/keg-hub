@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { spawnCmd, executeCmd } = require('KegProc')
 const { readDir, stat } = require('KegFileSys')
 const { generalError, throwNoTapLink } = require('../error')

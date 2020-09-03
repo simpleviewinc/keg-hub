@@ -1,7 +1,7 @@
-const { limbo, isFunc, reduceObj } = require('@svkeg/jsutils')
+const { limbo, isFunc, reduceObj } = require('@keg-hub/jsutils')
 
 /**
- * Converts all convert functions into a limbo function from @svkeg/jsutils
+ * Converts all convert functions into a limbo function from @keg-hub/jsutils
  * @param {Object} obj - object to add limbo to child functions
  *
  * @returns {Object} - Object with all functions wrapped with limbo

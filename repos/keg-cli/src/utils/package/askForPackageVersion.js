@@ -1,6 +1,6 @@
 const { throwPackageError } = require('../error/throwPackageError')
-const { get } = require('@svkeg/jsutils')
-const { ask } = require('@svkeg/ask-it')
+const { get } = require('@keg-hub/jsutils')
+const { ask } = require('@keg-hub/ask-it')
 
 /**
  * Asks the user which version of the package to use

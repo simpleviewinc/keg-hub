@@ -3,7 +3,7 @@
 require('module-alias/register')
 
 require('KegConst/constants')
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 
 /**
  * Checks if the Keg-CLI has been updated

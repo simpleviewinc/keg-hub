@@ -5,7 +5,7 @@ const { AskIt } = require('KegMocks/ask')
 const throwPackageError = jest.fn()
 jest.setMock('../../error/throwPackageError', { throwPackageError })
 jest.setMock('KegLog', { Logger })
-jest.setMock('@svkeg/ask-it', { ask: AskIt })
+jest.setMock('@keg-hub/ask-it', { ask: AskIt })
 
 const { askForPackage } = require('../askForPackage')
 

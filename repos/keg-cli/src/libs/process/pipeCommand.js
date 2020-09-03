@@ -1,7 +1,7 @@
 const { Logger } = require('KegLog')
 const { Loading } = require('./loading')
-const { spawnCmd } = require('@svkeg/spawn-cmd')
-const { get, checkCall, deepMerge, isFunc, isArr } = require('@svkeg/jsutils')
+const { spawnCmd } = require('@keg-hub/spawn-cmd')
+const { get, checkCall, deepMerge, isFunc, isArr } = require('@keg-hub/jsutils')
 
 
 /**

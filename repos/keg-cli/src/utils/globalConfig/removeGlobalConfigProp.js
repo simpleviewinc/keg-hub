@@ -1,4 +1,4 @@
-const { unset } = require('@svkeg/jsutils')
+const { unset } = require('@keg-hub/jsutils')
 const { saveGlobalConfig } = require('./saveGlobalConfig')
 const { validateGlobalConfig } = require('./validateGlobalConfig')
 

@@ -1,7 +1,7 @@
 const { Logger } = require('KegLog')
 const { getHubRepos } = require('KegUtils/hub/getHubRepos')
 const { spawnCmd } = require('KegProc')
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 
 // Update the Max listeners, to ensure all processes can exit properly
 process.setMaxListeners(Infinity)

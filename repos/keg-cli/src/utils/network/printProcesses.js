@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { pickKeys } = require('@svkeg/jsutils')
+const { pickKeys } = require('@keg-hub/jsutils')
 
 /**
  * Prints out processes returned by getProcessesUsingPort

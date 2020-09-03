@@ -1,4 +1,4 @@
-const { checkCall, isStr } = require('@svkeg/jsutils')
+const { checkCall, isStr } = require('@keg-hub/jsutils')
 const { gitCli } = require('./commands')
 const { formatRemotes } = require('./helpers')
 

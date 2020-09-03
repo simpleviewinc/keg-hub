@@ -1,8 +1,8 @@
-const { deepMerge, deepClone, validate, isStr, isObj, get } = require('@svkeg/jsutils')
+const { deepMerge, deepClone, validate, isStr, isObj, get } = require('@keg-hub/jsutils')
 const globalConfig = require('KegMocks/helpers/globalConfig')
 
 const validateMock = jest.fn((...args) => validate(...args))
-jest.setMock('@svkeg/jsutils', {
+jest.setMock('@keg-hub/jsutils', {
   deepMerge,
   deepClone,
   validate: validateMock,

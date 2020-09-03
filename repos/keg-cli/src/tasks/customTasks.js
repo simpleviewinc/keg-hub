@@ -1,6 +1,6 @@
 const { throwExitError } = require('KegUtils/error/throwExitError')
 const { TASK_REQURIED } = require('../constants')
-const { get, reduceObj, isObj } = require('@svkeg/jsutils')
+const { get, reduceObj, isObj } = require('@keg-hub/jsutils')
 const appConfig = {}
 
 /**
