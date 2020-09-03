@@ -1,4 +1,4 @@
-const { Logger } = require("@svkeg/ask-it/src/logger")
+const { Logger } = require("@keg-hub/ask-it/src/logger")
 
 /**
  * Formats and throws an error when a required argument is not included

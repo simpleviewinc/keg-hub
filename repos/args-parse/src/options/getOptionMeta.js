@@ -1,4 +1,4 @@
-const { isObj } = require('@svkeg/jsutils')
+const { isObj } = require('@keg-hub/jsutils')
 
 /**
  * Gets the option meta data for a key from a task

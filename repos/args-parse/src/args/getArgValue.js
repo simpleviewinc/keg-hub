@@ -2,7 +2,7 @@ const {
   exists,
   isArr,
   isStr,
-} = require('@svkeg/jsutils')
+} = require('@keg-hub/jsutils')
 const { splitEqualsMatch } = require('../utils/splitEqualsMatch')
 const { buildMatchTypes } = require('../utils/buildMatchTypes')
 const { hasKeyIdentifier } = require('../utils/hasKeyIdentifier')

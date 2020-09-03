@@ -1,6 +1,6 @@
 const { testTask1, testTask2, testTask3, testTask4 } = require('../__mocks__/testTasks')
 const Ask = require('../__mocks__/ask')
-jest.setMock('@svkeg/ask-it', Ask)
+jest.setMock('@keg-hub/ask-it', Ask)
 
 const { argsParse } = require('../argsParse')
 
@@ -221,7 +221,7 @@ describe('argsParse', () => {
 
   })
 
-  it('should call @svkeg/ask-it when no value is passed and task.ask is exist', async () => {
+  it('should call @keg-hub/ask-it when no value is passed and task.ask is exist', async () => {
 
     expect(Ask.ask).not.toHaveBeenCalled()
     expect(Ask.buildModel).not.toHaveBeenCalled()

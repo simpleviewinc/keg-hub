@@ -1,5 +1,5 @@
-const { isObj, isStr, get } = require('@svkeg/jsutils')
-const { ask, buildModel } = require('@svkeg/ask-it')
+const { isObj, isStr, get } = require('@keg-hub/jsutils')
+const { ask, buildModel } = require('@keg-hub/ask-it')
 const { getConfig } = require('../utils/getConfig')
 
 /**
