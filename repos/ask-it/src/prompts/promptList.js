@@ -1,6 +1,6 @@
 const { ask } = require('../askIt')
 const { Logger } = require('../logger')
-const { validate, isArr, isStr } = require('@svkeg/jsutils')
+const { validate, isArr, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Helper that prompts the user to select an option from a list.
