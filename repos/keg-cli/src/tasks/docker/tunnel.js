@@ -1,6 +1,7 @@
 const ngrok = require('ngrok')
 const qrcode = require('qrcode-terminal')
 const { Logger } = require('KegLog')
+const { DOCKER } = require('KegConst/docker')
 
 /**
  * Create a public tunnel the the url (by default, to `kegdev.xyz`)
@@ -15,9 +16,9 @@ const tunnel = async args => {
   const { params } = args
   const { qr, source, port } = params
 
-  const dockerIP = process.env.KEG_DOCKER_IP
+  const dockerIP = DOCKER.PREFIXED.KEG_DOCKER_IP
   const srcUri = source || port || dockerIP
-
+  
   Logger.header('Starting tunnel...', 'white')
 
   const tunnelUrl = await ngrok.connect(srcUri)
@@ -32,14 +33,15 @@ const tunnel = async args => {
 module.exports = {
   tunnel: {
     name: 'tunnel',
-    alias: ['t', 'tl', 'ngrok' ],
+    alias: [ 't', 'tl', 'tn', 'tnl', 'tun', 'ngrok' ],
     action: tunnel,
     description: 'Creates a public tunnel to the running docker container available at kegdev.xyz',
     example: 'keg docker tunnel <options>',
     options: {
       qr:  {
         description: 'if true, `tunnel` will display a qr code that encodes the tunnel\'s public uri. This can make connecting a mobile device to the tunnel much easier.',
-        example: 'keg docker tunnel --qr',
+        example: 'keg docker tunnel --qr false',
+        default: true,
       },
       source: {
         description: "optional override for the source url or ip of the tunnel. By default, this command tunnels kegdev.xyz",
