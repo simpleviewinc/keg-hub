@@ -86,12 +86,12 @@
     source-map "^0.5.0"
 
 "@babel/core@^7.0.0", "@babel/core@^7.1.0", "@babel/core@^7.4.5", "@babel/core@^7.7.5", "@babel/core@^7.9.0":
-  version "7.11.5"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.11.5.tgz#6ad96e2f71899ea3f9b651f0a911e85205d1ff6d"
-  integrity sha512-fsEANVOcZHzrsV6dMVWqpSeXClq3lNbYrfFGme6DE25FQWe7pyeYpXyx9guqUnpy466JLzZ8z4uwSr2iv60V5Q==
+  version "7.11.6"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.11.6.tgz#3a9455dc7387ff1bac45770650bc13ba04a15651"
+  integrity sha512-Wpcv03AGnmkgm6uS6k8iwhIwTrcP0m17TL1n1sy7qD0qelDu4XNeW0dN0mHfa+Gei211yDaLoEe/VlbXQzM4Bg==
   dependencies:
     "@babel/code-frame" "^7.10.4"
-    "@babel/generator" "^7.11.5"
+    "@babel/generator" "^7.11.6"
     "@babel/helper-module-transforms" "^7.11.0"
     "@babel/helpers" "^7.10.4"
     "@babel/parser" "^7.11.5"
@@ -105,16 +105,16 @@
     lodash "^4.17.19"
     resolve "^1.3.2"
     semver "^5.4.1"
-    source-map "^0.6.1"
+    source-map "^0.5.0"
 
-"@babel/generator@^7.10.5", "@babel/generator@^7.11.5", "@babel/generator@^7.5.0", "@babel/generator@^7.9.0":
-  version "7.11.5"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.11.5.tgz#a5582773425a468e4ba269d9a1f701fbca6a7a82"
-  integrity sha512-9UqHWJ4IwRTy4l0o8gq2ef8ws8UPzvtMkVKjTLAiRmza9p9V6Z+OfuNd9fB1j5Q67F+dVJtPC2sZXI8NM9br4g==
+"@babel/generator@^7.10.5", "@babel/generator@^7.11.5", "@babel/generator@^7.11.6", "@babel/generator@^7.5.0", "@babel/generator@^7.9.0":
+  version "7.11.6"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.11.6.tgz#b868900f81b163b4d464ea24545c61cbac4dc620"
+  integrity sha512-DWtQ1PV3r+cLbySoHrwn9RWEgKMBLLma4OBQloPRyDYvc5msJM9kvTLo1YnlJd1P/ZuKbdli3ijr5q3FvAF3uA==
   dependencies:
     "@babel/types" "^7.11.5"
     jsesc "^2.5.1"
-    source-map "^0.6.1"
+    source-map "^0.5.0"
 
 "@babel/helper-annotate-as-pure@^7.10.4":
   version "7.10.4"
@@ -1976,17 +1976,17 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-2.1.3.tgz#0250c5468803ba6050c447463e540935bcf5bd2c"
   integrity sha512-ONUpVYx4tdoVxPtvx1BXVBmb8vut/JthrkOy1AJY1GmxfOwd6Ukui4hcncuf9odkvF7AbdtCOtTX96KGWpXC6Q==
 
-"@keg-hub/tap-resolver@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/tap-resolver/-/tap-resolver-1.1.0.tgz#710f094f2e08393fae962a752a647fb555580350"
-  integrity sha512-LWYf3mkhl/UXCgAtfTB+rRWurX2BFv/ypXmKvnzPwpuXPh4If6NY3lyBFoTFPi0Vrt8p4P9P0AQpwpFjHyIkug==
+"@keg-hub/tap-resolver@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@keg-hub/tap-resolver/-/tap-resolver-1.1.1.tgz#4d7ce0eba1fee16a28f81a0fcfc50c5aed48bb71"
+  integrity sha512-PKyxhhpqCNGKsvxjhLEgcof04Ts78aycbqEmHTIO1lpv5OQCyV9FmGynpYoKqs8ra7Q1MshlhAREJhpb+z6z7Q==
   dependencies:
     "@babel/cli" "7.8.4"
     "@babel/core" "7.10.5"
     "@babel/preset-env" "7.10.4"
     "@babel/preset-react" "7.10.4"
     "@babel/runtime" "7.10.5"
-    "@svkeg/jsutils" "0.0.1"
+    "@keg-hub/jsutils" "0.0.1"
     app-root-path "3.0.0"
     babel-loader "8.1.0"
     babel-plugin-module-resolver "4.0.0"
@@ -2196,11 +2196,6 @@
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
-
-"@svkeg/jsutils@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/jsutils/-/jsutils-0.0.1.tgz#289cb4c72ac841aada73c5f9b9c44fd60d9f3afb"
-  integrity sha512-mQEQ1MP4Cczw1u1A9MmX0WCP6QNAx34LulBuutiy8AgOmk30+m93q+/RdoXxsYAHhfrY7T3JmslUbHbs4fFdww==
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
@@ -4361,9 +4356,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001111:
-  version "1.0.30001122"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001122.tgz#2c8ff631330d986a07a7ba7125cce77a1373b475"
-  integrity sha512-pxjw28CThdrqfz06nJkpAc5SXM404TXB/h5f4UJX+rrXJKE/1bu/KAILc2AY+O6cQIFtRjV9qOR2vaEp9LDGUA==
+  version "1.0.30001123"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001123.tgz#7b981d81382ab2c8fd062f3e6439215e8c503c22"
+  integrity sha512-03dJDoa4YC4332jq0rqwiM+Hw6tA5RJtrnZKvOQy7ASoIUv8CinkcmGhYpCvCjedvkBQrrKnkcELxrUSW/XwNQ==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -5621,9 +5616,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.47, electron-to-chromium@^1.3.523:
-  version "1.3.558"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.558.tgz#a329d3139cb33e8652a7e7db4c5ae26e294b9f60"
-  integrity sha512-r6th6b/TU2udqVoUDGWHF/z2ACJVnEei0wvWZf/nt+Qql1Vxh60ZYPhQP46j4D73T/Jou7hl4TqQfxben+qJTg==
+  version "1.3.560"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.560.tgz#6c3f61fe50324770b75705300e9f98f29312ea8d"
+  integrity sha512-0cEFfOA3sNXfSxo0FIClBhrLVSe/QO9LBiqmmYPm3N/IYyt41NRTa2EhvOMWAOKpjd91t/rq062yhnJzfVMKkQ==
 
 elliptic@^6.5.3:
   version "6.5.3"
