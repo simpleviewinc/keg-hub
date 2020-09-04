@@ -1,5 +1,5 @@
 const { getConfig } = require('../utils/getConfig')
-const { exists, isStr, isBool } = require('@svkeg/jsutils')
+const { exists, isStr, isBool } = require('@keg-hub/jsutils')
 
 /**
  * Placeholder variable to cache the boolean options

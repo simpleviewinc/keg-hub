@@ -32,7 +32,7 @@ const checkForNodeModules = () => {
   const checkModules = [
     path.join(kegDir, 'node_modules/expo'),
     path.join(kegDir, 'node_modules/react'),
-    path.join(kegDir, 'node_modules/@svkeg/tap-resolver'),
+    path.join(kegDir, 'node_modules/@keg-hub/tap-resolver'),
   ]
 
   return checkModules.map(dir => fs.existsSync(dir))

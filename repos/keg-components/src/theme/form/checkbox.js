@@ -1,6 +1,6 @@
 import defaults from '../defaults.json'
 import { colors } from '../colors'
-import { get, deepMerge } from '@svkeg/jsutils'
+import { get, deepMerge } from '@keg-hub/jsutils'
 
 const height = get(defaults, 'form.checkbox.height', 20)
 const width = get(defaults, 'form.checkbox.width', 20)

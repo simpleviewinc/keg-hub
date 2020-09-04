@@ -1,7 +1,7 @@
 require('module-alias/register')
 
 const path = require('path')
-const { ask } = require('@svkeg/ask-it')
+const { ask } = require('@keg-hub/ask-it')
 const { Logger } = require('KegLog')
 const homeDir = require('os').homedir()
 const { encrypt } = require('KegCrypto')
@@ -11,7 +11,7 @@ const { requireFile } = require('KegFileSys/fileSys')
 const cliJson = require('KegRoot/scripts/setup/cli.config.json')
 const { throwExitError } = require('KegUtils/error/throwExitError')
 const { defPaths, defRepos } = require('KegUtils/globalConfig/defaultConfig')
-const { deepMerge, mapObj, reduceObj, get, set } = require('@svkeg/jsutils')
+const { deepMerge, mapObj, reduceObj, get, set } = require('@keg-hub/jsutils')
 const { saveGlobalConfig } = require('KegUtils/globalConfig/saveGlobalConfig')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
 

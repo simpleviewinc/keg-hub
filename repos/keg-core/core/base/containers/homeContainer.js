@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, H5, Text, Row } from 'SVComponents'
-import { useStylesCallback } from '@svkeg/re-theme'
-import { get } from '@svkeg/jsutils'
+import { useStylesCallback } from '@keg-hub/re-theme'
+import { get } from '@keg-hub/jsutils'
 import { isNative, isStandalonePWA, isIOSWeb } from 'SVUtils'
 
 const buildStyles = (theme, styles) => {

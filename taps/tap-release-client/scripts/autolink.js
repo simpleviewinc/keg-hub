@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const { get } = require('@svkeg/jsutils')
-const { asyncCmd } = require('@svkeg/spawn-cmd')
+const { get } = require('@keg-hub/jsutils')
+const { asyncCmd } = require('@keg-hub/spawn-cmd')
 const tapRoot = path.join(__dirname, '..')
 const tapConfig = require(`${tapRoot}/tap.json`)
 const { KEG_CLI_PATH } = process.env

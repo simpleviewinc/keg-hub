@@ -1,4 +1,4 @@
-const { deepMerge } = require('@svkeg/jsutils')
+const { deepMerge } = require('@keg-hub/jsutils')
 
 /**
  * Builds the options for the compose service

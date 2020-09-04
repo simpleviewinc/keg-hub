@@ -1,5 +1,5 @@
 const homeDir = require('os').homedir()
-const { get, template } = require('@svkeg/jsutils')
+const { get, template } = require('@keg-hub/jsutils')
 const { getComposeConfig } = require('./getComposeConfig')
 
 

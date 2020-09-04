@@ -1,7 +1,7 @@
 const {
   exists,
   isArr,
-} = require('@svkeg/jsutils')
+} = require('@keg-hub/jsutils')
 const { getArgValue } = require('./getArgValue')
 const { removeOption } = require('../options/removeOption')
 

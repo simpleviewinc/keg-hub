@@ -1,6 +1,6 @@
 const { throwWrap } = require('../error/throwWrap')
 const { executeTask } = require('../task/executeTask')
-const { get, isFunc, isStr } = require('@svkeg/jsutils')
+const { get, isFunc, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Checks all global sub-tasks for sub-sub-tasks

@@ -1,5 +1,5 @@
 const path = require('path')
-const { isArr } = require('@svkeg/jsutils')
+const { isArr } = require('@keg-hub/jsutils')
 const cliRoot = path.join(__dirname, '../../../../')
 const { git } = require('../git')
 

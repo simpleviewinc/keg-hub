@@ -1,5 +1,5 @@
 const path = require('path')
-const { validate, isStr, isObj, get } = require('@svkeg/jsutils')
+const { validate, isStr, isObj, get } = require('@keg-hub/jsutils')
 
 /**
  * Checks if an item is a string or falsy

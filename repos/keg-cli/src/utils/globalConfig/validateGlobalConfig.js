@@ -1,4 +1,4 @@
-const { isObj, get } = require('@svkeg/jsutils')
+const { isObj, get } = require('@keg-hub/jsutils')
 const { defaultConfig } = require('./defaultConfig')
 const { generalError } = require('../error/generalError')
 

@@ -1,4 +1,4 @@
-const { deepFreeze, keyMap } = require('@svkeg/jsutils')
+const { deepFreeze, keyMap } = require('@keg-hub/jsutils')
 const homeDir = require('os').homedir()
 const path = require('path')
 const { KEG_GLOBAL_CONFIG } = process.env

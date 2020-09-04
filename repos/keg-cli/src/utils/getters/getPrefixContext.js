@@ -1,6 +1,6 @@
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
 const { getKegContext } = require('./getKegContext')
-const { checkCall, isStr } = require('@svkeg/jsutils')
+const { checkCall, isStr } = require('@keg-hub/jsutils')
 /**
  * Check if it's a prefixed context, and if so parse the context from it
  * @function

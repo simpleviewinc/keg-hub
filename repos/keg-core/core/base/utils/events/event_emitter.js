@@ -1,4 +1,4 @@
-import { logData } from '@svkeg/jsutils'
+import { logData } from '@keg-hub/jsutils'
 
 let KegEventEmitter
 

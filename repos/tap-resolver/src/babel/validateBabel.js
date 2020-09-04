@@ -1,4 +1,4 @@
-const { isObj, isStr } = require('@svkeg/jsutils')
+const { isObj, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Validates the required data to create the babel config

@@ -1,4 +1,4 @@
-import { isFunc } from '@svkeg/jsutils'
+import { isFunc } from '@keg-hub/jsutils'
 
 export const getPressHandler = (isWeb, onClick, onPress) => {
   const action = onClick || onPress

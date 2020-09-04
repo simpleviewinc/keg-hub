@@ -1,6 +1,6 @@
 const webResolver = require('./webResolver')
 const contentResolver = require('./contentResolver')
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { validateApp } = require('../helpers')
 
 /**

@@ -1,6 +1,6 @@
 require('module-alias/register')
 
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
 const { getGitKey } = require('KegUtils/git/getGitKey')
 

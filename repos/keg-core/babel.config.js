@@ -1,7 +1,7 @@
 const tapPath = require('app-root-path').path
-const getAppConfig = require('@svkeg/tap-resolver/src/resolvers/getAppConfig')
-const tapResolver = require('@svkeg/tap-resolver')
-const { checkCall, deepMerge, set, get, unset } = require('@svkeg/jsutils')
+const getAppConfig = require('@keg-hub/tap-resolver/src/resolvers/getAppConfig')
+const tapResolver = require('@keg-hub/tap-resolver')
+const { checkCall, deepMerge, set, get, unset } = require('@keg-hub/jsutils')
 const tapConfig = getAppConfig(tapPath, false, false)
 const kegConfig = require('./app.json')
 const configOverrides = get(kegConfig, [ 'keg', 'overrides' ])

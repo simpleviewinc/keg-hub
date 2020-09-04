@@ -1,5 +1,5 @@
 import { getPlatform } from 'KegGetPlatform'
-import { get, deepMerge, reduceObj, isObj } from '@svkeg/jsutils'
+import { get, deepMerge, reduceObj, isObj } from '@keg-hub/jsutils'
 
 const allPlatforms = `$all`
 const platform = `$` + getPlatform()

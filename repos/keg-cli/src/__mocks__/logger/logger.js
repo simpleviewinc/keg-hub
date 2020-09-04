@@ -1,4 +1,4 @@
-const { keyMap } = require('@svkeg/jsutils')
+const { keyMap } = require('@keg-hub/jsutils')
 
 const logData = (...data) => console.log(...data)
 

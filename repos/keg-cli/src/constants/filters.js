@@ -1,4 +1,4 @@
-const { deepFreeze } = require('@svkeg/jsutils')
+const { deepFreeze } = require('@keg-hub/jsutils')
 
 // Pattern matching (RegEx)
 module.exports = deepFreeze({

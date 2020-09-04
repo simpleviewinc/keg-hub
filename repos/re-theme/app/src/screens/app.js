@@ -1,6 +1,6 @@
 import React from 'react'
-import { withTheme } from '@svkeg/re-theme'
-import { get } from '@svkeg/jsutils'
+import { withTheme } from '@keg-hub/re-theme'
+import { get } from '@keg-hub/jsutils'
 import {
   Readme,
   ReuseRefExample,

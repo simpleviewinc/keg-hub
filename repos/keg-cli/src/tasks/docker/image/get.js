@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { throwNoDockerImg } = require('KegUtils/error/throwNoDockerImg')
 const { DOCKER } = require('KegConst/docker')
 const docker = require('KegDocCli')

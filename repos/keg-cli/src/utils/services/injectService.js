@@ -1,5 +1,5 @@
 const path = require('path')
-const { get, isStr } = require('@svkeg/jsutils')
+const { get, isStr } = require('@keg-hub/jsutils')
 const { pathExists } = require('KegFileSys')
 const { throwMissingFile } = require('../error/throwMissingFile')
 const { getServiceName } = require('../docker/compose/getServiceName')

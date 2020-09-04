@@ -1,4 +1,4 @@
-import { isArr, isObj, get } from '@svkeg/jsutils'
+import { isArr, isObj, get } from '@keg-hub/jsutils'
 import { getTheme } from './getTheme'
 
 /**

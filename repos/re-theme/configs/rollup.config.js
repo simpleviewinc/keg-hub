@@ -7,7 +7,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import buildHook from './buildHook'
 
 const shared = platform => ({
-  external: ['react', 'react-dom', 'react-native', 'jsutils', '@svkeg/jsutils' ],
+  external: ['react', 'react-dom', 'react-native', 'jsutils', '@keg-hub/jsutils' ],
   watch: {
     clearScreen: false
   },

@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { deepMerge } = require('@svkeg/jsutils')
+const { deepMerge } = require('@keg-hub/jsutils')
 
 /**
  * Reads the passed in filePath or content, and replaces content with values from the global config 

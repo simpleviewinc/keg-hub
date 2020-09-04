@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isStr, isNum } from '@svkeg/jsutils'
+import { isStr, isNum } from '@keg-hub/jsutils'
 import { Picker } from 'react-native'
 const SelectOption = Picker.Item
 

@@ -1,4 +1,4 @@
-const { isFunc, isStr } = require('@svkeg/jsutils')
+const { isFunc, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Checks if the passed in value is a Hex value

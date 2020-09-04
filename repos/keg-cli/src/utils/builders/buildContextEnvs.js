@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { buildTapContext } = require('./buildTapContext')
 const { getSetting } = require('../globalConfig/getSetting')

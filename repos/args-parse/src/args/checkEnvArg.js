@@ -1,4 +1,4 @@
-const { reduceObj } = require('@svkeg/jsutils')
+const { reduceObj } = require('@keg-hub/jsutils')
 const { getConfig } = require('../utils/getConfig')
 
 /**

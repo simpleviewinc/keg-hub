@@ -1,6 +1,6 @@
 import { isValidUpsertItemRequest, handleInvalidRequest } from './errorHandler'
 import { ItemsRequestError } from './error'
-import { isArr, isObj, deepMerge } from '@svkeg/jsutils'
+import { isArr, isObj, deepMerge } from '@keg-hub/jsutils'
 import '../typedefs'
 
 /**

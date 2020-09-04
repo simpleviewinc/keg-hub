@@ -1,7 +1,7 @@
 /** @module theme */
 'use strict'
 
-import { isArr, isFunc, isNum } from '@svkeg/jsutils'
+import { isArr, isFunc, isNum } from '@keg-hub/jsutils'
 
 const listeners = {}
 

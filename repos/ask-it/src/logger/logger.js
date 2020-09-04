@@ -1,4 +1,4 @@
-const { get, isColl, isObj, isStr, isFunc } = require('@svkeg/jsutils')
+const { get, isColl, isObj, isStr, isFunc } = require('@keg-hub/jsutils')
 const colors = require('colors/safe')
 
 /**

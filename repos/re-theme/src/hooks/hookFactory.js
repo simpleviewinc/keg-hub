@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useLayoutEffect } from 'react'
-import { isFunc, isObj, isColl, deepMerge, checkCall } from '@svkeg/jsutils'
+import { isFunc, isObj, isColl, deepMerge, checkCall } from '@keg-hub/jsutils'
 import { Constants } from '../constants'
 
 /**

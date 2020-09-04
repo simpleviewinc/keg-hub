@@ -1,4 +1,4 @@
-import { deepMerge, get, isArr, isObj, isStr } from '@svkeg/jsutils'
+import { deepMerge, get, isArr, isObj, isStr } from '@keg-hub/jsutils'
 import { getCurrentTheme } from '../theme/manageTheme'
 
 /**

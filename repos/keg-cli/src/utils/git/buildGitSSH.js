@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { pathExistsSync } = require('KegFileSys')
 const { fillTemplate } = require('../template')
 const { throwNoFileExists } = require('../error/throwNoFileExists')

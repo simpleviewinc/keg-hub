@@ -1,4 +1,4 @@
-import { limbo, isStr, isEmpty, validate } from '@svkeg/jsutils'
+import { limbo, isStr, isEmpty, validate } from '@keg-hub/jsutils'
 const isDev = process.env.NODE_ENV !== 'production'
 
 /**

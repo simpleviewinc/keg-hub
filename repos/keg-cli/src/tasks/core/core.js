@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 
 /**
  * Default keg-core task, when a sub-task can not be found

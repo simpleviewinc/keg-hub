@@ -1,5 +1,5 @@
 {
-  "name": "@svkeg/ask-it",
+  "name": "@keg-hub/ask-it",
   "version": "0.0.1",
   "description": "Node CLI helper for asking questions",
   "main": "src/index.js",
@@ -38,7 +38,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@svkeg/jsutils": "0.0.1",
+    "@keg-hub/jsutils": "0.0.1",
     "colors": "1.4.0",
     "inquirer": "7.0.6"
   },

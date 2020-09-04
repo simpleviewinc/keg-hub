@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeFocus, useThemeHover, useTheme } from '@svkeg/re-theme'
+import { useThemeFocus, useThemeHover, useTheme } from '@keg-hub/re-theme'
 
 export const ReuseRefInput = props => {
   const { components: { customInput } } = useTheme()

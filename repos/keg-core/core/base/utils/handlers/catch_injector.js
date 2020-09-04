@@ -1,4 +1,4 @@
-import { isFunc } from '@svkeg/jsutils'
+import { isFunc } from '@keg-hub/jsutils'
 
 const errorHandler = (module, key, method) => {
   return async (...args) => {

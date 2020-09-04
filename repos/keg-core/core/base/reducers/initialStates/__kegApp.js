@@ -1,4 +1,4 @@
-import { deepMerge } from '@svkeg/jsutils'
+import { deepMerge } from '@keg-hub/jsutils'
 import { appState as state } from 'SVReducers/initialStates/app'
 
 export const appState = deepMerge(

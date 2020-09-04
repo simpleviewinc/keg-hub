@@ -2,26 +2,26 @@
 # yarn lockfile v1
 
 
-"@svkeg/ask-it@0.0.1":
+"@keg-hub/ask-it@0.0.1":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/ask-it/-/ask-it-0.0.1.tgz#abb0a462284735530b3b7367722ad9d3d96486ad"
-  integrity sha512-n2uFPQs66ItnObAED5e/tvlG+m1So1wn4dSe2odnmHTSsRQ34BRDk7ED6qHUghZRfOhP87XOEDivtQBleWMTzg==
+  resolved "https://registry.yarnpkg.com/@keg-hub/ask-it/-/ask-it-0.0.1.tgz#49af762e0069b4dbe062f658a53f43c9cf3a988f"
+  integrity sha512-agTe1LPIAbXOoZjQ3nxoHDLLVpKkeVIj0UJAoKVX2T87UUO/kO0N4sumRQHXja3yZEqspbdMOR0VLFNhvCGlWg==
   dependencies:
-    "@svkeg/jsutils" "0.0.1"
+    "@keg-hub/jsutils" "0.0.1"
     colors "1.4.0"
     inquirer "7.0.6"
 
-"@svkeg/jsutils@0.0.1":
+"@keg-hub/jsutils@0.0.1":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/jsutils/-/jsutils-0.0.1.tgz#289cb4c72ac841aada73c5f9b9c44fd60d9f3afb"
-  integrity sha512-mQEQ1MP4Cczw1u1A9MmX0WCP6QNAx34LulBuutiy8AgOmk30+m93q+/RdoXxsYAHhfrY7T3JmslUbHbs4fFdww==
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
+  integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
-"@svkeg/spawn-cmd@0.0.1":
+"@keg-hub/spawn-cmd@0.0.1":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/spawn-cmd/-/spawn-cmd-0.0.1.tgz#29eb36f1417565b2c39cfeac121463b4888cd5a7"
-  integrity sha512-2KDbAPyUG03ILtTqcdjhmVLHM/k6xzIojR81YQt3HLB//udtu172p0DZtkwFgQICrOVAp/V7xZ7mrRxI+jTKeA==
+  resolved "https://registry.yarnpkg.com/@keg-hub/spawn-cmd/-/spawn-cmd-0.0.1.tgz#074033451d916d9b82827efe4b65b57565c7303a"
+  integrity sha512-PrrPPX0AB+AzzsSUR/nTAYsjEr4/GxmHGiKEOYPx89hvlbRZlkbXPObBNzGyOroYPqPjpZINJo4xpqNKW/QVrA==
   dependencies:
-    "@svkeg/jsutils" "0.0.1"
+    "@keg-hub/jsutils" "0.0.1"
     app-root-path "3.0.0"
     cross-spawn "7.0.3"
     shell-exec "1.0.2"

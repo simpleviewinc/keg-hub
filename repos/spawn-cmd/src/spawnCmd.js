@@ -1,4 +1,4 @@
-const { isArr, isStr, isObj, get, checkCall, isFunc } = require('@svkeg/jsutils')
+const { isArr, isStr, isObj, get, checkCall, isFunc } = require('@keg-hub/jsutils')
 const rootDir = require('app-root-path').path
 const { errorHandler } = require('./utils')
 const { create, kill } = require('./childProcess')

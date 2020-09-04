@@ -1,4 +1,4 @@
-const { exists } = require('@svkeg/jsutils')
+const { exists } = require('@keg-hub/jsutils')
 const { getOptionMeta } = require('../options/getOptionMeta')
 const { ensureArg } = require('./ensureArgs')
 

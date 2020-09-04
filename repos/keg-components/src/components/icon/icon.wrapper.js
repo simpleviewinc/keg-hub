@@ -1,6 +1,6 @@
 import React from 'react'
-import { useTheme } from '@svkeg/re-theme'
-import { get } from '@svkeg/jsutils'
+import { useTheme } from '@keg-hub/re-theme'
+import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { isValidComponent } from '../../utils'

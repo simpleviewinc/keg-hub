@@ -1,4 +1,4 @@
-const { isArr } = require('@svkeg/jsutils')
+const { isArr } = require('@keg-hub/jsutils')
 const inquirer = require('inquirer')
 const { input } = require('./prompts/input')
 const { confirm } = require('./prompts/confirm')

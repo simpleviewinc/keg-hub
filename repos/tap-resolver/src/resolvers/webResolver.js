@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { isFunc, isStr } = require('@svkeg/jsutils')
+const { isFunc, isStr } = require('@keg-hub/jsutils')
 const rootDir = require('app-root-path').path
 /**
  * Checks all passed in extentions with the file path

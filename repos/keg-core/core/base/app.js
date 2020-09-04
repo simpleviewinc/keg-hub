@@ -5,12 +5,12 @@ import {
   ReThemeProvider,
   getDefaultTheme,
   setDefaultTheme,
-} from '@svkeg/re-theme'
+} from '@keg-hub/re-theme'
 import { getStore } from 'SVStore'
 import { initAppAction, navigateTo } from 'SVActions'
 import { AppHeader, Select, Option } from 'SVComponents'
 import { Router } from 'SVComponents'
-import { checkCall, get } from '@svkeg/jsutils'
+import { checkCall, get } from '@keg-hub/jsutils'
 import { theme } from 'SVTheme'
 import { getHistory } from 'SVNavigation'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'

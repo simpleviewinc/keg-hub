@@ -1,4 +1,4 @@
-import { get, softFalsy, isArr } from '@svkeg/jsutils'
+import { get, softFalsy, isArr } from '@keg-hub/jsutils'
 
 /**
  * Creates an error wit the message, path and object

@@ -1,4 +1,4 @@
-import { isStr, isObj, isFunc } from '@svkeg/jsutils'
+import { isStr, isObj, isFunc } from '@keg-hub/jsutils'
 
 /**
  * @param {string} path

@@ -34,11 +34,11 @@
     "web": "cd node_modules/keg-core; yarn web"
   },
   "dependencies": {
-    "keg-core": "https://github.com/simpleviewinc/keg-core.git#master"
+    "keg-core": "npm:@keg-hub/keg-core@0.2.1"
   },
   "devDependencies": {
-    "@svkeg/jsutils": "0.0.1",
-    "@svkeg/spawn-cmd": "0.0.1",
+    "@keg-hub/jsutils": "0.0.1",
+    "@keg-hub/spawn-cmd": "0.0.1",
     "rimraf": "3.0.2"
   }
 }

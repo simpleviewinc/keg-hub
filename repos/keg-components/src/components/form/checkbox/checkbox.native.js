@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from '@svkeg/re-theme'
+import { withTheme } from '@keg-hub/re-theme'
 import { Text } from '../../typography/text'
 import { CheckboxWrapper } from './checkbox.wrapper'
 

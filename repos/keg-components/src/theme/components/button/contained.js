@@ -1,6 +1,6 @@
 import { colors } from '../../colors'
 import { transition } from '../../transition'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import { buildTheme } from '../../../utils/styles'
 import defaults from '../../defaults.json'
 
@@ -30,13 +30,13 @@ const containedStyles = (state, colorType) => {
         state === 'disabled'
           ? get(colors, 'opacity._50')
           : get(colors, 'palette.white01'),
-      fontSize: 14,
-      fontWeight: '500',
-      letterSpacing: 0.5,
-      textAlign: 'center',
-      $web: {
-        ...transition(['color'], 0.15),
-      },
+        fontSize: 14,
+        fontWeight: '500',
+        letterSpacing: 0.5,
+        textAlign: 'center',
+        $web: {
+          ...transition(['color'], 0.15),
+        },
     },
   }
 }

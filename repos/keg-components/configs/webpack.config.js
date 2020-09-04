@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { aliases } = require('./aliases.config')
 const babelConfig = require('./babel.config.js')
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
 const ENV = process.env.NODE_ENV || process.env.ENV || 'development'
 
@@ -30,7 +30,7 @@ const addRules = [
     test: /\.(js|jsx)$/,
     include: [
       path.resolve(__dirname, "../node_modules/@expo/vector-icons"),
-      path.resolve(__dirname, "../node_modules/@svkeg/re-theme"),
+      path.resolve(__dirname, "../node_modules/@keg-hub/re-theme"),
     ],
     use: {
       loader: "babel-loader",

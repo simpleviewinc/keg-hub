@@ -1,4 +1,4 @@
-const { get, isObj } = require('@svkeg/jsutils')
+const { get, isObj } = require('@keg-hub/jsutils')
 const { checkTapKegPath } = require('../helpers')
 
 /**

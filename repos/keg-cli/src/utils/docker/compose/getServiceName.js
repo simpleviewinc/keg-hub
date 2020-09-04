@@ -1,4 +1,4 @@
-const { get } = require('@svkeg/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { throwNoComposeService } = require('../../error/throwNoComposeService')
 const { loadComposeConfig } = require('./loadComposeConfig')
 

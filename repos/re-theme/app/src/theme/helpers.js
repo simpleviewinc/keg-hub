@@ -1,4 +1,4 @@
-import { isNum, isStr, capitalize, isArr } from '@svkeg/jsutils'
+import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
 
 const allSides = [ 'left', 'right', 'top', 'bottom' ]
 let defUnits = 'px'

@@ -1,5 +1,5 @@
-const { get } = require('@svkeg/jsutils')
-const { ask } = require('@svkeg/ask-it')
+const { get } = require('@keg-hub/jsutils')
+const { ask } = require('@keg-hub/ask-it')
 const { decrypt } = require('KegCrypto')
 const { throwWrongPassword } = require('../error')
 const { getSetting } = require('../globalConfig/getSetting')

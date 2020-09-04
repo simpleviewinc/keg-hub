@@ -1,4 +1,4 @@
-const { deepMerge } = require('@svkeg/jsutils')
+const { deepMerge } = require('@keg-hub/jsutils')
 const { defaultConfig } = require('./defaultConfig')
 const { saveGlobalConfig } = require('./saveGlobalConfig')
 

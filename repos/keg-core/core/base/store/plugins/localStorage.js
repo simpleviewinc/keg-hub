@@ -1,6 +1,6 @@
 import { KeyStore } from 'SVNative/keyStore'
 import { ActionTypes, Values } from 'SVConstants'
-import { get, exists, eitherArr, isStr } from '@svkeg/jsutils'
+import { get, exists, eitherArr, isStr } from '@keg-hub/jsutils'
 
 const {
   Plugins: {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from '@svkeg/re-theme'
+import { useTheme } from '@keg-hub/re-theme'
 import { Section, Grid, Row, Text, withAppHeader } from 'SVComponents'
 
 export const RootContainer = withAppHeader('Tap-Release-Client', props => {

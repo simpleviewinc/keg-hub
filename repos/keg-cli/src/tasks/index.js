@@ -1,4 +1,4 @@
-const { isObj, isFunc, reduceObj } = require('@svkeg/jsutils')
+const { isObj, isFunc, reduceObj } = require('@keg-hub/jsutils')
 const { buildTaskData } = require('../utils/builders/buildTaskData')
 
 /**

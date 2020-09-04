@@ -1,7 +1,7 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { executeCmd } = require('KegProc')
-const { isFunc, pickKeys } = require('@svkeg/jsutils')
+const { isFunc, pickKeys } = require('@keg-hub/jsutils')
 const { getRepoPath } = require('../getters/getRepoPath')
 const { generalError } = require('../error/generalError')
 

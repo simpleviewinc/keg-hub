@@ -1,4 +1,4 @@
-const { isStr } = require('@svkeg/jsutils')
+const { isStr } = require('@keg-hub/jsutils')
 
 /**
  * Checks if the passed in data string has an options key identifier

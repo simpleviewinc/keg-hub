@@ -1,6 +1,6 @@
-const { ask } = require('@svkeg/ask-it')
+const { ask } = require('@keg-hub/ask-it')
 const { Logger } = require('KegLog')
-const { isArr, checkCall } = require('@svkeg/jsutils')
+const { isArr, checkCall } = require('@keg-hub/jsutils')
 const { checkRunningContainers } = require('../checkRunningContainers')
 const { stopService } = require('../../services/stopService')
 

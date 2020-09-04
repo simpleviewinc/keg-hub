@@ -1,4 +1,4 @@
-const { isObj, isArr, isStr, isNum, isBool } = require('@svkeg/jsutils')
+const { isObj, isArr, isStr, isNum, isBool } = require('@keg-hub/jsutils')
 const cmdArgs = require('../cmdArgs')
 const path = require('path')
 

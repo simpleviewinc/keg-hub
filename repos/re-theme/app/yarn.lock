@@ -1406,6 +1406,16 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@keg-hub/jsutils@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
+  integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
+
+"@keg-hub/re-theme@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-2.1.3.tgz#0250c5468803ba6050c447463e540935bcf5bd2c"
+  integrity sha512-ONUpVYx4tdoVxPtvx1BXVBmb8vut/JthrkOy1AJY1GmxfOwd6Ukui4hcncuf9odkvF7AbdtCOtTX96KGWpXC6Q==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1526,16 +1536,6 @@
     "@svgr/plugin-jsx" "^4.3.2"
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
-
-"@svkeg/jsutils@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/jsutils/-/jsutils-0.0.1.tgz#289cb4c72ac841aada73c5f9b9c44fd60d9f3afb"
-  integrity sha512-mQEQ1MP4Cczw1u1A9MmX0WCP6QNAx34LulBuutiy8AgOmk30+m93q+/RdoXxsYAHhfrY7T3JmslUbHbs4fFdww==
-
-"@svkeg/re-theme@2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@svkeg/re-theme/-/re-theme-2.1.3.tgz#1886c1ea2b7cc765380c78faa935009e050f66e0"
-  integrity sha512-EaWv/86Rpq/G6u6kt6fu/Fz31YWlfAPaWc+jXMjIYuda6R8oxjgf5LscPWKSavhNEvqrCeHo24dvt/t0DrX24w==
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"

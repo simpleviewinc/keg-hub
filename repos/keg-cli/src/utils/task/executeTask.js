@@ -1,5 +1,5 @@
 const { showHelp } = require('KegLog')
-const { isFunc } = require('@svkeg/jsutils')
+const { isFunc } = require('@keg-hub/jsutils')
 const { throwNoAction } = require('KegUtils/error')
 const { parseArgs } = require('KegUtils/helpers/parseArgs')
 const { hasHelpArg } = require('KegUtils/helpers/hasHelpArg')

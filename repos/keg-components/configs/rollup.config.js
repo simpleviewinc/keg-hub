@@ -26,8 +26,8 @@ const shared = {
     'react',
     'react-dom',
     'react-native',
-    '@svkeg/jsutils',
-    '@svkeg/re-theme',
+    '@keg-hub/jsutils',
+    '@keg-hub/re-theme',
     'prop-types',
     'expo-fonts'
   ],

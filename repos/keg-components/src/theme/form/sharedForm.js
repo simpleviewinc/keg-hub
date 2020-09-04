@@ -1,5 +1,5 @@
 import defaults from '../defaults.json'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import { colors } from '../colors'
 import { padding } from '../padding'
 

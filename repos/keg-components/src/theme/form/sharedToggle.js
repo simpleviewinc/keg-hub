@@ -1,7 +1,7 @@
 import defaults from '../defaults.json'
 import { margin } from '../margin'
 import { flex } from '../flex'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 
 const space = get(defaults, 'form.checkbox.space', 15)
 const height = get(defaults, 'form.switch.height', 20)

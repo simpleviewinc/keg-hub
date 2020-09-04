@@ -1,4 +1,4 @@
-import { isArr, isNum, trainCase } from '@svkeg/jsutils'
+import { isArr, isNum, trainCase } from '@keg-hub/jsutils'
 
 export const transition = (prop = 'all', amount = '1s', type = 'ease') => {
   prop = isArr(prop) ? prop : [prop]

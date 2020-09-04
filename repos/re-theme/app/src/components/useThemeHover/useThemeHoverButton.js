@@ -1,5 +1,5 @@
 import React from 'react'
-import { useThemeHover, useTheme } from '@svkeg/re-theme'
+import { useThemeHover, useTheme } from '@keg-hub/re-theme'
 
 export const UseThemeHoverButton = props => {
   const { components: { button } } = useTheme()

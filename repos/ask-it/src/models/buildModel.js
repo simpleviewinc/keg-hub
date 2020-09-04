@@ -1,4 +1,4 @@
-const { isStr, isObj } = require('@svkeg/jsutils')
+const { isStr, isObj } = require('@keg-hub/jsutils')
 const models = require('./models')
 
 /**

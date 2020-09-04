@@ -1,4 +1,4 @@
-const { isObj } = require('@svkeg/jsutils')
+const { isObj } = require('@keg-hub/jsutils')
 const { getBuildTags } = require('./getBuildTags')
 const { getDirsToMount, getAppMount, getVolumeMounts } = require('./buildDockerMounts')
 const { getDockerImg } = require('./getDockerImg')

@@ -1,5 +1,5 @@
 import { SVReload } from 'SVNative'
-import { checkCall } from '@svkeg/jsutils'
+import { checkCall } from '@keg-hub/jsutils'
 
 export const reloadAppAction = async tap => {
   try {

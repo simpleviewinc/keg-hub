@@ -1,4 +1,4 @@
-import { deepFreeze } from '@svkeg/jsutils'
+import { deepFreeze } from '@keg-hub/jsutils'
 
 export const Constants = deepFreeze({
   BUILD_EVENT: 'build',

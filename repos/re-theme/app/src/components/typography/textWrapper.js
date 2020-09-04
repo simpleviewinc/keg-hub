@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTheme } from '@svkeg/re-theme'
+import { withTheme } from '@keg-hub/re-theme'
 
 const textWrapper = (El, themeKey) => {
   return withTheme(props => {

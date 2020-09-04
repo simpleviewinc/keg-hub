@@ -1,5 +1,5 @@
 const { dockerCli } = require('./commands')
-const { isArr, isStr } = require('@svkeg/jsutils')
+const { isArr, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Calls the docker cli and gets a list of current columes

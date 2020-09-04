@@ -5,7 +5,7 @@ import {
   useInputHandlers,
   usePressHandlers,
 } from '../../../hooks'
-import { useTheme } from '@svkeg/re-theme'
+import { useTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
 
 /**

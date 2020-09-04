@@ -1,5 +1,5 @@
 const path = require('path')
-const { isFunc } = require('@svkeg/jsutils')
+const { isFunc } = require('@keg-hub/jsutils')
 const { validateApp } = require('../helpers')
 /**
  * Adds dynamic content to the aliasMap of base content if a tap is set

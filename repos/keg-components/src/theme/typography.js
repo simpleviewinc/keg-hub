@@ -1,7 +1,7 @@
 import { colors } from './colors'
 import { margin } from './margin'
 import defaults from './defaults.json'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 
 const fontDefs = get(defaults, 'font', {})
 

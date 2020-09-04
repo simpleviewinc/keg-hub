@@ -1,7 +1,14 @@
 /** @module dimensions */
 'use strict'
 
-import { mapObj, isObj, toNum, isNum, softFalsy, logData } from '@svkeg/jsutils'
+import {
+  mapObj,
+  isObj,
+  toNum,
+  isNum,
+  softFalsy,
+  logData,
+} from '@keg-hub/jsutils'
 
 /**
  * Default sizes for a screen width

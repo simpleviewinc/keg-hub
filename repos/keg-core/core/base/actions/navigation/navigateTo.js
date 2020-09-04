@@ -1,5 +1,5 @@
 import { navigateToPath } from 'SVNavigation/navigateToPath'
-import { logData } from '@svkeg/jsutils'
+import { logData } from '@keg-hub/jsutils'
 import { getHistory } from 'SVNavigation/history'
 
 /**

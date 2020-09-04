@@ -2,8 +2,8 @@ import React from 'react'
 import { Container } from './container'
 import { Row } from './row'
 import PropTypes from 'prop-types'
-import { withTheme } from '@svkeg/re-theme'
-import { isArr } from '@svkeg/jsutils'
+import { withTheme } from '@keg-hub/re-theme'
+import { isArr } from '@keg-hub/jsutils'
 
 // alignItems = y-axis
 // justifyContent = x-axis

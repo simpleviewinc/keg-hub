@@ -1,6 +1,6 @@
 /** @module dimensions */
 
-import { debounce, isArr, isFunc, checkCall } from '@svkeg/jsutils'
+import { debounce, isArr, isFunc, checkCall } from '@keg-hub/jsutils'
 import { Constants } from '../constants'
 import { setRNDimensions } from './dimensions'
 import { hasDomAccess } from '../helpers/hasDomAccess'

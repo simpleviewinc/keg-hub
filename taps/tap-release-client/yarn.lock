@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@svkeg/jsutils@0.0.1":
+"@keg-hub/jsutils@0.0.1":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/jsutils/-/jsutils-0.0.1.tgz#289cb4c72ac841aada73c5f9b9c44fd60d9f3afb"
-  integrity sha512-mQEQ1MP4Cczw1u1A9MmX0WCP6QNAx34LulBuutiy8AgOmk30+m93q+/RdoXxsYAHhfrY7T3JmslUbHbs4fFdww==
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
+  integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
-"@svkeg/spawn-cmd@0.0.1":
+"@keg-hub/spawn-cmd@0.0.1":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@svkeg/spawn-cmd/-/spawn-cmd-0.0.1.tgz#29eb36f1417565b2c39cfeac121463b4888cd5a7"
-  integrity sha512-2KDbAPyUG03ILtTqcdjhmVLHM/k6xzIojR81YQt3HLB//udtu172p0DZtkwFgQICrOVAp/V7xZ7mrRxI+jTKeA==
+  resolved "https://registry.yarnpkg.com/@keg-hub/spawn-cmd/-/spawn-cmd-0.0.1.tgz#074033451d916d9b82827efe4b65b57565c7303a"
+  integrity sha512-PrrPPX0AB+AzzsSUR/nTAYsjEr4/GxmHGiKEOYPx89hvlbRZlkbXPObBNzGyOroYPqPjpZINJo4xpqNKW/QVrA==
   dependencies:
-    "@svkeg/jsutils" "0.0.1"
+    "@keg-hub/jsutils" "0.0.1"
     app-root-path "3.0.0"
     cross-spawn "7.0.3"
     shell-exec "1.0.2"
@@ -85,9 +85,10 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
-"keg-core@https://github.com/simpleviewinc/keg-core.git#master":
-  version "0.2.0"
-  resolved "https://github.com/simpleviewinc/keg-core.git#e5086fe6a0ceaf07095fb50c9be07fa748e84972"
+"keg-core@npm:@keg-hub/keg-core@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@keg-hub/keg-core/-/keg-core-0.2.1.tgz#9459966afd0cddc5073385de731a2d2be7ebf3d0"
+  integrity sha512-9jsLWfGqpVyVinhsEXETfw3e4I1nlyyZW4+by1BqgJ0jErKjKZQTilrbe2+MQciKn7BO1yM+4210gLnSSpeShg==
 
 minimatch@^3.0.4:
   version "3.0.4"

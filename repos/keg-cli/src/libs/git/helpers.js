@@ -1,4 +1,4 @@
-const { checkCall, reduceObj, isStr, deepMerge } = require('@svkeg/jsutils')
+const { checkCall, reduceObj, isStr, deepMerge } = require('@keg-hub/jsutils')
 const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 
 /**

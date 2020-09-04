@@ -1,5 +1,5 @@
 import { testTheme } from '../../mocks'
-import { get, deepClone } from '@svkeg/jsutils'
+import { get, deepClone } from '@keg-hub/jsutils'
 
 jest.resetModules()
 

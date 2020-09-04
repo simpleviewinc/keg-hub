@@ -1,4 +1,4 @@
-const { isFunc } = require('@svkeg/jsutils')
+const { isFunc } = require('@keg-hub/jsutils')
 const { executeTask } = require('KegUtils/task')
 
 

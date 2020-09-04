@@ -1,7 +1,7 @@
 import React from 'react'
-import { useTheme, useThemeHover } from '@svkeg/re-theme'
+import { useTheme, useThemeHover } from '@keg-hub/re-theme'
 import { getPressHandler, getTarget } from '../../utils'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 
 const getSpacer = isWeb => {

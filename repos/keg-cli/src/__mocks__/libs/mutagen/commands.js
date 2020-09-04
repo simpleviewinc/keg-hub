@@ -21,7 +21,7 @@ Alpha:
 	URL: /Users/lancetipton/keg/keg-components
 	Connection state: Connected
 Beta:
-	URL: docker://89081a36b44d/keg/keg-core/node_modules/@svkeg/keg-components
+	URL: docker://89081a36b44d/keg/keg-core/node_modules/@keg-hub/keg-components
 		DOCKER_HOST=tcp://192.168.99.101:2376
 		DOCKER_TLS_VERIFY=1
 		DOCKER_CERT_PATH=/Users/lancetipton/.docker/machine/machines/docker-keg
@@ -57,7 +57,7 @@ const listObjOutput = [
       connectionState: 'Connected'
     },
     beta: {
-      url: 'docker://89081a36b44d/keg/keg-core/node_modules/@svkeg/keg-components',
+      url: 'docker://89081a36b44d/keg/keg-core/node_modules/@keg-hub/keg-components',
       dockerHost: 'tcp://192.168.99.101:2376',
       dockerTlsVerify: '1',
       dockerCertPath: '/Users/lancetipton/.docker/machine/machines/docker-keg',
@@ -67,7 +67,7 @@ const listObjOutput = [
   }
 ]
 
-const createStr = `mutagen sync create --name=components --default-file-mode=0644 --default-directory-mode=0755 --sync-mode=two-way-resolved --ignore-vcs --ignore=/node_modules --ignore=/core/base/assets/* --ignore=/.* --ignore=!/.storybook --ignore=*.lock --ignore=*.md --ignore=/temp --ignore=/web-build --ignore=/reports --ignore=/build --ignore=/docs /Users/lancetipton/keg/keg-components docker://89081a36b44d/keg/keg-core/node_modules/@svkeg/keg-components`
+const createStr = `mutagen sync create --name=components --default-file-mode=0644 --default-directory-mode=0755 --sync-mode=two-way-resolved --ignore-vcs --ignore=/node_modules --ignore=/core/base/assets/* --ignore=/.* --ignore=!/.storybook --ignore=*.lock --ignore=*.md --ignore=/temp --ignore=/web-build --ignore=/reports --ignore=/build --ignore=/docs /Users/lancetipton/keg/keg-components docker://89081a36b44d/keg/keg-core/node_modules/@keg-hub/keg-components`
 
 const listResponse = jest.fn(async (args) => {
   return { error: null, data: listStrOutput }

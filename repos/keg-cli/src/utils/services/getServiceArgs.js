@@ -1,4 +1,4 @@
-const { get, deepMerge } = require('@svkeg/jsutils')
+const { get, deepMerge } = require('@keg-hub/jsutils')
 
 /**
  * Checks is params or argsExt has an image || container key

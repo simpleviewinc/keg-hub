@@ -1,5 +1,5 @@
 import { colors } from '../colors'
-import { get } from '@svkeg/jsutils'
+import { get } from '@keg-hub/jsutils'
 
 const container = {
   display: 'flex',
