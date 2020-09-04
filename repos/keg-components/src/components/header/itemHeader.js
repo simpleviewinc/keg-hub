@@ -75,7 +75,7 @@ export const ItemHeader = props => {
           <Center
             ellipsis={ellipsis}
             theme={theme}
-            styles={headerStyles.content?.center}
+            styles={headerStyles.content.center}
             title={title}
           >
             { CenterComponent }

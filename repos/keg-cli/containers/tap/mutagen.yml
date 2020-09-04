@@ -65,7 +65,6 @@ actions:
     start:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
       privileged: true
-      detach: true
       cmds:
         - yarn dev
     att:
@@ -87,7 +86,6 @@ actions:
     start:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
       privileged: true
-      detach: true
       cmds:
         - yarn dev
     att:
