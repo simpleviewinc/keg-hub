@@ -86,6 +86,7 @@ module.exports = {
       ...require('./prune'),
       ...require('./restart'),
       ...require('./test'),
+      ...require('./tunnel'),
       ...require('./volume'),
     },
     action: dockerTask,
