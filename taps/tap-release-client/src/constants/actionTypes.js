@@ -1,4 +1,4 @@
-import { keyMap } from '@svkeg/jsutils'
+import { keyMap } from '@keg-hub/jsutils'
 
 export const ActionTypes = keyMap(
   [

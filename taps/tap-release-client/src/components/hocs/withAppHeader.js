@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppHeader } from '@svkeg/keg-components'
+import { AppHeader } from '@keg-hub/keg-components'
 import { navigateBack } from 'SVActions/navigation/navigateBack'
 import { isRootStack } from 'SVNavigation/isRootStack'
 import { isStandalonePWA, isNative } from 'SVUtils/platform'
