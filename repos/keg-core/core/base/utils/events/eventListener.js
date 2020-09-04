@@ -1,14 +1,14 @@
 import { logData } from '@keg-hub/jsutils'
 
-let KegEventEmitter
+let KegEventListener
 
 /**
  * Stores events based on event names, which can then be called at another time in a different location
  *
  * @export
- * @class EventEmitter
+ * @class EventListener
  */
-export class EventEmitter {
+export class EventListener {
   listeners = {}
 
   on = (event, cb) => {
@@ -42,10 +42,10 @@ export class EventEmitter {
 /**
  * Gets the App Event Emitter, if one does not exist it creates it
  *
- * @returns {EventEmitter|Object} - Instance of an EventEmitter
+ * @returns {EventListener|Object} - Instance of an EventListener
  */
-export const getEventEmitter = () => {
-  KegEventEmitter = KegEventEmitter || new EventEmitter()
+export const getEventListener = () => {
+  KegEventListener = KegEventListener || new EventListener()
 
-  return KegEventEmitter
+  return KegEventListener
 }
