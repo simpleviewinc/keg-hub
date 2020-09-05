@@ -3,9 +3,9 @@
 import { hookFactory } from './hookFactory'
 
 /**
- * Creates an useThemeHover hook based on the 'mouseenter' and 'mouseleave' events
+ * Creates an useThemeHover hook based on the 'pointerover' and 'pointerout' events
  */
 export const useThemeHover = hookFactory({
-  on: 'mouseenter',
-  off: 'mouseleave',
+  on: 'pointerover',
+  off: 'pointerout',
 })
