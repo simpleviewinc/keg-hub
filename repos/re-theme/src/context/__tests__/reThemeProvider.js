@@ -31,7 +31,12 @@ let effectCB = null
 const useEffect = jest.fn(cb => {
   effectCB = cb
 })
-jest.setMock('react', { ...React, useState, useEffect })
+let memoCB = null
+const useMemo = jest.fn(cb => {
+  return cb()
+})
+
+jest.setMock('react', { ...React, useState, useEffect, useMemo })
 
 // Mock Dimensions api for the add and remove Event listener, to test adding and removing an event
 let addEventCB = null
@@ -46,7 +51,7 @@ jest.setMock('../../dimensions/dimensions', {
 // Helper function to render the ReThemeProvider
 let mergeTheme = false
 const renderReThemeProvider = () => {
-  const { ReThemeProvider } = require('../provider')
+  const { ReThemeProvider } = require('../reThemeProvider')
   return ReThemeProvider({
     theme: testTheme,
     merge: mergeTheme,

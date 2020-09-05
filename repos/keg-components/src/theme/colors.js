@@ -1,13 +1,13 @@
 import { get, isArr, isStr, reduceObj } from '@keg-hub/jsutils'
 import defaults from './defaults.json'
-import { helpers } from '@keg-hub/re-theme'
+import { opacity, shadeHex } from '@keg-hub/re-theme/colors'
 
 const defPalette = get(defaults, 'colors.palette', {})
 const defTypes = get(defaults, 'colors.types', {})
 
 export const colors = {
   // Use opacity helper from re-theme
-  opacity: helpers.colors.opacity,
+  opacity: opacity,
 
   // Build out the pallet based on the default colors
   palette: reduceObj(
@@ -19,7 +19,7 @@ export const colors = {
           const name = `${key}0${i + 1}`
           updated[name] = isStr(val)
             ? val
-            : helpers.colors.shadeHex(value[1], value[i])
+            : shadeHex(value[1], value[i])
         })
 
       return updated

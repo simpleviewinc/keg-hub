@@ -109,7 +109,28 @@ const mergePlatformOS = (theme, platforms) => {
 
   // If any of the platform theme object exist, then merge them together
   // Otherwise just return the passed in theme object
-  return toMerge.length ? deepMerge({}, ...toMerge) : theme
+  return toMerge.length ? deepMerge(...toMerge) : theme
+}
+
+const updatePlatformTheme = (platforms, Platform, themeData) => {
+  // If the themeData is not an object, then just return it
+  // Because we've hit the rules for this tree in the theme
+  if(!isObj(themeData)) return themeData
+
+  // Extract the class && className
+  const { $class, $className, ...cleanTheme } = themeData
+
+  const mergedPlatform = getPlatformTheme(
+    mergePlatformOS(cleanTheme, platforms),
+    platforms,
+    Platform
+  )
+
+  const className = $className || $class
+  className && (mergedPlatform.$class = className)
+
+  return mergedPlatform
+  
 }
 
 /**
@@ -133,16 +154,9 @@ const getPlatformTheme = (theme, platforms, Platform = {}) => {
   return reduceObj(
     theme,
     (key, value, platformTheme) => {
-      // Check if the value is an object
-      // If it is make call to merge platform specific styles, and recursively call self
-      // Otherwise check the values units
-      platformTheme[key] = isObj(value)
-        ? getPlatformTheme(
-            mergePlatformOS(value, platforms),
-            platforms,
-            Platform
-          )
-        : value
+    
+      // Update the current get correct value for the platform key
+      platformTheme[key] = updatePlatformTheme(platforms, Platform, value)
 
       // Return the update platformTheme object
       return platformTheme

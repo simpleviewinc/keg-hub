@@ -36,12 +36,12 @@ describe('joinTheme', () => {
     const { joinTheme, getTheme } = setupTest(true)
 
     const testObj = {}
-    const testArr = []
-    joinTheme(testObj, testArr, testObj)
+    const testArr = [ testObj ]
+    joinTheme(testObj, testObj, testObj)
 
     expect(getTheme).toHaveBeenCalled()
     expect(getTheme.mock.calls[0][0]).toBe(testObj)
-    expect(getTheme.mock.calls[0][1]).toBe(testArr)
+    expect(getTheme.mock.calls[0][1]).toBe(testObj)
     expect(getTheme.mock.calls[0][2]).toBe(testObj)
   })
 

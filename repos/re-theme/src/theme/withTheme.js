@@ -2,7 +2,7 @@
 'use strict'
 
 import React from 'react'
-import { ReThemeContext } from '../context/context'
+import { ReThemeContext } from '../context/reThemeContext'
 
 /**
  * Adds the theme, merge and dimensions props from the Context to the passed in components' props

@@ -2,8 +2,9 @@
   "name": "@keg-hub/re-theme",
   "version": "2.1.3",
   "description": "Simple Theme switcher / builder for React and React Native",
-  "main": "build/cjs/index.js",
-  "module": "build/esm/index.js",
+  "main": "build/cjs",
+  "module": "build/esm",
+  "private": true,
   "publishConfig": {
     "access": "public"
   },
@@ -24,15 +25,14 @@
   "scripts": {
     "app": "cd app; yarn start",
     "app:install": "cd app && yarn install",
-    "build": "yarn clean:build; rollup -c ./configs/rollup.config.js",
+    "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
     "build:app": "cd app; yarn build",
-    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
+    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm",
     "clean:full": "yarn clean:nm; clean:build",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
     "deploy": "gh-pages -d docs -o upstream",
-    "dev": "nodemon --watch ./configs --exec 'rollup -c ./configs/rollup.config.js -w'",
+    "dev": "nodemon --watch ./configs --exec 'NODE_ENV=development rollup -c ./configs/rollup.config.js -w'",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
@@ -48,6 +48,11 @@
     "@babel/plugin-proposal-class-properties": "7.10.4",
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.4",
+    "@rollup/plugin-alias": "3.1.1",
+    "@rollup/plugin-babel": "^5.2.0",
+    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-node-resolve": "7.1.1",
+    "@rollup/plugin-replace": "2.3.3",
     "@keg-hub/jsutils": "0.0.1",
     "@keg-hub/spawn-cmd": "0.0.1",
     "app-root-path": "3.0.0",
@@ -71,12 +76,7 @@
     "rimraf": "3.0.2",
     "rollup": "2.23.1",
     "rollup-jest": "0.0.2",
-    "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-cleanup": "3.1.1",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-replace": "2.2.0",
-    "rollup-plugin-sourcemaps": "0.6.2",
     "rollup-plugin-terser": "6.1.0"
   },
   "peerDependencies": {
@@ -105,6 +105,9 @@
       "__DEV__": true
     },
     "testEnvironment": "jsdom",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/mocks"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/setupTests.js"
     ]

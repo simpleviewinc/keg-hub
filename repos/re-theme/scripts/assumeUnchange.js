@@ -11,14 +11,14 @@ const rootDir = require('app-root-path').path
 const assumeUnchange = async folderName => {
   if (process.env.DOC_APP_PATH) return
 
-  console.log(`-----git update assume-unchange folder: ${folderName}-----`)
   try {
+    console.log(`git update assume-unchange folder: ${folderName}`)
     await exec(
       `cd ${rootDir} && git update-index --assume-unchanged ${folderName}/*/*`
     )
   }
   catch (error) {
-    console.log(error)
+    console.error(error.stderr)
     console.log(
       `Try manually running 'git update-index --assume-unchanged ${folderName}/*/*'`
     )

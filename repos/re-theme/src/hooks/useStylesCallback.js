@@ -15,7 +15,9 @@ import { checkCall, isObj, isEmptyColl } from '@keg-hub/jsutils'
  * const styles = useStylesCallback(buildStyles)
  *
  * @param {function} stylesCb - Callback function to build the styles
+ * @param {Array} cbDependencies - List of dependencies passed to useCallback hook for the stylesCb
  * @param {Object} [customStyles={}] - Custom styles to pass to the styles callback
+ * 
  * @returns { Object } - Current theme
  */
 export const useStylesCallback = (stylesCb, cbDependencies, customStyles) => {
@@ -32,5 +34,5 @@ export const useStylesCallback = (stylesCb, cbDependencies, customStyles) => {
   const theme = useTheme()
 
   // Use the useMemo hook to memoize the call to the stylesCb
-  return useMemo(() => checkCall(cb, theme, styles) || {}, [ theme, cb, styles ])
+  return useMemo(() => checkCall(cb, theme, styles, ...cbDependencies) || {}, [ theme, cb, styles ])
 }

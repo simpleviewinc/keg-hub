@@ -1,7 +1,7 @@
 /** @module hooks */
 
 import { useContext } from 'react'
-import { ReThemeContext } from '../context/context'
+import { ReThemeContext } from '../context/reThemeContext'
 
 /**
  * Uses the useContext hook from react to get the current theme ( Value prop of the context )

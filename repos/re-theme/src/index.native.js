@@ -1,4 +1,5 @@
-import { ReThemeContext, ReThemeProvider } from './context'
+import { ReThemeContext } from './context/reThemeContext'
+import { ReThemeProvider } from './context/reThemeProvider'
 import { setRNPlatform } from './context/platform'
 import {
   getSize,
@@ -8,7 +9,6 @@ import {
   useDimensions,
 } from './dimensions'
 import { setRNDimensions } from './dimensions/dimensions'
-import { helpers } from './helpers'
 
 import {
   addThemeEvent,
@@ -20,6 +20,7 @@ import {
 } from './theme'
 
 import {
+  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,
@@ -44,6 +45,7 @@ export {
   setDefaultTheme,
   withTheme,
   // Theme hooks
+  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,
@@ -52,6 +54,5 @@ export {
   // Context Exports
   ReThemeContext,
   ReThemeProvider,
-  // Style Helpers
-  helpers,
+
 }
