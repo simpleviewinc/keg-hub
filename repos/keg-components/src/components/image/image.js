@@ -3,6 +3,8 @@ import { Image as RNImage } from 'react-native'
 import PropTypes from 'prop-types'
 import { ImageWrapper } from './image.wrapper'
 import { getPlatform } from 'KegGetPlatform'
+import { useClassName } from '../../hooks/useClassName'
+
 const isWeb = getPlatform() === 'web'
 
 /**
@@ -17,13 +19,18 @@ const isWeb = getPlatform() === 'web'
  * @property {string} props.type - image type
  *
  */
-const Element = forwardRef(({ attrs, src, ...props }, ref) => (
-  <RNImage
-    ref={ref}
-    {...attrs}
-    {...props}
-  />
-))
+const Element = forwardRef(({ className, dataSet, attrs, src, ...props }, ref) => {
+  const imgRef = useClassName(className, dataSet, ref)
+
+  return (
+    <RNImage
+      {...attrs}
+      {...props}
+      ref={imgRef}
+    />
+  )
+
+})
 
 export const Image = forwardRef((props, ref) => (
   <ImageWrapper

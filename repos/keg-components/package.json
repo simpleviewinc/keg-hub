@@ -28,7 +28,7 @@
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "clean:install": "yarn clean:full; yarn install --force",
     "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js",
-    "dev": "nodemon --watch ./configs --exec 'rollup -c ./configs/rollup.config.js -w'",
+    "dev": "nodemon --watch ./configs --exec 'NODE_ENV=dev rollup -c ./configs/rollup.config.js -w'",
     "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslint.config.js {{changed}} --fix",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",

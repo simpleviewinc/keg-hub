@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { InputWrapper } from './input.wrapper'
+import { useClassName } from '../../../hooks/useClassName'
 
-const Element = React.forwardRef(({ elProps, ...args }, ref) => {
+const Element = React.forwardRef(({ className, dataSet, elProps, ...args }, ref) => {
+  const inputRef = useClassName(className, dataSet, ref)
+
   return <input
     {...args}
     {...elProps}
-    ref={ref}
+    ref={inputRef}
   />
 })
 

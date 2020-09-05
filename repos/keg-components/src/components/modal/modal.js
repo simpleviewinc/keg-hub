@@ -3,9 +3,11 @@ import { TouchableOpacity, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 import { useThemePath, useFromToAnimation } from 'KegHooks'
 import { View } from 'KegView'
-import { noOp } from 'KegUtils'
 import { Dimensions } from 'react-native'
 import { isFunc } from '@keg-hub/jsutils'
+import { noOp, noOpObj } from '../../utils/helpers/noop'
+import { useClassName } from '../../hooks/useClassName'
+import { spacedJoin } from '../../utils/helpers/spacedJoin'
 
 /**
  * Default Slide animated View for modal
@@ -16,6 +18,7 @@ import { isFunc } from '@keg-hub/jsutils'
  * @param {Function=} props.onAnimationFinish - the function to execute when the an animation is complete
  */
 const SlideAnimatedView = ({
+  className,
   defaultStyle,
   visible,
   children,
@@ -35,8 +38,11 @@ const SlideAnimatedView = ({
     [visible]
   )
 
+  const aniRef = useClassName(className, Modal.dataSet.content)
+
   return (
     <Animated.View
+      ref={aniRef}
       dataSet={Modal.dataSet.content}
       style={{ ...defaultStyle, transform: [{ translateY: slide }] }}
     >
@@ -63,6 +69,7 @@ const hideModalStyle = { height: 0, width: 0, overflow: 'hidden' }
  */
 export const Modal = props => {
   const {
+    classNames=noOpObj,
     styles,
     onBackdropTouch = noOp,
     themePath,
@@ -103,6 +110,7 @@ export const Modal = props => {
   return (
     // change the wrapper dimensions to 0 when visible is set to false
     <View
+      className={spacedJoin(classNames.modal, 'keg-modal')}
       dataSet={Modal.dataSet.main}
       style={renderModal ? modalStyles.main : hideModalStyle}
     >
@@ -113,6 +121,7 @@ export const Modal = props => {
         activeOpacity={activeOpacity}
       />
       <AnimatedComponent
+        className={classNames.animated}
         onAnimationFinish={cb}
         visible={visible}
         defaultStyle={modalStyles.content}

@@ -4,3 +4,5 @@
  * @returns {function}
  */
 export const noOp = () => {}
+
+export const noOpObj = {}

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
 } from 'react-native'
+import { useClassName } from '../../hooks/useClassName'
 
 const isWeb = getPlatform() === 'web'
 const Touchable =
@@ -25,11 +26,15 @@ const Touchable =
  * @property {Object} props.ref - reference to native element
  *
  */
-const Element = React.forwardRef((props, ref) => {
-  return <Touchable
-    {...props}
-    ref={ref}
-  />
+const Element = React.forwardRef(({ className, dataSet,  ...props}, ref) => {
+  const btnRef = useClassName(className, dataSet, ref)
+
+  return (
+    <Touchable
+      {...props}
+      ref={btnRef}
+    />
+  )
 })
 
 export const Button = props => (
