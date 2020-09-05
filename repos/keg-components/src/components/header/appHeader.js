@@ -1,6 +1,7 @@
 import React from 'react'
 import { ItemHeader } from './itemHeader'
 import { deepMerge } from '@keg-hub/jsutils'
+import { noOpObj } from '../../utils/helpers/noop'
 
 /**
  * AppHeader
@@ -8,9 +9,11 @@ import { deepMerge } from '@keg-hub/jsutils'
  * @param {object} props
  */
 export const AppHeader = props => {
-  const { dataSet, ...otherProps } = props
+  const { classNames=noOpObj, dataSet, ...otherProps } = props
   return (
     <ItemHeader
+      classNames={classNames}
+      className={'keg-app-header'}
       dataSet={deepMerge(AppHeader.dataSet, dataSet)}
       {...otherProps}
     />

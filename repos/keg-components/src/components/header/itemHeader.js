@@ -8,6 +8,8 @@ import { Icon } from 'KegIcon'
 import { H6 } from '../typography'
 import { renderFromType } from '../../utils'
 import { useThemePath } from '../../hooks'
+import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { noOpObj } from '../../utils/helpers/noop'
 
 /**
  * ItemHeader
@@ -20,6 +22,8 @@ export const ItemHeader = props => {
   const theme = useTheme()
 
   const {
+    className,
+    classNames=noOpObj,
     title,
     styles,
     RightComponent,
@@ -40,11 +44,14 @@ export const ItemHeader = props => {
     ...elprops
   } = props
 
+  const classContent = classNames.content || noOpObj
+
   const [headerStyles] = useThemePath(themePath || `header.itemHeader`, styles)
   // builds the left, center, and right section based on props
 
   return (
     <View
+      className={spacedJoin(classNames.main, ['keg-header', className ])}
       dataSet={dataSet?.main || ItemHeader.dataSet.main}
       {...elprops}
       style={theme.join(
@@ -55,6 +62,7 @@ export const ItemHeader = props => {
       { children || (
         <>
           <Side
+            classNames={classContent.left}
             dataSet={dataSet?.content?.left || ItemHeader.dataSet.content.left}
             styles={headerStyles.content}
             iconName={leftIcon}
@@ -65,6 +73,7 @@ export const ItemHeader = props => {
           </Side>
 
           <Center
+            classNames={classContent.center}
             dataSet={
               dataSet?.content?.center || ItemHeader.dataSet.content.center
             }
@@ -78,6 +87,7 @@ export const ItemHeader = props => {
 
           <Side
             right
+            classNames={classContent.right}
             dataSet={
               dataSet?.content?.right || ItemHeader.dataSet.content.right
             }
@@ -154,15 +164,24 @@ ItemHeader.propTypes = {
  * @returns {Component} - center component
  */
 const Center = props => {
-  const { styles, title, ellipsis = true, children, dataSet } = props
+  const {
+    classNames=noOpObj,
+    styles,
+    title,
+    ellipsis = true,
+    children,
+    dataSet
+  } = props
 
   return (
     <View
+      className={spacedJoin(classNames.main, 'keg-header-center')}
       dataSet={dataSet?.main}
       style={styles.main}
     >
       { (children && renderFromType(children, {}, null)) || (
         <H6
+          className={classNames.text || classNames.title}
           dataSet={dataSet?.content}
           ellipsis={ellipsis}
           style={styles.content.title}
@@ -190,6 +209,7 @@ const Center = props => {
  */
 const Side = props => {
   const {
+    classNames=noOpObj,
     styles,
     iconName,
     IconElement,
@@ -213,6 +233,7 @@ const Side = props => {
 
   return (
     <View
+      className={spacedJoin(classNames.main, `keg-header-${position}`)}
       dataSet={dataSet?.main}
       style={get(styles, [ position, 'main' ])}
     >
@@ -220,6 +241,7 @@ const Side = props => {
       { (children && renderFromType(children, {}, null)) ||
         (action ? (
           <Button
+            className={classNames.button}
             dataSet={dataSet?.content}
             styles={contentStyles.button}
             onClick={action}
@@ -229,6 +251,7 @@ const Side = props => {
         ) : (
           showIcon && (
             <View
+              className={classNames.icon}
               dataSet={dataSet?.content}
               style={contentStyles.main}
             >

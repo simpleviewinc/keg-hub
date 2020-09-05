@@ -3,11 +3,17 @@ import { ActivityIndicator } from 'react-native'
 import { IndicatorWrapper } from './indicator.wrapper'
 import { View } from 'KegView'
 import { getPlatform } from 'KegGetPlatform'
+import { spacedJoin } from '../../utils/helpers/spacedJoin'
+
 const isWeb = getPlatform() === 'web'
 
-const Element = ({ style = {}, size, color, ...attrs }) => {
+const Element = ({ className, dataSet, style = {}, size, color, ...attrs }) => {
+  
   return (
-    <View>
+    <View
+      className={spacedJoin(className, 'keg-indicator')}
+      dataSet={dataSet}
+    >
       <ActivityIndicator
         size={size}
         color={style.color || color}
