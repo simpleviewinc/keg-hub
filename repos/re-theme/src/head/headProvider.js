@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Provider } from './headContext'
 import { hasDomAccess } from '../helpers/hasDomAccess'
-import { isArr } from '@svkeg/jsutils'
+import { isArr } from '@keg-hub/jsutils'
 
 /**
  * HeadProvider - Component used to apply styles to the Dom when on a web Platform

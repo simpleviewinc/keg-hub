@@ -6,7 +6,7 @@ import { HeadContext } from '../head/headContext'
 import { getRNPlatform } from '../context/platform'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { generateDataSet } from '../styleParser/generateDataSet'
-import { checkCall, get, isStr, isObj, exists, uniqArr, isEmptyColl } from '@svkeg/jsutils'
+import { checkCall, get, isStr, isObj, exists, uniqArr, isEmptyColl } from '@keg-hub/jsutils'
 
 /**
  * Cache holder for quick check if we're using web styles or not

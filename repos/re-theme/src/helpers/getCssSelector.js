@@ -1,4 +1,4 @@
-import { exists } from '@svkeg/jsutils'
+import { exists } from '@keg-hub/jsutils'
 
 /**
  * Builds the format used to select the web dom element and apply styles to it

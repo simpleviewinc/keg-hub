@@ -1,7 +1,7 @@
 import { noOpObj } from '../helpers/noOp'
 import { stringHasher } from '../helpers/stringHasher'
 import { getCssSelector } from '../helpers/getCssSelector'
-import { isObj, reduceObj, get, set } from '@svkeg/jsutils'
+import { isObj, reduceObj, get, set } from '@keg-hub/jsutils'
 
 /**
  * Adds a value to the passed in styleObj at the passed in rulePath

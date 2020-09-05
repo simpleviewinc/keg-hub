@@ -1,4 +1,4 @@
-import { exists, camelCase, isArr } from '@svkeg/jsutils'
+import { exists, camelCase, isArr } from '@keg-hub/jsutils'
 
 /**
  * Matches all content between `{}`

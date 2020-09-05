@@ -1,4 +1,4 @@
-import { isNum, isObj } from '@svkeg/jsutils'
+import { isNum, isObj } from '@keg-hub/jsutils'
 import cssProperties from './cssProperties'
 
 /**

@@ -1,4 +1,4 @@
-import { isArr, checkCall } from '@svkeg/jsutils'
+import { isArr, checkCall } from '@keg-hub/jsutils'
 import { validateArguments } from './validate'
 import { addToDom } from './addToDom'
 import { cssToJs } from './cssToJs'

@@ -1,4 +1,4 @@
-import { isArr, isFunc } from '@svkeg/jsutils'
+import { isArr, isFunc } from '@keg-hub/jsutils'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 
 /**

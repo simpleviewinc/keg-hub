@@ -1,4 +1,4 @@
-import { isStr } from '@svkeg/jsutils'
+import { isStr } from '@keg-hub/jsutils'
 
 /**
  * Creates a hash from a passed in string consistently
