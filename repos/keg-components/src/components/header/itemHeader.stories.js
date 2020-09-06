@@ -1,9 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ItemHeader, Button, View, Image } from '../..'
+import { ItemHeader, Button, View, Image, Touchable } from '../..'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
-import { TouchableOpacity } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
 const buttonStyles = {
@@ -44,7 +43,7 @@ const CustomComponentButtons = () => {
 
 const SVIcon = () => {
   return (
-    <TouchableOpacity
+    <Touchable
       activeOpacity={0.5}
       onPress={action('Image clicked')}
     >
@@ -58,7 +57,7 @@ const SVIcon = () => {
         }}
         src='https://www.trilogyed.com/blog/wp-content/uploads/2020/07/simpleview_primary-696x110.png'
       />
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

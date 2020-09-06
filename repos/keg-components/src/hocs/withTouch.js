@@ -1,22 +1,15 @@
 import React from 'react'
-import {
-  Platform,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableNativeFeedback,
-} from 'react-native'
+import { Touchable } from '../components/touchable'
+import { TouchableWithoutFeedback } from 'react-native'
 import { useThemePath } from '../hooks'
 import { useTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
-
-const TouchableWithFeedback =
-  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
 /**
  * Returns a new component that wraps `Component` with touchable capabilities.
  * @param {Function} Component - a react component to be wrapped
  * @param {Object} options - options obj
- * @param {Boolean} options.showFeedback - if true, show feedback opacity animation (from TouchableOpacity or TouchableNativeFeedback), otherwise show none (TouchableWithoutFeedback)
+ * @param {Boolean} options.showFeedback - if true, show feedback opacity animation (Touchable), otherwise show none (TouchableWithoutFeedback)
  * @returns {Function} - react component that wraps Component
  */
 export const withTouch = (Component, options = {}) => {
@@ -25,8 +18,8 @@ export const withTouch = (Component, options = {}) => {
   /**
    * Wrapped react component
    * @param {Object} props
-   * @param {String} props.touchThemePath - optional theme path for TouchableOpacity wrapping the component
-   * @param {Object} props.touchStyle - optional style object for TouchableOpacity wrapping the component
+   * @param {String} props.touchThemePath - optional theme path for Touchable wrapping the component
+   * @param {Object} props.touchStyle - optional style object for Touchable wrapping the component
    * @param {Function} props.onPress - callback on touch
    * @param {...*} props.remaining - remaining props get passed down to the wrapped component
    */
@@ -42,7 +35,7 @@ export const withTouch = (Component, options = {}) => {
     const [style] = useThemePath(touchThemePath)
 
     const TouchWrapper = showFeedback
-      ? TouchableWithFeedback
+      ? Touchable
       : TouchableWithoutFeedback
 
     return (

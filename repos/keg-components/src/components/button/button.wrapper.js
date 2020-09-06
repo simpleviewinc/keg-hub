@@ -5,7 +5,8 @@ import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { Text } from '../typography/text'
 import { getActiveOpacity, getPressHandler, renderFromType } from '../../utils'
-
+import { noPropObj } from '../../utils/helpers/noop'
+import { spacedJoin } from '../../utils/helpers/spacedJoin'
 /**
  * Finds the child type and formats it in the proper type to be rendered
  * @param {Object|Array|string} Children - React components to render
@@ -33,6 +34,7 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
  */
 export const ButtonWrapper = props => {
   const {
+    className,
     Element,
     children,
     content,
@@ -64,6 +66,7 @@ export const ButtonWrapper = props => {
 
   return (
     <Element
+      className={spacedJoin(className, 'keg-button')}
       {...elProps}
       ref={themeRef}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}

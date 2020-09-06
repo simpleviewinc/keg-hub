@@ -1,16 +1,9 @@
 import React from 'react'
 import { ButtonWrapper } from './button.wrapper'
+import { Touchable } from '../touchable'
 import { getPlatform } from 'KegGetPlatform'
-import {
-  Platform,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-} from 'react-native'
 import { useClassName } from '../../hooks/useClassName'
-
 const isWeb = getPlatform() === 'web'
-const Touchable =
-  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
 /**
  * Button
@@ -26,21 +19,10 @@ const Touchable =
  * @property {Object} props.ref - reference to native element
  *
  */
-const Element = React.forwardRef(({ className, dataSet,  ...props}, ref) => {
-  const btnRef = useClassName(className, dataSet, ref)
-
-  return (
-    <Touchable
-      {...props}
-      ref={btnRef}
-    />
-  )
-})
-
 export const Button = props => (
   <ButtonWrapper
     {...props}
-    Element={Element}
+    Element={Touchable}
     isWeb={isWeb}
   />
 )
