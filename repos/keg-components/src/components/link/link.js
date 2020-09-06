@@ -26,7 +26,7 @@ const Element = React.forwardRef((props, ref) => {
 
   return (
     <Touchable
-      className={spacedJoin(classNames.link, 'keg-link')
+      className={spacedJoin(classNames.link, 'keg-link')}
       dataSet={ dataSet }
       {...elProps}
       {...attrs}
