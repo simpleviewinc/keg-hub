@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { TouchableOpacity, Animated } from 'react-native'
+import { Animated } from 'react-native'
+import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { useThemePath, useFromToAnimation } from 'KegHooks'
 import { View } from 'KegView'
 import { Dimensions } from 'react-native'
 import { isFunc } from '@keg-hub/jsutils'
-import { noOp, noOpObj } from '../../utils/helpers/noop'
+import { noOp, noPropObj } from '../../utils/helpers/noop'
 import { useClassName } from '../../hooks/useClassName'
 import { spacedJoin } from '../../utils/helpers/spacedJoin'
 
@@ -69,7 +70,7 @@ const hideModalStyle = { height: 0, width: 0, overflow: 'hidden' }
  */
 export const Modal = props => {
   const {
-    classNames=noOpObj,
+    classNames=noPropObj,
     styles,
     onBackdropTouch = noOp,
     themePath,
@@ -114,14 +115,15 @@ export const Modal = props => {
       dataSet={Modal.dataSet.main}
       style={renderModal ? modalStyles.main : hideModalStyle}
     >
-      <TouchableOpacity
+      <Touchable
+        className={spacedJoin(classNames.backdrop, 'keg-modal-backdrop')}
         dataSet={Modal.dataSet.backdrop}
         style={modalStyles.backdrop}
         onPress={onBackdropTouch}
         activeOpacity={activeOpacity}
       />
       <AnimatedComponent
-        className={classNames.animated}
+        className={classNames.content}
         onAnimationFinish={cb}
         visible={visible}
         defaultStyle={modalStyles.content}
