@@ -14,11 +14,12 @@
 # * Should add the custom config to the root config at /usr/local/etc/dnsmasq.conf
 # 
 # **Step 2**
-# * Next update you mac DNS settings to use 127.0.0.1 as the first DNS resolver.
+# * The DNS resolvers should be updated automatically
+# * But you can validate it by check your DNS settings in system preferences
 # * Go to system preferences > network
 # * Click on the advanced button
 # * Then click on the DNS tab
-#   * Add 127.0.0.1 as the first entry in the DNS servers list
+#   * Ensure `127.0.0.1` is the first entry in the DNS servers list
 #   * Looks like this => http://snpy.in/vHkGoj
 # 
 # ------ END OF SETUP ------ #
@@ -34,11 +35,16 @@ keg_message(){
 }
 
 keg_install_dnsmasq(){
-  brew install dnsmasq
+  if [[ -x "$(command -v dnsmasq 2>/dev/null)" ]]; then
+    keg_message "System already has dnsmasq installed!"
+  else
+    brew install dnsmasq
+  fi
 }
 
 # Add custom config path to the main dnsmasq config
 keg_add_custom_config(){
+  keg_message "Adding custom config to dnsmasq..."
   local DNS_CONFIG=$(cat /usr/local/etc/dnsmasq.conf | grep ".kegConfig/dnsmasq.conf")
   if [[ -z "$DNS_CONFIG" ]]; then
     echo "conf-file=$KEG_DNS_MASQ_CONF" > /usr/local/etc/dnsmasq.conf
@@ -47,6 +53,7 @@ keg_add_custom_config(){
 
 # Create custom config and add the kegdev config to it
 keg_create_dns_config(){
+  keg_message "Creating custom dnsmasq config..."
   cat > $KEG_DNS_MASQ_CONF <<-EOF
   address=/kegdev.xyz/127.0.0.1
   listen-address=127.0.0.1
@@ -57,8 +64,33 @@ EOF
 # Stop and start the dnsmasq service
 # Wrap the stop call incase it's not running which will cause error output
 keg_ensure_dns_masq_running(){
+  keg_message "Ensuring dnsmasq service is running..."
   sudo brew services stop dnsmasq 2> /dev/null
   sudo brew services start dnsmasq 2> /dev/null
+}
+
+# Updates the DNS server resolvers with an internal DNS
+# Ensures the internal DNS comes first
+keg_update_dns_servers(){
+  keg_message "Updating system DNS servers to use internal DNS..."
+
+  local INTERNAL_DNS=127.0.0.1
+
+  # Get the name of the primary network interface
+  local IFACE=$( echo 'show State:/Network/Global/IPv4' | scutil | grep PrimaryInterface | cut -d: -f2 | xargs echo )
+
+  # Get the current active service
+  local SERVICE_NAME=$( networksetup -listnetworkserviceorder | grep "$IFACE" | cut -d: -f2 | cut -d, -f1 | xargs echo )
+
+  # Backup the current DNS settings
+  local CURRENT_SERVERS="$(networksetup -getdnsservers "$SERVICE_NAME")"
+  local HAS_INTERNAL_DNS="$(networksetup -getdnsservers "$SERVICE_NAME" | grep "$INTERNAL_DNS")"
+
+  if [[ -z "$HAS_INTERNAL_DNS" ]]; then
+    # Append the DNS servers including the internal DNS
+    networksetup -setdnsservers "$SERVICE_NAME" $INTERNAL_DNS $CURRENT_SERVERS
+  fi
+
 }
 
 # Sets up dnsmasq for the keg, to allow local DNS routing for the kegdev xyz domain
@@ -67,6 +99,7 @@ keg_setup_dnsmasq(){
   keg_create_dns_config
   keg_add_custom_config
   keg_ensure_dns_masq_running
+  keg_update_dns_servers
 }
 
 keg_check_remove_file(){
@@ -94,6 +127,8 @@ keg_remove_dnsmasq(){
   keg_check_remove_file "/usr/local/etc/dnsmasq.d" "sudo"
   
   keg_message "Successfully removed dnsmasq!"
+  keg_message "You must manually remove 127.0.0.1 from the network interface DNS servers!"
+  keg_message "Settings are located in \"system preferences > network > advanced > Dns (tab)!\""
 }
 
 # Check if we should remove or install dnsmasq
