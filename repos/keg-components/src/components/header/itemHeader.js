@@ -9,7 +9,7 @@ import { H6 } from '../typography'
 import { renderFromType } from '../../utils'
 import { useThemePath } from '../../hooks'
 import { spacedJoin } from '../../utils/helpers/spacedJoin'
-import { noOpObj } from '../../utils/helpers/noop'
+import { noPropObj } from '../../utils/helpers/noop'
 
 /**
  * ItemHeader
@@ -23,7 +23,7 @@ export const ItemHeader = props => {
 
   const {
     className,
-    classNames=noOpObj,
+    classNames=noPropObj,
     title,
     styles,
     RightComponent,
@@ -44,7 +44,7 @@ export const ItemHeader = props => {
     ...elprops
   } = props
 
-  const classContent = classNames.content || noOpObj
+  const classContent = classNames.content || noPropObj
 
   const [headerStyles] = useThemePath(themePath || `header.itemHeader`, styles)
   // builds the left, center, and right section based on props
@@ -165,7 +165,7 @@ ItemHeader.propTypes = {
  */
 const Center = props => {
   const {
-    classNames=noOpObj,
+    classNames=noPropObj,
     styles,
     title,
     ellipsis = true,
@@ -209,7 +209,7 @@ const Center = props => {
  */
 const Side = props => {
   const {
-    classNames=noOpObj,
+    classNames=noPropObj,
     styles,
     iconName,
     IconElement,

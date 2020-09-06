@@ -4,7 +4,7 @@ import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
 import { isValidComponent } from '../../utils'
-import { noOpObj } from '../../utils/helpers/noop'
+import { noPropObj } from '../../utils/helpers/noop'
 import { spacedJoin } from '../../utils/helpers/spacedJoin'
 import { useThemePath } from 'KegHooks'
 
@@ -50,8 +50,8 @@ const Progress = props => {
  */
 export const Loading = props => {
   const {
-    classNames=noOpObj,
-    dataSet=noOpObj,
+    classNames=noPropObj,
+    dataSet=noPropObj,
     children,
     text = 'Loading',
     indicator,

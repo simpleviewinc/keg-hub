@@ -1,11 +1,11 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 import { LinkWrapper } from './link.wrapper'
 import { KegText } from 'KegText'
+import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { getPlatform } from 'KegGetPlatform'
 import { useClassName } from '../../hooks/useClassName'
-import { noOpObj } from '../../utils/helpers/noop'
+import { noPropObj } from '../../utils/helpers/noop'
 import { spacedJoin } from '../../utils/helpers/spacedJoin'
 
 const isWeb = getPlatform() === 'web'
@@ -13,8 +13,8 @@ const Text = KegText('link')
 
 const Element = React.forwardRef((props, ref) => {
   const {
-    classNames=noOpObj,
-    dataSet=noOpObj,
+    classNames=noPropObj,
+    dataSet=noPropObj,
     elProps,
     children,
     href,
@@ -24,14 +24,13 @@ const Element = React.forwardRef((props, ref) => {
     ...attrs
   } = props
 
-  const linkRef = useClassName(classNames.link, dataSet, ref, 'keg-link')
-  
   return (
-    <TouchableOpacity
+    <Touchable
+      className={spacedJoin(classNames.link, 'keg-link')
       dataSet={ dataSet }
       {...elProps}
       {...attrs}
-      ref={linkRef}
+      ref={ref}
     >
       <Text
         className={spacedJoin(classNames.text, 'keg-link-text')}
@@ -42,7 +41,7 @@ const Element = React.forwardRef((props, ref) => {
       >
         { children }
       </Text>
-    </TouchableOpacity>
+    </Touchable>
   )
 })
 

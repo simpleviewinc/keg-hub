@@ -1,8 +1,11 @@
+import { deepFreeze } from '@keg-hub/jsutils'
 /**
  * @summary Empty function that does nothing
  *
  * @returns {function}
  */
-export const noOp = () => {}
+export const noOp = Object.freeze(() => {})
 
-export const noOpObj = {}
+export const noOpObj = Object.freeze({})
+
+export const noPropObj = deepFreeze({ content: {} })
