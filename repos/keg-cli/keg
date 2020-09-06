@@ -127,8 +127,15 @@ keg_auto_load_envs(){
   # Check if $KEG_DOCKER_NAME is already loaded
   if [[ -z "$KEG_DOCKER_NAME" ]]; then
 
+    local KEG_USE_MACH="$(keg_use_docker_machine)"
     # Build the path to the docker-machine envs
-    local KEG_DM_ENVS=$KEG_CLI_PATH/scripts/setup/docker-machine.env
+    local KEG_DM_ENVS
+
+    if [[ "$KEG_USE_MACH" == "false" ]]; then
+      KEG_DM_ENVS=$KEG_CLI_PATH/scripts/docker/docker-desktop.env
+    else
+      KEG_DM_ENVS=$KEG_CLI_PATH/scripts/docker/docker-machine.env
+    fi
 
     # Ensure the file exists
     if [[ -f "$KEG_DM_ENVS" ]]; then
@@ -140,8 +147,6 @@ keg_auto_load_envs(){
     fi
 
   fi
-
-  local KEG_USE_MACH="$(keg_use_docker_machine)"
 
   if [[ "$KEG_USE_MACH" == "false" ]]; then
     export KEG_ENV_LOADED="loaded"

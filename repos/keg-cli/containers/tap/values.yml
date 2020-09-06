@@ -43,11 +43,6 @@ env:
   CADDY_PROXY_PARAMS: transparent,websocket
   CADDY_DISABLE_TLS: true
 
-  # Uncomment to lock down a folder path on the server
-  # Format [path]:[user]:[pass], where [path] is the directory to protect
-  # Declare multiple by separating them with commas.
-  # CADDY_BASIC_AUTH: /:foo:bar
-
   # --- GENERAL CONTEXT ENVs --- #
 
   # Image Build information

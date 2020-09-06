@@ -21,14 +21,15 @@ const { getKegContext } = require('../getters/getKegContext')
 const buildContextEnvs = async (args) => {
   const { cmdContext, envs={}, globalConfig, params={}, tap } = args
 
+  const containerEnvs = getContainerConst(cmdContext, 'env', {})
   // Get the ENV vars for the command context and merge with any passed in envs
-  return {
+  const built = {
 
     // Get the name of the docker-compose service
     KEG_COMPOSE_SERVICE: await getServiceName({ context: getKegContext(cmdContext) }),
 
     // Get the ENV context for the command
-    ...getContainerConst(cmdContext, 'env', {}),
+    ...containerEnvs,
 
     // Add the passed in custom ENVS to override any of the defaults
     ...envs,
@@ -46,11 +47,17 @@ const buildContextEnvs = async (args) => {
 
     // Add the git key so we can call github within the image / container
     PUBLIC_GIT_KEY: await getPublicGitKey(globalConfig),
-
     // Get any params that should be converted into ENVs passed to docker
     ...convertParamsToEnvs(params),
 
+    // ---- IMPORTANT ---- //
+    // Set the compose project name last
+    // This way it does not get overwritten
+    // It will ensure all projects are on the same network
+    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME,
   }
+
+  return built
 
 }
 
