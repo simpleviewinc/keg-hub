@@ -1,6 +1,7 @@
-import defaults from './defaults.json'
 import { spaceHelper } from './helpers'
+import { getThemeDefaults } from './themeDefaults'
 
+const defaults = getThemeDefaults()
 const size = defaults.layout.padding
 
 const padding = (amount, sides = []) => spaceHelper(amount, sides, 'padding')

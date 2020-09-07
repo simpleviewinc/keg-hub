@@ -1,7 +1,8 @@
 import { get, isArr, isStr, reduceObj } from '@keg-hub/jsutils'
-import defaults from './defaults.json'
+import { getThemeDefaults } from './themeDefaults'
 import { opacity, shadeHex } from '@keg-hub/re-theme/colors'
 
+const defaults = getThemeDefaults()
 const defPalette = get(defaults, 'colors.palette', {})
 const defTypes = get(defaults, 'colors.types', {})
 

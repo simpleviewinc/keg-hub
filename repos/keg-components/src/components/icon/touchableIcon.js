@@ -1,5 +1,6 @@
 import { Icon } from 'KegIcon'
 import { withTouch } from '../../hocs'
+import { Touchable } from '../touchable'
 
 /**
  * A simple wrapper around the Icon component that makes it touchable
@@ -11,6 +12,6 @@ import { withTouch } from '../../hocs'
 export const TouchableIcon = withTouch(Icon)
 
 TouchableIcon.propTypes = {
-  ...TouchableIcon.propTypes,
+  ...Touchable.propTypes,
   ...Icon.propTypes,
 }

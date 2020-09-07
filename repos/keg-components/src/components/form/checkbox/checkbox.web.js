@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'KegView'
 import { CheckboxWrapper } from './checkbox.wrapper'
-import { CheckSolid } from 'KegIcons'
+import { Check } from 'KegIcons'
 import { noPropObj } from '../../../utils/helpers/noop'
 
 // Styles are defined here so that they are enforced
@@ -34,7 +34,7 @@ const Element = React.forwardRef(
     return (
       <View style={styles.main}>
         <View style={styles.area}></View>
-        { checked && <CheckSolid style={checkBoxStyles.icon} /> }
+        { checked && <Check style={checkBoxStyles.icon} /> }
         <input
           {...elProps}
           {...props}

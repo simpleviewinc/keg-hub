@@ -1,6 +1,8 @@
 import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
 import { colors } from './colors'
-import defaults from './defaults.json'
+import { getThemeDefaults } from './themeDefaults'
+
+const defaults = getThemeDefaults()
 
 export const spaceHelper = (amount, sides = [], type) => {
   sides = (sides.length && sides) || defaults.layout.sides

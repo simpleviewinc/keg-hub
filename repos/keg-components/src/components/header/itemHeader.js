@@ -5,11 +5,12 @@ import { get } from '@keg-hub/jsutils'
 import { View } from 'KegView'
 import { Button } from '../button'
 import { Icon } from 'KegIcon'
-import { H6 } from '../typography'
+import { H5 } from '../typography'
 import { renderFromType } from '../../utils'
 import { useThemePath } from '../../hooks'
 import { spacedJoin } from '../../utils/helpers/spacedJoin'
 import { noPropObj } from '../../utils/helpers/noop'
+import { isValidComponent } from '../../utils/validate/isValidComponent'
 
 /**
  * ItemHeader
@@ -180,14 +181,14 @@ const Center = props => {
       style={styles.main}
     >
       { (children && renderFromType(children, {}, null)) || (
-        <H6
-          className={classNames.text || classNames.title}
+        <H5
+          className={spacedJoin(classNames.text || classNames.title, `keg-header-title`)}
           dataSet={dataSet?.content}
           ellipsis={ellipsis}
           style={styles.content.title}
         >
           { title }
-        </H6>
+        </H5>
       ) }
     </View>
   )
@@ -221,7 +222,7 @@ const Side = props => {
 
   const position = right ? 'right' : 'left'
   // get the styles for the specified position
-  const contentStyles = get(styles, [ position, 'content' ])
+  const contentStyles = get(styles, [ position, 'content' ], noPropObj)
   const iconProps = {
     styles,
     IconElement,
@@ -229,7 +230,7 @@ const Side = props => {
     position,
   }
 
-  const showIcon = iconName && IconElement
+  const showIcon = isValidComponent(IconElement)
 
   return (
     <View

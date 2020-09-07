@@ -2,8 +2,9 @@ import { colors } from '../../colors'
 import { transition } from '../../transition'
 import { get } from '@keg-hub/jsutils'
 import { buildTheme } from '../../../utils/styles'
-import defaults from '../../defaults.json'
+import { getThemeDefaults } from '../../themeDefaults'
 
+const defaults = getThemeDefaults()
 const containedStyles = (state, colorType) => {
   const opacity = get(defaults, `states.types.${state}.opacity`)
   const shade = get(defaults, `states.types.${state}.shade`)

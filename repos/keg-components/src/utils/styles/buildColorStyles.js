@@ -1,6 +1,8 @@
 import { colors } from '../../theme/colors'
-import defaults from '../../theme/defaults.json'
 import { get, checkCall } from '@keg-hub/jsutils'
+import { getThemeDefaults } from '../../theme/themeDefaults'
+
+const defaults = getThemeDefaults()
 const colorSurface = get(colors, 'surface', {})
 
 const colorStyles = (type, states, cb) => {

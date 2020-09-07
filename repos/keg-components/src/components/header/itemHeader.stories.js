@@ -1,12 +1,9 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ItemHeader, Button, View, Image, Touchable } from '../..'
+import { ItemHeader, Button, View, Image, Touchable } from '../'
+import { Android, ArrowLeft, Search } from '../../assets/icons'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
-
-const FontAwesome = () => {
-  return null
-}
 
 const buttonStyles = {
   main: { backgroundColor: 'transparent' },
@@ -97,6 +94,7 @@ const customDataSet = {
     },
   },
 }
+
 storiesOf('Header | ItemHeader', module)
   .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
@@ -113,9 +111,8 @@ storiesOf('Header | ItemHeader', module)
         shadow
         title={'Custom Icons, no left action'}
         styles={headerStyles2}
-        IconComponent={FontAwesome}
-        leftIcon={'android'}
-        rightIcon={'search'}
+        LeftIconComponent={Android}
+        RightIconComponent={Search}
         onRightClick={action('Right Section Clicked!')}
       />
     </StoryWrap>
@@ -139,8 +136,15 @@ storiesOf('Header | ItemHeader', module)
       <p />
       <ItemHeader
         title={'Clickable left icon'}
-        IconComponent={FontAwesome}
-        leftIcon={'arrow-left'}
+        LeftIconComponent={(
+          <ArrowLeft
+            style={{
+              color: `#FFFFFF`,
+              fontSize: 30,
+              paddingLeft: 10,
+            }}
+          />
+        )}
         onLeftClick={action('Left Section Clicked!')}
       />
     </StoryWrap>
