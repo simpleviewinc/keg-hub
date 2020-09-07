@@ -1,12 +1,17 @@
 import React, { forwardRef } from 'react'
+import { TextInput } from 'react-native'
 import { getValueFromChildren, getReadOnly } from '../../../utils'
 import {
   useThemePath,
   useInputHandlers,
   usePressHandlers,
 } from '../../../hooks'
+import { useClassName } from '../../../hooks/useClassName'
 import { useTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
+import { withTouch } from '../../../hocs'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * Gets the key value pair for the select components value
@@ -21,10 +26,12 @@ const getValue = ({ children, value }) => {
   return value !== undefined ? { value: setValue } : {} // return empty object, otherwise we would not be able to type into input since it would be waiting on value prop to change
 }
 
-export const InputWrapper = forwardRef((props, ref) => {
+export const Input = forwardRef((props, ref) => {
   const theme = useTheme()
   const {
+    className,
     children,
+    dataSet,
     disabled = false,
     editable = true,
     Element,
@@ -38,38 +45,44 @@ export const InputWrapper = forwardRef((props, ref) => {
     themePath = `form.input.${type}`,
     style,
     value,
-    isWeb,
     ...elProps
   } = props
 
   const [inputStyles] = useThemePath(themePath)
+  const inputRef = useClassName(className, dataSet, ref, 'keg-input')
+
+  const TextInputTouch = withTouch(TextInput, { showFeedback: false })
 
   return (
-    <Element
-      elProps={elProps}
-      style={theme.join(inputStyles, style)}
-      ref={ref}
+    <TextInputTouch
+      accessibilityRole='textbox'
+      onPress={onPress}
       {...getReadOnly(isWeb, readOnly, disabled, editable)}
       {...getValue(props, isWeb)}
       {...useInputHandlers({ onChange, onValueChange, onChangeText })}
       {...usePressHandlers(isWeb, { onClick, onPress })}
-    >
-      { children }
-    </Element>
+      {...elProps}
+      style={[inputStyles, style]}
+      ref={inputRef}
+    />
   )
 })
 
-InputWrapper.propTypes = {
+Input.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
     PropTypes.array,
   ]),
-  isWeb: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   onChangeText: PropTypes.func,
+  placeholder: PropTypes.string,
   style: PropTypes.object,
   type: PropTypes.string,
   value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 }
+
+
