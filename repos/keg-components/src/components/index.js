@@ -1,6 +1,7 @@
 export * from './box'
 export * from './button'
 export * from './card'
+export * from './createElement'
 export * from './divider'
 export * from './drawer'
 export * from './filePicker'
