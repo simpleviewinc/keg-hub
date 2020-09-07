@@ -1,13 +1,15 @@
 # Keg Components
  * Base UI Components for the Keg Core and Tap extensions
 
-## Install
+## Add to your project
 ```js
   yarn add @keg-hub/keg-components
   npm install @keg-hub/keg-components
 ```
 
-## Dev setup
+## Developer setup
+* `git clone https://github.com/simpleviewinc/keg-hub.git ~/keg-hub`
+* `cd ~/keg-hub/repos/keg-components`
 * `yarn install`
 * `yarn sb` - local storybook
 * `yarn sb:native` - native local storybook
@@ -119,12 +121,11 @@ export const button = {
   }
 }
 ```
-* in the first case, the theme object would not have the `content` styles on the `$web` platform, making it inconsistent with `$native`
+* In the first case, the theme object would not have the `content` styles on the `$web` platform, making it inconsistent with `$native`
 
 
 ## Icons
- * TODO - add info on keg-assets
-
+ * **TODO - add info on adding SVG's**
 
 ## Accessability
 
@@ -144,7 +145,7 @@ export const button = {
   region: 'section',
   adjustable: 'slider',
   button: 'button',
-  // Heading mapping user prop `aria-level` to set the level
+  // Heading mapping leverages the `aria-level` prop to determine the heading element
   // Example <Text accessibilityRole='header' aria-level='1' > => <h1>
   header: 'heading',
   image: 'img',
