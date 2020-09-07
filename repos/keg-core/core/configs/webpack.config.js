@@ -7,8 +7,6 @@ const getExpoConfig = require('@expo/webpack-config')
 const babelConfig = require(path.join(kegPath, './babel.config'))()
 const { NODE_ENV } = process.env
 
-const customCreateElement = path.join(kegPath, 'core/base/native/react/createElement.js')
-
 /**
  * Dependencies to be resolved to keg-core/node_modules/<repo name>
  */
@@ -17,11 +15,9 @@ const resolveCoreAlias = {
   'react-native': 'react-native-web',
   'react-native-web': 'react-native-web',
   'react-native-svg': 'react-native-svg-web',
-  'react-native-web/dist/exports/createElement': customCreateElement,
-  'react-native-web/dist/exports/createElement/index': customCreateElement,
   '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/web',
   '@keg-hub/keg-components':
-    '@keg-hub/keg-components/build/esm/kegComponents.native.js',
+    '@keg-hub/keg-components/build/esm/kegComponents.js',
 }
 
 /**
