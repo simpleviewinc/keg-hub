@@ -4,35 +4,28 @@ import { action } from '@storybook/addon-actions'
 import { Icon as KegIcon } from 'KegIcon'
 import { TouchableIcon } from './touchableIcon'
 import { StoryWrap } from 'StoryWrap'
-const FontAwesome = () => {
-  return null
-}
-
-const Icon = props => <KegIcon
-  Element={FontAwesome}
-  {...props}
-/>
+import { Copy, Home, Flag, Rocket, Search } from '../../assets/icons'
 
 const wrapStyles = { textAlign: 'center' }
 
 storiesOf('Display | Icon', module)
   .add('Default', () => (
     <StoryWrap style={wrapStyles}>
-      <Icon name={'rocket'} />
+      <KegIcon Component={Rocket} />
     </StoryWrap>
   ))
   .add('Color', () => (
     <StoryWrap style={wrapStyles}>
-      <Icon
-        name={'flag'}
+      <KegIcon
+        Component={Flag}
         color={'#2196F3'}
       />
     </StoryWrap>
   ))
   .add('Size', () => (
     <StoryWrap style={wrapStyles}>
-      <Icon
-        name={'home'}
+      <KegIcon
+        Component={Home}
         size={50}
       />
     </StoryWrap>
@@ -40,9 +33,8 @@ storiesOf('Display | Icon', module)
   .add('Touchable', () => (
     <StoryWrap style={wrapStyles}>
       <TouchableIcon
-        Element={FontAwesome}
+        Component={Copy}
         onPress={action('Icon pressed')}
-        name={'copy'}
         size={35}
       />
     </StoryWrap>

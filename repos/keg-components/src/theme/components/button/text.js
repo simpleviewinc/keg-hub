@@ -2,7 +2,9 @@ import { colors } from '../../colors'
 import { get } from '@keg-hub/jsutils'
 import { contained } from './contained'
 import { buildTheme } from '../../../utils/styles'
-import defaults from '../../defaults.json'
+import { getThemeDefaults } from '../../themeDefaults'
+
+const defaults = getThemeDefaults()
 
 const textStyle = (state, colorType) => {
   const shade = get(defaults, `states.types.${state}.shade`)

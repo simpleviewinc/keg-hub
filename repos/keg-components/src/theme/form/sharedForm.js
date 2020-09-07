@@ -1,8 +1,9 @@
-import defaults from '../defaults.json'
 import { get } from '@keg-hub/jsutils'
 import { colors } from '../colors'
 import { padding } from '../padding'
+import { getThemeDefaults } from '../themeDefaults'
 
+const defaults = getThemeDefaults()
 const height = get(defaults, 'form.input.height', 35)
 const verticalPad = padding.size / 6
 const borderWidth = 1

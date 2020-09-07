@@ -2,7 +2,9 @@ import { colors } from '../../colors'
 import { contained } from './contained'
 import { get } from '@keg-hub/jsutils'
 import { buildTheme } from '../../../utils/styles'
-import defaults from '../../defaults.json'
+import { getThemeDefaults } from '../../themeDefaults'
+
+const defaults = getThemeDefaults()
 
 const outlineStyles = (state, colorType) => {
   const stateShade = defaults.states.types[state].shade

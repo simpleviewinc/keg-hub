@@ -28,13 +28,13 @@ export const KegText = element => {
       const a11y = useMemo(() => {
         const type = accessibilityRole
           ? accessibilityRole
-          : element.indexOf('h') === 0 && headings.includes(element[2])
+          : element.indexOf('h') === 0 && headings.includes(element[1])
             ? 'header'
             : element
 
         return {
           accessibilityRole: accessibilityRole || type,
-          ...(type === 'header' && { ['aria-level']: element[2] }),
+          ...(type === 'header' && { ['aria-level']: element[1] }),
         }
       }, [ element, accessibilityRole ])
 
