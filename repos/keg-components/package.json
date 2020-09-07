@@ -44,6 +44,7 @@
     "sb:native": "RE_PLATFORM=native start-storybook -p 60710",
     "sb:server": "npx http-server docs",
     "svg:convert": "svgr --config-file configs/svgr.config.js <",
+    "svg:folder": "svgr --ignore-existing --config-file configs/svgr.config.js -d",
     "test": "yarn test:web",
     "test:reports": "yarn test:web --coverage && yarn view:reports",
     "test:native": "PLATFORM=native RE_PLATFORM=native NODE_ENV=test jest --no-cache --config=./configs/jest.config.js",
