@@ -8,7 +8,7 @@ import { Icon } from 'KegIcon'
 import { H5 } from '../typography'
 import { renderFromType } from '../../utils'
 import { useThemePath } from '../../hooks'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 import { noPropObj } from '../../utils/helpers/noop'
 import { isValidComponent } from '../../utils/validate/isValidComponent'
 
@@ -48,11 +48,12 @@ export const ItemHeader = props => {
   const classContent = classNames.content || noPropObj
 
   const [headerStyles] = useThemePath(themePath || `header.itemHeader`, styles)
-  // builds the left, center, and right section based on props
+  const mainCls = useClassList(classNames.main, [ 'keg-header', className ])
 
+  // builds the left, center, and right section based on props
   return (
     <View
-      className={spacedJoin(classNames.main, [ 'keg-header', className ])}
+      className={mainCls}
       dataSet={dataSet?.main || ItemHeader.dataSet.main}
       {...elprops}
       style={theme.join(
@@ -174,15 +175,18 @@ const Center = props => {
     dataSet,
   } = props
 
+  const mainCls = useClassList(classNames.main, ['keg-header-center'])
+  const titleCls = useClassList(classNames.title || classNames.text, [`keg-header-title`])
+  
   return (
     <View
-      className={spacedJoin(classNames.main, 'keg-header-center')}
+      className={mainCls}
       dataSet={dataSet?.main}
       style={styles.main}
     >
       { (children && renderFromType(children, {}, null)) || (
         <H5
-          className={spacedJoin(classNames.text || classNames.title, `keg-header-title`)}
+          className={titleCls}
           dataSet={dataSet?.content}
           ellipsis={ellipsis}
           style={styles.content.title}
@@ -231,10 +235,12 @@ const Side = props => {
   }
 
   const showIcon = isValidComponent(IconElement)
+  const mainCls = useClassList(classNames.main, [`keg-header-${position}`])
+  const btnCls = useClassList(classNames.button, [`keg-header-${position}-button`])
 
   return (
     <View
-      className={spacedJoin(classNames.main, `keg-header-${position}`)}
+      className={mainCls}
       dataSet={dataSet?.main}
       style={get(styles, [ position, 'main' ])}
     >

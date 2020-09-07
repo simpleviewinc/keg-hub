@@ -3,7 +3,7 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
-import { spacedJoin } from '../../../utils/helpers/spacedJoin'
+import { useClassList } from '../../../hooks/useClassList'
 
 /**
  * Form
@@ -25,7 +25,7 @@ export const Form = React.forwardRef((props, ref) => {
   return (
     <View
       accessibilityRole='form'
-      className={spacedJoin(className, 'keg-form')}
+      className={useClassList(className, ['keg-form'])}
       {...elProps}
       style={[
         get(theme, 'form.form.default'),

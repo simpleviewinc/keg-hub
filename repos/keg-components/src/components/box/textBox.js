@@ -6,7 +6,8 @@ import { TouchableIcon } from '../icon'
 import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { noPropObj } from '../../utils/helpers/noop'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
+import { Copy } from '../../assets/icons'
 
 /**
  * A Text Box for showing text. Includes a copy to clipboard button.
@@ -33,19 +34,22 @@ export const TextBox = props => {
 
   const [style] = useThemePath(themePath, styles)
 
+  const mainCls = useClassList(classNames.main, ['keg-textbox'])
+  const wrapperCls = useClassList(classNames.content.wrapper, [ 'keg-textbox-wrapper'])
+  const textCls = useClassList(classNames.content.text, ['keg-textbox-text'])
+  const clipCls = useClassList(classNames.content.clipboard, ['keg-textbox-clipboard'])
+
   return (
     <View
-      className={spacedJoin(classNames.main, ['keg-textbox'])}
+      className={mainCls}
       style={style.main}
     >
       <View
-        className={spacedJoin(classNames.content.wrapper, [
-          'keg-textbox-wrapper',
-        ])}
+        className={wrapperCls}
         style={get(style, 'content.wrapper')}
       >
         <Text
-          className={spacedJoin(classNames.content.text, ['keg-textbox-text'])}
+          className={textCls}
           numberOfLines={maxLines}
           style={get(style, 'content.text')}
         >
@@ -57,12 +61,10 @@ export const TextBox = props => {
       <Text>
         { useClipboard && text && (
           <TouchableIcon
-            name={'copy'}
+            Component={Copy}
             size={15}
-            className={spacedJoin(classNames.content.clipboard, [
-              'keg-textbox-clipboard',
-            ])}
-            wrapStyle={get(style, 'content.clipboard')}
+            className={clipCls}
+            touchStyle={get(style, 'content.clipboard')}
             onPress={_ => text && Clipboard.setString(text)}
           />
         ) }

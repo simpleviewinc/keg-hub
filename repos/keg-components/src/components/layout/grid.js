@@ -4,7 +4,7 @@ import { Row } from './row'
 import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { isArr, get } from '@keg-hub/jsutils'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 
 /**
  * Builds the styles based on the passed in isCenter param
@@ -49,14 +49,14 @@ export const Grid = ({ className, children, style, ...props }) => {
   return (
     <Container
       {...props}
-      className={spacedJoin(className, 'keg-grid')}
+      className={useClassList(className, ['keg-grid'])}
       flexDir={isRow ? 'column' : 'row'}
       size={1}
-      style={theme.join(
+      style={[
         get(theme, [ 'layout', 'grid', 'wrapper' ]),
         style,
         isCenter && buildCenterStyles(isCenter)
-      )}
+      ]}
     >
       { children }
     </Container>

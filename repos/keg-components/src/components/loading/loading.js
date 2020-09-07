@@ -5,7 +5,7 @@ import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
 import { isValidComponent } from '../../utils'
 import { noPropObj } from '../../utils/helpers/noop'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 import { useThemePath } from 'KegHooks'
 
 /**
@@ -41,11 +41,14 @@ const Progress = props => {
  * Loading
  * @summary Custom Loading component. All props are optional
  *
- * @param {Object} props - see buttonPropTypes
- * @property {String} props.text - button text
- * @property {Object} props.style - custom style
- * @property {Object} props.wrapStyle - custom wrapper style
- * @property {Object} props.children
+ * @param {Object} props - see Loading.propTypes
+ * @property {String} props.classNames - Class names to apply to the component
+ * @property {String} props.text - Text to display while loading
+ * @property {number} props.size - Size of the loading indicator
+ * @property {Object} props.styles - Styles object tree
+ * @property {Object} props.themePath - Custom path to styles on the theme
+ * @property {Object} props.type - Theme type to use
+ * @property {Object} props.children - Custom Children of the loading component
  *
  */
 export const Loading = props => {
@@ -66,7 +69,7 @@ export const Loading = props => {
   return (
     <View
       style={builtStyles.container}
-      className={spacedJoin(classNames.loading, 'keg-loading')}
+      className={useClassList(classNames.loading, ['keg-loading'])}
       dataSet={dataSet}
     >
       { children || (
@@ -85,6 +88,5 @@ export const Loading = props => {
 Loading.propTypes = {
   text: PropTypes.string,
   style: PropTypes.object,
-  wrapStyle: PropTypes.object,
   children: PropTypes.object,
 }

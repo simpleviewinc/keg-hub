@@ -5,7 +5,7 @@ import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { getPlatform } from 'KegGetPlatform'
 import { noPropObj } from '../../utils/helpers/noop'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 
 const isWeb = getPlatform() === 'web'
 const Text = KegText('link')
@@ -23,9 +23,12 @@ const Element = React.forwardRef((props, ref) => {
     ...attrs
   } = props
 
+  const linkCls = useClassList(classNames.link, ['keg-link'])
+  const textCls = useClassList(classNames.text, ['keg-link-text'])
+
   return (
     <Touchable
-      className={spacedJoin(classNames.link, 'keg-link')}
+      className={linkCls}
       dataSet={dataSet}
       {...elProps}
       {...attrs}
@@ -33,7 +36,7 @@ const Element = React.forwardRef((props, ref) => {
     >
       <Text
         accessibilityRole='link'
-        className={spacedJoin(classNames.text, 'keg-link-text')}
+        className={textCls}
         style={style}
         href={href}
         target={target}
