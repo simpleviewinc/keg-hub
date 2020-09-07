@@ -1,7 +1,13 @@
 # Keg Components
  * Base UI Components for the Keg Core and Tap extensions
 
-# Dev setup
+## Install
+```js
+  yarn add @keg-hub/keg-components
+  npm install @keg-hub/keg-components
+```
+
+## Dev setup
 * `yarn install`
 * `yarn sb` - local storybook
 * `yarn sb:native` - native local storybook
@@ -9,14 +15,14 @@
 * `yarn format` - formats your code based on the config set in `configs/eslint.config.js` && `configs/prettier.config.js`
 * `yarn eslint:watch` - watches any code change for any lint errors
 
-# Theming
+## Theming
 
 Keg Components leverages [re-theme](https://github.com/simpleviewinc/re-theme) for dynamic theming across platforms and viewport sizes
 
-## Theme objects
+### Theme objects
 * For new components, create and export your theme objects in `src/theme/components`
 
-## Using themes in components
+### Using themes in components
 * Use the `useThemePath` hook:
 
   ```javascript
@@ -123,7 +129,7 @@ export const button = {
 ## Accessability
 
 * Mapping of accessibilityRole prop value to Web Element
-* Example => <Touchable accessibilityRole='button'> => <button role='button'>
+* Example => `<Link accessibilityRole='link'>` => `<a role='link'>`
 ```js
   article: 'article',
   banner: 'header',
@@ -142,12 +148,15 @@ export const button = {
   // Example <Text accessibilityRole='header' aria-level='1' > => <h1>
   header: 'heading',
   image: 'img',
-  imagebutton: null,
-  keyboardkey: null,
-  label: null,
   link: 'link',
   none: 'presentation',
   search: 'search',
   summary: 'region',
-  text: null
 ```
+
+## Create Element
+* This library exports a `createElement` method
+* This method allows create custom native elements per platform, for needs such as:
+  * Defining `className` when on a web platform
+  * Overwriting the `Text` component, but still taking advantage of the `accessability` props
+  * **TODO: Give more examples**
