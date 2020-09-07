@@ -4,7 +4,9 @@ import { ItemHeader, Button, View, Image, Touchable } from '../..'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
 
-const FontAwesome = () => {}
+const FontAwesome = () => {
+  return null
+}
 
 const buttonStyles = {
   main: { backgroundColor: 'transparent' },

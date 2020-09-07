@@ -25,7 +25,7 @@ const Element = forwardRef(
 
     return (
       <RNImage
-        accessibilityLabel='img'
+        accessibilityLabel='image'
         {...attrs}
         {...props}
         ref={imgRef}

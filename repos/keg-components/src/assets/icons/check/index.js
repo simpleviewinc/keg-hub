@@ -1,4 +1,1 @@
-export * from './duotone'
-export * from './light'
-export * from './regular'
-export * from './solid'
+export * from './check'

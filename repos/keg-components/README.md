@@ -114,3 +114,40 @@ export const button = {
 }
 ```
 * in the first case, the theme object would not have the `content` styles on the `$web` platform, making it inconsistent with `$native`
+
+
+## Icons
+ * TODO - add info on keg-assets
+
+
+## Accessability
+
+* Mapping of accessibilityRole prop value to Web Element
+* Example => <Touchable accessibilityRole='button'> => <button role='button'>
+```js
+  article: 'article',
+  banner: 'header',
+  complementary: 'aside',
+  contentinfo: 'footer',
+  form: 'form',
+  link: 'a',
+  list: 'ul',
+  listitem: 'li',
+  main: 'main',
+  navigation: 'nav',
+  region: 'section',
+  adjustable: 'slider',
+  button: 'button',
+  // Heading mapping user prop `aria-level` to set the level
+  // Example <Text accessibilityRole='header' aria-level='1' > => <h1>
+  header: 'heading',
+  image: 'img',
+  imagebutton: null,
+  keyboardkey: null,
+  label: null,
+  link: 'link',
+  none: 'presentation',
+  search: 'search',
+  summary: 'region',
+  text: null
+```

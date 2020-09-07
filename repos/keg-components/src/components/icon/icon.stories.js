@@ -4,7 +4,9 @@ import { action } from '@storybook/addon-actions'
 import { Icon as KegIcon } from 'KegIcon'
 import { TouchableIcon } from './touchableIcon'
 import { StoryWrap } from 'StoryWrap'
-const FontAwesome = () => {}
+const FontAwesome = () => {
+  return null
+}
 
 const Icon = props => <KegIcon
   Element={FontAwesome}

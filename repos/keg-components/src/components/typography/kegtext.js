@@ -29,12 +29,12 @@ export const KegText = element => {
         const type = accessibilityRole
           ? accessibilityRole
           : element.indexOf('h') === 0 && headings.includes(element[2])
-            ? 'heading'
+            ? 'header'
             : element
 
         return {
           accessibilityRole: accessibilityRole || type,
-          ...(type === 'heading' && { ['aria-level']: element[2] }),
+          ...(type === 'header' && { ['aria-level']: element[2] }),
         }
       }, [ element, accessibilityRole ])
 
