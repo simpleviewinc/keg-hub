@@ -8,6 +8,9 @@ const { autoLink } = require('./autoLink')
  * Runs `yarn app:install - which sets up the /app`
  */
 const setupApp = async () => {
+  // Don't run in side docker
+  if (process.env.DOC_APP_PATH) return
+
   console.log(`-----running yarn app:install-----`)
   try {
     await exec(`cd ${rootDir} && yarn app:install`)

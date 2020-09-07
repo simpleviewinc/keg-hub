@@ -5,11 +5,14 @@ import { InputWrapper } from './input.wrapper'
 import { withTouch } from '../../../hocs'
 
 const Element = forwardRef(({ elProps, ...args }, ref) => {
-  return <TextInput
-    {...args}
-    {...elProps}
-    ref={ref}
-  />
+  return (
+    <TextInput
+      accessibilityRole='textbox'
+      {...args}
+      {...elProps}
+      ref={ref}
+    />
+  )
 })
 
 /**

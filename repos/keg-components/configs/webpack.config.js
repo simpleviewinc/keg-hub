@@ -15,7 +15,10 @@ const addPlugins = [
 // Hard coded aliases
 const addAliases = {
   // Add the react-native-web overwrite
-  "react-native": "react-native-web/dist/cjs",
+  'react-native': 'react-native-web',
+  'react-native-web': 'react-native-web',
+  'react-native-svg': 'react-native-svg-web',
+  '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/reTheme.js',
 }
 
 // Hard coded Rules
@@ -108,7 +111,7 @@ const customWatchOptions = options => {
     ...options,
     ignored: [
       ...(options.ignored || []),
-      /node_modules([\\]+|\/)+(?!\@simpleviewinc\/re-theme\/build\/esm)/,
+      /node_modules([\\]+|\/)+(?!\@keg-hub\/re-theme\/build\/esm)/,
     ]
   }
 }

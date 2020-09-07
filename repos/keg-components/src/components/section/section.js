@@ -11,12 +11,8 @@ export const Section = withTheme(props => {
     <View
       {...args}
       className={spacedJoin(className, 'keg-section')}
-      style={theme.get(
-        `keg-section-${type || 'default'}`,
-        `section.default`,
-        type && `section.${type}`,
-        style
-      )}
+      accessibilityRole='region'
+      style={theme.get(`section.default`, type && `section.${type}`, style)}
     >
       { children }
     </View>

@@ -4,7 +4,6 @@ import { KegText } from 'KegText'
 import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { getPlatform } from 'KegGetPlatform'
-import { useClassName } from '../../hooks/useClassName'
 import { noPropObj } from '../../utils/helpers/noop'
 import { spacedJoin } from '../../utils/helpers/spacedJoin'
 
@@ -13,8 +12,8 @@ const Text = KegText('link')
 
 const Element = React.forwardRef((props, ref) => {
   const {
-    classNames=noPropObj,
-    dataSet=noPropObj,
+    classNames = noPropObj,
+    dataSet = noPropObj,
     elProps,
     children,
     href,
@@ -27,16 +26,16 @@ const Element = React.forwardRef((props, ref) => {
   return (
     <Touchable
       className={spacedJoin(classNames.link, 'keg-link')}
-      dataSet={ dataSet }
+      dataSet={dataSet}
       {...elProps}
       {...attrs}
       ref={ref}
     >
       <Text
+        accessibilityRole='link'
         className={spacedJoin(classNames.text, 'keg-link-text')}
         style={style}
         href={href}
-        accessibilityRole='link'
         target={target}
       >
         { children }

@@ -19,18 +19,20 @@ const isWeb = getPlatform() === 'web'
  * @property {string} props.type - image type
  *
  */
-const Element = forwardRef(({ className, dataSet, attrs, src, ...props }, ref) => {
-  const imgRef = useClassName(className, dataSet, ref)
+const Element = forwardRef(
+  ({ className, dataSet, attrs, src, ...props }, ref) => {
+    const imgRef = useClassName(className, dataSet, ref)
 
-  return (
-    <RNImage
-      {...attrs}
-      {...props}
-      ref={imgRef}
-    />
-  )
-
-})
+    return (
+      <RNImage
+        accessibilityLabel='img'
+        {...attrs}
+        {...props}
+        ref={imgRef}
+      />
+    )
+  }
+)
 
 export const Image = forwardRef((props, ref) => (
   <ImageWrapper

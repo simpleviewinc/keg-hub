@@ -7,12 +7,11 @@ import {
 } from 'react-native'
 import { useClassName } from '../../hooks/useClassName'
 
-const TouchableComp = Platform.OS === 'android'
-  ? TouchableNativeFeedback
-  : TouchableOpacity
+const TouchableComp =
+  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
 /**
- * Touchable 
+ * Touchable
  * @summary Custom Touch component. All props are optional
  *
  * @param {Object} props - see touchablePropTypes
@@ -24,14 +23,14 @@ const TouchableComp = Platform.OS === 'android'
  *
  */
 export const Touchable = React.forwardRef((props, ref) => {
-  const { className, dataSet, feedBack=true, ...attrs } = props
+  const { className, dataSet, feedBack = true, ...attrs } = props
   const Component = feedBack ? TouchableComp : TouchableWithoutFeedback
 
   const touchRef = useClassName(className, dataSet, ref, 'keg-touchable')
-  return (
-    <Component
-      {...attrs}
-      ref={touchRef}
-    />
-  )
+
+  return <Component
+    accessible={true}
+    {...attrs}
+    ref={touchRef}
+  />
 })

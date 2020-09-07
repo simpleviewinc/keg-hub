@@ -1,5 +1,5 @@
 export * from 'KegCheckbox'
-export * from 'KegForm'
+export * from './form'
 export * from 'KegInput'
 export * from 'KegOption'
 export * from 'KegRadio'

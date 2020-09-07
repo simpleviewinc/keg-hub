@@ -9,9 +9,10 @@ import { noPropObj } from '../../utils/helpers/noop'
  * @param {object} props
  */
 export const AppHeader = props => {
-  const { classNames=noPropObj, dataSet, ...otherProps } = props
+  const { classNames = noPropObj, dataSet, ...otherProps } = props
   return (
     <ItemHeader
+      accessibilityRole='banner'
       classNames={classNames}
       className={'keg-app-header'}
       dataSet={deepMerge(AppHeader.dataSet, dataSet)}
