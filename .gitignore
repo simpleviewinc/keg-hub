@@ -200,3 +200,4 @@ taps/tap-release-client/tests/reports/archive/*
 taps/tap-release-client/test/reports/*.json
 taps/tap-release-client/test/reports/*.html
 taps/tap-release-client/tests/node_modules
+*.code-workspace
