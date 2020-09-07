@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { View } from 'KegView'
-import { Button } from 'KegButton'
+import { Button } from '../button'
 import { Icon } from 'KegIcon'
 import { H6 } from '../typography'
 import { renderFromType } from '../../utils'
@@ -23,7 +23,7 @@ export const ItemHeader = props => {
 
   const {
     className,
-    classNames=noPropObj,
+    classNames = noPropObj,
     title,
     styles,
     RightComponent,
@@ -51,7 +51,7 @@ export const ItemHeader = props => {
 
   return (
     <View
-      className={spacedJoin(classNames.main, ['keg-header', className ])}
+      className={spacedJoin(classNames.main, [ 'keg-header', className ])}
       dataSet={dataSet?.main || ItemHeader.dataSet.main}
       {...elprops}
       style={theme.join(
@@ -165,12 +165,12 @@ ItemHeader.propTypes = {
  */
 const Center = props => {
   const {
-    classNames=noPropObj,
+    classNames = noPropObj,
     styles,
     title,
     ellipsis = true,
     children,
-    dataSet
+    dataSet,
   } = props
 
   return (
@@ -209,7 +209,7 @@ const Center = props => {
  */
 const Side = props => {
   const {
-    classNames=noPropObj,
+    classNames = noPropObj,
     styles,
     iconName,
     IconElement,

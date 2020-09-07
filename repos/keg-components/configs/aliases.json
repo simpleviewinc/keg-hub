@@ -1,10 +1,9 @@
 {
-  "KegButton": "src/components/button/button.js",
   "KegCheckbox": "src/components/form/checkbox/checkbox.${platform}.js",
-  "KegForm": "src/components/form/form/form.${platform}.js",
   "KegFilePicker": "src/components/filePicker/filePicker.${platform}.js",
   "KegImg": "src/components/image/image.js",
   "KegIcon": "src/components/icon/icon.js",
+  "KegIcons": "src/assets/icons",
   "KegIndicator": "src/components/indicator/indicator.js",
   "KegInput": "src/components/form/input/input.${platform}.js",
   "KegLink": "src/components/link/link.js",

@@ -3,7 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import { useThemePath } from '../../hooks'
 import PropTypes from 'prop-types'
 import { P } from '../typography'
-import { Button } from 'KegButton'
+import { Button } from '../button'
 import { View } from 'KegView'
 import { get } from '@keg-hub/jsutils'
 

@@ -1,33 +1,48 @@
 import React from 'react'
 import { View } from 'KegView'
 import { CheckboxWrapper } from './checkbox.wrapper'
-import { Icon } from 'KegIcon'
+import { CheckSolid } from 'KegIcons'
+import { noPropObj } from '../../../utils/helpers/noop'
+
+// Styles are defined here so that they are enforced
+// Due to how the checkbox is designed, these styles should not be changed
+// Which is why they are not defined within the theme
+const checkBoxStyles = {
+  icon: {
+    position: 'relative',
+    zIndex: 1,
+    height: 16,
+    width: 16,
+    top: 'calc( 50% - 8px)',
+    left: 'calc( 50% - 8px)',
+  },
+  input: {
+    position: 'absolute',
+    zIndex: 2,
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+    margin: 0,
+    opacity: 0,
+    cursor: 'pointer',
+  },
+}
 
 const Element = React.forwardRef(
-  ({ elProps, styles, icon, checked, ...props }, ref) => {
+  ({ elProps, styles = noPropObj, icon, checked, ...props }, ref) => {
     return (
       <View style={styles.main}>
         <View style={styles.area}></View>
-        { checked && <Icon
-          styles={styles.indicator}
-          name={icon || 'check'}
-        /> }
+        { checked && <CheckSolid style={checkBoxStyles.icon} /> }
         <input
           {...elProps}
           {...props}
+          role='checkbox'
           checked={checked}
           type='checkbox'
           ref={ref}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            margin: 0,
-            opacity: 0,
-            cursor: 'pointer',
-          }}
+          style={checkBoxStyles.input}
         />
       </View>
     )

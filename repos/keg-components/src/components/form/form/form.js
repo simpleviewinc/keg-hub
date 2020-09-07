@@ -1,7 +1,9 @@
 import React from 'react'
-import { FormWrapper } from './form.wrapper'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
+import { useTheme } from '@keg-hub/re-theme'
+import { get } from '@keg-hub/jsutils'
+import { spacedJoin } from '../../../utils/helpers/spacedJoin'
 
 /**
  * Form
@@ -15,25 +17,27 @@ import PropTypes from 'prop-types'
  * @property {Object} ref - reference to native element
  *
  */
-const Element = React.forwardRef(({ elProps, children, ...props }, ref) => {
+export const Form = React.forwardRef((props, ref) => {
+  const theme = useTheme()
+
+  const { children, className, elType, style, type, ...elProps } = props
+
   return (
     <View
+      accessibilityRole='form'
+      className={spacedJoin(className, 'keg-form')}
       {...elProps}
-      {...props}
+      style={[
+        get(theme, 'form.form.default'),
+        type && get(theme, `form.form.${type}`),
+        style,
+      ]}
       ref={ref}
     >
       { children }
     </View>
   )
 })
-
-export const Form = props => (
-  <FormWrapper
-    {...props}
-    Element={Element}
-    elType='native'
-  />
-)
 
 Form.propTypes = {
   children: PropTypes.oneOfType([

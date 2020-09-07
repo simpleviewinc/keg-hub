@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTheme } from '@keg-hub/re-theme'
 import { useThemePath } from '../../hooks'
 import { Clipboard, Text } from 'react-native'
 import { View } from 'KegView'
@@ -24,34 +23,29 @@ import { spacedJoin } from '../../utils/helpers/spacedJoin'
  */
 export const TextBox = props => {
   const {
-    classNames=noPropObj,
+    classNames = noPropObj,
+    maxLines = 100,
+    styles,
     text,
     themePath = 'textBox.outlined.default',
-    styles=noPropObj,
     useClipboard = false,
-    maxLines = 100,
   } = props
-  
-  const theme = useTheme()
+
   const [style] = useThemePath(themePath, styles)
 
   return (
     <View
       className={spacedJoin(classNames.main, ['keg-textbox'])}
-      style={theme.join(style.main, styles)}
+      style={style.main}
     >
       <View
-        className={spacedJoin(
-          classNames.content.wrapper,
-          ['keg-textbox-wrapper']
-        )}
+        className={spacedJoin(classNames.content.wrapper, [
+          'keg-textbox-wrapper',
+        ])}
         style={get(style, 'content.wrapper')}
       >
         <Text
-          className={spacedJoin(
-            classNames.content.text,
-            ['keg-textbox-text']
-          )}
+          className={spacedJoin(classNames.content.text, ['keg-textbox-text'])}
           numberOfLines={maxLines}
           style={get(style, 'content.text')}
         >
@@ -65,10 +59,9 @@ export const TextBox = props => {
           <TouchableIcon
             name={'copy'}
             size={15}
-            className={spacedJoin(
-              classNames.content.clipboard,
-              ['keg-textbox-clipboard']
-            )}
+            className={spacedJoin(classNames.content.clipboard, [
+              'keg-textbox-clipboard',
+            ])}
             wrapStyle={get(style, 'content.clipboard')}
             onPress={_ => text && Clipboard.setString(text)}
           />
