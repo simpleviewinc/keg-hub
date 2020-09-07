@@ -2,7 +2,7 @@ import React from 'react'
 import { withTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 
 export const Section = withTheme(props => {
   const { className, theme, children, style, type, ...args } = props
@@ -10,7 +10,7 @@ export const Section = withTheme(props => {
   return (
     <View
       {...args}
-      className={spacedJoin(className, 'keg-section')}
+      className={useClassList(className, ['keg-section'])}
       accessibilityRole='region'
       style={theme.get(`section.default`, type && `section.${type}`, style)}
     >

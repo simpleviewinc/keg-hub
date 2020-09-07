@@ -8,7 +8,7 @@ import { Dimensions } from 'react-native'
 import { isFunc } from '@keg-hub/jsutils'
 import { noOp, noPropObj } from '../../utils/helpers/noop'
 import { useClassName } from '../../hooks/useClassName'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 
 /**
  * Default Slide animated View for modal
@@ -39,7 +39,7 @@ const SlideAnimatedView = ({
     [visible]
   )
 
-  const aniRef = useClassName(className, Modal.dataSet.content)
+  const aniRef = useClassName(className, [ 'keg-modal-content' ])
 
   return (
     <Animated.View
@@ -108,22 +108,25 @@ export const Modal = props => {
     else if (isFunc(onAnimateIn)) onAnimateIn()
   }, [ onAnimateOut, onAnimateIn ])
 
+  const modalCls = useClassList(classNames.modal, ['keg-modal'])
+  const backdropCls = useClassList(classNames.backdrop, ['keg-modal-backdrop'])
+
   return (
     // change the wrapper dimensions to 0 when visible is set to false
     <View
-      className={spacedJoin(classNames.modal, 'keg-modal')}
+      className={modalCls}
       dataSet={Modal.dataSet.main}
       style={renderModal ? modalStyles.main : hideModalStyle}
     >
       <Touchable
-        className={spacedJoin(classNames.backdrop, 'keg-modal-backdrop')}
+        className={backdropCls}
         dataSet={Modal.dataSet.backdrop}
         style={modalStyles.backdrop}
         onPress={onBackdropTouch}
         activeOpacity={activeOpacity}
       />
       <AnimatedComponent
-        className={classNames.content}
+        className={classNames.content.main}
         onAnimationFinish={cb}
         visible={visible}
         defaultStyle={modalStyles.content}

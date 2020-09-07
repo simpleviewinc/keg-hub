@@ -3,7 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 
 const widthFromSize = (size, theme) => {
   const total = get(theme, [ 'layout', 'columns' ], 12)
@@ -23,14 +23,14 @@ export const Column = ({ className, children, size, center, ...props }) => {
   return (
     <Container
       {...props}
-      className={spacedJoin(className, 'keg-column')}
+      className={useClassList(className, ['keg-column'])}
       size={size}
       flexDir='column'
-      style={theme.join(
+      style={[
         get(theme, [ 'layout', 'grid', 'column' ]),
         props.style,
         getColumnWidth(size, theme)
-      )}
+      ]}
     >
       { children }
     </Container>

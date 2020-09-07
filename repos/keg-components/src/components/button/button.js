@@ -4,7 +4,7 @@ import { get } from '@keg-hub/jsutils'
 import { Touchable } from '../touchable'
 import { Text } from '../typography/text'
 import { useThemePath } from '../../hooks'
-import { spacedJoin } from '../../utils/helpers/spacedJoin'
+import { useClassList } from '../../hooks/useClassList'
 import { useThemeHover, useThemeActive } from '@keg-hub/re-theme'
 import { getActiveOpacity, getPressHandler, renderFromType } from '../../utils'
 
@@ -75,7 +75,7 @@ export const Button = props => {
   return (
     <Touchable
       accessibilityRole='button'
-      className={spacedJoin(className, 'keg-button')}
+      className={useClassList(className, ['keg-button'])}
       {...elProps}
       ref={themeRef}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}

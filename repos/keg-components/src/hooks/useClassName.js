@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { checkCall, isObj } from '@keg-hub/jsutils'
+import { checkCall, isObj, isArr, isStr } from '@keg-hub/jsutils'
 
 /**
  * Returns a function that should be set as the element ref
@@ -16,12 +16,23 @@ export const useClassName = (className, dataSet, ref, defClass) => {
 
   return useCallback(element => {
     if(element){
+
+      // Add the default className to the classList
       defClass && element.classList.add(defClass)
-      dataSet && dataSet.class && dataSet.class.split(' ').map(toAdd => element.classList.add(toAdd))
-      className && className.split(' ').map(toAdd => element.classList.add(toAdd))
+
+      // Add any dataSet.class attrs to the classList
+      dataSet &&
+        dataSet.class &&
+        dataSet.class.split(' ')
+          .map(toAdd => element.classList.add(toAdd))
+      
+      // Add classNames to the classList
+      ;(isStr(className) && className.split(' ') || className || [])
+        .map(toAdd => element.classList.add(toAdd))
     }
 
-    isObj(ref) && (current in ref)
+    // Update the ref based on it's type
+    isObj(ref) && ('current' in ref)
       ? ref.current = element
       : checkCall(ref, element)
 

@@ -4,7 +4,8 @@ import React, { useMemo } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { getPlatform, getPressHandler } from '../../utils'
-import { pickKeys } from '@keg-hub/jsutils'
+import { pickKeys, isArr } from '@keg-hub/jsutils'
+import { noPropObj } from '../../utils/helpers/noop'
 
 /**
  * Checks the for width styles in the props styles object
@@ -12,11 +13,18 @@ import { pickKeys } from '@keg-hub/jsutils'
  *
  * @return {boolean} - If a width style rule exists
  */
-const hasWidth = style =>
+const useHasWidth = styles => (
   useMemo(() => {
-    return Object.keys(pickKeys(style, [ 'width', 'minWidth', 'maxWidth' ]))
-      .length
-  }, [style])
+    return styles.map(style => {
+      return Boolean(
+        Object.keys(pickKeys(
+          style,
+          [ 'width', 'minWidth', 'maxWidth' ]
+        )).length
+      )
+    }).indexOf(true) !== -1
+  }, styles)
+)
 
 /**
  * Container
@@ -30,19 +38,23 @@ export const Container = ({
   children,
   flexDir,
   size,
-  style,
+  style=noPropObj,
   ...props
 }) => {
+
+  const containerStyles = isArr(style) ? style : [ style ]
+  const hasWidth = useHasWidth(containerStyles)
+
   // Get flex type based on size or style
   const flexStyle =
     flexDir === 'row'
-      ? { flexDirection: flexDir, flex: size ? size : hasWidth(style) ? 0 : 1 }
+      ? { flexDirection: flexDir, flex: size ? size : hasWidth ? 0 : 1 }
       : {}
 
   return (
     <View
       {...props}
-      style={{ ...flexStyle, ...style }}
+      style={[flexStyle, ...containerStyles]}
       {...getPressHandler(getPlatform(), onClick || onPress)}
     >
       { children }
@@ -61,5 +73,8 @@ Container.propTypes = {
   onPress: PropTypes.func,
   onClick: PropTypes.func,
   size: PropTypes.number,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
 }

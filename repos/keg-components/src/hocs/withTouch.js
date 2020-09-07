@@ -4,6 +4,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useThemePath } from '../hooks'
 import { useTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
+import { noPropObj } from '../utils/helpers/noop'
 
 /**
  * Returns a new component that wraps `Component` with touchable capabilities.
@@ -26,7 +27,7 @@ export const withTouch = (Component, options = {}) => {
   const wrapped = React.forwardRef((props, ref) => {
     const {
       touchThemePath = '',
-      touchStyle = {},
+      touchStyle = noPropObj,
       onPress,
       ...otherProps
     } = props
@@ -40,7 +41,7 @@ export const withTouch = (Component, options = {}) => {
 
     return (
       <TouchWrapper
-        style={theme.join(style, touchStyle)}
+        style={[touchStyle , style]}
         onPress={onPress}
       >
         <Component

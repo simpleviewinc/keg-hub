@@ -23,7 +23,7 @@ export const KegText = element => {
         ...attrs
       } = props
 
-      const textRef = useClassName(className, dataSet, ref)
+      const textRef = useClassName(className, dataSet, ref, `keg-${element}`)
 
       const a11y = useMemo(() => {
         const type = accessibilityRole
