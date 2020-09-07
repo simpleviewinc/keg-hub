@@ -30,7 +30,6 @@ const addRules = [
   {
     test: /\.(js|jsx)$/,
     include: [
-      path.resolve(__dirname, "../node_modules/@expo/vector-icons"),
       path.resolve(__dirname, "../node_modules/@keg-hub/re-theme"),
     ],
     use: {
