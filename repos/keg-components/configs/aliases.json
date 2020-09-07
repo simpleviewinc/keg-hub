@@ -22,5 +22,6 @@
   "KegHocs": "src/hocs/index.js",
   "KegHooks": "src/hooks/index.js",
   "KegUtils": "src/utils/index.js",
-  "StoryWrap": ".storybook/storyWrap.js"
+  "StoryWrap": ".storybook/storyWrap.js",
+  "react-native-svg": "react-native-svg-web"
 }
