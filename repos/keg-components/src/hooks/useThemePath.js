@@ -1,7 +1,9 @@
 import { useLayoutEffect, useState } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
+import { noPropObj } from '../utils/helpers/noop'
 import {
   get,
+  shallowEqual,
   deepMerge,
   reduceObj,
   logData,
@@ -18,13 +20,15 @@ import {
  * @returns {boolean} - If the style objects are equal to each other
  */
 const stylesEqual = (current, updates) => {
-  return (current && !updates) || (!current && updates)
-    ? false
-    : Boolean(
-      (!current && !updates) ||
-          (isEmptyColl(current) && isEmptyColl(updates)) ||
-          jsonEqual(current, updates)
-    )
+  return current === updates
+    ? true
+    : (current && !updates) || (!current && updates)
+      ? false
+      : Boolean(
+        (!current && !updates) ||
+            (isEmptyColl(current) && isEmptyColl(updates)) ||
+            shallowEqual(current, updates)
+      )
 }
 
 /**
@@ -62,28 +66,30 @@ const getStylesFromPath = (theme, path) => {
  */
 const mergeStyles = (pathStyles, userStyles) => {
   // If no user styles, just return the pathStyles
-  if (!userStyles) return pathStyles
+  if (!userStyles || userStyles === noPropObj) return pathStyles
 
   // Get the keys of both to try and find the level of the userStyles
   const pathKeys = Object.keys(pathStyles)
   const userKeys = Object.keys(userStyles)
 
   // Check if the userKeys has a key at the same level as the pathKeys
-  return pathKeys.indexOf(userKeys[0]) !== -1
-    ? // If there is a match, then merge the objects at the top level
-      // Example => pathStyles.default && userStyles.default both exist
-      deepMerge(pathStyles, userStyles)
-    : // Otherwise the userStyles are expected to be one level deeper
-  // So add the user styles to each key of the path styles
-  // Example => pathStyles.default.main && userStyles.main both exist
-    reduceObj(
-      pathStyles,
-      (key, value, updated) => {
-        updated[key] = deepMerge(value, userStyles)
-        return updated
-      },
-      {}
-    )
+  return !userKeys.length
+    ? pathStyles
+    : pathKeys.indexOf(userKeys[0]) !== -1
+      ? // If there is a match, then merge the objects at the top level
+        // Example => pathStyles.default && userStyles.default both exist
+        deepMerge(pathStyles, userStyles)
+      : // Otherwise the userStyles are expected to be one level deeper
+        // So add the user styles to each key of the path styles
+        // Example => pathStyles.default.main && userStyles.main both exist
+        reduceObj(
+          pathStyles,
+          (key, value, updated) => {
+            updated[key] = deepMerge(value, userStyles)
+            return updated
+          },
+          {}
+        )
 }
 
 /**
@@ -106,7 +112,7 @@ const buildTheme = (theme, path, styles) => {
  *
  * @returns {Array} - Built styles object and function to update the styles
  */
-export const useThemePath = (path, styles) => {
+export const useThemePath = (path, styles=noPropObj) => {
   // Ensure styles is a collection and it's not empty
   const [ userStyles, setUserStyles ] = useState(styles)
   const customEqual = stylesEqual(styles, userStyles)
@@ -114,10 +120,13 @@ export const useThemePath = (path, styles) => {
   // Get access to the theme
   const theme = useTheme()
 
-  // Create the themeStyles from the passed in styles and the theme pathStyles
-  const [ themeStyles, setThemeStyles ] = useState(
-    buildTheme(theme, path, styles)
-  )
+  // Memoize the themeStyles built from the passed in styles and the theme pathStyles
+  const builtTheme = useMemo(() => {
+    return buildTheme(theme, path, styles)
+  }, [ theme, path, customEqual ])
+
+  // Save the builtTheme to the state
+  const [ themeStyles, setThemeStyles ] = useState(builtTheme)
 
   // Use the layoutEffect hook to ensure it runs before the dom paint happens
   useLayoutEffect(() => {

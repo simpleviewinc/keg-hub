@@ -42,7 +42,7 @@ export const ItemHeader = props => {
     themePath,
     children,
     dataSet,
-    ...elprops
+    ...elProps
   } = props
 
   const classContent = classNames.content || noPropObj
@@ -55,11 +55,11 @@ export const ItemHeader = props => {
     <View
       className={mainCls}
       dataSet={dataSet?.main || ItemHeader.dataSet.main}
-      {...elprops}
-      style={theme.join(
+      {...elProps}
+      style={[
         headerStyles.main,
         shadow && get(headerStyles, [ 'main', 'shadow' ])
-      )}
+      ]}
     >
       { children || (
         <>

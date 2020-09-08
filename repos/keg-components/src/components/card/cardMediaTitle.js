@@ -1,34 +1,37 @@
 import React from 'react'
-import { useTheme } from '@keg-hub/re-theme'
 import { View } from 'KegView'
 import { Text } from '../typography/text'
 import { get } from '@keg-hub/jsutils'
+import { noPropObj } from '../../utils/helpers/noop'
+import { useThemePath } from '../../hooks'
+import { useClassList } from '../../hooks/useClassList'
 
-export const CardMediaTitle = ({ subtitle, title, styles }) => {
-  const theme = useTheme()
+export const CardMediaTitle = ({ classNames=noPropObj, subtitle, title, styles=noPropObj }) => {
+  const themeStyles = useThemePath(`components.card`)
+
   return (
     <View
-      style={theme.join(
-        get(theme, [ 'components', 'card', 'overlay' ]),
-        styles.overlay
-      )}
+      className={useClassList(classNames.main, ['keg-card-media-title-main'])}
+      style={[ themeStyles.overlay, styles.overlay ]}
     >
       { title && (
         <Text
-          style={theme.join(
-            get(theme, [ 'components', 'card', 'featured', 'title' ]),
+          className={useClassList(classNames.content.title, ['keg-card-media-title'])}
+          style={[
+            get(themeStyles, [ 'featured', 'title' ]),
             styles.title
-          )}
+          ]}
         >
           { title }
         </Text>
       ) }
       { subtitle && (
         <Text
-          style={theme.join(
-            get(theme, [ 'components', 'card', 'featured', 'subtitle' ]),
+          className={useClassList(classNames.content.subtitle, ['keg-card-media-subtitle'])}
+          style={[
+            get(themeStyles, [ 'featured', 'subtitle' ]),
             styles.subtitle
-          )}
+          ]}
         >
           { subtitle }
         </Text>

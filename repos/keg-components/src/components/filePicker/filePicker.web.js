@@ -70,7 +70,7 @@ export const FilePicker = React.forwardRef((props, ref) => {
   }, [])
 
   return (
-    <View style={theme.join(get(componentTheme, 'main'), style)}>
+    <View style={[ get(componentTheme, 'main'), style ]}>
       <Button
         content={title}
         onClick={clickInput}

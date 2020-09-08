@@ -50,7 +50,7 @@ export const SelectWrapper = props => {
   return (
     <Element
       elProps={elProps}
-      style={theme.join(selectStyles, style)}
+      style={[selectStyles, style]}
       {...getReadOnly(isWeb, readOnly, disabled, editable)}
       {...getValue(props, isWeb)}
       {...useSelectHandlers({ onChange, onValueChange })}
