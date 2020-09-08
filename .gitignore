@@ -164,7 +164,7 @@ reports
 repos/**/containers/**/.env
 repos/**/container/.env
 repos/**/container/run.sh
-!repos/keg-components/build
+!repos/**/build
 repos/**/run.sh
 repos/keg-core/core/base/assets
 repos/keg-core/core/base/assets/index.js
