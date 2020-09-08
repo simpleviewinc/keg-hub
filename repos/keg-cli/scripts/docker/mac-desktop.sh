@@ -234,9 +234,7 @@ keg_check_bash_file(){
 # Prints out the docker version to confirm the install
 keg_print_docker_versions(){
   echo ""
-  keg_message "Installed docker versions:"
-  keg_message "$(docker -v)"
-  keg_message "$(docker-compose -v)"
+  keg_message "Finished installing docker-desktop!"
   echo ""
 }
 
@@ -247,7 +245,6 @@ keg_install_docker_desktop(){
   local HAS_DOCKER_APP="$(keg_check_docker_app)"
   if [[ "$HAS_DOCKER_APP" ]]; then
     keg_message "Docker for Desktop app already installed!"
-    keg_print_docker_versions
     keg_message "exiting ..."
     return
   fi
