@@ -1,1 +1,1 @@
-export * from './reTheme'
+export * from './web'

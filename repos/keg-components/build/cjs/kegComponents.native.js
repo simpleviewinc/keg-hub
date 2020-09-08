@@ -6,10 +6,11 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var PropTypes = _interopDefault(require('prop-types'));
-var reTheme = require('@svkeg/re-theme');
-var jsutils = require('@svkeg/jsutils');
+var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
+var colors$2 = require('@keg-hub/re-theme/colors');
 var reactNative = require('react-native');
+var PropTypes = _interopDefault(require('prop-types'));
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -185,14 +186,6 @@ function _nonIterableSpread() {
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-
-var View = React__default.forwardRef(function (_ref, ref) {
-  var children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["children"]);
-  return React__default.createElement(reactNative.View, _extends({}, props, {
-    ref: ref
-  }), children);
-});
 
 var useAnimate = function useAnimate(_ref) {
   var ref = _ref.ref,
@@ -426,11 +419,11 @@ var defaults = {
 var defPalette = jsutils.get(defaults, 'colors.palette', {});
 var defTypes = jsutils.get(defaults, 'colors.types', {});
 var colors$1 = {
-  opacity: reTheme.helpers.colors.opacity,
+  opacity: colors$2.opacity,
   palette: jsutils.reduceObj(defPalette, function (key, value, updated) {
     !jsutils.isArr(value) ? updated[key] = value : value.map(function (val, i) {
       var name = "".concat(key, "0").concat(i + 1);
-      updated[name] = jsutils.isStr(val) ? val : reTheme.helpers.colors.shadeHex(value[1], value[i]);
+      updated[name] = jsutils.isStr(val) ? val : colors$2.shadeHex(value[1], value[i]);
     });
     return updated;
   }, {})
@@ -776,96 +769,13 @@ var useFromToAnimation = function useFromToAnimation(params, dependencies) {
   return [fromVal];
 };
 
-var ellipsisProps = {
-  ellipsizeMode: 'tail',
-  numberOfLines: 1
-};
-var KegText = function KegText(element) {
-  return reTheme.withTheme(function (props) {
-    var children = props.children,
-        style = props.style,
-        theme = props.theme,
-        ellipsis = props.ellipsis,
-        attrs = _objectWithoutProperties(props, ["children", "style", "theme", "ellipsis"]);
-    var textStyles = theme.get('typography.font.family', 'typography.default', element && "typography.".concat(element));
-    return React__default.createElement(reactNative.Text, _extends({}, attrs, ellipsis && ellipsisProps, {
-      style: theme.join(textStyles, style)
-    }), children);
-  });
-};
-
-var Text = KegText('text');
-
-var getChildren = function getChildren(Children) {
-  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  return renderFromType(Children, {
-    style: styles.content
-  }, Text);
-};
-var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
-  return disabled ? _objectSpread2(_objectSpread2({}, mainStyles), jsutils.get(btnStyles, 'disabled.main')) : mainStyles;
-};
-var ButtonWrapper = function ButtonWrapper(props) {
-  var Element = props.Element,
-      children = props.children,
-      content = props.content,
-      isWeb = props.isWeb,
-      onClick = props.onClick,
-      onPress = props.onPress,
-      themePath = props.themePath,
-      ref = props.ref,
-      styles = props.styles,
-      elProps = _objectWithoutProperties(props, ["Element", "children", "content", "isWeb", "onClick", "onPress", "themePath", "ref", "styles"]);
-  var _useThemePath = useThemePath(themePath || 'button.contained.default', styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      btnStyles = _useThemePath2[0];
-  var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
-    ref: ref,
-    noMerge: true
-  }),
-      _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
-      hoverRef = _useThemeHover2[0],
-      hoverStyles = _useThemeHover2[1];
-  var _useThemeActive = reTheme.useThemeActive(hoverStyles, jsutils.get(btnStyles, 'active'), {
-    ref: hoverRef,
-    noMerge: true
-  }),
-      _useThemeActive2 = _slicedToArray(_useThemeActive, 2),
-      themeRef = _useThemeActive2[0],
-      themeStyles = _useThemeActive2[1];
-  return React__default.createElement(Element, _extends({}, elProps, {
-    ref: themeRef,
-    style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
-    children: getChildren(children || content, themeStyles)
-  }, getPressHandler(false, onClick, onPress), getActiveOpacity(false, props, btnStyles)));
-};
-ButtonWrapper.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
-  content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
-  Element: PropTypes.oneOfType([PropTypes.element, PropTypes.object, PropTypes.string, PropTypes.array]),
-  disabled: PropTypes.bool,
-  isWeb: PropTypes.bool,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  ref: PropTypes.object,
-  styles: PropTypes.object,
-  themePath: PropTypes.string
-};
-
-var isWeb = getPlatform() === 'web';
-var Touchable = reactNative.Platform.OS === 'android' ? reactNative.TouchableNativeFeedback : reactNative.TouchableOpacity;
-var Element = React__default.forwardRef(function (props, ref) {
-  return React__default.createElement(Touchable, _extends({}, props, {
+var View = React__default.forwardRef(function (_ref, ref) {
+  var children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["children"]);
+  return React__default.createElement(reactNative.View, _extends({}, props, {
     ref: ref
-  }));
+  }), children);
 });
-var Button = function Button(props) {
-  return React__default.createElement(ButtonWrapper, _extends({}, props, {
-    Element: Element,
-    isWeb: isWeb
-  }));
-};
-Button.propTypes = _objectSpread2(_objectSpread2({}, Touchable.propTypes), ButtonWrapper.propTypes);
 
 var IconWrapper = React__default.forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
@@ -902,163 +812,14 @@ IconWrapper.propTypes = {
   type: PropTypes.string
 };
 
-var isWeb$1 = getPlatform() === 'web';
+var isWeb = getPlatform() === 'web';
 var Icon = function Icon(props) {
   return React__default.createElement(IconWrapper, _extends({}, props, {
     Element: props.Element,
-    isWeb: isWeb$1
+    isWeb: isWeb
   }));
 };
 Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
-
-var Caption = KegText('caption');
-
-var H1 = KegText('h1');
-
-var H2 = KegText('h2');
-
-var H3 = KegText('h3');
-
-var H4 = KegText('h4');
-
-var H5 = KegText('h5');
-
-var H6 = KegText('h6');
-
-var Label = KegText('label');
-
-var P = KegText('paragraph');
-
-var Subtitle = KegText('subtitle');
-
-var AppHeader = function AppHeader(props) {
-  var theme = reTheme.useTheme();
-  var title = props.title,
-      styles = props.styles,
-      RightComponent = props.RightComponent,
-      CenterComponent = props.CenterComponent,
-      LeftComponent = props.LeftComponent,
-      onLeftClick = props.onLeftClick,
-      leftIcon = props.leftIcon,
-      LeftIconComponent = props.LeftIconComponent,
-      rightIcon = props.rightIcon,
-      RightIconComponent = props.RightIconComponent,
-      IconComponent = props.IconComponent,
-      onRightClick = props.onRightClick,
-      shadow = props.shadow,
-      ellipsis = props.ellipsis,
-      themePath = props.themePath,
-      _props$type = props.type,
-      type = _props$type === void 0 ? 'default' : _props$type,
-      children = props.children,
-      elprops = _objectWithoutProperties(props, ["title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "type", "children"]);
-  var _useThemePath = useThemePath(themePath || "appHeader.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      headerStyles = _useThemePath2[0];
-  return React__default.createElement(View, _extends({
-    dataSet: AppHeader.dataSet.main
-  }, elprops, {
-    style: theme.join(headerStyles.main, shadow && jsutils.get(headerStyles, ['shadow']))
-  }), children || React__default.createElement(React__default.Fragment, null, React__default.createElement(Side, {
-    styles: headerStyles.content,
-    iconName: leftIcon,
-    IconElement: LeftIconComponent || IconComponent,
-    action: onLeftClick
-  }, LeftComponent), React__default.createElement(Center, {
-    ellipsis: ellipsis,
-    theme: theme,
-    styles: headerStyles.content.center,
-    title: title
-  }, CenterComponent), React__default.createElement(Side, {
-    right: true,
-    styles: headerStyles.content,
-    iconName: rightIcon,
-    IconElement: RightIconComponent || IconComponent,
-    action: onRightClick
-  }, RightComponent)));
-};
-AppHeader.dataSet = {
-  main: {
-    class: 'app-header-main'
-  },
-  left: {
-    class: 'app-header-content-left'
-  },
-  right: {
-    class: 'app-header-content-right'
-  },
-  center: {
-    class: 'app-header-content-center'
-  }
-};
-AppHeader.propTypes = {
-  title: PropTypes.string,
-  styles: PropTypes.object,
-  RightComponent: PropTypes.element,
-  LeftComponent: PropTypes.element,
-  CenterComponent: PropTypes.element,
-  onLeftClick: PropTypes.func,
-  leftIcon: PropTypes.string,
-  LeftIconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element, PropTypes.elementType]),
-  onRightClick: PropTypes.func,
-  rightIcon: PropTypes.string,
-  RightIconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element, PropTypes.elementType]),
-  IconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element, PropTypes.elementType]),
-  shadow: PropTypes.bool,
-  ellipsis: PropTypes.bool,
-  themePath: PropTypes.string
-};
-var Center = function Center(props) {
-  var styles = props.styles,
-      title = props.title,
-      _props$ellipsis = props.ellipsis,
-      ellipsis = _props$ellipsis === void 0 ? true : _props$ellipsis,
-      children = props.children;
-  return React__default.createElement(View, {
-    dataSet: AppHeader.dataSet.center,
-    style: styles.main
-  }, children && renderFromType(children, {}, null) || React__default.createElement(H6, {
-    ellipsis: ellipsis,
-    style: styles.content.title
-  }, title));
-};
-var Side = function Side(props) {
-  var styles = props.styles,
-      iconName = props.iconName,
-      IconElement = props.IconElement,
-      action = props.action,
-      children = props.children,
-      right = props.right;
-  var position = right ? 'right' : 'left';
-  var contentStyles = jsutils.get(styles, [position, 'content']);
-  var iconProps = {
-    styles: styles,
-    IconElement: IconElement,
-    iconName: iconName,
-    position: position
-  };
-  var showIcon = iconName && IconElement;
-  return React__default.createElement(View, {
-    dataSet: AppHeader.dataSet[position],
-    style: jsutils.get(styles, [position, 'main'])
-  }, children && renderFromType(children, {}, null) || (action ? React__default.createElement(Button, {
-    styles: contentStyles.button,
-    onClick: action
-  }, showIcon && React__default.createElement(CustomIcon, iconProps)) : showIcon && React__default.createElement(View, {
-    style: contentStyles.main
-  }, React__default.createElement(CustomIcon, iconProps))));
-};
-var CustomIcon = function CustomIcon(props) {
-  var styles = props.styles,
-      iconName = props.iconName,
-      IconElement = props.IconElement,
-      position = props.position;
-  return React__default.createElement(Icon, {
-    name: iconName,
-    Element: IconElement,
-    styles: jsutils.get(styles, [position, 'content', 'icon'])
-  });
-};
 
 var TouchableWithFeedback = reactNative.Platform.OS === 'android' ? reactNative.TouchableNativeFeedback : reactNative.TouchableOpacity;
 var withTouch = function withTouch(Component) {
@@ -1129,6 +890,95 @@ TextBox.propTypes = {
   themePath: PropTypes.string,
   styles: PropTypes.object
 };
+
+var ellipsisProps = {
+  ellipsizeMode: 'tail',
+  numberOfLines: 1
+};
+var KegText = function KegText(element) {
+  return reTheme.withTheme(function (props) {
+    var children = props.children,
+        style = props.style,
+        theme = props.theme,
+        ellipsis = props.ellipsis,
+        attrs = _objectWithoutProperties(props, ["children", "style", "theme", "ellipsis"]);
+    var textStyles = theme.get('typography.font.family', 'typography.default', element && "typography.".concat(element));
+    return React__default.createElement(reactNative.Text, _extends({}, attrs, ellipsis && ellipsisProps, {
+      style: theme.join(textStyles, style)
+    }), children);
+  });
+};
+
+var Text = KegText('text');
+
+var getChildren = function getChildren(Children) {
+  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  return renderFromType(Children, {
+    style: styles.content
+  }, Text);
+};
+var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
+  return disabled ? _objectSpread2(_objectSpread2({}, mainStyles), jsutils.get(btnStyles, 'disabled.main')) : mainStyles;
+};
+var ButtonWrapper = function ButtonWrapper(props) {
+  var Element = props.Element,
+      children = props.children,
+      content = props.content,
+      isWeb = props.isWeb,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      themePath = props.themePath,
+      ref = props.ref,
+      styles = props.styles,
+      elProps = _objectWithoutProperties(props, ["Element", "children", "content", "isWeb", "onClick", "onPress", "themePath", "ref", "styles"]);
+  var _useThemePath = useThemePath(themePath || 'button.contained.default', styles),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      btnStyles = _useThemePath2[0];
+  var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
+    ref: ref
+  }),
+      _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
+      hoverRef = _useThemeHover2[0],
+      hoverStyles = _useThemeHover2[1];
+  var _useThemeActive = reTheme.useThemeActive(hoverStyles, jsutils.get(btnStyles, 'active'), {
+    ref: hoverRef
+  }),
+      _useThemeActive2 = _slicedToArray(_useThemeActive, 2),
+      themeRef = _useThemeActive2[0],
+      themeStyles = _useThemeActive2[1];
+  return React__default.createElement(Element, _extends({}, elProps, {
+    ref: themeRef,
+    style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
+    children: getChildren(children || content, themeStyles)
+  }, getPressHandler(false, onClick, onPress), getActiveOpacity(false, props, btnStyles)));
+};
+ButtonWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
+  content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
+  Element: PropTypes.oneOfType([PropTypes.element, PropTypes.object, PropTypes.string, PropTypes.array]),
+  disabled: PropTypes.bool,
+  isWeb: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  ref: PropTypes.object,
+  styles: PropTypes.object,
+  themePath: PropTypes.string
+};
+
+var isWeb$1 = getPlatform() === 'web';
+var Touchable = reactNative.Platform.OS === 'android' ? reactNative.TouchableNativeFeedback : reactNative.TouchableOpacity;
+var Element = React__default.forwardRef(function (props, ref) {
+  return React__default.createElement(Touchable, _extends({}, props, {
+    ref: ref
+  }));
+});
+var Button = function Button(props) {
+  return React__default.createElement(ButtonWrapper, _extends({}, props, {
+    Element: Element,
+    isWeb: isWeb$1
+  }));
+};
+Button.propTypes = _objectSpread2(_objectSpread2({}, Touchable.propTypes), ButtonWrapper.propTypes);
 
 var CardBody = function CardBody(_ref) {
   var style = _ref.style,
@@ -1573,6 +1423,26 @@ Drawer.propTypes = {
   style: PropTypes.object,
   children: PropTypes.object
 };
+
+var Caption = KegText('caption');
+
+var H1 = KegText('h1');
+
+var H2 = KegText('h2');
+
+var H3 = KegText('h3');
+
+var H4 = KegText('h4');
+
+var H5 = KegText('h5');
+
+var H6 = KegText('h6');
+
+var Label = KegText('label');
+
+var P = KegText('paragraph');
+
+var Subtitle = KegText('subtitle');
 
 var FilePicker = React__default.forwardRef(function (props, _ref) {
   var onChange = props.onChange,
@@ -2459,153 +2329,172 @@ Modal.propTypes = {
   AnimatedComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType])
 };
 
-var flex = {
-  align: function align(dir) {
-    return {
-      alignItems: dir
-    };
+var ItemHeader = function ItemHeader(props) {
+  var _dataSet$content, _dataSet$content2, _headerStyles$content, _dataSet$content3;
+  var theme = reTheme.useTheme();
+  var title = props.title,
+      styles = props.styles,
+      RightComponent = props.RightComponent,
+      CenterComponent = props.CenterComponent,
+      LeftComponent = props.LeftComponent,
+      onLeftClick = props.onLeftClick,
+      leftIcon = props.leftIcon,
+      LeftIconComponent = props.LeftIconComponent,
+      rightIcon = props.rightIcon,
+      RightIconComponent = props.RightIconComponent,
+      IconComponent = props.IconComponent,
+      onRightClick = props.onRightClick,
+      shadow = props.shadow,
+      ellipsis = props.ellipsis,
+      themePath = props.themePath,
+      children = props.children,
+      dataSet = props.dataSet,
+      elprops = _objectWithoutProperties(props, ["title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children", "dataSet"]);
+  var _useThemePath = useThemePath(themePath || "header.itemHeader", styles),
+      _useThemePath2 = _slicedToArray(_useThemePath, 1),
+      headerStyles = _useThemePath2[0];
+  return React__default.createElement(View, _extends({
+    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : dataSet.main) || ItemHeader.dataSet.main
+  }, elprops, {
+    style: theme.join(headerStyles.main, shadow && jsutils.get(headerStyles, ['main', 'shadow']))
+  }), children || React__default.createElement(React__default.Fragment, null, React__default.createElement(Side, {
+    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : (_dataSet$content = dataSet.content) === null || _dataSet$content === void 0 ? void 0 : _dataSet$content.left) || ItemHeader.dataSet.content.left,
+    styles: headerStyles.content,
+    iconName: leftIcon,
+    IconElement: LeftIconComponent || IconComponent,
+    action: onLeftClick
+  }, LeftComponent), React__default.createElement(Center, {
+    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : (_dataSet$content2 = dataSet.content) === null || _dataSet$content2 === void 0 ? void 0 : _dataSet$content2.center) || ItemHeader.dataSet.content.center,
+    ellipsis: ellipsis,
+    theme: theme,
+    styles: (_headerStyles$content = headerStyles.content) === null || _headerStyles$content === void 0 ? void 0 : _headerStyles$content.center,
+    title: title
+  }, CenterComponent), React__default.createElement(Side, {
+    right: true,
+    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : (_dataSet$content3 = dataSet.content) === null || _dataSet$content3 === void 0 ? void 0 : _dataSet$content3.right) || ItemHeader.dataSet.content.right,
+    styles: headerStyles.content,
+    iconName: rightIcon,
+    IconElement: RightIconComponent || IconComponent,
+    action: onRightClick
+  }, RightComponent)));
+};
+ItemHeader.dataSet = {
+  main: {
+    class: 'item-header-main'
   },
-  direction: function direction(dir) {
-    return {
-      flexDirection: dir
-    };
-  },
-  justify: function justify(dir) {
-    return {
-      justifyContent: dir
-    };
-  },
-  display: {
-    display: 'flex'
-  },
-  wrap: {
-    flexWrap: 'wrap'
-  },
-  center: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  left: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
-  },
-  right: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end'
-  }
-};
-flex.direction.row = {
-  flexDirection: 'row'
-};
-flex.direction.column = {
-  flexDirection: 'column'
-};
-flex.row = flex.direction.row;
-flex.column = flex.direction.column;
-flex.justify.start = {
-  justifyContent: 'flex-start'
-};
-flex.justify.end = {
-  justifyContent: 'flex-end'
-};
-flex.justify.center = {
-  justifyContent: 'center'
-};
-flex.justify.between = {
-  justifyContent: 'space-between'
-};
-flex.justify.around = {
-  justifyContent: 'space-around'
-};
-flex.justify.even = {
-  justifyContent: 'space-evenly'
-};
-flex.align.start = {
-  alignItems: 'flex-start'
-};
-flex.align.end = {
-  alignItems: 'flex-end'
-};
-flex.align.center = {
-  alignItems: 'center'
-};
-flex.align.stretch = {
-  alignItems: 'stretch'
-};
-flex.align.base = {
-  alignItems: 'baseline'
-};
-
-var defaultSectionStyle = {
-  height: '100%',
-  backgroundColor: 'transparent'
-};
-var sideContentMainStyle = _objectSpread2(_objectSpread2({}, defaultSectionStyle), {}, {
-  justifyContent: 'center',
-  paddingLeft: 0
-});
-var defaultSideSectionStyle = {
-  main: _objectSpread2(_objectSpread2({}, defaultSectionStyle), {}, {
-    flexDirection: 'row',
-    maxWidth: '20%'
-  }, flex.align.center),
   content: {
-    button: {
-      main: _objectSpread2({}, sideContentMainStyle)
+    left: {
+      main: {
+        class: 'item-header-content-left-main'
+      }
     },
-    main: _objectSpread2({}, sideContentMainStyle),
-    icon: {
-      paddingHorizontal: 10,
-      color: '#111111',
-      fontSize: 30
+    right: {
+      main: {
+        class: 'item-header-content-right-main'
+      }
+    },
+    center: {
+      main: {
+        class: 'item-header-content-center-main'
+      }
     }
   }
 };
-var appHeader = {
-  default: {
-    shadow: {
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.5,
-      shadowRadius: 2
+ItemHeader.propTypes = {
+  dataSet: PropTypes.object,
+  title: PropTypes.string,
+  styles: PropTypes.object,
+  RightComponent: PropTypes.element,
+  LeftComponent: PropTypes.element,
+  CenterComponent: PropTypes.element,
+  onLeftClick: PropTypes.oneOfType([PropTypes.func, PropTypes.any]),
+  leftIcon: PropTypes.string,
+  LeftIconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element, PropTypes.elementType]),
+  onRightClick: PropTypes.oneOfType([PropTypes.func, PropTypes.any]),
+  rightIcon: PropTypes.string,
+  RightIconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element, PropTypes.elementType]),
+  IconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element, PropTypes.elementType]),
+  shadow: PropTypes.bool,
+  ellipsis: PropTypes.bool,
+  themePath: PropTypes.string
+};
+var Center = function Center(props) {
+  var styles = props.styles,
+      title = props.title,
+      _props$ellipsis = props.ellipsis,
+      ellipsis = _props$ellipsis === void 0 ? true : _props$ellipsis,
+      children = props.children,
+      dataSet = props.dataSet;
+  return React__default.createElement(View, {
+    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.main,
+    style: styles.main
+  }, children && renderFromType(children, {}, null) || React__default.createElement(H6, {
+    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.content,
+    ellipsis: ellipsis,
+    style: styles.content.title
+  }, title));
+};
+var Side = function Side(props) {
+  var styles = props.styles,
+      iconName = props.iconName,
+      IconElement = props.IconElement,
+      action = props.action,
+      children = props.children,
+      right = props.right,
+      dataSet = props.dataSet;
+  var position = right ? 'right' : 'left';
+  var contentStyles = jsutils.get(styles, [position, 'content']);
+  var iconProps = {
+    styles: styles,
+    IconElement: IconElement,
+    iconName: iconName,
+    position: position
+  };
+  var showIcon = iconName && IconElement;
+  return React__default.createElement(View, {
+    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.main,
+    style: jsutils.get(styles, [position, 'main'])
+  }, children && renderFromType(children, {}, null) || (action ? React__default.createElement(Button, {
+    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.content,
+    styles: contentStyles.button,
+    onClick: action
+  }, showIcon && React__default.createElement(CustomIcon, iconProps)) : showIcon && React__default.createElement(View, {
+    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.content,
+    style: contentStyles.main
+  }, React__default.createElement(CustomIcon, iconProps))));
+};
+var CustomIcon = function CustomIcon(props) {
+  var styles = props.styles,
+      iconName = props.iconName,
+      IconElement = props.IconElement,
+      position = props.position;
+  return React__default.createElement(Icon, {
+    name: iconName,
+    Element: IconElement,
+    styles: jsutils.get(styles, [position, 'content', 'icon'])
+  });
+};
+
+var AppHeader = function AppHeader(props) {
+  var dataSet = props.dataSet,
+      otherProps = _objectWithoutProperties(props, ["dataSet"]);
+  return React__default.createElement(ItemHeader, _extends({
+    dataSet: jsutils.deepMerge(AppHeader.dataSet, dataSet)
+  }, otherProps));
+};
+AppHeader.dataSet = {
+  main: {
+    class: 'app-header-main'
+  },
+  content: {
+    left: {
+      class: 'app-header-content-left'
     },
-    main: {
-      $all: {
-        justifyContent: 'center',
-        backgroundColor: jsutils.get(colors$1, 'surface.primary.colors.dark'),
-        height: 70,
-        width: '100%',
-        flexDirection: 'row'
-      }
+    right: {
+      class: 'app-header-content-right'
     },
-    content: {
-      left: {
-        main: _objectSpread2(_objectSpread2({}, flex.left), defaultSideSectionStyle.main),
-        content: defaultSideSectionStyle.content
-      },
-      right: {
-        main: _objectSpread2(_objectSpread2({}, flex.right), defaultSideSectionStyle.main),
-        content: defaultSideSectionStyle.content
-      },
-      center: {
-        main: _objectSpread2(_objectSpread2(_objectSpread2({}, flex.center), defaultSectionStyle), {}, {
-          width: '60%'
-        }),
-        content: {
-          title: {
-            color: 'white'
-          }
-        }
-      }
+    center: {
+      class: 'app-header-content-center'
     }
   }
 };
@@ -2856,6 +2745,89 @@ padding.top = {
 };
 padding.bottom = {
   paddingBottom: size$2
+};
+
+var flex = {
+  align: function align(dir) {
+    return {
+      alignItems: dir
+    };
+  },
+  direction: function direction(dir) {
+    return {
+      flexDirection: dir
+    };
+  },
+  justify: function justify(dir) {
+    return {
+      justifyContent: dir
+    };
+  },
+  display: {
+    display: 'flex'
+  },
+  wrap: {
+    flexWrap: 'wrap'
+  },
+  center: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  left: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
+  right: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  }
+};
+flex.direction.row = {
+  flexDirection: 'row'
+};
+flex.direction.column = {
+  flexDirection: 'column'
+};
+flex.row = flex.direction.row;
+flex.column = flex.direction.column;
+flex.justify.start = {
+  justifyContent: 'flex-start'
+};
+flex.justify.end = {
+  justifyContent: 'flex-end'
+};
+flex.justify.center = {
+  justifyContent: 'center'
+};
+flex.justify.between = {
+  justifyContent: 'space-between'
+};
+flex.justify.around = {
+  justifyContent: 'space-around'
+};
+flex.justify.even = {
+  justifyContent: 'space-evenly'
+};
+flex.align.start = {
+  alignItems: 'flex-start'
+};
+flex.align.end = {
+  alignItems: 'flex-end'
+};
+flex.align.center = {
+  alignItems: 'center'
+};
+flex.align.stretch = {
+  alignItems: 'stretch'
+};
+flex.align.base = {
+  alignItems: 'baseline'
 };
 
 var opacity05 = jsutils.get(colors$1, 'opacity._05');
@@ -3254,8 +3226,79 @@ var modal$1 = {
   }
 };
 
+var defaultSectionStyle = {
+  height: '100%',
+  backgroundColor: 'transparent'
+};
+var sideContentMainStyle = _objectSpread2(_objectSpread2({}, defaultSectionStyle), {}, {
+  justifyContent: 'center',
+  paddingLeft: 0
+});
+var defaultSideSectionStyle = {
+  main: _objectSpread2(_objectSpread2({}, defaultSectionStyle), {}, {
+    flexDirection: 'row',
+    maxWidth: '20%'
+  }, flex.align.center),
+  content: {
+    button: {
+      main: _objectSpread2({}, sideContentMainStyle)
+    },
+    main: _objectSpread2({}, sideContentMainStyle),
+    icon: {
+      paddingHorizontal: 10,
+      color: '#111111',
+      fontSize: 30
+    }
+  }
+};
+var itemHeader = {
+  main: {
+    $all: {
+      shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2
+      }
+    },
+    $web: {
+      justifyContent: 'center',
+      backgroundColor: jsutils.get(colors$1, 'surface.primary.colors.dark'),
+      height: 70,
+      width: '100%',
+      flexDirection: 'row'
+    }
+  },
+  content: {
+    left: {
+      main: _objectSpread2(_objectSpread2({}, flex.left), defaultSideSectionStyle.main),
+      content: defaultSideSectionStyle.content
+    },
+    right: {
+      main: _objectSpread2(_objectSpread2({}, flex.right), defaultSideSectionStyle.main),
+      content: defaultSideSectionStyle.content
+    },
+    center: {
+      main: _objectSpread2(_objectSpread2(_objectSpread2({}, flex.center), defaultSectionStyle), {}, {
+        width: '60%'
+      }),
+      content: {
+        title: {
+          color: 'white'
+        }
+      }
+    }
+  }
+};
+
+var header = {
+  itemHeader: itemHeader
+};
+
 var components = {
-  appHeader: appHeader,
   button: button,
   card: card,
   divider: divider,
@@ -3268,7 +3311,8 @@ var components = {
   loading: loading,
   section: section,
   textBox: textBox,
-  modal: modal$1
+  modal: modal$1,
+  header: header
 };
 
 var display = {
@@ -3727,6 +3771,7 @@ exports.H6 = H6;
 exports.Icon = Icon;
 exports.Image = Image;
 exports.Input = Input;
+exports.ItemHeader = ItemHeader;
 exports.Label = Label;
 exports.Link = Link;
 exports.Loading = Loading;

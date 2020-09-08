@@ -17,14 +17,40 @@ const runCmd = async (cmd) => {
 
 }
 
+const buildPath = path.join(__dirname, `../build`)
+const buildIndexes = {
+  cjs: {
+    [path.join(buildPath, 'cjs/index.js')]: `'use strict'\nmodule.exports = require('./web')\n`,
+    [path.join(buildPath, 'cjs/index.native.js')]: `'use strict'\nmodule.exports = require('./native')\n`,
+  },
+  esm: {
+    [path.join(buildPath, 'esm/index.js')]: `export * from './web'\n`,
+    [path.join(buildPath, 'esm/index.native.js')]: `export * from './native'\n`,
+  }
+}
+
+const writeIndexes = indexes => {
+  Object.entries(indexes).map(([filePath, content]) => {
+    fs.writeFileSync(filePath, content)
+  })
+}
+
 export default function buildHook(platform){
   return {
     name: 'buildHook',
     buildEnd: async () => {
       try {
 
-        // Only run the build hook if inside a container
+        // Build the index files for the build export
+        if(platform !== 'native'){
+          writeIndexes(buildIndexes.cjs)
+          writeIndexes(buildIndexes.esm)
+        }
+
+        // Only run the build hook if NOT inside a container
         if(!DOC_APP_PATH || platform === 'native') return
+        
+
 
         // Check if we are running the container for ReTheme
         // The retheme folder path and the app path will be the same

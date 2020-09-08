@@ -42,6 +42,7 @@ module.exports = {
     '\\.(css|less)$': 'identity-obj-proxy',
     [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1',
     ...mappedNames,
+    '@keg-hub/re-theme/colors': `${ROOT_DIR}/node_modules/@keg-hub/re-theme/build/cjs/web/colors.js`
   },
   verbose: true,
   testPathIgnorePatterns: [ '/node_modules/' ],

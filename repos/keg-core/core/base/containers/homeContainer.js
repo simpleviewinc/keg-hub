@@ -23,7 +23,7 @@ const buildStyles = (theme, styles) => {
 }
 
 export const HomeContainer = props => {
-  const homeStyles = useStylesCallback(buildStyles)
+  const homeStyles = useStylesCallback(buildStyles, [props.style])
 
   return (
     <>
