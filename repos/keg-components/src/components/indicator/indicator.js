@@ -3,7 +3,7 @@ import { ActivityIndicator } from 'react-native'
 import { IndicatorWrapper } from './indicator.wrapper'
 import { View } from 'KegView'
 import { getPlatform } from 'KegGetPlatform'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 
 const isWeb = getPlatform() === 'web'
 

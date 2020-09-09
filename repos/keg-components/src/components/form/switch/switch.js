@@ -4,6 +4,7 @@ import { SwitchWrapper } from './switch.wrapper'
 import { Switch as RNSwitch, TouchableOpacity } from 'react-native'
 import { View } from 'KegView'
 import { getPlatform } from 'KegGetPlatform'
+import { useClassName } from 'KegClassName'
 const isWeb = getPlatform() === 'web'
 
 /**
@@ -45,6 +46,7 @@ const getSwitchColors = (
  */
 const Element = React.forwardRef((props, ref) => {
   const {
+    className,
     elProps,
     style,
     styles = {},
@@ -53,14 +55,19 @@ const Element = React.forwardRef((props, ref) => {
     ...attrs
   } = props
 
+  const switchRef = useClassName('keg-switch', className, ref)
+
   return (
-    <View style={styles.main}>
+    <View
+      className='keg-switch-area'
+      style={styles.main}
+    >
       <RNSwitch
         style={styles.switch}
         {...getSwitchColors(thumbColor, trackColor, styles)}
         {...elProps}
         {...attrs}
-        ref={ref}
+        ref={switchRef}
       />
     </View>
   )

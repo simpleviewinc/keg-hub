@@ -6,6 +6,7 @@ import { useThemePath } from '../../../hooks'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import PropTypes from 'prop-types'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
@@ -84,6 +85,7 @@ const ChildrenComponent = ({ children }) => (
  */
 export const SwitchWrapper = props => {
   const {
+    className,
     checked,
     children,
     elType,
@@ -113,13 +115,24 @@ export const SwitchWrapper = props => {
 
   return (
     (children && (
-      <View style={activeStyles.main}>
-        <ChildrenComponent children={children} />
+      <View
+        className={useThemeTypeAsClass(
+          elThemePath || type,
+          'keg-switch',
+          className
+        )}
+        style={activeStyles.main}
+      >
+        <ChildrenComponent
+          className='keg-switch-container'
+          children={children}
+        />
       </View>
     )) || (
       <View style={activeStyles.main}>
         { LeftComponent && (
           <SideComponent
+            className='keg-switch-left'
             Component={LeftComponent}
             style={activeStyles.content.left}
           />
@@ -145,6 +158,7 @@ export const SwitchWrapper = props => {
 
         { RightComponent && (
           <SideComponent
+            className='keg-switch-right'
             Component={RightComponent}
             style={activeStyles.content.right}
           />

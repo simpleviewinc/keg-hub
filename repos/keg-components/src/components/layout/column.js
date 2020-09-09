@@ -3,7 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 
 const widthFromSize = (size, theme) => {
   const total = get(theme, [ 'layout', 'columns' ], 12)

@@ -4,7 +4,7 @@ import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
 import { isValidComponent } from '../../utils'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 import { useThemePath } from 'KegHooks'
 
 /**

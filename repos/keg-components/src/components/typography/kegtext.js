@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { withTheme } from '@keg-hub/re-theme'
 import { Text as RNText } from 'react-native'
-import { useClassName } from '../../hooks/useClassName'
+import { useClassName } from 'KegClassName'
 
 const ellipsisProps = {
   ellipsizeMode: 'tail',

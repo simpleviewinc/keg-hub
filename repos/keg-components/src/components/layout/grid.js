@@ -4,7 +4,7 @@ import { Row } from './row'
 import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { isArr, get } from '@keg-hub/jsutils'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 
 /**
  * Builds the styles based on the passed in isCenter param

@@ -4,9 +4,9 @@ import { get } from '@keg-hub/jsutils'
 import { Touchable } from '../touchable'
 import { Text } from '../typography/text'
 import { useThemePath } from '../../hooks'
-import { useClassList } from '../../hooks/useClassList'
 import { useThemeHover, useThemeActive } from '@keg-hub/re-theme'
 import { getActiveOpacity, getPressHandler, renderFromType } from '../../utils'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * Finds the child type and formats it in the proper type to be rendered
@@ -75,7 +75,11 @@ export const Button = props => {
   return (
     <Touchable
       accessibilityRole='button'
-      className={useClassList('keg-button', className)}
+      className={useThemeTypeAsClass(
+        themePath || type,
+        'keg-button',
+        className
+      )}
       {...elProps}
       ref={themeRef}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}

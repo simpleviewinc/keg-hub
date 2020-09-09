@@ -1,12 +1,13 @@
 import React from 'react'
 import { View } from 'KegView'
+import { Text } from '../typography/text'
 import PropTypes from 'prop-types'
 import { get } from '@keg-hub/jsutils'
 import { TouchableIcon } from '../icon'
 import { Copy } from '../../assets/icons'
 import { useThemePath } from '../../hooks'
-import { Clipboard, Text } from 'react-native'
-import { useClassList } from '../../hooks/useClassList'
+import { Clipboard } from 'react-native'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * A Text Box for showing text. Includes a copy to clipboard button.
@@ -27,7 +28,8 @@ export const TextBox = props => {
     maxLines = 100,
     styles,
     text,
-    themePath = 'textBox.outlined.default',
+    type = 'default',
+    themePath = `textBox.outlined.${type}`,
     useClipboard = false,
   } = props
 
@@ -35,11 +37,15 @@ export const TextBox = props => {
 
   return (
     <View
-      className={useClassList('keg-textbox', className)}
+      className={useThemeTypeAsClass(
+        themePath || type,
+        'keg-textbox',
+        className
+      )}
       style={style.main}
     >
       <View
-        className='keg-textbox-wrapper'
+        className='keg-textbox-container'
         style={get(style, 'content.wrapper')}
       >
         <Text

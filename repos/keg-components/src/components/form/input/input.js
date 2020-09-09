@@ -6,7 +6,7 @@ import {
   useInputHandlers,
   usePressHandlers,
 } from '../../../hooks'
-import { useClassName } from '../../../hooks/useClassName'
+import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
 import { withTouch } from '../../../hocs'
 import { getPlatform } from 'KegGetPlatform'

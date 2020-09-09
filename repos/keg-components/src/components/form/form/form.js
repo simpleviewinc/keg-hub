@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { get } from '@keg-hub/jsutils'
 import { useThemePath } from '../../../hooks'
 import { useTheme } from '@keg-hub/re-theme'
-import { useClassList } from '../../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 /**
  * Form
  * @summary Custom button component. All props are optional

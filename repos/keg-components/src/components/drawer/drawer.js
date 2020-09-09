@@ -2,10 +2,8 @@ import { View } from '../view'
 import PropTypes from 'prop-types'
 import { get } from '@keg-hub/jsutils'
 import { useThemePath } from '../../hooks'
-import { Animated, StyleSheet } from 'react-native'
-import { noPropObj } from '../../utils/helpers/noop'
-import { useClassList } from '../../hooks/useClassList'
-import { useClassName } from '../../hooks/useClassName'
+import { Animated } from 'react-native'
+import { useClassName } from 'KegClassName'
 import React, { useState, useLayoutEffect, useRef } from 'react'
 import { isValidComponent } from '../../utils/validate/isValidComponent'
 /**
@@ -16,9 +14,8 @@ import { isValidComponent } from '../../utils/validate/isValidComponent'
  *
  * @returns {boolean} - If the animation should NOT run
  */
-const noAnimate = (toggled, current, { initial, max }) => (
-  !toggled && current === initial) || (toggled && current === max
-)
+const noAnimate = (toggled, current, { initial, max }) =>
+  (!toggled && current === initial) || (toggled && current === max)
 
 /**
  * Drawer
@@ -37,21 +34,21 @@ export const Drawer = props => {
   // Define the default heights as a ref
   const heights = useRef({ initial: initial || 0, max: 0 })
   // Define the animated value as a ref
-  const [ animation ] = useState(new Animated.Value(initial))
+  const [animation] = useState(new Animated.Value(initial))
 
   // Define a helper to update the total max height of the slider
   // Gets called from the onLayout callback of the View wrapper
-  const setMaxHeight = event => (heights.current.max = event.nativeEvent.layout.height)
+  const setMaxHeight = event =>
+    (heights.current.max = event.nativeEvent.layout.height)
 
   // Use useLayoutEffect to check if the slider should be animated
   // Within the hook, toggled flag defines how to update the animated value
   // To Open: toggled === true === should animate open
   // To Close: toggled === false === should animate close
   useLayoutEffect(() => {
-
     // Check if we should animate the slider
     // If the values have not changed, no need to animate
-    if(noAnimate(toggled, animation._value, heights.current)) return
+    if (noAnimate(toggled, animation._value, heights.current)) return
 
     const { initial, max } = heights.current
 
@@ -65,27 +62,30 @@ export const Drawer = props => {
     // Start the animation, from value ==> to value
     Animated.spring(animation, { toValue: heightChanges.to }).start()
 
-  // Add toggled as a dep, so anytime it changes, we run the hook code
-  }, [ toggled ])
+    // Add toggled as a dep, so anytime it changes, we run the hook code
+  }, [toggled])
 
   const drawerStyles = useThemePath(`drawer`, styles)
   const aniRef = useClassName('keg-drawer', className)
 
   return (
-    <Animated.View 
+    <Animated.View
       ref={aniRef}
-      style={[ drawerStyles.main, get(styles, 'main'), { height: animation } ]}
+      style={[ drawerStyles.main, get(styles, 'main'), { height: animation }]}
     >
       <View
         className='keg-drawer-content'
-        onLayout={ setMaxHeight }
-        style={ get(styles, 'content') }
+        onLayout={setMaxHeight}
+        style={get(styles, 'content')}
       >
-        {
-          isValidComponent(Element)
-            ? (<Element { ...childProps } styles={ styles } />)
-            : props.children 
-        }
+        { isValidComponent(Element) ? (
+          <Element
+            {...childProps}
+            styles={styles}
+          />
+        ) : (
+          props.children
+        ) }
       </View>
     </Animated.View>
   )
@@ -93,13 +93,7 @@ export const Drawer = props => {
 
 Drawer.propTypes = {
   initial: PropTypes.number,
-  Element: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.elementType,
-  ]),
-  styles: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  Element: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
+  styles: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   toggled: PropTypes.bool,
 }

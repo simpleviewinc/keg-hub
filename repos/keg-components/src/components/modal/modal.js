@@ -7,8 +7,8 @@ import { View } from 'KegView'
 import { Dimensions } from 'react-native'
 import { isFunc } from '@keg-hub/jsutils'
 import { noOp } from '../../utils/helpers/noop'
-import { useClassName } from '../../hooks/useClassName'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassName } from 'KegClassName'
+import { useClassList } from 'KegClassList'
 
 /**
  * Default Slide animated View for modal

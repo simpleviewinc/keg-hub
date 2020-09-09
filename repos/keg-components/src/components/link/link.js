@@ -4,7 +4,7 @@ import { KegText } from 'KegText'
 import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { getPlatform } from 'KegGetPlatform'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 
 const isWeb = getPlatform() === 'web'
 const Text = KegText('link')

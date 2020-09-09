@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react'
-import { useTheme } from '@keg-hub/re-theme'
 import { Text } from '../../typography'
 import { View } from 'KegView'
 import { useThemePath } from '../../../hooks'
-import { get, set, isStr, toBool, checkCall } from '@keg-hub/jsutils'
+import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import PropTypes from 'prop-types'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
@@ -16,7 +16,6 @@ import PropTypes from 'prop-types'
  * @returns {Object} - Styles with the correct values based on isChecked state
  */
 const useCheckedState = (isChecked, themeStyles) => {
-  const theme = useTheme()
   return useMemo(() => {
     return {
       ...themeStyles,
@@ -29,9 +28,9 @@ const useCheckedState = (isChecked, themeStyles) => {
         indicator: {
           ...get(themeStyles, 'content.indicator.off'),
           ...(isChecked && get(themeStyles, 'content.indicator.on')),
-        }
-      }
-    } 
+        },
+      },
+    }
   }, [isChecked])
 }
 
@@ -60,11 +59,16 @@ const setCheckedValue = (isChecked, setChecked, onChange) => {
  *
  * @returns {Component} - section component
  */
-const SideComponent = ({ Component, style }) => {
+const SideComponent = ({ className, Component, style }) => {
   return isStr(Component) ? (
-    <Text style={style}>{ Component }</Text>
+    <Text
+      className={className}
+      style={style}
+    >
+      { Component }
+    </Text>
   ) : (
-    renderFromType(Component, { style: styles.content })
+    renderFromType(Component, { style: styles.content, className })
   )
 }
 
@@ -74,8 +78,8 @@ const SideComponent = ({ Component, style }) => {
  *
  * @returns {React Component|Object|Array}
  */
-const ChildrenComponent = ({ children }) => (
-  <>{ renderFromType(children, {}, null) }</>
+const ChildrenComponent = ({ children, className }) => (
+  <>{ renderFromType(children, { className }, null) }</>
 )
 
 /**
@@ -86,6 +90,7 @@ const ChildrenComponent = ({ children }) => (
  */
 export const CheckboxWrapper = props => {
   const {
+    className,
     checked,
     children,
     elType,
@@ -115,13 +120,24 @@ export const CheckboxWrapper = props => {
 
   return (
     (children && (
-      <View style={activeStyles.main}>
-        <ChildrenComponent children={children} />
+      <View
+        className={useThemeTypeAsClass(
+          elThemePath || type,
+          'keg-checkbox',
+          className
+        )}
+        style={activeStyles.main}
+      >
+        <ChildrenComponent
+          className='keg-checkbox-container'
+          children={children}
+        />
       </View>
     )) || (
       <View style={activeStyles.main}>
         { LeftComponent && (
           <SideComponent
+            className='keg-checkbox-left'
             Component={LeftComponent}
             style={activeStyles.content.left}
           />
@@ -134,6 +150,7 @@ export const CheckboxWrapper = props => {
           })
         ) : (
           <Element
+            className='keg-checkbox-container'
             elProps={elProps}
             disabled={disabled}
             styles={activeStyles.content}
@@ -147,6 +164,7 @@ export const CheckboxWrapper = props => {
 
         { RightComponent && (
           <SideComponent
+            className='keg-checkbox-right'
             Component={RightComponent}
             style={activeStyles.content.right}
           />

@@ -4,6 +4,8 @@ import { Picker } from 'react-native'
 import { useThemePath } from '../../../hooks'
 import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
 import { getValueFromChildren, getInputValueKey } from '../../../utils'
+import { useClassName } from 'KegClassName'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * Gets the key value pair for the select components value
@@ -22,6 +24,7 @@ const getValue = props => {
 
 export const Select = React.forwardRef((props, ref) => {
   const {
+    className,
     children,
     editable,
     disabled,
@@ -36,10 +39,16 @@ export const Select = React.forwardRef((props, ref) => {
   } = props
 
   const selectStyles = useThemePath(themePath)
+  const selectClasses = useThemeTypeAsClass(
+    themePath || type,
+    'keg-select',
+    className
+  )
+  const selectRef = useClassName('keg-select', selectClasses, ref)
 
   return (
     <Picker
-      ref={ref}
+      ref={selectRef}
       {...elProps}
       enabled={editable}
       style={[ selectStyles, style ]}

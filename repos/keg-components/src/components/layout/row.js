@@ -3,7 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 
 export const Row = ({ className, children, style, ...props }) => {
   const theme = useTheme()

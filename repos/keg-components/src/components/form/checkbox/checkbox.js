@@ -35,7 +35,10 @@ const checkBoxStyles = {
 }
 
 const Element = React.forwardRef(
-  ({ elProps, styles = noPropObj, icon, checked, ...props }, ref) => {
+  (
+    { className, elProps, styles = noPropObj, icon, checked, ...props },
+    ref
+  ) => {
     const checkStyle = useMemo(() => {
       return {
         ...styles.indicator,
@@ -44,10 +47,20 @@ const Element = React.forwardRef(
     }, [ checkBoxStyles, styles ])
 
     return (
-      <View style={styles.main}>
-        <View style={styles.area}></View>
-        { checked && <Check style={checkStyle} /> }
+      <View
+        style={styles.main}
+        className={className}
+      >
+        <View
+          className='keg-checkbox-area'
+          style={styles.area}
+        ></View>
+        { checked && <Check
+          className='keg-checkbox-icon'
+          style={checkStyle}
+        /> }
         <input
+          className='keg-checkbox'
           {...elProps}
           {...props}
           role='checkbox'

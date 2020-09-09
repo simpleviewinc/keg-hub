@@ -5,7 +5,7 @@ import {
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
 } from 'react-native'
-import { useClassName } from '../../hooks/useClassName'
+import { useClassName } from 'KegClassName'
 
 const TouchableComp =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity

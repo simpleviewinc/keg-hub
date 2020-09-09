@@ -6,7 +6,7 @@ import { View } from 'KegView'
 import { isValidComponent } from '../../utils'
 import { useThemePath } from 'KegHooks'
 import { renderFromType } from '../../utils'
-
+import { useClassList } from 'KegClassList'
 /**
  * Icon
  * @summary Custom Icon component
@@ -24,6 +24,7 @@ import { renderFromType } from '../../utils'
 export const Icon = React.forwardRef((props, ref) => {
   const theme = useTheme()
   const {
+    className,
     color,
     Component,
     Element = Component,
@@ -61,13 +62,17 @@ export const Icon = React.forwardRef((props, ref) => {
   }
 
   return (
-    <View style={iconStyles.container}>
+    <View
+      className={useClassList(`keg-icon`, className)}
+      style={iconStyles.container}
+    >
       { renderFromType(Element, { ...attrs, ...iconProps }) }
     </View>
   )
 })
 
 Icon.propTypes = {
+  className: PropTypes.string,
   Component: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.func,

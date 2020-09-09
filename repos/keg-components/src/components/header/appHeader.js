@@ -1,6 +1,6 @@
 import React from 'react'
 import { ItemHeader } from './itemHeader'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 /**
  * AppHeader
  * @todo implement native status bar functionality. ref: https://jira.simpleviewtools.com/browse/ZEN-362

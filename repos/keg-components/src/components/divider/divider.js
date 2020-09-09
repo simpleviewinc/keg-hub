@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { View } from 'KegView'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 
 export const Divider = ({ className, style, ...props }) => {
   const theme = useTheme()

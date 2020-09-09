@@ -1,6 +1,6 @@
 import React from 'react'
 import { View as RNView } from 'react-native'
-import { useClassName } from '../../hooks/useClassName'
+import { useClassName } from 'KegClassName'
 
 export const View = React.forwardRef(
   ({ children, className, ...props }, ref) => {

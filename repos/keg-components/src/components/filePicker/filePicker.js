@@ -5,7 +5,7 @@ import { P } from '../typography'
 import { Button } from '../button'
 import { View } from 'KegView'
 import { get } from '@keg-hub/jsutils'
-
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 /**
  * A component for selecting files from the user's system. Looks better than a basic input element,
  * and accepts style objects for styling further
@@ -23,6 +23,7 @@ import { get } from '@keg-hub/jsutils'
  */
 export const FilePicker = React.forwardRef((props, ref) => {
   const {
+    className,
     onChange,
     title,
     children,
@@ -68,7 +69,14 @@ export const FilePicker = React.forwardRef((props, ref) => {
   }, [])
 
   return (
-    <View style={[ get(componentTheme, 'main'), style ]}>
+    <View
+      className={useThemeTypeAsClass(
+        themePath || type,
+        'keg-filepicker',
+        className
+      )}
+      style={[ get(componentTheme, 'main'), style ]}
+    >
       <Button
         content={title}
         onClick={clickInput}

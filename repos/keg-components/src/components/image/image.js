@@ -6,7 +6,7 @@ import { Image as RNImage } from 'react-native'
 import { useThemeHover } from '@keg-hub/re-theme'
 import { useThemePath, useStyle } from 'KegHooks'
 import React, { useState, forwardRef, useRef, useCallback } from 'react'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 import { getImgSrc, getPressHandler } from 'KegUtils'
 import { getPlatform } from 'KegGetPlatform'
 const isWeb = getPlatform() === 'web'
@@ -47,7 +47,6 @@ export const Image = forwardRef((props, ref) => {
     alt,
     className,
     children,
-    isWeb,
     onClick,
     onPress,
     src,

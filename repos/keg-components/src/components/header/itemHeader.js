@@ -8,7 +8,7 @@ import { Icon } from 'KegIcon'
 import { H5 } from '../typography'
 import { renderFromType } from '../../utils'
 import { useThemePath } from '../../hooks'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 import { noPropObj } from '../../utils/helpers/noop'
 import { isValidComponent } from '../../utils/validate/isValidComponent'
 

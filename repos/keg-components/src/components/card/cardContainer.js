@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
-import { useClassList } from '../../hooks/useClassList'
+import { useClassList } from 'KegClassList'
 import { noOpObj, noPropObj } from '../../utils/helpers/noop'
 
 export const CardContainer = ({
