@@ -1,0 +1,60 @@
+actions:
+  run:
+    location: /keg/app
+    cmds:
+      - /bin/bash /keg/app/container/run.sh
+  install:
+    location: /keg/app
+    cmds:
+      - yarn install
+  build:
+    location: /keg/app
+    cmds:
+      - yarn build
+  start:
+    location: /keg/app
+    detach: true
+    cmds:
+      - yarn dev
+  app:
+    location: /keg/app
+    detach: true
+    cmds:
+      - yarn app
+env:
+
+  # --- KEG-CLI ENV CONTEXT --- #
+
+  # Set the paths to the linked external app
+  # The app should be linked to the keg-cli with `kee`
+  # Example command to link the app => `keg tap link kee`
+  KEG_DOCKER_FILE: "{{ cli.taps.links.consumer }}/container/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.taps.links.consumer }}/container/values.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.taps.links.consumer }}/container/docker-compose.yml"
+
+  # The KEG_CONTEXT_PATH env should be the location of the external app being run
+  KEG_CONTEXT_PATH: "{{ cli.taps.links.consumer }}"
+
+
+  # --- GIT ENV CONTEXT --- #
+
+  GIT_RETHEME_URL: "{{ cli.git.orgUrl }}/keg-test-consumer.git"
+
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  # Default location of the app in the docker container
+  DOC_APP_PATH: /keg/app
+  DOC_EVF_PATH: /keg/tap
+
+  # Default port of the app to expose from the container
+  DOC_APP_PORT: 3000
+
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image/Container Build information
+  # IMAGE and CONTAINER_NAME should be the same
+  IMAGE: keg-test-consumer
+  CONTAINER_NAME: keg-test-consumer
+  VERSION: "0.0.1"
