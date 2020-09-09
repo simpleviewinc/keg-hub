@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@keg-hub/re-theme'
 import { useThemePath, useMediaProps } from 'KegHooks'
-import { noPropObj } from '../../utils/helpers/noop'
 
 // Card children imports
 import { CardContent } from './cardContent'
@@ -32,6 +30,7 @@ export const Card = ({ styles, ...props }) => {
   const cardStyles = useThemePath(themePath || `card.${type}`, styles)
   const mediaProps = useMediaProps({ Media, image, video, styles: cardStyles })
   const hasMedia = Boolean(Media || mediaProps)
+  const hasContent = Boolean(children || title || subtitle)
 
   return (
     <CardContainer
@@ -57,7 +56,7 @@ export const Card = ({ styles, ...props }) => {
         />
       ) }
 
-      { children && (
+      { hasContent && (
         <CardContent
           title={title}
           subtitle={subtitle}
@@ -72,6 +71,7 @@ export const Card = ({ styles, ...props }) => {
           type='footer'
           numberOfLines={footerLines}
           styles={cardStyles.footer}
+          showBorder={hasContent}
         />
       ) }
     </CardContainer>

@@ -15,15 +15,28 @@ const section = {
     borderColor: colorPalette.gray01,
     borderStyle: 'solid',
     borderBottomWidth: 1,
-    padding: padding.size / 2,
-    paddingTop: 0,
+    padding: 0,
+    paddingBottom: padding.size / 2,
     margin: margin.size,
     marginBottom: 0,
+    marginTop: margin.size - margin.size / 5,
   },
   text: {
-    fontSize: 24,
+    fontSize: 22,
+    lineHeight: 26,
     color: get(colors, 'opacity._65'),
     fontWeight: 'bold',
+  },
+  noBorder: {
+    main: {
+      borderBottomWidth: 0,
+      borderTopWidth: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+    },
+    text: {
+      lineHeight: 20,
+    },
   },
 }
 
@@ -42,7 +55,7 @@ export const contained = {
     $all: {
       backgroundColor: colorPalette.white01,
       margin: margin.size,
-      paddingBottom: margin.size,
+      paddingBottom: margin.size - margin.size / 5,
       borderColor: colorPalette.gray01,
       borderStyle: 'solid',
       borderWidth: 1,
@@ -65,12 +78,24 @@ export const contained = {
     text: {
       ...section.text,
       fontSize: 20,
-    }
+      lineHeight: 24,
+    },
+    noBorder: {
+      main: {
+        borderBottomWidth: 0,
+        borderTopWidth: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+      text: {
+        lineHeight: 20,
+      },
+    },
   },
   media: {
     main: {
       margin: 0,
-      marginTop: margin.size / 2,
+      marginTop: margin.size - margin.size / 5,
     },
     image: {},
     loadingComp: {

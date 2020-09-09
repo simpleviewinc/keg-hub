@@ -5,24 +5,23 @@ import { Text } from '../typography/text'
 import { renderFromType } from '../../utils'
 import { get } from '@keg-hub/jsutils'
 
-const noBorder = {
-  borderBottomWidth: 0,
-  borderTopWidth: 0
-}
-const SectionWrap = ({ children, numberOfLines, styles, type }) => {
+const SectionWrap = ({ children, numberOfLines, showBorder, styles, type }) => {
   type = type || 'section'
   return (
     <Text
       className={`keg-${type}-text`}
-      style={get(styles, `text`)}
       numberOfLines={numberOfLines}
+      style={[
+        get(styles, `text`),
+        showBorder === false && get(styles, `noBorder.text`),
+      ]}
     >
       { children }
     </Text>
   )
 }
 
-export const CardSection = ({ Section, showBorder, ...props }) => {
+export const CardSection = ({ Section, ...props }) => {
   const type = props.type || 'section'
   return (
     Section && (
@@ -30,7 +29,7 @@ export const CardSection = ({ Section, showBorder, ...props }) => {
         className={`keg-card-${type}`}
         style={[
           get(props, `styles.main`),
-          showBorder === false && noBorder
+          props.showBorder === false && get(props, `styles.noBorder.main`),
         ]}
       >
         { renderFromType(Section, props, SectionWrap) }
