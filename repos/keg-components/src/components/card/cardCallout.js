@@ -6,32 +6,31 @@ import { noPropObj } from '../../utils/helpers/noop'
 import { useThemePath } from '../../hooks'
 import { useClassList } from '../../hooks/useClassList'
 
-export const CardMediaTitle = ({ classNames=noPropObj, subtitle, title, styles=noPropObj }) => {
+export const CardCallout = ({
+  className,
+  subtitle,
+  title,
+  styles = noPropObj,
+}) => {
   const themeStyles = useThemePath(`components.card`)
 
   return (
     <View
-      className={useClassList(classNames.main, ['keg-card-media-title-main'])}
+      className={useClassList('keg-card-callout', className)}
       style={[ themeStyles.overlay, styles.overlay ]}
     >
       { title && (
         <Text
-          className={useClassList(classNames.content.title, ['keg-card-media-title'])}
-          style={[
-            get(themeStyles, [ 'featured', 'title' ]),
-            styles.title
-          ]}
+          className='keg-card-title'
+          style={[ get(themeStyles, [ 'featured', 'title' ]), styles.title ]}
         >
           { title }
         </Text>
       ) }
       { subtitle && (
         <Text
-          className={useClassList(classNames.content.subtitle, ['keg-card-media-subtitle'])}
-          style={[
-            get(themeStyles, [ 'featured', 'subtitle' ]),
-            styles.subtitle
-          ]}
+          className='keg-card-subtitle'
+          style={[ get(themeStyles, [ 'featured', 'subtitle' ]), styles.subtitle ]}
         >
           { subtitle }
         </Text>

@@ -10,7 +10,7 @@ export const Section = withTheme(props => {
   return (
     <View
       {...args}
-      className={useClassList(className, ['keg-section'])}
+      className={useClassList('keg-section', className)}
       accessibilityRole='region'
       style={theme.get(`section.default`, type && `section.${type}`, style)}
     >

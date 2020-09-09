@@ -49,13 +49,13 @@ export const Grid = ({ className, children, style, ...props }) => {
   return (
     <Container
       {...props}
-      className={useClassList(className, ['keg-grid'])}
+      className={useClassList('keg-grid', className)}
       flexDir={isRow ? 'column' : 'row'}
       size={1}
       style={[
         get(theme, [ 'layout', 'grid', 'wrapper' ]),
         style,
-        isCenter && buildCenterStyles(isCenter)
+        isCenter && buildCenterStyles(isCenter),
       ]}
     >
       { children }

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
-import { useTheme } from '@keg-hub/re-theme'
 import { useThemePath } from '../../hooks'
 import PropTypes from 'prop-types'
 import { P } from '../typography'
@@ -37,8 +36,7 @@ export const FilePicker = React.forwardRef((props, ref) => {
     ...args
   } = props
 
-  const theme = useTheme()
-  const [componentTheme] = useThemePath(themePath)
+  const componentTheme = useThemePath(themePath)
 
   // store the file selected by the user
   const [ file, setFile ] = useState({})

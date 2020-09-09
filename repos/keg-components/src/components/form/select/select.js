@@ -1,40 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@keg-hub/re-theme'
+import { Picker } from 'react-native'
 import { useThemePath } from '../../../hooks'
-import {
-  getValueFromChildren,
-  getInputValueKey,
-  getReadOnly,
-} from '../../../utils'
 import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
+import { getValueFromChildren, getInputValueKey } from '../../../utils'
 
 /**
  * Gets the key value pair for the select components value
  * @param {*} props - Props passed to the component
- * @param {*} isWeb - Is the platform equal to web
  *
  * @returns {Object} - key / value pair for the select component
  */
-const getValue = (
-  { children, onChange, onValueChange, readOnly, value },
-  isWeb
-) => {
-  const setValue = getValueFromChildren(value, children)
+const getValue = props => {
+  const { children, onChange, onValueChange, readOnly, value } = props
 
-  const valKey = getInputValueKey(isWeb, onChange, onValueChange, readOnly)
+  const setValue = getValueFromChildren(value, children)
+  const valKey = getInputValueKey(false, onChange, onValueChange, readOnly)
 
   return { [valKey]: setValue }
 }
 
-export const SelectWrapper = props => {
-  const theme = useTheme()
+export const Select = React.forwardRef((props, ref) => {
   const {
     children,
     editable,
     disabled,
-    Element,
-    isWeb,
     readOnly,
     onChange,
     onValueChange,
@@ -45,22 +35,23 @@ export const SelectWrapper = props => {
     ...elProps
   } = props
 
-  const [selectStyles] = useThemePath(themePath)
+  const selectStyles = useThemePath(themePath)
 
   return (
-    <Element
-      elProps={elProps}
-      style={[selectStyles, style]}
-      {...getReadOnly(isWeb, readOnly, disabled, editable)}
-      {...getValue(props, isWeb)}
+    <Picker
+      ref={ref}
+      {...elProps}
+      enabled={editable}
+      style={[ selectStyles, style ]}
+      {...getValue(props)}
       {...useSelectHandlers({ onChange, onValueChange })}
     >
       { children }
-    </Element>
+    </Picker>
   )
-}
+})
 
-SelectWrapper.propTypes = {
+Select.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,

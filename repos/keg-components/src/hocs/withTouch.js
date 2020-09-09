@@ -1,8 +1,7 @@
 import React from 'react'
 import { Touchable } from '../components/touchable'
-import { TouchableWithoutFeedback } from 'react-native'
-import { useThemePath } from '../hooks'
 import { useTheme } from '@keg-hub/re-theme'
+import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { noPropObj } from '../utils/helpers/noop'
 
@@ -33,22 +32,18 @@ export const withTouch = (Component, options = {}) => {
     } = props
 
     const theme = useTheme()
-    const [style] = useThemePath(touchThemePath)
-
-    const TouchWrapper = showFeedback
-      ? Touchable
-      : TouchableWithoutFeedback
 
     return (
-      <TouchWrapper
-        style={[touchStyle , style]}
+      <Touchable
+        showFeedback={showFeedback}
+        style={[ get(theme, touchThemePath), touchStyle ]}
         onPress={onPress}
       >
         <Component
           ref={ref}
           {...otherProps}
         />
-      </TouchWrapper>
+      </Touchable>
     )
   })
 

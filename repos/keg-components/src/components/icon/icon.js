@@ -26,12 +26,12 @@ export const Icon = React.forwardRef((props, ref) => {
   const {
     color,
     Component,
-    Element=Component,
+    Element = Component,
     name,
     size,
     styles,
     themePath,
-    type='default',
+    type = 'default',
     ...attrs
   } = props
 
@@ -41,7 +41,7 @@ export const Icon = React.forwardRef((props, ref) => {
       null
     )
 
-  const [iconStyles] = useThemePath(themePath || `icon.${type}`, styles)
+  const iconStyles = useThemePath(themePath || `icon.${type}`, styles)
 
   const iconProps = {
     ref,

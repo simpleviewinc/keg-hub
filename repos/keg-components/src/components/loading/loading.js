@@ -4,7 +4,6 @@ import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
 import { isValidComponent } from '../../utils'
-import { noPropObj } from '../../utils/helpers/noop'
 import { useClassList } from '../../hooks/useClassList'
 import { useThemePath } from 'KegHooks'
 
@@ -23,7 +22,10 @@ const Progress = props => {
   const LoadingIndicator = loadIndicator || Indicator
 
   return (
-    <View style={styles.progress} className='keg-progress' >
+    <View
+      style={styles.progress}
+      className='keg-progress'
+    >
       { isValidComponent(LoadingIndicator) ? (
         <LoadingIndicator
           size={size}
@@ -31,7 +33,14 @@ const Progress = props => {
           type={type}
         />
       ) : (
-        text && <Text style={styles.text}>{ text }</Text>
+        text && (
+          <Text
+            className='keg-progress-text'
+            style={styles.text}
+          >
+            { text }
+          </Text>
+        )
       ) }
     </View>
   )
@@ -42,7 +51,7 @@ const Progress = props => {
  * @summary Custom Loading component. All props are optional
  *
  * @param {Object} props - see Loading.propTypes
- * @property {String} props.classNames - Class names to apply to the component
+ * @property {String} props.className - Class name of the root element
  * @property {String} props.text - Text to display while loading
  * @property {number} props.size - Size of the loading indicator
  * @property {Object} props.styles - Styles object tree
@@ -53,8 +62,7 @@ const Progress = props => {
  */
 export const Loading = props => {
   const {
-    classNames=noPropObj,
-    dataSet=noPropObj,
+    className,
     children,
     text = 'Loading',
     indicator,
@@ -64,13 +72,12 @@ export const Loading = props => {
     type = 'default',
   } = props
 
-  const [builtStyles] = useThemePath(themePath || `loading.${type}`, styles)
+  const builtStyles = useThemePath(themePath || `loading.${type}`, styles)
 
   return (
     <View
       style={builtStyles.container}
-      className={useClassList(classNames.loading, ['keg-loading'])}
-      dataSet={dataSet}
+      className={useClassList('keg-loading', className)}
     >
       { children || (
         <Progress

@@ -1,13 +1,12 @@
 import React from 'react'
+import { View } from 'KegView'
+import PropTypes from 'prop-types'
+import { get } from '@keg-hub/jsutils'
+import { TouchableIcon } from '../icon'
+import { Copy } from '../../assets/icons'
 import { useThemePath } from '../../hooks'
 import { Clipboard, Text } from 'react-native'
-import { View } from 'KegView'
-import { TouchableIcon } from '../icon'
-import { get } from '@keg-hub/jsutils'
-import PropTypes from 'prop-types'
-import { noPropObj } from '../../utils/helpers/noop'
 import { useClassList } from '../../hooks/useClassList'
-import { Copy } from '../../assets/icons'
 
 /**
  * A Text Box for showing text. Includes a copy to clipboard button.
@@ -24,7 +23,7 @@ import { Copy } from '../../assets/icons'
  */
 export const TextBox = props => {
   const {
-    classNames = noPropObj,
+    className,
     maxLines = 100,
     styles,
     text,
@@ -32,24 +31,19 @@ export const TextBox = props => {
     useClipboard = false,
   } = props
 
-  const [style] = useThemePath(themePath, styles)
-
-  const mainCls = useClassList(classNames.main, ['keg-textbox'])
-  const wrapperCls = useClassList(classNames.content.wrapper, [ 'keg-textbox-wrapper'])
-  const textCls = useClassList(classNames.content.text, ['keg-textbox-text'])
-  const clipCls = useClassList(classNames.content.clipboard, ['keg-textbox-clipboard'])
+  const style = useThemePath(themePath, styles)
 
   return (
     <View
-      className={mainCls}
+      className={useClassList('keg-textbox', className)}
       style={style.main}
     >
       <View
-        className={wrapperCls}
+        className='keg-textbox-wrapper'
         style={get(style, 'content.wrapper')}
       >
         <Text
-          className={textCls}
+          className='keg-textbox-text'
           numberOfLines={maxLines}
           style={get(style, 'content.text')}
         >
@@ -63,7 +57,7 @@ export const TextBox = props => {
           <TouchableIcon
             Component={Copy}
             size={15}
-            className={clipCls}
+            className='keg-textbox-clipboard'
             touchStyle={get(style, 'content.clipboard')}
             onPress={_ => text && Clipboard.setString(text)}
           />

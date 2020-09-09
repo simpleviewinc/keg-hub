@@ -7,7 +7,6 @@ import {
   usePressHandlers,
 } from '../../../hooks'
 import { useClassName } from '../../../hooks/useClassName'
-import { useTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
 import { withTouch } from '../../../hocs'
 import { getPlatform } from 'KegGetPlatform'
@@ -27,11 +26,9 @@ const getValue = ({ children, value }) => {
 }
 
 export const Input = forwardRef((props, ref) => {
-  const theme = useTheme()
   const {
     className,
     children,
-    dataSet,
     disabled = false,
     editable = true,
     Element,
@@ -48,8 +45,8 @@ export const Input = forwardRef((props, ref) => {
     ...elProps
   } = props
 
-  const [inputStyles] = useThemePath(themePath)
-  const inputRef = useClassName(className, dataSet, ref, 'keg-input')
+  const inputStyles = useThemePath(themePath)
+  const inputRef = useClassName('keg-input', className, ref)
 
   const TextInputTouch = withTouch(TextInput, { showFeedback: false })
 
@@ -62,7 +59,7 @@ export const Input = forwardRef((props, ref) => {
       {...useInputHandlers({ onChange, onValueChange, onChangeText })}
       {...usePressHandlers(isWeb, { onClick, onPress })}
       {...elProps}
-      style={[inputStyles, style]}
+      style={[ inputStyles, style ]}
       ref={inputRef}
     />
   )
@@ -84,5 +81,3 @@ Input.propTypes = {
   type: PropTypes.string,
   value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 }
-
-

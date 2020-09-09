@@ -1,31 +1,18 @@
 import React from 'react'
 import { ItemHeader } from './itemHeader'
-import { deepMerge } from '@keg-hub/jsutils'
-import { noPropObj } from '../../utils/helpers/noop'
-
+import { useClassList } from '../../hooks/useClassList'
 /**
  * AppHeader
  * @todo implement native status bar functionality. ref: https://jira.simpleviewtools.com/browse/ZEN-362
  * @param {object} props
  */
 export const AppHeader = props => {
-  const { classNames = noPropObj, dataSet, ...otherProps } = props
+  const { className, ...otherProps } = props
   return (
     <ItemHeader
       accessibilityRole='banner'
-      classNames={classNames}
-      className={'keg-app-header'}
-      dataSet={deepMerge(AppHeader.dataSet, dataSet)}
+      className={useClassList('keg-app-header', className)}
       {...otherProps}
     />
   )
-}
-
-AppHeader.dataSet = {
-  main: { class: 'app-header-main' },
-  content: {
-    left: { class: 'app-header-content-left' },
-    right: { class: 'app-header-content-right' },
-    center: { class: 'app-header-content-center' },
-  },
 }

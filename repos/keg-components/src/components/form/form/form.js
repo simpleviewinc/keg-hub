@@ -1,10 +1,10 @@
 import React from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
-import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
+import { useThemePath } from '../../../hooks'
+import { useTheme } from '@keg-hub/re-theme'
 import { useClassList } from '../../../hooks/useClassList'
-
 /**
  * Form
  * @summary Custom button component. All props are optional
@@ -20,18 +20,24 @@ import { useClassList } from '../../../hooks/useClassList'
 export const Form = React.forwardRef((props, ref) => {
   const theme = useTheme()
 
-  const { children, className, elType, style, type, ...elProps } = props
+  const {
+    children,
+    className,
+    elType,
+    style,
+    type,
+    themePath = `form.form.${type || 'default'}`,
+    ...elProps
+  } = props
+
+  const formTheme = useThemePath(themePath)
 
   return (
     <View
       accessibilityRole='form'
-      className={useClassList(className, ['keg-form'])}
+      className={useClassList('keg-form', className)}
       {...elProps}
-      style={[
-        get(theme, 'form.form.default'),
-        type && get(theme, `form.form.${type}`),
-        style,
-      ]}
+      style={[ get(theme, 'form.form.default'), formTheme, style ]}
       ref={ref}
     >
       { children }

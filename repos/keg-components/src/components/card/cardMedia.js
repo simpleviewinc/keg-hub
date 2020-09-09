@@ -4,11 +4,11 @@ import { View } from 'KegView'
 import { Image } from 'KegImg'
 import { get } from '@keg-hub/jsutils'
 import { useStyle } from 'KegHooks'
-import { CardMediaTitle } from './cardMediaTitle'
+import { CardCallout } from './cardCallout'
 
 const MediaFromType = ({ mediaProps, styles }) => {
-  const { type, ...props } = mediaProps
-  const { image, video, container, loading, loadingComp } = props.styles
+  const { className, type, ...props } = mediaProps
+  const { image, video, container, loading, loadingComp } = styles
 
   const mediaStyles = useStyle(
     type === 'image' && image && { image },
@@ -20,10 +20,13 @@ const MediaFromType = ({ mediaProps, styles }) => {
 
   switch (type) {
   case 'image': {
-    return <Image
-      {...props}
-      styles={mediaStyles}
-    />
+    return (
+      <Image
+        {...props}
+        className='keg-card-media'
+        styles={mediaStyles}
+      />
+    )
   }
   default: {
     return null
@@ -38,17 +41,21 @@ export const CardMedia = ({ mediaProps, Media, subtitle, styles, title }) => {
   return Media || !mediaProps ? (
     Media || null
   ) : (
-    <View style={get(styles, 'media.container')}>
+    <View
+      className='keg-card-media'
+      style={get(styles, 'main')}
+    >
       <MediaFromType
         mediaProps={mediaProps}
         styles={styles}
       />
 
       { (title || subtitle) && (
-        <CardMediaTitle
+        <CardCallout
+          className='keg-card-media-callout'
+          styles={styles}
           subtitle={subtitle}
           title={title}
-          styles={styles}
         />
       ) }
     </View>

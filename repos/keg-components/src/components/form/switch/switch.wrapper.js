@@ -108,7 +108,7 @@ export const SwitchWrapper = props => {
 
   const elThemePath =
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
-  const [themeStyles] = useThemePath(elThemePath, styles)
+  const themeStyles = useThemePath(elThemePath, styles)
   const activeStyles = useCheckedState(isChecked, themeStyles)
 
   return (

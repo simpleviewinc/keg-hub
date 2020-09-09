@@ -24,7 +24,6 @@ export const ItemHeader = props => {
 
   const {
     className,
-    classNames = noPropObj,
     title,
     styles,
     RightComponent,
@@ -41,31 +40,24 @@ export const ItemHeader = props => {
     ellipsis,
     themePath,
     children,
-    dataSet,
     ...elProps
   } = props
 
-  const classContent = classNames.content || noPropObj
-
-  const [headerStyles] = useThemePath(themePath || `header.itemHeader`, styles)
-  const mainCls = useClassList(classNames.main, [ 'keg-header', className ])
+  const headerStyles = useThemePath(themePath || `header.itemHeader`, styles)
 
   // builds the left, center, and right section based on props
   return (
     <View
-      className={mainCls}
-      dataSet={dataSet?.main || ItemHeader.dataSet.main}
+      className={useClassList('keg-header', className)}
       {...elProps}
       style={[
         headerStyles.main,
-        shadow && get(headerStyles, [ 'main', 'shadow' ])
+        shadow && get(headerStyles, [ 'main', 'shadow' ]),
       ]}
     >
       { children || (
         <>
           <Side
-            classNames={classContent.left}
-            dataSet={dataSet?.content?.left || ItemHeader.dataSet.content.left}
             styles={headerStyles.content}
             iconName={leftIcon}
             IconElement={LeftIconComponent || IconComponent}
@@ -75,10 +67,6 @@ export const ItemHeader = props => {
           </Side>
 
           <Center
-            classNames={classContent.center}
-            dataSet={
-              dataSet?.content?.center || ItemHeader.dataSet.content.center
-            }
             ellipsis={ellipsis}
             theme={theme}
             styles={headerStyles.content?.center}
@@ -89,10 +77,6 @@ export const ItemHeader = props => {
 
           <Side
             right
-            classNames={classContent.right}
-            dataSet={
-              dataSet?.content?.right || ItemHeader.dataSet.content.right
-            }
             styles={headerStyles.content}
             iconName={rightIcon}
             IconElement={RightIconComponent || IconComponent}
@@ -106,23 +90,7 @@ export const ItemHeader = props => {
   )
 }
 
-ItemHeader.dataSet = {
-  main: { class: 'item-header-main' },
-  content: {
-    left: {
-      main: { class: 'item-header-content-left-main' },
-    },
-    right: {
-      main: { class: 'item-header-content-right-main' },
-    },
-    center: {
-      main: { class: 'item-header-content-center-main' },
-    },
-  },
-}
-
 ItemHeader.propTypes = {
-  dataSet: PropTypes.object,
   title: PropTypes.string,
   styles: PropTypes.object,
   RightComponent: PropTypes.element,
@@ -160,34 +128,21 @@ ItemHeader.propTypes = {
  * @property {Boolean=} props.ellipsis - applies ellipsis on text. default true
  * @property {Object} props.styles
  * @property {String=} props.title - title displayed in the center 
- * @property {Object} props.dataSet - dataSet attribute
  * @property {Component} props.children  - custom component to display on the center section. overrides the other props
 
  * @returns {Component} - center component
  */
 const Center = props => {
-  const {
-    classNames = noPropObj,
-    styles,
-    title,
-    ellipsis = true,
-    children,
-    dataSet,
-  } = props
+  const { styles, title, ellipsis = true, children } = props
 
-  const mainCls = useClassList(classNames.main, ['keg-header-center'])
-  const titleCls = useClassList(classNames.title || classNames.text, [`keg-header-title`])
-  
   return (
     <View
-      className={mainCls}
-      dataSet={dataSet?.main}
+      className='keg-header-center'
       style={styles.main}
     >
       { (children && renderFromType(children, {}, null)) || (
         <H5
-          className={titleCls}
-          dataSet={dataSet?.content}
+          className='keg-header-center-title'
           ellipsis={ellipsis}
           style={styles.content.title}
         >
@@ -203,7 +158,6 @@ const Center = props => {
  * @summary builds the side sections of the appheader
  * @param {Object} props
  * @property {Object} props.styles
- * @property {Object} props.dataSet - dataSet attribute
  * @property {String=} props.iconName - name of icon to use (FontAwesome icons). uses the Icon component
  * @property {Component} props.IconElement - icon component for the icon set (e.g. FontAwesome)
  * @property {Function} props.action - function to perform on section click
@@ -213,16 +167,7 @@ const Center = props => {
  * @returns {Component} - section component
  */
 const Side = props => {
-  const {
-    classNames = noPropObj,
-    styles,
-    iconName,
-    IconElement,
-    action,
-    children,
-    right,
-    dataSet,
-  } = props
+  const { styles, iconName, IconElement, action, children, right } = props
 
   const position = right ? 'right' : 'left'
   // get the styles for the specified position
@@ -235,21 +180,17 @@ const Side = props => {
   }
 
   const showIcon = isValidComponent(IconElement)
-  const mainCls = useClassList(classNames.main, [`keg-header-${position}`])
-  const btnCls = useClassList(classNames.button, [`keg-header-${position}-button`])
 
   return (
     <View
-      className={mainCls}
-      dataSet={dataSet?.main}
+      className={`keg-header-${position}`}
       style={get(styles, [ position, 'main' ])}
     >
       { /* if 'action' is passed in, use a button to wrap the icon */ }
       { (children && renderFromType(children, {}, null)) ||
         (action ? (
           <Button
-            className={classNames.button}
-            dataSet={dataSet?.content}
+            className={`keg-header-${position}-button`}
             styles={contentStyles.button}
             onClick={action}
           >
@@ -258,8 +199,7 @@ const Side = props => {
         ) : (
           showIcon && (
             <View
-              className={classNames.icon}
-              dataSet={dataSet?.content}
+              className={`keg-header-${position}-icon`}
               style={contentStyles.main}
             >
               <CustomIcon {...iconProps} />
@@ -282,10 +222,11 @@ const Side = props => {
  * @returns {Component} - Customized Icon component
  */
 const CustomIcon = props => {
-  const { styles, iconName, IconElement, position } = props
+  const { className, iconName, IconElement, position, styles } = props
 
   return (
     <Icon
+      className={className}
       name={iconName}
       Element={IconElement}
       styles={get(styles, [ position, 'content', 'icon' ])}

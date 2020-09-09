@@ -6,7 +6,7 @@ import { useThemePath, useFromToAnimation } from 'KegHooks'
 import { View } from 'KegView'
 import { Dimensions } from 'react-native'
 import { isFunc } from '@keg-hub/jsutils'
-import { noOp, noPropObj } from '../../utils/helpers/noop'
+import { noOp } from '../../utils/helpers/noop'
 import { useClassName } from '../../hooks/useClassName'
 import { useClassList } from '../../hooks/useClassList'
 
@@ -39,12 +39,11 @@ const SlideAnimatedView = ({
     [visible]
   )
 
-  const aniRef = useClassName(className, [ 'keg-modal-content' ])
+  const aniRef = useClassName('keg-modal-content', className)
 
   return (
     <Animated.View
       ref={aniRef}
-      dataSet={Modal.dataSet.content}
       style={{ ...defaultStyle, transform: [{ translateY: slide }] }}
     >
       { children }
@@ -70,22 +69,22 @@ const hideModalStyle = { height: 0, width: 0, overflow: 'hidden' }
  */
 export const Modal = props => {
   const {
-    classNames=noPropObj,
-    styles,
-    onBackdropTouch = noOp,
-    themePath,
-    type = 'default',
-    activeOpacity = 1,
-    visible,
     AnimatedComponent = SlideAnimatedView,
+    activeOpacity = 1,
+    children,
+    className,
     onAnimateIn,
     onAnimateOut,
-    children,
+    onBackdropTouch = noOp,
+    styles,
+    themePath,
+    type = 'default',
+    visible,
   } = props
 
   const [ renderModal, setRenderModal ] = useState(false)
   if (props.visible && !renderModal) setRenderModal(true)
-  const [modalStyles] = useThemePath(themePath || `modal.${type}`, styles)
+  const modalStyles = useThemePath(themePath || `modal.${type}`, styles)
 
   useEffect(() => {
     if (global.document && visible) {
@@ -108,25 +107,19 @@ export const Modal = props => {
     else if (isFunc(onAnimateIn)) onAnimateIn()
   }, [ onAnimateOut, onAnimateIn ])
 
-  const modalCls = useClassList(classNames.modal, ['keg-modal'])
-  const backdropCls = useClassList(classNames.backdrop, ['keg-modal-backdrop'])
-
   return (
     // change the wrapper dimensions to 0 when visible is set to false
     <View
-      className={modalCls}
-      dataSet={Modal.dataSet.main}
+      className={useClassList('keg-modal', className)}
       style={renderModal ? modalStyles.main : hideModalStyle}
     >
       <Touchable
-        className={backdropCls}
-        dataSet={Modal.dataSet.backdrop}
+        className={'keg-modal-backdrop'}
         style={modalStyles.backdrop}
         onPress={onBackdropTouch}
         activeOpacity={activeOpacity}
       />
       <AnimatedComponent
-        className={classNames.content.main}
         onAnimationFinish={cb}
         visible={visible}
         defaultStyle={modalStyles.content}
@@ -135,12 +128,6 @@ export const Modal = props => {
       </AnimatedComponent>
     </View>
   )
-}
-
-Modal.dataSet = {
-  main: { class: 'modal-main' },
-  backdrop: { class: 'modal-backdrop' },
-  content: { class: 'modal-content' },
 }
 
 Modal.propTypes = {

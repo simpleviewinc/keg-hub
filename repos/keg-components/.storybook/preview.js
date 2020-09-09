@@ -12,9 +12,9 @@ setRNDimensions(Dimensions)
 const IGNORE_WARN = [
   'Ignored an update',
   'Story with id',
-  'The default hierarchy separators',
 ]
 
+const orgWarn = console.warn
 console.warn = function override(...args) {
   const logString = args[0]
   !isStr(logString) ||

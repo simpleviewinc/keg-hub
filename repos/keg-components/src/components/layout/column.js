@@ -23,13 +23,13 @@ export const Column = ({ className, children, size, center, ...props }) => {
   return (
     <Container
       {...props}
-      className={useClassList(className, ['keg-column'])}
+      className={useClassList('keg-column', className)}
       size={size}
       flexDir='column'
       style={[
         get(theme, [ 'layout', 'grid', 'column' ]),
         props.style,
-        getColumnWidth(size, theme)
+        getColumnWidth(size, theme),
       ]}
     >
       { children }

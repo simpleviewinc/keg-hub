@@ -9,7 +9,7 @@ export const full = deepMerge(contained, {
     },
   },
   header: {
-    container: {
+    main: {
       paddingTop: padding.size / 2,
       paddingBottom: padding.size / 2,
     },
@@ -17,12 +17,21 @@ export const full = deepMerge(contained, {
       paddingLeft: padding.size,
       paddingRight: padding.size,
     },
-    divider: {
-      display: 'none',
+  },
+  footer: {
+    main: {
+      paddingTop: padding.size / 2,
+      paddingBottom: padding.size / 2,
+    },
+    text: {
+      paddingLeft: padding.size,
+      paddingRight: padding.size,
     },
   },
-  body: {
-    padding: padding.size,
-    paddingTop: 0,
+  content: {
+    body: {
+      padding: padding.size,
+      paddingTop: 0,
+    },
   },
 })

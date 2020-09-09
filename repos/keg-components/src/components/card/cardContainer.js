@@ -1,14 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
+import { useClassList } from '../../hooks/useClassList'
+import { noOpObj, noPropObj } from '../../utils/helpers/noop'
 
-export const CardContainer = ({ attributes = {}, children, styles = {} }) => {
+export const CardContainer = ({
+  className,
+  attributes = noOpObj,
+  children,
+  styles = noPropObj,
+}) => {
   return (
     <View
+      className={useClassList('keg-card', className)}
       {...attributes}
       style={styles.main}
     >
-      <View style={styles.container}>{ children }</View>
+      <View
+        className='keg-card-container'
+        style={styles.container}
+      >
+        { children }
+      </View>
     </View>
   )
 }

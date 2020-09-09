@@ -55,7 +55,7 @@ export const Button = props => {
     ...elProps
   } = props
 
-  const [btnStyles] = useThemePath(
+  const btnStyles = useThemePath(
     themePath || `button.contained.${type}`,
     styles
   )
@@ -75,7 +75,7 @@ export const Button = props => {
   return (
     <Touchable
       accessibilityRole='button'
-      className={useClassList(className, ['keg-button'])}
+      className={useClassList('keg-button', className)}
       {...elProps}
       ref={themeRef}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}

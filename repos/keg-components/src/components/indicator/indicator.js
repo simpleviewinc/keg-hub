@@ -7,13 +7,9 @@ import { useClassList } from '../../hooks/useClassList'
 
 const isWeb = getPlatform() === 'web'
 
-const Element = ({ className, dataSet, style = {}, size, color, ...attrs }) => {
-  
+const Element = ({ className, style = {}, size, color, ...attrs }) => {
   return (
-    <View
-      className={useClassList(className, ['keg-indicator'])}
-      dataSet={dataSet}
-    >
+    <View className={useClassList('keg-indicator', className)}>
       <ActivityIndicator
         size={size}
         color={style.color || color}

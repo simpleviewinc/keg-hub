@@ -4,7 +4,6 @@ import { KegText } from 'KegText'
 import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { getPlatform } from 'KegGetPlatform'
-import { noPropObj } from '../../utils/helpers/noop'
 import { useClassList } from '../../hooks/useClassList'
 
 const isWeb = getPlatform() === 'web'
@@ -12,31 +11,26 @@ const Text = KegText('link')
 
 const Element = React.forwardRef((props, ref) => {
   const {
-    classNames = noPropObj,
-    dataSet = noPropObj,
-    elProps,
     children,
+    className,
+    elProps,
     href,
     onPress,
-    target,
     style,
+    target,
     ...attrs
   } = props
 
-  const linkCls = useClassList(classNames.link, ['keg-link'])
-  const textCls = useClassList(classNames.text, ['keg-link-text'])
-
   return (
     <Touchable
-      className={linkCls}
-      dataSet={dataSet}
+      className={useClassList('keg-link', className)}
       {...elProps}
       {...attrs}
       ref={ref}
     >
       <Text
         accessibilityRole='link'
-        className={textCls}
+        className='keg-link-text'
         style={style}
         href={href}
         target={target}

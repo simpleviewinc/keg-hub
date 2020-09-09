@@ -83,18 +83,6 @@ const headerStyles2 = {
   },
 }
 
-const customDataSet = {
-  main: { class: 'custom-header-main' },
-  content: {
-    left: {
-      main: { class: 'custom-data-set-left' },
-    },
-    center: {
-      main: { class: 'custom-data-set-center' },
-    },
-  },
-}
-
 storiesOf('Header | ItemHeader', module)
   .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
@@ -120,7 +108,6 @@ storiesOf('Header | ItemHeader', module)
   .add('Plain', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
       <ItemHeader
-        dataSet={customDataSet}
         shadow
         title={'Keg Components'}
       />
@@ -136,7 +123,7 @@ storiesOf('Header | ItemHeader', module)
       <p />
       <ItemHeader
         title={'Clickable left icon'}
-        LeftIconComponent={(
+        LeftIconComponent={
           <ArrowLeft
             style={{
               color: `#FFFFFF`,
@@ -144,7 +131,7 @@ storiesOf('Header | ItemHeader', module)
               paddingLeft: 10,
             }}
           />
-        )}
+        }
         onLeftClick={action('Left Section Clicked!')}
       />
     </StoryWrap>

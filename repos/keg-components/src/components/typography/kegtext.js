@@ -16,14 +16,13 @@ export const KegText = element => {
         accessibilityRole,
         children,
         className,
-        dataSet,
         style,
         theme,
         ellipsis,
         ...attrs
       } = props
 
-      const textRef = useClassName(className, dataSet, ref, `keg-${element}`)
+      const textRef = useClassName(`keg-${element}`, className, ref)
 
       const a11y = useMemo(() => {
         const type = accessibilityRole

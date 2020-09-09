@@ -11,8 +11,8 @@ export const Row = ({ className, children, style, ...props }) => {
   return (
     <Container
       {...props}
-      className={useClassList(className, ['keg-row'])}
-      style={[get(theme, 'layout.grid.row'), style]}
+      className={useClassList('keg-row', className)}
+      style={[ get(theme, 'layout.grid.row'), style ]}
       flexDir='row'
     >
       { children }

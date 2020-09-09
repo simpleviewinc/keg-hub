@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { isArr } from '@keg-hub/jsutils'
 import { noPropArr } from '../utils/helpers/noop'
 
 /**
@@ -11,9 +9,6 @@ import { noPropArr } from '../utils/helpers/noop'
  *
  * @returns {function} - Ref function to be added to the component
  */
-export const useClassList = (className, classList = noPropArr) => {
-  const classListArr = isArr(classList) ? classList : [classList]
-  return useMemo(() => {
-    return classListArr.concat([className])
-  }, [ className, ...classListArr ])
+export const useClassList = () => {
+  return noPropArr
 }
