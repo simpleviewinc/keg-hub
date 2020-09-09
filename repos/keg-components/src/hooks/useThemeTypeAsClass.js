@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { get } from '@keg-hub/jsutils'
+import { get, isArr } from '@keg-hub/jsutils'
 import { colors } from '../theme/colors'
 import { useClassList } from 'KegClassList'
 import { noOpObj } from '../utils/helpers/noop'
