@@ -10,7 +10,7 @@ const colorStyles = (type, states, cb) => {
   return Object.keys(states).reduce((built, key) => {
     return {
       ...built,
-      [key]: checkCall(cb, colorSurface[type], key),
+      [key]: checkCall(cb, type, colorSurface[type], key),
     }
   }, {})
 }
@@ -31,4 +31,17 @@ export const buildColorStyles = (states, cb) => {
     },
     {}
   )
+}
+
+/**
+ * Builds styles for just a surface and does not include the states
+ * @param {function} cb - Function to build the styles for that color type
+ *
+ * @returns {Object} - Object with keys and styles values of the surfaces types
+ */
+export const buildSurfaceStyles = cb => {
+  return Object.keys(colorSurface).reduce((surfaceStyles, surface) => {
+    surfaceStyles[surface] = checkCall(cb, surface, colorSurface)
+    return surfaceStyles
+  }, {})
 }

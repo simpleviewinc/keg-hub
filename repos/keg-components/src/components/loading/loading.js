@@ -76,7 +76,7 @@ export const Loading = props => {
 
   return (
     <View
-      style={builtStyles.container}
+      style={builtStyles.main}
       className={useClassList('keg-loading', className)}
     >
       { children || (

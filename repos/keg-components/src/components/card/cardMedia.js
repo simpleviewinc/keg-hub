@@ -8,7 +8,13 @@ import { useStyle } from 'KegHooks'
 const noHeader = { marginTop: 0 }
 
 const MediaFromType = ({ mediaProps, styles }) => {
-  const { className, type, ...props } = mediaProps
+  const {
+    className,
+    type,
+    resizeMode = 'cover',
+    resizeMethod = 'scale',
+    ...props
+  } = mediaProps
   const { image, video, container, loading, loadingComp } = styles
 
   const mediaStyles = useStyle(
@@ -23,6 +29,8 @@ const MediaFromType = ({ mediaProps, styles }) => {
   case 'image': {
     return (
       <Image
+        resizeMode={resizeMode}
+        resizeMethod={resizeMethod}
         {...props}
         className='keg-card-media'
         styles={mediaStyles}
@@ -35,7 +43,14 @@ const MediaFromType = ({ mediaProps, styles }) => {
   }
 }
 
-export const CardMedia = ({ hasHeader, mediaProps, Media, subtitle, styles, title }) => {
+export const CardMedia = ({
+  hasHeader,
+  mediaProps,
+  Media,
+  subtitle,
+  styles,
+  title,
+}) => {
   // If no mediaProps, just return Media
   // It's either a custom component || does not exist
   // Otherwise render with the mediaProps
@@ -44,10 +59,7 @@ export const CardMedia = ({ hasHeader, mediaProps, Media, subtitle, styles, titl
   ) : (
     <View
       className='keg-card-media'
-      style={[
-        get(styles, 'main'),
-        hasHeader === false && noHeader
-      ]}
+      style={[ get(styles, 'main'), hasHeader === false && noHeader ]}
     >
       <MediaFromType
         mediaProps={mediaProps}

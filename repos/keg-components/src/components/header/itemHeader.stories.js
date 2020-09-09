@@ -55,6 +55,7 @@ const SVIcon = () => {
           width: 200,
           alignSelf: 'center',
         }}
+        useLoading={false}
         src='https://www.trilogyed.com/blog/wp-content/uploads/2020/07/simpleview_primary-696x110.png'
       />
     </Touchable>

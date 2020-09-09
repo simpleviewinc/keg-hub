@@ -94,17 +94,15 @@ export const contained = {
   },
   media: {
     main: {
+      position: 'relative',
       margin: 0,
       marginTop: margin.size - margin.size / 5,
     },
     image: {},
     loadingComp: {
-      indicator: {
-        icon: {
-          fontSize: '100px',
-          color: colorPalette.gray01,
-        },
-      },
+      main: {},
+      progress: {},
+      indicator: {},
     },
     video: {
       width: '100%',

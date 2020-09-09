@@ -35,34 +35,31 @@ const checkBoxStyles = {
 }
 
 const Element = React.forwardRef(
-  ({ elProps, styles=noPropObj, icon, checked, ...props }, ref) => {
+  ({ elProps, styles = noPropObj, icon, checked, ...props }, ref) => {
+    const checkStyle = useMemo(() => {
+      return {
+        ...styles.indicator,
+        ...checkBoxStyles.icon,
+      }
+    }, [ checkBoxStyles, styles ])
 
-  const checkStyle = useMemo(() => {
-    return {
-      ...styles.indicator,
-      ...checkBoxStyles.icon,
-    }
-  }, [ checkBoxStyles, styles ])
-
-  console.log(`---------- checkStyle ----------`)
-  console.log(checkStyle)
-
-  return (
-    <View style={styles.main}>
-      <View style={styles.area}></View>
-      { checked && <Check style={checkStyle} /> }
-      <input
-        {...elProps}
-        {...props}
-        role='checkbox'
-        checked={checked}
-        type='checkbox'
-        ref={ref}
-        style={checkBoxStyles.input}
-      />
-    </View>
-  )
-})
+    return (
+      <View style={styles.main}>
+        <View style={styles.area}></View>
+        { checked && <Check style={checkStyle} /> }
+        <input
+          {...elProps}
+          {...props}
+          role='checkbox'
+          checked={checked}
+          type='checkbox'
+          ref={ref}
+          style={checkBoxStyles.input}
+        />
+      </View>
+    )
+  }
+)
 
 export const Checkbox = props => (
   <CheckboxWrapper

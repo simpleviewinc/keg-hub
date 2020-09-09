@@ -1,5 +1,7 @@
 import { useCallback } from 'react'
 import { checkCall, isObj, isArr } from '@keg-hub/jsutils'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * Returns a function that should be set as the element ref
@@ -16,7 +18,7 @@ export const useClassName = (defClass, className, ref) => {
 
   return useCallback(
     element => {
-      if (element) {
+      if (isWeb && element) {
         // Add the default classes to the classList
         defClass && element.classList.add(defClass)
 
