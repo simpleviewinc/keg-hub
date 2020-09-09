@@ -35,6 +35,8 @@ services:
       - CADDY_HOST
       - CADDY_PROXY_PARAMS
       - CADDY_BASIC_AUTH
+      - CADDY_DISABLE_TLS
+      - CADDY_PORT
       - DOC_APP_PATH
       - DOC_CLI_PATH
       - DOC_CORE_PATH
