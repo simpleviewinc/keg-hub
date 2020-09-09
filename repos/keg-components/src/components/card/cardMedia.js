@@ -4,7 +4,8 @@ import { View } from 'KegView'
 import { Image } from 'KegImg'
 import { get } from '@keg-hub/jsutils'
 import { useStyle } from 'KegHooks'
-import { CardCallout } from './cardCallout'
+
+const noHeader = { marginTop: 0 }
 
 const MediaFromType = ({ mediaProps, styles }) => {
   const { className, type, ...props } = mediaProps
@@ -34,7 +35,7 @@ const MediaFromType = ({ mediaProps, styles }) => {
   }
 }
 
-export const CardMedia = ({ mediaProps, Media, subtitle, styles, title }) => {
+export const CardMedia = ({ hasHeader, mediaProps, Media, subtitle, styles, title }) => {
   // If no mediaProps, just return Media
   // It's either a custom component || does not exist
   // Otherwise render with the mediaProps
@@ -43,21 +44,15 @@ export const CardMedia = ({ mediaProps, Media, subtitle, styles, title }) => {
   ) : (
     <View
       className='keg-card-media'
-      style={get(styles, 'main')}
+      style={[
+        get(styles, 'main'),
+        hasHeader === false && noHeader
+      ]}
     >
       <MediaFromType
         mediaProps={mediaProps}
         styles={styles}
       />
-
-      { (title || subtitle) && (
-        <CardCallout
-          className='keg-card-media-callout'
-          styles={styles}
-          subtitle={subtitle}
-          title={title}
-        />
-      ) }
     </View>
   )
 }

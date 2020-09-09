@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View } from 'KegView'
 import { CheckboxWrapper } from './checkbox.wrapper'
 import { Check } from 'KegIcons'
@@ -10,11 +10,16 @@ import { noPropObj } from '../../../utils/helpers/noop'
 const checkBoxStyles = {
   icon: {
     position: 'relative',
+    fontSize: 14,
     zIndex: 1,
-    height: 16,
-    width: 16,
-    top: 'calc( 50% - 8px)',
-    left: 'calc( 50% - 8px)',
+    height: 14,
+    width: 14,
+    top: 0,
+    left: 3,
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
     position: 'absolute',
@@ -30,24 +35,34 @@ const checkBoxStyles = {
 }
 
 const Element = React.forwardRef(
-  ({ elProps, styles = noPropObj, icon, checked, ...props }, ref) => {
-    return (
-      <View style={styles.main}>
-        <View style={styles.area}></View>
-        { checked && <Check style={checkBoxStyles.icon} /> }
-        <input
-          {...elProps}
-          {...props}
-          role='checkbox'
-          checked={checked}
-          type='checkbox'
-          ref={ref}
-          style={checkBoxStyles.input}
-        />
-      </View>
-    )
-  }
-)
+  ({ elProps, styles=noPropObj, icon, checked, ...props }, ref) => {
+
+  const checkStyle = useMemo(() => {
+    return {
+      ...styles.indicator,
+      ...checkBoxStyles.icon,
+    }
+  }, [ checkBoxStyles, styles ])
+
+  console.log(`---------- checkStyle ----------`)
+  console.log(checkStyle)
+
+  return (
+    <View style={styles.main}>
+      <View style={styles.area}></View>
+      { checked && <Check style={checkStyle} /> }
+      <input
+        {...elProps}
+        {...props}
+        role='checkbox'
+        checked={checked}
+        type='checkbox'
+        ref={ref}
+        style={checkBoxStyles.input}
+      />
+    </View>
+  )
+})
 
 export const Checkbox = props => (
   <CheckboxWrapper

@@ -3,7 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import { Text } from '../../typography'
 import { View } from 'KegView'
 import { useThemePath } from '../../../hooks'
-import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
+import { get, set, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import PropTypes from 'prop-types'
 
@@ -18,8 +18,10 @@ import PropTypes from 'prop-types'
 const useCheckedState = (isChecked, themeStyles) => {
   const theme = useTheme()
   return useMemo(() => {
-    return theme.join(themeStyles, {
+    return {
+      ...themeStyles,
       content: {
+        ...themeStyles.content,
         area: {
           ...get(themeStyles, 'content.area.off'),
           ...(isChecked && get(themeStyles, 'content.area.on')),
@@ -27,9 +29,9 @@ const useCheckedState = (isChecked, themeStyles) => {
         indicator: {
           ...get(themeStyles, 'content.indicator.off'),
           ...(isChecked && get(themeStyles, 'content.indicator.on')),
-        },
-      },
-    })
+        }
+      }
+    } 
   }, [isChecked])
 }
 

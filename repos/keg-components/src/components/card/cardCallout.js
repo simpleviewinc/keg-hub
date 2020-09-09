@@ -1,9 +1,10 @@
 import React from 'react'
 import { View } from 'KegView'
-import { Text } from '../typography/text'
 import { get } from '@keg-hub/jsutils'
-import { noPropObj } from '../../utils/helpers/noop'
+import { useTheme } from '@keg-hub/re-theme'
+import { Text } from '../typography/text'
 import { useThemePath } from '../../hooks'
+import { noPropObj } from '../../utils/helpers/noop'
 import { useClassList } from '../../hooks/useClassList'
 
 export const CardCallout = ({
@@ -12,17 +13,18 @@ export const CardCallout = ({
   title,
   styles = noPropObj,
 }) => {
-  const themeStyles = useThemePath(`components.card`)
+
+  const calloutStyles = get(styles, `callout`)
 
   return (
     <View
       className={useClassList('keg-card-callout', className)}
-      style={[ themeStyles.overlay, styles.overlay ]}
+      style={calloutStyles.overlay}
     >
       { title && (
         <Text
           className='keg-card-title'
-          style={[ get(themeStyles, [ 'featured', 'title' ]), styles.title ]}
+          style={calloutStyles.title}
         >
           { title }
         </Text>
@@ -30,7 +32,7 @@ export const CardCallout = ({
       { subtitle && (
         <Text
           className='keg-card-subtitle'
-          style={[ get(themeStyles, [ 'featured', 'subtitle' ]), styles.subtitle ]}
+          style={calloutStyles.subtitle}
         >
           { subtitle }
         </Text>

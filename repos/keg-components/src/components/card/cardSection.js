@@ -5,6 +5,10 @@ import { Text } from '../typography/text'
 import { renderFromType } from '../../utils'
 import { get } from '@keg-hub/jsutils'
 
+const noBorder = {
+  borderBottomWidth: 0,
+  borderTopWidth: 0
+}
 const SectionWrap = ({ children, numberOfLines, styles, type }) => {
   type = type || 'section'
   return (
@@ -18,13 +22,16 @@ const SectionWrap = ({ children, numberOfLines, styles, type }) => {
   )
 }
 
-export const CardSection = ({ Section, ...props }) => {
+export const CardSection = ({ Section, showBorder, ...props }) => {
   const type = props.type || 'section'
   return (
     Section && (
       <View
         className={`keg-card-${type}`}
-        style={get(props, `styles.main`)}
+        style={[
+          get(props, `styles.main`),
+          showBorder === false && noBorder
+        ]}
       >
         { renderFromType(Section, props, SectionWrap) }
       </View>

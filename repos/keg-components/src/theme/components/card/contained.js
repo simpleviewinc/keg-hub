@@ -21,8 +21,8 @@ const section = {
     marginBottom: 0,
   },
   text: {
-    fontSize: 20,
-    color: colorPalette.black02,
+    fontSize: 24,
+    color: get(colors, 'opacity._65'),
     fontWeight: 'bold',
   },
 }
@@ -58,10 +58,31 @@ export const contained = {
       ...section.main,
       paddingTop: padding.size / 2,
       paddingBottom: 0,
-      // marginTop: margin.size / 2,
       marginBottom: 0,
       borderTopWidth: 1,
       borderBottomWidth: 0,
+    },
+    text: {
+      ...section.text,
+      fontSize: 20,
+    }
+  },
+  media: {
+    main: {
+      margin: 0,
+      marginTop: margin.size / 2,
+    },
+    image: {},
+    loadingComp: {
+      indicator: {
+        icon: {
+          fontSize: '100px',
+          color: colorPalette.gray01,
+        },
+      },
+    },
+    video: {
+      width: '100%',
     },
   },
   content: {
@@ -69,35 +90,17 @@ export const contained = {
       margin: margin.size,
       marginBottom: 0,
     },
-    media: {
-      main: {
-        margin: margin.size,
-        marginBottom: 0,
-      },
-      image: {},
-      loadingComp: {
-        indicator: {
-          icon: {
-            fontSize: '100px',
-            color: colorPalette.gray01,
-          },
-        },
-      },
-      video: {
-        width: '100%',
-      },
-    },
-    featured: {
+    callout: {
       title: {
         fontSize: 18,
-        marginBottom: 8,
-        color: colorPalette.white01,
+        marginBottom: margin.size / 4,
+        color: get(colors, 'opacity._40'),
         fontWeight: '800',
       },
       subtitle: {
         fontSize: 13,
-        marginBottom: 8,
-        color: colorPalette.white01,
+        marginBottom: margin.size,
+        color: get(colors, 'opacity._40'),
         fontWeight: '400',
       },
     },
