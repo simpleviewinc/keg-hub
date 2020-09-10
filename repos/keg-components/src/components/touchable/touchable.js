@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Platform,
   TouchableOpacity,
@@ -34,3 +35,19 @@ export const Touchable = React.forwardRef((props, ref) => {
     ref={touchRef}
   />
 })
+
+Touchable.propTypes = {
+  ...TouchableComp.propTypes,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.func,
+  ]),
+  className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  ref: PropTypes.object,
+  styles: PropTypes.object,
+  showFeedback: PropTypes.bool,
+}
