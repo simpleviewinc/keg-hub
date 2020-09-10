@@ -2,7 +2,7 @@
 
 const path = require("path")
 const fs = require("fs")
-const { argsParse } = require("@svkeg/args-parse")
+const { argsParse } = require("@keg-hub/args-parse")
 const { compose, runCmd } = require("./docker")
 
 

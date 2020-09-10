@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { spawnCmd } = require('@svkeg/spawn-cmd')
+const { spawnCmd } = require('@keg-hub/spawn-cmd')
 const reports_path="src/reports/cucumber/index.html" 
 const polling_interval=500
 

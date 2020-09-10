@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 require("./loadEnv")
-const { spawnCmd } = require('@svkeg/spawn-cmd')
+const { spawnCmd } = require('@keg-hub/spawn-cmd')
 const cwd = process.cwd()
 
 const runCmd = (cmd, args, env={}) => {
