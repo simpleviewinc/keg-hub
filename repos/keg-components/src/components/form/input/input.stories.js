@@ -4,7 +4,7 @@ import { Input, Label } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
-storiesOf('Form | Input', module)
+storiesOf('Form/Input', module)
   .add('Default', () => (
     <StoryWrap>
       <Input onChange={action('Input Change!')} />

@@ -4,11 +4,11 @@ import { action } from '@storybook/addon-actions'
 import { Icon as KegIcon } from 'KegIcon'
 import { TouchableIcon } from './touchableIcon'
 import { StoryWrap } from 'StoryWrap'
-import { Copy, Home, Flag, Rocket, Search } from '../../assets/icons'
+import { Copy, Home, Flag, Rocket } from '../../assets/icons'
 
 const wrapStyles = { textAlign: 'center' }
 
-storiesOf('Display | Icon', module)
+storiesOf('Display/Icon', module)
   .add('Default', () => (
     <StoryWrap style={wrapStyles}>
       <KegIcon Component={Rocket} />

@@ -23,12 +23,6 @@ const addAliases = {
 
 // Hard coded Rules
 const addRules = [
-  // Add the source loader for jsx files, which allows our story plugin to work
-  {
-    test: /\.stories\.jsx?$/,
-    loaders: [require.resolve('@storybook/source-loader')],
-    enforce: 'pre',
-  },
   {
     test: /\.(js|jsx)$/,
     include: [

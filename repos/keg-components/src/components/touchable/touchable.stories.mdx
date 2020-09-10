@@ -1,0 +1,32 @@
+<!--- Touchable.stories.mdx -->
+
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+
+import { Touchable } from './touchable'
+import { View } from '../view'
+import { H6 } from '../typography'
+
+<Meta title="Interactions/Touchable" component={Touchable}/>
+
+# Touchable
+
+Base component for handling touch interactions
+
+### Basic Example
+
+<Preview>
+  <Story name="Basic">
+    <Touchable className='basic-example' >
+      <View style={{ textAlign: 'center' }} >
+        <H6 style={{ fontWeight: 'bold' }} >
+          Click Me
+        </H6>
+      </View>
+    </Touchable>
+  </Story>
+</Preview>
+
+
+### Props
+
+<Props of={Touchable} />

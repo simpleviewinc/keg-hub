@@ -4,7 +4,7 @@ import { Switch, Checkbox } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap, Split } from 'StoryWrap'
 
-storiesOf('Form | Switch', module)
+storiesOf('Form/Switch', module)
   .add('Default', () => (
     <StoryWrap>
       <Switch onChange={action('Switch Click!')} />

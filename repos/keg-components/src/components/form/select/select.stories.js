@@ -4,7 +4,7 @@ import { Select, Option } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
-storiesOf('Form | Select', module)
+storiesOf('Form/Select', module)
   .add('Default', () => (
     <StoryWrap>
       <Select onChange={action('Select Change!')}>
