@@ -4,7 +4,7 @@
 
 A test-runner for behavior tests defined in the [keg](https://github.com/simpleviewinc/keg-core), its associated repos, and taps. It uses a selenium grid of docker containers to test cucumber features across multiple browsers in parallel.
 
-Tests are:
+### Tests
 
 * Written in [cucumber](https://cucumber.io/)
   * an ordinary language that bridges the gap between business and technical people
