@@ -5,7 +5,7 @@ import { StoryWrap } from 'StoryWrap'
 
 const storyStyles = { textAlign: 'center' }
 
-storiesOf('Typography | Link', module)
+storiesOf('Typography/Link', module)
   .add('Anchor', () => (
     <StoryWrap style={storyStyles}>
       <A
