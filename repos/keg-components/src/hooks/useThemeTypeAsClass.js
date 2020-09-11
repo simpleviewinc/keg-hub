@@ -1,43 +1,45 @@
 import { useMemo } from 'react'
-import { get, isArr } from '@keg-hub/jsutils'
+import { get, isArr, eitherArr } from '@keg-hub/jsutils'
 import { colors } from '../theme/colors'
 import { useClassList } from 'KegClassList'
 import { noOpObj } from '../utils/helpers/noop'
 
 /**
  * Uses the surfaces defined in the colors to build surface specific classes for
- * @param {string} themeRef - Either the type or themePath passed to the component
- * @param {string} defRef - The default reference to use for the class
+ * @param {string} themeLoc - Either the type or themePath passed to the component
+ * @param {string} defClass - The default reference to use for the class
  *
- * @returns {Array} - Built classList based on surfaces and themeRef
+ * @returns {Array<string>} - Built classList based on surfaces and themeLoc
  */
-const useThemeType = (themeRef = '', defRef) => {
+const useThemeType = (themeLoc, defClass) => {
   return useMemo(() => {
-    if (!themeRef) return defRef
+    const defClassArr = eitherArr(defClass, [defClass])
 
-    const themeSplit = themeRef.split('.')
+    if (!themeLoc) return defClassArr
+
+    const themeSplit = themeLoc.split('.')
     const surface = themeSplit.pop()
     const typeRef = themeSplit.pop()
     const surfaces = Object.keys(get(colors, 'surface', noOpObj))
 
     return typeRef && surfaces.indexOf(surface)
-      ? [ `${defRef}-${typeRef}`, surface ]
+      ? [ `${defClass}-${typeRef}`, surface ]
       : surface
-        ? [`${defRef}-${surface}`]
-        : [defRef]
-  }, [ themeRef, defRef ])
+        ? [`${defClass}-${surface}`]
+        : defClassArr
+  }, [ themeLoc, defClass ])
 }
 
 /**
  * Helper hook to call get the theme type then use that to create the classList
- * @param {string} themeRef - Either the type or themePath passed to the component
+ * @param {string} themeLoc - Either the type or themePath passed to the component
  * @param {string} defClass - The default class for the component
  * @param {Array|string} className - Custom class name passed to the component
  *
- * @returns {Array} - Built classList response from useClassList
+ * @returns {Array<string>} - Built classList response from useClassList
  */
-export const useThemeTypeAsClass = (themeRef = '', defClass, className) => {
-  const themeTypeCls = useThemeType(themeRef, defClass)
+export const useThemeTypeAsClass = (themeLoc = '', defClass, className) => {
+  const themeTypeCls = useThemeType(themeLoc, defClass)
   const classList = isArr(className)
     ? className.concat(themeTypeCls)
     : [ ...themeTypeCls, className ]

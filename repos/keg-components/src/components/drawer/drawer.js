@@ -29,17 +29,22 @@ const noAnimate = (toggled, current, { initial, max }) =>
  * @returns {Component} - Drawer Component
  */
 export const Drawer = props => {
-  const { initial, Element, styles, toggled, ...childProps } = props
+  const { initial, Element, styles, toggled, className, ...childProps } = props
 
   // Define the default heights as a ref
   const heights = useRef({ initial: initial || 0, max: 0 })
   // Define the animated value as a ref
-  const [animation] = useState(new Animated.Value(initial))
+  const [ animation, setAnimation ] = useState(new Animated.Value(initial))
 
   // Define a helper to update the total max height of the slider
   // Gets called from the onLayout callback of the View wrapper
-  const setMaxHeight = event =>
-    (heights.current.max = event.nativeEvent.layout.height)
+  const setMaxHeight = event => {
+    const maxHeight = event.nativeEvent.layout.height
+    if (!heights.current || heights.current.max === maxHeight) return
+
+    heights.current.max = maxHeight
+    toggled && setAnimation(new Animated.Value(maxHeight))
+  }
 
   // Use useLayoutEffect to check if the slider should be animated
   // Within the hook, toggled flag defines how to update the animated value

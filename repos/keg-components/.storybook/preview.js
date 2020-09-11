@@ -33,6 +33,14 @@ addParameters({
   },
 })
 
+addDecorator(storyFn =>
+  <ReThemeProvider theme={ theme } >
+    <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
+      { storyFn() }
+    </View>
+  </ReThemeProvider>
+)
+
 setRNPlatform(Platform)
 setRNDimensions(Dimensions)
 
@@ -49,13 +57,3 @@ console.warn = function override(...args) {
     // Call the original warning log
     orgWarn.apply(console, [ ...args ])
 }
-
-
-addDecorator(storyFn =>
-  <ReThemeProvider theme={ theme } >
-    <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
-      { storyFn() }
-    </View>
-  </ReThemeProvider>
-)
-
