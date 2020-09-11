@@ -130,16 +130,19 @@ export const CheckboxWrapper = props => {
 
   const elThemePath =
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
-
-  const themeStyles = useThemePath(elThemePath, styles)
-  const activeStyles = useCheckedState(isChecked, themeStyles)
-  const disabledStyles = useThemePath(
-    `form.${elType}.disabled`,
-    themeStyles
-  )
+  
   const activeStyles = useCheckedState(
     isChecked,
     canUseHandler ? themeStyles : disabledStyles
+  )
+
+  const themeStyles = useThemePath(elThemePath, styles)
+  const disabledStyles = useThemePath(`form.${elType}.disabled`, themeStyles)
+  const activeStyles = useCheckedState(isChecked, disabledStyles)
+  const typeClassName = useThemeTypeAsClass(
+    elThemePath || type,
+    'keg-checkbox',
+    className
   )
 
   const defaultPressHandler = setCheckedValue(
@@ -150,12 +153,6 @@ export const CheckboxWrapper = props => {
       enableCheck: !disableCheck,
       enableUncheck: !disableUncheck,
     }
-  )
-
-  const typeClassName = useThemeTypeAsClass(
-    elThemePath || type,
-    'keg-checkbox',
-    className
   )
 
   const pressHandler =
