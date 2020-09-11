@@ -26,6 +26,5 @@
   "StoryWrap": ".storybook/storyWrap.js",
   "KegClassList": "src/hooks/useClassList${platform}.js",
   "KegClassName": "src/hooks/useClassName${platform}.js",
-  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js",
-  "react-native-svg": "react-native-svg-web"
+  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js"
 }
