@@ -1,6 +1,7 @@
 export * from './android'
 export * from './arrowLeft'
 export * from './check'
+export * from './chevronDown'
 export * from './copy'
 export * from './flag'
 export * from './home'

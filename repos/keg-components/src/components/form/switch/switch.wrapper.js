@@ -1,12 +1,12 @@
-import React, { useState, useMemo } from 'react'
-import { useTheme } from '@keg-hub/re-theme'
-import { Text } from '../../typography'
 import { View } from 'KegView'
+import PropTypes from 'prop-types'
+import { Text } from '../../typography'
+import { useTheme } from '@keg-hub/re-theme'
+import React, { useState, useMemo } from 'react'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { useThemePath } from '../../../hooks'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
-import PropTypes from 'prop-types'
-import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
@@ -112,15 +112,16 @@ export const SwitchWrapper = props => {
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
   const themeStyles = useThemePath(elThemePath, styles)
   const activeStyles = useCheckedState(isChecked, themeStyles)
+  const typeClassName = useThemeTypeAsClass(
+    elThemePath || type,
+    'keg-switch',
+    className
+  )
 
   return (
     (children && (
       <View
-        className={useThemeTypeAsClass(
-          elThemePath || type,
-          'keg-switch',
-          className
-        )}
+        className={typeClassName}
         style={activeStyles.main}
       >
         <ChildrenComponent
@@ -129,7 +130,10 @@ export const SwitchWrapper = props => {
         />
       </View>
     )) || (
-      <View style={activeStyles.main}>
+      <View
+        className={typeClassName}
+        style={activeStyles.main}
+      >
         { LeftComponent && (
           <SideComponent
             className='keg-switch-left'

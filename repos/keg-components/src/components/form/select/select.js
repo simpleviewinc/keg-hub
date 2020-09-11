@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Picker } from 'react-native'
 import { useThemePath } from '../../../hooks'
@@ -6,6 +7,8 @@ import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
 import { getValueFromChildren, getInputValueKey } from '../../../utils'
 import { useClassName } from 'KegClassName'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
+import { ChevronDown } from '../../../assets/icons'
+import { Icon } from 'KegIcon'
 
 /**
  * Gets the key value pair for the select components value
@@ -26,19 +29,19 @@ export const Select = React.forwardRef((props, ref) => {
   const {
     className,
     children,
-    editable,
     disabled,
     readOnly,
     onChange,
     onValueChange,
+    style,
+    styles,
     type = 'default',
     themePath = `form.select.${type}`,
-    style,
     value,
     ...elProps
   } = props
 
-  const selectStyles = useThemePath(themePath)
+  const selectStyles = useThemePath(themePath, styles)
   const selectClasses = useThemeTypeAsClass(
     themePath || type,
     'keg-select',
@@ -47,16 +50,23 @@ export const Select = React.forwardRef((props, ref) => {
   const classRef = useClassName('keg-select', selectClasses, ref)
 
   return (
-    <Picker
-      ref={classRef}
-      {...elProps}
-      enabled={editable}
-      style={[ selectStyles, style ]}
-      {...getValue(props)}
-      {...useSelectHandlers({ onChange, onValueChange })}
-    >
-      { children }
-    </Picker>
+    <View style={[ selectStyles.main, style ]}>
+      <Picker
+        ref={classRef}
+        {...elProps}
+        enabled={!disabled}
+        style={[selectStyles.select]}
+        {...getValue(props)}
+        {...useSelectHandlers({ onChange, onValueChange })}
+      >
+        { children }
+      </Picker>
+      <Icon
+        styles={selectStyles.icon}
+        Component={ChevronDown}
+        color={disabled && selectStyles.icon?.disabled?.color}
+      />
+    </View>
   )
 })
 
@@ -66,6 +76,7 @@ Select.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   ref: PropTypes.object,

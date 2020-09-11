@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
 import { View } from 'KegView'
-import { CheckboxWrapper } from './checkbox.wrapper'
 import { Check } from 'KegIcons'
+import React, { useMemo } from 'react'
+import { CheckboxWrapper } from './checkbox.wrapper'
 import { noPropObj } from '../../../utils/helpers/noop'
 
 // Styles are defined here so that they are enforced

@@ -26,7 +26,7 @@ storiesOf('Display/Icon', module)
     <StoryWrap style={wrapStyles}>
       <KegIcon
         Component={Home}
-        size={50}
+        size={100}
       />
     </StoryWrap>
   ))

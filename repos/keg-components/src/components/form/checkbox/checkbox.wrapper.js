@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react'
-import { Text } from '../../typography'
 import { View } from 'KegView'
+import PropTypes from 'prop-types'
+import { Text } from '../../typography'
 import { useThemePath } from '../../../hooks'
+import React, { useState, useMemo } from 'react'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
-import PropTypes from 'prop-types'
-import { useThemeTypeAsClass } from 'KegTypeAsClass'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
@@ -117,15 +117,16 @@ export const CheckboxWrapper = props => {
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
   const themeStyles = useThemePath(elThemePath, styles)
   const activeStyles = useCheckedState(isChecked, themeStyles)
+  const typeClassName = useThemeTypeAsClass(
+    elThemePath || type,
+    'keg-checkbox',
+    className
+  )
 
   return (
     (children && (
       <View
-        className={useThemeTypeAsClass(
-          elThemePath || type,
-          'keg-checkbox',
-          className
-        )}
+        className={typeClassName}
         style={activeStyles.main}
       >
         <ChildrenComponent
@@ -134,7 +135,10 @@ export const CheckboxWrapper = props => {
         />
       </View>
     )) || (
-      <View style={activeStyles.main}>
+      <View
+        className={typeClassName}
+        style={activeStyles.main}
+      >
         { LeftComponent && (
           <SideComponent
             className='keg-checkbox-left'
