@@ -44,11 +44,11 @@ export const Select = React.forwardRef((props, ref) => {
     'keg-select',
     className
   )
-  const selectRef = useClassName('keg-select', selectClasses, ref)
+  const classRef = useClassName('keg-select', selectClasses, ref)
 
   return (
     <Picker
-      ref={selectRef}
+      ref={classRef}
       {...elProps}
       enabled={editable}
       style={[ selectStyles, style ]}

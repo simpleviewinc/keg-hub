@@ -66,11 +66,11 @@ export const Drawer = props => {
   }, [toggled])
 
   const drawerStyles = useThemePath(`drawer`, styles)
-  const aniRef = useClassName('keg-drawer', className)
+  const classRef = useClassName('keg-drawer', className)
 
   return (
     <Animated.View
-      ref={aniRef}
+      ref={classRef}
       style={[ drawerStyles.main, get(styles, 'main'), { height: animation }]}
     >
       <View

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { checkCall, isObj, isArr } from '@keg-hub/jsutils'
+import { checkCall, eitherArr, isObj, isArr } from '@keg-hub/jsutils'
 import { getPlatform } from 'KegGetPlatform'
 const isWeb = getPlatform() === 'web'
 
@@ -11,10 +11,15 @@ const isWeb = getPlatform() === 'web'
  * @param {string|Array[string]} className - Class or an array of classes to add to the element
  * @param {Object|function} ref - Ref object passed to the consuming component
  *
+ * @example
+ * const classRef = useClassName('class-1', `class-2`, ref || React.createRef())
+ * // The class attribute of the div will be `class-1 class-2` 
+ * return (<div ref={classRef} />My Div</div>)
+ * 
  * @returns {function} - Ref function to be added to the component
  */
 export const useClassName = (defClass, className, ref) => {
-  className = isArr(className) ? className : [className]
+  className = eitherArr(className, [className]) 
 
   return useCallback(
     element => {

@@ -1,13 +1,12 @@
 import { useCallback } from 'react'
 import { checkCall, isObj } from '@keg-hub/jsutils'
 
-export const useClassName = (className, ref) => {
-  return useCallback(
-    element => {
-      isObj(ref) && current in ref
-        ? (ref.current = element)
-        : checkCall(ref, element)
-    },
-    [ className, ref ]
-  )
+/**
+ * Placeholder hook for Native platforms
+ * <br/>Just returns the passed in ref
+ * 
+ * @returns {Object|function|undefeind} - Passed in Ref
+ */
+export const useClassName = (defClass, className, ref) => {
+  return ref
 }

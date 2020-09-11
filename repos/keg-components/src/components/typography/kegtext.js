@@ -22,7 +22,7 @@ export const KegText = element => {
         ...attrs
       } = props
 
-      const textRef = useClassName(`keg-${element}`, className, ref)
+      const classRef = useClassName(`keg-${element}`, className, ref)
 
       const a11y = useMemo(() => {
         const type = accessibilityRole
@@ -50,7 +50,7 @@ export const KegText = element => {
           {...a11y}
           {...(ellipsis && ellipsisProps)}
           style={[ textStyles, style ]}
-          ref={textRef}
+          ref={classRef}
         >
           { children }
         </RNText>

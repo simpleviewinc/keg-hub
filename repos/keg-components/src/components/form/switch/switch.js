@@ -55,7 +55,7 @@ const Element = React.forwardRef((props, ref) => {
     ...attrs
   } = props
 
-  const switchRef = useClassName('keg-switch', className, ref)
+  const classRef = useClassName('keg-switch', className, ref)
 
   return (
     <View
@@ -67,7 +67,7 @@ const Element = React.forwardRef((props, ref) => {
         {...getSwitchColors(thumbColor, trackColor, styles)}
         {...elProps}
         {...attrs}
-        ref={switchRef}
+        ref={classRef}
       />
     </View>
   )

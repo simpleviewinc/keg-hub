@@ -46,7 +46,7 @@ export const Input = forwardRef((props, ref) => {
   } = props
 
   const inputStyles = useThemePath(themePath)
-  const inputRef = useClassName('keg-input', className, ref)
+  const classRef = useClassName('keg-input', className, ref)
 
   const TextInputTouch = withTouch(TextInput, { showFeedback: false })
 
@@ -60,7 +60,7 @@ export const Input = forwardRef((props, ref) => {
       {...usePressHandlers(isWeb, { onClick, onPress })}
       {...elProps}
       style={[ inputStyles, style ]}
-      ref={inputRef}
+      ref={classRef}
     />
   )
 })

@@ -39,11 +39,11 @@ const SlideAnimatedView = ({
     [visible]
   )
 
-  const aniRef = useClassName('keg-modal-content', className)
+  const classRef = useClassName('keg-modal-content', className)
 
   return (
     <Animated.View
-      ref={aniRef}
+      ref={classRef}
       style={{ ...defaultStyle, transform: [{ translateY: slide }] }}
     >
       { children }
