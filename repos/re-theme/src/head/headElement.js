@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import * as ReactDOM from 'react-dom'
 import { Consumer } from './headContext'
 import { hasDomAccess } from '../helpers/hasDomAccess'
@@ -17,33 +17,39 @@ const canUseDOM = hasDomAccess()
 export const HeadElement = props => {
 
   const { tag: Tag, style, id, ...tagProps } = props
-  const { name, property } = tagProps
 
   const indexRef = useRef(-1)
   const headTagsRef = useRef(null)
   const children = (Tag === 'style' && style) || props.children
 
   useEffect(() => {
-    indexRef.current = headTagsRef.current.addTag(Tag, id)
+    const { tag } = props
+    const children = (Tag === 'style' && style) || props.children
+    
+    // For the first element, this needs to be set as a side effect the render
+    // For all other element is should be bypassed
+    // That way this does not fail the check because it's already set
+    indexRef.current = headTagsRef.current.addTag(tag, children, id)
 
     return () => {
-      headTagsRef.current.removeTag(Tag, indexRef.current, id)
+      headTagsRef.current.removeTag(tag, indexRef.current, id)
     }
-
-  }, [ Tag, name, property, style ])
+  }, [])
 
   return (
     <Consumer>
       {headTags => {
         headTagsRef.current = headTags
-
-        return canUseDOM &&
-          headTags.shouldRender(Tag, indexRef.current, id) &&
-          ReactDOM.createPortal(
-            <Tag {...tagProps} id={id} children={ children } />,
-            document.head
-          )
-
+        return canUseDOM && headTags.shouldRender(Tag, indexRef.current, children)
+          ? ReactDOM.createPortal(
+              <Tag
+                {...tagProps}
+                id={id}
+                children={ children }
+              />,
+              document.head
+            )
+          : null
       }}
     </Consumer>
   )

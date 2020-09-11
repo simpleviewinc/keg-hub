@@ -87,7 +87,7 @@ const checkWebPlatform = inline => {
  */
 export const useCss = (styleRef, customStyles, config={}) => {
   const { rootClass, inline, selector, id } = config
-  
+
   const theme = useTheme()
   const head = useContext(HeadContext)
 
@@ -121,22 +121,10 @@ export const useCss = (styleRef, customStyles, config={}) => {
       { selector, ...config }
     )
 
-    if(!web) return { cssProps, styleProps: {} }
-
-    // TODO: this it not currently being handled after the refactor
-    // Need to update to use the hash based on custom styles
-    const hashId = web && uniqArr(web.hash).join('-')
+    if(!web) return cssProps
 
     // When on web, add the styles to a Dom <style> element
-    // This allows using css sudo classes like :hover
-    return {
-      cssProps,
-      styleProps: {
-        id: hashId,
-        // Only build the styles if the hashId does not all ready exist
-        children: head.hasHash(hashId) ? '' : jsToCss(web.styles, hashId),
-      }
-    }
+    return {}
 
   }, [ themeStyles, custom, rootClass, inline, selector, id ])
 }
