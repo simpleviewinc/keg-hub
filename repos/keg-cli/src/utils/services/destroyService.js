@@ -32,14 +32,11 @@ const destroyService = async (args, argsExt) => {
   // build the internal arguments
   const serviceArgs = getServiceArgs(args, argsExt)
 
-  // Bring down the docker-compose services
+  // Bring down the docker-compose services and remove the docker-container
   await runInternalTask('docker.tasks.compose.tasks.down', {
     ...serviceArgs,
     params: { ...serviceArgs.params, remove: 'orphans,volumes' }
   })
-
-  // Destroy the docker-container
-  await runInternalTask('docker.tasks.container.tasks.remove', serviceArgs)
 
   // Remove the image if option is passed in
   await checkRemoveImage(serviceArgs)

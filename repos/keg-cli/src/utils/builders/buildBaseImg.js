@@ -1,4 +1,4 @@
-
+const { get } = require('@keg-hub/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
@@ -30,6 +30,12 @@ const checkForLatestTag = (image, args) => {
  * @returns {void}
  */
 const buildBaseImg = async args => {
+  const tapName = get(args, 'params.tap')
+
+  // If it's a tap, check if we should build the base image
+  const shouldBuildBase = tapName && getContainerConst(tapName, `env.keg_from_base`, true)
+  if(!shouldBuildBase) return args
+
   const baseName = getContainerConst('base', `env.image`, 'keg-base')
   const exists = await docker.image.exists(baseName)
 

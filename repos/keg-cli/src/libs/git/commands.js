@@ -10,8 +10,17 @@ const { NEWLINES_MATCH, SPACE_MATCH } = require('KegConst/patterns')
  *
  * @returns {string} - cmd with git added
  */
-const ensureGit = cmd => cmd.trim().indexOf('git') === 0 ? cmd : `git ${cmd}`
-
+const ensureGit = cmd => (
+  isStr(cmd)
+    ? cmd.trim().indexOf('git') === 0
+      ? cmd
+      : `git ${cmd}`
+    : isArr(cmd)
+      ? cmd[0] === 'git'
+        ? ensureGit(cmd.join(' '))
+        : ensureGit((['git']).concat(cmd).join(' '))
+      : cmd
+)
 
 /**
  * Ensures git is added to the passed in cmd, and executes the command
