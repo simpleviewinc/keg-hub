@@ -3,11 +3,13 @@ import { ActivityIndicator } from 'react-native'
 import { IndicatorWrapper } from './indicator.wrapper'
 import { View } from 'KegView'
 import { getPlatform } from 'KegGetPlatform'
+import { useClassList } from 'KegClassList'
+
 const isWeb = getPlatform() === 'web'
 
-const Element = ({ style = {}, size, color, ...attrs }) => {
+const Element = ({ className, style = {}, size, color, ...attrs }) => {
   return (
-    <View>
+    <View className={useClassList('keg-indicator', className)}>
       <ActivityIndicator
         size={size}
         color={style.color || color}

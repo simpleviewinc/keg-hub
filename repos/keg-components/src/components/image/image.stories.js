@@ -5,7 +5,7 @@ import { Image, Link, Text } from '../../'
 
 const wrapStyles = { textAlign: 'center' }
 
-storiesOf('Display | Image', module)
+storiesOf('Display/Image', module)
   .add('Image', () => (
     <StoryWrap style={wrapStyles}>
       <Image

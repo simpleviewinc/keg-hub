@@ -5,8 +5,40 @@ import { flex } from '../../flex'
 import { helpers } from '../../helpers'
 import { get } from '@keg-hub/jsutils'
 
-const opacity05 = get(colors, 'opacity._05')
+const opacity05 = get(colors, 'opacity._5')
 const colorPalette = get(colors, 'palette')
+
+const section = {
+  main: {
+    ...flex.left,
+    ...flex.column,
+    borderColor: colorPalette.gray01,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    padding: 0,
+    paddingBottom: padding.size / 2,
+    margin: margin.size,
+    marginBottom: 0,
+    marginTop: margin.size - margin.size / 5,
+  },
+  text: {
+    fontSize: 22,
+    lineHeight: 26,
+    color: get(colors, 'opacity._65'),
+    fontWeight: 'bold',
+  },
+  noBorder: {
+    main: {
+      borderBottomWidth: 0,
+      borderTopWidth: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+    },
+    text: {
+      lineHeight: 20,
+    },
+  },
+}
 
 export const contained = {
   main: {
@@ -22,79 +54,86 @@ export const contained = {
     },
     $all: {
       backgroundColor: colorPalette.white01,
-      borderWidth: 1,
-      padding: padding.size,
       margin: margin.size,
-      marginBottom: 0,
+      paddingBottom: margin.size - margin.size / 5,
       borderColor: colorPalette.gray01,
       borderStyle: 'solid',
+      borderWidth: 1,
     },
   },
   container: {
     backgroundColor: colorPalette.transparent,
   },
+  header: section,
   footer: {
-    container: {},
-    text: {},
-    divider: {},
-  },
-  header: {
-    container: {
-      ...flex.left,
-      ...flex.column,
+    ...section,
+    main: {
+      ...section.main,
+      paddingTop: padding.size / 2,
+      paddingBottom: 0,
+      marginBottom: 0,
+      borderTopWidth: 1,
+      borderBottomWidth: 0,
     },
     text: {
-      fontSize: 16,
-      color: colorPalette.black02,
-      fontWeight: 'bold',
-      textAlign: 'center',
+      ...section.text,
+      fontSize: 20,
+      lineHeight: 24,
     },
-    divider: {},
-  },
-  divider: {
-    marginBottom: margin.size,
+    noBorder: {
+      main: {
+        borderBottomWidth: 0,
+        borderTopWidth: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+      text: {
+        lineHeight: 20,
+      },
+    },
   },
   media: {
-    container: {
-      marginBottom: margin.size,
-      width: '100%',
+    main: {
+      position: 'relative',
+      margin: 0,
+      marginTop: margin.size - margin.size / 5,
     },
-    image: {
-      width: '100%',
-    },
+    image: {},
     loadingComp: {
-      indicator: {
-        icon: {
-          fontSize: '100px',
-          color: colorPalette.gray01,
-        },
-      },
+      main: {},
+      progress: {},
+      indicator: {},
     },
     video: {
       width: '100%',
     },
   },
-  featured: {
-    title: {
-      fontSize: 18,
-      marginBottom: 8,
-      color: colorPalette.white01,
-      fontWeight: '800',
+  content: {
+    main: {
+      margin: margin.size,
+      marginBottom: 0,
     },
-    subtitle: {
-      fontSize: 13,
-      marginBottom: 8,
-      color: colorPalette.white01,
-      fontWeight: '400',
+    callout: {
+      title: {
+        fontSize: 18,
+        marginBottom: margin.size / 4,
+        color: get(colors, 'opacity._40'),
+        fontWeight: '800',
+      },
+      subtitle: {
+        fontSize: 13,
+        marginBottom: margin.size,
+        color: get(colors, 'opacity._40'),
+        fontWeight: '400',
+      },
+    },
+    overlay: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: opacity05,
+      alignSelf: 'stretch',
+      justifyContent: 'center',
+      ...helpers.abs,
     },
   },
-  overlay: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: opacity05,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    ...helpers.abs,
-  },
-  body: {},
 }

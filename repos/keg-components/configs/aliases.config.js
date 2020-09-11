@@ -4,10 +4,12 @@ const rootPath = path.join(__dirname, '../')
 
 const platform = process.env.RE_PLATFORM || process.env.PLATFORM || 'web'
 
+const ext = platform === 'web' ? '' : '.native'
+
 const getAliases = platform => Object
   .keys(pathAlias)
   .reduce((updated, key) => {
-    updated[key] = pathAlias[key].replace(/\$\{platform\}/g, platform)
+    updated[key] = pathAlias[key].replace(/\$\{platform\}/g, ext)
 
     return updated
   }, {})
@@ -19,7 +21,7 @@ const resolvedAlias = Object.entries(aliases)
 
     updated[key] = path.resolve(
       rootPath,
-      value.replace("${platform}", platform),
+      value.replace("${platform}", ext),
     )
 
     return updated

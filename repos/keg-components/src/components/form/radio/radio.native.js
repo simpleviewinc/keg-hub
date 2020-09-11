@@ -6,12 +6,11 @@ import { Text } from '../../typography/text'
 
 export const Radio = withTheme(props => {
   const { theme, children, style, onClick, onPress, text, ...args } = props
-  const radioStyle = theme.join(get(theme, [ 'form', 'radio' ]), style)
 
   return (
     <Text
       {...args}
-      style={radioStyle}
+      style={[get(theme, [ 'form', 'radio' ]), style]}
     >
       { text }
     </Text>

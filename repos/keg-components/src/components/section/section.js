@@ -2,19 +2,17 @@ import React from 'react'
 import { withTheme } from '@keg-hub/re-theme'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
+import { useClassList } from 'KegClassList'
 
 export const Section = withTheme(props => {
-  const { theme, children, style, type, ...args } = props
+  const { className, theme, children, style, type, ...args } = props
 
   return (
     <View
       {...args}
-      style={theme.get(
-        `keg-section-${type || 'default'}`,
-        `section.default`,
-        type && `section.${type}`,
-        style
-      )}
+      className={useClassList('keg-section', className)}
+      accessibilityRole='region'
+      style={theme.get(`section.default`, type && `section.${type}`, style)}
     >
       { children }
     </View>

@@ -21,7 +21,7 @@ const buildHeightWithTheme = (stylesWithHeight, themeStyles) => {
  * @returns {array} - styles object with height equal to window/screen height
  */
 export const useThemeWithHeight = (themePath, styles, key) => {
-  const [themeStyles] = useThemePath(themePath, styles)
+  const themeStyles = useThemePath(themePath, styles)
   const { height } = useDimensions()
   const [ curHeight, setCurHeight ] = useState(height)
   const [ stylesWithHeight, setStylesWithHeight ] = useState(

@@ -29,7 +29,9 @@ const shared = {
     '@keg-hub/jsutils',
     '@keg-hub/re-theme',
     'prop-types',
-    'expo-fonts'
+    'expo-fonts',
+    'react-native-svg-web',
+    'react-native-svg'
   ],
   watch: {
     clearScreen: false

@@ -3,6 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { Container } from './container'
 import PropTypes from 'prop-types'
+import { useClassList } from 'KegClassList'
 
 const widthFromSize = (size, theme) => {
   const total = get(theme, [ 'layout', 'columns' ], 12)
@@ -16,19 +17,20 @@ const getColumnWidth = (size, theme) => {
   return size ? widthFromSize(size, theme) : { flexGrow: 1 }
 }
 
-export const Column = ({ children, size, center, ...props }) => {
+export const Column = ({ className, children, size, center, ...props }) => {
   const theme = useTheme()
 
   return (
     <Container
       {...props}
+      className={useClassList('keg-column', className)}
       size={size}
       flexDir='column'
-      style={theme.join(
+      style={[
         get(theme, [ 'layout', 'grid', 'column' ]),
         props.style,
-        getColumnWidth(size, theme)
-      )}
+        getColumnWidth(size, theme),
+      ]}
     >
       { children }
     </Container>

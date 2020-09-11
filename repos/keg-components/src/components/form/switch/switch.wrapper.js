@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react'
-import { useTheme } from '@keg-hub/re-theme'
-import { Text } from '../../typography'
 import { View } from 'KegView'
+import PropTypes from 'prop-types'
+import { Text } from '../../typography'
+import { useTheme } from '@keg-hub/re-theme'
+import React, { useState, useMemo } from 'react'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { useThemePath } from '../../../hooks'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
-import PropTypes from 'prop-types'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
@@ -84,6 +85,7 @@ const ChildrenComponent = ({ children }) => (
  */
 export const SwitchWrapper = props => {
   const {
+    className,
     checked,
     children,
     elType,
@@ -108,18 +110,33 @@ export const SwitchWrapper = props => {
 
   const elThemePath =
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
-  const [themeStyles] = useThemePath(elThemePath, styles)
+  const themeStyles = useThemePath(elThemePath, styles)
   const activeStyles = useCheckedState(isChecked, themeStyles)
+  const typeClassName = useThemeTypeAsClass(
+    elThemePath || type,
+    'keg-switch',
+    className
+  )
 
   return (
     (children && (
-      <View style={activeStyles.main}>
-        <ChildrenComponent children={children} />
+      <View
+        className={typeClassName}
+        style={activeStyles.main}
+      >
+        <ChildrenComponent
+          className='keg-switch-container'
+          children={children}
+        />
       </View>
     )) || (
-      <View style={activeStyles.main}>
+      <View
+        className={typeClassName}
+        style={activeStyles.main}
+      >
         { LeftComponent && (
           <SideComponent
+            className='keg-switch-left'
             Component={LeftComponent}
             style={activeStyles.content.left}
           />
@@ -145,6 +162,7 @@ export const SwitchWrapper = props => {
 
         { RightComponent && (
           <SideComponent
+            className='keg-switch-right'
             Component={RightComponent}
             style={activeStyles.content.right}
           />

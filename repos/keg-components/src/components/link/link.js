@@ -1,31 +1,45 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 import { LinkWrapper } from './link.wrapper'
 import { KegText } from 'KegText'
+import { Touchable } from '../touchable'
 import PropTypes from 'prop-types'
 import { getPlatform } from 'KegGetPlatform'
+import { useClassList } from 'KegClassList'
 
 const isWeb = getPlatform() === 'web'
 const Text = KegText('link')
 
-const Element = React.forwardRef(
-  ({ elProps, children, href, onPress, target, style, ...props }, ref) => (
-    <TouchableOpacity
+const Element = React.forwardRef((props, ref) => {
+  const {
+    children,
+    className,
+    elProps,
+    href,
+    onPress,
+    style,
+    target,
+    ...attrs
+  } = props
+
+  return (
+    <Touchable
+      className={useClassList('keg-link', className)}
       {...elProps}
-      {...props}
-      ref={ref}
+      {...attrs}
+      touchRef={ref}
     >
       <Text
+        accessibilityRole='link'
+        className='keg-link-text'
         style={style}
         href={href}
-        accessibilityRole='link'
         target={target}
       >
         { children }
       </Text>
-    </TouchableOpacity>
+    </Touchable>
   )
-)
+})
 
 const Link = props => <LinkWrapper
   {...props}

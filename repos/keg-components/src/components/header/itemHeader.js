@@ -3,11 +3,14 @@ import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { View } from 'KegView'
-import { Button } from 'KegButton'
+import { Button } from '../button'
 import { Icon } from 'KegIcon'
-import { H6 } from '../typography'
+import { H5 } from '../typography'
 import { renderFromType } from '../../utils'
 import { useThemePath } from '../../hooks'
+import { useClassList } from 'KegClassList'
+import { noPropObj } from '../../utils/helpers/noop'
+import { isValidComponent } from '../../utils/validate/isValidComponent'
 
 /**
  * ItemHeader
@@ -20,6 +23,7 @@ export const ItemHeader = props => {
   const theme = useTheme()
 
   const {
+    className,
     title,
     styles,
     RightComponent,
@@ -36,26 +40,24 @@ export const ItemHeader = props => {
     ellipsis,
     themePath,
     children,
-    dataSet,
-    ...elprops
+    ...elProps
   } = props
 
-  const [headerStyles] = useThemePath(themePath || `header.itemHeader`, styles)
-  // builds the left, center, and right section based on props
+  const headerStyles = useThemePath(themePath || `header.itemHeader`, styles)
 
+  // builds the left, center, and right section based on props
   return (
     <View
-      dataSet={dataSet?.main || ItemHeader.dataSet.main}
-      {...elprops}
-      style={theme.join(
+      className={useClassList('keg-header', className)}
+      {...elProps}
+      style={[
         headerStyles.main,
-        shadow && get(headerStyles, [ 'main', 'shadow' ])
-      )}
+        shadow && get(headerStyles, [ 'main', 'shadow' ]),
+      ]}
     >
       { children || (
         <>
           <Side
-            dataSet={dataSet?.content?.left || ItemHeader.dataSet.content.left}
             styles={headerStyles.content}
             iconName={leftIcon}
             IconElement={LeftIconComponent || IconComponent}
@@ -65,9 +67,6 @@ export const ItemHeader = props => {
           </Side>
 
           <Center
-            dataSet={
-              dataSet?.content?.center || ItemHeader.dataSet.content.center
-            }
             ellipsis={ellipsis}
             theme={theme}
             styles={headerStyles.content?.center}
@@ -78,9 +77,6 @@ export const ItemHeader = props => {
 
           <Side
             right
-            dataSet={
-              dataSet?.content?.right || ItemHeader.dataSet.content.right
-            }
             styles={headerStyles.content}
             iconName={rightIcon}
             IconElement={RightIconComponent || IconComponent}
@@ -94,23 +90,7 @@ export const ItemHeader = props => {
   )
 }
 
-ItemHeader.dataSet = {
-  main: { class: 'item-header-main' },
-  content: {
-    left: {
-      main: { class: 'item-header-content-left-main' },
-    },
-    right: {
-      main: { class: 'item-header-content-right-main' },
-    },
-    center: {
-      main: { class: 'item-header-content-center-main' },
-    },
-  },
-}
-
 ItemHeader.propTypes = {
-  dataSet: PropTypes.object,
   title: PropTypes.string,
   styles: PropTypes.object,
   RightComponent: PropTypes.element,
@@ -148,27 +128,26 @@ ItemHeader.propTypes = {
  * @property {Boolean=} props.ellipsis - applies ellipsis on text. default true
  * @property {Object} props.styles
  * @property {String=} props.title - title displayed in the center 
- * @property {Object} props.dataSet - dataSet attribute
  * @property {Component} props.children  - custom component to display on the center section. overrides the other props
 
  * @returns {Component} - center component
  */
 const Center = props => {
-  const { styles, title, ellipsis = true, children, dataSet } = props
+  const { styles, title, ellipsis = true, children } = props
 
   return (
     <View
-      dataSet={dataSet?.main}
+      className='keg-header-center'
       style={styles.main}
     >
       { (children && renderFromType(children, {}, null)) || (
-        <H6
-          dataSet={dataSet?.content}
+        <H5
+          className='keg-header-center-title'
           ellipsis={ellipsis}
           style={styles.content.title}
         >
           { title }
-        </H6>
+        </H5>
       ) }
     </View>
   )
@@ -179,7 +158,6 @@ const Center = props => {
  * @summary builds the side sections of the appheader
  * @param {Object} props
  * @property {Object} props.styles
- * @property {Object} props.dataSet - dataSet attribute
  * @property {String=} props.iconName - name of icon to use (FontAwesome icons). uses the Icon component
  * @property {Component} props.IconElement - icon component for the icon set (e.g. FontAwesome)
  * @property {Function} props.action - function to perform on section click
@@ -189,19 +167,11 @@ const Center = props => {
  * @returns {Component} - section component
  */
 const Side = props => {
-  const {
-    styles,
-    iconName,
-    IconElement,
-    action,
-    children,
-    right,
-    dataSet,
-  } = props
+  const { styles, iconName, IconElement, action, children, right } = props
 
   const position = right ? 'right' : 'left'
   // get the styles for the specified position
-  const contentStyles = get(styles, [ position, 'content' ])
+  const contentStyles = get(styles, [ position, 'content' ], noPropObj)
   const iconProps = {
     styles,
     IconElement,
@@ -209,18 +179,18 @@ const Side = props => {
     position,
   }
 
-  const showIcon = iconName && IconElement
+  const showIcon = isValidComponent(IconElement)
 
   return (
     <View
-      dataSet={dataSet?.main}
+      className={`keg-header-${position}`}
       style={get(styles, [ position, 'main' ])}
     >
       { /* if 'action' is passed in, use a button to wrap the icon */ }
       { (children && renderFromType(children, {}, null)) ||
         (action ? (
           <Button
-            dataSet={dataSet?.content}
+            className={`keg-header-${position}-button`}
             styles={contentStyles.button}
             onClick={action}
           >
@@ -229,7 +199,7 @@ const Side = props => {
         ) : (
           showIcon && (
             <View
-              dataSet={dataSet?.content}
+              className={`keg-header-${position}-icon`}
               style={contentStyles.main}
             >
               <CustomIcon {...iconProps} />
@@ -252,10 +222,11 @@ const Side = props => {
  * @returns {Component} - Customized Icon component
  */
 const CustomIcon = props => {
-  const { styles, iconName, IconElement, position } = props
+  const { className, iconName, IconElement, position, styles } = props
 
   return (
     <Icon
+      className={className}
       name={iconName}
       Element={IconElement}
       styles={get(styles, [ position, 'content', 'icon' ])}

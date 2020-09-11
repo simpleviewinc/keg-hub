@@ -15,22 +15,17 @@ const addPlugins = [
 // Hard coded aliases
 const addAliases = {
   // Add the react-native-web overwrite
-  "react-native": "react-native-web/dist/cjs",
+  'react-native': 'react-native-web',
+  'react-native-web': 'react-native-web',
+  'react-native-svg': 'react-native-svg-web',
   '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/web',
 }
 
 // Hard coded Rules
 const addRules = [
-  // Add the source loader for jsx files, which allows our story plugin to work
-  {
-    test: /\.stories\.jsx?$/,
-    loaders: [require.resolve('@storybook/source-loader')],
-    enforce: 'pre',
-  },
   {
     test: /\.(js|jsx)$/,
     include: [
-      path.resolve(__dirname, "../node_modules/@expo/vector-icons"),
       path.resolve(__dirname, "../node_modules/@keg-hub/re-theme"),
     ],
     use: {

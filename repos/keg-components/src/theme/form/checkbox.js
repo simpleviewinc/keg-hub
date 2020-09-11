@@ -1,7 +1,8 @@
-import defaults from '../defaults.json'
 import { colors } from '../colors'
 import { get, deepMerge } from '@keg-hub/jsutils'
+import { getThemeDefaults } from '../themeDefaults'
 
+const defaults = getThemeDefaults()
 const height = get(defaults, 'form.checkbox.height', 20)
 const width = get(defaults, 'form.checkbox.width', 20)
 
@@ -55,20 +56,7 @@ const checkboxDefault = {
     indicator: {
       off: {
         $web: {
-          outline: 'none',
-          marginLeft: 0,
-          cursor: 'pointer',
-          height: height,
-          width: width,
-          position: 'absolute',
-          top: 0,
-          left: 0,
           color: get(colors, 'palette.white02'),
-          fontSize: '16px',
-          flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
         },
       },
       on: {},

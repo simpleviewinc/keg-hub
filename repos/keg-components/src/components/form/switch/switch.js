@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types'
 import React from 'react'
-import { SwitchWrapper } from './switch.wrapper'
-import { Switch as RNSwitch, TouchableOpacity } from 'react-native'
 import { View } from 'KegView'
+import { useClassName } from 'KegClassName'
 import { getPlatform } from 'KegGetPlatform'
+import { SwitchWrapper } from './switch.wrapper'
+import { Switch as RNSwitch } from 'react-native'
 const isWeb = getPlatform() === 'web'
 
 /**
@@ -45,6 +45,7 @@ const getSwitchColors = (
  */
 const Element = React.forwardRef((props, ref) => {
   const {
+    className,
     elProps,
     style,
     styles = {},
@@ -53,14 +54,19 @@ const Element = React.forwardRef((props, ref) => {
     ...attrs
   } = props
 
+  const classRef = useClassName('keg-switch', className, ref)
+
   return (
-    <View style={styles.main}>
+    <View
+      className='keg-switch-area'
+      style={styles.main}
+    >
       <RNSwitch
         style={styles.switch}
         {...getSwitchColors(thumbColor, trackColor, styles)}
         {...elProps}
         {...attrs}
-        ref={ref}
+        ref={classRef}
       />
     </View>
   )
@@ -76,17 +82,6 @@ export const Switch = props => (
 )
 
 Switch.propTypes = {
-  ...TouchableOpacity.propTypes,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array,
-  ]),
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  ref: PropTypes.object,
-  style: PropTypes.object,
-  text: PropTypes.string,
-  type: PropTypes.string,
+  ...RNSwitch.propTypes,
+  ...SwitchWrapper.propTypes,
 }

@@ -4,11 +4,18 @@ import { View } from 'KegView'
 import { Image } from 'KegImg'
 import { get } from '@keg-hub/jsutils'
 import { useStyle } from 'KegHooks'
-import { CardMediaTitle } from './cardMediaTitle'
+
+const noHeader = { marginTop: 0 }
 
 const MediaFromType = ({ mediaProps, styles }) => {
-  const { type, ...props } = mediaProps
-  const { image, video, container, loading, loadingComp } = props.styles
+  const {
+    className,
+    type,
+    resizeMode = 'cover',
+    resizeMethod = 'scale',
+    ...props
+  } = mediaProps
+  const { image, video, container, loading, loadingComp } = styles
 
   const mediaStyles = useStyle(
     type === 'image' && image && { image },
@@ -20,10 +27,15 @@ const MediaFromType = ({ mediaProps, styles }) => {
 
   switch (type) {
   case 'image': {
-    return <Image
-      {...props}
-      styles={mediaStyles}
-    />
+    return (
+      <Image
+        resizeMode={resizeMode}
+        resizeMethod={resizeMethod}
+        {...props}
+        className='keg-card-media'
+        styles={mediaStyles}
+      />
+    )
   }
   default: {
     return null
@@ -31,26 +43,28 @@ const MediaFromType = ({ mediaProps, styles }) => {
   }
 }
 
-export const CardMedia = ({ mediaProps, Media, subtitle, styles, title }) => {
+export const CardMedia = ({
+  hasHeader,
+  mediaProps,
+  Media,
+  subtitle,
+  styles,
+  title,
+}) => {
   // If no mediaProps, just return Media
   // It's either a custom component || does not exist
   // Otherwise render with the mediaProps
   return Media || !mediaProps ? (
     Media || null
   ) : (
-    <View style={get(styles, 'media.container')}>
+    <View
+      className='keg-card-media'
+      style={[ get(styles, 'main'), hasHeader === false && noHeader ]}
+    >
       <MediaFromType
         mediaProps={mediaProps}
         styles={styles}
       />
-
-      { (title || subtitle) && (
-        <CardMediaTitle
-          subtitle={subtitle}
-          title={title}
-          styles={styles}
-        />
-      ) }
     </View>
   )
 }

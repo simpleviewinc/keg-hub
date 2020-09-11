@@ -1,1 +1,1 @@
-export * from 'KegButton'
+export * from './button'

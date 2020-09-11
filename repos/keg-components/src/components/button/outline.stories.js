@@ -8,7 +8,7 @@ import { StoryWrap } from 'StoryWrap'
 
 const buttonStyle = { width: 125, marginRight: 10 }
 
-storiesOf('Button | Outline', module)
+storiesOf('Button/Outline', module)
   .add('Standard', () => (
     <StoryWrap style={{ textAlign: 'center', flexDirection: 'row' }}>
       <Button

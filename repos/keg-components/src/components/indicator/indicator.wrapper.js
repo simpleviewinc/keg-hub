@@ -15,7 +15,7 @@ export const IndicatorWrapper = props => {
     ...elProps
   } = props
 
-  const [builtStyles] = useThemePath(themePath || `indicator.${type}`, styles)
+  const builtStyles = useThemePath(themePath || `indicator.${type}`, styles)
 
   return (
     <View style={builtStyles.container}>

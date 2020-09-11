@@ -4,7 +4,7 @@ import { Input, Label } from '../../'
 import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 
-storiesOf('Form | Input', module)
+storiesOf('Form/Input', module)
   .add('Default', () => (
     <StoryWrap>
       <Input onChange={action('Input Change!')} />
@@ -38,18 +38,5 @@ storiesOf('Form | Input', module)
   .add('On Press', () => (
     <StoryWrap>
       <Input onPress={action('Input clicked')} />
-    </StoryWrap>
-  ))
-  .add('Read only', () => (
-    <StoryWrap>
-      <Input
-        value="Sorry, I'm read only."
-        readOnly
-      />
-    </StoryWrap>
-  ))
-  .add('Placeholder', () => (
-    <StoryWrap>
-      <Input placeholder='Type here...' />
     </StoryWrap>
   ))

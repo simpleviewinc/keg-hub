@@ -4,6 +4,7 @@ import { View } from 'KegView'
 import { Indicator } from 'KegIndicator'
 import { Text } from '../typography/text'
 import { isValidComponent } from '../../utils'
+import { useClassList } from 'KegClassList'
 import { useThemePath } from 'KegHooks'
 
 /**
@@ -21,7 +22,10 @@ const Progress = props => {
   const LoadingIndicator = loadIndicator || Indicator
 
   return (
-    <View style={styles.progress}>
+    <View
+      style={styles.progress}
+      className='keg-progress'
+    >
       { isValidComponent(LoadingIndicator) ? (
         <LoadingIndicator
           size={size}
@@ -29,7 +33,14 @@ const Progress = props => {
           type={type}
         />
       ) : (
-        text && <Text style={styles.text}>{ text }</Text>
+        text && (
+          <Text
+            className='keg-progress-text'
+            style={styles.text}
+          >
+            { text }
+          </Text>
+        )
       ) }
     </View>
   )
@@ -39,15 +50,19 @@ const Progress = props => {
  * Loading
  * @summary Custom Loading component. All props are optional
  *
- * @param {Object} props - see buttonPropTypes
- * @property {String} props.text - button text
- * @property {Object} props.style - custom style
- * @property {Object} props.wrapStyle - custom wrapper style
- * @property {Object} props.children
+ * @param {Object} props - see Loading.propTypes
+ * @property {String} props.className - Class name of the root element
+ * @property {String} props.text - Text to display while loading
+ * @property {number} props.size - Size of the loading indicator
+ * @property {Object} props.styles - Styles object tree
+ * @property {Object} props.themePath - Custom path to styles on the theme
+ * @property {Object} props.type - Theme type to use
+ * @property {Object} props.children - Custom Children of the loading component
  *
  */
 export const Loading = props => {
   const {
+    className,
     children,
     text = 'Loading',
     indicator,
@@ -57,10 +72,13 @@ export const Loading = props => {
     type = 'default',
   } = props
 
-  const [builtStyles] = useThemePath(themePath || `loading.${type}`, styles)
+  const builtStyles = useThemePath(themePath || `loading.${type}`, styles)
 
   return (
-    <View style={builtStyles.container}>
+    <View
+      style={builtStyles.main}
+      className={useClassList('keg-loading', className)}
+    >
       { children || (
         <Progress
           styles={builtStyles}
@@ -77,6 +95,5 @@ export const Loading = props => {
 Loading.propTypes = {
   text: PropTypes.string,
   style: PropTypes.object,
-  wrapStyle: PropTypes.object,
   children: PropTypes.object,
 }

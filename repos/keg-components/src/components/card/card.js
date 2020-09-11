@@ -3,17 +3,16 @@ import PropTypes from 'prop-types'
 import { useThemePath, useMediaProps } from 'KegHooks'
 
 // Card children imports
-import { CardBody } from './cardBody'
+import { CardContent } from './cardContent'
 import { CardContainer } from './cardContainer'
-import { CardFooter } from './cardFooter'
-import { CardHeader } from './cardHeader'
+import { CardSection } from './cardSection'
 import { CardMedia } from './cardMedia'
 
 export const Card = ({ styles, ...props }) => {
-  styles = styles || {}
-
   const {
+    contentTitle,
     children,
+    className,
     Footer,
     footerLines,
     Header,
@@ -28,56 +27,80 @@ export const Card = ({ styles, ...props }) => {
     ...attributes
   } = props
 
-  const [cardStyles] = useThemePath(themePath || `card.${type}`, styles)
+  const cardStyles = useThemePath(themePath || `card.${type}`, styles)
   const mediaProps = useMediaProps({ Media, image, video, styles: cardStyles })
+  const hasMedia = Boolean(Media || mediaProps)
+  const hasContent = Boolean(children || title || subtitle)
 
   return (
     <CardContainer
+      className={className}
       attributes={attributes}
       styles={cardStyles}
     >
       { Header && (
-        <CardHeader
-          Header={Header}
+        <CardSection
+          Section={Header}
+          type='header'
           numberOfLines={headerLines}
-          styles={cardStyles}
+          styles={cardStyles.header}
+          showBorder={!hasMedia}
         />
       ) }
 
-      { (Media || mediaProps) && (
+      { hasMedia && (
         <CardMedia
+          mediaProps={mediaProps}
+          styles={cardStyles.media}
+          hasHeader={Boolean(Header)}
+        />
+      ) }
+
+      { hasContent && (
+        <CardContent
           title={title}
           subtitle={subtitle}
-          mediaProps={mediaProps}
-          styles={cardStyles}
+          styles={cardStyles.content}
+          children={children}
         />
       ) }
 
-      { children && <CardBody
-        style={cardStyles.body}
-        children={children}
-      /> }
-
       { Footer && (
-        <CardFooter
-          footer={Footer}
+        <CardSection
+          Section={Footer}
+          type='footer'
           numberOfLines={footerLines}
-          styles={cardStyles}
+          styles={cardStyles.footer}
+          showBorder={hasContent}
         />
       ) }
     </CardContainer>
   )
 }
 
-Card.Body = CardBody
+Card.Body = CardContent
 Card.Container = CardContainer
-Card.Header = CardHeader
-Card.Footer = CardFooter
+Card.Header = CardSection
+Card.Footer = CardSection
 Card.Media = CardMedia
 
 Card.propTypes = {
+  contentTitle: PropTypes.string,
+  Footer: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.string,
+    PropTypes.func,
+    PropTypes.element,
+  ]),
   footerLines: PropTypes.number,
-  header: PropTypes.string,
+  Header: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.string,
+    PropTypes.func,
+    PropTypes.element,
+  ]),
   headerLines: PropTypes.number,
   Media: PropTypes.oneOfType([
     PropTypes.object,

@@ -1,10 +1,9 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ItemHeader, Button, View, Image } from '../..'
+import { ItemHeader, Button, View, Image, Touchable } from '../'
+import { Android, ArrowLeft, Search } from '../../assets/icons'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
-import { TouchableOpacity } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons'
 
 const buttonStyles = {
   main: { backgroundColor: 'transparent' },
@@ -44,7 +43,7 @@ const CustomComponentButtons = () => {
 
 const SVIcon = () => {
   return (
-    <TouchableOpacity
+    <Touchable
       activeOpacity={0.5}
       onPress={action('Image clicked')}
     >
@@ -56,9 +55,10 @@ const SVIcon = () => {
           width: 200,
           alignSelf: 'center',
         }}
+        useLoading={false}
         src='https://www.trilogyed.com/blog/wp-content/uploads/2020/07/simpleview_primary-696x110.png'
       />
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 
@@ -84,18 +84,7 @@ const headerStyles2 = {
   },
 }
 
-const customDataSet = {
-  main: { class: 'custom-header-main' },
-  content: {
-    left: {
-      main: { class: 'custom-data-set-left' },
-    },
-    center: {
-      main: { class: 'custom-data-set-center' },
-    },
-  },
-}
-storiesOf('Header | ItemHeader', module)
+storiesOf('Header/ItemHeader', module)
   .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
       <ItemHeader
@@ -111,9 +100,8 @@ storiesOf('Header | ItemHeader', module)
         shadow
         title={'Custom Icons, no left action'}
         styles={headerStyles2}
-        IconComponent={FontAwesome}
-        leftIcon={'android'}
-        rightIcon={'search'}
+        LeftIconComponent={Android}
+        RightIconComponent={Search}
         onRightClick={action('Right Section Clicked!')}
       />
     </StoryWrap>
@@ -121,7 +109,6 @@ storiesOf('Header | ItemHeader', module)
   .add('Plain', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
       <ItemHeader
-        dataSet={customDataSet}
         shadow
         title={'Keg Components'}
       />
@@ -137,8 +124,15 @@ storiesOf('Header | ItemHeader', module)
       <p />
       <ItemHeader
         title={'Clickable left icon'}
-        IconComponent={FontAwesome}
-        leftIcon={'arrow-left'}
+        LeftIconComponent={
+          <ArrowLeft
+            style={{
+              color: `#FFFFFF`,
+              fontSize: 30,
+              paddingLeft: 10,
+            }}
+          />
+        }
         onLeftClick={action('Left Section Clicked!')}
       />
     </StoryWrap>

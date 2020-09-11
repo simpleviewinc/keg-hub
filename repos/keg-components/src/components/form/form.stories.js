@@ -6,7 +6,7 @@ import { Checkbox, Form, Input, Label, Option, Select, Switch } from '../../'
 
 const inputStyles = { marginBottom: 15, width: 200 }
 
-storiesOf('Form | Form', module).add('Default', () => (
+storiesOf('Form/Form', module).add('Default', () => (
   <StoryWrap>
     <Form name='story-form'>
       <Label>Enter Some Text</Label>
@@ -45,6 +45,7 @@ storiesOf('Form | Form', module).add('Default', () => (
       <Label>Switch Me</Label>
       <Switch
         styles={{ main: { marginBottom: 15 } }}
+        onChange={action('Switch Click!')}
         close
         RightComponent={"I'm a Switch"}
       />
@@ -54,6 +55,7 @@ storiesOf('Form | Form', module).add('Default', () => (
       <Label>Click Me</Label>
       <Checkbox
         style={{ main: { marginBottom: 15 } }}
+        onChange={action('Checkbox Click!')}
         close
         RightComponent={"I'm a Checkbox"}
       />

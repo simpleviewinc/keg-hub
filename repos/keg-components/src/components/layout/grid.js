@@ -4,6 +4,7 @@ import { Row } from './row'
 import PropTypes from 'prop-types'
 import { useTheme } from '@keg-hub/re-theme'
 import { isArr, get } from '@keg-hub/jsutils'
+import { useClassList } from 'KegClassList'
 
 /**
  * Builds the styles based on the passed in isCenter param
@@ -41,20 +42,21 @@ const getChildAttrs = children => {
   )
 }
 
-export const Grid = ({ children, style, ...props }) => {
+export const Grid = ({ className, children, style, ...props }) => {
   const theme = useTheme()
   const { isRow, isCenter } = getChildAttrs(children)
 
   return (
     <Container
       {...props}
+      className={useClassList('keg-grid', className)}
       flexDir={isRow ? 'column' : 'row'}
       size={1}
-      style={theme.join(
+      style={[
         get(theme, [ 'layout', 'grid', 'wrapper' ]),
         style,
-        isCenter && buildCenterStyles(isCenter)
-      )}
+        isCenter && buildCenterStyles(isCenter),
+      ]}
     >
       { children }
     </Container>
