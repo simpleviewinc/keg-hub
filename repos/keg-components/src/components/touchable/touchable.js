@@ -24,10 +24,9 @@ const TouchableComp =
  *
  */
 export const Touchable = React.forwardRef((props, ref) => {
-  const { className, showFeedback = true, ...attrs } = props
+  const { className, showFeedback = true, touchRef, ...attrs } = props
   const Component = showFeedback ? TouchableComp : TouchableWithoutFeedback
-
-  const classRef = useClassName('keg-touchable', className, ref)
+  const classRef = useClassName('keg-touchable', className, touchRef || ref)
 
   return <Component
     accessible={true}

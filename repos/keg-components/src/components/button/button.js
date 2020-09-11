@@ -41,14 +41,13 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
  * @property {Object} props.ref - reference to native element
  *
  */
-export const Button = props => {
+export const Button = React.forwardRef((props, ref) => {
   const {
     className,
     children,
     content,
     onClick,
     onPress,
-    ref,
     styles,
     type = 'default',
     themePath,
@@ -81,14 +80,14 @@ export const Button = props => {
         className
       )}
       {...elProps}
-      ref={themeRef}
+      touchRef={themeRef}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}
       children={getChildren(children || content, themeStyles)}
       {...getPressHandler(false, onClick, onPress)}
       {...getActiveOpacity(false, props, btnStyles)}
     />
   )
-}
+})
 
 Button.propTypes = {
   ...Touchable.propTypes,

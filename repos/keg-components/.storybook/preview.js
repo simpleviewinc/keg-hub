@@ -1,10 +1,11 @@
 import React from 'react'
-import { Dimensions, Platform } from 'react-native'
-import { addDecorator, addParameters } from '@storybook/react'
 import { View } from 'KegView'
-import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 import { theme } from '../src/theme'
 import { isStr } from '@keg-hub/jsutils'
+import { Dimensions, Platform } from 'react-native'
+import { configureActions } from '@storybook/addon-actions'
+import { addDecorator, addParameters } from '@storybook/react'
+import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 
 const parsePart = (full, part) => {
   return !part || part.indexOf('@summary') === 0
@@ -33,6 +34,11 @@ addParameters({
   },
 })
 
+configureActions({
+  depth: 3,
+  limit: 20,
+})
+
 addDecorator(storyFn =>
   <ReThemeProvider theme={ theme } >
     <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
@@ -43,17 +49,3 @@ addDecorator(storyFn =>
 
 setRNPlatform(Platform)
 setRNDimensions(Dimensions)
-
-const IGNORE_WARN = [
-  'Ignored an update',
-  'Story with id',
-]
-
-const orgWarn = console.warn
-console.warn = function override(...args) {
-  const logString = args[0]
-  !isStr(logString) ||
-    !IGNORE_WARN.some(ignoreMessage => logString.trim().startsWith(ignoreMessage)) &&
-    // Call the original warning log
-    orgWarn.apply(console, [ ...args ])
-}

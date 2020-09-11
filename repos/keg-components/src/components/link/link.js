@@ -26,7 +26,7 @@ const Element = React.forwardRef((props, ref) => {
       className={useClassList('keg-link', className)}
       {...elProps}
       {...attrs}
-      ref={ref}
+      touchRef={ref}
     >
       <Text
         accessibilityRole='link'

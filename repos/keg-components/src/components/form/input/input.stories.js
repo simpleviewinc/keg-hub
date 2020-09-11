@@ -40,16 +40,3 @@ storiesOf('Form/Input', module)
       <Input onPress={action('Input clicked')} />
     </StoryWrap>
   ))
-  .add('Read only', () => (
-    <StoryWrap>
-      <Input
-        value="Sorry, I'm read only."
-        readOnly
-      />
-    </StoryWrap>
-  ))
-  .add('Placeholder', () => (
-    <StoryWrap>
-      <Input placeholder='Type here...' />
-    </StoryWrap>
-  ))
