@@ -1,12 +1,11 @@
 import { noOpObj } from '../helpers/noOp'
-import { stringHasher } from '../helpers/stringHasher'
 import { getCssSelector } from '../helpers/getCssSelector'
 import { isObj, reduceObj, get, set } from '@keg-hub/jsutils'
 
 /**
  * Adds a value to the passed in styleObj at the passed in rulePath
  * @function
- * @param {Object} styleObj - Object to be updated with styles
+ * @param {Object} styleObj - Object to be updated with style
  * @param {string} rulePath - Path on the object to update
  * @param {string|number} value - Value to set at the rulePath of the styleObj
  *
@@ -18,47 +17,47 @@ const addRuleToStyles = (styleObj, rulePath, value) => {
 }
 
 /**
- * Calls addRuleToStyles passing props based on the web || cssProps existence
+ * Calls addRuleToStyles passing props based on the web || styleProps existence
  * @function
  * @param {Object} web - Object that stores web Styles
- * @param {Object} cssProps - Object that stores native Styles and the dataSet object
+ * @param {Object} styleProps - Object that stores native Styles and the dataSet object
  * @param {string} rulePath - Path on the object to update
  * @param {string|number} value - Value to set at the rulePath of the styleObj
  *
  * @returns {string} - Hashed version of the string
  */
 const buildStyleRules = (current, config, rule, value) => {
-  const { web, cssProps, custom } = current
+  const { web, styleProps, custom } = current
   const cssValue = isObj(custom) && custom[rule] || value
 
   const selector = getCssSelector(config)
-  const rulePath = web ? `styles.${selector}.${rule}` : `style.${rule}`
+  const rulePath = web ? `style.${selector}.${rule}` : `style.${rule}`
 
-  addRuleToStyles(web || cssProps, rulePath, cssValue)
+  addRuleToStyles(web || styleProps, rulePath, cssValue)
 
-  return { web, cssProps, selector }
+  return { web, styleProps, selector }
 }
 
 /**
- * Adds the dataSet to the cssProps object
+ * Adds the dataSet to the styleProps object
  * @function
  * @param {Object} web - Object that stores web Styles
- * @param {Object} cssProps - Object that stores native Styles and the dataSet object
+ * @param {Object} styleProps - Object that stores native Styles and the dataSet object
  * @param {string} key - Name of the css rule || child style object
  * @param {string|number} value - Value to set at the rulePath of the styleObj
  *
  * @returns {string} - Hashed version of the string
  */
-const addDataSet = (web, cssProps, key, selector, dataSet) => {
-  (web && get(web, `styles.${selector}`) || get(cssProps, `${key}.style`)) &&
-    set(cssProps, `${key}.dataSet`,  dataSet)
+const addDataSet = (web, styleProps, key, selector, dataSet) => {
+  (web && get(web, `style.${selector}`) || get(styleProps, `${key}.style`)) &&
+    set(styleProps, `${key}.dataSet`,  dataSet)
 }
 
 /**
  * Builds style rules of child style objects
  * @function
  * @param {Object} web - Object that stores web Styles
- * @param {Object} cssProps - Object that stores native Styles and the dataSet object
+ * @param {Object} styleProps - Object that stores native Styles and the dataSet object
  * @param {string} rootClass - Root class to build the rules for
  * @param {string} key - Name of the css rule || child style object
  * @param {string|number|Object} value - Value to set at the rulePath of the styleObj
@@ -66,13 +65,13 @@ const addDataSet = (web, cssProps, key, selector, dataSet) => {
  * @returns {string} - Built child style object
  */
 const buildDataSet = (current, config, key, value) => {
-  const { web, cssProps } = current
+  const { web, styleProps } = current
   const custom = isObj(current.custom) && current.custom[key] || noOpObj
 
   // Build the class name to be used in the dataSet and web
   const selector = `${config.selector}-${key}`
 
-  // Recursively call buildDataSet on each child object of the original cssProps
+  // Recursively call buildDataSet on each child object of the original styleProps
   const built = generateDataSet(
     web,
     value,
@@ -80,38 +79,35 @@ const buildDataSet = (current, config, key, value) => {
     { ...config, selector },
   )
 
-  // Set the sub-cssProps to the key of the parent cssProps
-  cssProps[key] = built.cssProps
+  // Set the sub-styleProps to the key of the parent styleProps
+  styleProps[key] = built.styleProps
 
-  addDataSet(web, cssProps, key, built.selector, { class: selector })
+  addDataSet(web, styleProps, key, built.selector, { class: selector })
 
-  // Create a hash of the selector to identify it later in in the HeadProvider
-  web && web.hash.push(stringHasher(selector))
-
-  // Merge web styles and return web and cssProps
-  return { cssProps, web: web && { ...web, ...built.web } }
+  // Merge web style and return web and styleProps
+  return { styleProps, web: web && { ...web, ...built.web } }
 
 }
 
 /**
- * Builds the cssProps to be returned to the calling component
+ * Builds the styleProps to be returned to the calling component
  * <br/> The method returns valid component props, which means
- * <br/> The cssProps can and should be applied directly to the component
+ * <br/> The styleProps can and should be applied directly to the component
  * <br/> It builds a dataSet: { class: <dynamic-class> } based on the path to found style rules
  * @example
  * const css = { content: { icon: { color: 'green' }}}
- * const cssProps = buildDataSet(`class`, css)
- * // cssProps === { content: { icon: { style: { color: 'blue' }, dataSet: { class: `class-content-icon` }}}}
+ * const styleProps = buildDataSet(`class`, css)
+ * // styleProps === { content: { icon: { style: { color: 'blue' }, dataSet: { class: `class-content-icon` }}}}
  * // dataSet.class === css.content.icon === `class-content-icon`
- * // The class value `cssProps.content.icon.dataSet.class` is built from the cssStyle path to the Icon
+ * // The class value `styleProps.content.icon.dataSet.class` is built from the cssStyle path to the Icon
  * @function
  * 
- * @param {Object} web - Empty object to hold the styles when in on a Web Platform
+ * @param {Object} web - Empty object to hold the style when in on a Web Platform
  * @param {Object} css - CssInJs style object
- * @param {Object} [custom={}] - Custom styles to merge with the theme css
+ * @param {Object} [custom={}] - Custom style to merge with the theme css
  * @param {Object} [config={}] - Config object for building style rules
  * 
- * @returns {Object} - cssProps Object, containing style and dataSet keys
+ * @returns {Object} - styleProps Object, containing style and dataSet keys
  */
 export const generateDataSet = (web, css, custom, config={}) => {
 
@@ -126,7 +122,7 @@ export const generateDataSet = (web, css, custom, config={}) => {
           value,
         )
       // If it's not an object, it must by style rules
-      // So make call to add it to the styles object
+      // So make call to add it to the style object
       : buildStyleRules(
           built,
           config,
@@ -134,5 +130,5 @@ export const generateDataSet = (web, css, custom, config={}) => {
           value,
         )
 
-  }, { cssProps: {}, web, custom })
+  }, { styleProps: {}, web, custom })
 }

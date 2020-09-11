@@ -39,7 +39,7 @@ const renderHeadElement = (props={}) => {
   const { HeadElement } = require('../headElement')
 
   return HeadElement({
-    tag: 'style',
+    Tag: 'style',
     children: '.test { color: blue }',
     ...props,
   })

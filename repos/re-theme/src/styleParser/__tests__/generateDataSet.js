@@ -25,8 +25,8 @@ const themeStyles = {
 
 const webClass = 'web-test-root-class'
 const webDataSetProp = [
-  { hash: [] }, // web
-  themeStyles, // cssProps
+  {}, // web
+  themeStyles, // styleProps
   {}, // custom style
   { 
     selector: webClass,
@@ -38,7 +38,7 @@ const webDataSetProp = [
 const nativeClass = 'native-test-root-class'
 const nativeDataSetProp = [
   false, // web
-  themeStyles, // cssProps
+  themeStyles, // styleProps
   {}, // custom style
   {
     selector: nativeClass,
@@ -59,9 +59,9 @@ describe('generateDataSet', () => {
 
     const built = generateDataSet(...webDataSetProp)
 
-    const mainClass = get(built, 'cssProps.main.dataSet.class')
-    const titleClass = get(built, 'cssProps.content.title.dataSet.class')
-    const buttonClass = get(built, 'cssProps.content.button.dataSet.class')
+    const mainClass = get(built, 'styleProps.main.dataSet.class')
+    const titleClass = get(built, 'styleProps.content.title.dataSet.class')
+    const buttonClass = get(built, 'styleProps.content.button.dataSet.class')
 
     expect(mainClass).toBe(`${webClass}-main`)
     expect(titleClass).toBe(`${webClass}-content-title`)
@@ -73,9 +73,9 @@ describe('generateDataSet', () => {
 
     const built = generateDataSet(...webDataSetProp)
 
-    const mainStyle = get(built, 'cssProps.main.style')
-    const titleStyle = get(built, 'cssProps.content.title.style')
-    const buttonStyle = get(built, 'cssProps.content.button.style')
+    const mainStyle = get(built, 'styleProps.main.style')
+    const titleStyle = get(built, 'styleProps.content.title.style')
+    const buttonStyle = get(built, 'styleProps.content.button.style')
 
     expect(mainStyle).toBe(undefined)
     expect(titleStyle).toBe(undefined)
@@ -83,10 +83,10 @@ describe('generateDataSet', () => {
 
   })
 
-  it('should build web styles props on web', () => {
+  it('should build web style props on web', () => {
 
     const built = generateDataSet(...webDataSetProp)
-    const webStyle = get(built, 'web.styles')
+    const webStyle = get(built, 'web.style')
 
     expect(typeof webStyle).toBe('object')
 
@@ -95,7 +95,7 @@ describe('generateDataSet', () => {
   it('should convert the data-set class values to data-attribute selectors', () => {
 
     const built = generateDataSet(...webDataSetProp)
-    const webStyle = get(built, 'web.styles')
+    const webStyle = get(built, 'web.style')
     const mainStyle = webStyle[`[data-class~=\"${webClass}-main\"]`]
     const titleStyle = webStyle[`[data-class~=\"${webClass}-content-title\"]`]
     const buttonStyle = webStyle[`[data-class~=\"${webClass}-content-button\"]`]
@@ -120,23 +120,23 @@ describe('generateDataSet', () => {
 
     const built = generateDataSet(...nativeDataSetProp)
 
-    const mainStyle = get(built, 'cssProps.main.style')
-    const mainClass = get(built, 'cssProps.main.dataSet.class')
+    const mainStyle = get(built, 'styleProps.main.style')
+    const mainClass = get(built, 'styleProps.main.dataSet.class')
 
     expect(mainStyle.flexDirection).toBe(themeStyles.main.flexDirection)
     expect(mainStyle.height).toBe(themeStyles.main.height)
     expect(mainStyle.backgroundColor).toBe(themeStyles.main.backgroundColor)
     expect(mainClass).toBe(`${nativeClass}-main`)
 
-    const titleStyle = get(built, 'cssProps.content.title.style')
-    const titleClass = get(built, 'cssProps.content.title.dataSet.class')
+    const titleStyle = get(built, 'styleProps.content.title.style')
+    const titleClass = get(built, 'styleProps.content.title.dataSet.class')
 
     expect(titleStyle.alignSelf).toBe(themeStyles.content.title.alignSelf)
     expect(titleStyle.paddingLeft).toBe(themeStyles.content.title.paddingLeft)
     expect(titleClass).toBe(`${nativeClass}-content-title`)
 
-    const buttonStyle = get(built, 'cssProps.content.button.style')
-    const buttonClass = get(built, 'cssProps.content.button.dataSet.class')
+    const buttonStyle = get(built, 'styleProps.content.button.style')
+    const buttonClass = get(built, 'styleProps.content.button.dataSet.class')
 
     expect(buttonStyle.flexDirection).toBe(themeStyles.content.button.flexDirection)
     expect(buttonStyle.alignItems).toBe(themeStyles.content.button.alignItems)
@@ -145,7 +145,7 @@ describe('generateDataSet', () => {
 
   })
 
-  it('should NOT build web styles for on native', () => {
+  it('should NOT build web style for on native', () => {
 
     const built = generateDataSet(...nativeDataSetProp)
     expect(built.web).toBe(false)
@@ -155,8 +155,8 @@ describe('generateDataSet', () => {
   it('should NOT build props for non-style-object', () => {
 
     const built = generateDataSet(...nativeDataSetProp)
-    const contentStyle = get(built, 'cssProps.content.style')
-    const contentClass = get(built, 'cssProps.content.dataSet')
+    const contentStyle = get(built, 'styleProps.content.style')
+    const contentClass = get(built, 'styleProps.content.dataSet')
 
     expect(contentStyle).toBe(undefined)
     expect(contentClass).toBe(undefined)

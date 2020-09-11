@@ -8,8 +8,8 @@ import { useCss } from './useCss'
  * @example
  * const buildStyle = (theme, styles) => { return { ...theme.myComponent, ...styles } }
  * const { cssProps, styleProps } = useCssCallback(buildStyle, customStyles, [], { selector: rootClass })
- * <Style {...styleProps} />
- * <View {...cssProps} >My View</View>
+ * <Style {...cssProps} />
+ * <View {...styleProps} >My View</View>
  * 
  * @param {function} cssCb - Callback function to build the styles
  * @param {Array} cbDependencies - List of dependencies passed to useCallback hook for the stylesCb
