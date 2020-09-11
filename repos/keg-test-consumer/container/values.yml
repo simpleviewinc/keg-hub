@@ -1,26 +1,3 @@
-actions:
-  run:
-    location: /keg/app
-    cmds:
-      - /bin/bash /keg/app/container/run.sh
-  install:
-    location: /keg/app
-    cmds:
-      - yarn install
-  build:
-    location: /keg/app
-    cmds:
-      - yarn build
-  start:
-    location: /keg/app
-    detach: true
-    cmds:
-      - yarn dev
-  app:
-    location: /keg/app
-    detach: true
-    cmds:
-      - yarn app
 env:
 
   # --- KEG-CLI ENV CONTEXT --- #
@@ -58,3 +35,8 @@ env:
   IMAGE: keg-test-consumer
   CONTAINER_NAME: keg-test-consumer
   VERSION: "0.0.1"
+
+  # --- KEG TEST CONSUMER ENVs --- #
+  # taps can check this environment variable to determine
+  # where to place the build output
+  KEG_CONSUMER_BUILD_PATH: /keg/app/node_modules/@keg-hub/tap-evf-sessions

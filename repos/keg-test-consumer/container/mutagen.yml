@@ -22,22 +22,18 @@ sync:
 actions:
   evf:
     install: 
-      # location: /keg/app/node_modules/@keg-hub/tap-evf-sessions
       location: /keg/tap
       privileged: true
       cmds:
         - yarn install
     build:
-      # location: /keg/app/node_modules/@keg-hub/tap-evf-sessions
       location: /keg/tap
       privileged: true
       cmds:
         - yarn roll:dev
     start:
-      # location: /keg/app/node_modules/@keg-hub/tap-evf-sessions
       location: /keg/tap
       privileged: true
-      detach: true
       cmds:
         - yarn dev
 

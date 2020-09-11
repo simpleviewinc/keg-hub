@@ -23,6 +23,7 @@ services:
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL
+      - KEG_CONSUMER_BUILD_PATH
       - NODE_ENV
     ports:
       - 80:${DOC_APP_PORT}
