@@ -32,6 +32,9 @@ addParameters({
         : null
     },
   },
+  options: {
+    enableShortcuts: false
+  }
 })
 
 configureActions({

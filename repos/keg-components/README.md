@@ -127,7 +127,7 @@ export const button = {
 ## Icons
  * **TODO - add info on adding SVG's**
 
-## Accessability
+## Accessibility
 
 * Mapping of accessibilityRole prop value to Web Element
 * Example => `<Link accessibilityRole='link'>` => `<a role='link'>`

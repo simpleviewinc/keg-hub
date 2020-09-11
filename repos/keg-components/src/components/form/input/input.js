@@ -9,8 +9,6 @@ import {
 import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
 import { withTouch } from '../../../hocs'
-import { getPlatform } from 'KegGetPlatform'
-const isWeb = getPlatform() === 'web'
 
 /**
  * Gets the key value pair for the select components value
@@ -54,10 +52,10 @@ export const Input = forwardRef((props, ref) => {
     <TextInputTouch
       accessibilityRole='textbox'
       onPress={onPress}
-      {...getReadOnly(isWeb, readOnly, disabled, editable)}
-      {...getValue(props, isWeb)}
+      {...getReadOnly(false, readOnly, disabled, editable)}
+      {...getValue(props, false)}
       {...useInputHandlers({ onChange, onValueChange, onChangeText })}
-      {...usePressHandlers(isWeb, { onClick, onPress })}
+      {...usePressHandlers(false, { onClick, onPress })}
       {...elProps}
       style={[ inputStyles, style ]}
       ref={classRef}

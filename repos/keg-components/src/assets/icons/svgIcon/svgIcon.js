@@ -10,17 +10,18 @@ const useSize = (size, style, theme) => {
     const themeSize = get(theme, 'typography.default.fontSize', 15) * 2
     return {
       height: iconSize || get(style, 'height', themeSize),
-      width: iconSize || get(style, 'width', themeSize)
+      width: iconSize || get(style, 'width', themeSize),
     }
-  }, [size, style])
+  }, [ size, style ])
 }
 
 const useColor = (fill, stroke, color, border, style, theme) => {
   return useMemo(() => {
     const themeColor = get(theme, 'typography.default.color')
     return {
-      stroke: stroke || border || style.border || color || style.color || themeColor,
-      fill: fill || color || style.color || stroke
+      stroke:
+        stroke || border || style.border || color || style.color || themeColor,
+      fill: fill || color || style.color || stroke,
     }
   }, [ fill, stroke, color, border, style ])
 }
@@ -40,9 +41,6 @@ export const SvgIcon = props => {
   } = props
 
   const theme = useTheme()
-  const strokeColor = stroke || border || style.border || color || style.color
-  const fillColor = fill || color || style.color || stroke
-
   const sizeStyle = useSize(size, style, theme)
   const colorStyle = useColor(fill, stroke, color, border, style, theme)
 
