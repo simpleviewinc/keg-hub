@@ -1,3 +1,10 @@
+/****************** IMPORTANT ******************/ /*
+ * This component is a work in progress
+ * It's NOT complete or expected to be working
+ * It is NOT exported from the main components export
+ * It is NOT included in the keg-components bundle
+/****************** IMPORTANT ******************/
+
 import { View } from '../view'
 import PropTypes from 'prop-types'
 import { get } from '@keg-hub/jsutils'

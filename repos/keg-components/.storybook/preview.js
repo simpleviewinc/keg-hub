@@ -36,7 +36,7 @@ addParameters({
 
 configureActions({
   depth: 3,
-  limit: 20,
+  limit: 30,
 })
 
 addDecorator(storyFn =>
