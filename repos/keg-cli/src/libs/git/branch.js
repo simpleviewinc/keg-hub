@@ -94,15 +94,20 @@ const doGitAction = async (git, action, args, cmdOpts) => {
   args.location = args.location || process.cwd()
   args.action = action
 
-  const gitCmd = [ 'git', action ]
+  const toRun = [ 'git', action ]
   const remote = await ensureGitRemote(git, args)
   args.remote = args.remote
-  remote && gitCmd.push(remote)
+  remote && toRun.push(remote)
 
-  const pushTo = await ensureGitBranch(git, args)
-  gitCmd.push(pushTo)
+  const withBranch = await ensureGitBranch(git, args)
+  if(!withBranch) return { data: `Failed to find branch to push to!`, exitCode: 1 }
+  
+  toRun.push(withBranch)
 
-  return gitCmd(gitCmd, buildCmdOpts(cmdOpts, args))
+  const resp = await gitCmd(toRun, buildCmdOpts(cmdOpts, args))
+
+  return { data: resp, exitCode: 0 }
+
 }
 
 /**
@@ -152,7 +157,16 @@ class Branch {
     }, {}, location)
 
     const remotes = await this.git.remote.list(location, options)
+
     return formatBranches(branches, remotes)
+  }
+
+
+  get = async (location=process.cwd(), name, options) => {
+    const branches = await this.list(location, options)
+    return branches.reduce((found, branch) => {
+      return found || branch.name !== name ? found : branch
+    }, null)
   }
 
   /**
@@ -206,7 +220,7 @@ class Branch {
   *
   * @returns {Object} - Current branch object
   */
-  push = (args, cmdOpts={}) => {
+  push = async (args, cmdOpts={}) => {
     return doGitAction(this.git, `push`, args, cmdOpts)
   }
 
