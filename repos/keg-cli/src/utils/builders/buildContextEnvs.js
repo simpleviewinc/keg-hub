@@ -51,7 +51,7 @@ const buildContextEnvs = async (args) => {
     ...convertParamsToEnvs(params),
 
     // ---- IMPORTANT ---- //
-    // Set the compose project name last
+    // Set the compose project`s name last
     // This way it does not get overwritten
     // It will ensure all projects are on the same network
     COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME,

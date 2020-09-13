@@ -5,6 +5,16 @@ services:
     tty: true
     stdin_open: true
     privileged: true
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tap.rule=Host(`tap.local.kegdev.xyz`)
+      - traefik.http.routers.tap.entrypoints=keg
+      - traefik.http.services.tap.loadbalancer.server.port=${DOC_APP_PORT}
+      - com.keg.env.context=tap
+      - com.keg.env.cmd=${KEG_EXEC_CMD:-tap:start}
+      - com.keg.env.port=${DOC_APP_PORT}
+      - com.keg.path.local=${KEG_CONTEXT_PATH}
+      - com.keg.path.container=${DOC_APP_PATH}
     volumes:
       - ${CLI_PATH}:${DOC_CLI_PATH}
     build:
@@ -35,11 +45,6 @@ services:
     container_name: ${CONTAINER_NAME}
     environment:
       - CHOKIDAR_USEPOLLING
-      - CADDY_HOST
-      - CADDY_PROXY_PARAMS
-      - CADDY_BASIC_AUTH
-      - CADDY_DISABLE_TLS
-      - CADDY_PORT
       - DOC_APP_PATH
       - DOC_CLI_PATH
       - DOC_CORE_PATH
@@ -62,4 +67,4 @@ services:
       - TAP
     ports:
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
-      - 80:${DOC_APP_PORT}
+      - ${DOC_APP_PORT}:${DOC_APP_PORT}
