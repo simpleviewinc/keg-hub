@@ -11,7 +11,6 @@ services:
         - GIT_COMPONENTS_URL
         - GIT_RETHEME_URL
         - GIT_RESOLVER_URL
-        - GIT_PROXY_URL
         - DOC_CLI_PATH
         - DOC_CORE_PATH
         - DOC_COMPONENTS_PATH
@@ -21,9 +20,6 @@ services:
         - PUBLIC_GIT_KEY
     container_name: ${CONTAINER_NAME}
     environment:
-      - CADDY_HOST
-      - CADDY_PROXY_PARAMS
-      - CADDY_BASIC_AUTH
       - EXPO_DEBUG_PORT
       - EXPO_APP_PORT
       - GIT_CLI_URL
@@ -31,7 +27,6 @@ services:
       - GIT_COMPONENTS_URL
       - GIT_RETHEME_URL
       - GIT_RESOLVER_URL
-      - GIT_PROXY_URL
       - DOC_CLI_PATH
       - DOC_CORE_PATH
       - DOC_COMPONENTS_PATH
