@@ -16,24 +16,24 @@ const { confirmExec } = require('KegUtils/helpers/confirmExec')
  */
 const branchReset = async (args) => {
   const { globalConfig, params, __internal={} } = args
-  const { context, location, log, tap } = params
+  const { context, location, log, tap, confirm, force } = params
   const { __skipLog } = __internal
   const gitPath = getGitPath(globalConfig, tap || context) || location
   !gitPath && generalError(`Git path does not exist for ${ tap || context || location }`)
 
+  Logger.empty()
+
   confirmExec({
-    confirm: `This permanently deletes all un-tracked files from $1. Are you sure?`,
+    confirm: `This permanently deletes all un-tracked files from ${gitPath}.\nAre you sure?`,
     success: `Git branch reset success!`,
     cancel: `Git branch reset canceled!`,
-    preConfirm: !confirm,
+    preConfirm: force || confirm === false ? true : false,
     execute: async () => {
       // Make call to reset the git branch
       const resp = await git.branch.reset({ location: gitPath, log: !__skipLog && log })
 
-      console.log(resp)
-
-      // log && Logger.log(resp)
-      // Logger.empty()
+      log && Logger.log(resp)
+      Logger.empty()
 
     },
   })
@@ -48,19 +48,33 @@ module.exports = {
     action: branchReset,
     options: {
       context: {
-        description: 'Name of location of the git repo to clean',
+        description: 'Name of the git repo to reset',
         example: 'keg git branch reset --context core',
+      },
+      tap: {
+        description: 'Name of the tap to build a Docker image for',
+        example: 'keg git branch reset --tap visitapps',
+      },
+      location: {
+        description: 'Location of the git repo to clean',
+        example: 'keg git branch reset --location /path/to/my/repo',
+        default: process.cwd()
       },
       confirm: {
         description: 'Confirm before resetting the branch.',
         example: 'keg git branch reset --confirm false',
         default: true,
       },
+      force: {
+        description: `Force reset, don't ask to confirm!`,
+        example: 'keg git branch reset --force',
+        default: false,
+      },
       log: {
         alias: [ 'lg' ],
         description: `Logs the git command being run`,
         example: 'keg git branch --log false',
-        default: true
+        default: false
       },
     }
   }
