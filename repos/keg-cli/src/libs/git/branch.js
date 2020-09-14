@@ -220,7 +220,7 @@ class Branch {
   *
   * @returns {Object} - Current branch object
   */
-  push = async (args, cmdOpts={}) => {
+  push = (args, cmdOpts={}) => {
     return doGitAction(this.git, `push`, args, cmdOpts)
   }
 
@@ -249,6 +249,18 @@ class Branch {
   delete = ({ branch, force, location, log }, cmdOpts={}) => {
     cmdOpts = location ? { ...cmdOpts, cwd: location } : cmdOpts
     return gitCmd(`branch -D ${ branch } ${ force ? '-f' : '' }`.trim(), cmdOpts, log)
+  }
+
+  clean = ({ location, log }, cmdOpts={}) => {
+    cmdOpts = location ? { ...cmdOpts, cwd: location } : cmdOpts
+    return gitCmd(`clean -f .`, cmdOpts, log)
+  }
+
+  reset = async ({ location, log }, cmdOpts={}) => {
+    cmdOpts = location ? { ...cmdOpts, cwd: location } : cmdOpts
+    await this.clean({ location, log }, cmdOpts)
+
+    return gitCmd(`reset --hard`, cmdOpts, log)
   }
 
 }
