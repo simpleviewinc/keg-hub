@@ -12,7 +12,14 @@ const { serviceOptions, startService } = require('KegUtils/services')
  * @returns {void}
  */
 const startProxy = async (args) => {
-  return startService(args, {
+  return startService({
+    ...args,
+    __internal: {
+      ...args.__internal,
+      locationContext: args.task.locationContext,
+    },
+  },
+  {
     context: 'proxy',
     container: 'keg-proxy',
   })
@@ -27,8 +34,6 @@ module.exports = {
     locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Runs keg-proxy in a docker container`,
     example: 'keg proxy start <options>',
-    options: serviceOptions('proxy', 'start', {
-      
-    }),
+    options: serviceOptions('proxy', 'start', {}),
   }
 }

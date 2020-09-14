@@ -1,5 +1,6 @@
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { DOCKER } = require('KegConst/docker')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
 
 /**
  * Build the keg-proxy in docker, without a tap
@@ -19,11 +20,16 @@ const buildProxy = async args => {
   // Build the core image through internal task
   return runInternalTask('tasks.docker.tasks.build', {
     ...args,
+    __internal: {
+      ...args.__internal,
+      locationContext: args.task.locationContext,
+    },
     params: {
       ...args.params,
       tap: undefined,
       context: 'proxy',
       cache: args.params.cache,
+      build: false,
     },
   })
 }
@@ -33,6 +39,7 @@ module.exports = {
     name: 'build',
     alias: [ 'bld', 'make' ],
     action: buildProxy,
+    locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Builds the keg-proxy docker container`,
     example: 'keg proxy build <options>',
     options: {
