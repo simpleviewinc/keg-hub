@@ -1,4 +1,3 @@
-const { ask } = require('@keg-hub/ask-it')
 const { Logger } = require('KegLog')
 const { git } = require('KegGitCli')
 const { getGitPath } = require('KegUtils/git/getGitPath')
