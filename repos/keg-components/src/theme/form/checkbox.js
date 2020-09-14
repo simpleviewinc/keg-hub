@@ -95,7 +95,19 @@ const checkboxClose = deepMerge(checkboxDefault, {
   },
 })
 
+const checkboxDisabled = {
+  main: {
+    $all: {
+      opacity: 0.5,
+    },
+    $web: {
+      cursor: 'not-allowed',
+    },
+  },
+}
+
 export const checkbox = {
   default: checkboxDefault,
   close: checkboxClose,
+  disabled: checkboxDisabled,
 }

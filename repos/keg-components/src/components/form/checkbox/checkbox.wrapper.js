@@ -40,12 +40,20 @@ const useCheckedState = (isChecked, themeStyles) => {
  * @param {boolean} isChecked - Current state of the check value
  * @param {function} setChecked - Update the checked state
  * @param {function} onChange - Callback to call when the state changes
+ * @param {boolean} options.enableCheck - `setChecked` can only be called with `true` if this value is also true
+ * @param {boolean} options.enableUncheck - `setChecked` can only be called with `false` if this value is true
  *
  * @returns {function} - The checked state update function
  */
-const setCheckedValue = (isChecked, setChecked, onChange) => {
+const setCheckedValue = (
+  isChecked,
+  setChecked,
+  onChange,
+  { enableCheck = true, enableUncheck = true }
+) => {
   return event => {
-    setChecked(!isChecked)
+    if (!isChecked) enableCheck && setChecked(true)
+    else enableUncheck && setChecked(false)
     checkCall(onChange, event, !isChecked)
   }
 }
@@ -96,6 +104,8 @@ export const CheckboxWrapper = props => {
     elType,
     Element,
     disabled,
+    disableCheck,
+    disableUncheck,
     isWeb,
     LeftComponent,
     close,
@@ -122,6 +132,19 @@ export const CheckboxWrapper = props => {
     'keg-checkbox',
     className
   )
+
+  // ensure the handler can be fired, so long as the next check state is allowed
+  const canUseHandler =
+    (isChecked && !disableUncheck) || (!isChecked && !disableCheck)
+  const pressHandler =
+    canUseHandler &&
+    getOnChangeHandler(
+      isWeb,
+      setCheckedValue(isChecked, setChecked, onChange || onValueChange, {
+        enableCheck: !disableCheck,
+        enableUncheck: !disableUncheck,
+      })
+    )
 
   return (
     (children && (
@@ -159,10 +182,7 @@ export const CheckboxWrapper = props => {
             disabled={disabled}
             styles={activeStyles.content}
             {...getChecked(isWeb, isChecked)}
-            {...getOnChangeHandler(
-              isWeb,
-              setCheckedValue(isChecked, setChecked, onChange || onValueChange)
-            )}
+            {...pressHandler}
           />
         ) }
 
@@ -223,4 +243,6 @@ CheckboxWrapper.propTypes = {
   themePath: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.bool,
+  disableCheck: PropTypes.bool,
+  disableUncheck: PropTypes.bool,
 }
