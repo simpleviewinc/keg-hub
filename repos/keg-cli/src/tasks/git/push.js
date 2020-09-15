@@ -1,5 +1,6 @@
 const { Logger } = require('KegLog')
 const { git } = require('KegGitCli')
+const { ask } = require('@keg-hub/ask-it')
 const { exists } = require('@keg-hub/jsutils')
 const { getGitPath } = require('KegUtils/git')
 const { generalError } = require('KegUtils/error')
@@ -19,7 +20,13 @@ const gitPushRepo = async args => {
   const { skipLog } = __internal
   const { context, location: repoPath, tap, env, log, ...pushParams } = params
   const location = repoPath || context && getGitPath(globalConfig, tap || context) || process.cwd()
+
+  const doPush = pushParams.force
+    ? await ask.confirm(`Are you sure you want to force push your local changes?`)
+    : true
   
+  if(!doPush) return Logger.log(`Canceled git push task!`)
+
   const { data, exitCode } = await git.branch.push({ ...pushParams, log: exists(skipLog) && !skipLog || log, location })
   
   // Log the outcome of the git push command
