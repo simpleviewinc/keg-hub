@@ -123,28 +123,43 @@ export const CheckboxWrapper = props => {
 
   const [ isChecked, setChecked ] = useState(toBool(checked || value))
 
+  // ensure the handler can be fired, so long as the next check state is allowed
+  const canUseHandler =
+    !disabled &&
+    ((isChecked && !disableUncheck) || (!isChecked && !disableCheck))
+
   const elThemePath =
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
+
   const themeStyles = useThemePath(elThemePath, styles)
   const activeStyles = useCheckedState(isChecked, themeStyles)
+  const disabledStyles = useThemePath(
+    `form.${elType}.disabled`,
+    themeStyles
+  )
+  const activeStyles = useCheckedState(
+    isChecked,
+    canUseHandler ? themeStyles : disabledStyles
+  )
+
+  const defaultPressHandler = setCheckedValue(
+    isChecked,
+    setChecked,
+    onChange || onValueChange,
+    {
+      enableCheck: !disableCheck,
+      enableUncheck: !disableUncheck,
+    }
+  )
+
   const typeClassName = useThemeTypeAsClass(
     elThemePath || type,
     'keg-checkbox',
     className
   )
 
-  // ensure the handler can be fired, so long as the next check state is allowed
-  const canUseHandler =
-    (isChecked && !disableUncheck) || (!isChecked && !disableCheck)
   const pressHandler =
-    canUseHandler &&
-    getOnChangeHandler(
-      isWeb,
-      setCheckedValue(isChecked, setChecked, onChange || onValueChange, {
-        enableCheck: !disableCheck,
-        enableUncheck: !disableUncheck,
-      })
-    )
+    canUseHandler && getOnChangeHandler(isWeb, defaultPressHandler)
 
   return (
     (children && (

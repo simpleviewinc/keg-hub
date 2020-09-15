@@ -61,9 +61,6 @@ const checkboxDefault = {
       },
       on: {},
     },
-    disabled: {
-      opacity: 0.4,
-    },
     left: {
       flex: 1,
       textAlign: 'left',
@@ -95,14 +92,19 @@ const checkboxClose = deepMerge(checkboxDefault, {
   },
 })
 
+const disabledRules = {
+  $all: {
+    opacity: 0.4,
+  },
+  $web: {
+    cursor: 'not-allowed',
+  },
+}
+
 const checkboxDisabled = {
-  main: {
-    $all: {
-      opacity: 0.5,
-    },
-    $web: {
-      cursor: 'not-allowed',
-    },
+  main: {},
+  content: {
+    main: disabledRules,
   },
 }
 
