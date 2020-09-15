@@ -51,7 +51,7 @@ module.exports = {
         example: 'keg git branch reset --context core',
       },
       tap: {
-        description: 'Name of the tap to build a Docker image for',
+        description: 'Name of the tap to reset. Tap must be linked!',
         example: 'keg git branch reset --tap visitapps',
       },
       location: {
