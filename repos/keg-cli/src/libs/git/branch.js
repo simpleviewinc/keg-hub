@@ -1,9 +1,8 @@
 const { Logger } = require('KegLog')
 const { gitCli, gitCmd } = require('./commands')
 const { checkCall } = require('@keg-hub/jsutils')
-const { buildCmdOpts, ensureGitRemote, ensureGitBranch } = require('./helpers')
 const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
-
+const { buildCmdOpts, ensureGitRemote, ensureGitBranch } = require('./helpers')
 /**
  * Matches any * or - character that does not have a alphanumeric character following it
  * @example
@@ -103,6 +102,8 @@ const doGitAction = async (git, action, args, cmdOpts) => {
   if(!withBranch) return { data: `Failed to find branch to push to!`, exitCode: 1 }
   
   toRun.push(withBranch)
+
+  args.force && toRun.push('--force')
 
   const resp = await gitCmd(toRun, buildCmdOpts(cmdOpts, args))
 
