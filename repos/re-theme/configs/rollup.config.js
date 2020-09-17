@@ -20,8 +20,8 @@ const buildPath = `./build`
 // Example => Not all apps that use re-theme need the styleParser
 // So we export it separately to keep bundle size down
 const inputs = {
-  styleParser: './src/styleParser/index.js',
-  head: './src/head/index.js',
+  styleInjector: './src/styleInjector/index.{{platform}}',
+  styleParser: './src/styleParser/index.{{platform}}',
   colors: './src/helpers/colors.js',
 }
 
@@ -30,7 +30,12 @@ const buildConfig = (type, ext, platform, config) => {
     ...config,
     input: {
       index: `./src/index.${ext}`,
-      ...inputs
+      ...Object.keys(inputs)
+        .reduce((converted, key) => {
+          converted[key] = inputs[key].replace('{{platform}}', ext)
+
+          return converted
+        }, {})
     },
     output: {
       dir: `${buildPath}/${type}/${platform}`,
@@ -72,8 +77,7 @@ const shared = (platform, ext) => ({
     cleanup(),
     // Terser can lead to errors when importing
     // This needs to be tested before it can be turned on
-    // isProd && terser({
-    false && terser({
+    isProd && terser({
       mangle: {
         keep_fnames: true,
         keep_classnames: true,

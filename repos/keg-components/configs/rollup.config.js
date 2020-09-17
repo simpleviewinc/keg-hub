@@ -29,10 +29,11 @@ const shared = {
     '@keg-hub/jsutils',
     '@keg-hub/re-theme',
     '@keg-hub/re-theme/colors',
+    '@keg-hub/re-theme/styleInjector',
     'prop-types',
     'expo-fonts',
     'react-native-svg-web',
-    'react-native-svg'
+    'react-native-svg',
   ],
   watch: {
     clearScreen: false
