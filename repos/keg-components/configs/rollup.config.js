@@ -28,6 +28,7 @@ const shared = {
     'react-native',
     '@keg-hub/jsutils',
     '@keg-hub/re-theme',
+    '@keg-hub/re-theme/colors',
     'prop-types',
     'expo-fonts',
     'react-native-svg-web',

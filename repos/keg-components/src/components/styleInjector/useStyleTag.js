@@ -16,7 +16,7 @@ const isProduction = NODE_ENV === 'production'
 /**
  * Unique ID for the style tag that holds the injected styles
  */
-const KEG_STYLES_TAG_ID = `keg-injected-styles`
+const KEG_STYLES_TAG_ID = `keg-components-stylesheet`
 
 /**
  * Cache holder to hold the main StyleSheet Dom element

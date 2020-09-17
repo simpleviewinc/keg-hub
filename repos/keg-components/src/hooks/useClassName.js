@@ -38,6 +38,6 @@ export const useClassName = (defClass, className, ref) => {
         ? (ref.current = element)
         : checkCall(ref, element)
     },
-    [ defClass, ...className, ref ]
+    [ defClass, className.join(' '), ref ]
   )
 }

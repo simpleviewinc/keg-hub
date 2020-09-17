@@ -8,7 +8,6 @@
   "KegIcons": "src/assets/icons",
   "KegIndicator": "src/components/indicator/indicator.js",
   "KegInput": "src/components/form/input/input.js",
-  "KegInjector": "src/components/styleInjector/styleInjector.js",
   "KegLink": "src/components/link/link.js",
   "KegOption": "src/components/form/option/option${platform}.js",
   "KegRadio": "src/components/form/radio/radio${platform}.js",
@@ -27,5 +26,9 @@
   "StoryWrap": ".storybook/storyWrap.js",
   "KegClassList": "src/hooks/useClassList${platform}.js",
   "KegClassName": "src/hooks/useClassName${platform}.js",
-  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js"
+  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js",
+  "KegInjector": "src/components/styleInjector/styleInjector.js",
+  "KegStyleTag": "src/components/styleInjector/useStyleTag.js",
+  "KegInjectedText": "src/components/typography/kegtext.injected.js",
+  "KegInjectedView": "src/components/view/view.injected.js"
 }
