@@ -103,6 +103,7 @@ export const CheckboxWrapper = props => {
     children,
     elType,
     Element,
+    CheckIcon,
     disabled,
     disableCheck,
     disableUncheck,
@@ -193,6 +194,7 @@ export const CheckboxWrapper = props => {
             elProps={elProps}
             disabled={disabled}
             styles={activeStyles.content}
+            CheckIcon={CheckIcon}
             {...getChecked(isWeb, isChecked)}
             {...pressHandler}
           />
@@ -247,6 +249,7 @@ CheckboxWrapper.propTypes = {
     PropTypes.func,
     PropTypes.element,
   ]),
+  CheckIcon: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]),
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   ref: PropTypes.object,

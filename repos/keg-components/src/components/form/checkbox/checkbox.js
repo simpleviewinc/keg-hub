@@ -45,45 +45,62 @@ const Input = StyleInjector(KegInput, {
   className: 'keg-checkbox'
 })
 
-const Element = React.forwardRef(
-  (
-    { className, elProps, styles = noPropObj, icon, checked, ...props },
-    ref
-  ) => {
-    const checkStyle = useMemo(() => {
-      return {
-        ...styles.indicator,
-        ...checkBoxStyles.icon,
-      }
-    }, [ checkBoxStyles, styles ])
+const Element = React.forwardRef((props, ref) => {
+  const {
+    className,
+    elProps,
+    styles = noPropObj,
+    CheckIcon = Check,
+    checked,
+    ...remainingProps
+  } = props
 
-    return (
+  const checkStyle = useMemo(() => {
+    return {
+      ...checkBoxStyles.icon,
+      ...styles.indicator,
+    }
+  }, [ checkBoxStyles, styles ])
+
+  const inputStyle = useMemo(
+    () => ({
+      ...checkBoxStyles.input,
+      ...styles.input,
+    }),
+    [ checkBoxStyles, styles ]
+  )
+
+  return (
+    <View
+      style={styles.main}
+      className={className}
+    >
       <View
-        style={styles.main}
-        className={className}
-      >
-        <View
-          className='keg-checkbox-area'
-          style={styles.area}
-        ></View>
-        { checked && <Check
+        className='keg-checkbox-area'
+        style={styles.area}
+      />
+
+      { checked && (
+        <CheckIcon
           className='keg-checkbox-icon'
           style={checkStyle}
-        /> }
-        <Input
-          className='keg-checkbox'
-          {...elProps}
-          {...props}
-          role='checkbox'
-          checked={checked}
-          type='checkbox'
-          ref={ref}
-          style={checkBoxStyles.input}
-        />
-      </View>
+        /> 
+      )}
+
+      <Input
+        className='keg-checkbox'
+        {...elProps}
+        {...remainingProps}
+        role='checkbox'
+        checked={checked}
+        type='checkbox'
+        ref={ref}
+        style={inputStyle}
+      />
     )
-  }
-)
+    </View>
+  )
+})
 
 export const Checkbox = props => (
   <CheckboxWrapper
