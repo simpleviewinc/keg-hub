@@ -91,9 +91,3 @@ export const styleSheetParser = (args) => {
   return parsedStyles
 
 }
-
-// TODO: These the data class data should be stored in a look up
-// Then in the useCss hook, it uses that look up to find the styles
-// That way the styles do not need to be passed around to components
-// Instead a components can just pass in the dataClass Id, and get back the styles
-
