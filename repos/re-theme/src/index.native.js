@@ -20,7 +20,6 @@ import {
 } from './theme'
 
 import {
-  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,
@@ -45,7 +44,6 @@ export {
   setDefaultTheme,
   withTheme,
   // Theme hooks
-  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,
