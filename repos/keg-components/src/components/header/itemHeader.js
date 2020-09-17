@@ -52,7 +52,7 @@ export const ItemHeader = props => {
       {...elProps}
       style={[
         headerStyles.main,
-        shadow && get(headerStyles, [ 'main', 'shadow' ]),
+        shadow && get(headerStyles, [ 'shadow' ]),
       ]}
     >
       { children || (
