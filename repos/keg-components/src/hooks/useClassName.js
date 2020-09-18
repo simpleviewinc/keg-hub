@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
-import { checkCall, eitherArr, isObj, isArr } from '@keg-hub/jsutils'
 import { getPlatform } from 'KegGetPlatform'
+import { checkCall, eitherArr, isObj } from '@keg-hub/jsutils'
+import { ensureClassArray } from '../utils/helpers/ensureClassArray'
+
 const isWeb = getPlatform() === 'web'
 
 /**
@@ -13,13 +15,13 @@ const isWeb = getPlatform() === 'web'
  *
  * @example
  * const classRef = useClassName('class-1', `class-2`, ref || React.createRef())
- * // The class attribute of the div will be `class-1 class-2` 
+ * // The class attribute of the div will be `class-1 class-2`
  * return (<div ref={classRef} />My Div</div>)
- * 
+ *
  * @returns {function} - Ref function to be added to the component
  */
 export const useClassName = (defClass, className, ref) => {
-  className = eitherArr(className, [className]) 
+  className = eitherArr(className, [className])
 
   return useCallback(
     element => {
@@ -27,8 +29,8 @@ export const useClassName = (defClass, className, ref) => {
         // Add the default classes to the classList
         defClass && element.classList.add(defClass)
 
-        // Add className to the classList
-        className.map(cls => cls && element.classList.add(cls))
+        // Ensure classNames is flat array, then add it's children
+        element.classList.add(...ensureClassArray(className))
       }
 
       // Update the ref based on it's type
