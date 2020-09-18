@@ -104,7 +104,17 @@ const disabledRules = {
 const checkboxDisabled = {
   main: {},
   content: {
+<<<<<<< HEAD
     main: disabledRules,
+=======
+    main: {},
+    input: {
+      cursor: 'not-allowed',
+    },
+    right: {
+      cursor: 'not-allowed',
+    },
+>>>>>>> added checkbox feature for clickable text; added useful hook for getting category data
   },
 }
 
