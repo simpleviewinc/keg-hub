@@ -62,6 +62,7 @@ const shared = (platform, ext) => ({
     alias({
       entries: {
         ReHead: `src/head/index.${ext}`,
+        ReDimensions: `src/dimensions/dimensions.${ext}`
       },
     }),
     resolve(),

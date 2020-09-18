@@ -8,7 +8,7 @@ import {
   setSizes,
   useDimensions,
 } from './dimensions'
-import { setRNDimensions } from './dimensions/dimensions'
+import { setRNDimensions } from 'ReDimensions'
 
 import {
   addThemeEvent,

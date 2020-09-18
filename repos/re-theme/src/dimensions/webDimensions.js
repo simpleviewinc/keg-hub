@@ -2,7 +2,7 @@
 
 import { debounce, isArr, isFunc, checkCall } from '@keg-hub/jsutils'
 import { Constants } from '../constants'
-import { setRNDimensions } from './dimensions'
+import { setRNDimensions } from 'ReDimensions'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 
 const DEBOUNCE_RATE = 100

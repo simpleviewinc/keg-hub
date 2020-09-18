@@ -147,7 +147,7 @@ export const addStylesToDom = (selector, css) => {
   // But it does not allow you to see the styles in the inspector
   // So we only want to use it when in production
   isProduction
-    ? css.rules.map(rule => KegSheet = getKegSheet().sheet.insertRule(rule))
+    ? css.rules.map(rule => KegSheet.sheet.insertRule(rule))
     : KegSheet.append(css.all)
 
 }
