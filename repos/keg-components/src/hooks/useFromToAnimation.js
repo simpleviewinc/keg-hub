@@ -2,6 +2,8 @@ import { useEffect, useMemo } from 'react'
 import { Animated } from 'react-native'
 import { noOp } from 'KegUtils'
 import { isArr } from '@keg-hub/jsutils'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * A hook for running an animation from an origin (from) point to a destination (to) point
@@ -27,7 +29,10 @@ export const useFromToAnimation = (params, dependencies) => {
   const fromVal = useMemo(() => new Animated.Value(from), animDependencies)
 
   useEffect(() => {
-    Animated.timing(fromVal, { toValue: to, duration }).start(onFinish)
+    const aniProps = { toValue: to, duration }
+    !isWeb && (aniProps.useNativeDriver = true)
+
+    Animated.timing(fromVal, aniProps).start(onFinish)
   }, animDependencies)
 
   return [fromVal]
