@@ -23,6 +23,7 @@ export const ItemHeader = props => {
   const theme = useTheme()
 
   const {
+    appHeader,
     className,
     title,
     styles,
@@ -52,9 +53,11 @@ export const ItemHeader = props => {
       {...elProps}
       style={[
         headerStyles.main,
-        shadow && get(headerStyles, [ 'shadow' ]),
+        appHeader && get(headerStyles, [ 'appHeader', 'main' ]),
+        shadow && get(headerStyles, [ 'shadow', 'main' ]),
       ]}
     >
+      { shadow && <View style={headerStyles?.shadow?.cover} /> }
       { children || (
         <>
           <Side
