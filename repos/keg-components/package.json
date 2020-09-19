@@ -59,7 +59,11 @@
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.4",
     "@keg-hub/jsutils": "0.0.1",
+<<<<<<< HEAD
     "@keg-hub/re-theme": "5.0.1",
+=======
+    "@keg-hub/re-theme": "5.0.0",
+>>>>>>> 44fef2aeebf415544f390eb6ec3285cc0cfc3624
     "@rollup/plugin-alias": "3.1.1",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-replace": "2.3.3",
