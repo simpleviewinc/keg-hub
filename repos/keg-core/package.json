@@ -1,7 +1,7 @@
 {
   "name": "@keg-hub/keg-core",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "publishConfig": {
     "access": "public"
   },
@@ -52,8 +52,8 @@
     "@babel/runtime": "7.10.5",
     "@expo/webpack-config": "0.12.25",
     "@keg-hub/jsutils": "0.0.1",
-    "@keg-hub/keg-components": "5.0.0",
-    "@keg-hub/re-theme": "5.0.0",
+    "@keg-hub/keg-components": "5.0.1",
+    "@keg-hub/re-theme": "5.0.1",
     "@keg-hub/tap-resolver": "1.1.1",
     "@testing-library/react-hooks": "3.2.1",
     "app-root-path": "3.0.0",
