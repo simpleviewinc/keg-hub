@@ -48,6 +48,7 @@ const getKegSheet = () => {
 const uppercasePattern = /[A-Z]/g
 const msPattern = /^ms-/
 const hyphenCache = {}
+
 /**
  * Converts a matching style rule to lowercase with hyphen
  * External hyphenator helpers, created outside the method to improve performance
