@@ -124,6 +124,7 @@ module.exports = {
     tasks: {
       ...require('./list'),
       ...require('./current'),
+      ...require('./reset'),
     },
     options: {
       branch: {
