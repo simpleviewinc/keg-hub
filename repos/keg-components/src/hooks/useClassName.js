@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import { getPlatform } from 'KegGetPlatform'
 import { checkCall, eitherArr, isObj } from '@keg-hub/jsutils'
 import { ensureClassArray } from '../utils/helpers/ensureClassArray'
@@ -22,6 +22,7 @@ const isWeb = getPlatform() === 'web'
  */
 export const useClassName = (defClass, className, ref) => {
   className = eitherArr(className, [className])
+  const classRef = useRef(className)
 
   return useCallback(
     element => {
@@ -29,8 +30,21 @@ export const useClassName = (defClass, className, ref) => {
         // Add the default classes to the classList
         defClass && element.classList.add(defClass)
 
-        // Ensure classNames is flat array, then add it's children
-        element.classList.add(...ensureClassArray(className))
+        // Ensure we have a flat array
+        const classArr = ensureClassArray(className)
+
+        // Loop over the previous classes, and see if any have been removed
+        classRef.current.map(
+          cls =>
+            cls && classArr.indexOf(cls) === -1 && element.classList.remove(cls)
+        )
+
+        // Update our ref with the new classes
+        // Which will allows us to check them for updates on next render
+        classRef.current = classArr
+
+        // Add the classes to the element
+        element.classList.add(...classArr)
       }
 
       // Update the ref based on it's type

@@ -1,11 +1,9 @@
 import React, { useMemo } from 'react'
-import { useStyleTag } from 'KegStyleTag'
-import { StyleInjector } from 'KegInjector'
 import { useClassName } from 'KegClassName'
 import { withTheme } from '@keg-hub/re-theme'
 import { capitalize } from '@keg-hub/jsutils'
 import { Text as RNText } from 'react-native'
-
+import { StyleInjector, useStyleTag } from '@keg-hub/re-theme/styleInjector'
 
 const ellipsisProps = {
   ellipsizeMode: 'tail',
@@ -16,7 +14,6 @@ const headings = [ '1', '2', '3', '4', '5', '6' ]
 export const KegText = element => {
   return withTheme(
     StyleInjector(
-
       React.forwardRef((props, ref) => {
         const {
           accessibilityRole,
@@ -38,7 +35,6 @@ export const KegText = element => {
         }, [ theme, element ])
 
         const classList = useStyleTag(textStyles)
-        
         className.push(classList.pop())
         const classRef = useClassName(`keg-${element}`, className, ref)
 
@@ -55,7 +51,6 @@ export const KegText = element => {
           }
         }, [ element, accessibilityRole ])
 
-
         return (
           <RNText
             {...attrs}
@@ -68,6 +63,7 @@ export const KegText = element => {
         )
       }),
 
-    { displayName: capitalize(element), className: `keg-${element}` })
+      { displayName: capitalize(element), className: `keg-${element}` }
+    )
   )
 }

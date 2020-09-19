@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { addStylesToDom, getSelector, hyphenator, wrapWithMedia } from './injectHelpers'
+import { addStylesToDom, getSelector, hyphenator } from './injectHelpers'
 import { isArr, eitherArr, isObj } from '@keg-hub/jsutils'
 import { useTheme } from '../hooks/useTheme'
 
@@ -71,6 +71,7 @@ export const useStyleTag = (style, className='') => {
 
   const theme = useTheme()
   const themeSize = theme?.RTMeta?.size
+  const themeKey = theme?.RTMeta?.key
 
   const { selector } = useMemo(() => {
     const { blocks } = convertToCss(style, selector)
@@ -81,21 +82,19 @@ export const useStyleTag = (style, className='') => {
     // Adds the css selector ( className ) to each block
     const css = blocks.reduce((css, block) => {
       const fullBlock = `${selector}${block}`
-
-      css.all += themeSize ? wrapWithMedia(themeSize, fullBlock) : fullBlock
+      css.all += fullBlock
       css.rules.push(fullBlock)
 
       return css
     }, { all: '', rules: [] })
 
-
-    addStylesToDom(selector, css)
+    addStylesToDom(selector, css, themeKey)
 
     return {
       css,
       selector: selector.split('.').filter(cls => cls)
     }
-  }, [style, className, themeSize])
+  }, [style, className, themeSize, themeKey])
 
   return selector
 }
