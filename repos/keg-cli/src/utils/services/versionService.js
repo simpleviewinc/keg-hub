@@ -60,9 +60,18 @@ const updateRepoVersion = async (repo, version, publishContext) => {
   return updateVersion
 }
 
-const updateDependenciesWithVersion = (repoName, repos, version) => {
+const updateDependenciesWithVersion = async (repoName, repos, version) => {
+
+  // Check if we should update version in other repos dependencies
+  const confirmed = await ask.confirm(
+    `Update repos with dependencies of ${repos.repo} to version ${version}?`
+  )
+
   // Loop over all the repos and check for the repo as a dependancy
-  return repos.map(({ package, location }) => {
+  return confirmed && repos.map(otherRepo => {
+    const { package, location } = otherRepo
+
+    // Track if a dependency has been updated
     let updated = false
 
     // If the dependency exists, update it to the newest version
@@ -76,8 +85,15 @@ const updateDependenciesWithVersion = (repoName, repos, version) => {
       updated = true
     }
 
+    // If nothing was update just return
+    if(!updated) return
+
     // Overwrite the package.json file with updated package version 
-    updated && fs.writeFileSync(location, JSON.stringify(package, null, 2) + '\n')
+    fs.writeFileSync(location, JSON.stringify(package, null, 2) + '\n')
+
+    // Update the original package.json with the update version
+    otherRepo.package = package
+
   })
 }
 
@@ -105,8 +121,8 @@ const versionService = async (args, publishContext) => {
   if(!otherRepos || !otherRepos.length)
     return Logger.log(`Could not find any repos to update the dependency version!`)
 
-  
-  updateDependenciesWithVersion(
+  // Update all other repos that have the current repo as a dependency
+  await updateDependenciesWithVersion(
     get(repo, 'package.name'),
     repos,
     updateTo
