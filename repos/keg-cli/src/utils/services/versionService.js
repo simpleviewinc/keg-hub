@@ -90,7 +90,7 @@ const updateDependenciesWithVersion = async (repoName, repos, version) => {
     if(!updated) return
 
     // Overwrite the package.json file with updated package version 
-    fs.writeFileSync(location, JSON.stringify(package, null, 2) + '\n')
+    fs.writeFileSync(`${location}/package.json`, JSON.stringify(package, null, 2) + '\n')
 
     // Update the original package.json with the update version
     otherRepo.package = package
