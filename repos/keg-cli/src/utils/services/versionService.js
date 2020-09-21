@@ -43,17 +43,20 @@ const getUpdateVersion = async (repo, version, publishContext) => {
 
 }
 
+const writePackageVersion = (repo, version) => {
+  version && (repo.package.version = version)
+  fs.writeFileSync(
+    `${repo.location}/package.json`,
+    JSON.stringify(repo.package, null, 2) + '\n'
+  )
+}
+
 const updateRepoVersion = async (repo, version, publishContext) => {
   const { dependent } = publishContext
 
   // If the repos are dependent, and we already have a version, use it
   if(dependent && cachedVersion){
-    // TODO: Fix this so it's not called twice
-
-    // Add core to update repo.package ( package.json ) with the new version
-    // Update the cached version as well
-    repo.package.version = cachedVersion
-    fs.writeFileSync(`${repo.location}/package.json`, JSON.stringify(repo.package, null, 2) + '\n')
+    writePackageVersion(repo, cachedVersion)
     return cachedVersion
   }
 
@@ -66,10 +69,7 @@ const updateRepoVersion = async (repo, version, publishContext) => {
   // Cache the version if it's dependant, so it can be re-used
   if(dependent) cachedVersion = updateVersion
 
-  // Add core to update repo.package ( package.json ) with the new version
-  // Update the cached version as well
-  repo.package.version = updateVersion
-  fs.writeFileSync(`${repo.location}/package.json`, JSON.stringify(repo.package, null, 2) + '\n')
+  writePackageVersion(repo, updateVersion)
 
   return updateVersion
 }
@@ -83,7 +83,7 @@ const updateDependenciesWithVersion = async (repoName, repos, version) => {
 
   // Loop over all the repos and check for the repo as a dependancy
   return confirmed && repos.map(otherRepo => {
-    const { package, location } = otherRepo
+    const { package } = otherRepo
 
     // Track if a dependency has been updated
     let updated = false
@@ -102,11 +102,10 @@ const updateDependenciesWithVersion = async (repoName, repos, version) => {
     // If nothing was update just return
     if(!updated) return
 
-    // Overwrite the package.json file with updated package version 
-    fs.writeFileSync(`${location}/package.json`, JSON.stringify(package, null, 2) + '\n')
-
     // Update the original package.json with the update version
     otherRepo.package = package
+    // Overwrite the package.json file with updated package version 
+    writePackageVersion(otherRepo)
 
   })
 }
@@ -143,6 +142,8 @@ const versionService = async (args, publishContext) => {
     repos,
     updateTo
   )
+
+  return publishContext
 
 }
 
