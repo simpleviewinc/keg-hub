@@ -47,7 +47,15 @@ const updateRepoVersion = async (repo, version, publishContext) => {
   const { dependent } = publishContext
 
   // If the repos are dependent, and we already have a version, use it
-  if(dependent && cachedVersion) return cachedVersion
+  if(dependent && cachedVersion){
+    // TODO: Fix this so it's not called twice
+
+    // Add core to update repo.package ( package.json ) with the new version
+    // Update the cached version as well
+    repo.package.version = updateTo
+    fs.writeFileSync(`${repo.location}/package.json`, JSON.stringify(repo.package, null, 2) + '\n')
+    return cachedVersion
+  }
 
   // Get the version to update to based on semver
   const updateVersion = await getUpdateVersion(repo, version, publishContext)
@@ -57,6 +65,11 @@ const updateRepoVersion = async (repo, version, publishContext) => {
 
   // Cache the version if it's dependant, so it can be re-used
   if(dependent) cachedVersion = updateVersion
+
+  // Add core to update repo.package ( package.json ) with the new version
+  // Update the cached version as well
+  repo.package.version = updateTo
+  fs.writeFileSync(`${repo.location}/package.json`, JSON.stringify(repo.package, null, 2) + '\n')
 
   return updateVersion
 }
@@ -97,6 +110,8 @@ const updateDependenciesWithVersion = async (repoName, repos, version) => {
 
   })
 }
+
+
 
 const versionService = async (args, publishContext) => {
   const { params } = args
