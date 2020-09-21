@@ -138,6 +138,14 @@ module.exports = deepFreeze({
     start: 'compose-start',
     packageRun: 'package-run',
     dockerExec: 'docker-exec',
+  },
+
+  VERSION: {
+    TYPES: [
+      'major',
+      'minor',
+      'patch',
+    ]
   }
 
 })
