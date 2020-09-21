@@ -10,7 +10,7 @@ const VERSION_TYPES = [
   'patch',
 ]
 
-const getUpdateVersion = async (repo, version, publishContext) => {
+const getVersionUpdate = async (repo, version, publishContext) => {
   const packageVersion = get(repo, 'package.version')
 
   const updateVersion = VERSION_TYPES.indexOf(version) !== -1
@@ -26,5 +26,5 @@ const getUpdateVersion = async (repo, version, publishContext) => {
 }
 
 module.exports = {
-  getUpdateVersion
+  getVersionUpdate
 }
