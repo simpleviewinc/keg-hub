@@ -1,48 +1,15 @@
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { ask } = require('@keg-hub/ask-it')
+const { get } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { versionService } = require('./versionService')
-const { get, deepMerge } = require('@keg-hub/jsutils')
 const { generalError } = require('../error/generalError')
-const { confirmExec } = require('../helpers/confirmExec')
+const { runRepoScript } = require('../hub/runRepoScript')
+const { throwPublishError } = require('../error/throwPublishError')
+const { getPublishContext } = require('../publish/getPublishContext')
+const { getPublishContextOrder } = require('../publish/getPublishContextOrder')
 
-const getPublishContext = (globalConfig, context, publishArgs) => {
-  // Get the publish context from the globalConfig, and merge with passed in publish args
-  return deepMerge(
-    {
-      tasks: {
-        install: true,
-        test: true,
-        build: true,
-        version: true,
-        publish: true,
-      }
-    },
-    get(globalConfig, `publish.${context}`),
-    publishArgs
-  )
-}
-
-const getPublishContextOrder = (repos, publishContext, { context }) => {
-  const publishOrder = (publishContext || get(globalConfig, `publish.${context}`)).order
-
-  !publishOrder && generalError(`Publish context order ${context} does not exist!`)
-
-  const indexRepos = repos.reduce((toPublish, repo) => {
-    const publishIndex = publishOrder.indexOf(get(repo, 'package.name'))
-    return publishIndex === -1
-      ? toPublish
-      : { ...toPublish, [publishIndex]: repo }
-  }, {})
-
-  // Get the indexes and sort them to get the correct order
-  // Then get the repo for that index and return it
-  return Object.keys(indexRepos).sort()
-    .map(index => {
-      return indexRepos[index]
-    })
-}
 
 const confirmPublish = async context => {
   const resp = await ask.confirm(`Confirm publish with config ${context}?`)
@@ -52,58 +19,42 @@ const confirmPublish = async context => {
   process.exit(0)
 }
 
-const runYarnScript = async (publishContext, repo, script) => {
-  logFormal(repo, `Running yarn ${script.trim()}...`)
-
-  // Run the yarn script from the package.json of the repo
-  const scriptRep = await spawnCmd(
-    `yarn ${script.trim()}`.trim(),
-    { cwd: repo.location },
-    false
-  )
-
-  scriptRep && publishError(publishContext, repo, script)
-
-  return true
-}
-
 const logFormal = (repo, message) => {
   Logger.empty()
   Logger.highlight(``, `[${repo.repo.toUpperCase()}]`, message)
   Logger.empty()
 }
 
-const publishError = (publishContext, repo, fail, message) => {
-  Logger.error(`Error publishing context ${publishContext.name}!`)
-  Logger.error(`Repo ${repo.repo} failed when running ${fail}!`)
-  message && Logger.message(message)
-  process.exit(0)
-}
-
 const runPublishContext = (toPublish, repos, params={}, publishContext) => {
   const { install, test, build, version, publish } = publishContext.tasks
-  
+
+  if(!toPublish.length) return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
+
   return toPublish.reduce(async (toResolve, repo) => {
     const updated = await toResolve
-    logFormal(repo, `Running publish service`)
 
-    // Install all dependencies
-    install && await runYarnScript(publishContext, repo, `install`)
-
-    // Run the repo's tests
-    test && await runYarnScript(publishContext, repo, `test`)
-
-    // Build the repo
-    build && await runYarnScript(publishContext, repo, `build`)
-
-    // Update the version of the repo
+    // Update the version of the repos
     version && await versionService(
-      { params: { ...params, repo, repos }},
-      publishContext
+      { params },
+      { publishContext, repo, repos }
     )
 
+    logFormal(repo, `Running publish service`)
+
+    // Callback when an error is throw for a repo script
+    const scriptError = script => () => throwPublishError(publishContext, repo, script)
+
+    // Install all dependencies
+    install && await runRepoScript(repo, `install`, scriptError(`install`))
+
+    // Run the repo's tests
+    test && await runPublishScript(repo, `test`, scriptError(`test`))
+
+    // Build the repo
+    build && await runPublishScript(repo, `build`, scriptError(`build`))
+
     // Publish to NPM
-    publish && await runYarnScript(publishContext, repo, `publish`)
+    publish && await runPublishScript(repo, `publish`, scriptError(`publish`))
 
     // Add the update to updated, so we know this repo was published
     updated.push(repo)
