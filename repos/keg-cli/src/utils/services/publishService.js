@@ -48,13 +48,13 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
     install && await runRepoScript(repo, `install`, scriptError(`install`))
 
     // Run the repo's tests
-    test && await runPublishScript(repo, `test`, scriptError(`test`))
+    test && await runRepoScript(repo, `test`, scriptError(`test`))
 
     // Build the repo
-    build && await runPublishScript(repo, `build`, scriptError(`build`))
+    build && await runRepoScript(repo, `build`, scriptError(`build`))
 
     // Publish to NPM
-    publish && await runPublishScript(repo, `publish`, scriptError(`publish`))
+    publish && await runRepoScript(repo, `publish`, scriptError(`publish`))
 
     // Add the update to updated, so we know this repo was published
     updated.push(repo)
