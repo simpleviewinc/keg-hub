@@ -1,62 +1,19 @@
-const fs = require('fs')
-const semver = require('semver')
 const { Logger } = require('KegLog')
-const { spawnCmd } = require('KegProc')
-const { ask } = require('@keg-hub/ask-it')
 const { get } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { generalError } = require('../error/generalError')
-const { confirmExec } = require('../helpers/confirmExec')
-
-const VERSION_TYPES = [
-  'major',
-  'minor',
-  'patch',
-]
+const { getUpdateVersion } = require('../version/getUpdateVersion')
+const { writePackageVersion } = require('../version/writePackageVersion')
+const { updateVersionInDependencies } = require('../version/updateVersionInDependencies')
 
 let cachedVersion
-
-const getUpdateVersion = async (repo, version, publishContext) => {
-  const packageVersion = get(repo, 'package.version')
-
-  const updateVersion = VERSION_TYPES.indexOf(version) !== -1
-    ? semver.inc(packageVersion, version)
-    : !version
-      ? await ask.input(`Please enter the new version for ${publishContext.name}?`)
-      : version
-
-
-  // Validate the updated version
-  !semver.valid(updateVersion) &&
-    generalError(`Invalid version ${version} for publish context ${publishContext.name}!`)
-
-  // Make sure the new version is greater then the last published version
-  semver.lt(updateVersion, packageVersion) &&
-    generalError(`Version ${version} can not be less the previous version ${packageVersion}!`)
-
-  // Ask the user to confirm the update?
-  const confirmed = await ask.confirm(`Update ${publishContext.name} version to ${updateVersion}?`)
-
-  return confirmed
-    ? updateVersion
-    : Logger.warn(`Canceled version update for publish context ${publishContext.name}!`)
-
-}
-
-const writePackageVersion = (repo, version) => {
-  version && (repo.package.version = version)
-  fs.writeFileSync(
-    `${repo.location}/package.json`,
-    JSON.stringify(repo.package, null, 2) + '\n'
-  )
-}
 
 const updateRepoVersion = async (repo, version, publishContext) => {
   const { dependent } = publishContext
 
   // If the repos are dependent, and we already have a version, use it
   if(dependent && cachedVersion){
-    writePackageVersion(repo, cachedVersion)
+    writePackageVersion(repo.package, repo.location, cachedVersion)
     return cachedVersion
   }
 
@@ -69,52 +26,14 @@ const updateRepoVersion = async (repo, version, publishContext) => {
   // Cache the version if it's dependant, so it can be re-used
   if(dependent) cachedVersion = updateVersion
 
-  writePackageVersion(repo, updateVersion)
+  writePackageVersion(repo.package, repo.location, updateVersion)
 
   return updateVersion
 }
 
-const updateDependenciesWithVersion = async (repoName, repos, version) => {
-
-  // Check if we should update version in other repos dependencies
-  const confirmed = await ask.confirm(
-    `Update repos with dependencies of ${repoName} to version ${version}?`
-  )
-
-  // Loop over all the repos and check for the repo as a dependancy
-  return confirmed && repos.map(otherRepo => {
-    const { package } = otherRepo
-
-    // Track if a dependency has been updated
-    let updated = false
-
-    // If the dependency exists, update it to the newest version
-    if (package.dependencies && package.dependencies[repoName]){
-      package.dependencies[repoName] = version
-      updated = true
-    }
-
-    if (package.devDependencies && package.devDependencies[repoName]){
-      package.devDependencies[repoName] = version
-      updated = true
-    }
-
-    // If nothing was update just return
-    if(!updated) return
-
-    // Update the original package.json with the update version
-    otherRepo.package = package
-    // Overwrite the package.json file with updated package version 
-    writePackageVersion(otherRepo)
-
-  })
-}
-
-
-
-const versionService = async (args, publishContext) => {
+const versionService = async (args, { publishContext, repo, repos }) => {
   const { params } = args
-  const { repo, repos, version, context } = params
+  const { version, context } = params
 
   publishContext = (publishContext || get(globalConfig, `publish.${context}`))
   !publishContext && generalError(`Publish context ${context} does not exist!`)
@@ -137,7 +56,7 @@ const versionService = async (args, publishContext) => {
     return Logger.log(`Could not find any repos to update the dependency version!`)
 
   // Update all other repos that have the current repo as a dependency
-  await updateDependenciesWithVersion(
+  await updateVersionInDependencies(
     get(repo, 'package.name'),
     repos,
     updateTo
