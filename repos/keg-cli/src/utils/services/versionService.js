@@ -2,7 +2,7 @@ const { Logger } = require('KegLog')
 const { get } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { generalError } = require('../error/generalError')
-const { getUpdateVersion } = require('../version/getUpdateVersion')
+const { getVersionUpdate } = require('../version/getVersionUpdate')
 const { writePackageVersion } = require('../version/writePackageVersion')
 const { updateVersionInDependencies } = require('../version/updateVersionInDependencies')
 
@@ -18,7 +18,7 @@ const updateRepoVersion = async (repo, version, publishContext) => {
   }
 
   // Get the version to update to based on semver
-  const updateVersion = await getUpdateVersion(repo, version, publishContext)
+  const updateVersion = await getVersionUpdate(repo, version, publishContext)
 
   // If no version to update to and context is dependent, just exit
   if(!updateVersion && dependent) process.exit(0)
