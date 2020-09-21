@@ -2,7 +2,6 @@ import React from 'react'
 import { View as RNView } from 'react-native'
 import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
 /**
  * View
@@ -12,8 +11,8 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
-export const View = StyleInjector(
-  React.forwardRef(({ children, className, viewRef, ...props }, ref) => {
+export const View = React.forwardRef(
+  ({ children, className, ...props }, ref) => {
     const classRef = useClassName('keg-view', className, ref)
 
     return (
@@ -24,11 +23,13 @@ export const View = StyleInjector(
         { children }
       </RNView>
     )
-  }),
-  { displayName: 'View', className: 'keg-view' }
+  }
 )
 
 View.propTypes = {
   ...RNView.propTypes,
-  className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
+  className: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ])
 }

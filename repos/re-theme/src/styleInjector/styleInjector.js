@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useStyleTag } from './useStyleTag'
 
 /**
@@ -12,14 +12,20 @@ import { useStyleTag } from './useStyleTag'
  * 
  * @returns {string} - className Css selector of the added style rules
  */
-const BuildWithStyles = ({ Component, children, config, className, KegDefClass, style, ...props }) => {
+const BuildWithStyles = React.forwardRef((props, ref) => {
+  const { Component, children, config, className, KegDefClass, style, ...buildProps } = props
   const classList = useStyleTag(style, className || KegDefClass)
+
   return (
-    <Component {...props} className={classList} >
+    <Component
+      {...buildProps}
+      ref={ref}
+      className={classList} 
+    >
       {children}
     </Component>
   )
-}
+})
 
 /**
  * Custom Hoc that wraps a component, and extracts the style prop from props
@@ -33,9 +39,9 @@ const BuildWithStyles = ({ Component, children, config, className, KegDefClass, 
 export const StyleInjector = (Component, config={}) => {
   const { className:KegDefClass } = config
 
-  return ({ style, ...props}) => {
+  return React.forwardRef(({ style, ...props}, ref) => {
     return !style
-      ? (<Component {...props} />)
+      ? (<Component {...props} style={style} ref={ref} />)
       : (
           <BuildWithStyles
             KegDefClass={KegDefClass}
@@ -43,8 +49,9 @@ export const StyleInjector = (Component, config={}) => {
             style={style}
             config={config}
             Component={Component}
+            ref={ref}
           />
         )
-  }
+  })
 }
 
