@@ -65,7 +65,7 @@ const getPackageJson = (repoPath, repo) => {
  * @returns {*} - Formatted repo information
  */
 const buildRepo = (repo, hubReposPath, args) => {
-  const { format, callback } = args
+  const { format, callback, full } = args
 
   const repoPath =  path.join(hubReposPath, repo)
   const package = getPackageJson(repoPath, repo)
@@ -78,7 +78,9 @@ const buildRepo = (repo, hubReposPath, args) => {
       )
     : !package
       ? false
-      : convertFormat({
+      : full
+        ? { repo, location: repoPath, package }
+        : convertFormat({
           repo,
           location: repoPath,
           ...pickKeys(package, [
@@ -88,6 +90,64 @@ const buildRepo = (repo, hubReposPath, args) => {
           ])
         }, package, format)
 }
+
+/**
+ * Runs keg-hub commands against repos synchronously
+ * @function
+ * @param {Object} repos - All repos to run command on
+ * @param {Object} hubReposPath - Path to the keg-hub/repos folder
+ * @param {Object} args - Passed from the task caller
+ *
+ * @returns {*} - Formatted repo information
+ */
+const runCmdSync = async (repos, hubReposPath, args) => {
+
+  const { context:filter } = args
+
+  return repos.reduce(async (toResolve, repo) => {
+      const responses = await toResolve
+
+      const repoData = filter !== 'all' && !repo.includes(filter)
+        ? false
+        : await buildRepo(repo, hubReposPath, args)
+      
+      repoData && responses.push(repoData)
+
+      return responses
+
+    }, Promise.resolve([]))
+
+}
+
+/**
+ * Runs keg-hub commands against repos asynchronously
+ * @function
+ * @param {Object} repos - All repos to run command on
+ * @param {Object} hubReposPath - Path to the keg-hub/repos folder
+ * @param {Object} args - Passed from the task caller
+ *
+ * @returns {*} - Formatted repo information
+ */
+const runCmdAsync = async (repos, hubReposPath, args) => {
+  const { context:filter } = args
+
+  const response = await Promise.all(
+    repos.reduce((repos, repo) => {
+
+      const repoData = filter !== 'all' && !repo.includes(filter)
+        ? false
+        : buildRepo(repo, hubReposPath, args)
+
+      return repoData
+        ? repos.concat([ repoData ])
+        : repos
+
+    }, [])
+  )
+
+  return response
+}
+
 
 /**
  * Loads information about the repos in then keg-hub/repos folder
@@ -100,28 +160,17 @@ const buildRepo = (repo, hubReposPath, args) => {
  * @returns {Array} - Group of promises resolving to formatted repo information
  */
 const getHubRepos = async (args={}) => {
-  const { context:filter } = args
+  const { context:filter, sync } = args
 
   const hubReposPath = path.join(getRepoPath('hub'), 'repos')
   const { data, error } = await executeCmd(findSubNodeModules, { cwd: hubReposPath })
+  error && generalError(error.stack)
 
-  return error
-    ? generalError(error.stack)
-    : Promise.all(
-        data.trim()
-          .split('\n')
-          .reduce((repos, repo) => {
+  const repos = data.trim().split('\n')
 
-            const repoData = filter !== 'all' && !repo.includes(filter)
-              ? false
-              : buildRepo(repo, hubReposPath, args)
-
-            return repoData
-              ? repos.concat([ repoData ])
-              : repos
-
-          }, [])
-      )
+  return sync
+    ? runCmdSync(repos, hubReposPath, args)
+    : runCmdAsync(repos, hubReposPath, args)
 
 }
 

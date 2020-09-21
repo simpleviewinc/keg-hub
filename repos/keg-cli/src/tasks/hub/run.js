@@ -43,7 +43,11 @@ const runScript = (repo, package, args={}) => {
   )
 
   // Run the yarn script from the package.json of the repo
-  return spawnCmd(`yarn ${script.trim()}`.trim(), {}, location, false)
+  return spawnCmd(
+    `yarn ${script.trim()}`.trim(),
+    { cwd: location },
+    false
+  )
 
 }
 
@@ -58,7 +62,7 @@ const runScript = (repo, package, args={}) => {
  * @returns {void}
  */
 const runRepos = async args => {
-  const { command, globalConfig, options, params, tasks } = args
+  const { params } = args
 
   Logger.empty()
 
@@ -91,6 +95,12 @@ module.exports = {
         example: 'keg hub run --context cli',
         default: 'all'
       },
+      sync: {
+        alias: [ 'sy' ],
+        description: 'Run all commands synchronously',
+        example: 'keg hub run --sync false',
+        default: true
+      }
     }
   }
 }
