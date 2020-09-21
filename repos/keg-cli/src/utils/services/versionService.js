@@ -1,10 +1,11 @@
-const { Logger } = require('KegLog')
+const fs = require('fs')
 const semver = require('semver')
+const { Logger } = require('KegLog')
+const { spawnCmd } = require('KegProc')
+const { ask } = require('@keg-hub/ask-it')
+const { get } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { generalError } = require('../error/generalError')
-const { ask } = require('@keg-hub/ask-it')
-const { spawnCmd } = require('KegProc')
-const { get } = require('@keg-hub/jsutils')
 const { confirmExec } = require('../helpers/confirmExec')
 
 const VERSION_TYPES = [
@@ -64,7 +65,7 @@ const updateDependenciesWithVersion = async (repoName, repos, version) => {
 
   // Check if we should update version in other repos dependencies
   const confirmed = await ask.confirm(
-    `Update repos with dependencies of ${repos.repo} to version ${version}?`
+    `Update repos with dependencies of ${repoName} to version ${version}?`
   )
 
   // Loop over all the repos and check for the repo as a dependancy
