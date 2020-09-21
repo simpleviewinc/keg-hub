@@ -52,7 +52,7 @@ const updateRepoVersion = async (repo, version, publishContext) => {
 
     // Add core to update repo.package ( package.json ) with the new version
     // Update the cached version as well
-    repo.package.version = updateTo
+    repo.package.version = cachedVersion
     fs.writeFileSync(`${repo.location}/package.json`, JSON.stringify(repo.package, null, 2) + '\n')
     return cachedVersion
   }
@@ -68,7 +68,7 @@ const updateRepoVersion = async (repo, version, publishContext) => {
 
   // Add core to update repo.package ( package.json ) with the new version
   // Update the cached version as well
-  repo.package.version = updateTo
+  repo.package.version = updateVersion
   fs.writeFileSync(`${repo.location}/package.json`, JSON.stringify(repo.package, null, 2) + '\n')
 
   return updateVersion
