@@ -5,6 +5,7 @@ module.exports = {
     example: 'keg hub <command> <options>',
     tasks: {
       ...require('./dependencies'),
+      ...require('./publish'),
       ...require('./repos'),
       ...require('./run'),
     }
