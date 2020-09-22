@@ -20,7 +20,7 @@ export const validateArguments = (args={}) => {
 
   // Ensure a callback is passed in
   if (!isFunc(args.callback)){
-    console.error(`[ Error ] styleSheetParser requires a function callback.\nIt received:`, callback)
+    console.error(`[ Error ] styleSheetParser requires a function callback.\nIt received:`, args.callback)
     return { valid: false}
   }
 

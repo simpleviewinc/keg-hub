@@ -1,4 +1,4 @@
-import { isArr, checkCall } from '@keg-hub/jsutils'
+import { isArr, checkCall, isObj } from '@keg-hub/jsutils'
 import { validateArguments } from './validate'
 import { addToDom } from './addToDom'
 import { cssToJs } from './cssToJs'
@@ -59,10 +59,13 @@ export const styleSheetParser = (args) => {
     // Have to convert all styleSheets form the DOM into an array to loop over them
     Array.from(document.styleSheets).reduce(
       (formatted, sheet) => loopSheetCssRules(formatted, sheet, classNames, callback),
-      {}
+      { asStr: '' }
     )
 
-  toDom && stylesText && addToDom(parsedStyles.asStr)
+  toDom &&
+    isObj(parsedStyles) &&
+    parsedStyles.asStr &&
+    addToDom(parsedStyles.asStr)
 
   return parsedStyles
 
