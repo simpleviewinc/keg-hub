@@ -2,7 +2,7 @@
 'use strict'
 
 import { deepMerge, isObj } from '@keg-hub/jsutils'
-import { Dimensions } from 'ReDimensions'
+import { Dimensions } from '../dimensions/dimensions'
 import { buildTheme } from './buildTheme'
 
 /**
