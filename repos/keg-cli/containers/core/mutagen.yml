@@ -36,6 +36,11 @@ actions:
       detach: true
       cmds:
         - yarn dev
+    att:
+      location: /keg/keg-core/node_modules/@keg-hub/re-theme
+      privileged: true
+      cmds:
+        - bash
   components:
     install: 
       location: /keg/keg-core/node_modules/@keg-hub/keg-components
@@ -53,6 +58,11 @@ actions:
       detach: true
       cmds:
         - yarn dev
+    att:
+      location: /keg/keg-core/node_modules/@keg-hub/keg-components
+      privileged: true
+      cmds:
+        - bash
   core:
     start:
       location: /keg/keg-core

@@ -20,13 +20,18 @@ sync:
         - "/docs"
 actions:
   core:
-    install: 
+    install:
       location: /keg/tap/node_modules/keg-core
       privileged: true
       cmds:
         - yarn install
+    att:
+      location: /keg/tap/node_modules/keg-core
+      privileged: true
+      cmds:
+        - bash
   retheme:
-    install: 
+    install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
       privileged: true
       cmds:
@@ -42,8 +47,13 @@ actions:
       detach: true
       cmds:
         - yarn dev
+    att:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
+      privileged: true
+      cmds:
+        - bash
   components:
-    install: 
+    install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
       privileged: true
       cmds:
@@ -59,6 +69,11 @@ actions:
       detach: true
       cmds:
         - yarn dev
+    att:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      privileged: true
+      cmds:
+        - bash
   tap:
     start:
       location: /keg/tap
