@@ -1,9 +1,13 @@
 let RNDimensions
 
+const loadReactNativeDimensions = () => {
+  const { Dimensions } = require('react-native')
+  return Dimensions
+}
+
 const checkDimensions = callBack => {
   return (...props) => {
-    const { Dimensions } = require('react-native')
-    RNDimensions = RNDimensions || Dimensions
+    RNDimensions = RNDimensions || loadReactNativeDimensions()
 
     return RNDimensions
       ? callBack(...props)
