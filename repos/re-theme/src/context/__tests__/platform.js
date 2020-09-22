@@ -46,4 +46,19 @@ describe('platform', () => {
 
   })
 
+  describe('Platform.select', () => {
+
+    it('should select the correct key from an object based on platform', () => {
+      const defPlatform = getRNPlatform()
+      expect(defPlatform.select({ native: 'I am native', web: 'I am web' }))
+        .toBe('I am web')
+    })
+
+    afterEach(() => {
+      setRNPlatform(undefined)
+    })
+
+  })
+
+
 })
