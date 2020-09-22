@@ -1,8 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { useClassName } from 'KegClassName'
 import { Image as RNImage } from 'react-native'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
-import { useClassName } from 'KegClassName'
-import PropTypes from 'prop-types'
 
 /**
  * Image
@@ -14,13 +14,11 @@ import PropTypes from 'prop-types'
  */
 const KegImage = React.forwardRef(({ className, ...props }, ref) => {
   const classRef = useClassName('keg-image', className, ref)
-  return (
-    <RNImage
-      accessibilityLabel='image'
-      {...props}
-      ref={classRef}
-    />
-  )
+  return <RNImage
+    accessibilityLabel='image'
+    {...props}
+    ref={classRef}
+  />
 })
 
 /**
@@ -31,15 +29,12 @@ const KegImage = React.forwardRef(({ className, ...props }, ref) => {
  * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
-export const Image = StyleInjector(
-  KegImage,
-  { displayName: 'Image', className: 'keg-image' }
-)
+export const Image = StyleInjector(KegImage, {
+  displayName: 'Image',
+  className: 'keg-image',
+})
 
 Image.propTypes = {
   ...RNImage.propTypes,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ])
+  className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
 }

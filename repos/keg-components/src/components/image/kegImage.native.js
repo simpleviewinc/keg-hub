@@ -10,13 +10,11 @@ import { Image as RNImage } from 'react-native'
  *
  */
 export const Image = React.forwardRef(({ className, ...props }, ref) => {
-  return (
-    <RNImage
-      accessibilityLabel='image'
-      {...props}
-      ref={classRef}
-    />
-  )
+  return <RNImage
+    accessibilityLabel='image'
+    {...props}
+    ref={ref}
+  />
 })
 
 Image.propTypes = RNImage.propTypes
