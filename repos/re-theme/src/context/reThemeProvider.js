@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react'
 import { ReThemeContext } from './reThemeContext'
-import { Dimensions } from '../dimensions/dimensions'
+import { Dimensions } from 'ReDimensions'
 import { getSize } from '../dimensions/sizeMap'
 import { buildTheme, getDefaultTheme } from '../theme'
 import { getCurrentTheme } from '../theme/manageTheme'
