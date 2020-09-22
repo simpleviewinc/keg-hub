@@ -1,18 +1,17 @@
-import React from 'react'
-import { ScrollView as RNScrollView } from 'react-native'
-
+import { ScrollView as KegScrollView } from './scrollView.native'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
 /**
- * ScrollView
- * @summary Wrapper around React-Native scroll view export
+ * View
+ * @summary Default view component that wraps the React Native View component. All props are optional
  *
- * @param {Object} props - see React Native ScrollView.propTypes
+ * @param {Object} props - see View PropTypes
+ * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
-export const ScrollView = props => {
-  return <RNScrollView {...props} />
-}
+export const ScrollView = StyleInjector(
+  KegScrollView,
+  { displayName: 'Scroll-View', className: 'keg-scroll-view' }
+)
 
-ScrollView.propTypes = {
-  ...RNScrollView.propTypes,
-}
+ScrollView.propTypes = KegScrollView.propTypes
