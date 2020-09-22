@@ -1,3 +1,4 @@
+import React from 'react'
 
 /**
  * Stub for Native StyleInjector calls, just renders the component
