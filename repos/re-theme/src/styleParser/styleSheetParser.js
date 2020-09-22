@@ -4,29 +4,6 @@ import { addToDom } from './addToDom'
 import { cssToJs } from './cssToJs'
 
 /**
- * Converts to the data-class text from the rootSelector class
- * @example
- * .my-class-name => [data-class~="my-class-name"] 
- * @param {Object} cssRule - Rule to be updated form a styleSheet on the dom
- * @param {string} rootSelector - Class the matches the cssRule
- * @param {string} styleText - Past updated style rules
- * 
- * @returns {string} - Updated style text with the cssRule converted to a data-class attribute
- */
-const convertToDataClass = (cssRule, rootSelector, formatted) => {
-
-  const selectorRef = rootSelector.substring(1)
-  const dataClass = `[data-class~="${selectorRef}"]`
-  const dataRule = cssRule.cssText.replace(rootSelector, dataClass)
-
-  formatted.asObj[dataClass] = cssToJs(dataRule, formatted.asObj[dataClass])
-  formatted.dataClass[selectorRef] = formatted.asObj[dataClass]
-  formatted.asStr += `${dataRule}\n`
-
-  return formatted
-}
-
-/**
  * Loops a style sheets rules and looks for matching className selectors
  * @function
  * @param {Object} formatted - Object to hold the parsed styles
@@ -51,7 +28,7 @@ const loopSheetCssRules = (formatted, sheet, classNames, callback) => {
       // Check if the rootSelector is in the classNames
       // If it is, then call the callback
       return classNames.includes(rootSelector)
-        ? checkCall(callback, cssRule, rootSelector, formatted)
+        ? checkCall(callback, cssRule, rootSelector, formatted, cssToJs)
         : formatted
 
     }, formatted)
@@ -73,9 +50,8 @@ export const styleSheetParser = (args) => {
     classNames,
     callback,
     toDom=true,
-    format,
     valid
-  } = validateArguments(args, convertToDataClass)
+  } = validateArguments(args)
 
   if(valid === false) return {}
 
@@ -83,7 +59,7 @@ export const styleSheetParser = (args) => {
     // Have to convert all styleSheets form the DOM into an array to loop over them
     Array.from(document.styleSheets).reduce(
       (formatted, sheet) => loopSheetCssRules(formatted, sheet, classNames, callback),
-      { asStr: '', asObj: {}, dataClass: {} }
+      {}
     )
 
   toDom && stylesText && addToDom(parsedStyles.asStr)
