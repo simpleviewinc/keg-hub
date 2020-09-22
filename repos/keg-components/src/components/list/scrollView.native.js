@@ -33,7 +33,7 @@ const useScrollClassNames = (defClass, className, innerClassName, ref) => {
         updateClassNames(
           scrollResponder.getInnerViewNode(),
           classRef,
-          `#{defClass}-container`,
+          `${defClass}-container`,
           innerClassName
         )
       }

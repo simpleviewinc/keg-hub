@@ -141,8 +141,10 @@ export const addStylesToDom = (selector, css) => {
   // The insertRule method is a lot faster then append method
   // But it does not allow you to see the styles in the inspector
   // So we only want to use it when in production
+  // We have to wrap it in @media all selector
+  // This is due to the limitations of insertRule requiring the css to be wrapped
   isProduction
-    ? css.rules.map(rule => KegSheet.sheet.insertRule(rule))
+    ? KegSheet.sheet.insertRule(`@media all {${css.all}}`)
     : KegSheet.append(css.all)
 
 }
