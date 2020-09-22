@@ -15,6 +15,7 @@ const resolveCoreAlias = {
   'react-native': 'react-native-web',
   'react-native-web': 'react-native-web',
   'react-native-svg': 'react-native-svg-web',
+  '@keg-hub/jsutils': '@keg-hub/jsutils/build/esm',
   '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/web',
   '@keg-hub/re-theme/styleParser':
     '@keg-hub/re-theme/build/esm/web/styleParser.js',

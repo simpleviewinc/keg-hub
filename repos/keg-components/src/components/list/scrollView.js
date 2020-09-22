@@ -9,9 +9,9 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
-export const ScrollView = StyleInjector(
-  KegScrollView,
-  { displayName: 'Scroll-View', className: 'keg-scroll-view' }
-)
+export const ScrollView = StyleInjector(KegScrollView, {
+  displayName: 'Scroll-View',
+  className: 'keg-scrollview',
+})
 
 ScrollView.propTypes = KegScrollView.propTypes
