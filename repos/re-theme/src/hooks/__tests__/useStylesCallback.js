@@ -7,7 +7,8 @@ const useCallbackResponse = jest.fn()
 const mockUseCallback = jest.fn((cb, deps) => (typeof cb === 'function' ? cb(...deps) : useCallbackResponse))
 
 const useMemoResponse = {}
-const mockUseMemo = jest.fn(() => useMemoResponse)
+let useMemoFuncResponse
+const mockUseMemo = jest.fn(() => useMemoFuncResponse || useMemoResponse)
 jest.setMock('react', { useCallback: mockUseCallback, useMemo: mockUseMemo })
 
 const mockReThemeContext = {}
@@ -18,7 +19,9 @@ const mockUseTheme = jest.fn(() => mockTheme)
 jest.setMock('../useTheme', { useTheme: mockUseTheme })
 
 const stylesCallbackResponse = { test: 'styles callback response' }
-const stylesCb = jest.fn(() => { return stylesCallbackResponse })
+let callbackResponseFunc
+const stylesCb = jest.fn(() => { return callbackResponseFunc || stylesCallbackResponse })
+
 const cbDependencies = [ 'test', 'array' ]
 const customStyles = { test: 'object' }
 
@@ -48,6 +51,13 @@ describe('useStylesCallback', () => {
     expect(stylesCb).not.toHaveBeenCalled()
     useStylesCallback(stylesCb, cbDependencies, customStyles)
     expect(stylesCb).toHaveBeenCalled()
+  })
+
+  it('should set cbDependencies as an empty array if cbDependencies is falsy', () => {
+    expect(stylesCb).not.toHaveBeenCalled()
+    useStylesCallback(stylesCb, undefined, customStyles)
+    expect(Array.isArray(stylesCb.mock.calls[0])).toBe(true)
+    expect(stylesCb.mock.calls[0].length).toBe(0)
   })
 
   it('should call useMemo, passing the theme, stylesCb response, and customStyles as dependencies', () => {
@@ -90,6 +100,15 @@ describe('useStylesCallback', () => {
     useStylesCallback(stylesCb, cbDependencies, {})
     const dependencies = mockUseMemo.mock.calls[0][1]
     expect(dependencies[2]).toBe(false)
+  })
+
+  it('should call the stylesCB inside the useMemo hook', () => {
+    useMemoFuncResponse = jest.fn((cb, deps) => typeof cb === 'function' ? cb(...deps) : true)
+    callbackResponseFunc = jest.fn(() => `useCallback called from useMemo`)
+    useStylesCallback(stylesCb, cbDependencies, {})
+    const useMemoFunc = mockUseMemo.mock.calls[0][0]    
+    const useMemoResp = useMemoFunc()
+    expect(useMemoResp).toBe(`useCallback called from useMemo`)
   })
 
 })

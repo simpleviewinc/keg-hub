@@ -11,8 +11,9 @@ const updateStateValue = jest.fn(update => {
 })
 
 // Mocked useSate function to test that it's called
+let stateOverride
 const useState = jest.fn(value => {
-  stateValue = value
+  stateValue = stateOverride || value
   return [ stateValue, updateStateValue ]
 })
 
@@ -54,6 +55,7 @@ describe('nativeThemeHook', () => {
     stateValue = null
     effectCB = null
     refObj = { current: undefined }
+    stateOverride = undefined
   })
 
   it('should return a ref as first item in the reponse array', () => {
@@ -82,6 +84,13 @@ describe('nativeThemeHook', () => {
     const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, { ref: customRef })
     expect(refObj.current).toBe(undefined)
     expect(ref).toBe(customRef)
+  })
+
+  it('should call the useLayoutEffect, which shoudl call setValue if the values are not equal', () => {
+    stateOverride = { custom: 'state-override' }
+    const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
+    effectCB()
+    expect(updateStateValue).toHaveBeenCalledWith(stateOverride)
   })
 
 })
