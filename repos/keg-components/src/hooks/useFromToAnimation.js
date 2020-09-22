@@ -9,6 +9,8 @@ import { isArr } from '@keg-hub/jsutils'
  * @param {number} params.from - the starting value of the animation
  * @param {number} params.to - the ending destination value of the animation
  * @param {Number} params.duration - time in milliseconds that the animation should proceed
+ * @param {boolean} params.loop - loop the animation
+ * @param {Easing} params.easing - react-native Easing obj
  * @param {Function} params.onFinish - passed to Animated.start(), called when the animation finishes
  * @param {Array} dependencies - optional array of dependencies that will dictate when the hook re-runs the animation.
  *                               By default, the animation reruns if the `from` or `to` values change.
@@ -16,7 +18,8 @@ import { isArr } from '@keg-hub/jsutils'
  *  - Animated.Value: pass this value to your Animated.View to begin the animation
  */
 export const useFromToAnimation = (params, dependencies) => {
-  const { from, to, duration = 500, onFinish = noOp } = params || {}
+  const { from, to, duration = 500, onFinish = noOp, loop = false, easing } =
+    params || {}
 
   // determines when the animation should run
   const animDependencies = isArr(dependencies) ? dependencies : [ from, to ]
@@ -25,9 +28,16 @@ export const useFromToAnimation = (params, dependencies) => {
   // whenever the animation would run again, which is why it shares hookDependencies
   // with the useEffect below
   const fromVal = useMemo(() => new Animated.Value(from), animDependencies)
+  const animatedTiming = Animated.timing(fromVal, {
+    toValue: to,
+    duration,
+    easing,
+  })
 
   useEffect(() => {
-    Animated.timing(fromVal, { toValue: to, duration }).start(onFinish)
+    loop
+      ? Animated.loop(animatedTiming).start()
+      : animatedTiming.start(onFinish)
   }, animDependencies)
 
   return [fromVal]
