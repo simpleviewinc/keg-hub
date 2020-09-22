@@ -13,14 +13,17 @@ import { useStyleTag } from './useStyleTag'
  * @returns {string} - className Css selector of the added style rules
  */
 const BuildWithStyles = React.forwardRef((props, ref) => {
-  const { Component, children, config, className, KegDefClass, style, ...buildProps } = props
-  const classList = useStyleTag(style, className || KegDefClass)
+  const { Component, children, config, className, style, ...buildProps } = props
+  const { className:KegDefClass } = config
+  
+  const { classList, filteredStyle } = useStyleTag(style, className || KegDefClass, config)
 
   return (
     <Component
       {...buildProps}
+      style={filteredStyle}
       ref={ref}
-      className={classList} 
+      className={classList}
     >
       {children}
     </Component>
@@ -37,14 +40,11 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
  * @returns {Function} - Anonymous function that wraps the passed in Component
  */
 export const StyleInjector = (Component, config={}) => {
-  const { className:KegDefClass } = config
-
   return React.forwardRef(({ style, ...props}, ref) => {
     return !style
       ? (<Component {...props} style={style} ref={ref} />)
       : (
           <BuildWithStyles
-            KegDefClass={KegDefClass}
             {...props}
             style={style}
             config={config}

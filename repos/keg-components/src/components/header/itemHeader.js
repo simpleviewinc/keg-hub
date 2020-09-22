@@ -11,6 +11,9 @@ import { useThemePath } from '../../hooks'
 import { useClassList } from 'KegClassList'
 import { noPropObj } from '../../utils/helpers/noop'
 import { isValidComponent } from '../../utils/validate/isValidComponent'
+import { getPlatform } from 'KegGetPlatform'
+
+const isWeb = getPlatform() === 'web'
 
 /**
  * ItemHeader
@@ -57,7 +60,7 @@ export const ItemHeader = props => {
         shadow && get(headerStyles, [ 'shadow', 'main' ]),
       ]}
     >
-      { shadow && <View style={headerStyles?.shadow?.cover} /> }
+      { !isWeb && shadow && <View style={headerStyles?.shadow?.cover} /> }
       { children || (
         <>
           <Side

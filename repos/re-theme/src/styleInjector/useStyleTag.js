@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { addStylesToDom, getSelector, hyphenator } from './injectHelpers'
+import { addStylesToDom, getSelector, hyphenator, filterRules } from './injectHelpers'
 import { isArr, eitherArr, isObj } from '@keg-hub/jsutils'
 import { useTheme } from '../hooks/useTheme'
 import {
@@ -38,19 +38,21 @@ export const createBlock = style => {
  * 
  * @returns {string} - Style rules Object converted into a style rules string
  */
-export const convertToCss = style => {
-
+export const convertToCss = (style, filter) => {
   const stlArr = flattenArray(eitherArr(style, [style]))
 
   return stlArr.reduce((rules, stl) => {
     if(!isObj(stl)) return rules
+    
+    const { style:cleanStyle, filtered } = filterRules(stl, filter)
+    Object.assign(rules.filtered, filtered)
 
-    const flat = flattenStyle(stl)
+    const flat = flattenStyle(cleanStyle)
     const compiled = createCompileableStyle(flat)
     rules.blocks.push(createBlock(compiled))
 
     return rules
-  }, { blocks: [] })
+  }, { blocks: [], filtered: {} })
 
 }
 
@@ -63,14 +65,14 @@ export const convertToCss = style => {
  * 
  * @returns {string} - className Css selector of the added style rules
  */
-export const useStyleTag = (style, className='') => {
+export const useStyleTag = (style, className='', config) => {
 
   const theme = useTheme()
   const themeSize = theme?.RTMeta?.size
   const themeKey = theme?.RTMeta?.key
 
-  const { selector } = useMemo(() => {
-    const { blocks } = convertToCss(style, selector)
+  return useMemo(() => {
+    const { blocks, filtered } = convertToCss(style, selector)
 
     // Create a unique selector based on the className and built blocks
     const selector = getSelector(className, blocks.join(''))
@@ -88,9 +90,9 @@ export const useStyleTag = (style, className='') => {
 
     return {
       css,
-      selector: selector.split('.').filter(cls => cls)
+      filteredStyle: filtered,
+      classList: selector.split('.').filter(cls => cls)
     }
-  }, [style, className, themeSize, themeKey])
+  }, [style, className, themeSize, themeKey, config])
 
-  return selector
 }

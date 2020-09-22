@@ -31,7 +31,7 @@
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "deploy": "gh-pages -d docs -o upstream",
-    "dev": "nodemon --watch ./configs --exec 'NODE_ENV=development rollup -c ./configs/rollup.config.js -w'",
+    "dev": "nodemon --watch ./configs --exec 'NODE_ENV=production rollup -c ./configs/rollup.config.js -w'",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",

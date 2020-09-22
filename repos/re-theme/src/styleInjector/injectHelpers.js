@@ -1,4 +1,4 @@
-import { isArr, isStr, exists } from '@keg-hub/jsutils'
+import { isArr, isStr, exists, omitKeys, pickKeys } from '@keg-hub/jsutils'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 import { addThemeEvent } from '../theme/themeEvent'
 import { Constants } from '../constants'
@@ -99,6 +99,40 @@ export const hashString = (str, maxLength=0) => {
   }
 
   return maxLength ? hash.slice(0, maxLength) : hash
+}
+
+/**
+ * Default style rules to not convert to CSS
+ * @Object
+ */
+const defFilterRules = [
+  'aspectRatio',
+  'elevation',
+  'overlayColor',
+  'resizeMode',
+  'tintColor',
+  'backgroundSize',
+  'animationKeyframes',
+  'placeholderTextColor',
+  'pointerEvents',
+  'scrollbarWidth',
+]
+
+/**
+ * Filters out styles that require extra help to convert to CSS
+ * <br/>In these cases, we let react-native-web handel through the style attribute
+ * @function
+ * @param {Object} style - Object containing style rules
+ * @param {Array} filter - Custom style rules to filter out
+ *
+ * @returns {Object} - Contains separated objects with filtered styles, non-filtered styles
+ */
+export const filterRules = (style, filter) => {
+  const toFilter = isArr(filter) ? defFilterRules.concat(filter) : defFilterRules
+  return {
+    style: omitKeys(style, toFilter),
+    filtered: pickKeys(style, toFilter)
+  }
 }
 
 /**

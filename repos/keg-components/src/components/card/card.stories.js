@@ -12,6 +12,9 @@ const wrapStyles = {
 }
 const cardStyles = {
   main: { maxWidth: '300px', minWidth: '240px' },
+  media: {
+    image: { height: 240, resizeMode: 'contain', backgroundSize: 'contain' },
+  },
 }
 
 storiesOf('Display/Card', module).add('No Image', () => (
@@ -75,7 +78,7 @@ storiesOf('Display/Card', module).add('With Image', () => (
     <Card
       Header={'Goats in Boats'}
       image={{ src: 'https://placegoat.com/240/240' }}
-      styles={{ ...cardStyles, media: { image: { height: 240 } } }}
+      styles={cardStyles}
     >
       <P>
         Goats were one of the first animals to be tamed by humans and were being
@@ -86,11 +89,11 @@ storiesOf('Display/Card', module).add('With Image', () => (
     <Card
       Footer={'Goats in Boats'}
       image={{ src: 'https://placegoat.com/240/240' }}
-      styles={{ ...cardStyles, media: { image: { height: 240 } } }}
+      styles={cardStyles}
     ></Card>
     <Card
       image={{ src: 'https://placegoat.com/240/240' }}
-      styles={{ ...cardStyles, media: { image: { height: 240 } } }}
+      styles={cardStyles}
     >
       <P>
         Goats were one of the first animals to be tamed by humans and were being
@@ -102,7 +105,7 @@ storiesOf('Display/Card', module).add('With Image', () => (
       title='Card Title'
       subtitle='Card Subtitle'
       image={{ src: 'https://placegoat.com/240/240' }}
-      styles={{ ...cardStyles, media: { image: { height: 240 } } }}
+      styles={cardStyles}
     >
       <P>Card component with title and subtitle</P>
       <P>Some text text for the demo to show what the card looks like.</P>
@@ -112,7 +115,7 @@ storiesOf('Display/Card', module).add('With Image', () => (
       title='Card Title'
       subtitle='Card Subtitle'
       image={{ src: 'https://placegoat.com/240/240' }}
-      styles={{ ...cardStyles, media: { image: { height: 240 } } }}
+      styles={cardStyles}
     >
       <P>Card component with title and subtitle</P>
       <P>Some text text for the demo to show what the card looks like.</P>
