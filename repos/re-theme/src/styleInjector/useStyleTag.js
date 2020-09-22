@@ -2,17 +2,13 @@ import { useMemo } from 'react'
 import { addStylesToDom, getSelector, hyphenator } from './injectHelpers'
 import { isArr, eitherArr, isObj } from '@keg-hub/jsutils'
 import { useTheme } from '../hooks/useTheme'
-
-/**
- * IMPORTANT -- Uses internal react-native-web methods to keep bundle size down
- *   - If this code is ever removed from react-native-web
- *   - We'll need to add it into ReTheme, or come up with a different solution
-*/
-import prefixStyles from 'react-native-web/dist/cjs/modules/prefixStyles'
-import flattenArray from 'react-native-web/dist/cjs/modules/flattenArray'
-import flattenStyle from 'react-native-web/dist/cjs/exports/StyleSheet/flattenStyle'
-import createReactDOMStyle from 'react-native-web/dist/cjs/exports/StyleSheet/createReactDOMStyle'
-import createCompileableStyle from 'react-native-web/dist/cjs/exports/StyleSheet/createCompileableStyle'
+import {
+  prefixStyles,
+  flattenArray,
+  flattenStyle,
+  createReactDOMStyle,
+  createCompileableStyle,
+} from './reactNativeWeb'
 
 /**
  * Creates a style rules string from a JS object
@@ -20,7 +16,7 @@ import createCompileableStyle from 'react-native-web/dist/cjs/exports/StyleSheet
  * 
  * @returns {string} - Style rules Object converted into a style rules string
  */
-const createBlock = style => {
+export const createBlock = style => {
   const prefixed = prefixStyles(createReactDOMStyle(style))
   const cssString = Object.keys(prefixed)
     .map(property => {
@@ -42,7 +38,7 @@ const createBlock = style => {
  * 
  * @returns {string} - Style rules Object converted into a style rules string
  */
-const convertToCss = style => {
+export const convertToCss = style => {
 
   const stlArr = flattenArray(eitherArr(style, [style]))
 
