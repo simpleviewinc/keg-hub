@@ -1,6 +1,7 @@
 /** @module theme */
 'use strict'
 
+import { ruleHelpers } from '../constants/ruleHelpers'
 import { getSizeMap } from '../dimensions'
 import { Constants } from '../constants'
 import { getRNPlatform } from '../context/platform'
@@ -59,6 +60,13 @@ const buildSizedThemes = (theme, sizedTheme, size) => {
   return reduceObj(
     theme,
     (name, value, sizedTheme) => {
+
+      // Check if the name is a shortcut
+      if(ruleHelpers[name]){
+        unset(theme, name)
+        theme[ruleHelpers[name]] = value
+      }
+
       // If value is not an object, just return the sizedTheme
       if (!isObj(value)) return sizedTheme
 
