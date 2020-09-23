@@ -27,7 +27,5 @@
   "StoryWrap": ".storybook/storyWrap.js",
   "KegClassList": "src/hooks/useClassList${platform}.js",
   "KegClassName": "src/hooks/useClassName${platform}.js",
-  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js",
-  "KegInjector": "src/components/styleInjector/styleInjector.js",
-  "KegStyleTag": "src/components/styleInjector/useStyleTag.js"
+  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js"
 }
