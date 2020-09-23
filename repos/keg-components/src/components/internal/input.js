@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { TextInput } from 'react-native'
 import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
-import { withTouch } from '../../../hocs'
+import { withTouch } from '../../hocs'
 
 /**
  * Input
@@ -26,21 +26,8 @@ export const Input = forwardRef(({ className, ...props }, ref) => {
   )
 })
 
+
 Input.propTypes = {
   ...TextInput.propTypes,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array,
-  ]),
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  onChange: PropTypes.func,
-  onValueChange: PropTypes.func,
-  onChangeText: PropTypes.func,
-  placeholder: PropTypes.string,
-  style: PropTypes.object,
-  type: PropTypes.string,
-  value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 }

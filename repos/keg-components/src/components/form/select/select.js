@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
-import { Picker } from 'react-native'
+import { Select as InternalSelect } from '../../internal/select'
 import { useThemePath } from '../../../hooks'
 import { useSelectHandlers } from '../../../hooks/useSelectHandlers'
 import { getValueFromChildren, getInputValueKey } from '../../../utils'
@@ -10,6 +10,15 @@ import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { ChevronDown } from '../../../assets/icons'
 import { Icon } from 'KegIcon'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+
+/**
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
+ */
+const KegSelect = StyleInjector(
+  InternalSelect,
+  { displayName: 'Select', className: 'keg-select' }
+)
 
 /**
  * Gets the key value pair for the select components value
@@ -26,6 +35,14 @@ const getValue = props => {
   return { [valKey]: setValue }
 }
 
+/**
+ * Select
+ * @summary Default Select component that wraps the Internal Select component with the styles injector. All props are optional
+ *
+ * @param {Object} props - see KegSelect PropTypes
+ * @property {String} props.className - Value to set the className to (web platform only)
+ *
+ */
 export const Select = React.forwardRef((props, ref) => {
   const {
     className,
@@ -49,14 +66,10 @@ export const Select = React.forwardRef((props, ref) => {
     className
   )
   const classRef = useClassName('keg-select', selectClasses, ref)
-  const InjectedComp = StyleInjector(
-    Picker,
-    { displayName: 'Select', className: 'keg-select' }
-  )
 
   return (
     <View style={[ selectStyles.main, style ]}>
-      <InjectedComp
+      <KegSelect
         ref={classRef}
         {...elProps}
         enabled={!disabled}
@@ -65,7 +78,7 @@ export const Select = React.forwardRef((props, ref) => {
         {...useSelectHandlers({ onChange, onValueChange })}
       >
         { children }
-      </InjectedComp>
+      </KegSelect>
       <Icon
         styles={selectStyles.icon}
         Component={ChevronDown}
@@ -75,7 +88,9 @@ export const Select = React.forwardRef((props, ref) => {
   )
 })
 
+
 Select.propTypes = {
+  ...InternalSelect.propTypes,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,

@@ -5,8 +5,18 @@ import {
   useInputHandlers,
   usePressHandlers,
 } from '../../../hooks'
-import { Input as KegInput } from './kegInput'
+import PropTypes from 'prop-types'
+import { Input as InternalInput } from '../../internal/input.js'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+
+/**
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
+ */
+const KegInput = StyleInjector(
+  InternalInput,
+  { displayName: 'Input', className: 'keg-input' }
+)
 
 /**
  * Gets the key value pair for the select components value
@@ -23,7 +33,7 @@ const getValue = ({ children, value }) => {
 
 /**
  * Input
- * @summary Default Input component that wraps the KegInput component with the styles injector. All props are optional
+ * @summary Default Input component that wraps the Internal Input component with the styles injector. All props are optional
  *
  * @param {Object} props - see KegInput PropTypes
  * @property {String} props.className - Value to set the className to (web platform only)
@@ -50,13 +60,9 @@ export const Input = React.forwardRef((props, ref) => {
   } = props
 
   const inputStyles = useThemePath(themePath)
-  const InjectedComp = StyleInjector(
-    KegInput,
-    { displayName: 'Input', className: 'keg-input' }
-  )
   
   return (
-    <InjectedComp
+    <KegInput
       accessibilityRole='textbox'
       onPress={onPress}
       {...getReadOnly(false, readOnly, disabled, editable)}
@@ -70,4 +76,21 @@ export const Input = React.forwardRef((props, ref) => {
 })
 
 
-Input.propTypes = KegInput.propTypes
+Input.propTypes = {
+  ...KegInput.propTypes,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  onChange: PropTypes.func,
+  onValueChange: PropTypes.func,
+  onChangeText: PropTypes.func,
+  placeholder: PropTypes.string,
+  style: PropTypes.object,
+  type: PropTypes.string,
+  value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+}
+

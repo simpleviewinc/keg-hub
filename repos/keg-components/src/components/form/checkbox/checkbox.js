@@ -4,6 +4,7 @@ import React, { useMemo } from 'react'
 import { CheckboxWrapper } from './checkbox.wrapper'
 import { noPropObj } from '../../../utils/helpers/noop'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+import { Input as KegInput } from '../../internal/input.web'
 
 // Styles are defined here so that they are enforced
 // Due to how the checkbox is designed, these styles should not be changed
@@ -35,13 +36,15 @@ const checkBoxStyles = {
   },
 }
 
+
 /**
- * @summary A simple wrapper around the a web input element
- * <br/> This is required because we can't just pass input to the StyleInjector
- * <br/> It requires a React component, and input gets viewed as a variable
- * @param {Object} props - props object. Accepts all standard <input /> props which will be passed to the input element. Additional props:
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
  */
-const InputComp = props => (<input {...props} />)
+const Input = StyleInjector(
+  KegInput,
+  { displayName: 'Checkbox', className: 'keg-checkbox' }
+)
 
 const Element = React.forwardRef(
   (
@@ -54,11 +57,6 @@ const Element = React.forwardRef(
         ...checkBoxStyles.icon,
       }
     }, [ checkBoxStyles, styles ])
-
-    const InjectedComp = StyleInjector(
-      InputComp,
-      { displayName: 'Checkbox', className: 'keg-checkbox' }
-    )
 
     return (
       <View
@@ -73,7 +71,7 @@ const Element = React.forwardRef(
           className='keg-checkbox-icon'
           style={checkStyle}
         /> }
-        <InjectedComp
+        <Input
           className='keg-checkbox'
           {...elProps}
           {...props}

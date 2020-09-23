@@ -2,14 +2,18 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'
 import { checkCall, isFunc } from '@keg-hub/jsutils'
-import { Image as KegImage } from 'KegInternalImage'
+import { Image as InternalImage } from '../internal/image'
 import { useThemeHover } from '@keg-hub/re-theme'
 import { useThemePath, useStyle } from 'KegHooks'
 import React, { useState, forwardRef, useRef, useCallback } from 'react'
 import { useClassList } from 'KegClassList'
 import { getImgSrc, getPressHandler } from 'KegUtils'
-import { getPlatform } from 'KegGetPlatform'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
+const KegImage = StyleInjector(InternalImage, {
+  displayName: 'Image',
+  className: 'keg-image',
+})
 
 /**
  * Image
@@ -93,6 +97,7 @@ export const Image = forwardRef((props, ref) => {
 })
 
 Image.propTypes = {
+  ...InternalImage.propTypes,
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
