@@ -67,7 +67,7 @@ const setCheckedValue = (
  *
  * @returns {Component} - section component
  */
-const SideComponent = ({ className, Component, style, onPress }) => {
+const SideComponent = ({ className, Component, styles, style, onPress }) => {
   const sideProps = onPress ? { onPress } : undefined
   return isStr(Component) ? (
     <Text
@@ -79,7 +79,8 @@ const SideComponent = ({ className, Component, style, onPress }) => {
     </Text>
   ) : (
     renderFromType(Component, {
-      style: styles.content,
+      style,
+      styles,
       className,
       ...sideProps,
     })
