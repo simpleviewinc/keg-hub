@@ -9,6 +9,7 @@ import { useClassName } from 'KegClassName'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { ChevronDown } from '../../../assets/icons'
 import { Icon } from 'KegIcon'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
 /**
  * Gets the key value pair for the select components value
@@ -48,10 +49,14 @@ export const Select = React.forwardRef((props, ref) => {
     className
   )
   const classRef = useClassName('keg-select', selectClasses, ref)
+  const InjectedComp = StyleInjector(
+    Picker,
+    { displayName: 'Select', className: 'keg-select' }
+  )
 
   return (
     <View style={[ selectStyles.main, style ]}>
-      <Picker
+      <InjectedComp
         ref={classRef}
         {...elProps}
         enabled={!disabled}
@@ -60,7 +65,7 @@ export const Select = React.forwardRef((props, ref) => {
         {...useSelectHandlers({ onChange, onValueChange })}
       >
         { children }
-      </Picker>
+      </InjectedComp>
       <Icon
         styles={selectStyles.icon}
         Component={ChevronDown}

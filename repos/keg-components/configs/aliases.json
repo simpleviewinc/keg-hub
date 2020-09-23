@@ -8,7 +8,7 @@
   "KegIcon": "src/components/icon/icon.js",
   "KegIcons": "src/assets/icons",
   "KegIndicator": "src/components/indicator/indicator.js",
-  "KegInput": "src/components/form/input/input${platform}.js",
+  "KegInput": "src/components/form/input/input.js",
   "KegLink": "src/components/link/link.js",
   "KegOption": "src/components/form/option/option${platform}.js",
   "KegRadio": "src/components/form/radio/radio${platform}.js",

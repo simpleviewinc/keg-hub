@@ -4,6 +4,8 @@ import { useClassName } from 'KegClassName'
 import { getPlatform } from 'KegGetPlatform'
 import { SwitchWrapper } from './switch.wrapper'
 import { Switch as RNSwitch } from 'react-native'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+
 const isWeb = getPlatform() === 'web'
 
 /**
@@ -55,13 +57,17 @@ const Element = React.forwardRef((props, ref) => {
   } = props
 
   const classRef = useClassName('keg-switch', className, ref)
+  const InjectedComp = StyleInjector(
+    RNSwitch,
+    { displayName: 'Switch', className: 'keg-switch' }
+  )
 
   return (
     <View
       className='keg-switch-area'
       style={styles.main}
     >
-      <RNSwitch
+      <InjectedComp
         style={styles.switch}
         {...getSwitchColors(thumbColor, trackColor, styles)}
         {...elProps}

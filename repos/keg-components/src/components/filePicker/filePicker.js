@@ -6,6 +6,16 @@ import { Button } from '../button'
 import { View } from 'KegView'
 import { get } from '@keg-hub/jsutils'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+
+/**
+ * @summary A simple wrapper around the a web input element
+ * <br/> This is required because we can't just pass input to the StyleInjector
+ * <br/> It requires a React component, and input gets viewed as a variable
+ * @param {Object} props - props object. Accepts all standard <input /> props which will be passed to the input element. Additional props:
+ */
+const InputComp = props => (<input {...props} />)
+
 /**
  * A component for selecting files from the user's system. Looks better than a basic input element,
  * and accepts style objects for styling further
@@ -68,6 +78,11 @@ export const FilePicker = React.forwardRef((props, ref) => {
     openOnMount && clickInput()
   }, [])
 
+  const InjectedComp = StyleInjector(
+    InputComp,
+    { displayName: 'FilePicker', className: 'keg-file-picker' }
+  )
+
   return (
     <View
       className={useThemeTypeAsClass(
@@ -94,7 +109,7 @@ export const FilePicker = React.forwardRef((props, ref) => {
       }
 
       { /* this input is hidden from the user, but is still used for selecting a file */ }
-      <input
+      <InjectedComp
         {...args}
         ref={input => {
           ref && (ref.current = input)
