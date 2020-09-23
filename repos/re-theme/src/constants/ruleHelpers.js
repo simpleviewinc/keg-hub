@@ -20,44 +20,46 @@ export const ruleHelpers = {
 
   // Border helpers
   bC: `borderColor`,
-  bTC: `borderTopColor`,
-  bBC: `borderBottomColor`,
-  bRC: `borderRightColor`,
-  bLC: `borderLeftColor`,
+  bCT: `borderTopColor`,
+  bCB: `borderBottomColor`,
+  bCR: `borderRightColor`,
+  bCL: `borderLeftColor`,
   bW: `borderWidth`,
-  bR: `borderRadius`,
   bS: `borderStyle`,
   bC: `borderColor`,
+  bRad: `borderRadius`,
 
   // Color helpers
-  clr: `color`,
+  c: `color`,
   bg: `background`,
   bgC: `backgroundColor`,
 
   // Layout helpers
-  dsp: `display`,
+  d: `display`,
   ovf: `overflow`,
   ovfX: `overflowX`,
   ovfY: `overflowY`,
   pos: `position`,
-  zI: `zIndex`,
+  z: `zIndex`,
+
   tp: `top`,
   bt: `bottom`,
+  btm: `bottom`,
   lt: `left`,
   rt: `right`,
 
   // Effect helpers
   bxS: `boxShadow`,
-  opc: `opacity`,
-  ptE: `pointerEvents`,
+  op: `opacity`,
+  ptrE: `pointerEvents`,
   otl: `outline`,
 
   // Flex helpers
-  fx: `flex`,
-  fxD: `flexDirection`,
-  fxW: `flexWrap`,
-  fxB: `flexBasis`,
-  fxS: `flexShrink`,
+  fl: `flex`,
+  flD: `flexDirection`,
+  flWr: `flexWrap`,
+  flB: `flexBasis`,
+  flS: `flexShrink`,
   jtC: `justifyContent`,
   alC: `alignContent`,
   alS: `alignSelf`,
@@ -66,8 +68,6 @@ export const ruleHelpers = {
   // Dimension helpers
   w: 'width',
   h: `height`,
-  wd: 'width',
-  ht: `height`,
   minH: `minHeight`,
   maxH: `maxHeight`,
   minW: `minWidth`,
@@ -75,13 +75,12 @@ export const ruleHelpers = {
   
   // Text / Font helpers
   ftF: `fontFamily`,
-  ftS: `fontSize`,
-  ftSl: `fontStyle`,
-  ftW: `fontWeight`,
+  ftSz: `fontSize`,
+  ftS: `fontStyle`,
+  ftWt: `fontWeight`,
   lnH: `lineHeight`,
-  ltS: `letterSpacing`,
-  txA: `textAlign`,
-  txD: `textDecoration`,
-  txDL: `textDecorationLine`
+  ltrS: `letterSpacing`,
+  txAl: `textAlign`,
+  txDc: `textDecoration`,
 
 }
