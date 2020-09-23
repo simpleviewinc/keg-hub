@@ -2,9 +2,9 @@ import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
 import { colors } from './colors'
 import { getThemeDefaults } from './themeDefaults'
 
-const defaults = getThemeDefaults()
 
 export const spaceHelper = (amount, sides = [], type) => {
+  const defaults = getThemeDefaults()
   sides = (sides.length && sides) || defaults.layout.sides
   if (sides === 'all' || (isArr(sides) && sides[0] === 'all'))
     sides = defaults.layout.sides
@@ -17,6 +17,7 @@ export const spaceHelper = (amount, sides = [], type) => {
 }
 
 export const unitsHelper = value => {
+  const defaults = getThemeDefaults()
   if (!isStr(value) && !isNum(value)) return value
   if (isStr(value)) {
     const amount = parseInt(value)
@@ -30,7 +31,7 @@ export const unitsHelper = value => {
 
 const align = dir => (isStr(dir) && { textAlign: dir }) || {}
 const background = color => ({ backgroundColor: colors[color] || color || '' })
-const bold = () => ({ fontWeight: defaults.font.bold })
+const bold = () => ({ fontWeight: getThemeDefaults()?.font?.bold })
 const color = color =>
   colors[color] ? { color: colors[color] } : { color: color }
 const size = num => ({ fontSize: unitsHelper(num) })

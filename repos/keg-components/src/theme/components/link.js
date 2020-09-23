@@ -1,17 +1,22 @@
-import { colors } from '../colors'
+import { getThemeDefaults } from '../themeDefaults'
 
-export const link = {
-  default: {
-    $all: {
-      color: colors.palette.blue01,
-      textDecorationLine: 'underline',
-      textDecorationColor: colors.palette.blue02,
+export const link = (config) => {
+  const { colors } = getThemeDefaults()
+
+  return {
+    default: {
+      $all: {
+        color: colors.palette.blue01,
+        textDecorationLine: 'underline',
+        textDecorationColor: colors.palette.blue02,
+      },
     },
-  },
-  hover: {
-    $all: {
-      color: colors.palette.blue02,
-      textDecorationColor: colors.palette.blue02,
+    hover: {
+      $all: {
+        color: colors.palette.blue02,
+        textDecorationColor: colors.palette.blue02,
+      },
     },
-  },
+  }
 }
+

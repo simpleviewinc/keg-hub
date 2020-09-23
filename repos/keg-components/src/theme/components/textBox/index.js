@@ -1,7 +1,10 @@
-import { outlined } from './textBox.outlined'
-import { contained } from './textBox.contained'
+import { containedInit } from './textBox.contained'
+import { outlinedInit } from './textBox.outlined'
 
-export const textBox = {
-  outlined,
-  contained,
+export const textBox = (config) => {
+  const contained = containedInit(config)
+  return {
+    contained,
+    outlined: outlinedInit(config, contained),
+  }
 }

@@ -1,6 +1,12 @@
-export const icon = {
-  default: {
-    container: {},
-    icon: {},
-  },
+import { getThemeDefaults } from '../../themeDefaults'
+
+export const iconInit = (config) => {
+
+  return{
+    default: {
+      container: {},
+      icon: {},
+    }
+  }
+
 }

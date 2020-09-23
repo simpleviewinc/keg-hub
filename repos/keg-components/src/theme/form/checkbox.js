@@ -2,62 +2,76 @@ import { colors } from '../colors'
 import { get, deepMerge } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-const defaults = getThemeDefaults()
-const height = get(defaults, 'form.checkbox.height', 20)
-const width = get(defaults, 'form.checkbox.width', 20)
+export const init = () => {
+  const defaults = getThemeDefaults()
+  const height = get(defaults, 'form.checkbox.height', 20)
+  const width = get(defaults, 'form.checkbox.width', 20)
 
-const checkboxDefault = {
-  main: {
-    $all: {
-      width: '100%',
-      height: 35,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    $web: {
-      display: 'flex',
-    },
-  },
-  content: {
+  const checkboxDefault = {
     main: {
-      $web: {
-        outline: 'none',
-        height: height,
-        width: width,
-        display: 'flex',
-        alignItems: 'stretch',
-        position: 'relative',
-      },
-      $native: {
+      $all: {
+        width: '100%',
+        height: 35,
+        flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
+      },
+      $web: {
+        display: 'flex',
       },
     },
-    area: {
-      off: {
-        $all: {
-          backgroundColor: get(colors, 'palette.gray01'),
-        },
+    content: {
+      main: {
         $web: {
           outline: 'none',
-          height: '100%',
-          width: '100%',
-          position: 'absolute',
-          boxShadow: `inset 0px 0px 5px ${get(colors, 'opacity._15')}`,
-          borderRadius: get(defaults, 'form.border.radius', 5),
+          height: height,
+          width: width,
+          display: 'flex',
+          alignItems: 'stretch',
+          position: 'relative',
+        },
+        $native: {
+          alignItems: 'center',
         },
       },
-      on: {
-        $all: {
-          backgroundColor: get(colors, 'surface.primary.colors.main'),
+      area: {
+        off: {
+          $all: {
+            backgroundColor: get(colors, 'palette.gray01'),
+          },
+          $web: {
+            outline: 'none',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+            boxShadow: `inset 0px 0px 5px ${get(colors, 'opacity._15')}`,
+            borderRadius: get(defaults, 'form.border.radius', 5),
+          },
+        },
+        on: {
+          $all: {
+            backgroundColor: get(colors, 'surface.primary.colors.main'),
+          },
         },
       },
-    },
-    indicator: {
-      off: {
-        $web: {
-          color: get(colors, 'palette.white02'),
+      indicator: {
+        off: {
+          $web: {
+            color: get(colors, 'palette.white02'),
+          },
         },
+        on: {},
+      },
+      disabled: {
+        opacity: 0.4,
+      },
+      left: {
+        flex: 1,
+        textAlign: 'left',
+      },
+      right: {
+        flex: 1,
+        textAlign: 'right',
       },
       on: {},
     },
@@ -69,53 +83,56 @@ const checkboxDefault = {
       flex: 1,
       textAlign: 'right',
     },
-  },
-}
+  }
 
-const checkboxClose = deepMerge(checkboxDefault, {
-  main: {
+  const checkboxClose = deepMerge(checkboxDefault, {
+    main: {
+      $all: {
+        justifyContent: 'flex-start',
+      },
+    },
+    content: {
+      left: {
+        flex: 'none',
+        marginRight: '10px',
+        textAlign: 'inherit',
+      },
+      right: {
+        flex: 'none',
+        marginLeft: '10px',
+        textAlign: 'inherit',
+      },
+    },
+  })
+
+  const disabledRules = {
     $all: {
-      justifyContent: 'flex-start',
+      opacity: 0.4,
     },
-  },
-  content: {
-    left: {
-      flex: 'none',
-      marginRight: '10px',
-      textAlign: 'inherit',
+    $web: {
+      cursor: 'not-allowed',
     },
-    right: {
-      flex: 'none',
-      marginLeft: '10px',
-      textAlign: 'inherit',
-    },
-  },
-})
+  }
 
-const disabledRules = {
-  $all: {
-    opacity: 0.4,
-  },
-  $web: {
-    cursor: 'not-allowed',
-  },
-}
-
-const checkboxDisabled = {
-  main: disabledRules,
-  content: {
+  const checkboxDisabled = {
     main: disabledRules,
-    input: {
-      cursor: 'not-allowed',
+    content: {
+      main: disabledRules,
+      input: {
+        cursor: 'not-allowed',
+      },
+      right: {
+        cursor: 'not-allowed',
+      },
     },
-    right: {
-      cursor: 'not-allowed',
-    },
-  },
+  }
+
+  return {
+    default: checkboxDefault,
+    close: checkboxClose,
+    disabled: checkboxDisabled,
+  }
+
+
 }
 
-export const checkbox = {
-  default: checkboxDefault,
-  close: checkboxClose,
-  disabled: checkboxDisabled,
-}

@@ -14,20 +14,22 @@ import { modal } from './modal'
 import { header } from './header'
 import { textToggle } from './textToggle'
 
-export const components = {
-  button,
-  card,
-  divider,
-  drawer,
-  filePicker,
-  icon,
-  image,
-  indicator,
-  link,
-  loading,
-  section,
-  textBox,
-  modal,
-  header,
-  textToggle
+export const components = config => {
+  return {
+    button: button(config),
+    card: card(config),
+    divider: divider(config),
+    drawer: drawer(config),
+    filePicker: filePicker(config),
+    icon: icon(config),
+    image: image(config),
+    indicator: indicator(config),
+    link: link(config),
+    loading: loading(config),
+    section: section(config),
+    textBox: textBox(config),
+    modal: modal(config),
+    header: header(config),
+    textToggle: textToggle,
+  }
 }

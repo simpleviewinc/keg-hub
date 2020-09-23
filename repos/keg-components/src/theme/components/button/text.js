@@ -1,29 +1,29 @@
-import { colors } from '../../colors'
 import { get } from '@keg-hub/jsutils'
-import { contained } from './contained'
 import { buildTheme } from '../../../utils/styles'
 import { getThemeDefaults } from '../../themeDefaults'
 
-const defaults = getThemeDefaults()
+export const textInit = (config, contained) => {
+  const { colors, states } = getThemeDefaults()
 
-const textStyle = (state, colorType) => {
-  const shade = get(defaults, `states.types.${state}.shade`)
-  const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
-  return {
-    main: {
-      $all: {
-        backgroundColor:
-          state === 'hover'
-            ? colors.opacity(10, activeColor)
-            : get(colors, 'palette.transparent'),
+  const textStyle = (state, colorType) => {
+    const shade = get(states, `types.${state}.shade`)
+    const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
+    return {
+      main: {
+        $all: {
+          backgroundColor:
+            state === 'hover'
+              ? colors.opacity(10, activeColor)
+              : get(colors, 'palette.transparent'),
+        },
       },
-    },
-    content: {
-      $all: {
-        color: activeColor,
+      content: {
+        $all: {
+          color: activeColor,
+        },
       },
-    },
+    }
   }
-}
 
-export const text = buildTheme(textStyle, { inheritFrom: [contained] })
+  return buildTheme(textStyle, { inheritFrom: [contained] })
+}

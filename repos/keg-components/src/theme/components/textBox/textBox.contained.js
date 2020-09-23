@@ -1,52 +1,55 @@
-import { wrapper } from './defaults'
 import { get } from '@keg-hub/jsutils'
-import { colors } from '../../colors'
-const { surface, palette } = colors
+import { getThemeDefaults } from '../../themeDefaults'
 
-export const contained = {
-  default: {
-    $all: {
-      main: {
-        minHeight: 100,
-        width: wrapper.width,
-        padding: wrapper.padding,
-        backgroundColor: get(surface, 'default.colors.light'),
+export const containedInit = (config) => {
+  const { colors } = getThemeDefaults()
+  const { surface, palette } = colors
 
-        display: 'flex',
-        flexDirection: 'column',
-      },
-      content: {
-        wrapper: {
+  return {
+    default: {
+      $all: {
+        main: {
+          minHeight: 100,
+          width: 250,
+          padding: 5,
+          backgroundColor: get(surface, 'default.colors.light'),
+
           display: 'flex',
-          marginRight: wrapper.padding + 5,
+          flexDirection: 'column',
+        },
+        content: {
+          wrapper: {
+            display: 'flex',
+            marginRight: 10,
+            flex: 1,
+            flexWrap: 'wrap',
+          },
+          text: {
+            color: get(palette, 'black03'),
+            fontWeight: 'bold',
+            fontSize: 10,
+          },
+          clipboard: {
+            opacity: 0.7,
+            right: 0,
+            top: 0,
+            margin: 3,
+            position: 'absolute',
+          },
+        },
+      },
+      $native: {
+        main: {
+          flexDirection: 'row',
           flex: 1,
-          flexWrap: 'wrap',
         },
-        text: {
-          color: get(palette, 'black03'),
-          fontWeight: 'bold',
-          fontSize: 10,
-        },
-        clipboard: {
-          opacity: 0.7,
-          right: 0,
-          top: 0,
-          margin: wrapper.padding - 2,
-          position: 'absolute',
+        content: {
+          clipboard: {},
         },
       },
     },
-    $native: {
-      main: {
-        flexDirection: 'row',
-        flex: 1,
-      },
-      content: {
-        clipboard: {},
-      },
-    },
-  },
-  disabled: {},
-  hover: {},
-  active: {},
+    disabled: {},
+    hover: {},
+    active: {},
+  }
 }
