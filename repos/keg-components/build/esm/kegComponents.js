@@ -1,9 +1,11 @@
-import React, { useRef, useEffect, useMemo, isValidElement, useState, useLayoutEffect, forwardRef, useCallback } from 'react';
-import { useTheme, useDimensions, withTheme, useThemeHover, useThemeActive } from '@keg-hub/re-theme';
-import { isFunc, reduceObj, isArr, isObj, isStr, get as get$1, deepMerge as deepMerge$1, validate, flatMap, mapEntries, isEmptyColl, jsonEqual, checkCall, logData, toBool, pickKeys, trainCase, isNum, capitalize } from '@keg-hub/jsutils';
-import { opacity, shadeHex } from '@keg-hub/re-theme/colors';
-import { Dimensions, Animated, View as View$1, Platform, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, Text as Text$2, Clipboard, ActivityIndicator, Image as Image$1, Switch as Switch$1 } from 'react-native';
+import React__default, { useRef, useCallback, useMemo, isValidElement, useEffect, useState, useLayoutEffect, createElement, forwardRef } from 'react';
+import { View as View$2, Text as Text$2, Dimensions, Animated, Platform, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, Clipboard, ActivityIndicator, Image as Image$2, TextInput, Picker, Switch as Switch$2, ScrollView as ScrollView$2 } from 'react-native';
+import { eitherArr, isObj, isArr, isStr, checkCall, capitalize, isFunc, get, deepFreeze, reduceObj, deepMerge, validate, flatMap, mapEntries, isEmptyColl, toBool, pickKeys, trainCase, isNum, deepClone, set } from '@keg-hub/jsutils';
 import PropTypes from 'prop-types';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import { useTheme, useDimensions, useThemeHover, useThemeActive, withTheme } from '@keg-hub/re-theme';
+import { opacity, shadeHex } from '@keg-hub/re-theme/colors';
+import Svg, { Path } from 'react-native-svg';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -180,46 +182,135 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-var useAnimate = function useAnimate(_ref) {
-  var ref = _ref.ref,
-      animation = _ref.animation,
-      config = _ref.config,
-      startCb = _ref.startCb,
-      startDelay = _ref.startDelay;
-  var aniRef = useRef(ref);
-  var animate = function animate() {
-    var element = aniRef.current;
-    element && isFunc(element.animate) && element.animate(animation, config);
-  };
-  useEffect(function () {
-    var timeout = setTimeout(function () {
-      return animate();
-    }, startDelay || 0);
-    return function () {
-      return clearTimeout(timeout);
-    };
-  }, []);
-  return [aniRef];
+var platform = "web"  ;
+var getPlatform = function getPlatform() {
+  return platform;
 };
 
-var useChildren = function useChildren(defaults, overrides) {
-  return useMemo(function () {
-    return reduceObj(defaults, function (key, value, children) {
-      children[key] = overrides[key] || value;
-    }, {});
-  }, [].concat(_toConsumableArray(Object.values(defaults.values)), _toConsumableArray(Object.values(overrides))));
+var ensureClassArray = function ensureClassArray(classList) {
+  var ensured = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  return eitherArr(classList, [classList]).reduce(function (classNames, item) {
+    isObj(item) ? item.className ? ensureClassArray(item.className, classNames) :
+    Object.keys(item).map(function (key) {
+      return isObj(item[key]) && ensureClassArray(item[key], classNames);
+    }) : isArr(item) ? ensureClassArray(item, classNames) : isStr(item) && item.split(' ').map(function (item) {
+      return item && classNames.push(item);
+    });
+    return classNames;
+  }, ensured);
 };
+
+var updateClassNames = function updateClassNames(element, classesRef, defClass, className) {
+  var _element$classList;
+  if ( !('classList' in element)) return;
+  defClass && element.classList.add(defClass);
+  var classArr = ensureClassArray(className);
+  classesRef.current.map(function (cls) {
+    return cls && classArr.indexOf(cls) === -1 && element.classList.remove(cls);
+  });
+  classesRef.current = classArr;
+  (_element$classList = element.classList).add.apply(_element$classList, _toConsumableArray(classArr));
+};
+
+var handleRefUpdate = function handleRefUpdate(ref, update) {
+  return isObj(ref) && 'current' in ref ? ref.current = update : checkCall(ref, update);
+};
+
+var useClassName = function useClassName(defClass, className, ref) {
+  var classArr = eitherArr(className, [className]);
+  var classRef = useRef(classArr);
+  return useCallback(function (element) {
+     element && updateClassNames(element, classRef, defClass, classArr);
+    handleRefUpdate(ref, element);
+  }, [defClass, classArr.join(' '), ref]);
+};
+
+var View = React__default.forwardRef(function (_ref, ref) {
+  var children = _ref.children,
+      className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["children", "className"]);
+  var classRef = useClassName('keg-view', className, ref);
+  return React__default.createElement(View$2, _extends({}, props, {
+    ref: classRef
+  }), children);
+});
+View.propTypes = _objectSpread2(_objectSpread2({}, View$2.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var View$1 = StyleInjector(View, {
+  displayName: 'View',
+  className: 'keg-view'
+});
+View$1.propTypes = View.propTypes;
+
+var headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+var useTextAccessibility = function useTextAccessibility(element, accessibilityRole) {
+  return useMemo(function () {
+    var type = accessibilityRole ? accessibilityRole : headings.includes(element) ? 'header' : element;
+    return _objectSpread2({
+      accessibilityRole: type
+    }, type === 'header' && _defineProperty({}, 'aria-level', element[1]));
+  }, [element, accessibilityRole]);
+};
+
+var useTextStyles = function useTextStyles(element) {
+  var theme = useTheme();
+  return useMemo(function () {
+    return theme.get('typography.font.family', 'typography.default', element && "typography.".concat(element));
+  }, [theme, element]);
+};
+
+var ellipsisProps = {
+  ellipsizeMode: 'tail',
+  numberOfLines: 1
+};
+var KegText = function KegText(element) {
+  return React__default.forwardRef(function (props, ref) {
+    var accessibilityRole = props.accessibilityRole,
+        children = props.children,
+        className = props.className,
+        ellipsis = props.ellipsis,
+        attrs = _objectWithoutProperties(props, ["accessibilityRole", "children", "className", "ellipsis"]);
+    var classRef = useClassName("keg-".concat(element), className, ref);
+    var a11y = useTextAccessibility(element, accessibilityRole);
+    return React__default.createElement(Text$2, _extends({}, attrs, a11y, ellipsis && ellipsisProps, {
+      ref: classRef
+    }), children);
+  });
+};
+KegText.propTypes = _objectSpread2(_objectSpread2({}, Text$2.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var useTextComponent = function useTextComponent(element) {
+  return useMemo(function () {
+    return StyleInjector(KegText(element), {
+      displayName: capitalize(element),
+      className: "keg-".concat(element)
+    });
+  }, [element]);
+};
+var KegText$1 = function KegText(element) {
+  return React__default.forwardRef(function (props, ref) {
+    var textStyles = useTextStyles(element);
+    var Text = useTextComponent(element);
+    return React__default.createElement(Text, _extends({}, props, {
+      style: [textStyles, props.style],
+      ref: ref
+    }));
+  });
+};
+KegText$1.propTypes = KegText.propTypes;
+
+var Text = KegText$1('text');
 
 var isValidComponent = function isValidComponent(Component) {
   return isValidElement(Component) || isFunc(Component);
 };
 
 var renderFromType = function renderFromType(Element, props, Wrapper) {
-  return isValidComponent(Element) ? isFunc(Element) ? React.createElement(Element, props) : Element : isArr(Element) ? Element : Wrapper ? React.createElement(Wrapper, props, Element) : Element;
-};
-
-var getOnLoad = function getOnLoad(isWeb, callback) {
-  return _defineProperty({}, isWeb ? 'onLoad' : 'onLoadEnd', callback);
+  return isValidComponent(Element) ? isFunc(Element) ? React__default.createElement(Element, props) : Element : isArr(Element) ? Element : Wrapper ? React__default.createElement(Wrapper, props, Element) : Element;
 };
 
 var getOnChangeHandler = function getOnChangeHandler(isWeb, onChange, onValueChange) {
@@ -254,7 +345,7 @@ var getInputValueKey = function getInputValueKey(isWeb, onChange, onValueChange,
   return !isWeb ? 'selectedValue' : isFunc(onChange) || isFunc(onValueChange) || readOnly ? 'value' : 'defaultValue';
 };
 var getValueFromChildren = function getValueFromChildren(value, children) {
-  return value ? value : children ? isArr(children) ? get$1(children, ['0', 'props', 'children']) : get$1(children, ['props', 'children']) : '';
+  return value ? value : children ? isArr(children) ? get(children, ['0', 'props', 'children']) : get(children, ['props', 'children']) : '';
 };
 
 var getReadOnly = function getReadOnly(isWeb, readOnly, disabled) {
@@ -270,12 +361,12 @@ var getTarget = function getTarget(isWeb, target) {
   } : {};
 };
 
-var platform = "web"  ;
-var getPlatform = function getPlatform() {
-  return platform;
-};
-
-var noOp = function noOp() {};
+var noOp = Object.freeze(function () {});
+var noOpObj = Object.freeze({});
+var noPropObj = deepFreeze({
+  content: {}
+});
+var noPropArr = deepFreeze([]);
 
 var states = {
 	defaultType: "default",
@@ -374,7 +465,9 @@ var font = {
 	spacing: 0.15,
 	bold: "700",
 	units: "px",
-	family: "Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\""
+	family: "Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"",
+	components: {
+	}
 };
 var form = {
 	border: {
@@ -409,8 +502,14 @@ var defaults = {
 	modal: modal
 };
 
-var defPalette = get$1(defaults, 'colors.palette', {});
-var defTypes = get$1(defaults, 'colors.types', {});
+var __themeDefaults = defaults;
+var getThemeDefaults = function getThemeDefaults() {
+  return __themeDefaults;
+};
+
+var defaults$1 = getThemeDefaults();
+var defPalette = get(defaults$1, 'colors.palette', {});
+var defTypes = get(defaults$1, 'colors.types', {});
 var colors$1 = {
   opacity: opacity,
   palette: reduceObj(defPalette, function (key, value, updated) {
@@ -432,7 +531,13 @@ colors$1.surface = reduceObj(defTypes, function (key, value, updated) {
   return updated;
 }, {});
 
-var colorSurface = get$1(colors$1, 'surface', {});
+var colorSurface = get(colors$1, 'surface', {});
+var buildSurfaceStyles = function buildSurfaceStyles(cb) {
+  return Object.keys(colorSurface).reduce(function (surfaceStyles, surface) {
+    surfaceStyles[surface] = checkCall(cb, surface, colorSurface);
+    return surfaceStyles;
+  }, {});
+};
 
 var allPlatforms = "$all";
 var platform$1 = "$" + getPlatform();
@@ -444,8 +549,8 @@ var mergePlatforms = function mergePlatforms(toMerge) {
       $native = toMerge.$native,
       otherKeys = _objectWithoutProperties(toMerge, ["$all", "$web", "$native"]);
   return platforms.reduce(function (merged, plat) {
-    var platStyles = plat !== nonPlatform && get$1(toMerge, [plat]);
-    return platStyles ? deepMerge$1(merged, platStyles) : merged;
+    var platStyles = plat !== nonPlatform && get(toMerge, [plat]);
+    return platStyles ? deepMerge(merged, platStyles) : merged;
   }, otherKeys);
 };
 var platformFlatten = function platformFlatten(initial) {
@@ -463,7 +568,7 @@ var inheritFrom = function inheritFrom() {
   for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {
     styles[_key] = arguments[_key];
   }
-  return deepMerge$1.apply(void 0, _toConsumableArray(styles.map(function (style) {
+  return deepMerge.apply(void 0, _toConsumableArray(styles.map(function (style) {
     return isObj(style) ? platformFlatten(style) : undefined;
   })));
 };
@@ -492,7 +597,7 @@ var buildTheme = function buildTheme(themeFn) {
       inheritFrom = _options$inheritFrom === void 0 ? [] : _options$inheritFrom;
   var combinations = pairsOf(states, colorTypes);
   var themeWithTypes = combinations.reduce(themeReducer(themeFn), {});
-  return platformFlatten(deepMerge$1.apply(void 0, _toConsumableArray(inheritFrom).concat([themeWithTypes])));
+  return platformFlatten(deepMerge.apply(void 0, _toConsumableArray(inheritFrom).concat([themeWithTypes])));
 };
 var pairsOf = function pairsOf(states, colorTypes) {
   return flatMap(states, function (state) {
@@ -506,7 +611,7 @@ var themeReducer = function themeReducer(themeFn) {
     var _ref2 = _slicedToArray(_ref, 2),
         state = _ref2[0],
         colorType = _ref2[1];
-    return deepMerge$1(totalTheme, themeForType(themeFn, state, colorType));
+    return deepMerge(totalTheme, themeForType(themeFn, state, colorType));
   };
 };
 var themeForType = function themeForType(themeFn, state, colorType) {
@@ -517,6 +622,36 @@ var validateFunctions = function validateFunctions(functionObj) {
   return isObj(functionObj) && mapEntries(functionObj, function (name, func) {
     return [name, isFunc(func)];
   }) || {};
+};
+
+var useAnimate = function useAnimate(_ref) {
+  var ref = _ref.ref,
+      animation = _ref.animation,
+      config = _ref.config,
+      startCb = _ref.startCb,
+      startDelay = _ref.startDelay;
+  var aniRef = useRef(ref);
+  var animate = function animate() {
+    var element = aniRef.current;
+    element && isFunc(element.animate) && element.animate(animation, config);
+  };
+  useEffect(function () {
+    var timeout = setTimeout(function () {
+      return animate();
+    }, startDelay || 0);
+    return function () {
+      return clearTimeout(timeout);
+    };
+  }, []);
+  return [aniRef];
+};
+
+var useChildren = function useChildren(defaults, overrides) {
+  return useMemo(function () {
+    return reduceObj(defaults, function (key, value, children) {
+      children[key] = overrides[key] || value;
+    }, {});
+  }, [].concat(_toConsumableArray(Object.values(defaults.values)), _toConsumableArray(Object.values(overrides))));
 };
 
 var makeHandlerObject = function makeHandlerObject(handler, _ref) {
@@ -535,7 +670,7 @@ var useInputHandlers = function useInputHandlers() {
   return useMemo(function () {
     var areValidFuncs = validateFunctions(handlers);
     var handleChange = function handleChange(event) {
-      var value = get$1(event, 'target.value');
+      var value = get(event, 'target.value');
       areValidFuncs.onChange && onChange(event);
       areValidFuncs.onValueChange && onValueChange(value);
       areValidFuncs.onChangeText && onChangeText(value);
@@ -545,13 +680,13 @@ var useInputHandlers = function useInputHandlers() {
 };
 
 var getMediaType = function getMediaType(mediaTypes, styles) {
-  return reduceObj(mediaTypes, function (key, value, mediaData) {
+  return mediaTypes ? reduceObj(mediaTypes, function (key, value, mediaData) {
     return !mediaData.type && value ? {
       type: key,
       media: value,
       styles: !isObj(styles) ? styles : styles.media
     } : mediaData;
-  }, {});
+  }, {}) : noOpObj;
 };
 var useMediaProps = function useMediaProps(_ref) {
   var Media = _ref.Media,
@@ -578,12 +713,12 @@ var useMediaProps = function useMediaProps(_ref) {
     _objectSpread2(_objectSpread2({
       type: type
     }, media), {}, {
-      styles: deepMerge$1(
+      styles: deepMerge(
       {
         loading: styles.loading
       },
       mediaStyles,
-      get$1(media, 'style', {}))
+      get(media, 'style', {}))
     });
   }, [Media, image, video, styles]);
 };
@@ -622,7 +757,7 @@ var useSelectHandlers = function useSelectHandlers() {
   return useMemo(function () {
     var validFuncMap = validateFunctions(handlers);
     var onChangeHandler = function onChangeHandler(event) {
-      var value = get$1(event, 'target.value');
+      var value = get(event, 'target.value');
       validFuncMap.onChange && onChange(event);
       validFuncMap.onValueChange && onValueChange(value);
     };
@@ -663,49 +798,32 @@ var useStyle = function useStyle() {
   }, [].concat(styles));
 };
 
-var stylesEqual = function stylesEqual(current, updates) {
-  return current && !updates || !current && updates ? false : Boolean(!current && !updates || isEmptyColl(current) && isEmptyColl(updates) || jsonEqual(current, updates));
+var validateStyles = function validateStyles(styles) {
+  return !Boolean(!styles || styles === noPropObj || isEmptyColl(styles));
 };
 var getStylesFromPath = function getStylesFromPath(theme, path) {
-  return get$1(theme, path) || checkCall(function () {
-    logData("Could not find ".concat(path, " on theme"), theme, "warn");
-    var split = path.split('.');
-    split[split.length] = 'default';
-    return get$1(theme, split, {});
-  });
+  return path && get(theme, path) || function () {
+  }();
 };
 var mergeStyles = function mergeStyles(pathStyles, userStyles) {
-  if (!userStyles) return pathStyles;
+  if (!userStyles || userStyles === noPropObj) return pathStyles;
   var pathKeys = Object.keys(pathStyles);
   var userKeys = Object.keys(userStyles);
-  return pathKeys.indexOf(userKeys[0]) !== -1 ?
-  deepMerge$1(pathStyles, userStyles) :
+  return !userKeys.length ? pathStyles : pathKeys.indexOf(userKeys[0]) !== -1 ?
+  deepMerge(pathStyles, userStyles) :
   reduceObj(pathStyles, function (key, value, updated) {
-    updated[key] = deepMerge$1(value, userStyles);
+    updated[key] = deepMerge(value, userStyles);
     return updated;
   }, {});
 };
-var buildTheme$1 = function buildTheme(theme, path, styles) {
-  return mergeStyles(getStylesFromPath(theme, path), styles);
-};
-var useThemePath = function useThemePath(path, styles) {
-  var _useState = useState(styles),
-      _useState2 = _slicedToArray(_useState, 2),
-      userStyles = _useState2[0],
-      setUserStyles = _useState2[1];
-  var customEqual = stylesEqual(styles, userStyles);
+var useThemePath = function useThemePath(path) {
+  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noPropObj;
   var theme = useTheme();
-  var _useState3 = useState(buildTheme$1(theme, path, styles)),
-      _useState4 = _slicedToArray(_useState3, 2),
-      themeStyles = _useState4[0],
-      setThemeStyles = _useState4[1];
-  useLayoutEffect(function () {
-    var updatedStyles = buildTheme$1(theme, path, styles);
-    if (stylesEqual(themeStyles, updatedStyles)) return;
-    !customEqual && setUserStyles(styles);
-    setThemeStyles(updatedStyles);
-  }, [theme, path, customEqual]);
-  return [themeStyles, setThemeStyles];
+  return useMemo(function () {
+    var pathStyles = getStylesFromPath(theme, path);
+    var validStyles = validateStyles(styles);
+    return validStyles ? mergeStyles(pathStyles, styles) : pathStyles || noPropObj;
+  }, [theme, path, styles]);
 };
 
 var windowHeight = Dimensions.get('window').height;
@@ -717,12 +835,10 @@ var buildHeightStyles = function buildHeightStyles(height, key) {
   return key ? _defineProperty({}, key, heightStyles) : heightStyles;
 };
 var buildHeightWithTheme = function buildHeightWithTheme(stylesWithHeight, themeStyles) {
-  return deepMerge$1(themeStyles, stylesWithHeight);
+  return deepMerge(themeStyles, stylesWithHeight);
 };
 var useThemeWithHeight = function useThemeWithHeight(themePath, styles, key) {
-  var _useThemePath = useThemePath(themePath, styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      themeStyles = _useThemePath2[0];
+  var themeStyles = useThemePath(themePath, styles);
   var _useDimensions = useDimensions(),
       height = _useDimensions.height;
   var _useState = useState(height),
@@ -741,100 +857,150 @@ var useThemeWithHeight = function useThemeWithHeight(themePath, styles, key) {
   return [stylesWithHeight, setStylesWithHeight];
 };
 
-var useFromToAnimation = function useFromToAnimation(params, dependencies) {
+var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},
       from = _ref.from,
       to = _ref.to,
       _ref$duration = _ref.duration,
       duration = _ref$duration === void 0 ? 500 : _ref$duration,
       _ref$onFinish = _ref.onFinish,
-      onFinish = _ref$onFinish === void 0 ? noOp : _ref$onFinish;
-  var animDependencies = isArr(dependencies) ? dependencies : [from, to];
+      onFinish = _ref$onFinish === void 0 ? noOp : _ref$onFinish,
+      _ref$loop = _ref.loop,
+      loop = _ref$loop === void 0 ? false : _ref$loop,
+      easing = _ref.easing;
+  var animDependencies = [from, to, duration, loop, easing, onFinish];
   var fromVal = useMemo(function () {
     return new Animated.Value(from);
   }, animDependencies);
+  var config = {
+    toValue: to,
+    duration: duration,
+    easing: easing
+  };
+  var animatedTiming = Animated.timing(fromVal, config);
   useEffect(function () {
-    Animated.timing(fromVal, {
-      toValue: to,
-      duration: duration
-    }).start(onFinish);
+    loop ? Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);
   }, animDependencies);
   return [fromVal];
 };
 
-var View = React.forwardRef(function (_ref, ref) {
-  var children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["children"]);
-  return React.createElement(View$1, _extends({}, props, {
-    ref: ref
-  }), children);
-});
+var useClassList = function useClassList(className) {
+  var classList = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noPropArr;
+  var classListArr = eitherArr(classList, [classList]);
+  return useMemo(function () {
+    return ensureClassArray(classListArr).concat([className]);
+  }, [className].concat(_toConsumableArray(classListArr)));
+};
 
-var IconWrapper = React.forwardRef(function (props, ref) {
+var useThemeType = function useThemeType(themeLoc, defClass) {
+  return useMemo(function () {
+    var defClassArr = eitherArr(defClass, [defClass]);
+    if (!themeLoc) return defClassArr;
+    var themeSplit = themeLoc.split('.');
+    var surface = themeSplit.pop();
+    var typeRef = themeSplit.pop();
+    var surfaces = Object.keys(get(colors$1, 'surface', noOpObj));
+    return typeRef && surfaces.indexOf(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
+  }, [themeLoc, defClass]);
+};
+var useThemeTypeAsClass = function useThemeTypeAsClass() {
+  var themeLoc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var defClass = arguments.length > 1 ? arguments[1] : undefined;
+  var className = arguments.length > 2 ? arguments[2] : undefined;
+  var themeTypeCls = useThemeType(themeLoc, defClass);
+  var classList = isArr(className) ? className.concat(themeTypeCls) : [].concat(_toConsumableArray(themeTypeCls), [className]);
+  return useClassList(defClass, classList);
+};
+
+var Icon = React__default.forwardRef(function (props, ref) {
   var theme = useTheme();
-  var color = props.color,
-      Element = props.Element,
+  var className = props.className,
+      color = props.color,
+      Component = props.Component,
+      _props$Element = props.Element,
+      Element = _props$Element === void 0 ? Component : _props$Element,
       name = props.name,
       size = props.size,
       styles = props.styles,
       themePath = props.themePath,
       _props$type = props.type,
-      type = _props$type === void 0 ? 'default' : _props$type;
+      type = _props$type === void 0 ? 'default' : _props$type,
+      attrs = _objectWithoutProperties(props, ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"]);
   if (!isValidComponent(Element)) return console.error("Invalid Element passed to Icon component!", Element) || null;
-  var _useThemePath = useThemePath(themePath || "icon.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      builtStyles = _useThemePath2[0];
+  var iconStyles = useThemePath(themePath || "icon.".concat(type), styles);
   var iconProps = {
     ref: ref,
     name: name,
-    style: builtStyles.icon,
-    color: color || builtStyles.color || get$1(builtStyles, 'icon.color') || get$1(theme, 'typography.default.color'),
-    size: parseInt(size || get$1(builtStyles, 'icon.fontSize') || get$1(theme, 'typography.default.fontSize', 15) * 2, 10)
+    style: iconStyles.icon,
+    color: color || iconStyles.color || get(iconStyles, 'icon.color') || get(theme, 'typography.default.color'),
+    size: parseInt(size || get(iconStyles, 'icon.fontSize') || get(theme, 'typography.default.fontSize', 15) * 2, 10)
   };
-  return React.createElement(View, {
-    style: builtStyles.container
-  }, React.createElement(Element, iconProps));
+  return React__default.createElement(View$1, {
+    className: useClassList("keg-icon", className),
+    style: iconStyles.container
+  }, renderFromType(Element, _objectSpread2(_objectSpread2({}, attrs), iconProps)));
 });
-IconWrapper.propTypes = {
+Icon.propTypes = {
+  className: PropTypes.string,
+  Component: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.elementType]),
   Element: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.elementType]),
   color: PropTypes.string,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   ref: PropTypes.object,
   style: PropTypes.object,
   size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   type: PropTypes.string
 };
 
-var isWeb = getPlatform() === 'web';
-var Icon = function Icon(props) {
-  return React.createElement(IconWrapper, _extends({}, props, {
-    Element: props.Element,
-    isWeb: isWeb
+var TouchableComp = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
+var Touchable = React__default.forwardRef(function (props, ref) {
+  var className = props.className,
+      _props$showFeedback = props.showFeedback,
+      showFeedback = _props$showFeedback === void 0 ? true : _props$showFeedback,
+      touchRef = props.touchRef,
+      attrs = _objectWithoutProperties(props, ["className", "showFeedback", "touchRef"]);
+  var Component = showFeedback ? TouchableComp : TouchableWithoutFeedback;
+  var classRef = useClassName('keg-touchable', className, touchRef || ref);
+  return React__default.createElement(Component, _extends({
+    accessible: true
+  }, attrs, {
+    ref: classRef
   }));
-};
-Icon.propTypes = _objectSpread2({}, IconWrapper.propTypes);
+});
+Touchable.propTypes = _objectSpread2(_objectSpread2({}, TouchableComp.propTypes), {}, {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
+  ref: PropTypes.object,
+  styles: PropTypes.object,
+  showFeedback: PropTypes.bool
+});
 
-var TouchableWithFeedback = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
+var Touchable$1 = StyleInjector(Touchable, {
+  displayName: 'Touchable',
+  className: 'keg-touchable',
+  important: ['transitionDuration', 'WebkitTransitionDuration']
+});
+Touchable$1.propTypes = Touchable.propTypes;
+
 var withTouch = function withTouch(Component) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var _options$showFeedback = options.showFeedback,
       showFeedback = _options$showFeedback === void 0 ? true : _options$showFeedback;
-  var wrapped = React.forwardRef(function (props, ref) {
+  var wrapped = React__default.forwardRef(function (props, ref) {
     var _props$touchThemePath = props.touchThemePath,
         touchThemePath = _props$touchThemePath === void 0 ? '' : _props$touchThemePath,
         _props$touchStyle = props.touchStyle,
-        touchStyle = _props$touchStyle === void 0 ? {} : _props$touchStyle,
+        touchStyle = _props$touchStyle === void 0 ? noPropObj : _props$touchStyle,
         onPress = props.onPress,
         otherProps = _objectWithoutProperties(props, ["touchThemePath", "touchStyle", "onPress"]);
     var theme = useTheme();
-    var _useThemePath = useThemePath(touchThemePath),
-        _useThemePath2 = _slicedToArray(_useThemePath, 1),
-        style = _useThemePath2[0];
-    var TouchWrapper = showFeedback ? TouchableWithFeedback : TouchableWithoutFeedback;
-    return React.createElement(TouchWrapper, {
-      style: theme.join(style, touchStyle),
+    return React__default.createElement(Touchable$1, {
+      showFeedback: showFeedback,
+      style: [get(theme, touchThemePath), touchStyle],
       onPress: onPress
-    }, React.createElement(Component, _extends({
+    }, React__default.createElement(Component, _extends({
       ref: ref
     }, otherProps)));
   });
@@ -847,32 +1013,101 @@ var withTouch = function withTouch(Component) {
 };
 
 var TouchableIcon = withTouch(Icon);
-TouchableIcon.propTypes = _objectSpread2(_objectSpread2({}, TouchableIcon.propTypes), Icon.propTypes);
+TouchableIcon.propTypes = _objectSpread2(_objectSpread2({}, Touchable$1.propTypes), Icon.propTypes);
+
+var useSize = function useSize(size, style, theme) {
+  return useMemo(function () {
+    var iconSize = size || get(style, 'fontSize');
+    var themeSize = get(theme, 'typography.default.fontSize', 15) * 2;
+    return {
+      height: iconSize || get(style, 'height', themeSize),
+      width: iconSize || get(style, 'width', themeSize)
+    };
+  }, [size, style]);
+};
+var useColor = function useColor(fill, stroke, color, border, style, theme) {
+  return useMemo(function () {
+    var themeColor = get(theme, 'typography.default.color');
+    return {
+      stroke: stroke || border || style.border || color || style.color || themeColor,
+      fill: fill || color || style.color || stroke
+    };
+  }, [fill, stroke, color, border, style]);
+};
+var SvgIcon = function SvgIcon(props) {
+  var border = props.border,
+      color = props.color,
+      delta = props.delta,
+      fill = props.fill,
+      name = props.name,
+      size = props.size,
+      stroke = props.stroke,
+      _props$style = props.style,
+      style = _props$style === void 0 ? noPropObj : _props$style,
+      viewBox = props.viewBox,
+      attrs = _objectWithoutProperties(props, ["border", "color", "delta", "fill", "name", "size", "stroke", "style", "viewBox"]);
+  var theme = useTheme();
+  var sizeStyle = useSize(size, style, theme);
+  var colorStyle = useColor(fill, stroke, color, border, style, theme);
+  return React__default.createElement(Svg, _extends({}, attrs, {
+    viewBox: viewBox,
+    style: [style, sizeStyle]
+  }), React__default.createElement(Path, {
+    stroke: colorStyle.stroke,
+    fill: colorStyle.fill,
+    d: delta
+  }));
+};
+
+var Check = function Check(props) {
+  return createElement(SvgIcon, _extends({}, props, {
+    viewBox: "0 0 512 512",
+    delta: "M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+  }));
+};
+
+var ChevronDown = function ChevronDown(props) {
+  return createElement(SvgIcon, _extends({}, props, {
+    viewBox: "0 0 448 512",
+    delta: "M441.9 167.3l-19.8-19.8c-4.7-4.7-12.3-4.7-17 0L224 328.2 42.9 147.5c-4.7-4.7-12.3-4.7-17 0L6.1 167.3c-4.7 4.7-4.7 12.3 0 17l209.4 209.4c4.7 4.7 12.3 4.7 17 0l209.4-209.4c4.7-4.7 4.7-12.3 0-17z"
+  }));
+};
+
+var Copy = function Copy(props) {
+  return createElement(SvgIcon, _extends({}, props, {
+    viewBox: "0 0 448 512",
+    delta: "M433.941 65.941l-51.882-51.882A48 48 0 00348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"
+  }));
+};
 
 var TextBox = function TextBox(props) {
-  var text = props.text,
-      _props$themePath = props.themePath,
-      themePath = _props$themePath === void 0 ? 'textBox.outlined.default' : _props$themePath,
-      styles = props.styles,
-      _props$useClipboard = props.useClipboard,
-      useClipboard = _props$useClipboard === void 0 ? false : _props$useClipboard,
+  var className = props.className,
       _props$maxLines = props.maxLines,
-      maxLines = _props$maxLines === void 0 ? 100 : _props$maxLines;
-  var theme = useTheme();
-  var _useThemePath = useThemePath(themePath, styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      style = _useThemePath2[0];
-  return React.createElement(View$1, {
-    style: theme.join(style.main, styles)
-  }, React.createElement(View$1, {
-    style: get$1(style, 'content.wrapper')
-  }, React.createElement(Text$2, {
+      maxLines = _props$maxLines === void 0 ? 100 : _props$maxLines,
+      styles = props.styles,
+      text = props.text,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'default' : _props$type,
+      _props$themePath = props.themePath,
+      themePath = _props$themePath === void 0 ? "textBox.outlined.".concat(type) : _props$themePath,
+      _props$useClipboard = props.useClipboard,
+      useClipboard = _props$useClipboard === void 0 ? false : _props$useClipboard;
+  var style = useThemePath(themePath, styles);
+  return React__default.createElement(View$1, {
+    className: useThemeTypeAsClass(themePath || type, 'keg-textbox', className),
+    style: style.main
+  }, React__default.createElement(View$1, {
+    className: "keg-textbox-container",
+    style: get(style, 'content.wrapper')
+  }, React__default.createElement(Text, {
+    className: "keg-textbox-text",
     numberOfLines: maxLines,
-    style: get$1(style, 'content.text')
-  }, text || '')), React.createElement(Text$2, null, useClipboard && text && React.createElement(TouchableIcon, {
-    name: 'copy',
+    style: get(style, 'content.text')
+  }, text || '')), React__default.createElement(Text, null, useClipboard && text && React__default.createElement(TouchableIcon, {
+    Component: Copy,
     size: 15,
-    wrapStyle: get$1(style, 'content.clipboard'),
+    className: "keg-textbox-clipboard",
+    touchStyle: get(style, 'content.clipboard'),
     onPress: function onPress(_) {
       return text && Clipboard.setString(text);
     }
@@ -884,26 +1119,6 @@ TextBox.propTypes = {
   styles: PropTypes.object
 };
 
-var ellipsisProps = {
-  ellipsizeMode: 'tail',
-  numberOfLines: 1
-};
-var KegText = function KegText(element) {
-  return withTheme(function (props) {
-    var children = props.children,
-        style = props.style,
-        theme = props.theme,
-        ellipsis = props.ellipsis,
-        attrs = _objectWithoutProperties(props, ["children", "style", "theme", "ellipsis"]);
-    var textStyles = theme.get('typography.font.family', 'typography.default', element && "typography.".concat(element));
-    return React.createElement(Text$2, _extends({}, attrs, ellipsis && ellipsisProps, {
-      style: theme.join(textStyles, style)
-    }), children);
-  });
-};
-
-var Text = KegText('text');
-
 var getChildren = function getChildren(Children) {
   var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   return renderFromType(Children, {
@@ -911,89 +1126,106 @@ var getChildren = function getChildren(Children) {
   }, Text);
 };
 var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
-  return disabled ? _objectSpread2(_objectSpread2({}, mainStyles), get$1(btnStyles, 'disabled.main')) : mainStyles;
+  return disabled ? _objectSpread2(_objectSpread2({}, mainStyles), get(btnStyles, 'disabled.main')) : mainStyles;
 };
-var ButtonWrapper = function ButtonWrapper(props) {
-  var Element = props.Element,
+var Button = React__default.forwardRef(function (props, ref) {
+  var className = props.className,
       children = props.children,
       content = props.content,
-      isWeb = props.isWeb,
       onClick = props.onClick,
       onPress = props.onPress,
-      themePath = props.themePath,
-      ref = props.ref,
       styles = props.styles,
-      elProps = _objectWithoutProperties(props, ["Element", "children", "content", "isWeb", "onClick", "onPress", "themePath", "ref", "styles"]);
-  var _useThemePath = useThemePath(themePath || 'button.contained.default', styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      btnStyles = _useThemePath2[0];
-  var _useThemeHover = useThemeHover(get$1(btnStyles, 'default', {}), get$1(btnStyles, 'hover'), {
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'default' : _props$type,
+      themePath = props.themePath,
+      elProps = _objectWithoutProperties(props, ["className", "children", "content", "onClick", "onPress", "styles", "type", "themePath"]);
+  var btnStyles = useThemePath(themePath || "button.contained.".concat(type), styles);
+  var _useThemeHover = useThemeHover(get(btnStyles, 'default', {}), get(btnStyles, 'hover'), {
     ref: ref
   }),
       _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
       hoverRef = _useThemeHover2[0],
       hoverStyles = _useThemeHover2[1];
-  var _useThemeActive = useThemeActive(hoverStyles, get$1(btnStyles, 'active'), {
+  var _useThemeActive = useThemeActive(hoverStyles, get(btnStyles, 'active'), {
     ref: hoverRef
   }),
       _useThemeActive2 = _slicedToArray(_useThemeActive, 2),
       themeRef = _useThemeActive2[0],
       themeStyles = _useThemeActive2[1];
-  return React.createElement(Element, _extends({}, elProps, {
-    ref: themeRef,
+  return React__default.createElement(Touchable$1, _extends({
+    accessibilityRole: "button",
+    className: useThemeTypeAsClass(themePath || type, 'keg-button', className)
+  }, elProps, {
+    touchRef: themeRef,
     style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
     children: getChildren(children || content, themeStyles)
   }, getPressHandler(false, onClick, onPress), getActiveOpacity(false, props, btnStyles)));
-};
-ButtonWrapper.propTypes = {
+});
+Button.propTypes = _objectSpread2(_objectSpread2({}, Touchable$1.propTypes), {}, {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
   content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
-  Element: PropTypes.oneOfType([PropTypes.element, PropTypes.object, PropTypes.string, PropTypes.array]),
+  Touchable: PropTypes.oneOfType([PropTypes.element, PropTypes.object, PropTypes.string, PropTypes.array]),
   disabled: PropTypes.bool,
-  isWeb: PropTypes.bool,
   onClick: PropTypes.func,
   onPress: PropTypes.func,
   ref: PropTypes.object,
   styles: PropTypes.object,
   themePath: PropTypes.string
-};
-
-var isWeb$1 = getPlatform() === 'web';
-var Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
-var Element = React.forwardRef(function (props, ref) {
-  return React.createElement(Touchable, _extends({}, props, {
-    ref: ref
-  }));
 });
-var Button = function Button(props) {
-  return React.createElement(ButtonWrapper, _extends({}, props, {
-    Element: Element,
-    isWeb: isWeb$1
-  }));
-};
-Button.propTypes = _objectSpread2(_objectSpread2({}, Touchable.propTypes), ButtonWrapper.propTypes);
 
-var CardBody = function CardBody(_ref) {
-  var style = _ref.style,
-      children = _ref.children;
-  return React.createElement(View, {
-    style: style
-  }, children);
+var CardCallout = function CardCallout(_ref) {
+  var className = _ref.className,
+      subtitle = _ref.subtitle,
+      title = _ref.title,
+      _ref$styles = _ref.styles,
+      styles = _ref$styles === void 0 ? noPropObj : _ref$styles;
+  var calloutStyles = get(styles, "callout");
+  return React__default.createElement(View$1, {
+    className: useClassList('keg-card-callout', className),
+    style: calloutStyles.overlay
+  }, title && React__default.createElement(Text, {
+    className: "keg-card-title",
+    style: calloutStyles.title
+  }, title), subtitle && React__default.createElement(Text, {
+    className: "keg-card-subtitle",
+    style: calloutStyles.subtitle
+  }, subtitle));
 };
-CardBody.propTypes = {
+
+var CardContent = function CardContent(_ref) {
+  var children = _ref.children,
+      _ref$styles = _ref.styles,
+      styles = _ref$styles === void 0 ? noPropObj : _ref$styles,
+      subtitle = _ref.subtitle,
+      title = _ref.title;
+  return React__default.createElement(View$1, {
+    className: "keg-card-content",
+    style: styles.main
+  }, (title || subtitle) && React__default.createElement(CardCallout, {
+    className: "keg-card-content-callout",
+    styles: styles,
+    subtitle: subtitle,
+    title: title
+  }), children);
+};
+CardContent.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string, PropTypes.func, PropTypes.element]),
   style: PropTypes.object
 };
 
 var CardContainer = function CardContainer(_ref) {
-  var _ref$attributes = _ref.attributes,
-      attributes = _ref$attributes === void 0 ? {} : _ref$attributes,
+  var className = _ref.className,
+      _ref$attributes = _ref.attributes,
+      attributes = _ref$attributes === void 0 ? noOpObj : _ref$attributes,
       children = _ref.children,
       _ref$styles = _ref.styles,
-      styles = _ref$styles === void 0 ? {} : _ref$styles;
-  return React.createElement(View, _extends({}, attributes, {
+      styles = _ref$styles === void 0 ? noPropObj : _ref$styles;
+  return React__default.createElement(View$1, _extends({
+    className: useClassList('keg-card', className)
+  }, attributes, {
     style: styles.main
-  }), React.createElement(View, {
+  }), React__default.createElement(View$1, {
+    className: "keg-card-container",
     style: styles.container
   }, children));
 };
@@ -1003,67 +1235,34 @@ CardContainer.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func])
 };
 
-var Divider = function Divider(_ref) {
-  var style = _ref.style,
-      props = _objectWithoutProperties(_ref, ["style"]);
-  var theme = useTheme();
-  return React.createElement(View, _extends({}, props, {
-    style: theme.join(get$1(theme, ['divider']), style)
-  }));
-};
-Divider.propTypes = {
-  style: PropTypes.object
-};
-
-var FooterWrap = function FooterWrap(_ref) {
-  var numberOfLines = _ref.numberOfLines,
+var SectionWrap = function SectionWrap(_ref) {
+  var children = _ref.children,
+      numberOfLines = _ref.numberOfLines,
+      showBorder = _ref.showBorder,
       styles = _ref.styles,
-      children = _ref.children;
-  var textProps = {
-    style: get(styles, 'footer.text')
-  };
-  numberOfLines && (textProps.numberOfLines = numberOfLines);
-  return React.createElement(View, {
-    style: get(styles, 'footer.container')
-  }, React.createElement(Text, textProps, children), React.createElement(Divider, {
-    style: deepMerge(styles.divider, get(styles, 'footer.divider'))
-  }));
+      type = _ref.type;
+  type = type || 'section';
+  return React__default.createElement(Text, {
+    className: "keg-".concat(type, "-text"),
+    numberOfLines: numberOfLines,
+    style: [get(styles, "text"), showBorder === false && get(styles, "noBorder.text")]
+  }, children);
 };
-var CardFooter = function CardFooter(_ref2) {
-  var Footer = _ref2.Footer,
-      props = _objectWithoutProperties(_ref2, ["Footer"]);
-  return Footer ? renderFromType(Footer, props, FooterWrap) : null;
+var CardSection = function CardSection(_ref2) {
+  var Section = _ref2.Section,
+      props = _objectWithoutProperties(_ref2, ["Section"]);
+  var type = props.type || 'section';
+  return Section && React__default.createElement(View$1, {
+    className: "keg-card-".concat(type),
+    style: [get(props, "styles.main"), props.showBorder === false && get(props, "styles.noBorder.main")]
+  }, renderFromType(Section, props, SectionWrap));
 };
-CardFooter.propTypes = {
-  header: PropTypes.string,
+CardSection.propTypes = _defineProperty({
+  Section: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func]),
   numberOfLines: PropTypes.number,
-  styles: PropTypes.object
-};
-
-var HeaderWrap = function HeaderWrap(_ref) {
-  var numberOfLines = _ref.numberOfLines,
-      styles = _ref.styles,
-      children = _ref.children;
-  var textProps = {
-    style: get$1(styles, 'header.text')
-  };
-  numberOfLines && (textProps.numberOfLines = numberOfLines);
-  return React.createElement(View, {
-    style: get$1(styles, 'header.container')
-  }, React.createElement(Text, textProps, children), React.createElement(Divider, {
-    style: deepMerge$1(styles.divider, get$1(styles, 'header.divider'))
-  }));
-};
-var CardHeader = function CardHeader(_ref2) {
-  var Header = _ref2.Header,
-      props = _objectWithoutProperties(_ref2, ["Header"]);
-  return Header ? renderFromType(Header, props, HeaderWrap) : null;
-};
-CardHeader.propTypes = {
-  header: PropTypes.string,
-  numberOfLines: PropTypes.number,
-  styles: PropTypes.object
-};
+  styles: PropTypes.object,
+  type: PropTypes.string
+}, "numberOfLines", PropTypes.number);
 
 var IndicatorWrapper = function IndicatorWrapper(props) {
   var alt = props.alt,
@@ -1076,12 +1275,10 @@ var IndicatorWrapper = function IndicatorWrapper(props) {
       type = _props$type === void 0 ? 'default' : _props$type,
       themePath = props.themePath,
       elProps = _objectWithoutProperties(props, ["alt", "Element", "isWeb", "resizeMode", "size", "styles", "type", "themePath"]);
-  var _useThemePath = useThemePath(themePath || "indicator.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      builtStyles = _useThemePath2[0];
-  return React.createElement(View, {
+  var builtStyles = useThemePath(themePath || "indicator.".concat(type), styles);
+  return React__default.createElement(View$1, {
     style: builtStyles.container
-  }, React.createElement(Element, _extends({}, elProps, {
+  }, React__default.createElement(Element, _extends({}, elProps, {
     alt: alt || 'Loading',
     style: builtStyles.icon,
     size: size,
@@ -1089,14 +1286,17 @@ var IndicatorWrapper = function IndicatorWrapper(props) {
   })));
 };
 
-var isWeb$2 = getPlatform() === 'web';
-var Element$1 = function Element(_ref) {
-  var _ref$style = _ref.style,
+var isWeb = getPlatform() === 'web';
+var Element = function Element(_ref) {
+  var className = _ref.className,
+      _ref$style = _ref.style,
       style = _ref$style === void 0 ? {} : _ref$style,
       size = _ref.size,
       color = _ref.color,
-      attrs = _objectWithoutProperties(_ref, ["style", "size", "color"]);
-  return React.createElement(View, null, React.createElement(ActivityIndicator, {
+      attrs = _objectWithoutProperties(_ref, ["className", "style", "size", "color"]);
+  return React__default.createElement(View$1, {
+    className: useClassList('keg-indicator', className)
+  }, React__default.createElement(ActivityIndicator, {
     size: size,
     color: style.color || color
   }));
@@ -1107,13 +1307,13 @@ var Indicator = function Indicator(_ref2) {
       color = _ref2.color,
       styles = _ref2.styles,
       props = _objectWithoutProperties(_ref2, ["alt", "size", "color", "styles"]);
-  return React.createElement(IndicatorWrapper, _extends({}, props, {
+  return React__default.createElement(IndicatorWrapper, _extends({}, props, {
     alt: alt || 'Loading',
     size: ['large', 'small'].includes(size) ? size : 'large',
     color: color,
-    Element: Element$1,
+    Element: Element,
     styles: styles,
-    isWeb: isWeb$2
+    isWeb: isWeb
   }));
 };
 
@@ -1124,18 +1324,21 @@ var Progress = function Progress(props) {
       type = props.type,
       size = props.size;
   var LoadingIndicator = loadIndicator || Indicator;
-  return React.createElement(View, {
-    style: styles.progress
-  }, isValidComponent(LoadingIndicator) ? React.createElement(LoadingIndicator, {
+  return React__default.createElement(View$1, {
+    style: styles.progress,
+    className: "keg-progress"
+  }, isValidComponent(LoadingIndicator) ? React__default.createElement(LoadingIndicator, {
     size: size,
     styles: styles.indicator,
     type: type
-  }) : text && React.createElement(Text, {
+  }) : text && React__default.createElement(Text, {
+    className: "keg-progress-text",
     style: styles.text
   }, text));
 };
 var Loading = function Loading(props) {
-  var children = props.children,
+  var className = props.className,
+      children = props.children,
       _props$text = props.text,
       text = _props$text === void 0 ? 'Loading' : _props$text,
       indicator = props.indicator,
@@ -1144,12 +1347,11 @@ var Loading = function Loading(props) {
       themePath = props.themePath,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type;
-  var _useThemePath = useThemePath(themePath || "loading.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      builtStyles = _useThemePath2[0];
-  return React.createElement(View, {
-    style: builtStyles.container
-  }, children || React.createElement(Progress, {
+  var builtStyles = useThemePath(themePath || "loading.".concat(type), styles);
+  return React__default.createElement(View$1, {
+    style: builtStyles.main,
+    className: useClassList('keg-loading', className)
+  }, children || React__default.createElement(Progress, {
     styles: builtStyles,
     text: text,
     loadIndicator: indicator,
@@ -1160,117 +1362,104 @@ var Loading = function Loading(props) {
 Loading.propTypes = {
   text: PropTypes.string,
   style: PropTypes.object,
-  wrapStyle: PropTypes.object,
   children: PropTypes.object
 };
 
-var onLoadEvent = function onLoadEvent(setLoading, props, setStyle, loadedStyle) {
-  return function (event) {
-    checkCall(setLoading, false);
-    checkCall(setStyle, loadedStyle);
-    checkCall(props.onLoad, event, props);
-  };
-};
-var ImageWrapper = forwardRef(function (props, ref) {
+var Image = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["className"]);
+  var classRef = useClassName('keg-image', className, ref);
+  return React__default.createElement(Image$2, _extends({
+    accessibilityLabel: "image"
+  }, props, {
+    ref: classRef
+  }));
+});
+Image.propTypes = _objectSpread2(_objectSpread2({}, Image$2.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var KegImage = StyleInjector(Image, {
+  displayName: 'Image',
+  className: 'keg-image'
+});
+var Image$1 = forwardRef(function (props, ref) {
   var _useState = useState(true),
       _useState2 = _slicedToArray(_useState, 2),
       loading = _useState2[0],
       setLoading = _useState2[1];
+  var internalRef = ref || useRef(null);
   var alt = props.alt,
+      className = props.className,
       children = props.children,
-      Element = props.Element,
-      isWeb = props.isWeb,
       onClick = props.onClick,
       onPress = props.onPress,
       src = props.src,
       source = props.source,
-      _props$styles = props.styles,
-      styles = _props$styles === void 0 ? {} : _props$styles,
+      styles = props.styles,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
-      themePath = props.themePath,
+      _props$themePath = props.themePath,
+      themePath = _props$themePath === void 0 ? "image.".concat(type) : _props$themePath,
       _props$useLoading = props.useLoading,
       useLoading = _props$useLoading === void 0 ? true : _props$useLoading,
-      attrs = _objectWithoutProperties(props, ["alt", "children", "Element", "isWeb", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"]);
-  var _useThemePath = useThemePath(themePath || "image.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      builtStyles = _useThemePath2[0];
+      attrs = _objectWithoutProperties(props, ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"]);
+  var builtStyles = useThemePath(themePath, styles);
   var loadingStyles = useStyle(builtStyles.loading, builtStyles.image);
   var loadedStyles = useStyle(loadingStyles, builtStyles.loaded);
   var _useThemeHover = useThemeHover(loadedStyles, builtStyles.hover, {
-    ref: ref
+    internalRef: internalRef
   }),
       _useThemeHover2 = _slicedToArray(_useThemeHover, 3),
+      imgRef = _useThemeHover2[0],
       elementStyle = _useThemeHover2[1],
       setStyle = _useThemeHover2[2];
-  return React.createElement(View, {
+  var onLoad = useCallback(function () {
+    checkCall(setLoading, false);
+    checkCall(setStyle, elementStyle);
+    checkCall(props.onLoad, props);
+    isFunc(imgRef) ? imgRef(internalRef.current) : imgRef && (imgRef.current = internalRef.current);
+  }, [src, source, internalRef.current]);
+  return React__default.createElement(View$1, {
+    className: useClassList("keg-image-container", className),
     style: builtStyles.container
-  }, loading && useLoading && React.createElement(Loading, {
+  }, loading && useLoading && React__default.createElement(Loading, {
+    className: "keg-image-loading",
     styles: builtStyles.loadingComp
-  }), React.createElement(Element, _extends({
-    ref: ref,
-    attrs: attrs,
-    alt: alt,
+  }), React__default.createElement(KegImage, _extends({}, attrs, {
     style: loading ? loadingStyles : builtStyles.image
-  }, getPressHandler(isWeb, onClick, onPress), getImgSrc(false, src, source), getOnLoad(isWeb, onLoadEvent(setLoading, props, setStyle, elementStyle)))));
+  }, getPressHandler(false, onClick, onPress), getImgSrc(false, src, source), {
+    onLoadEnd: onLoad,
+    alt: alt,
+    ref: internalRef
+  })));
 });
-ImageWrapper.propTypes = {
+Image$1.propTypes = _objectSpread2(_objectSpread2({}, Image.propTypes), {}, {
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
   src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  style: PropTypes.object
-};
-
-var isWeb$3 = getPlatform() === 'web';
-var Element$2 = forwardRef(function (_ref, ref) {
-  var attrs = _ref.attrs,
-      src = _ref.src,
-      props = _objectWithoutProperties(_ref, ["attrs", "src"]);
-  return React.createElement(Image$1, _extends({
-    ref: ref
-  }, attrs, props));
+  styles: PropTypes.object
 });
-var Image = forwardRef(function (props, ref) {
-  return React.createElement(ImageWrapper, _extends({}, props, {
-    ref: ref,
-    Element: Element$2,
-    isWeb: isWeb$3
-  }));
-});
-Image.propTypes = {
-  onPress: PropTypes.func,
-  type: PropTypes.string,
-  alt: PropTypes.string,
-  src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  style: PropTypes.object
-};
 
-var CardMediaTitle = function CardMediaTitle(_ref) {
-  var subtitle = _ref.subtitle,
-      title = _ref.title,
-      styles = _ref.styles;
-  var theme = useTheme();
-  return React.createElement(View, {
-    style: theme.join(get$1(theme, ['components', 'card', 'overlay']), styles.overlay)
-  }, title && React.createElement(Text, {
-    style: theme.join(get$1(theme, ['components', 'card', 'featured', 'title']), styles.title)
-  }, title), subtitle && React.createElement(Text, {
-    style: theme.join(get$1(theme, ['components', 'card', 'featured', 'subtitle']), styles.subtitle)
-  }, subtitle));
+var noHeader = {
+  marginTop: 0
 };
-
 var MediaFromType = function MediaFromType(_ref) {
   var mediaProps = _ref.mediaProps,
       styles = _ref.styles;
-  var type = mediaProps.type,
-      props = _objectWithoutProperties(mediaProps, ["type"]);
-  var _props$styles = props.styles,
-      image = _props$styles.image,
-      video = _props$styles.video,
-      container = _props$styles.container,
-      loading = _props$styles.loading,
-      loadingComp = _props$styles.loadingComp;
+  var className = mediaProps.className,
+      type = mediaProps.type,
+      _mediaProps$resizeMod = mediaProps.resizeMode,
+      resizeMode = _mediaProps$resizeMod === void 0 ? 'cover' : _mediaProps$resizeMod,
+      _mediaProps$resizeMet = mediaProps.resizeMethod,
+      resizeMethod = _mediaProps$resizeMet === void 0 ? 'scale' : _mediaProps$resizeMet,
+      props = _objectWithoutProperties(mediaProps, ["className", "type", "resizeMode", "resizeMethod"]);
+  var image = styles.image,
+      video = styles.video,
+      container = styles.container,
+      loading = styles.loading,
+      loadingComp = styles.loadingComp;
   var mediaStyles = useStyle(type === 'image' && image && {
     image: image
   }, type === 'video' && video && {
@@ -1285,7 +1474,11 @@ var MediaFromType = function MediaFromType(_ref) {
   switch (type) {
     case 'image':
       {
-        return React.createElement(Image, _extends({}, props, {
+        return React__default.createElement(Image$1, _extends({
+          resizeMode: resizeMode,
+          resizeMethod: resizeMethod
+        }, props, {
+          className: "keg-card-media",
           styles: mediaStyles
         }));
       }
@@ -1296,19 +1489,17 @@ var MediaFromType = function MediaFromType(_ref) {
   }
 };
 var CardMedia = function CardMedia(_ref2) {
-  var mediaProps = _ref2.mediaProps,
+  var hasHeader = _ref2.hasHeader,
+      mediaProps = _ref2.mediaProps,
       Media = _ref2.Media,
       subtitle = _ref2.subtitle,
       styles = _ref2.styles,
       title = _ref2.title;
-  return Media || !mediaProps ? Media || null : React.createElement(View, {
-    style: get$1(styles, 'media.container')
-  }, React.createElement(MediaFromType, {
+  return Media || !mediaProps ? Media || null : React__default.createElement(View$1, {
+    className: "keg-card-media",
+    style: [get(styles, 'main'), hasHeader === false && noHeader]
+  }, React__default.createElement(MediaFromType, {
     mediaProps: mediaProps,
-    styles: styles
-  }), (title || subtitle) && React.createElement(CardMediaTitle, {
-    subtitle: subtitle,
-    title: title,
     styles: styles
   }));
 };
@@ -1322,8 +1513,9 @@ CardMedia.propTypes = {
 var Card = function Card(_ref) {
   var styles = _ref.styles,
       props = _objectWithoutProperties(_ref, ["styles"]);
-  styles = styles || {};
-  var children = props.children,
+  var contentTitle = props.contentTitle,
+      children = props.children,
+      className = props.className,
       Footer = props.Footer,
       footerLines = props.footerLines,
       Header = props.Header,
@@ -1336,45 +1528,53 @@ var Card = function Card(_ref) {
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
       video = props.video,
-      attributes = _objectWithoutProperties(props, ["children", "Footer", "footerLines", "Header", "headerLines", "image", "Media", "subtitle", "themePath", "title", "type", "video"]);
-  var _useThemePath = useThemePath(themePath || "card.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      cardStyles = _useThemePath2[0];
+      attributes = _objectWithoutProperties(props, ["contentTitle", "children", "className", "Footer", "footerLines", "Header", "headerLines", "image", "Media", "subtitle", "themePath", "title", "type", "video"]);
+  var cardStyles = useThemePath(themePath || "card.".concat(type), styles);
   var mediaProps = useMediaProps({
     Media: Media,
     image: image,
     video: video,
     styles: cardStyles
   });
-  return React.createElement(CardContainer, {
+  var hasMedia = Boolean(Media || mediaProps);
+  var hasContent = Boolean(children || title || subtitle);
+  return React__default.createElement(CardContainer, {
+    className: className,
     attributes: attributes,
     styles: cardStyles
-  }, Header && React.createElement(CardHeader, {
-    Header: Header,
+  }, Header && React__default.createElement(CardSection, {
+    Section: Header,
+    type: "header",
     numberOfLines: headerLines,
-    styles: cardStyles
-  }), (Media || mediaProps) && React.createElement(CardMedia, {
+    styles: cardStyles.header,
+    showBorder: !hasMedia
+  }), hasMedia && React__default.createElement(CardMedia, {
+    mediaProps: mediaProps,
+    styles: cardStyles.media,
+    hasHeader: Boolean(Header)
+  }), hasContent && React__default.createElement(CardContent, {
     title: title,
     subtitle: subtitle,
-    mediaProps: mediaProps,
-    styles: cardStyles
-  }), children && React.createElement(CardBody, {
-    style: cardStyles.body,
+    styles: cardStyles.content,
     children: children
-  }), Footer && React.createElement(CardFooter, {
-    footer: Footer,
+  }), Footer && React__default.createElement(CardSection, {
+    Section: Footer,
+    type: "footer",
     numberOfLines: footerLines,
-    styles: cardStyles
+    styles: cardStyles.footer,
+    showBorder: hasContent
   }));
 };
-Card.Body = CardBody;
+Card.Body = CardContent;
 Card.Container = CardContainer;
-Card.Header = CardHeader;
-Card.Footer = CardFooter;
+Card.Header = CardSection;
+Card.Footer = CardSection;
 Card.Media = CardMedia;
 Card.propTypes = {
+  contentTitle: PropTypes.string,
+  Footer: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string, PropTypes.func, PropTypes.element]),
   footerLines: PropTypes.number,
-  header: PropTypes.string,
+  Header: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string, PropTypes.func, PropTypes.element]),
   headerLines: PropTypes.number,
   Media: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string, PropTypes.func, PropTypes.element]),
   styles: PropTypes.object,
@@ -1382,63 +1582,58 @@ Card.propTypes = {
   title: PropTypes.string
 };
 
-var getHeight = function getHeight(height, toggled) {
-  return toggled ? height : height && !toggled ? 0 : null;
-};
-var Drawer = function Drawer(props) {
+var Divider = function Divider(_ref) {
+  var className = _ref.className,
+      style = _ref.style,
+      props = _objectWithoutProperties(_ref, ["className", "style"]);
   var theme = useTheme();
-  var style = props.style,
-      children = props.children,
-      toggled = props.toggled;
-  var slideRef = useRef(null);
-  var _useState = useState(null),
-      _useState2 = _slicedToArray(_useState, 2),
-      height = _useState2[0],
-      setHeight = _useState2[1];
-  useLayoutEffect(function () {
-    var curHeight = get$1(slideRef, 'current.offsetHeight');
-    if (curHeight === 0) return;
-    height !== curHeight && setHeight(curHeight);
-  }, [height]);
-  var sliderStyle = theme.join({
-    overflow: 'hidden',
-    transition: 'max-height 1s ease'
-  }, get$1(theme, 'components.drawer'), style, {
-    maxHeight: getHeight(height, toggled)
-  });
-  return React.createElement(View, {
-    ref: slideRef,
-    style: sliderStyle
-  }, children);
+  return React__default.createElement(View$1, _extends({
+    accessibilityRole: "separator",
+    className: useClassList('keg-divider', className)
+  }, props, {
+    style: [get(theme, ['divider']), style]
+  }));
 };
-Drawer.propTypes = {
-  toggled: PropTypes.bool,
-  style: PropTypes.object,
-  children: PropTypes.object
+Divider.propTypes = {
+  styles: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
-var Caption = KegText('caption');
+var Caption = KegText$1('caption');
 
-var H1 = KegText('h1');
+var H1 = KegText$1('h1');
 
-var H2 = KegText('h2');
+var H2 = KegText$1('h2');
 
-var H3 = KegText('h3');
+var H3 = KegText$1('h3');
 
-var H4 = KegText('h4');
+var H4 = KegText$1('h4');
 
-var H5 = KegText('h5');
+var H5 = KegText$1('h5');
 
-var H6 = KegText('h6');
+var H6 = KegText$1('h6');
 
-var Label = KegText('label');
+var Label = KegText$1('label');
 
-var P = KegText('paragraph');
+var P = KegText$1('paragraph');
 
-var Subtitle = KegText('subtitle');
+var Subtitle = KegText$1('subtitle');
 
-var FilePicker = React.forwardRef(function (props, _ref) {
-  var onChange = props.onChange,
+var Input = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["className"]);
+  var classRef = useClassName('keg-input', className, ref);
+  return React__default.createElement("input", _extends({
+    ref: classRef
+  }, props));
+});
+
+var Input$1 = StyleInjector(Input, {
+  displayName: 'FilePickerInput',
+  className: 'keg-file-picker-input'
+});
+var FilePicker = React__default.forwardRef(function (props, _ref) {
+  var className = props.className,
+      onChange = props.onChange,
       title = props.title,
       children = props.children,
       _props$style = props.style,
@@ -1453,11 +1648,8 @@ var FilePicker = React.forwardRef(function (props, _ref) {
       capture = props.capture,
       _props$openOnMount = props.openOnMount,
       openOnMount = _props$openOnMount === void 0 ? false : _props$openOnMount,
-      args = _objectWithoutProperties(props, ["onChange", "title", "children", "style", "showFile", "onFilePicked", "themePath", "buttonThemePath", "capture", "openOnMount"]);
-  var theme = useTheme();
-  var _useThemePath = useThemePath(themePath),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      componentTheme = _useThemePath2[0];
+      args = _objectWithoutProperties(props, ["className", "onChange", "title", "children", "style", "showFile", "onFilePicked", "themePath", "buttonThemePath", "capture", "openOnMount"]);
+  var componentTheme = useThemePath(themePath);
   var _useState = useState({}),
       _useState2 = _slicedToArray(_useState, 2),
       file = _useState2[0],
@@ -1475,23 +1667,24 @@ var FilePicker = React.forwardRef(function (props, _ref) {
   useEffect(function () {
     openOnMount && clickInput();
   }, []);
-  return React.createElement(View, {
-    style: theme.join(get$1(componentTheme, 'main'), style)
-  }, React.createElement(Button, {
+  return React__default.createElement(View$1, {
+    className: useThemeTypeAsClass(themePath || type, 'keg-filepicker', className),
+    style: [get(componentTheme, 'main'), style]
+  }, React__default.createElement(Button, {
     content: title,
     onClick: clickInput,
-    style: get$1(componentTheme, 'content.button'),
+    style: get(componentTheme, 'content.button'),
     themePath: buttonThemePath
   }, children),
-  showFile && React.createElement(P, {
-    style: get$1(componentTheme, 'content.file')
-  }, file.name), React.createElement("input", _extends({}, args, {
+  showFile && React__default.createElement(P, {
+    style: get(componentTheme, 'content.file')
+  }, file.name), React__default.createElement(Input$1, _extends({}, args, {
     ref: function ref(input) {
       _ref && (_ref.current = input);
       refToInput.current = input;
     },
     onChange: handleInputChange,
-    style: get$1(componentTheme, 'content.input'),
+    style: get(componentTheme, 'content.input'),
     type: "file",
     capture: capture
   })));
@@ -1509,13 +1702,12 @@ FilePicker.propTypes = {
 };
 
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
-  var theme = useTheme();
   return useMemo(function () {
-    return theme.join(themeStyles, {
-      content: {
-        area: _objectSpread2(_objectSpread2({}, get$1(themeStyles, 'content.area.off')), isChecked && get$1(themeStyles, 'content.area.on')),
-        indicator: _objectSpread2(_objectSpread2({}, get$1(themeStyles, 'content.indicator.off')), isChecked && get$1(themeStyles, 'content.indicator.on'))
-      }
+    return _objectSpread2(_objectSpread2({}, themeStyles), {}, {
+      content: _objectSpread2(_objectSpread2({}, themeStyles.content), {}, {
+        area: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.area.off')), isChecked && get(themeStyles, 'content.area.on')),
+        indicator: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.indicator.off')), isChecked && get(themeStyles, 'content.indicator.on'))
+      })
     });
   }, [isChecked]);
 };
@@ -1526,20 +1718,27 @@ var setCheckedValue = function setCheckedValue(isChecked, setChecked, onChange) 
   };
 };
 var SideComponent = function SideComponent(_ref) {
-  var Component = _ref.Component,
+  var className = _ref.className,
+      Component = _ref.Component,
       style = _ref.style;
-  return isStr(Component) ? React.createElement(Text, {
+  return isStr(Component) ? React__default.createElement(Text, {
+    className: className,
     style: style
   }, Component) : renderFromType(Component, {
-    style: styles.content
+    style: styles.content,
+    className: className
   });
 };
 var ChildrenComponent = function ChildrenComponent(_ref2) {
-  var children = _ref2.children;
-  return React.createElement(React.Fragment, null, renderFromType(children, {}, null));
+  var children = _ref2.children,
+      className = _ref2.className;
+  return React__default.createElement(React__default.Fragment, null, renderFromType(children, {
+    className: className
+  }, null));
 };
 var CheckboxWrapper = function CheckboxWrapper(props) {
-  var checked = props.checked,
+  var className = props.className,
+      checked = props.checked,
       children = props.children,
       elType = props.elType,
       Element = props.Element,
@@ -1556,32 +1755,37 @@ var CheckboxWrapper = function CheckboxWrapper(props) {
       type = props.type,
       themePath = props.themePath,
       value = props.value,
-      elProps = _objectWithoutProperties(props, ["checked", "children", "elType", "Element", "disabled", "isWeb", "LeftComponent", "close", "onChange", "onValueChange", "ref", "RightComponent", "styles", "CheckboxComponent", "type", "themePath", "value"]);
+      elProps = _objectWithoutProperties(props, ["className", "checked", "children", "elType", "Element", "disabled", "isWeb", "LeftComponent", "close", "onChange", "onValueChange", "ref", "RightComponent", "styles", "CheckboxComponent", "type", "themePath", "value"]);
   var _useState = useState(toBool(checked || value)),
       _useState2 = _slicedToArray(_useState, 2),
       isChecked = _useState2[0],
       setChecked = _useState2[1];
   var elThemePath = themePath || "form.".concat(elType, ".").concat(close && 'close' || 'default');
-  var _useThemePath = useThemePath(elThemePath, styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      themeStyles = _useThemePath2[0];
+  var themeStyles = useThemePath(elThemePath, styles);
   var activeStyles = useCheckedState(isChecked, themeStyles);
-  return children && React.createElement(View, {
+  var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-checkbox', className);
+  return children && React__default.createElement(View$1, {
+    className: typeClassName,
     style: activeStyles.main
-  }, React.createElement(ChildrenComponent, {
+  }, React__default.createElement(ChildrenComponent, {
+    className: "keg-checkbox-container",
     children: children
-  })) || React.createElement(View, {
+  })) || React__default.createElement(View$1, {
+    className: typeClassName,
     style: activeStyles.main
-  }, LeftComponent && React.createElement(SideComponent, {
+  }, LeftComponent && React__default.createElement(SideComponent, {
+    className: "keg-checkbox-left",
     Component: LeftComponent,
     style: activeStyles.content.left
   }), CheckboxComponent ? renderFromType(CheckboxComponent, _objectSpread2(_objectSpread2({}, props), {}, {
     styles: activeStyles.content
-  })) : React.createElement(Element, _extends({
+  })) : React__default.createElement(Element, _extends({
+    className: "keg-checkbox-container",
     elProps: elProps,
     disabled: disabled,
     styles: activeStyles.content
-  }, getChecked(isWeb, isChecked), getOnChangeHandler(isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React.createElement(SideComponent, {
+  }, getChecked(isWeb, isChecked), getOnChangeHandler(isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent, {
+    className: "keg-checkbox-right",
     Component: RightComponent,
     style: activeStyles.content.right
   }));
@@ -1605,89 +1809,94 @@ CheckboxWrapper.propTypes = {
   value: PropTypes.bool
 };
 
-var Element$3 = React.forwardRef(function (_ref, ref) {
-  var elProps = _ref.elProps,
-      styles = _ref.styles,
+var checkBoxStyles = {
+  icon: {
+    position: 'relative',
+    fontSize: 14,
+    zIndex: 1,
+    height: 14,
+    width: 14,
+    top: 0,
+    left: 3,
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  input: {
+    position: 'absolute',
+    zIndex: 2,
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+    margin: 0,
+    opacity: 0,
+    cursor: 'pointer'
+  }
+};
+var Input$2 = StyleInjector(Input, {
+  displayName: 'Checkbox',
+  className: 'keg-checkbox'
+});
+var Element$1 = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      elProps = _ref.elProps,
+      _ref$styles = _ref.styles,
+      styles = _ref$styles === void 0 ? noPropObj : _ref$styles,
       icon = _ref.icon,
       checked = _ref.checked,
-      props = _objectWithoutProperties(_ref, ["elProps", "styles", "icon", "checked"]);
-  return React.createElement(View, {
-    style: styles.main
-  }, React.createElement(View, {
+      props = _objectWithoutProperties(_ref, ["className", "elProps", "styles", "icon", "checked"]);
+  var checkStyle = useMemo(function () {
+    return _objectSpread2(_objectSpread2({}, styles.indicator), checkBoxStyles.icon);
+  }, [checkBoxStyles, styles]);
+  return React__default.createElement(View$1, {
+    style: styles.main,
+    className: className
+  }, React__default.createElement(View$1, {
+    className: "keg-checkbox-area",
     style: styles.area
-  }), checked && React.createElement(Icon, {
-    styles: styles.indicator,
-    name: icon || 'check'
-  }), React.createElement("input", _extends({}, elProps, props, {
+  }), checked && React__default.createElement(Check, {
+    className: "keg-checkbox-icon",
+    style: checkStyle
+  }), React__default.createElement(Input$2, _extends({
+    className: "keg-checkbox"
+  }, elProps, props, {
+    role: "checkbox",
     checked: checked,
     type: "checkbox",
     ref: ref,
-    style: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      height: '100%',
-      width: '100%',
-      margin: 0,
-      opacity: 0,
-      cursor: 'pointer'
-    }
+    style: checkBoxStyles.input
   })));
 });
 var Checkbox = function Checkbox(props) {
-  return React.createElement(CheckboxWrapper, _extends({}, props, {
+  return React__default.createElement(CheckboxWrapper, _extends({}, props, {
     elType: 'checkbox',
-    Element: Element$3,
+    Element: Element$1,
     isWeb: true
   }));
 };
 Checkbox.propTypes = _objectSpread2({}, CheckboxWrapper.propTypes);
 
-var buildStyles = function buildStyles(theme, type, elType) {
-  var form = theme.get('form.form.default', type && "form.form.".concat(type));
-  return {
-    form: form
-  };
-};
-var FormWrapper = React.forwardRef(function (props, ref) {
+var Form = React__default.forwardRef(function (props, ref) {
   var theme = useTheme();
   var children = props.children,
-      Element = props.Element,
+      className = props.className,
       elType = props.elType,
-      isWeb = props.isWeb,
       style = props.style,
       type = props.type,
-      elProps = _objectWithoutProperties(props, ["children", "Element", "elType", "isWeb", "style", "type"]);
-  var builtStyles = buildStyles(theme, type);
-  return React.createElement(Element, {
-    elProps: elProps,
-    ref: ref,
-    style: theme.join(builtStyles.form, style),
-    children: children
-  });
-});
-FormWrapper.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
-  ref: PropTypes.object,
-  style: PropTypes.object,
-  type: PropTypes.string
-};
-
-var Element$4 = React.forwardRef(function (_ref, ref) {
-  var elProps = _ref.elProps,
-      children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["elProps", "children"]);
-  return React.createElement("form", _extends({}, elProps, props, {
+      _props$themePath = props.themePath,
+      themePath = _props$themePath === void 0 ? "form.form.".concat(type || 'default') : _props$themePath,
+      elProps = _objectWithoutProperties(props, ["children", "className", "elType", "style", "type", "themePath"]);
+  var formTheme = useThemePath(themePath);
+  return React__default.createElement(View$1, _extends({
+    accessibilityRole: "form",
+    className: useClassList('keg-form', className)
+  }, elProps, {
+    style: [get(theme, 'form.form.default'), formTheme, style],
     ref: ref
   }), children);
 });
-var Form = function Form(props) {
-  return React.createElement(FormWrapper, _extends({}, props, {
-    Element: Element$4,
-    elType: "web",
-    isWeb: true
-  }));
-};
 Form.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
   onSubmit: PropTypes.func,
@@ -1696,6 +1905,27 @@ Form.propTypes = {
   type: PropTypes.string
 };
 
+var Input$3 = forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["className"]);
+  var classRef = useClassName('keg-input', className, ref);
+  var TextInputTouch = withTouch(TextInput, {
+    showFeedback: false
+  });
+  return React__default.createElement(TextInputTouch, _extends({
+    accessibilityRole: "textbox"
+  }, props, {
+    ref: classRef
+  }));
+});
+Input$3.propTypes = _objectSpread2(_objectSpread2({}, TextInput.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var KegInput = StyleInjector(Input$3, {
+  displayName: 'Input',
+  className: 'keg-input'
+});
 var getValue = function getValue(_ref) {
   var children = _ref.children,
       value = _ref.value;
@@ -1704,9 +1934,9 @@ var getValue = function getValue(_ref) {
     value: setValue
   } : {};
 };
-var InputWrapper = forwardRef(function (props, ref) {
-  var theme = useTheme();
-  var children = props.children,
+var Input$4 = React__default.forwardRef(function (props, ref) {
+  var className = props.className,
+      children = props.children,
       _props$disabled = props.disabled,
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$editable = props.editable,
@@ -1725,56 +1955,33 @@ var InputWrapper = forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
       style = props.style,
       value = props.value,
-      isWeb = props.isWeb,
-      elProps = _objectWithoutProperties(props, ["children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value", "isWeb"]);
-  var _useThemePath = useThemePath(themePath),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      inputStyles = _useThemePath2[0];
-  return React.createElement(Element, _extends({
-    elProps: elProps,
-    style: theme.join(inputStyles, style),
-    ref: ref
-  }, getReadOnly(isWeb, readOnly, disabled, editable), getValue(props), useInputHandlers({
+      elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+  var inputStyles = useThemePath(themePath);
+  return React__default.createElement(KegInput, _extends({
+    accessibilityRole: "textbox",
+    onPress: onPress
+  }, getReadOnly(false, readOnly, disabled, editable), getValue(props), useInputHandlers({
     onChange: onChange,
     onValueChange: onValueChange,
     onChangeText: onChangeText
-  }), usePressHandlers(isWeb, {
+  }), usePressHandlers(false, {
     onClick: onClick,
     onPress: onPress
-  })), children);
+  }), elProps, {
+    style: [inputStyles, style]
+  }));
 });
-InputWrapper.propTypes = {
+Input$4.propTypes = _objectSpread2(_objectSpread2({}, KegInput.propTypes), {}, {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
-  isWeb: PropTypes.bool,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func,
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   onChangeText: PropTypes.func,
+  placeholder: PropTypes.string,
   style: PropTypes.object,
   type: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-};
-
-var Element$5 = React.forwardRef(function (_ref, ref) {
-  var elProps = _ref.elProps,
-      args = _objectWithoutProperties(_ref, ["elProps"]);
-  return React.createElement("input", _extends({}, args, elProps, {
-    ref: ref
-  }));
-});
-var Input = function Input(props) {
-  return React.createElement(InputWrapper, _extends({
-    Element: Element$5,
-    isWeb: true
-  }, props));
-};
-Input.propTypes = _objectSpread2(_objectSpread2({}, InputWrapper.propTypes), {}, {
-  theme: PropTypes.object,
-  style: PropTypes.object,
-  value: PropTypes.string,
-  placeholder: PropTypes.string,
-  type: PropTypes.string,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func
 });
 
 var Option = function Option(props) {
@@ -1784,7 +1991,7 @@ var Option = function Option(props) {
       text = props.text,
       value = props.value,
       args = _objectWithoutProperties(props, ["children", "label", "style", "text", "value"]);
-  return React.createElement("option", _extends({}, args, {
+  return React__default.createElement("option", _extends({}, args, {
     value: value || label || text
   }), label || value || text || children);
 };
@@ -1796,174 +2003,103 @@ Option.propTypes = {
 };
 
 var Radio = function Radio(props) {
-  return React.createElement(Input, _extends({}, props, {
+  return React__default.createElement(Input$4, _extends({}, props, {
     type: "radio"
   }));
 };
 
-var getValue$1 = function getValue(_ref, isWeb) {
-  var children = _ref.children,
-      onChange = _ref.onChange,
-      onValueChange = _ref.onValueChange,
-      readOnly = _ref.readOnly,
-      value = _ref.value;
+var Select = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["className"]);
+  var classRef = useClassName('keg-select', className, ref);
+  return React__default.createElement(Picker, _extends({}, props, {
+    ref: classRef
+  }));
+});
+Select.propTypes = _objectSpread2(_objectSpread2({}, Picker.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var KegSelect = StyleInjector(Select, {
+  displayName: 'Select',
+  className: 'keg-select'
+});
+var getValue$1 = function getValue(props) {
+  var children = props.children,
+      onChange = props.onChange,
+      onValueChange = props.onValueChange,
+      readOnly = props.readOnly,
+      value = props.value;
   var setValue = getValueFromChildren(value, children);
-  var valKey = getInputValueKey(isWeb, onChange, onValueChange, readOnly);
+  var valKey = getInputValueKey(false, onChange, onValueChange, readOnly);
   return _defineProperty({}, valKey, setValue);
 };
-var SelectWrapper = function SelectWrapper(props) {
-  var theme = useTheme();
-  var children = props.children,
-      editable = props.editable,
+var Select$1 = React__default.forwardRef(function (props, ref) {
+  var _selectStyles$icon, _selectStyles$icon$di;
+  var className = props.className,
+      children = props.children,
       disabled = props.disabled,
-      Element = props.Element,
-      isWeb = props.isWeb,
       readOnly = props.readOnly,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
+      style = props.style,
+      styles = props.styles,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath,
-      style = props.style,
       value = props.value,
-      elProps = _objectWithoutProperties(props, ["children", "editable", "disabled", "Element", "isWeb", "readOnly", "onChange", "onValueChange", "type", "themePath", "style", "value"]);
-  var _useThemePath = useThemePath(themePath),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      selectStyles = _useThemePath2[0];
-  return React.createElement(Element, _extends({
-    elProps: elProps,
-    style: theme.join(selectStyles, style)
-  }, getReadOnly(isWeb, readOnly, disabled, editable), getValue$1(props, isWeb), useSelectHandlers({
+      elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
+  var selectStyles = useThemePath(themePath, styles);
+  var selectClasses = useThemeTypeAsClass(themePath || type, 'keg-select', className);
+  var classRef = useClassName('keg-select', selectClasses, ref);
+  return React__default.createElement(View$1, {
+    style: [selectStyles.main, style]
+  }, React__default.createElement(KegSelect, _extends({
+    ref: classRef
+  }, elProps, {
+    enabled: !disabled,
+    style: [selectStyles.select]
+  }, getValue$1(props), useSelectHandlers({
     onChange: onChange,
     onValueChange: onValueChange
-  })), children);
-};
-SelectWrapper.propTypes = {
+  })), children), React__default.createElement(Icon, {
+    styles: selectStyles.icon,
+    Component: ChevronDown,
+    color: disabled && ((_selectStyles$icon = selectStyles.icon) === null || _selectStyles$icon === void 0 ? void 0 : (_selectStyles$icon$di = _selectStyles$icon.disabled) === null || _selectStyles$icon$di === void 0 ? void 0 : _selectStyles$icon$di.color)
+  }));
+});
+Select$1.propTypes = _objectSpread2(_objectSpread2({}, Select.propTypes), {}, {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
   ref: PropTypes.object,
   style: PropTypes.object,
   type: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-};
-
-var Element$6 = React.forwardRef(function (_ref, ref) {
-  var elProps = _ref.elProps,
-      children = _ref.children,
-      readOnly = _ref.readOnly,
-      props = _objectWithoutProperties(_ref, ["elProps", "children", "readOnly"]);
-  return React.createElement("select", _extends({}, elProps, props, {
-    ref: ref
-  }), children);
 });
-var Select = function Select(props) {
-  return React.createElement(SelectWrapper, _extends({}, props, {
-    Element: Element$6,
-    isWeb: true
-  }));
-};
-Select.propTypes = _objectSpread2({}, SelectWrapper.propTypes);
 
-var useCheckedState$1 = function useCheckedState(isChecked, themeStyles) {
-  var theme = useTheme();
-  return useMemo(function () {
-    return theme.join(themeStyles, {
-      content: {
-        area: _objectSpread2(_objectSpread2({}, get$1(themeStyles, 'content.area.off')), isChecked && get$1(themeStyles, 'content.area.on')),
-        indicator: _objectSpread2(_objectSpread2({}, get$1(themeStyles, 'content.indicator.off')), isChecked && get$1(themeStyles, 'content.indicator.on'))
-      }
-    });
-  }, [isChecked]);
-};
-var setCheckedValue$1 = function setCheckedValue(isChecked, setChecked, onChange) {
-  return function (event) {
-    setChecked(!isChecked);
-    checkCall(onChange, event, !isChecked);
-  };
-};
-var SideComponent$1 = function SideComponent(_ref) {
-  var Component = _ref.Component,
-      style = _ref.style;
-  return isStr(Component) ? React.createElement(Text, {
-    style: style
-  }, Component) : renderFromType(Component, {
-    style: styles.content
-  });
-};
-var ChildrenComponent$1 = function ChildrenComponent(_ref2) {
-  var children = _ref2.children;
-  return React.createElement(React.Fragment, null, renderFromType(children, {}, null));
-};
-var SwitchWrapper = function SwitchWrapper(props) {
-  var checked = props.checked,
-      children = props.children,
-      elType = props.elType,
-      Element = props.Element,
-      disabled = props.disabled,
-      isWeb = props.isWeb,
-      LeftComponent = props.LeftComponent,
-      close = props.close,
-      onChange = props.onChange,
-      onValueChange = props.onValueChange,
-      ref = props.ref,
-      RightComponent = props.RightComponent,
-      styles = props.styles,
-      SwitchComponent = props.SwitchComponent,
-      type = props.type,
-      themePath = props.themePath,
-      value = props.value,
-      elProps = _objectWithoutProperties(props, ["checked", "children", "elType", "Element", "disabled", "isWeb", "LeftComponent", "close", "onChange", "onValueChange", "ref", "RightComponent", "styles", "SwitchComponent", "type", "themePath", "value"]);
-  var _useState = useState(toBool(checked || value)),
-      _useState2 = _slicedToArray(_useState, 2),
-      isChecked = _useState2[0],
-      setChecked = _useState2[1];
-  var elThemePath = themePath || "form.".concat(elType, ".").concat(close && 'close' || 'default');
-  var _useThemePath = useThemePath(elThemePath, styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      themeStyles = _useThemePath2[0];
-  var activeStyles = useCheckedState$1(isChecked, themeStyles);
-  return children && React.createElement(View, {
-    style: activeStyles.main
-  }, React.createElement(ChildrenComponent$1, {
-    children: children
-  })) || React.createElement(View, {
-    style: activeStyles.main
-  }, LeftComponent && React.createElement(SideComponent$1, {
-    Component: LeftComponent,
-    style: activeStyles.content.left
-  }), SwitchComponent ? renderFromType(SwitchComponent, _objectSpread2(_objectSpread2({}, props), {}, {
-    styles: activeStyles.content
-  })) : React.createElement(Element, _extends({
-    elProps: elProps,
-    disabled: disabled,
-    styles: activeStyles.content
-  }, getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue$1(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React.createElement(SideComponent$1, {
-    Component: RightComponent,
-    style: activeStyles.content.right
-  }));
-};
-SwitchWrapper.propTypes = {
-  checked: PropTypes.bool,
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
-  disabled: PropTypes.bool,
-  isWeb: PropTypes.bool,
-  Element: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
-  LeftComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
-  RightComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
-  SwitchComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
-  onChange: PropTypes.func,
-  onValueChange: PropTypes.func,
-  ref: PropTypes.object,
-  styles: PropTypes.object,
-  text: PropTypes.string,
-  themePath: PropTypes.string,
-  type: PropTypes.string,
-  value: PropTypes.bool
+var Slider = function Slider() {
+  return null;
 };
 
-var isWeb$4 = getPlatform() === 'web';
+var Switch = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["className"]);
+  var classRef = useClassName('keg-switch', className, ref);
+  return React__default.createElement(Switch$2, _extends({}, props, {
+    reg: classRef
+  }));
+});
+Switch.propTypes = _objectSpread2(_objectSpread2({}, Switch$2.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var KegSwitch = StyleInjector(Switch, {
+  displayName: 'Switch',
+  className: 'keg-switch'
+});
 var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
   var _ref$indicator = _ref.indicator,
       indicator = _ref$indicator === void 0 ? {} : _ref$indicator,
@@ -1979,44 +2115,115 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
   });
   return colors;
 };
-var Element$7 = React.forwardRef(function (props, ref) {
-  var elProps = props.elProps,
-      style = props.style,
-      _props$styles = props.styles,
-      styles = _props$styles === void 0 ? {} : _props$styles,
+var useCheckedState$1 = function useCheckedState(isChecked, themeStyles) {
+  var theme = useTheme();
+  return useMemo(function () {
+    return theme.join(themeStyles, {
+      content: {
+        area: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.area.off')), isChecked && get(themeStyles, 'content.area.on')),
+        indicator: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.indicator.off')), isChecked && get(themeStyles, 'content.indicator.on'))
+      }
+    });
+  }, [isChecked]);
+};
+var setCheckedValue$1 = function setCheckedValue(isChecked, setChecked, onChange) {
+  return function (event) {
+    setChecked(!isChecked);
+    checkCall(onChange, event, !isChecked);
+  };
+};
+var SideComponent$1 = function SideComponent(_ref2) {
+  var Component = _ref2.Component,
+      style = _ref2.style;
+  return isStr(Component) ? React__default.createElement(Text, {
+    style: style
+  }, Component) : renderFromType(Component, {
+    style: styles.content
+  });
+};
+var ChildrenComponent$1 = function ChildrenComponent(_ref3) {
+  var children = _ref3.children;
+  return React__default.createElement(React__default.Fragment, null, renderFromType(children, {}, null));
+};
+var Switch$1 = function Switch(props) {
+  var className = props.className,
+      checked = props.checked,
+      children = props.children,
+      elType = props.elType,
+      disabled = props.disabled,
+      LeftComponent = props.LeftComponent,
+      close = props.close,
+      onChange = props.onChange,
+      onValueChange = props.onValueChange,
+      ref = props.ref,
+      RightComponent = props.RightComponent,
+      styles = props.styles,
+      SwitchComponent = props.SwitchComponent,
+      type = props.type,
+      themePath = props.themePath,
       thumbColor = props.thumbColor,
       trackColor = props.trackColor,
-      attrs = _objectWithoutProperties(props, ["elProps", "style", "styles", "thumbColor", "trackColor"]);
-  return React.createElement(View, {
-    style: styles.main
-  }, React.createElement(Switch$1, _extends({
-    style: styles.switch
-  }, getSwitchColors(thumbColor, trackColor, styles), elProps, attrs, {
-    ref: ref
-  })));
-});
-var Switch = function Switch(props) {
-  return React.createElement(SwitchWrapper, _extends({}, props, {
-    elType: 'switch',
-    Element: Element$7,
-    isWeb: isWeb$4
+      value = props.value,
+      elProps = _objectWithoutProperties(props, ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "ref", "RightComponent", "styles", "SwitchComponent", "type", "themePath", "thumbColor", "trackColor", "value"]);
+  var _useState = useState(toBool(checked || value)),
+      _useState2 = _slicedToArray(_useState, 2),
+      isChecked = _useState2[0],
+      setChecked = _useState2[1];
+  var elThemePath = themePath || "form.switch.".concat(close && 'close' || 'default');
+  var themeStyles = useThemePath(elThemePath, styles);
+  var activeStyles = useCheckedState$1(isChecked, themeStyles);
+  var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-switch', className);
+  return children && React__default.createElement(View$1, {
+    className: typeClassName,
+    style: activeStyles.main
+  }, React__default.createElement(ChildrenComponent$1, {
+    className: "keg-switch-container",
+    children: children
+  })) || React__default.createElement(View$1, {
+    className: typeClassName,
+    style: activeStyles.main
+  }, LeftComponent && React__default.createElement(SideComponent$1, {
+    className: "keg-switch-left",
+    Component: LeftComponent,
+    style: activeStyles.content.left
+  }), SwitchComponent ? renderFromType(SwitchComponent, _objectSpread2(_objectSpread2({}, props), {}, {
+    styles: activeStyles.content
+  })) : React__default.createElement(KegSwitch, _extends({
+    elProps: elProps,
+    disabled: disabled,
+    styles: activeStyles.content
+  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue$1(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent$1, {
+    className: "keg-switch-right",
+    Component: RightComponent,
+    style: activeStyles.content.right
   }));
 };
-Switch.propTypes = _objectSpread2(_objectSpread2({}, TouchableOpacity.propTypes), {}, {
+Switch$1.propTypes = {
+  checked: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
+  LeftComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
+  RightComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
+  SwitchComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
+  onChange: PropTypes.func,
+  onValueChange: PropTypes.func,
   ref: PropTypes.object,
-  style: PropTypes.object,
+  styles: PropTypes.object,
   text: PropTypes.string,
-  type: PropTypes.string
-});
+  themePath: PropTypes.string,
+  thumbColor: PropTypes.string,
+  trackColor: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.bool
+};
 
-var hasWidth = function hasWidth(style) {
+var useHasWidth = function useHasWidth(styles) {
   return useMemo(function () {
-    return Object.keys(pickKeys(style, ['width', 'minWidth', 'maxWidth'])).length;
-  }, [style]);
+    return styles.map(function (style) {
+      return Boolean(Object.keys(pickKeys(style, ['width', 'minWidth', 'maxWidth'])).length);
+    }).indexOf(true) !== -1;
+  }, styles);
 };
 var Container = function Container(_ref) {
   var onPress = _ref.onPress,
@@ -2024,14 +2231,17 @@ var Container = function Container(_ref) {
       children = _ref.children,
       flexDir = _ref.flexDir,
       size = _ref.size,
-      style = _ref.style,
+      _ref$style = _ref.style,
+      style = _ref$style === void 0 ? noPropObj : _ref$style,
       props = _objectWithoutProperties(_ref, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
+  var containerStyles = isArr(style) ? style : [style];
+  var hasWidth = useHasWidth(containerStyles);
   var flexStyle = flexDir === 'row' ? {
     flexDirection: flexDir,
-    flex: size ? size : hasWidth(style) ? 0 : 1
+    flex: size ? size : hasWidth ? 0 : 1
   } : {};
-  return React.createElement(View, _extends({}, props, {
-    style: _objectSpread2(_objectSpread2({}, flexStyle), style)
+  return React__default.createElement(View$1, _extends({}, props, {
+    style: [flexStyle].concat(_toConsumableArray(containerStyles))
   }, getPressHandler(getPlatform(), onClick || onPress)), children);
 };
 Container.propTypes = {
@@ -2040,16 +2250,18 @@ Container.propTypes = {
   onPress: PropTypes.func,
   onClick: PropTypes.func,
   size: PropTypes.number,
-  style: PropTypes.object
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 var Row = function Row(_ref) {
-  var children = _ref.children,
+  var className = _ref.className,
+      children = _ref.children,
       style = _ref.style,
-      props = _objectWithoutProperties(_ref, ["children", "style"]);
+      props = _objectWithoutProperties(_ref, ["className", "children", "style"]);
   var theme = useTheme();
-  return React.createElement(Container, _extends({}, props, {
-    style: _objectSpread2(_objectSpread2({}, get$1(theme, 'layout.grid.row')), style),
+  return React__default.createElement(Container, _extends({}, props, {
+    className: useClassList('keg-row', className),
+    style: [get(theme, 'layout.grid.row'), style],
     flexDir: "row"
   }), children);
 };
@@ -2082,17 +2294,19 @@ var getChildAttrs = function getChildAttrs(children) {
   });
 };
 var Grid = function Grid(_ref) {
-  var children = _ref.children,
+  var className = _ref.className,
+      children = _ref.children,
       style = _ref.style,
-      props = _objectWithoutProperties(_ref, ["children", "style"]);
+      props = _objectWithoutProperties(_ref, ["className", "children", "style"]);
   var theme = useTheme();
   var _getChildAttrs = getChildAttrs(children),
       isRow = _getChildAttrs.isRow,
       isCenter = _getChildAttrs.isCenter;
-  return React.createElement(Container, _extends({}, props, {
+  return React__default.createElement(Container, _extends({}, props, {
+    className: useClassList('keg-grid', className),
     flexDir: isRow ? 'column' : 'row',
     size: 1,
-    style: theme.join(get$1(theme, ['layout', 'grid', 'wrapper']), style, isCenter && buildCenterStyles(isCenter))
+    style: [get(theme, ['layout', 'grid', 'wrapper']), style, isCenter && buildCenterStyles(isCenter)]
   }), children);
 };
 Grid.propTypes = {
@@ -2101,7 +2315,7 @@ Grid.propTypes = {
 };
 
 var widthFromSize = function widthFromSize(size, theme) {
-  var total = get$1(theme, ['layout', 'columns'], 12);
+  var total = get(theme, ['layout', 'columns'], 12);
   size = size > total ? total : size;
   var colWidth = parseFloat(size * (100 / total)).toFixed(4);
   return {
@@ -2115,15 +2329,17 @@ var getColumnWidth = function getColumnWidth(size, theme) {
   };
 };
 var Column = function Column(_ref) {
-  var children = _ref.children,
+  var className = _ref.className,
+      children = _ref.children,
       size = _ref.size,
       center = _ref.center,
-      props = _objectWithoutProperties(_ref, ["children", "size", "center"]);
+      props = _objectWithoutProperties(_ref, ["className", "children", "size", "center"]);
   var theme = useTheme();
-  return React.createElement(Container, _extends({}, props, {
+  return React__default.createElement(Container, _extends({}, props, {
+    className: useClassList('keg-column', className),
     size: size,
     flexDir: "column",
-    style: theme.join(get$1(theme, ['layout', 'grid', 'column']), props.style, getColumnWidth(size, theme))
+    style: [get(theme, ['layout', 'grid', 'column']), props.style, getColumnWidth(size, theme)]
   }), children);
 };
 Column.propTypes = {
@@ -2149,12 +2365,12 @@ var LinkWrapper = function LinkWrapper(props) {
       target = props.target,
       type = props.type;
   var linkStyle = theme.get('typography.font.family', 'link.default', type && "link.".concat(type));
-  var _useThemeHover = useThemeHover(theme.join(linkStyle, style), get$1(theme, "link.hover")),
+  var _useThemeHover = useThemeHover(theme.join(linkStyle, style), get(theme, "link.hover")),
       _useThemeHover2 = _slicedToArray(_useThemeHover, 2),
       ref = _useThemeHover2[0],
       themeStyle = _useThemeHover2[1];
   var spacer = space && getSpacer(space);
-  return React.createElement(React.Fragment, null, spacer, React.createElement(Element, _extends({
+  return React__default.createElement(React__default.Fragment, null, spacer, React__default.createElement(Element, _extends({
     ref: ref,
     href: href,
     style: themeStyle
@@ -2169,29 +2385,33 @@ LinkWrapper.propTypes = {
   type: PropTypes.string
 };
 
-var isWeb$5 = getPlatform() === 'web';
-var Text$1 = KegText('link');
-var Element$8 = React.forwardRef(function (_ref, ref) {
-  var elProps = _ref.elProps,
-      children = _ref.children,
-      href = _ref.href,
-      onPress = _ref.onPress,
-      target = _ref.target,
-      style = _ref.style,
-      props = _objectWithoutProperties(_ref, ["elProps", "children", "href", "onPress", "target", "style"]);
-  return React.createElement(TouchableOpacity, _extends({}, elProps, props, {
-    ref: ref
-  }), React.createElement(Text$1, {
+var isWeb$1 = getPlatform() === 'web';
+var Text$1 = KegText$1('link');
+var Element$2 = React__default.forwardRef(function (props, ref) {
+  var children = props.children,
+      className = props.className,
+      elProps = props.elProps,
+      href = props.href,
+      onPress = props.onPress,
+      style = props.style,
+      target = props.target,
+      attrs = _objectWithoutProperties(props, ["children", "className", "elProps", "href", "onPress", "style", "target"]);
+  return React__default.createElement(Touchable$1, _extends({
+    className: useClassList('keg-link', className)
+  }, elProps, attrs, {
+    touchRef: ref
+  }), React__default.createElement(Text$1, {
+    accessibilityRole: "link",
+    className: "keg-link-text",
     style: style,
     href: href,
-    accessibilityRole: "link",
     target: target
   }, children));
 });
 var Link = function Link(props) {
-  return React.createElement(LinkWrapper, _extends({}, props, {
-    Element: Element$8,
-    isWeb: isWeb$5
+  return React__default.createElement(LinkWrapper, _extends({}, props, {
+    Element: Element$2,
+    isWeb: isWeb$1
   }));
 };
 Link.propTypes = {
@@ -2203,13 +2423,16 @@ Link.propTypes = {
 };
 
 var Section = withTheme(function (props) {
-  var theme = props.theme,
+  var className = props.className,
+      theme = props.theme,
       children = props.children,
       style = props.style,
       type = props.type,
-      args = _objectWithoutProperties(props, ["theme", "children", "style", "type"]);
-  return React.createElement(View, _extends({}, args, {
-    style: theme.get("keg-section-".concat(type || 'default'), "section.default", type && "section.".concat(type), style)
+      args = _objectWithoutProperties(props, ["className", "theme", "children", "style", "type"]);
+  return React__default.createElement(View$1, _extends({}, args, {
+    className: useClassList('keg-section', className),
+    accessibilityRole: "region",
+    style: theme.get("section.default", type && "section.".concat(type), style)
   }), children);
 });
 Section.propTypes = {
@@ -2218,7 +2441,8 @@ Section.propTypes = {
 };
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
-  var defaultStyle = _ref.defaultStyle,
+  var className = _ref.className,
+      defaultStyle = _ref.defaultStyle,
       visible = _ref.visible,
       children = _ref.children,
       onAnimationFinish = _ref.onAnimationFinish;
@@ -2229,11 +2453,12 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
     from: visible ? bottomOfScreen : origin,
     to: visible ? origin : bottomOfScreen,
     onFinish: onAnimationFinish
-  }, [visible]),
+  }),
       _useFromToAnimation2 = _slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
-  return React.createElement(Animated.View, {
-    dataSet: Modal.dataSet.content,
+  var classRef = useClassName('keg-modal-content', className);
+  return React__default.createElement(Animated.View, {
+    ref: classRef,
     style: _objectSpread2(_objectSpread2({}, defaultStyle), {}, {
       transform: [{
         translateY: slide
@@ -2247,28 +2472,27 @@ var hideModalStyle = {
   overflow: 'hidden'
 };
 var Modal = function Modal(props) {
-  var styles = props.styles,
+  var _props$AnimatedCompon = props.AnimatedComponent,
+      AnimatedComponent = _props$AnimatedCompon === void 0 ? SlideAnimatedView : _props$AnimatedCompon,
+      _props$activeOpacity = props.activeOpacity,
+      activeOpacity = _props$activeOpacity === void 0 ? 1 : _props$activeOpacity,
+      children = props.children,
+      className = props.className,
+      onAnimateIn = props.onAnimateIn,
+      onAnimateOut = props.onAnimateOut,
       _props$onBackdropTouc = props.onBackdropTouch,
       onBackdropTouch = _props$onBackdropTouc === void 0 ? noOp : _props$onBackdropTouc,
+      styles = props.styles,
       themePath = props.themePath,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
-      _props$activeOpacity = props.activeOpacity,
-      activeOpacity = _props$activeOpacity === void 0 ? 1 : _props$activeOpacity,
-      visible = props.visible,
-      _props$AnimatedCompon = props.AnimatedComponent,
-      AnimatedComponent = _props$AnimatedCompon === void 0 ? SlideAnimatedView : _props$AnimatedCompon,
-      onAnimateIn = props.onAnimateIn,
-      onAnimateOut = props.onAnimateOut,
-      children = props.children;
+      visible = props.visible;
   var _useState = useState(false),
       _useState2 = _slicedToArray(_useState, 2),
       renderModal = _useState2[0],
       setRenderModal = _useState2[1];
   if (props.visible && !renderModal) setRenderModal(true);
-  var _useThemePath = useThemePath(themePath || "modal.".concat(type), styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      modalStyles = _useThemePath2[0];
+  var modalStyles = useThemePath(themePath || "modal.".concat(type), styles);
   useEffect(function () {
     if (global.document && visible) {
       global.document.body.style.overflow = 'hidden';
@@ -2282,33 +2506,22 @@ var Modal = function Modal(props) {
       setRenderModal(false);
       if (isFunc(onAnimateOut)) onAnimateOut();
     } else if (isFunc(onAnimateIn)) onAnimateIn();
-  }, [onAnimateOut, onAnimateIn]);
+  }, [onAnimateOut, onAnimateIn, visible]);
   return (
-    React.createElement(View, {
-      dataSet: Modal.dataSet.main,
+    React__default.createElement(View$1, {
+      className: useClassList('keg-modal', className),
       style: renderModal ? modalStyles.main : hideModalStyle
-    }, React.createElement(TouchableOpacity, {
-      dataSet: Modal.dataSet.backdrop,
+    }, React__default.createElement(Touchable$1, {
+      className: 'keg-modal-backdrop',
       style: modalStyles.backdrop,
       onPress: onBackdropTouch,
       activeOpacity: activeOpacity
-    }), React.createElement(AnimatedComponent, {
+    }), React__default.createElement(AnimatedComponent, {
       onAnimationFinish: cb,
       visible: visible,
       defaultStyle: modalStyles.content
     }, children))
   );
-};
-Modal.dataSet = {
-  main: {
-    class: 'modal-main'
-  },
-  backdrop: {
-    class: 'modal-backdrop'
-  },
-  content: {
-    class: 'modal-content'
-  }
 };
 Modal.propTypes = {
   themePath: PropTypes.string,
@@ -2322,10 +2535,13 @@ Modal.propTypes = {
   AnimatedComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType])
 };
 
+var isWeb$2 = getPlatform() === 'web';
 var ItemHeader = function ItemHeader(props) {
-  var _dataSet$content, _dataSet$content2, _headerStyles$content, _dataSet$content3;
+  var _headerStyles$content;
   var theme = useTheme();
-  var title = props.title,
+  var appHeader = props.appHeader,
+      className = props.className,
+      title = props.title,
       styles = props.styles,
       RightComponent = props.RightComponent,
       CenterComponent = props.CenterComponent,
@@ -2341,60 +2557,31 @@ var ItemHeader = function ItemHeader(props) {
       ellipsis = props.ellipsis,
       themePath = props.themePath,
       children = props.children,
-      dataSet = props.dataSet,
-      elprops = _objectWithoutProperties(props, ["title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children", "dataSet"]);
-  var _useThemePath = useThemePath(themePath || "header.itemHeader", styles),
-      _useThemePath2 = _slicedToArray(_useThemePath, 1),
-      headerStyles = _useThemePath2[0];
-  return React.createElement(View, _extends({
-    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : dataSet.main) || ItemHeader.dataSet.main
-  }, elprops, {
-    style: theme.join(headerStyles.main, shadow && get$1(headerStyles, ['main', 'shadow']))
-  }), children || React.createElement(React.Fragment, null, React.createElement(Side, {
-    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : (_dataSet$content = dataSet.content) === null || _dataSet$content === void 0 ? void 0 : _dataSet$content.left) || ItemHeader.dataSet.content.left,
+      elProps = _objectWithoutProperties(props, ["appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
+  var headerStyles = useThemePath(themePath || "header.itemHeader", styles);
+  return React__default.createElement(View$1, _extends({
+    className: useClassList('keg-header', className)
+  }, elProps, {
+    style: [headerStyles.main, appHeader && get(headerStyles, ['appHeader', 'main']), shadow && get(headerStyles, ['shadow', 'main'])]
+  }), !isWeb$2  , children || React__default.createElement(React__default.Fragment, null, React__default.createElement(Side, {
     styles: headerStyles.content,
     iconName: leftIcon,
     IconElement: LeftIconComponent || IconComponent,
     action: onLeftClick
-  }, LeftComponent), React.createElement(Center, {
-    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : (_dataSet$content2 = dataSet.content) === null || _dataSet$content2 === void 0 ? void 0 : _dataSet$content2.center) || ItemHeader.dataSet.content.center,
+  }, LeftComponent), React__default.createElement(Center, {
     ellipsis: ellipsis,
     theme: theme,
     styles: (_headerStyles$content = headerStyles.content) === null || _headerStyles$content === void 0 ? void 0 : _headerStyles$content.center,
     title: title
-  }, CenterComponent), React.createElement(Side, {
+  }, CenterComponent), React__default.createElement(Side, {
     right: true,
-    dataSet: (dataSet === null || dataSet === void 0 ? void 0 : (_dataSet$content3 = dataSet.content) === null || _dataSet$content3 === void 0 ? void 0 : _dataSet$content3.right) || ItemHeader.dataSet.content.right,
     styles: headerStyles.content,
     iconName: rightIcon,
     IconElement: RightIconComponent || IconComponent,
     action: onRightClick
   }, RightComponent)));
 };
-ItemHeader.dataSet = {
-  main: {
-    class: 'item-header-main'
-  },
-  content: {
-    left: {
-      main: {
-        class: 'item-header-content-left-main'
-      }
-    },
-    right: {
-      main: {
-        class: 'item-header-content-right-main'
-      }
-    },
-    center: {
-      main: {
-        class: 'item-header-content-center-main'
-      }
-    }
-  }
-};
 ItemHeader.propTypes = {
-  dataSet: PropTypes.object,
   title: PropTypes.string,
   styles: PropTypes.object,
   RightComponent: PropTypes.element,
@@ -2416,13 +2603,12 @@ var Center = function Center(props) {
       title = props.title,
       _props$ellipsis = props.ellipsis,
       ellipsis = _props$ellipsis === void 0 ? true : _props$ellipsis,
-      children = props.children,
-      dataSet = props.dataSet;
-  return React.createElement(View, {
-    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.main,
+      children = props.children;
+  return React__default.createElement(View$1, {
+    className: "keg-header-center",
     style: styles.main
-  }, children && renderFromType(children, {}, null) || React.createElement(H6, {
-    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.content,
+  }, children && renderFromType(children, {}, null) || React__default.createElement(H5, {
+    className: "keg-header-center-title",
     ellipsis: ellipsis,
     style: styles.content.title
   }, title));
@@ -2433,64 +2619,82 @@ var Side = function Side(props) {
       IconElement = props.IconElement,
       action = props.action,
       children = props.children,
-      right = props.right,
-      dataSet = props.dataSet;
+      right = props.right;
   var position = right ? 'right' : 'left';
-  var contentStyles = get$1(styles, [position, 'content']);
+  var contentStyles = get(styles, [position, 'content'], noPropObj);
   var iconProps = {
     styles: styles,
     IconElement: IconElement,
     iconName: iconName,
     position: position
   };
-  var showIcon = iconName && IconElement;
-  return React.createElement(View, {
-    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.main,
-    style: get$1(styles, [position, 'main'])
-  }, children && renderFromType(children, {}, null) || (action ? React.createElement(Button, {
-    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.content,
+  var showIcon = isValidComponent(IconElement);
+  return React__default.createElement(View$1, {
+    className: "keg-header-".concat(position),
+    style: get(styles, [position, 'main'])
+  }, children && renderFromType(children, {}, null) || (action ? React__default.createElement(Button, {
+    className: "keg-header-".concat(position, "-button"),
     styles: contentStyles.button,
     onClick: action
-  }, showIcon && React.createElement(CustomIcon, iconProps)) : showIcon && React.createElement(View, {
-    dataSet: dataSet === null || dataSet === void 0 ? void 0 : dataSet.content,
+  }, showIcon && React__default.createElement(CustomIcon, iconProps)) : showIcon && React__default.createElement(View$1, {
+    className: "keg-header-".concat(position, "-icon"),
     style: contentStyles.main
-  }, React.createElement(CustomIcon, iconProps))));
+  }, React__default.createElement(CustomIcon, iconProps))));
 };
 var CustomIcon = function CustomIcon(props) {
-  var styles = props.styles,
+  var className = props.className,
       iconName = props.iconName,
       IconElement = props.IconElement,
-      position = props.position;
-  return React.createElement(Icon, {
+      position = props.position,
+      styles = props.styles;
+  return React__default.createElement(Icon, {
+    className: className,
     name: iconName,
     Element: IconElement,
-    styles: get$1(styles, [position, 'content', 'icon'])
+    styles: get(styles, [position, 'content', 'icon'])
   });
 };
 
 var AppHeader = function AppHeader(props) {
-  var dataSet = props.dataSet,
-      otherProps = _objectWithoutProperties(props, ["dataSet"]);
-  return React.createElement(ItemHeader, _extends({
-    dataSet: deepMerge$1(AppHeader.dataSet, dataSet)
+  var className = props.className,
+      otherProps = _objectWithoutProperties(props, ["className"]);
+  return React__default.createElement(ItemHeader, _extends({
+    accessibilityRole: "banner",
+    className: useClassList('keg-app-header', className),
+    appHeader: true
   }, otherProps));
 };
-AppHeader.dataSet = {
-  main: {
-    class: 'app-header-main'
-  },
-  content: {
-    left: {
-      class: 'app-header-content-left'
-    },
-    right: {
-      class: 'app-header-content-right'
-    },
-    center: {
-      class: 'app-header-content-center'
+
+var useScrollClassNames = function useScrollClassNames(defClass, className, innerClassName, ref) {
+  className = eitherArr(className, [className]);
+  var classRef = useRef(className);
+  return useCallback(function (scrollResponder) {
+    if ( scrollResponder) {
+      updateClassNames(scrollResponder.getScrollableNode(), classRef, defClass, className);
+      updateClassNames(scrollResponder.getInnerViewNode(), classRef, "".concat(defClass, "-container"), innerClassName);
     }
-  }
+    handleRefUpdate(ref, scrollResponder);
+  }, [defClass, className.join(' '), ref]);
 };
+var ScrollView = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      innerClassName = _ref.innerClassName,
+      props = _objectWithoutProperties(_ref, ["className", "innerClassName"]);
+  var classRef = useScrollClassNames('keg-scrollview', className, innerClassName, ref);
+  return React__default.createElement(ScrollView$2, _extends({}, props, {
+    ref: classRef
+  }));
+});
+ScrollView.propTypes = _objectSpread2(_objectSpread2({}, ScrollView$2.propTypes), {}, {
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  innerClassName: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+});
+
+var ScrollView$1 = StyleInjector(ScrollView, {
+  displayName: 'Scroll-View',
+  className: 'keg-scrollview'
+});
+ScrollView$1.propTypes = ScrollView.propTypes;
 
 var transition = function transition() {
   var prop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
@@ -2523,10 +2727,11 @@ transition.maxHeight = {
   transition: 'max-height 1s ease'
 };
 
+var defaults$2 = getThemeDefaults();
 var containedStyles = function containedStyles(state, colorType) {
-  var opacity = get$1(defaults, "states.types.".concat(state, ".opacity"));
-  var shade = get$1(defaults, "states.types.".concat(state, ".shade"));
-  var activeColor = get$1(colors$1, "surface.".concat(colorType, ".colors.").concat(shade));
+  var opacity = get(defaults$2, "states.types.".concat(state, ".opacity"));
+  var shade = get(defaults$2, "states.types.".concat(state, ".shade"));
+  var activeColor = get(colors$1, "surface.".concat(colorType, ".colors.").concat(shade));
   return {
     main: {
       $all: {
@@ -2540,28 +2745,29 @@ var containedStyles = function containedStyles(state, colorType) {
       $web: _objectSpread2({
         cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
         boxShadow: 'none'
-      }, transition(['backgroundColor', 'borderColor'], 0.3)),
+      }, transition(['backgroundColor', 'borderColor'], 0.5)),
       $native: {}
     },
     content: {
-      color: state === 'disabled' ? get$1(colors$1, 'opacity._50') : get$1(colors$1, 'palette.white01'),
+      color: state === 'disabled' ? get(colors$1, 'opacity._50') : get(colors$1, 'palette.white01'),
       fontSize: 14,
       fontWeight: '500',
       letterSpacing: 0.5,
       textAlign: 'center',
-      $web: _objectSpread2({}, transition(['color'], 0.15))
+      $web: _objectSpread2({}, transition(['color'], 0.5))
     }
   };
 };
 var contained = buildTheme(containedStyles);
 
+var defaults$3 = getThemeDefaults();
 var textStyle = function textStyle(state, colorType) {
-  var shade = get$1(defaults, "states.types.".concat(state, ".shade"));
-  var activeColor = get$1(colors$1, "surface.".concat(colorType, ".colors.").concat(shade));
+  var shade = get(defaults$3, "states.types.".concat(state, ".shade"));
+  var activeColor = get(colors$1, "surface.".concat(colorType, ".colors.").concat(shade));
   return {
     main: {
       $all: {
-        backgroundColor: state === 'hover' ? colors$1.opacity(10, activeColor) : get$1(colors$1, 'palette.transparent')
+        backgroundColor: state === 'hover' ? colors$1.opacity(10, activeColor) : get(colors$1, 'palette.transparent')
       }
     },
     content: {
@@ -2575,16 +2781,17 @@ var text = buildTheme(textStyle, {
   inheritFrom: [contained]
 });
 
+var defaults$4 = getThemeDefaults();
 var outlineStyles = function outlineStyles(state, colorType) {
-  var stateShade = defaults.states.types[state].shade;
-  var activeColor = get$1(colors$1, "surface.".concat(colorType, ".colors.").concat(stateShade));
+  var stateShade = defaults$4.states.types[state].shade;
+  var activeColor = get(colors$1, "surface.".concat(colorType, ".colors.").concat(stateShade));
   return {
     main: {
       $all: {
         padding: 8,
         borderWidth: 1,
         borderColor: activeColor,
-        backgroundColor: state === 'hover' ? colors$1.opacity(10, activeColor) : get$1(colors$1, 'palette.white01')
+        backgroundColor: state === 'hover' ? colors$1.opacity(10, activeColor) : get(colors$1, 'palette.white01')
       },
       $web: {
         outline: 'none'
@@ -2607,11 +2814,12 @@ var button = {
   outline: outline
 };
 
+var defaults$5 = getThemeDefaults();
 var spaceHelper = function spaceHelper(amount) {
   var sides = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var type = arguments.length > 2 ? arguments[2] : undefined;
-  sides = sides.length && sides || defaults.layout.sides;
-  if (sides === 'all' || isArr(sides) && sides[0] === 'all') sides = defaults.layout.sides;
+  sides = sides.length && sides || defaults$5.layout.sides;
+  if (sides === 'all' || isArr(sides) && sides[0] === 'all') sides = defaults$5.layout.sides;
   return sides.reduce(function (styles, side) {
     styles["".concat(type).concat(capitalize(side))] = unitsHelper(amount);
     return styles;
@@ -2621,8 +2829,8 @@ var unitsHelper = function unitsHelper(value) {
   if (!isStr(value) && !isNum(value)) return value;
   if (isStr(value)) {
     var amount = parseInt(value);
-    if ((amount || amount === 0) && amount.toString() === value) value += defaults.font.units;
-  } else value += defaults.font.units;
+    if ((amount || amount === 0) && amount.toString() === value) value += defaults$5.font.units;
+  } else value += defaults$5.font.units;
   return value;
 };
 var align = function align(dir) {
@@ -2637,7 +2845,7 @@ var background = function background(color) {
 };
 var bold = function bold() {
   return {
-    fontWeight: defaults.font.bold
+    fontWeight: defaults$5.font.bold
   };
 };
 var color$1 = function color(_color) {
@@ -2678,7 +2886,8 @@ var helpers = {
   weight: weight
 };
 
-var size$1 = defaults.layout.margin;
+var defaults$6 = getThemeDefaults();
+var size$1 = defaults$6.layout.margin;
 var margin = function margin(amount) {
   var sides = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   return spaceHelper(amount, sides, 'margin');
@@ -2709,7 +2918,8 @@ margin.bottom = {
   marginBottom: size$1
 };
 
-var size$2 = defaults.layout.padding;
+var defaults$7 = getThemeDefaults();
+var size$2 = defaults$7.layout.padding;
 var padding = function padding(amount) {
   var sides = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   return spaceHelper(amount, sides, 'padding');
@@ -2823,8 +3033,37 @@ flex.align.base = {
   alignItems: 'baseline'
 };
 
-var opacity05 = get$1(colors$1, 'opacity._05');
-var colorPalette = get$1(colors$1, 'palette');
+var opacity05 = get(colors$1, 'opacity._5');
+var colorPalette = get(colors$1, 'palette');
+var section = {
+  main: _objectSpread2(_objectSpread2(_objectSpread2({}, flex.left), flex.column), {}, {
+    borderColor: colorPalette.gray01,
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    padding: 0,
+    paddingBottom: padding.size / 2,
+    margin: margin.size,
+    marginBottom: 0,
+    marginTop: margin.size - margin.size / 5
+  }),
+  text: {
+    fontSize: 22,
+    lineHeight: 26,
+    color: get(colors$1, 'opacity._65'),
+    fontWeight: 'bold'
+  },
+  noBorder: {
+    main: {
+      borderBottomWidth: 0,
+      borderTopWidth: 0,
+      paddingTop: 0,
+      paddingBottom: 0
+    },
+    text: {
+      lineHeight: 20
+    }
+  }
+};
 var contained$1 = {
   main: {
     $native: {
@@ -2842,106 +3081,87 @@ var contained$1 = {
     },
     $all: {
       backgroundColor: colorPalette.white01,
-      borderWidth: 1,
-      padding: padding.size,
       margin: margin.size,
-      marginBottom: 0,
+      paddingBottom: margin.size - margin.size / 5,
       borderColor: colorPalette.gray01,
-      borderStyle: 'solid'
+      borderStyle: 'solid',
+      borderWidth: 1
     }
   },
   container: {
     backgroundColor: colorPalette.transparent
   },
-  footer: {
-    container: {},
-    text: {},
-    divider: {}
-  },
-  header: {
-    container: _objectSpread2(_objectSpread2({}, flex.left), flex.column),
-    text: {
-      fontSize: 16,
-      color: colorPalette.black02,
-      fontWeight: 'bold',
-      textAlign: 'center'
-    },
-    divider: {}
-  },
-  divider: {
-    marginBottom: margin.size
-  },
-  media: {
-    container: {
-      marginBottom: margin.size,
-      width: '100%'
-    },
-    image: {
-      width: '100%'
-    },
-    loadingComp: {
-      indicator: {
-        icon: {
-          fontSize: '100px',
-          color: colorPalette.gray01
-        }
+  header: section,
+  footer: _objectSpread2(_objectSpread2({}, section), {}, {
+    main: _objectSpread2(_objectSpread2({}, section.main), {}, {
+      paddingTop: padding.size / 2,
+      paddingBottom: 0,
+      marginBottom: 0,
+      borderTopWidth: 1,
+      borderBottomWidth: 0
+    }),
+    text: _objectSpread2(_objectSpread2({}, section.text), {}, {
+      fontSize: 20,
+      lineHeight: 24
+    }),
+    noBorder: {
+      main: {
+        borderBottomWidth: 0,
+        borderTopWidth: 0,
+        paddingTop: 0,
+        paddingBottom: 0
+      },
+      text: {
+        lineHeight: 20
       }
+    }
+  }),
+  media: {
+    main: {
+      position: 'relative',
+      margin: 0,
+      marginTop: margin.size - margin.size / 5
+    },
+    image: {},
+    loadingComp: {
+      main: {},
+      progress: {},
+      indicator: {}
     },
     video: {
       width: '100%'
     }
   },
-  featured: {
-    title: {
-      fontSize: 18,
-      marginBottom: 8,
-      color: colorPalette.white01,
-      fontWeight: '800'
+  content: {
+    main: {
+      margin: margin.size,
+      marginBottom: 0
     },
-    subtitle: {
-      fontSize: 13,
-      marginBottom: 8,
-      color: colorPalette.white01,
-      fontWeight: '400'
-    }
-  },
-  overlay: _objectSpread2({
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: opacity05,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  }, helpers.abs),
-  body: {}
+    callout: {
+      title: {
+        fontSize: 18,
+        marginBottom: margin.size / 4,
+        color: get(colors$1, 'opacity._40'),
+        fontWeight: '800'
+      },
+      subtitle: {
+        fontSize: 13,
+        marginBottom: margin.size,
+        color: get(colors$1, 'opacity._40'),
+        fontWeight: '400'
+      }
+    },
+    overlay: _objectSpread2({
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: opacity05,
+      alignSelf: 'stretch',
+      justifyContent: 'center'
+    }, helpers.abs)
+  }
 };
 
-var full = deepMerge$1(contained$1, {
-  main: {
-    $all: {
-      padding: 0
-    }
-  },
-  header: {
-    container: {
-      paddingTop: padding.size / 2,
-      paddingBottom: padding.size / 2
-    },
-    text: {
-      paddingLeft: padding.size,
-      paddingRight: padding.size
-    },
-    divider: {
-      display: 'none'
-    }
-  },
-  body: {
-    padding: padding.size,
-    paddingTop: 0
-  }
-});
-
 var card = {
-  full: full,
   default: contained$1
 };
 
@@ -2958,7 +3178,12 @@ var divider = {
   }
 };
 
-var drawer = {};
+var drawer = {
+  main: {
+    overflow: 'hidden',
+    width: "100%"
+  }
+};
 
 var filePicker = {
   default: {
@@ -3003,6 +3228,7 @@ var icon = {
   }
 };
 
+var colorPalette$1 = get(colors$1, 'palette');
 var image = {
   default: {
     container: {
@@ -3010,7 +3236,32 @@ var image = {
         display: 'flex'
       }
     },
-    loadingComp: {},
+    loadingComp: {
+      main: {
+        position: 'absolute',
+        alignSelf: 'stretch',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        zIndex: 1,
+        background: colorPalette$1.white03
+      },
+      progress: {
+        position: 'absolute',
+        zIndex: 1,
+        width: '100%',
+        height: '100%',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      indicator: {
+        icon: {
+          fontSize: '100px',
+          color: colorPalette$1.gray02
+        }
+      }
+    },
     loading: {
       opacity: 0
     },
@@ -3036,31 +3287,31 @@ var indicator = {
   default: {
     container: container,
     icon: {
-      color: get$1(colors$1, 'surface.default.colors.main')
+      color: get(colors$1, 'surface.default.colors.main')
     }
   },
   primary: {
     container: container,
     icon: {
-      color: get$1(colors$1, 'surface.primary.colors.main')
+      color: get(colors$1, 'surface.primary.colors.main')
     }
   },
   secondary: {
     container: container,
     icon: {
-      color: get$1(colors$1, 'surface.secondary.colors.main')
+      color: get(colors$1, 'surface.secondary.colors.main')
     }
   },
   warn: {
     container: container,
     icon: {
-      color: get$1(colors$1, 'surface.warn.colors.main')
+      color: get(colors$1, 'surface.warn.colors.main')
     }
   },
   danger: {
     container: container,
     icon: {
-      color: get$1(colors$1, 'surface.danger.colors.main')
+      color: get(colors$1, 'surface.danger.colors.main')
     }
   }
 };
@@ -3081,15 +3332,35 @@ var link = {
   }
 };
 
-var loading = {
-  default: {
-    container: {},
-    progress: {},
-    text: {}
+var colorPalette$2 = get(colors$1, 'palette');
+var styles$1 = {
+  main: {
+    position: 'relative'
+  },
+  progress: {
+    position: 'absolute',
+    zIndex: 1,
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  indicator: {
+    icon: {
+      fontSize: '100px',
+      color: colorPalette$2.gray02
+    }
   }
 };
+var loadingStyles = buildSurfaceStyles(function (colorType, surfaces) {
+  var surfaceStyles = deepClone(styles$1);
+  set(surfaceStyles, 'indicator.icon.color', get(surfaces, "".concat(colorType, ".colors.main")));
+  return surfaceStyles;
+});
+var loading = loadingStyles;
 
-var section = {
+var section$1 = {
   default: {
     $native: {
       shadowColor: colors$1.opacity._05,
@@ -3131,7 +3402,7 @@ var contained$2 = {
         minHeight: 100,
         width: wrapper.width,
         padding: wrapper.padding,
-        backgroundColor: get$1(surface, 'default.colors.light'),
+        backgroundColor: get(surface, 'default.colors.light'),
         display: 'flex',
         flexDirection: 'column'
       },
@@ -3143,7 +3414,7 @@ var contained$2 = {
           flexWrap: 'wrap'
         },
         text: {
-          color: get$1(palette, 'black03'),
+          color: get(palette, 'black03'),
           fontWeight: 'bold',
           fontSize: 10
         },
@@ -3178,7 +3449,7 @@ var outlined = {
       main: {
         borderWidth: 2,
         borderRadius: 2,
-        borderColor: get$1(surface$1, 'default.colors.main')
+        borderColor: get(surface$1, 'default.colors.main')
       }
     }
   }
@@ -3247,23 +3518,41 @@ var defaultSideSectionStyle = {
 var itemHeader = {
   main: {
     $all: {
-      shadow: {
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 2
-      }
+      position: 'relative',
+      justifyContent: 'center',
+      backgroundColor: get(colors$1, 'surface.primary.colors.dark'),
+      width: '100%',
+      flexDirection: 'row',
+      height: 60
     },
     $web: {
-      justifyContent: 'center',
-      backgroundColor: get$1(colors$1, 'surface.primary.colors.dark'),
-      height: 70,
-      width: '100%',
-      flexDirection: 'row'
+      height: 70
     }
+  },
+  shadow: {
+    main: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      position: 'relative',
+      zIndex: 1
+    },
+    cover: {
+      position: 'absolute',
+      backgroundColor: get(colors$1, 'surface.primary.colors.dark'),
+      height: 10,
+      width: '100%',
+      flexDirection: 'row',
+      top: -5,
+      zIndex: 2
+    }
+  },
+  appHeader: {
+    main: {}
   },
   content: {
     left: {
@@ -3302,7 +3591,7 @@ var components = {
   indicator: indicator,
   link: link,
   loading: loading,
-  section: section,
+  section: section$1,
   textBox: textBox,
   modal: modal$1,
   header: header
@@ -3351,8 +3640,9 @@ var form$1 = {
   }
 };
 
-var height = get$1(defaults, 'form.checkbox.height', 20);
-var width = get$1(defaults, 'form.checkbox.width', 20);
+var defaults$8 = getThemeDefaults();
+var height = get(defaults$8, 'form.checkbox.height', 20);
+var width = get(defaults$8, 'form.checkbox.width', 20);
 var checkboxDefault = {
   main: {
     $all: {
@@ -3383,40 +3673,27 @@ var checkboxDefault = {
     area: {
       off: {
         $all: {
-          backgroundColor: get$1(colors$1, 'palette.gray01')
+          backgroundColor: get(colors$1, 'palette.gray01')
         },
         $web: {
           outline: 'none',
           height: '100%',
           width: '100%',
           position: 'absolute',
-          boxShadow: "inset 0px 0px 5px ".concat(get$1(colors$1, 'opacity._15')),
-          borderRadius: get$1(defaults, 'form.border.radius', 5)
+          boxShadow: "inset 0px 0px 5px ".concat(get(colors$1, 'opacity._15')),
+          borderRadius: get(defaults$8, 'form.border.radius', 5)
         }
       },
       on: {
         $all: {
-          backgroundColor: get$1(colors$1, 'surface.primary.colors.main')
+          backgroundColor: get(colors$1, 'surface.primary.colors.main')
         }
       }
     },
     indicator: {
       off: {
         $web: {
-          outline: 'none',
-          marginLeft: 0,
-          cursor: 'pointer',
-          height: height,
-          width: width,
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          color: get$1(colors$1, 'palette.white02'),
-          fontSize: '16px',
-          flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
+          color: get(colors$1, 'palette.white02')
         }
       },
       on: {}
@@ -3434,7 +3711,7 @@ var checkboxDefault = {
     }
   }
 };
-var checkboxClose = deepMerge$1(checkboxDefault, {
+var checkboxClose = deepMerge(checkboxDefault, {
   main: {
     $all: {
       justifyContent: 'flex-start'
@@ -3458,22 +3735,14 @@ var checkbox = {
   close: checkboxClose
 };
 
-var height$1 = get$1(defaults, 'form.input.height', 35);
-var verticalPad = padding.size / 6;
-var borderWidth = 1;
-var inputHeight = height$1 - (verticalPad * 2 + borderWidth * 2);
+var defaults$9 = getThemeDefaults();
 var sharedForm = {
   inputs: {
     backgroundColor: colors$1.palette.white01,
     minWidth: 100,
     overflow: 'hidden',
-    height: get$1(defaults, 'form.input.height', 35),
+    height: get(defaults$9, 'form.input.height', 35),
     padding: padding.size / 2
-  },
-  derivedInput: {
-    paddingTop: verticalPad,
-    paddingBottom: verticalPad,
-    height: inputHeight
   },
   border: {
     borderRadius: 5,
@@ -3487,15 +3756,9 @@ var sharedForm = {
 };
 
 var input = {
-  default: {
-    $all: _objectSpread2(_objectSpread2(_objectSpread2({}, sharedForm.border), sharedForm.inputs), sharedForm.derivedInput),
-    $web: {
-      width: '100%'
-    },
-    $native: {
-      width: '100%'
-    }
-  }
+  default: _objectSpread2(_objectSpread2(_objectSpread2({}, sharedForm.border), sharedForm.inputs), {}, {
+    width: '100%'
+  })
 };
 
 var option = {};
@@ -3504,12 +3767,42 @@ var radio = {};
 
 var select = {
   default: {
-    $all: _objectSpread2(_objectSpread2({}, sharedForm.border), sharedForm.inputs)
+    main: _objectSpread2(_objectSpread2(_objectSpread2({
+      position: 'relative'
+    }, sharedForm.border), sharedForm.inputs), {}, {
+      padding: 0,
+      overflow: 'none'
+    }),
+    select: {
+      $web: _objectSpread2(_objectSpread2({}, sharedForm.inputs), {}, {
+        borderWidth: 0,
+        appearance: 'none',
+        backgroundColor: colors$1.palette.transparent
+      })
+    },
+    icon: {
+      container: {
+        color: colors$1.opacity._85,
+        position: 'absolute',
+        zIndex: 1,
+        right: 10,
+        top: 10,
+        pointerEvents: 'none'
+      },
+      icon: {
+        color: colors$1.opacity._85,
+        fontSize: 15
+      },
+      disabled: {
+        color: colors$1.opacity._30
+      }
+    }
   }
 };
 
-var height$2 = get$1(defaults, 'form.switch.height', 20);
-var width$1 = get$1(defaults, 'form.switch.width', 20);
+var defaults$a = getThemeDefaults();
+var height$1 = get(defaults$a, 'form.switch.height', 20);
+var width$1 = get(defaults$a, 'form.switch.width', 20);
 var switchDefault = {
   main: {
     $all: {
@@ -3537,16 +3830,16 @@ var switchDefault = {
       off: {
         $web: {
           outline: 'none',
-          backgroundColor: get$1(colors$1, 'palette.gray01'),
-          boxShadow: "inset 0px 0px 5px ".concat(get$1(colors$1, 'opacity._15')),
-          borderRadius: get$1(defaults, 'form.border.radius', 5) * 2,
+          backgroundColor: get(colors$1, 'palette.gray01'),
+          boxShadow: "inset 0px 0px 5px ".concat(get(colors$1, 'opacity._15')),
+          borderRadius: get(defaults$a, 'form.border.radius', 5) * 2,
           height: '70%',
           width: '100%',
           position: 'absolute',
           top: 3
         },
         $native: {
-          backgroundColor: get$1(colors$1, 'surface.primary.colors.main')
+          backgroundColor: get(colors$1, 'surface.primary.colors.main')
         }
       },
       on: {}
@@ -3555,12 +3848,12 @@ var switchDefault = {
       off: {
         $web: _objectSpread2({
           outline: 'none',
-          backgroundColor: get$1(colors$1, 'palette.white02'),
-          borderRadius: get$1(defaults, 'form.border.radius', 5) * 2,
-          boxShadow: "0px 1px 3px ".concat(get$1(colors$1, 'opacity._50')),
+          backgroundColor: get(colors$1, 'palette.white02'),
+          borderRadius: get(defaults$a, 'form.border.radius', 5) * 2,
+          boxShadow: "0px 1px 3px ".concat(get(colors$1, 'opacity._50')),
           marginLeft: 0,
           cursor: 'pointer',
-          height: height$2,
+          height: height$1,
           width: width$1,
           position: 'absolute',
           top: 0,
@@ -3570,8 +3863,8 @@ var switchDefault = {
       on: {
         $web: {
           left: width$1,
-          boxShadow: "1px 1px 3px ".concat(get$1(colors$1, 'opacity._50')),
-          backgroundColor: get$1(colors$1, 'surface.primary.colors.main')
+          boxShadow: "1px 1px 3px ".concat(get(colors$1, 'opacity._50')),
+          backgroundColor: get(colors$1, 'surface.primary.colors.main')
         }
       }
     },
@@ -3580,7 +3873,7 @@ var switchDefault = {
     }
   }
 };
-var switchClose = deepMerge$1(switchDefault, {
+var switchClose = deepMerge(switchDefault, {
   main: {
     $all: {
       justifyContent: 'flex-start'
@@ -3664,7 +3957,11 @@ var transform = {
   }
 };
 
-var fontDefs = get$1(defaults, 'font', {});
+var defaults$b = getThemeDefaults();
+var fontDefs = get(defaults$b, 'font', {
+  components: {}
+});
+var compFontDefs = fontDefs.components;
 var typography = {
   font: {
     family: {
@@ -3680,53 +3977,53 @@ var typography = {
     letterSpacing: fontDefs.spacing || 0.15,
     margin: 0
   },
-  caption: {
+  caption: _objectSpread2({
     color: colors$1.opacity._60,
     fontSize: 12,
     letterSpacing: 0.4
-  },
-  h1: {
+  }, compFontDefs.caption),
+  h1: _objectSpread2({
     fontWeight: '300',
     fontSize: 40,
     letterSpacing: -1.5
-  },
-  h2: {
+  }, compFontDefs.h1),
+  h2: _objectSpread2({
     fontWeight: '300',
     fontSize: 32,
     letterSpacing: -0.5
-  },
-  h3: {
+  }, compFontDefs.h2),
+  h3: _objectSpread2({
     color: colors$1.opacity._60,
     fontSize: 28
-  },
-  h4: {
+  }, compFontDefs.h3),
+  h4: _objectSpread2({
     fontSize: 24,
     letterSpacing: 0.25
-  },
-  h5: {
+  }, compFontDefs.h4),
+  h5: _objectSpread2({
     fontSize: 20
-  },
-  h6: {
+  }, compFontDefs.h5),
+  h6: _objectSpread2({
     color: colors$1.opacity._60,
     fontSize: 16,
     letterSpacing: 0.15,
     fontWeight: '500'
-  },
-  label: {
+  }, compFontDefs.h6),
+  label: _objectSpread2({
     minWidth: '100%',
     fontSize: 14,
     letterSpacing: 0.15,
     fontWeight: '700',
     marginBottom: margin.size / 4
-  },
-  paragraph: {
+  }, compFontDefs.label),
+  paragraph: _objectSpread2({
     fontSize: fontDefs.size || 16,
     letterSpacing: 0.5
-  },
-  subtitle: {
+  }, compFontDefs.paragraph),
+  subtitle: _objectSpread2({
     fontSize: 14,
     letterSpacing: fontDefs.spacing || 0.15
-  }
+  }, compFontDefs.subtitle)
 };
 
 var theme = _objectSpread2({
@@ -3743,5 +4040,5 @@ var theme = _objectSpread2({
   typography: typography
 }, components);
 
-export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image, Input, ItemHeader, Label, Link, Loading, Modal, Option, P, Radio, Row, Section, Select, Subtitle, Switch, Text, TextBox, TouchableIcon, View, isValidComponent, renderFromType, theme, useAnimate, useChildren, useFromToAnimation, useInputHandlers, useMediaProps, usePressHandlers, useSelectHandlers, useSpin, useStyle, useThemePath, useThemeWithHeight, withTouch };
+export { Link as A, AppHeader, Button, Caption, Card, Checkbox, Column, Divider, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image$1 as Image, Input$4 as Input, ItemHeader, Label, Link, Loading, Modal, Option, P, Radio, Row, ScrollView$1 as ScrollView, Section, Select$1 as Select, Slider, Subtitle, SvgIcon, Switch$1 as Switch, Text, TextBox, Touchable$1 as Touchable, TouchableIcon, View$1 as View, isValidComponent, renderFromType, theme, useAnimate, useChildren, useClassList, useClassName, useFromToAnimation, useInputHandlers, useMediaProps, usePressHandlers, useSelectHandlers, useSpin, useStyle, useTextAccessibility, useThemePath, useThemeTypeAsClass, useThemeWithHeight, withTouch };
 //# sourceMappingURL=kegComponents.js.map

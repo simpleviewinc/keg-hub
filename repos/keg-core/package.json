@@ -1,7 +1,7 @@
 {
   "name": "@keg-hub/keg-core",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "publishConfig": {
     "access": "public"
   },
@@ -16,6 +16,7 @@
   "license": "MIT",
   "scripts": {
     "android": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -clear --android --dev",
+    "build": "echo \"Keg-Core build!\"",
     "build:android": "NODE_ENV=production PLATFORM=native expo build:android",
     "build:ios": "NODE_ENV=production PLATFORM=native expo build:ios",
     "build:web": "yarn clean:web:build && NODE_ENV=production PLATFORM=web expo build:web --no-pwa",
@@ -52,7 +53,7 @@
     "@babel/runtime": "7.10.5",
     "@expo/webpack-config": "0.12.25",
     "@keg-hub/jsutils": "0.0.1",
-    "@keg-hub/keg-components": "5.0.1",
+    "@keg-hub/keg-components": "6.0.0",
     "@keg-hub/re-theme": "6.0.0",
     "@keg-hub/tap-resolver": "1.1.1",
     "@testing-library/react-hooks": "3.2.1",
