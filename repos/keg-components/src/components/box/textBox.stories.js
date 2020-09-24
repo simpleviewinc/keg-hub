@@ -5,13 +5,17 @@ import { StoryWrap } from 'StoryWrap'
 import { Input } from 'KegInput'
 import { View } from 'react-native'
 
+const placeHolderText = 'Your text goes here...'
 const TextBoxStory = ({ type, useClipboard }) => {
-  const [ text, setText ] = useState('Your text goes here...')
+  const [ text, setText ] = useState(placeHolderText)
   const inputRef = useRef(null)
 
   useEffect(() => {
-    inputRef.current && inputRef.current.focus()
-    if (text !== 'Your text goes here...') inputRef.current.value = text
+    !inputRef.current &&
+      console.error(`Input ref did not get set. Something is wrong with the input component!`)
+    
+    inputRef.current.focus()
+    if (text !== placeHolderText) inputRef.current.value = text
   }, [text])
 
   return (
