@@ -18,7 +18,7 @@ let KegStyleSheet
 /**
  * Caches selectors already added to the Dom
  */
-const selectorCache = new Map()
+const selectorCache = new Set()
 
 /**
  * Checks if a selector already exists in the selector cache
@@ -151,7 +151,7 @@ export const getSelector = (className, cssString) => {
       : isStr(className) && className.split(' ').join('.').trim()
 
   return selector
-    ? `.${selector.trim()}.keg-${hashString(cssString)}`.trim()
+    ? `.${selector}.keg-${hashString(cssString)}`.trim()
     : `.keg-${hashString(cssString)}`.trim()
 }
 
@@ -169,7 +169,7 @@ export const addStylesToDom = (selector, css) => {
 
   // Cache the selector with the size
   // So next time we can look up if the size changed
-  selectorCache.set(selector, undefined)
+  selectorCache.add(selector)
   
   const KegSheet = getKegSheet()
   // The insertRule method is a lot faster then append method
