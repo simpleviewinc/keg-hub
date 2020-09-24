@@ -25,8 +25,25 @@ const logFormal = (repo, message) => {
   Logger.empty()
 }
 
+const runGitCmd = (cmd, location) => {
+    // Run the yarn script from the package.json of the passed in location
+  return spawnCmd(
+    `git ${cmd.trim()}`,
+    { cwd: location },
+    false
+  )
+}
+
 const runPublishContext = (toPublish, repos, params={}, publishContext) => {
-  const { install, test, build, version, publish } = publishContext.tasks
+  const {
+    install,
+    test,
+    build,
+    version,
+    publish,
+    access='public',
+    message,
+  } = publishContext.tasks
 
   if(!toPublish.length) return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
 
@@ -54,7 +71,23 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
     build && await runRepoScript(repo, `build`, scriptError(`build`))
 
     // Publish to NPM
-    publish && await runRepoScript(repo, `publish`, scriptError(`publish`))
+    publish && await runRepoScript(repo, `publish --access ${access}`, scriptError(`publish`))
+
+
+    const gitBranchName = `${repo.repo}:${version}`
+    const gitRemoteName = `origin`
+    // Create a new branch for the repo and version
+    await runGitCmd(`checkout -b ${gitBranchName}`, repo.location)
+
+    // Add the build changes
+    await runGitCmd(`add .`, repo.location)
+
+    // Commit the changes
+    message = get(publishContext, 'tasks.message', `Updating ${repo.repo} to version ${version}!`)
+    await runGitCmd(`commit -m \"${message}\"`, repo.location)
+
+    // Push the branch to github
+    await runGitCmd(`push ${gitRemoteName} ${gitBranchName}`, repo.location)
 
     // Add the update to updated, so we know this repo was published
     updated.push(repo)
