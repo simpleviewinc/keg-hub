@@ -52,6 +52,7 @@ export const typography = {
   },
   h5: {
     fontSize: 20,
+    marginBottom: margin.size,
     ...compFontDefs.h5,
   },
   h6: {
@@ -72,6 +73,8 @@ export const typography = {
   paragraph: {
     fontSize: fontDefs.size || 16,
     letterSpacing: 0.5,
+    marginBottom: margin.size,
+    lineHeight: 20,
     ...compFontDefs.paragraph,
   },
   subtitle: {

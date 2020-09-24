@@ -19,5 +19,5 @@ export const useClassList = (className, classList = noPropArr) => {
   const classListArr = eitherArr(classList, [classList])
   return useMemo(() => {
     return ensureClassArray(classListArr).concat([className])
-  }, [ className, ...classListArr ])
+  }, [ className, classListArr.join(' ') ])
 }
