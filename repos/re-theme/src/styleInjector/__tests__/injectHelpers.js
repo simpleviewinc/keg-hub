@@ -2,6 +2,19 @@ jest.resetModules()
 jest.resetAllMocks()
 
 const { hyphenator, hashString, getSelector, addStylesToDom } = require('../injectHelpers')
+import * as themeEvents from '../../theme/themeEvent'
+
+jest.resetModules()
+jest.resetAllMocks()
+
+let clearStyleSheet
+const mockAddThemeEvent = (evt, listener) => {
+  clearStyleSheet = listener
+}
+
+jest.setMock('../../theme/themeEvent', { ...themeEvents, addThemeEvent: mockAddThemeEvent })
+
+const { filterRules, hyphenator, hashString, getSelector, addStylesToDom } = require('../injectHelpers')
 
 describe('injectHelpers', () => {
 
@@ -20,6 +33,10 @@ describe('injectHelpers', () => {
 
     it('should not fail on pre-hyphenated strings', () => {
       expect(hyphenator(`some-test-string`)).toBe(`some-test-string`)
+    })
+
+    it('should add a - to the front then string starts with ms-', () => {
+      expect(hyphenator(`msTestString`)).toBe(`-ms-test-string`)
     })
 
   })
@@ -45,6 +62,38 @@ describe('injectHelpers', () => {
       expect(hashString(`{ test: "data" }`)).not.toBe(hashString(`{ test1: "data" }`))
     })
 
+    it('should return hash matching the length or the passed in max length value', () => {
+      const hash = hashString(`{ test: "data" }`, 2)
+      expect(hash.length).toBe(2)
+    })
+
+  })
+
+
+  describe(`filterRules`, () => {
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+
+    it('should return an object with with filtered and non-filtered styles', () => {
+      const { style, filtered } = filterRules({ resizeMode: 'fit', color: `#111111` })
+
+      expect(style.resizeMode).toBeUndefined()
+      expect(style.color).toBe(`#111111`)
+      expect(filtered.resizeMode).toBe(`fit`)
+      expect(filtered.color).toBeUndefined()
+    })
+
+    it('should accept custom filter rules', () => {
+      const { style, filtered } = filterRules({ resizeMode: 'fit', color: `#111111` }, [ 'color' ])
+
+      expect(style.resizeMode).toBeUndefined()
+      expect(style.color).toBeUndefined()
+      expect(filtered.resizeMode).toBe(`fit`)
+      expect(filtered.color).toBe(`#111111`)
+    })
+
   })
 
   describe('getSelector', () => {
@@ -63,11 +112,36 @@ describe('injectHelpers', () => {
       expect(selector.includes(`.test-class`)).toBe(true)
     })
 
+    it('should should accept className as an array', () => {
+      const selector = getSelector([`test-class`, `test-class-2`], `my-test-styles`)
+      expect(selector.includes(`.test-class`)).toBe(true)
+      expect(selector.includes(`.test-class-2`)).toBe(true)
+    })
+
     it('should not fail when no className is passed in', () => {
       const selector = getSelector(undefined, `my-test-styles`)
       expect(getSelector(undefined, `my-test-styles`)).toBe(`.keg-275181350`)
     })
 
+  })
+
+  describe('clearStyleSheet', () => {
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+
+    it('should clear all styles from the Keg StyleSheet when a build event is fired', () => {
+      addStylesToDom(`.test-styles`, { all: `.to-be-cleared{ color: blue; }` })
+      const KegStyleSheet = Array.from(document.head.children)[0]
+
+      expect(KegStyleSheet.textContent).toBe(`.to-be-cleared{ color: blue; }`)
+      expect(typeof clearStyleSheet).toBe('function')
+
+      clearStyleSheet()
+
+      expect(KegStyleSheet.textContent).toBe('')
+
+    })
   })
 
   describe('addStylesToDom', () => {
@@ -81,7 +155,7 @@ describe('injectHelpers', () => {
       const orgAppend = KegStyleSheet.append
       KegStyleSheet.append = jest.fn()
 
-      addStylesToDom(`.test-styles`, `{ color: blue; }`)
+      addStylesToDom(`.test-styles`, `.test-styles{ color: blue; }`)
       expect(KegStyleSheet.append).toHaveBeenCalled()
 
       KegStyleSheet.append = orgAppend
@@ -92,8 +166,9 @@ describe('injectHelpers', () => {
       const orgAppend = KegStyleSheet.append
       KegStyleSheet.append = jest.fn()
 
-      addStylesToDom(`.dup-test`, `{ color: blue; }`)
-      addStylesToDom(`.dup-test`, `{ color: blue; }`)
+      addStylesToDom(`.dup-test`, { all: `.dup-test{ color: blue; }`})
+      addStylesToDom(`.dup-test`, { all: `.dup-test{ color: blue; }`})
+
       expect(KegStyleSheet.append).toHaveBeenCalledTimes(1)
       KegStyleSheet.append = orgAppend
     })
