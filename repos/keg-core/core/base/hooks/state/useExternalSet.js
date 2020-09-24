@@ -1,29 +1,14 @@
 import { useCallback, useMemo } from 'react'
-import { uniqArr, identity, pipeline } from '@keg-hub/jsutils'
+import { uniqArr, identity, omitElement, pipeline } from '@keg-hub/jsutils'
 
 /**
- * //TODO: add to jsutils
- * Helper for userExternalSet. 
- * Returns a new array containing all the elements of `array`, except for `element`
- * 
- * @param {Array<*>} array
- * @param {*} element
- * @param {Function?} selector - optional fn returning a property of an element to compare for omission
- * @returns {Array} subset of array without element
+ * Helper for `useExternalSet`, checking if element
+ * is a member of `arr`, using the `selector` to
+ * get the right comparison value.
+ * @param {Array<*>} arr 
+ * @param {*} element 
+ * @param {Function?} selector - gets the prop to compare the elements with
  */
-const omitElement = (array, element, selector=identity) => {
-  const id = selector(element)
-
-  return array?.reduce((result, next) => {
-    // only include the next item in the result array if it is not equal to
-    // the `element` (checking using the selector function)
-    selector(next) === id &&
-      result.push(next)
-
-    return result
-  }, [])
-}
-
 const isMember = (arr, element, selector=identity) => {
   const id = selector(element)
   return arr?.some(
@@ -43,7 +28,7 @@ const isMember = (arr, element, selector=identity) => {
  * 
  * @param {Array} arr
  * @param {Function} setArr
- * @param {Function?} comparisonFn - optional fn to used to check element membership. 
+ * @param {Function?} selector - optional fn to used to get the property for checking element membership. 
  *  Must have signature: (elementToCheck, existingElement) => boolean (is equal)
  *  Usually only necessary for non-primitive types.
  * @returns {Object} set-like interface to arr
@@ -58,8 +43,7 @@ const isMember = (arr, element, selector=identity) => {
  * usersSet.add({ id: '4' }) // does nothing
  * usersSet.delete({ id: '4' }) // calls setUsersInStore with an array that omits user id 4
  */
-export const useExternalSet = (arr, setArr, selector) => {
-
+export const useExternalSet = (arr, setArr, selector=identity) => {
   // checks if arr contains the element, using the comparisonFn if defined
   const contains = useCallback(
     (arr, element) => isMember(arr, element, selector),
@@ -68,7 +52,10 @@ export const useExternalSet = (arr, setArr, selector) => {
 
   return useMemo(
     () => ({
-      // access to the underlying array
+      /**
+       * Provides access to the underlying array. Components using this
+       * may rerender when mutations are requested with add or delete
+       */
       data: arr,
 
       /**
@@ -96,6 +83,36 @@ export const useExternalSet = (arr, setArr, selector) => {
         pipeline(omitElement(arr, element, selector), setArr)
         return true
       },
+
+      /**
+       * Clears the set of all elements
+       */
+      clear: () => {
+        setArr([])
+      },
+
+      /**
+       * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/entries
+       */
+      entries: () => arr.map(element => [element, element]),
+
+      /**
+       * Helper to iterate over each element
+       */
+      forEach: (fn) => arr.forEach(fn),
+
+      /**
+       * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/values
+       */
+      values: () => arr.values(),
+
+      /**
+       * Allows iteration
+       * @example 
+       * const vals = useExternalSet(...)
+       * for (const element of vals) { ... }
+       */
+      [Symbol.iterator]: () => arr.values(),
 
       /**
        * @param {*} element - to check if present

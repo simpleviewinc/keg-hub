@@ -4,7 +4,8 @@ import { useExternalSet } from './useExternalSet'
 /**
  * Stores elements as react state, while also ensuring no duplicates.
  * Returns a set-like object
- * @param {*} initialData
+ * @param {Array<*>} initialData
+ * @param {Function?} selector (@see: `useExternalSet` selector docs)
  * @return {Object} set-like object, with methods `add`, `has`, `delete`. To access the underlying
  * data, use the `data` property (which returns an array). Calling one of the mutation functions, add or delete,
  * **may** initiate a react state update, rerendering any components depending on `data`.
@@ -21,7 +22,7 @@ import { useExternalSet } from './useExternalSet'
  * users.add({ name: 'Bob' }) // false
  * users.data // rerenders with [{ name: 'Bob' }]
  */
-export const useSet = (initialData = [], comparisonFn) => {
+export const useSet = (initialData = [], selector) => {
   const [ data, setData ] = useState(initialData)
-  return useExternalSet(data, setData, comparisonFn)
+  return useExternalSet(data, setData, selector)
 }
