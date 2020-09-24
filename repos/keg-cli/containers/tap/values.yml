@@ -35,6 +35,7 @@ env:
   DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
   DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
   DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
+  DOC_JSUTILS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
 
   # --- KEG-PROXY ENVs --- #
   # See https://github.com/whitestrake/caddy-gen for more information

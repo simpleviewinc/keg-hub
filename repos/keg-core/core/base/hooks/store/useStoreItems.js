@@ -5,7 +5,7 @@ import { isStr, get, capitalize } from '@keg-hub/jsutils'
  * Helper hook for getting categories from the store.
  * Particularly useful if you are gathering multiple categories at once.
  * @param {*} categories
- * @param {*} comparisonFn
+ * @param {*} comparisonFn - used to compare if data changed
  * @return {Object<Categories> || CategoryItems} an object containing the categories requested, if they exist in the store, or the category items themselves (returned only if `categories` is a path string)
  * @example
  * const categories = useStoreItems(['todos', 'users', 'settings.agenda'])
