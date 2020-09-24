@@ -14,10 +14,10 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  * Wrap the internal component with the Styles Injector Hoc
  * <br/>This allows us to add the styles as css classes
  */
-const KegSwitch = StyleInjector(
-  InternalSwitch,
-  { displayName: 'Switch', className: 'keg-switch' }
-)
+const KegSwitch = StyleInjector(InternalSwitch, {
+  displayName: 'Switch',
+  className: 'keg-switch'
+})
 
 /**
  * Gets the custom Native Switch colors from the passed in styles

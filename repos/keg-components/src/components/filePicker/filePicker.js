@@ -13,10 +13,10 @@ import { Input as KegInput } from '../internal/input.web'
  * Wrap the internal component with the Styles Injector Hoc
  * <br/>This allows us to add the styles as css classes
  */
-const Input = StyleInjector(
-  KegInput,
-  { displayName: 'FilePickerInput', className: 'keg-file-picker-input' }
-)
+const Input = StyleInjector(KegInput, {
+  displayName: 'FilePickerInput',
+  className: 'keg-file-picker-input'
+})
 
 /**
  * A component for selecting files from the user's system. Looks better than a basic input element,

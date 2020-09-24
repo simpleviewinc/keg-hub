@@ -9,9 +9,9 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
-export const View = StyleInjector(
-  KegView,
-  { displayName: 'View', className: 'keg-view' }
-)
+export const View = StyleInjector(KegView, {
+  displayName: 'View',
+  className: 'keg-view'
+})
 
 View.propTypes = KegView.propTypes

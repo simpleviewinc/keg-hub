@@ -13,10 +13,10 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  * Wrap the internal component with the Styles Injector Hoc
  * <br/>This allows us to add the styles as css classes
  */
-const KegInput = StyleInjector(
-  InternalInput,
-  { displayName: 'Input', className: 'keg-input' }
-)
+const KegInput = StyleInjector(InternalInput, {
+  displayName: 'Input',
+  className: 'keg-input'
+})
 
 /**
  * Gets the key value pair for the select components value

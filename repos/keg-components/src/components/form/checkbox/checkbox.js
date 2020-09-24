@@ -36,15 +36,14 @@ const checkBoxStyles = {
   },
 }
 
-
 /**
  * Wrap the internal component with the Styles Injector Hoc
  * <br/>This allows us to add the styles as css classes
  */
-const Input = StyleInjector(
-  KegInput,
-  { displayName: 'Checkbox', className: 'keg-checkbox' }
-)
+const Input = StyleInjector(KegInput, {
+  displayName: 'Checkbox',
+  className: 'keg-checkbox'
+})
 
 const Element = React.forwardRef(
   (
