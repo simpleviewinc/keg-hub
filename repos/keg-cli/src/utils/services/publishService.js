@@ -75,7 +75,7 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
     // Publish to NPM
     publish && await runRepoScript(repo, `publish --access ${access}`, scriptError(`publish`))
 
-    const gitBranchName = `${repo.repo}:${newVersion || 'build-&-publish'}`
+    const gitBranchName = `${repo.repo}@${newVersion || 'build-&-publish'}`
     const gitRemoteName = `origin`
     // Create a new branch for the repo and version
     await runGitCmd(`checkout -b ${gitBranchName}`, repo.location)
