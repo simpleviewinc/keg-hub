@@ -29,14 +29,11 @@ const SlideAnimatedView = ({
   const bottomOfScreen = windowHeight
   const origin = 0
 
-  const [slide] = useFromToAnimation(
-    {
-      from: visible ? bottomOfScreen : origin,
-      to: visible ? origin : bottomOfScreen,
-      onFinish: onAnimationFinish,
-    },
-    [visible]
-  )
+  const [slide] = useFromToAnimation({
+    from: visible ? bottomOfScreen : origin,
+    to: visible ? origin : bottomOfScreen,
+    onFinish: onAnimationFinish,
+  })
 
   const classRef = useClassName('keg-modal-content', className)
 
@@ -104,7 +101,7 @@ export const Modal = props => {
       if (isFunc(onAnimateOut)) onAnimateOut()
     }
     else if (isFunc(onAnimateIn)) onAnimateIn()
-  }, [ onAnimateOut, onAnimateIn ])
+  }, [ onAnimateOut, onAnimateIn, visible ])
 
   return (
     // change the wrapper dimensions to 0 when visible is set to false

@@ -74,15 +74,12 @@ const modal2Style = {
 }
 
 const TestComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
-  const [animValue] = useFromToAnimation(
-    {
-      from: visible ? 1200 : 0,
-      to: visible ? 0 : 1200,
-      duration: 1000,
-      onFinish: onAnimationFinish,
-    },
-    [visible]
-  )
+  const [animValue] = useFromToAnimation({
+    from: visible ? 1200 : 0,
+    to: visible ? 0 : 1200,
+    duration: 1000,
+    onFinish: onAnimationFinish,
+  })
 
   const rotate = animValue.interpolate({
     inputRange: [ 0, 1200 ],

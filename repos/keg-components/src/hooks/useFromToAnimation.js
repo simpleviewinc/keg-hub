@@ -11,28 +11,32 @@ const isWeb = getPlatform() === 'web'
  * @param {number} params.from - the starting value of the animation
  * @param {number} params.to - the ending destination value of the animation
  * @param {Number} params.duration - time in milliseconds that the animation should proceed
+ * @param {boolean} params.loop - loop the animation
+ * @param {Easing} params.easing - react-native Easing obj
  * @param {Function} params.onFinish - passed to Animated.start(), called when the animation finishes
- * @param {Array} dependencies - optional array of dependencies that will dictate when the hook re-runs the animation.
- *                               By default, the animation reruns if the `from` or `to` values change.
  * @returns {Array} [ Animated.Value ]
  *  - Animated.Value: pass this value to your Animated.View to begin the animation
  */
-export const useFromToAnimation = (params, dependencies) => {
-  const { from, to, duration = 500, onFinish = noOp } = params || {}
-
+export const useFromToAnimation = params => {
+  const { from, to, duration = 500, onFinish = noOp, loop = false, easing } =
+    params || {}
   // determines when the animation should run
-  const animDependencies = isArr(dependencies) ? dependencies : [ from, to ]
-
+  const animDependencies = [ from, to, duration, loop, easing, onFinish ]
+  
   // define the animated value here so we can return it. It needs to recompute
   // whenever the animation would run again, which is why it shares hookDependencies
   // with the useEffect below
   const fromVal = useMemo(() => new Animated.Value(from), animDependencies)
 
-  useEffect(() => {
-    const aniProps = { toValue: to, duration }
-    !isWeb && (aniProps.useNativeDriver = true)
+  const config = { toValue: to, duration, easing }
+  !isWeb && (config.useNativeDriver = true)
+  
+  const animatedTiming = Animated.timing(fromVal, config)
 
-    Animated.timing(fromVal, aniProps).start(onFinish)
+  useEffect(() => {
+    loop
+      ? Animated.loop(animatedTiming).start()
+      : animatedTiming.start(onFinish)
   }, animDependencies)
 
   return [fromVal]
