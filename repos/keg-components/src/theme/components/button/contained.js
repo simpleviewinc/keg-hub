@@ -22,7 +22,7 @@ const containedStyles = (state, colorType) => {
       $web: {
         cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
         boxShadow: 'none',
-        ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
+        ...transition([ 'backgroundColor', 'borderColor' ], 0.5),
       },
       $native: {},
     },
@@ -36,7 +36,7 @@ const containedStyles = (state, colorType) => {
         letterSpacing: 0.5,
         textAlign: 'center',
         $web: {
-          ...transition(['color'], 0.15),
+          ...transition(['color'], 0.5),
         },
     },
   }

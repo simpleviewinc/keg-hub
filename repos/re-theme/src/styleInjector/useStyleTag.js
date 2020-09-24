@@ -9,6 +9,20 @@ import {
   createReactDOMStyle,
   createCompileableStyle,
 } from './reactNativeWeb'
+import { ruleOverrides } from '../constants/ruleOverrides'
+import { noOpObj } from '../helpers/noOp'
+
+/**
+ * Checks if the rule is enforce and adds !important to it
+ * @param {Object} style - Styles rules to be converted to style rules string
+ * 
+ * @returns {string} - Style rules Object converted into a style rules string
+ */
+const checkImportant = (property, value, important) => (
+  important.includes(property)
+    ? `${value} !important`
+    : value
+)
 
 /**
  * Creates a style rules string from a JS object
@@ -16,11 +30,13 @@ import {
  * 
  * @returns {string} - Style rules Object converted into a style rules string
  */
-export const createBlock = style => {
+export const createBlock = (style, config) => {
+  const important = ruleOverrides.important.concat(config.important)
+  
   const prefixed = prefixStyles(createReactDOMStyle(style))
   const cssString = Object.keys(prefixed)
     .map(property => {
-      const value = prefixed[property]
+      const value = checkImportant(property, prefixed[property], important)
       const prop = hyphenator(property)
 
       return isArr(value)
@@ -38,18 +54,18 @@ export const createBlock = style => {
  * 
  * @returns {string} - Style rules Object converted into a style rules string
  */
-export const convertToCss = (style, filter) => {
+export const convertToCss = (style, config) => {
   const stlArr = flattenArray(eitherArr(style, [style]))
 
   return stlArr.reduce((rules, stl) => {
     if(!isObj(stl)) return rules
     
-    const { style:cleanStyle, filtered } = filterRules(stl, filter)
+    const { style:cleanStyle, filtered } = filterRules(stl, config.filter)
     Object.assign(rules.filtered, filtered)
 
     const flat = flattenStyle(cleanStyle)
     const compiled = createCompileableStyle(flat)
-    rules.blocks.push(createBlock(compiled))
+    rules.blocks.push(createBlock(compiled, config))
 
     return rules
   }, { blocks: [], filtered: {} })
@@ -67,12 +83,15 @@ export const convertToCss = (style, filter) => {
  */
 export const useStyleTag = (style, className='', config) => {
 
+  // Ensure config is an object
+  config = isObj(config) ? config : noOpObj
+  
   const theme = useTheme()
   const themeSize = theme?.RTMeta?.size
   const themeKey = theme?.RTMeta?.key
 
   return useMemo(() => {
-    const { blocks, filtered } = convertToCss(style, selector)
+    const { blocks, filtered } = convertToCss(style, config)
 
     // Create a unique selector based on the className and built blocks
     const selector = getSelector(className, blocks.join(''))
