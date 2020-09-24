@@ -4,7 +4,7 @@
 import { fireThemeEvent } from './themeEvent'
 import { Constants } from '../constants'
 import { getMergeSizes, getSize } from '../dimensions'
-import { isObj, deepMerge } from '@keg-hub/jsutils'
+import { isObj, deepMerge, checkCall } from '@keg-hub/jsutils'
 import { restructureTheme } from './restructureTheme'
 import { updateCurrentTheme, getCurrentTheme } from './manageTheme'
 import { getTheme } from '../helpers/getTheme'
@@ -89,12 +89,9 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
   const RTMeta = { key, size, width, height }
 
   // Check if the theme has changed since the last time it was built
-  // If not, then short-circuit, and just call configureBuiltTheme
-  // with cache data
+  // If not, then short-circuit, and call useCachedTheme with cache data
   if(themeSizeCache && theme === themeSizeCache.theme)
-    return key !== themeSizeCache.key
-      ? configureBuiltTheme(themeSizeCache, RTMeta)
-      : getCurrentTheme()
+    return useCachedTheme(themeSizeCache, RTMeta)
 
   const mergedTheme = mergeWithDefault(theme, defaultTheme, usrPlatform)
 
@@ -111,6 +108,28 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
   themeSizeCache = { extraTheme, mergedTheme, theme, key }
 
   return configureBuiltTheme(themeSizeCache, RTMeta)
+}
+
+/**
+ * Gets the correct cached theme based on if Viewport size has changed 
+ * @function
+ * @param {Object} themeSizeCache - Cache theme data containing the sizes
+ * @param {Object} themeSizeCache.mergedTheme - The full theme with sizes
+ * @param {Object} themeSizeCache.extraTheme - The full theme without sizes
+ * @param {string} themeSizeCache.key - keg size from the last time the theme was built
+ * @param {Object} RTMeta - Meta data about the current state of the theme
+ * @param {string} RTMeta.key - Current size key from the size map
+ *
+ * @returns {Object} Current theme object with the sizes merged
+ */
+const useCachedTheme = (themeSizeCache, RTMeta) => {
+  return RTMeta.key !== themeSizeCache.key
+    ? configureBuiltTheme(themeSizeCache, RTMeta)
+    : checkCall(() => {
+        const currentTheme = getCurrentTheme()
+        fireThemeEvent(Constants.BUILD_EVENT, currentTheme)
+        return currentTheme
+      })
 }
 
 /**
@@ -142,6 +161,7 @@ const configureBuiltTheme = ({ mergedTheme,  extraTheme }, RTMeta) => {
   builtTheme.RTMeta = { ...builtTheme.RTMeta, ...RTMeta }
 
   updateCurrentTheme(builtTheme)
+
   fireThemeEvent(Constants.BUILD_EVENT, builtTheme)
 
   return builtTheme

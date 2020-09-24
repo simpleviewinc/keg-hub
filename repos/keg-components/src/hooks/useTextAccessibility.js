@@ -4,7 +4,7 @@ import { useMemo } from 'react'
  * All possible heading size options
  * @array
  */
-const headings = [ '1', '2', '3', '4', '5', '6' ]
+const headings = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ]
 
 /**
  * Custom hook to memoize the accessibilityRole of a text component
@@ -16,14 +16,14 @@ const headings = [ '1', '2', '3', '4', '5', '6' ]
  */
 export const useTextAccessibility = (element, accessibilityRole) => {
   return useMemo(() => {
-    const type = accessibilityRole
+    const type = accessibilityRole 
       ? accessibilityRole
-      : element.indexOf('h') === 0 && headings.includes(element[1])
+      : headings.includes(element)
         ? 'header'
         : element
 
     return {
-      accessibilityRole: accessibilityRole || type,
+      accessibilityRole: type,
       ...(type === 'header' && { ['aria-level']: element[1] }),
     }
   }, [ element, accessibilityRole ])

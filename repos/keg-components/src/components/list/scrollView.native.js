@@ -3,7 +3,7 @@ import { ScrollView as RNScrollView } from 'react-native'
 import { getPlatform } from 'KegGetPlatform'
 import { eitherArr } from '@keg-hub/jsutils'
 import { updateClassNames } from '../../utils/helpers/updateClassNames'
-import { handelRefUpdate } from '../../utils/helpers/handelRefUpdate'
+import { handleRefUpdate } from '../../utils/helpers/handleRefUpdate'
 import PropTypes from 'prop-types'
 
 const isWeb = getPlatform() === 'web'
@@ -38,7 +38,7 @@ const useScrollClassNames = (defClass, className, innerClassName, ref) => {
         )
       }
 
-      handelRefUpdate(ref, scrollResponder)
+      handleRefUpdate(ref, scrollResponder)
     },
     [ defClass, className.join(' '), ref ]
   )

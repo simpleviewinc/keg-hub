@@ -7,7 +7,7 @@ import { isObj, checkCall } from '@keg-hub/jsutils'
  *
  * @returns {Object} - Combined child components
  */
-export const handelRefUpdate = (ref, update) => {
+export const handleRefUpdate = (ref, update) => {
   // Update the ref based on it's type
   return isObj(ref) && 'current' in ref
     ? (ref.current = update)

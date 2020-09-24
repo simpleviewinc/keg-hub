@@ -5,7 +5,7 @@ const isWeb = getPlatform() === 'web'
 /**
  * Helper to update the classNames on a Dom node
  * @param {Object} element - Dom node element
- * @param {Array[string]} classesRef - Array of classes currently on the element
+ * @param {RefObject<Array<string>>} classesRef - Array of classes currently on the element
  * @param {string} defClass - Default keg-components class always on the element
  * @param {string|Array[string]} className - Class or classes to add to the element
  *
