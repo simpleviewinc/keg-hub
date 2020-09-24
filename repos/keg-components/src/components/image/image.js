@@ -2,29 +2,18 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Loading } from '../loading'
 import { checkCall, isFunc } from '@keg-hub/jsutils'
-import { Image as RNImage } from 'react-native'
+import { Image as InternalImage } from '../internal/image'
 import { useThemeHover } from '@keg-hub/re-theme'
 import { useThemePath, useStyle } from 'KegHooks'
 import React, { useState, forwardRef, useRef, useCallback } from 'react'
 import { useClassList } from 'KegClassList'
 import { getImgSrc, getPressHandler } from 'KegUtils'
-import { getPlatform } from 'KegGetPlatform'
-const isWeb = getPlatform() === 'web'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
-/**
- * Custom class helper for images due to a bug in react-native-web
- * <br/>Can't use useClassName hook, for some reason when setting the ref on the image
- * <br/>If causes constant re-renders. Maybe worth looking into at some point
- * <br/>We have to manually add the keg class names to the image dom element when the image loads
- * @param {Element} element - Native dom element
- */
-const addImageClasses = element => {
-  if (!isWeb || !element || !element.classList) return
-
-  element.classList.add(`keg-image-content`)
-  element.firstChild.classList.add(`keg-image-sibling`)
-  element.lastChild.classList.add(`keg-image`)
-}
+const KegImage = StyleInjector(InternalImage, {
+  displayName: 'Image',
+  className: 'keg-image',
+})
 
 /**
  * Image
@@ -76,11 +65,11 @@ export const Image = forwardRef((props, ref) => {
     checkCall(setStyle, elementStyle)
     // Call onLoad in props if it exists
     checkCall(props.onLoad, props)
-    // Can only update the dom node if it exists, so check before doing the udpate
-    if (!internalRef.current) return
+    // Call the imgRef function or set it if it exists
+    isFunc(imgRef)
+      ? imgRef(internalRef.current)
+      : imgRef && (imgRef.current = internalRef.current)
 
-    isFunc(imgRef) && imgRef(internalRef.current)
-    isWeb && addImageClasses(internalRef.current)
   }, [ src, source, internalRef.current ])
 
   return (
@@ -94,8 +83,7 @@ export const Image = forwardRef((props, ref) => {
           styles={builtStyles.loadingComp}
         />
       ) }
-      <RNImage
-        accessibilityLabel='image'
+      <KegImage
         {...attrs}
         style={loading ? loadingStyles : builtStyles.image}
         {...getPressHandler(false, onClick, onPress)}
@@ -109,9 +97,10 @@ export const Image = forwardRef((props, ref) => {
 })
 
 Image.propTypes = {
+  ...InternalImage.propTypes,
   onPress: PropTypes.func,
   type: PropTypes.string,
   alt: PropTypes.string,
   src: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
-  style: PropTypes.object,
+  styles: PropTypes.object,
 }

@@ -2,7 +2,6 @@
 
 import { debounce, isArr, isFunc, checkCall } from '@keg-hub/jsutils'
 import { Constants } from '../constants'
-import { setRNDimensions } from './dimensions'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 
 const DEBOUNCE_RATE = 100
@@ -162,6 +161,4 @@ const Dimensions = {
   removeEventListener,
 }
 
-setRNDimensions(Dimensions)
-
-export { Dimensions, setRNDimensions }
+export { Dimensions }

@@ -1,14 +1,22 @@
-import React, { forwardRef } from 'react'
-import { TextInput } from 'react-native'
+import React from 'react'
 import { getValueFromChildren, getReadOnly } from '../../../utils'
 import {
   useThemePath,
   useInputHandlers,
   usePressHandlers,
 } from '../../../hooks'
-import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
-import { withTouch } from '../../../hocs'
+import { Input as InternalInput } from '../../internal/input.js'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+
+/**
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
+ */
+const KegInput = StyleInjector(InternalInput, {
+  displayName: 'Input',
+  className: 'keg-input'
+})
 
 /**
  * Gets the key value pair for the select components value
@@ -23,7 +31,15 @@ const getValue = ({ children, value }) => {
   return value !== undefined ? { value: setValue } : {} // return empty object, otherwise we would not be able to type into input since it would be waiting on value prop to change
 }
 
-export const Input = forwardRef((props, ref) => {
+/**
+ * Input
+ * @summary Default Input component that wraps the Internal Input component with the styles injector. All props are optional
+ *
+ * @param {Object} props - see KegInput PropTypes
+ * @property {String} props.className - Value to set the className to (web platform only)
+ *
+ */
+export const Input = React.forwardRef((props, ref) => {
   const {
     className,
     children,
@@ -44,12 +60,9 @@ export const Input = forwardRef((props, ref) => {
   } = props
 
   const inputStyles = useThemePath(themePath)
-  const classRef = useClassName('keg-input', className, ref)
-
-  const TextInputTouch = withTouch(TextInput, { showFeedback: false })
-
+  
   return (
-    <TextInputTouch
+    <KegInput
       accessibilityRole='textbox'
       onPress={onPress}
       {...getReadOnly(false, readOnly, disabled, editable)}
@@ -58,12 +71,13 @@ export const Input = forwardRef((props, ref) => {
       {...usePressHandlers(false, { onClick, onPress })}
       {...elProps}
       style={[ inputStyles, style ]}
-      ref={classRef}
     />
   )
 })
 
+
 Input.propTypes = {
+  ...KegInput.propTypes,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
@@ -79,3 +93,4 @@ Input.propTypes = {
   type: PropTypes.string,
   value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 }
+

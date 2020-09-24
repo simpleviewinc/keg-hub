@@ -40,20 +40,38 @@ const defaultSideSectionStyle = {
 export const itemHeader = {
   main: {
     $all: {
-      shadow: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-      },
-    },
-    $web: {
+      position: 'relative',
       justifyContent: 'center',
       backgroundColor: get(colors, 'surface.primary.colors.dark'),
-      height: 70,
       width: '100%',
       flexDirection: 'row',
+      height: 60,
     },
+    $web: {
+      height: 70,
+    },
+  },
+  shadow: {
+    main: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      position: 'relative',
+      zIndex: 1,
+    },
+    cover: {
+      position: 'absolute',
+      backgroundColor: get(colors, 'surface.primary.colors.dark'),
+      height: 10,
+      width: '100%',
+      flexDirection: 'row',
+      top: -5,
+      zIndex: 2,
+    },
+  },
+  appHeader: {
+    main: {},
   },
   content: {
     left: {

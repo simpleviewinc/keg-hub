@@ -32,7 +32,7 @@
     "format:eslint": "eslint --config ./core/configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./core/configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
-    "ios": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start -clear --ios --dev",
+    "ios": "EXPO_DEBUG=true NODE_ENV=development PLATFORM=native expo start --clear --ios --dev",
     "postinstall": "node ./core/scripts/js/postInstall.js",
     "roll:dev": "PLATFORM=web rollup -c ./core/configs/rollup.config.js",
     "start": "NODE_ENV=development expo start --clear",

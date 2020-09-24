@@ -8,7 +8,7 @@ export const select = {
       ...sharedForm.border,
       ...sharedForm.inputs,
       padding: 0,
-      overflow: 'hidden',
+      overflow: 'none',
     },
     select: {
       $web: {

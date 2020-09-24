@@ -3,6 +3,8 @@ import { Check } from 'KegIcons'
 import React, { useMemo } from 'react'
 import { CheckboxWrapper } from './checkbox.wrapper'
 import { noPropObj } from '../../../utils/helpers/noop'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+import { Input as KegInput } from '../../internal/input.web'
 
 // Styles are defined here so that they are enforced
 // Due to how the checkbox is designed, these styles should not be changed
@@ -34,6 +36,15 @@ const checkBoxStyles = {
   },
 }
 
+/**
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
+ */
+const Input = StyleInjector(KegInput, {
+  displayName: 'Checkbox',
+  className: 'keg-checkbox'
+})
+
 const Element = React.forwardRef(
   (
     { className, elProps, styles = noPropObj, icon, checked, ...props },
@@ -59,7 +70,7 @@ const Element = React.forwardRef(
           className='keg-checkbox-icon'
           style={checkStyle}
         /> }
-        <input
+        <Input
           className='keg-checkbox'
           {...elProps}
           {...props}

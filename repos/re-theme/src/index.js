@@ -1,4 +1,4 @@
-import { setRNDimensions } from './dimensions/webDimensions'
+import { setRNDimensions } from './dimensions/dimensions'
 import { ReThemeContext } from './context/reThemeContext'
 import { ReThemeProvider } from './context/reThemeProvider'
 import { setRNPlatform } from './context/platform'
@@ -21,7 +21,6 @@ import {
 } from './theme'
 
 import {
-  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,
@@ -46,7 +45,6 @@ export {
   setDefaultTheme,
   withTheme,
   // Theme hooks
-  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,

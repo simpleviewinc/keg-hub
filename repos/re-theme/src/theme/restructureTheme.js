@@ -1,6 +1,7 @@
 /** @module theme */
 'use strict'
 
+import { ruleHelpers } from '../constants/ruleHelpers'
 import { getSizeMap } from '../dimensions'
 import { Constants } from '../constants'
 import { getRNPlatform } from '../context/platform'
@@ -59,6 +60,13 @@ const buildSizedThemes = (theme, sizedTheme, size) => {
   return reduceObj(
     theme,
     (name, value, sizedTheme) => {
+
+      // Check if the name is a shortcut
+      if(ruleHelpers[name]){
+        unset(theme, name)
+        theme[ruleHelpers[name]] = value
+      }
+
       // If value is not an object, just return the sizedTheme
       if (!isObj(value)) return sizedTheme
 
@@ -99,17 +107,23 @@ const buildSizedThemes = (theme, sizedTheme, size) => {
  * @returns - Merged platform theme rules, or the passed in theme if no rules exist
  */
 const mergePlatformOS = (theme, platforms) => {
+  const sizeMap = getSizeMap()
+
+  const toMerge = []
   // Loop the platforms and check if they are allowed and the platform exist on theme
   // If is a valid platform add to the toMerge array
-  const toMerge = platforms.reduce((toMerge, plat) => {
-    theme[plat] && toMerge.push(theme[plat])
+  const mergeTheme = Object.keys(theme)
+    .reduce((cleanTheme, key) => {
+      key[0] === '$' && !sizeMap.hash[key]
+        ? platforms.indexOf(key) !== -1 && toMerge.push(theme[key])
+        : (cleanTheme[key] = theme[key])
 
-    return toMerge
-  }, [])
+      return cleanTheme
+    }, {})
 
   // If any of the platform theme object exist, then merge them together
   // Otherwise just return the passed in theme object
-  return toMerge.length ? deepMerge(...toMerge) : theme
+  return toMerge.length ? deepMerge(...toMerge) : mergeTheme
 }
 
 const updatePlatformTheme = (platforms, Platform, themeData) => {

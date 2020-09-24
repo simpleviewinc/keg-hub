@@ -61,15 +61,6 @@ describe('addToDom', () => {
 
   })
 
-  it('should set the type of the new style element', () => {
-
-    buildTestStyleEl()
-
-    addToDom(testStyles)
-    expect(mockStyleEl.type).toBe('text/css')
-
-  })
-
   it('should NOT call appendChild when styleSheet exists', () => {
 
     buildTestStyleEl()
@@ -124,4 +115,3 @@ describe('addToDom', () => {
   })
 
 })
-

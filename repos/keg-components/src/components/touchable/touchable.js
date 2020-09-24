@@ -1,52 +1,25 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import {
-  Platform,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  TouchableWithoutFeedback,
-} from 'react-native'
-import { useClassName } from 'KegClassName'
-
-const TouchableComp =
-  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
+import { Touchable as KegTouchable } from './touchable.native'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
 /**
  * Touchable
- * @summary Custom Touch component. All props are optional
+ * @summary Touchable component that allows interactions based on touch. All props are optional
  *
- * @param {Object} props - see touchablePropTypes
+ * @param {Object} props - see View PropTypes
  * @property {String} props.className - Value to set the className to (web platform only)
- * @property {Object} props.style - custom style - Set inline with the style prop
- * @property {Function} props.onPress - function to do when button is pressed
- * @property {Object} props.children - Child components of the component
- * @property {Object} props.ref - reference to native element
  *
  */
-export const Touchable = React.forwardRef((props, ref) => {
-  const { className, showFeedback = true, touchRef, ...attrs } = props
-  const Component = showFeedback ? TouchableComp : TouchableWithoutFeedback
-  const classRef = useClassName('keg-touchable', className, touchRef || ref)
-
-  return <Component
-    accessible={true}
-    {...attrs}
-    ref={classRef}
-  />
+export const Touchable = StyleInjector(KegTouchable, {
+  displayName: 'Touchable',
+  className: 'keg-touchable',
+  // Important rules should include the prefixed version
+  // Because important rules are checked after going through the prefixer
+  // Important rules have `!important` added to them to allow overwriting the style attribute
+  important: [
+    'transitionDuration',
+    'WebkitTransitionDuration',
+  ],
 })
 
-Touchable.propTypes = {
-  ...TouchableComp.propTypes,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array,
-    PropTypes.func,
-  ]),
-  className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
-  onClick: PropTypes.func,
-  onPress: PropTypes.func,
-  ref: PropTypes.object,
-  styles: PropTypes.object,
-  showFeedback: PropTypes.bool,
-}
+Touchable.propTypes = KegTouchable.propTypes

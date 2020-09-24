@@ -1,5 +1,4 @@
 
-export * from './useCss'
 export * from './useTheme'
 export * from './useStylesCallback'
 

@@ -5,7 +5,6 @@
 export const addToDom = styles => {
 
   const dataCss = document.createElement('style')
-  dataCss.type = 'text/css'
 
   // Based on the browser, we need to set the styles differently
   dataCss.styleSheet

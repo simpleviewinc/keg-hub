@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react'
 import { ReThemeContext } from './reThemeContext'
-import { Dimensions } from '../dimensions/dimensions'
+import { Dimensions } from 'ReDimensions'
 import { getSize } from '../dimensions/sizeMap'
 import { buildTheme, getDefaultTheme } from '../theme'
 import { getCurrentTheme } from '../theme/manageTheme'
@@ -20,7 +20,7 @@ import { get } from '@keg-hub/jsutils'
  * @returns {Component|Object} - ReThemeContext.Provider - Provides the theme to the Context consumer
  */
 export const ReThemeProvider = props => {
-  const { children, theme, merge: doMerge, platforms, logRenders } = props
+  const { children, theme, merge: doMerge, platforms } = props
   const merge = Boolean(doMerge || (!doMerge && doMerge !== false)) || false
 
   /**
@@ -69,8 +69,6 @@ export const ReThemeProvider = props => {
       Dimensions.removeEventListener('change', onChange)
     }
   }, [])
-
-  logRenders && console.log(`---------- RE-THEME RE-RENDER ----------`)
 
   const builtTheme = useMemo(() => {
     return buildTheme(

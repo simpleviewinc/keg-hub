@@ -1,7 +1,8 @@
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import { getPlatform } from 'KegGetPlatform'
-import { checkCall, eitherArr, isObj } from '@keg-hub/jsutils'
-import { ensureClassArray } from '../utils/helpers/ensureClassArray'
+import { eitherArr } from '@keg-hub/jsutils'
+import { updateClassNames } from '../utils/helpers/updateClassNames'
+import { handleRefUpdate } from '../utils/helpers/handleRefUpdate'
 
 const isWeb = getPlatform() === 'web'
 
@@ -21,23 +22,17 @@ const isWeb = getPlatform() === 'web'
  * @returns {function} - Ref function to be added to the component
  */
 export const useClassName = (defClass, className, ref) => {
-  className = eitherArr(className, [className])
+  const classArr = eitherArr(className, [className])
+  const classRef = useRef(classArr)
 
   return useCallback(
     element => {
-      if (isWeb && element) {
-        // Add the default classes to the classList
-        defClass && element.classList.add(defClass)
+      isWeb &&
+        element &&
+        updateClassNames(element, classRef, defClass, classArr)
 
-        // Ensure classNames is flat array, then add it's children
-        element.classList.add(...ensureClassArray(className))
-      }
-
-      // Update the ref based on it's type
-      isObj(ref) && 'current' in ref
-        ? (ref.current = element)
-        : checkCall(ref, element)
+      handleRefUpdate(ref, element)
     },
-    [ defClass, ...className, ref ]
+    [ defClass, classArr.join(' '), ref ]
   )
 }

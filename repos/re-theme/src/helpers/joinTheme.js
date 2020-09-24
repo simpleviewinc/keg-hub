@@ -22,6 +22,12 @@ const hasManyFromTheme = arg1 => isObj(arg1) && isObj(arg1.RTMeta)
  */
 export const joinTheme = (arg1, arg2, ...sources) => {
 
+  process.env.NODE_ENV !== 'production' && console.warn(
+    `[ ReTheme WARN ] - theme.join is deprecated!`,
+    `\nIt will be removed in an upcoming release.`,
+    `\nUse theme.get instead!`
+  )
+
   sources = !isArr(arg2)
     ? [arg2].concat(sources)
     : [ ...(arg2.map(arg => (isObj(arg) && arg) || (arg && get(arg1, arg)))), ...sources ]

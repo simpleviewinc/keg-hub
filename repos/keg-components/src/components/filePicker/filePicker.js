@@ -6,6 +6,18 @@ import { Button } from '../button'
 import { View } from 'KegView'
 import { get } from '@keg-hub/jsutils'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+import { Input as KegInput } from '../internal/input.web'
+
+/**
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
+ */
+const Input = StyleInjector(KegInput, {
+  displayName: 'FilePickerInput',
+  className: 'keg-file-picker-input'
+})
+
 /**
  * A component for selecting files from the user's system. Looks better than a basic input element,
  * and accepts style objects for styling further
@@ -94,7 +106,7 @@ export const FilePicker = React.forwardRef((props, ref) => {
       }
 
       { /* this input is hidden from the user, but is still used for selecting a file */ }
-      <input
+      <Input
         {...args}
         ref={input => {
           ref && (ref.current = input)

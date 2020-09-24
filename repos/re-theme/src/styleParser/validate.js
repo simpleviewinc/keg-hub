@@ -9,7 +9,7 @@ import { hasDomAccess } from '../helpers/hasDomAccess'
  * 
  * @returns {Object|boolean} - Passed in args or false if args are invalid
  */
-export const validateArguments = (args={}, fallbackCB) => {
+export const validateArguments = (args={}) => {
 
   // Ensure we have dom access and classNames is an array
   // Otherwise log error an return a string
@@ -18,12 +18,11 @@ export const validateArguments = (args={}, fallbackCB) => {
     return { valid: false}
   }
 
-  // Use the default fallbackCB when no callback is passed
-  const callback = args.callback || fallbackCB
-  if (!isFunc(callback)){
-    console.error(`[ Error ] styleSheetParser requires a function callback.\nIt received:`, callback)
+  // Ensure a callback is passed in
+  if (!isFunc(args.callback)){
+    console.error(`[ Error ] styleSheetParser requires a function callback.\nIt received:`, args.callback)
     return { valid: false}
   }
 
-  return { ...args, callback }
+  return args
 }

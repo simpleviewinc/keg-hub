@@ -1,30 +1,7 @@
-import { isArr, checkCall } from '@keg-hub/jsutils'
+import { isArr, checkCall, isObj } from '@keg-hub/jsutils'
 import { validateArguments } from './validate'
 import { addToDom } from './addToDom'
 import { cssToJs } from './cssToJs'
-
-/**
- * Converts to the data-class text from the rootSelector class
- * @example
- * .my-class-name => [data-class~="my-class-name"] 
- * @param {Object} cssRule - Rule to be updated form a styleSheet on the dom
- * @param {string} rootSelector - Class the matches the cssRule
- * @param {string} styleText - Past updated style rules
- * 
- * @returns {string} - Updated style text with the cssRule converted to a data-class attribute
- */
-const convertToDataClass = (cssRule, rootSelector, formatted) => {
-
-  const selectorRef = rootSelector.substring(1)
-  const dataClass = `[data-class~="${selectorRef}"]`
-  const dataRule = cssRule.cssText.replace(rootSelector, dataClass)
-
-  formatted.asObj[dataClass] = cssToJs(dataRule, formatted.asObj[dataClass])
-  formatted.dataClass[selectorRef] = formatted.asObj[dataClass]
-  formatted.asStr += `${dataRule}\n`
-
-  return formatted
-}
 
 /**
  * Loops a style sheets rules and looks for matching className selectors
@@ -51,7 +28,7 @@ const loopSheetCssRules = (formatted, sheet, classNames, callback) => {
       // Check if the rootSelector is in the classNames
       // If it is, then call the callback
       return classNames.includes(rootSelector)
-        ? checkCall(callback, cssRule, rootSelector, formatted)
+        ? checkCall(callback, cssRule, rootSelector, formatted, cssToJs)
         : formatted
 
     }, formatted)
@@ -73,9 +50,8 @@ export const styleSheetParser = (args) => {
     classNames,
     callback,
     toDom=true,
-    format,
     valid
-  } = validateArguments(args, convertToDataClass)
+  } = validateArguments(args)
 
   if(valid === false) return {}
 
@@ -83,17 +59,14 @@ export const styleSheetParser = (args) => {
     // Have to convert all styleSheets form the DOM into an array to loop over them
     Array.from(document.styleSheets).reduce(
       (formatted, sheet) => loopSheetCssRules(formatted, sheet, classNames, callback),
-      { asStr: '', asObj: {}, dataClass: {} }
+      { asStr: '' }
     )
 
-  toDom && stylesText && addToDom(parsedStyles.asStr)
+  toDom &&
+    isObj(parsedStyles) &&
+    parsedStyles.asStr &&
+    addToDom(parsedStyles.asStr)
 
   return parsedStyles
 
 }
-
-// TODO: These the data class data should be stored in a look up
-// Then in the useCss hook, it uses that look up to find the styles
-// That way the styles do not need to be passed around to components
-// Instead a components can just pass in the dataClass Id, and get back the styles
-

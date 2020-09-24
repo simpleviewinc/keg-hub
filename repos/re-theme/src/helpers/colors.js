@@ -1,4 +1,4 @@
-import { isObj, isArr, isStr } from '@keg-hub/jsutils'
+import { isObj, isArr, isStr, isNum } from '@keg-hub/jsutils'
 
 const convertToPercent = (num, percent) => parseInt((num * (100 + percent)) / 100)
 
@@ -12,17 +12,17 @@ const convertToColor = (num, percent) => {
   return asStr.length == 1 ? `0${asStr}` : asStr
 }
 
-const mapOpacity = opacity => {
+const mapOpacity = (opacity, color) => {
   // Map opacity amounts by .5
   for (let amount = 100; amount >= 0; amount -= 5)
-    opacity[`_${amount}`] = opacity((amount / 100).toFixed(2))
+    opacity[`_${amount}`] = opacity((amount / 100).toFixed(2), color)
 
   return opacity
 }
 
 /**
  * Convert hex color to rgba
- * @param  { string } hex - color to convert
+ * @param  {string} hex - color to convert
  *
  * @param {number} opacity - from 0-1
  * @return rgba as string
@@ -34,7 +34,8 @@ export const hexToRgba = (hex, opacity, asObj) => {
     )
 
   hex = hex.indexOf('#') === 0 ? hex.replace('#', '') : hex
-
+  hex = hex.length === 3 ? `${hex}${hex}` : hex
+  
   opacity = opacity > 1 ? (opacity / 100).toFixed(4) : opacity
 
   const rgbaObj = {
@@ -105,13 +106,15 @@ export const toRgb = (red, green, blue, alpha) => {
  * @returns {Object} - Built CSS transition rule
  */
 export const transition = (props = [], speed = 250, timingFunc = 'ease') => {
+  speed = isNum(speed) ? `${speed}ms` : isStr(speed) ? speed : `250ms`
+
   return typeof props === 'string'
-    ? { transition: `${props} ${speed}ms ${timingFunc}` }
+    ? { transition: `${props} ${speed} ${timingFunc}` }
     : isArr(props)
       ? {
           transition: props
             .reduce((trans, prop) => {
-              trans.push(`${prop} ${speed}ms ${timingFunc}`)
+              trans.push(`${prop} ${speed} ${timingFunc}`)
               return trans
             }, [])
             .join(', ')

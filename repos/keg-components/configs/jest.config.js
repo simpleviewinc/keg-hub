@@ -12,6 +12,7 @@ const mappedNames = reduceObj(aliases, (key, value, updated) => {
  * Asset types that should be stubbed out when tests run
  */
 const assetStubs = [
+  'bmp',
   'jpg',
   'jpeg',
   'gif',
@@ -41,7 +42,9 @@ module.exports = {
     '\\.(css|less)$': 'identity-obj-proxy',
     [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1',
     ...mappedNames,
-    '@keg-hub/re-theme/colors': `${ROOT_DIR}/node_modules/@keg-hub/re-theme/build/cjs/web/colors.js`
+    '@keg-hub/re-theme/colors': `${ROOT_DIR}/node_modules/@keg-hub/re-theme/build/cjs/web/colors.js`,
+    '@keg-hub/re-theme/styleInjector': `${ROOT_DIR}/node_modules/@keg-hub/re-theme/build/cjs/web/styleInjector.js`,
+    '@keg-hub/re-theme/styleParser': `${ROOT_DIR}/node_modules/@keg-hub/re-theme/build/cjs/web/styleParser.js`,
   },
   verbose: true,
   testPathIgnorePatterns: [ '/node_modules/' ],

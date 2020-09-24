@@ -8,7 +8,8 @@ import {
   setSizes,
   useDimensions,
 } from './dimensions'
-import { setRNDimensions } from './dimensions/dimensions'
+
+import { setRNDimensions } from './dimensions/dimensions.native'
 
 import {
   addThemeEvent,
@@ -20,7 +21,6 @@ import {
 } from './theme'
 
 import {
-  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,
@@ -45,7 +45,6 @@ export {
   setDefaultTheme,
   withTheme,
   // Theme hooks
-  useCss,
   useStylesCallback,
   useTheme,
   useThemeActive,

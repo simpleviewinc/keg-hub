@@ -1,6 +1,9 @@
 import { useEffect, useMemo } from 'react'
 import { Animated } from 'react-native'
 import { noOp } from 'KegUtils'
+import { isArr } from '@keg-hub/jsutils'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * A hook for running an animation from an origin (from) point to a destination (to) point
@@ -19,17 +22,16 @@ export const useFromToAnimation = params => {
     params || {}
   // determines when the animation should run
   const animDependencies = [ from, to, duration, loop, easing, onFinish ]
-
+  
   // define the animated value here so we can return it. It needs to recompute
   // whenever the animation would run again, which is why it shares hookDependencies
   // with the useEffect below
   const fromVal = useMemo(() => new Animated.Value(from), animDependencies)
 
-  const animatedTiming = Animated.timing(fromVal, {
-    toValue: to,
-    duration,
-    easing,
-  })
+  const config = { toValue: to, duration, easing }
+  !isWeb && (config.useNativeDriver = true)
+  
+  const animatedTiming = Animated.timing(fromVal, config)
 
   useEffect(() => {
     loop

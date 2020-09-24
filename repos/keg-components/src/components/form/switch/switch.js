@@ -1,10 +1,23 @@
-import React from 'react'
 import { View } from 'KegView'
-import { useClassName } from 'KegClassName'
-import { getPlatform } from 'KegGetPlatform'
-import { SwitchWrapper } from './switch.wrapper'
-import { Switch as RNSwitch } from 'react-native'
-const isWeb = getPlatform() === 'web'
+import PropTypes from 'prop-types'
+import { Text } from '../../typography'
+import { useTheme } from '@keg-hub/re-theme'
+import React, { useState, useMemo } from 'react'
+import { useThemeTypeAsClass } from 'KegTypeAsClass'
+import { useThemePath } from '../../../hooks'
+import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
+import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
+import { Switch as InternalSwitch } from '../../internal/switch.js'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+
+/**
+ * Wrap the internal component with the Styles Injector Hoc
+ * <br/>This allows us to add the styles as css classes
+ */
+const KegSwitch = StyleInjector(InternalSwitch, {
+  displayName: 'Switch',
+  className: 'keg-switch'
+})
 
 /**
  * Gets the custom Native Switch colors from the passed in styles
@@ -30,58 +43,208 @@ const getSwitchColors = (
 }
 
 /**
- * Switch
- * @summary Custom switch component. All props are optional
+ * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
+ * Checked styles only rebuild when isChecked value has changed
+ * @param {boolean} isChecked - Current state of the switch component
+ * @param {Object} themeStyles - Styles of the Switch component
  *
- * @param {Object} props - see switchPropTypes
- * @property {String} props.text - switch text
- * @property {String} props.type - flat, text, outlined, contained; default 'flat'
- * @property {Object} props.style - custom style
- * @property {Function} props.onPress - function to do when switch is pressed
- * @property {Boolean} props.disabled
- * @property {Object} props.children
- * @property {Object} props.ref - reference to native element
- *
+ * @returns {Object} - Styles with the correct values based on isChecked state
  */
-const Element = React.forwardRef((props, ref) => {
-  const {
-    className,
-    elProps,
-    style,
-    styles = {},
-    thumbColor,
-    trackColor,
-    ...attrs
-  } = props
+const useCheckedState = (isChecked, themeStyles) => {
+  const theme = useTheme()
+  return useMemo(() => {
+    return theme.join(themeStyles, {
+      content: {
+        area: {
+          ...get(themeStyles, 'content.area.off'),
+          ...(isChecked && get(themeStyles, 'content.area.on')),
+        },
+        indicator: {
+          ...get(themeStyles, 'content.indicator.off'),
+          ...(isChecked && get(themeStyles, 'content.indicator.on')),
+        },
+      },
+    })
+  }, [isChecked])
+}
 
-  const classRef = useClassName('keg-switch', className, ref)
+/**
+ * Sets / Updates the value of the checked Component
+ * Calls the callback, if it's passed in
+ * @param {boolean} isChecked - Current state of the check value
+ * @param {function} setChecked - Update the checked state
+ * @param {function} onChange - Callback to call when the state changes
+ *
+ * @returns {function} - The checked state update function
+ */
+const setCheckedValue = (isChecked, setChecked, onChange) => {
+  return event => {
+    setChecked(!isChecked)
+    checkCall(onChange, event, !isChecked)
+  }
+}
 
-  return (
-    <View
-      className='keg-switch-area'
-      style={styles.main}
-    >
-      <RNSwitch
-        style={styles.switch}
-        {...getSwitchColors(thumbColor, trackColor, styles)}
-        {...elProps}
-        {...attrs}
-        ref={classRef}
-      />
-    </View>
+/**
+ * Side
+ * @summary builds the side sections of the Switch
+ * @param {Object} props
+ * @property {React Component|string|Object|Array} Component  - custom component to display in the section.
+ * @property {Object} style - default headerstyle obj for section
+ *
+ * @returns {Component} - section component
+ */
+const SideComponent = ({ Component, style }) => {
+  return isStr(Component) ? (
+    <Text style={style}>{ Component }</Text>
+  ) : (
+    renderFromType(Component, { style: styles.content })
   )
-})
+}
 
-export const Switch = props => (
-  <SwitchWrapper
-    {...props}
-    elType={'switch'}
-    Element={Element}
-    isWeb={isWeb}
-  />
+/**
+ * Finds the children type and returns them in the format needed to render
+ * @param {Object|Array|string} props.children - Child components to render
+ *
+ * @returns {React Component|Object|Array}
+ */
+const ChildrenComponent = ({ children }) => (
+  <>{ renderFromType(children, {}, null) }</>
 )
 
+/**
+ * Switch
+ * Wraps the Internal KegSwitch which should be a Switch for the platform type
+ * @param {Object} props - see PropTypes below
+ *
+ */
+export const Switch = props => {
+  const {
+    className,
+    checked,
+    children,
+    elType,
+    disabled,
+    LeftComponent,
+    close,
+    onChange,
+    onValueChange,
+    ref,
+    RightComponent,
+    styles,
+    SwitchComponent,
+    type,
+    themePath,
+    thumbColor,
+    trackColor,
+    value,
+    ...elProps
+  } = props
+
+  const [ isChecked, setChecked ] = useState(toBool(checked || value))
+
+  const elThemePath =
+    themePath || `form.switch.${(close && 'close') || 'default'}`
+  const themeStyles = useThemePath(elThemePath, styles)
+  const activeStyles = useCheckedState(isChecked, themeStyles)
+  const typeClassName = useThemeTypeAsClass(
+    elThemePath || type,
+    'keg-switch',
+    className
+  )
+
+  return (
+    (children && (
+      <View
+        className={typeClassName}
+        style={activeStyles.main}
+      >
+        <ChildrenComponent
+          className='keg-switch-container'
+          children={children}
+        />
+      </View>
+    )) || (
+      <View
+        className={typeClassName}
+        style={activeStyles.main}
+      >
+        { LeftComponent && (
+          <SideComponent
+            className='keg-switch-left'
+            Component={LeftComponent}
+            style={activeStyles.content.left}
+          />
+        ) }
+
+        { SwitchComponent ? (
+          renderFromType(SwitchComponent, {
+            ...props,
+            styles: activeStyles.content,
+          })
+        ) : (
+          <KegSwitch
+            elProps={elProps}
+            disabled={disabled}
+            styles={activeStyles.content}
+            {...getSwitchColors(thumbColor, trackColor, activeStyles.content)}
+            {...getChecked(false, isChecked)}
+            {...getOnChangeHandler(
+              false,
+              setCheckedValue(isChecked, setChecked, onChange || onValueChange)
+            )}
+          />
+        ) }
+
+        { RightComponent && (
+          <SideComponent
+            className='keg-switch-right'
+            Component={RightComponent}
+            style={activeStyles.content.right}
+          />
+        ) }
+      </View>
+    )
+  )
+}
+
 Switch.propTypes = {
-  ...RNSwitch.propTypes,
-  ...SwitchWrapper.propTypes,
+  checked: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+  className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
+  disabled: PropTypes.bool,
+  LeftComponent: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.func,
+    PropTypes.element,
+  ]),
+  RightComponent: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.func,
+    PropTypes.element,
+  ]),
+  SwitchComponent: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.func,
+    PropTypes.element,
+  ]),
+  onChange: PropTypes.func,
+  onValueChange: PropTypes.func,
+  ref: PropTypes.object,
+  styles: PropTypes.object,
+  text: PropTypes.string,
+  themePath: PropTypes.string,
+  thumbColor: PropTypes.string,
+  trackColor: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.bool,
 }

@@ -12,6 +12,7 @@ export const AppHeader = props => {
     <ItemHeader
       accessibilityRole='banner'
       className={useClassList('keg-app-header', className)}
+      appHeader={true}
       {...otherProps}
     />
   )
