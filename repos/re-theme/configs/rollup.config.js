@@ -75,8 +75,6 @@ const shared = (platform, ext) => ({
     }),
     commonjs(),
     cleanup(),
-    // Terser can lead to errors when importing
-    // This needs to be tested before it can be turned on
     isProd && terser({
       mangle: {
         keep_fnames: true,
