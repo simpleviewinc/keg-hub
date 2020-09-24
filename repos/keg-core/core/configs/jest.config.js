@@ -41,6 +41,8 @@ const transpileForTests = [
   '@expo(nent)?/.*',
   '@react-native-community',
   '@react-navigation/.*',
+  'react-native-svg-web',
+  'react-native-web',
   '@unimodules/.*',
   'expo(nent)?',
   'expo-asset',
@@ -87,6 +89,9 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
     [`^.+\\.(${assetStubs})$`]: 'jest-static-stubs/$1',
+    '^react-native$': 'react-native-web',
+    '^react-native-svg': 'react-native-svg-web',
+    'react-router-native': 'react-router-dom',
   },
   verbose: true,
   testPathIgnorePatterns: ['/node_modules/'],

@@ -1966,15 +1966,15 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
   integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
-"@keg-hub/keg-components@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/@keg-hub/keg-components/-/keg-components-0.1.2.tgz#de096c8baeea4aabe7159e3c28dcf11095cd8703"
-  integrity sha512-xpMwJw7c4+LsSEecjV5DWFXINDTtJLmtIeaj9msaKwxiHy806AbORtzVJEY4cyeVhuWhvbkbkbH2xkpjO620Yg==
+"@keg-hub/keg-components@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@keg-hub/keg-components/-/keg-components-6.0.0.tgz#39e632ec9b42bcf881a937c3856af9f6920184c5"
+  integrity sha512-isArLtaQi5I4yX4nUsO63BUzBeqb/XSNdNjZLz49jz0XCwPEuKTJMi7DPM2sfofOha0q6FdVX3J/BrX0HG8YUw==
 
-"@keg-hub/re-theme@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-3.0.1.tgz#39f0e25d5921e4f1fff2bcd2e361152085783318"
-  integrity sha512-57604R6Fb9kkR7Kh8wo4adVIPLg8savBTN1hv3er/+I98Lt2JO6oOCNS0Us2qe70y447rvLBHOIbUysun57XUQ==
+"@keg-hub/re-theme@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-6.0.0.tgz#bfb2a270c93c8e0510bf6387d6ed2a9c651a79af"
+  integrity sha512-25PCZi34V3PKntY8e4L4YMixBvjN5cJztGCWUe+Y8sCfNApTgGZjuZBozcQj4d0Bh1CBk5/07cIlgksIT5iYLQ==
 
 "@keg-hub/tap-resolver@1.1.1":
   version "1.1.1"
@@ -11101,7 +11101,7 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
-prop-types@15.7.2, prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@15.7.2, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -11342,12 +11342,10 @@ react-native-screens@2.9.0:
   resolved "https://registry.npmjs.org/react-native-screens/-/react-native-screens-2.9.0.tgz#ead2843107ba00fee259aa377582e457c74f1f3b"
   integrity sha512-5MaiUD6HA3nzY3JbVI8l3V7pKedtxQF3d8qktTVI0WmWXTI4QzqOU8r8fPVvfKo3MhOXwhWBjr+kQ7DZaIQQeg==
 
-react-native-svg-web@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/react-native-svg-web/-/react-native-svg-web-1.0.1.tgz#16e1784077b6e5b6c7ebd9c3829e6684211cba99"
-  integrity sha1-FuF4QHe25bbH69nDgp5mhCEcupk=
-  dependencies:
-    prop-types "^15.5.10"
+react-native-svg-web@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmjs.org/react-native-svg-web/-/react-native-svg-web-1.0.9.tgz#a50b1ac6e33eb9efdba38d58e6e13c193ef041c2"
+  integrity sha512-fggz1MPx55xP92ZlFWhvxfsd8/Mj3z63E1eo1pldtBRuNbR4LffvtY9hwj96bgHZU3gRwJL00LV3GAWRFthlnA==
 
 react-native-svg@12.1.0:
   version "12.1.0"
