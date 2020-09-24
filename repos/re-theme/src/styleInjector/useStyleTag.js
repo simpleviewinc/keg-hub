@@ -31,7 +31,7 @@ const checkImportant = (property, value, important) => (
  * @returns {string} - Style rules Object converted into a style rules string
  */
 export const createBlock = (style, config) => {
-  const important = ruleOverrides.important.concat(config.important)
+  const important = ruleOverrides.important.concat(config?.important)
   
   const prefixed = prefixStyles(createReactDOMStyle(style))
   const cssString = Object.keys(prefixed)
@@ -60,7 +60,7 @@ export const convertToCss = (style, config) => {
   return stlArr.reduce((rules, stl) => {
     if(!isObj(stl)) return rules
     
-    const { style:cleanStyle, filtered } = filterRules(stl, config.filter)
+    const { style:cleanStyle, filtered } = filterRules(stl, config?.filter)
     Object.assign(rules.filtered, filtered)
 
     const flat = flattenStyle(cleanStyle)
@@ -82,10 +82,9 @@ export const convertToCss = (style, config) => {
  * @returns {string} - className Css selector of the added style rules
  */
 export const useStyleTag = (style, className='', config) => {
-
   // Ensure config is an object
   config = isObj(config) ? config : noOpObj
-  
+
   const theme = useTheme()
   const themeSize = theme?.RTMeta?.size
   const themeKey = theme?.RTMeta?.key
