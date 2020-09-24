@@ -62,7 +62,7 @@ const versionService = async (args, { publishContext, repo, repos }) => {
     updateTo
   )
 
-  return publishContext
+  return { publishContext, newVersion: updateTo }
 
 }
 

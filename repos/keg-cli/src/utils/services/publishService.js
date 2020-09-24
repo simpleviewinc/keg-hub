@@ -51,10 +51,12 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
     const updated = await toResolve
 
     // Update the version of the repos
-    version && await versionService(
-      { params },
-      { publishContext, repo, repos }
-    )
+    const { newVersion } = version
+    ? await versionService(
+        { params },
+        { publishContext, repo, repos }
+      )
+    : {}
 
     logFormal(repo, `Running publish service`)
 
@@ -73,8 +75,7 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
     // Publish to NPM
     publish && await runRepoScript(repo, `publish --access ${access}`, scriptError(`publish`))
 
-
-    const gitBranchName = `${repo.repo}:${version}`
+    const gitBranchName = `${repo.repo}:${newVersion || 'build-&-publish'}`
     const gitRemoteName = `origin`
     // Create a new branch for the repo and version
     await runGitCmd(`checkout -b ${gitBranchName}`, repo.location)
