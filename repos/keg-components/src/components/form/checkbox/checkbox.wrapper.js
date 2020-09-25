@@ -167,7 +167,7 @@ export const CheckboxWrapper = props => {
   const pressHandlerProp = toggleIsEnabled
     ? getOnChangeHandler(isWeb, pressHandler)
     : () => {}
-
+  
   return (
     (children && (
       <View
