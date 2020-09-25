@@ -1,8 +1,8 @@
+import React, { useState, useEffect, useMemo } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography'
 import { useThemePath } from '../../../hooks'
-import React, { useState, useMemo } from 'react'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
@@ -106,6 +106,7 @@ const ChildrenComponent = ({ children, className }) => (
 export const CheckboxWrapper = props => {
   const {
     className,
+    initChecked,
     checked,
     children,
     elType,
@@ -120,6 +121,7 @@ export const CheckboxWrapper = props => {
     close,
     onChange,
     onValueChange,
+    setCheckedSetter,
     ref,
     RightComponent,
     styles,
@@ -130,7 +132,11 @@ export const CheckboxWrapper = props => {
     ...elProps
   } = props
 
-  const [ isChecked, setChecked ] = useState(toBool(checked || value))
+  const initCheckedValue = toBool(checked || initChecked || value)
+
+  const [ isChecked, setChecked ] = useState(initCheckedValue)
+  useEffect(() => void setCheckedSetter?.(setChecked), [ setCheckedSetter ])
+
 
   // ensure the handler can be fired, so long as the next check state is allowed
   const canUseHandler =

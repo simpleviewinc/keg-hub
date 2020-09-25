@@ -1,6 +1,6 @@
 import { form as formTheme } from './form'
 import { checkbox } from './checkbox'
-import { checkboxGroup } from './checkboxGroup'
+import { checkGroup } from './checkGroup'
 import { input } from './input'
 import { option } from './option'
 import { radio } from './radio'
@@ -9,7 +9,7 @@ import { switchStyles } from './switch'
 
 export const form = {
   checkbox,
-  checkboxGroup,
+  checkGroup,
   form: formTheme,
   input,
   option,
