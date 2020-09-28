@@ -196,7 +196,7 @@ export const CheckboxWrapper = props => {
   )
 
   // returns the right props to use
-  const pressHandlerProp = toggleIsEnabled
+  const pressHandlerProp = canUseHandler
     ? getOnChangeHandler(isWeb, pressHandler)
     : undefined
   
@@ -221,7 +221,7 @@ export const CheckboxWrapper = props => {
             className='keg-checkbox-left'
             Component={LeftComponent}
             style={activeStyles.content.left}
-            onPress={allowAdjacentPress && toggleIsEnabled && pressHandler}
+            onPress={allowAdjacentPress && canUseHandler && pressHandler}
           />
         ) }
 
@@ -247,7 +247,7 @@ export const CheckboxWrapper = props => {
             className='keg-checkbox-right'
             Component={RightComponent}
             style={activeStyles.content.right}
-            onPress={allowAdjacentPress && toggleIsEnabled && pressHandler}
+            onPress={allowAdjacentPress && canUseHandler && pressHandler}
           />
         ) }
       </View>
