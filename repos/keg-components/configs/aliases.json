@@ -1,6 +1,7 @@
 {
   "KegButton": "src/components/button/button.js",
   "KegCheckbox": "src/components/form/checkbox/checkbox.js",
+  "KegCheckGroup": "src/components/form/checkGroup/checkGroup.js",
   "KegFilePicker": "src/components/filePicker/filePicker${platform}.js",
   "KegForm": "src/components/form/form/form.js",
   "KegImg": "src/components/image/image.js",

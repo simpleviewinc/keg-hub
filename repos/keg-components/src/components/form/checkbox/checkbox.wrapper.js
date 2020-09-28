@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography'
@@ -35,27 +35,27 @@ const useCheckedState = (isChecked, themeStyles) => {
 }
 
 /**
- * Sets / Updates the value of the checked Component
- * Calls the callback, if it's passed in
+ * Returns a memoized callback that sets / updates the value of the checked Component and 
+ * calls the callback, if it's passed in
  * @param {boolean} isChecked - Current state of the check value
  * @param {function} setChecked - Update the checked state
  * @param {function} onChange - Callback to call when the state changes
- * @param {boolean} options.enableCheck - `setChecked` can only be called with `true` if this value is also true
- * @param {boolean} options.enableUncheck - `setChecked` can only be called with `false` if this value is true
+ * @param {boolean} options.disableCheck - `setChecked` can only be called with `true` if this value is false
+ * @param {boolean} options.disableUncheck - `setChecked` can only be called with `false` if this value is also false
  *
  * @returns {function} - The checked state update function
  */
-const setCheckedValue = (
+const getCheckboxPressHandler = (
   isChecked,
   setChecked,
   onChange,
-  { enableCheck = true, enableUncheck = true }
+  { disableCheck = false, disableUncheck = true }
 ) => {
-  return event => {
-    if (!isChecked) enableCheck && setChecked(true)
-    else enableUncheck && setChecked(false)
+  return useCallback(event => {
+    if (isChecked) !disableUncheck && setChecked(false)
+    else !disableCheck && setChecked(true)
     checkCall(onChange, event, !isChecked)
-  }
+  }, [ isChecked, setChecked, onChange, disableCheck, disableUncheck ])
 }
 
 /**
@@ -101,7 +101,30 @@ const ChildrenComponent = ({ children, className }) => (
  * CheckboxWrapper
  * Wraps the Passed in Checkbox Element
  * @param {Object} props - see PropTypes below
- *
+ * @param {string?} props.className - css class string
+ * @param {boolean?} props.initChecked - the initial checked/unchecked value of Checkbox
+ * @param {boolean?} props.checked - alias for initChecked
+ * @param {Object | String | Array} props.children - react children
+ * @param {string} props.elType - type of checkbox
+ * @param {Component} props.Element - the which component used for the core checkbox ui. @see checkbox.js
+ * @param {Component?} props.CheckIcon - an optional component that overrides the icon used in the checkbox
+ * @param {boolean} props.disabled - disables checking and unchecking if true
+ * @param {boolean} props.disableCheck - disables checking if true
+ * @param {boolean} props.disableUncheck - disables unchecking if true
+ * @param {boolean} props.allowAdjacentPress - if true, allows pressing a side component to toggle the checkbox
+ * @param {boolean} props.isWeb - indicates current platform is web. Provide by checkbox.js
+ * @param {(Component | string)?} props.LeftComponent - an optional component or string to render left of the checkbox
+ * @param {boolean} props.close - if true, side components will be rendered close to the checkbox. If false, spaced apart.
+ * @param {Function?} props.onChange - callback fired when checkbox is toggled
+ * @param {Function?} props.onValueChange - callback fired when checkbox is toggled
+ * @param {Function?} props.setCheckedSetter - callback called once on initial render. Is passed the `setChecked` callback to provide consumer control of checked/unchecked state if needed.
+ * @param {(Component | string)?} props.RightComponent -  an optional component or string to render right of the checkbox 
+ * @param {Object} props.styles - styles that overwrite default checkbox styles
+ * @param {Component?} props.CheckboxComponent - an optional component that overrides the default checkbox element, passed the same props and styles
+ * @param {string} props.type - theme type
+ * @param {string} props.themePath - path to theme object
+ * @param {boolean} props.value - alias for initChecked
+ * @param {...rest} props.* - the remaining props are passed to Element
  */
 export const CheckboxWrapper = props => {
   const {
@@ -122,7 +145,6 @@ export const CheckboxWrapper = props => {
     onChange,
     onValueChange,
     setCheckedSetter,
-    ref,
     RightComponent,
     styles,
     CheckboxComponent,
@@ -135,6 +157,11 @@ export const CheckboxWrapper = props => {
   const initCheckedValue = toBool(checked || initChecked || value)
 
   const [ isChecked, setChecked ] = useState(initCheckedValue)
+
+  // by default, checkbox manages its own toggled state.
+  // however, if the consumer needs to control that, it can by passing
+  // the `setCheckedSetter` callback. This effect hook will pass the 
+  // consumer the `setChecked` callback, which consumer can then control
   useEffect(() => void setCheckedSetter?.(setChecked), [ setCheckedSetter ])
 
 
@@ -160,19 +187,20 @@ export const CheckboxWrapper = props => {
     className
   )
 
-  const pressHandler = setCheckedValue(
+  // makes the pressHandler function for the checkbox.
+  // if disableCheck is true, prevents isChecked being set to true,
+  // if disableUncheck is true, prevents isChecked being set to false.
+  const pressHandler = getCheckboxPressHandler(
     isChecked,
     setChecked,
-    onChange || onValueChange,
-    {
-      enableCheck: !disableCheck,
-      enableUncheck: !disableUncheck,
-    }
+    onChange || onValueChange, // support either callback name from consumer
+    { disableCheck, disableUncheck }
   )
 
+  // returns the right props to use
   const pressHandlerProp = toggleIsEnabled
     ? getOnChangeHandler(isWeb, pressHandler)
-    : () => {}
+    : undefined
   
   return (
     (children && (
@@ -269,7 +297,6 @@ CheckboxWrapper.propTypes = {
   CheckIcon: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]),
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
-  ref: PropTypes.object,
   styles: PropTypes.object,
   text: PropTypes.string,
   themePath: PropTypes.string,

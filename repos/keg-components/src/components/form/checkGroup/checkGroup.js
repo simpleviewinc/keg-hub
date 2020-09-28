@@ -7,7 +7,10 @@ import { isFunc } from '@keg-hub/jsutils'
 
 /**
  * Simple header for CheckGroup, without any checkbox
- * @param {} param0 
+ * @param {Object} props
+ * @param {string} props.title - title of header
+ * @param {Object} props.style - style rules to apply to the Text element
+ * @param {*} props.* - remaining props are passed to the Text element
  */
 export const SimpleHeader = ({ title, style, ...rest }) => {
   const textStyle = useMemo(() => ({ ...style, marginLeft: 27 }), [ style ])
@@ -24,7 +27,11 @@ export const SimpleHeader = ({ title, style, ...rest }) => {
 
 /**
  * Header for CheckGroup, with a checkbox for select-all functionality
- * @param {*} props
+ * @param {Object} props
+ * @param {string} props.title - title of header
+ * @param {Object} props.style - style rules to apply to the header
+ * @param {Function?} props.onPress - handler for checkbox press
+ * @param {boolean} props.checked - initial value of header checkbox
  */
 export const CheckboxHeader = ({ title, style, onPress, checked }) => {
   const headerStyles = useMemo(() => ({
