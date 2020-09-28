@@ -164,8 +164,7 @@ export const CheckboxWrapper = props => {
   // consumer the `setChecked` callback, which consumer can then control
   useEffect(() => void setCheckedSetter?.(setChecked), [ setCheckedSetter ])
 
-
-  // ensure the handler can be fired, so long as the next check state is allowed
+  // determine if the handler can be fired, so long as the next check state is allowed
   const canUseHandler =
     !disabled &&
     ((isChecked && !disableUncheck) || (!isChecked && !disableCheck))
@@ -173,14 +172,13 @@ export const CheckboxWrapper = props => {
   const elThemePath =
     themePath || `form.${elType}.${(close && 'close') || 'default'}`
   
+  const themeStyles = useThemePath(elThemePath, styles)
+  const disabledStyles = useThemePath(`form.${elType}.disabled`, themeStyles)
   const activeStyles = useCheckedState(
     isChecked,
     canUseHandler ? themeStyles : disabledStyles
   )
 
-  const themeStyles = useThemePath(elThemePath, styles)
-  const disabledStyles = useThemePath(`form.${elType}.disabled`, themeStyles)
-  const activeStyles = useCheckedState(isChecked, disabledStyles)
   const typeClassName = useThemeTypeAsClass(
     elThemePath || type,
     'keg-checkbox',
