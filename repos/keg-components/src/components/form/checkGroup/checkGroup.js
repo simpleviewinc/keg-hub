@@ -14,7 +14,6 @@ import { isFunc } from '@keg-hub/jsutils'
  */
 export const SimpleHeader = ({ title, style, ...rest }) => {
   const textStyle = useMemo(() => ({ ...style, marginLeft: 27 }), [ style ])
-  console.log({style})
   return (
     <Text 
       style={textStyle} 
