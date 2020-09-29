@@ -80,12 +80,12 @@ const Element = React.forwardRef((props, ref) => {
         style={styles.area}
       />
 
-      { checked && (
-        <CheckIcon
-          className='keg-checkbox-icon'
-          style={checkStyle}
-        /> 
-      )}
+      { checked && 
+          <CheckIcon
+            className='keg-checkbox-icon'
+            style={checkStyle}
+          /> 
+      }
 
       <Input
         className='keg-checkbox'
@@ -97,7 +97,6 @@ const Element = React.forwardRef((props, ref) => {
         ref={ref}
         style={inputStyle}
       />
-    )
     </View>
   )
 })

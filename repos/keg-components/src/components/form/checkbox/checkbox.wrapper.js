@@ -199,57 +199,58 @@ export const CheckboxWrapper = props => {
   const pressHandlerProp = canUseHandler
     ? getOnChangeHandler(isWeb, pressHandler)
     : undefined
-  
+
+  const ChildrenView = children && (
+    <View
+      className={typeClassName}
+      style={activeStyles.main}
+    >
+      <ChildrenComponent
+        className='keg-checkbox-container'
+        children={children}
+      />
+    </View>
+  )
+
   return (
-    (children && (
+    ChildrenView || (
       <View
         className={typeClassName}
         style={activeStyles.main}
       >
-        <ChildrenComponent
-          className='keg-checkbox-container'
-          children={children}
-        />
-      </View>
-    )) || (
-      <View
-        className={typeClassName}
-        style={activeStyles.main}
-      >
-        { LeftComponent && (
-          <SideComponent
-            className='keg-checkbox-left'
-            Component={LeftComponent}
-            style={activeStyles.content.left}
-            onPress={allowAdjacentPress && canUseHandler && pressHandler}
-          />
-        ) }
+        { LeftComponent &&
+            <SideComponent
+              className='keg-checkbox-left'
+              Component={LeftComponent}
+              style={activeStyles.content.left}
+              onPress={allowAdjacentPress && canUseHandler && pressHandler}
+            />
+        }
 
-        { CheckboxComponent ? (
-          renderFromType(CheckboxComponent, {
-            ...props,
-            styles: activeStyles.content,
-          })
-        ) : (
-          <Element
-            className='keg-checkbox-container'
-            elProps={elProps}
-            disabled={disabled}
-            styles={activeStyles.content}
-            CheckIcon={CheckIcon}
-            {...getChecked(isWeb, isChecked)}
-            {...pressHandlerProp}
-          />
-        ) }
+        { CheckboxComponent 
+            ? renderFromType(CheckboxComponent, {
+                ...props,
+                styles: activeStyles.content,
+              })
+            : <Element
+                className='keg-checkbox-container'
+                elProps={elProps}
+                disabled={disabled}
+                styles={activeStyles.content}
+                CheckIcon={CheckIcon}
+                {...getChecked(isWeb, isChecked)}
+                {...pressHandlerProp}
+              />
+        }
 
-        { RightComponent && (
-          <SideComponent
-            className='keg-checkbox-right'
-            Component={RightComponent}
-            style={activeStyles.content.right}
-            onPress={allowAdjacentPress && canUseHandler && pressHandler}
-          />
-        ) }
+        { RightComponent &&
+            <SideComponent
+              className='keg-checkbox-right'
+              Component={RightComponent}
+              style={activeStyles.content.right}
+              onPress={allowAdjacentPress && canUseHandler && pressHandler}
+            />
+        }
       </View>
     )
   )

@@ -6,7 +6,7 @@ import { useStylesMemo } from '@keg-hub/re-theme'
 import { isFunc } from '@keg-hub/jsutils'
 
 /**
- * Simple header for CheckGroup, without any checkbox
+ * Simple header for CheckGroup, without a checkbox
  * @param {Object} props
  * @param {string} props.title - title of header
  * @param {Object} props.style - style rules to apply to the Text element
@@ -58,6 +58,7 @@ export const CheckboxHeader = ({ title, style, onPress, checked }) => {
  * A group of checkbox items with a header.
  * Will include a select-all checkbox in the header IF you define the children as a function (@see story examples)
  * @param {Object} props
+ * @param {string} props.className - css class name
  * @param {string} props.title - title of the group
  * @param {boolean?} props.initChecked - initial checked value of the group header box, if you are using it
  * @param {Function?} props.onGroupPress - handler of header checkbox
@@ -66,7 +67,7 @@ export const CheckboxHeader = ({ title, style, onPress, checked }) => {
  * @param {Object?} props.styles.main
  * @param {Object?} props.styles.header
  */
-export const CheckGroup = ({ title, children, styles, initChecked=false, onGroupPress }) => {
+export const CheckGroup = ({ className, title, children, styles, initChecked=false, onGroupPress }) => {
   const groupStyles = useStylesMemo('form.checkGroup', styles)
 
   // if children is defined as a function, it's assumed it needs the groupProps for select-all behavior
@@ -96,7 +97,7 @@ export const CheckGroup = ({ title, children, styles, initChecked=false, onGroup
   }, [ checkedSetters ])
 
   return (
-    <View style={groupStyles?.main}>
+    <View className={className} style={groupStyles?.main}>
       {
         useCheckboxHeader
           ? <CheckboxHeader
