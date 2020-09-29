@@ -6,16 +6,13 @@ import { isStr, get, capitalize } from '@keg-hub/jsutils'
  * Particularly useful if you are gathering multiple categories at once.
  * @param {*} categories
  * @param {*} comparisonFn - used to compare if data changed
- * @return {Object<Categories> || CategoryItems} an object containing the categories requested, if they exist in the store, or the category items themselves (returned only if `categories` is a path string)
+ * @return {Object<string, (Object|Array)> | (Object|Array)} an object containing the categories requested, if they exist in the store, or the category items themselves (returned only if `categories` is a path string)
  * @example
- * const categories = useStoreItems(['todos', 'users', 'settings.agenda'])
- * const names = categories.users.map(user => user.name)
- * categories.agenda
+ * const { todos, users, settingsAgenda } = useStoreItems(['todos', 'users', 'settings.agenda'])
  *
  * @example
  * const names = useStoreItems('users.names')
  */
-//TODO: for arrays, should support full paths for each string too
 export const useStoreItems = (categories = [], comparisonFn = shallowEqual) => {
   const isSingleCategory = isStr(categories)
   return useSelector(

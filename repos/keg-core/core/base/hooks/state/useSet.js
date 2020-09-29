@@ -13,7 +13,7 @@ import { useExternalSet } from './useExternalSet'
  *
  * @example
  * const initialUsers = [ { name: 'Steve' } ]
- * const users = useSet(initialUsers)
+ * const users = useSet(initialUsers, usr => usr.name)
  * users.data // [ { name: 'Steve' } ]
  * users.has(initialUsers[0]) // true
  * users.delete(initialUsers[0]) // true

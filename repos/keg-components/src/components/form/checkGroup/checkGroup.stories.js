@@ -52,7 +52,7 @@ storiesOf('Form/CheckGroup', module)
                 const [ value, setValue ] = useState(initialCheckValue)
                 React.useEffect(() => void setCheckedSetter(setValue), [ setValue ])
                 return (
-                  <div style={{ display: 'flex', flexDirection: 'row'}}>
+                  <div key={breed} style={{ display: 'flex', flexDirection: 'row'}}>
                     <input type='radio' checked={value} onChange={setValue}></input>
                     <p>{ breed }</p>
                   </div>
