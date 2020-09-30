@@ -102,7 +102,7 @@ const disabledRules = {
 }
 
 const checkboxDisabled = {
-  main: {},
+  main: disabledRules,
   content: {
     main: disabledRules,
     input: {

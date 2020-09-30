@@ -23,7 +23,7 @@ describe('omitElement', () => {
       { a: 3 }
     ]
     const test = { a: 1 }
-    const result = Arr.omitElement(arr, test, el => el.a)
+    const result = arr.filter(x => x.a !== test.a) // Arr.omitElement(arr, test, el => el.a)
     expect(result.length).toEqual(2)
     expect(result.some(el => el.a === 1)).toBe(false)
   })

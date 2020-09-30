@@ -31,7 +31,7 @@ const useCheckedState = (isChecked, themeStyles) => {
         },
       },
     }
-  }, [isChecked])
+  }, [ isChecked, themeStyles ])
 }
 
 /**
