@@ -110,5 +110,5 @@ Drawer.propTypes = {
   initial: PropTypes.number,
   styles: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   toggled: PropTypes.bool,
-  type: PropTypes.string,
+  type: PropTypes.oneOf([ 'decay', 'spring', 'timing' ]),
 }
