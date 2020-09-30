@@ -22,10 +22,13 @@ const noAnimate = (toggled, current, { initial, max }) =>
  * Drawer
  * @param {Object} props - props passed from parent component
  * @param {number} props.initial - Initial height of the slider
- * @param {Function|Component} props.Element - Child Element that goes inside the Drawer
-
- * @param {Object} props.styles - Custom styles to add to the slider
+ * @param {Function|Component} props.children - Child components placed inside the drawer
+ * @param {Function|Component} props.Element - Child Element of the Drawer. Overrides the default children prop
+ * @param {string} props.type - Animation type from the Animated API that accepts an animated config
+ * @param {Object} props.config - Animation config object passed on to the Animated type method
+ * @param {Object} props.styles - Custom styles to applied to the slider
  * @param {boolean} props.toggled - Is the slider toggled open
+ * @param {boolean} props.* - All other props passed on to the Element Component prop if it exists
  *
  * @returns {Component} - Drawer Component
  */
@@ -101,6 +104,7 @@ export const Drawer = props => {
 }
 
 Drawer.propTypes = {
+  className: PropTypes.oneOfType([ PropTypes.array, PropTypes.string ]),
   config: PropTypes.object,
   Element: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
   initial: PropTypes.number,

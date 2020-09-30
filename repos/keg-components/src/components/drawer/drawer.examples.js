@@ -127,3 +127,16 @@ export const Basic = props => {
 
 }
 
+// Add the default props here, due to them being defined inline
+// This way we can define default props without effecting the actual component
+Drawer.defaultProps = {
+  type: 'timing',
+  config: {},
+  initial: 0,
+  toggled: false,
+}
+
+// Re-export the Component with the default props defined to be used in the MDX story
+export {
+  Drawer
+}
