@@ -1,4 +1,3 @@
-const { hyphenator, hashString, getSelector, addStylesToDom } = require('../injectHelpers')
 import * as themeEvents from '../../theme/themeEvent'
 
 jest.resetModules()
