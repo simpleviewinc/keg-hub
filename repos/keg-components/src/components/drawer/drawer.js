@@ -1,14 +1,8 @@
-/****************** IMPORTANT ******************/ /*
- * This component is a work in progress
- * It's NOT complete or expected to be working
- * It is NOT exported from the main components export
- * It is NOT included in the keg-components bundle
-/****************** IMPORTANT ******************/
-
 import { View } from '../view'
 import PropTypes from 'prop-types'
 import { get } from '@keg-hub/jsutils'
 import { useThemePath } from '../../hooks'
+import { noOpObj } from '../../utils/helpers/noop'
 import { Animated } from 'react-native'
 import { useClassName } from 'KegClassName'
 import React, { useState, useLayoutEffect, useRef } from 'react'
@@ -28,15 +22,18 @@ const noAnimate = (toggled, current, { initial, max }) =>
  * Drawer
  * @param {Object} props - props passed from parent component
  * @param {number} props.initial - Initial height of the slider
- * @param {Function|Component} props.Element - Child Element that goes inside the Drawer
-
- * @param {Object} props.styles - Custom styles to add to the slider
+ * @param {Function|Component} props.children - Child components placed inside the drawer
+ * @param {Function|Component} props.Element - Child Element of the Drawer. Overrides the default children prop
+ * @param {string} props.type - Animation type from the Animated API that accepts an animated config
+ * @param {Object} props.config - Animation config object passed on to the Animated type method
+ * @param {Object} props.styles - Custom styles to applied to the slider
  * @param {boolean} props.toggled - Is the slider toggled open
+ * @param {boolean} props.* - All other props passed on to the Element Component prop if it exists
  *
  * @returns {Component} - Drawer Component
  */
 export const Drawer = props => {
-  const { initial, Element, styles, toggled, className, ...childProps } = props
+  const { initial, Element, styles, toggled, className, type='timing', config=noOpObj, ...childProps } = props
 
   // Define the default heights as a ref
   const heights = useRef({ initial: initial || 0, max: 0 })
@@ -72,10 +69,13 @@ export const Drawer = props => {
     // Update the animation value to animate from
     animation.setValue(heightChanges.from)
     // Start the animation, from value ==> to value
-    Animated.spring(animation, { toValue: heightChanges.to }).start()
+    const animationConfig = config
+      ? { ...config, toValue: heightChanges.to }
+      : { toValue: heightChanges.to }
+    Animated[type](animation, animationConfig).start()
 
     // Add toggled as a dep, so anytime it changes, we run the hook code
-  }, [toggled])
+  }, [toggled, type, config ])
 
   const drawerStyles = useThemePath(`drawer`, styles)
   const classRef = useClassName('keg-drawer', className)
@@ -104,8 +104,11 @@ export const Drawer = props => {
 }
 
 Drawer.propTypes = {
-  initial: PropTypes.number,
+  className: PropTypes.oneOfType([ PropTypes.array, PropTypes.string ]),
+  config: PropTypes.object,
   Element: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
+  initial: PropTypes.number,
   styles: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   toggled: PropTypes.bool,
+  type: PropTypes.oneOf([ 'decay', 'spring', 'timing' ]),
 }
