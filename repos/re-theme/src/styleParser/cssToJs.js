@@ -1,5 +1,6 @@
 import { exists, camelCase, isArr } from '@keg-hub/jsutils'
 
+
 /**
  * Matches all content between `{}`
  * @example
@@ -7,11 +8,20 @@ import { exists, camelCase, isArr } from '@keg-hub/jsutils'
  * @function
  * @param {string} styleStr - Css styles in string format
  * 
- * @returns {string} - Content inbetween the {} of the passed in string
+ * @returns {string} - Content between the {} of the passed in string
  */
 const getStyleContent = styleStr => {
-  const matches = [ ...styleStr.matchAll(/\{(.+?)\}/gi) ]
-  return isArr(matches) && isArr(matches[0]) ? matches[0][1] : ''
+  const pattern = /\{(.+?)\}/
+  const regex = new RegExp(pattern, 'gi')
+  const matches = []
+  const foundMatch = styleStr.match(regex)
+
+  for (let index in foundMatch){
+    const item = foundMatch[index]
+    matches[index] = item.match(new RegExp(pattern)) 
+  }
+
+  return isArr(matches[0]) ? matches[0][1] : ''
 }
 
 /**

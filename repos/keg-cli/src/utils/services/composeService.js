@@ -7,6 +7,7 @@ const { runInternalTask } = require('../task/runInternalTask')
 const { buildExecParams } = require('../docker/buildExecParams')
 const { getContainerCmd } = require('../docker/getContainerCmd')
 const { KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
+
 /**
  * Runs `docker-compose` up command based on the passed in args
  * @function
@@ -16,7 +17,7 @@ const { KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
  * @returns {Array} - An array of promises for each sync being setup
  */
 const createSyncs = async (args, containerContext) => {
-  const { params: { sync, tap, context } } = args
+  const { params: { sync, tap, context, __injected } } = args
   const { cmdContext, container, id } = containerContext
   const dockerContainer = container || id || cmdContext || context
 
@@ -25,7 +26,7 @@ const createSyncs = async (args, containerContext) => {
       const resolved = await toResolve
       resolved.push(
         await syncService(
-          { ...args, params: { dependency, tap, context } },
+          { ...args, params: { dependency, tap, context, __injected } },
           { container: dockerContainer, dependency }
         )
       )

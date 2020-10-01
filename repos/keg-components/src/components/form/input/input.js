@@ -71,6 +71,7 @@ export const Input = React.forwardRef((props, ref) => {
       {...usePressHandlers(false, { onClick, onPress })}
       {...elProps}
       style={[ inputStyles, style ]}
+      ref={ref}
     />
   )
 })
