@@ -1,5 +1,5 @@
 import { useSelector, shallowEqual } from 'react-redux'
-import { isStr, get, capitalize } from '@keg-hub/jsutils'
+import { isStr, get, camelCasePath } from '@keg-hub/jsutils'
 
 /**
  * Helper hook for getting categories from the store.
@@ -17,22 +17,10 @@ export const useStoreItems = (categories = [], comparisonFn = shallowEqual) => {
   const isSingleCategory = isStr(categories)
   return useSelector(
     store => isSingleCategory
-      ? selectPath(store.items, categories)
+      ? get(store.items, categories)
       : selectCategories(store.items, categories),
     comparisonFn
   )
-}
-
-/**
- * selectPath: gets the path from items, so long as both exist and path is a string
- * @param {object} items 
- * @param {string} path 
- * @return {*?} - the value stored in items at path
- */
-const selectPath = (items, path) => {
-  return isStr(path)
-    ? get(items, path)
-    : null
 }
 
 /**
@@ -45,31 +33,10 @@ const selectCategories = (items, categories=[]) => {
   return categories.reduce(
     (data, category) => {
       if (!category) return data
-      const key = camelCasedPath(category)
-      data[key] = selectPath(items, category)
+      const key = camelCasePath(category)
+      data[key] = get(items, category)
       return data
     },
     {}
   )
-}
-
-/**
- * Turns a path into a camel-cased string, if there is more than one
- * step in the path. If there isn't, just returns path.
- * @param {str} path 
- * @example
- * makeKeyFromPath('settings.agendaMap') -> 'settingsAgendaMap'
- * makeKeyFrompath('settings') -> 'settings'
- */
-const camelCasedPath = (path) => {
-  const split = path.split('.')
-  const camelCasedSplit = split.map(
-    (str, idx) => idx > 0
-      ? capitalize(str)
-      : str
-  )
-
-  return camelCasedSplit.length > 1 
-    ? camelCasedSplit.join('')
-    : path
 }

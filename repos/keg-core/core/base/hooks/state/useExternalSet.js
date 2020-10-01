@@ -23,14 +23,13 @@ const isMember = (arr, element, selector=identity) => {
  * 
  * By default, useExternalSet determines if an element exists in the set
  * using reference equality. If you would like to use a different method,
- * pass in your own comparison function.
+ * pass in your own selector function.
  * 
  * 
  * @param {Array} arr
  * @param {Function} setArr
- * @param {Function?} selector - optional fn to used to get the property for checking element membership. 
- *  Must have signature: (elementToCheck, existingElement) => boolean (is equal)
- *  Usually only necessary for non-primitive types.
+ * @param {Function?} selector - optional fn to used to get the primitive property for checking element membership. 
+ *  Usually only necessary for reference types. Should have signature (element) => <some primitive property>
  * @returns {Object} set-like interface to arr
  * 
  * @example
