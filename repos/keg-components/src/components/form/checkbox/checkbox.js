@@ -1,6 +1,6 @@
 import { View } from 'KegView'
 import { Check } from 'KegIcons'
-import React, { useMemo } from 'react'
+import React, { useMemo, forwardRef } from 'react'
 import { CheckboxWrapper } from './checkbox.wrapper'
 import { noPropObj } from '../../../utils/helpers/noop'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
@@ -52,7 +52,7 @@ const Element = React.forwardRef((props, ref) => {
     styles = noPropObj,
     CheckIcon = Check,
     checked,
-    ...remainingProps
+    ...attributes
   } = props
 
   const checkStyle = useMemo(() => {
@@ -90,7 +90,7 @@ const Element = React.forwardRef((props, ref) => {
       <Input
         className='keg-checkbox'
         {...elProps}
-        {...remainingProps}
+        {...attributes}
         role='checkbox'
         checked={checked}
         type='checkbox'
@@ -101,13 +101,14 @@ const Element = React.forwardRef((props, ref) => {
   )
 })
 
-export const Checkbox = props => (
+export const Checkbox = forwardRef((props, ref) => (
   <CheckboxWrapper
     {...props}
     elType={'checkbox'}
     Element={Element}
     isWeb={true}
+    ref={ref}
   />
-)
+))
 
 Checkbox.propTypes = { ...CheckboxWrapper.propTypes }

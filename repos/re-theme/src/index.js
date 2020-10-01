@@ -22,7 +22,7 @@ import {
 
 import {
   useStylesCallback,
-  useStylesMemo,
+  useStyle,
   useTheme,
   useThemeActive,
   useThemeFocus,
@@ -47,7 +47,7 @@ export {
   withTheme,
   // Theme hooks
   useStylesCallback,
-  useStylesMemo,
+  useStyle,
   useTheme,
   useThemeActive,
   useThemeFocus,

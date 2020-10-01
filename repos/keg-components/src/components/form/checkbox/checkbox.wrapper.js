@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useState, useCallback, useEffect, useMemo, forwardRef, useImperativeHandle } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography'
@@ -45,7 +45,7 @@ const useCheckedState = (isChecked, themeStyles) => {
  *
  * @returns {function} - The checked state update function
  */
-const getCheckboxPressHandler = (
+const useCheckboxPressHandler = (
   isChecked,
   setChecked,
   onChange,
@@ -98,6 +98,22 @@ const ChildrenComponent = ({ children, className }) => (
 )
 
 /**
+ * Exposes an imperative api for the consumer of checkbox 
+ * @param {RefObject} ref 
+ * @param {boolean} isChecked
+ * @param {Function} setChecked 
+ */
+const useCheckboxHandle = (ref, isChecked, setChecked) => {
+  return useImperativeHandle(
+    ref,
+    () => ({ 
+      isChecked,
+      setChecked 
+    })
+  )
+}
+
+/**
  * CheckboxWrapper
  * Wraps the Passed in Checkbox Element
  * @param {Object} props - see PropTypes below
@@ -126,7 +142,7 @@ const ChildrenComponent = ({ children, className }) => (
  * @param {boolean} props.value - alias for initChecked
  * @param {...rest} props.* - the remaining props are passed to Element
  */
-export const CheckboxWrapper = props => {
+export const CheckboxWrapper = forwardRef((props, ref) => {
   const {
     className,
     initChecked,
@@ -160,9 +176,8 @@ export const CheckboxWrapper = props => {
 
   // by default, checkbox manages its own toggled state.
   // however, if the consumer needs to control that, it can by passing
-  // the `setCheckedSetter` callback. This effect hook will pass the 
-  // consumer the `setChecked` callback, which consumer can then control
-  useEffect(() => void setCheckedSetter?.(setChecked), [ setCheckedSetter ])
+  // in a `ref`, then calling ref.current.setChecked to control the value
+  useCheckboxHandle(ref, isChecked, setChecked)
 
   // determine if the handler can be fired, so long as the next check state is allowed
   const canUseHandler =
@@ -188,7 +203,7 @@ export const CheckboxWrapper = props => {
   // makes the pressHandler function for the checkbox.
   // if disableCheck is true, prevents isChecked being set to true,
   // if disableUncheck is true, prevents isChecked being set to false.
-  const pressHandler = getCheckboxPressHandler(
+  const pressHandler = useCheckboxPressHandler(
     isChecked,
     setChecked,
     onChange || onValueChange, // support either callback name from consumer
@@ -254,7 +269,7 @@ export const CheckboxWrapper = props => {
       </View>
     )
   )
-}
+})
 
 CheckboxWrapper.propTypes = {
   checked: PropTypes.bool,

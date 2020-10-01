@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { uniqArr, identity, omitElement, pipeline } from '@keg-hub/jsutils'
+import { uniqArr, identity, pipeline } from '@keg-hub/jsutils'
 
 /**
  * Helper for `useExternalSet`, checking if element
@@ -80,7 +80,10 @@ export const useExternalSet = (arr, setArr, selector=identity) => {
        */
       delete: element => {
         if (!contains(arr, element)) return false
-        pipeline(omitElement(arr, element, selector), setArr)
+        pipeline(
+          arr.filter(x => selector(x) !== selector(element)), 
+          setArr
+        )
         return true
       },
 

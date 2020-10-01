@@ -1,0 +1,47 @@
+<!--- CheckGroup.stories.mdx -->
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+
+import { useState } from 'react'
+import { CheckGroup, Basic, SelectAll, WithSwitch } from './checkGroup.examples'
+
+<Meta 
+  title="Form/CheckGroup" 
+  component={CheckGroup} 
+/>
+
+# CheckGroup
+
+A group of checkbox items with a header. It can also display an optional checkbox in the header
+that selects or deselects all the grouped checkboxes when pressed.
+
+## Examples
+
+### Basic (no select-all box)
+
+<Preview>
+  <Story name='Basic' args={{ check: true }}>
+    <Basic />
+  </Story>
+</Preview>
+
+### Select-all
+
+<Preview>
+  <Story name='With Select-All'>
+    <SelectAll />
+  </Story>
+</Preview>
+
+
+### With other toggleable components, like Switch
+
+<Preview>
+  <Story name='With any checkable component'>
+    <WithSwitch />
+  </Story>
+</Preview>
+
+### Props
+
+<Props of={CheckGroup} />
+

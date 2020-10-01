@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useCallback, useState, useRef, useMemo } from 'react'
 import { View } from 'KegView'
 import { Text } from '../../typography/text'
 import { Checkbox } from 'KegCheckbox'
-import { useStylesMemo } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
+import { useClassList } from 'KegClassList'
 import { isFunc } from '@keg-hub/jsutils'
 
 /**
@@ -55,6 +56,33 @@ export const CheckboxHeader = ({ title, style, onPress, checked }) => {
 }
 
 /**
+ * Returns the object to be passed to CheckGroup children,
+ * assuming the consumer defined them in render-prop format
+ * Currently the object contains these props:
+ *   - ref: a ref-setter function to acquire references to child components
+ * @return {Object} render props for children
+ * 
+ * @example
+ * const props = useGroupRenderProps()
+ * return (
+ *  {
+ *    isFunc(children) ? children(props) : children
+ *  }
+ * )
+ */
+const useGroupRenderProps = (childRefs) => {
+
+  // props to pass to all children, if the consumer defined them with render
+  // includes a `ref` function that each child can use to provide the CheckGroup
+  // with a ref to itself, used for behavior spanning all children (like select-all)
+  return useMemo(() => ({ 
+    ref: childRef => {
+      childRefs.current = [ ...childRefs.current, childRef ]
+    }
+  }), [ childRefs ])
+}
+
+/**
  * A group of checkbox items with a header.
  * Will include a select-all checkbox in the header IF you define the children as a function (@see story examples)
  * @param {Object} props
@@ -68,43 +96,40 @@ export const CheckboxHeader = ({ title, style, onPress, checked }) => {
  * @param {Object?} props.styles.header
  */
 export const CheckGroup = ({ className, title, children, styles, initChecked=false, onGroupPress }) => {
-  const groupStyles = useStylesMemo('form.checkGroup', styles)
+  const groupStyles = useStyle('form.checkGroup', styles)
 
   // if children is defined as a function, it's assumed it needs the groupProps for select-all behavior
-  const useCheckboxHeader = isFunc(children)
+  const renderCheckboxHeader = isFunc(children)
 
-  // store a list of all the children's 
-  const [ checkedSetters, setCheckedSetters ] = useState([])
+  // store a list of refs to all the children
+  const childRefs = useRef([])
 
-  // props to pass to all children, if the consumer defined them with render
-  // includes a `setCheckedSetter` function that children can use to provide the CheckGroup
-  // with the checked state setter cb, used with select-all behavior
-  const groupProps = useMemo(() => ({ 
-    setCheckedSetter: cb => 
-      setCheckedSetters(current => [ ...current, cb ])
-  }), [ setCheckedSetters ])
+  const renderProps = useGroupRenderProps(childRefs)
 
   // if children is a function, call that function with groupProps to enable select-all behavior.
   // otherwise, simply display children as-is
-  const renderedChildren = useCheckboxHeader 
-    ? children(groupProps) 
+  const renderedChildren = renderCheckboxHeader 
+    ? children(renderProps) 
     : children
 
   // callback that manages select-all behavior on click of the header checkbox
   const headerCheckHandler = useCallback(checked => {
     onGroupPress?.(checked)
-    checkedSetters.map(fn => isFunc(fn) && fn(checked))
-  }, [ checkedSetters ])
+    childRefs.current.map(child => child?.setChecked?.(checked))
+  }, [ childRefs ])
 
   return (
-    <View className={className} style={groupStyles?.main}>
+    <View 
+      className={useClassList('keg-check-group', className)} 
+      style={groupStyles?.main}
+    >
       {
-        useCheckboxHeader
+        renderCheckboxHeader
           ? <CheckboxHeader
               style={groupStyles?.header}
               title={title}
-              onPress={useCheckboxHeader && headerCheckHandler}
-              checked={useCheckboxHeader ? initChecked : undefined}
+              onPress={renderCheckboxHeader && headerCheckHandler}
+              checked={renderCheckboxHeader ? initChecked : undefined}
             />
           : <SimpleHeader style={groupStyles?.header} title={title} />
       }
