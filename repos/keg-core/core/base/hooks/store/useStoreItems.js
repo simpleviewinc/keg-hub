@@ -4,9 +4,9 @@ import { isStr, get, camelCasePath } from '@keg-hub/jsutils'
 /**
  * Helper hook for getting categories from the store.
  * Particularly useful if you are gathering multiple categories at once.
- * @param {*} categories
- * @param {*} comparisonFn - used to compare if data changed
- * @return {Object<string, (Object|Array)> | (Object|Array)} an object containing the categories requested, if they exist in the store, or the category items themselves (returned only if `categories` is a path string)
+ * @param {string| Array<string>} categories - a single category (string) or an array of categories to select from the items store
+ * @param {Function?} comparisonFn - used to compare if data changed, defaults to shallowEqual comparison from react-redux
+ * @return {(Object|Array) | Object<string, (Object|Array)> } an object containing the categories requested, if they exist in the store, or the category items themselves (returned only if `categories` is a path string)
  * @example
  * const { todos, users, settingsAgenda } = useStoreItems(['todos', 'users', 'settings.agenda'])
  *
