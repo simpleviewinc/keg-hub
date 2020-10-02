@@ -12,7 +12,6 @@ import { Input as KegInput } from '../../internal/input.web'
 const checkBoxStyles = {
   icon: {
     position: 'relative',
-    fontSize: 14,
     zIndex: 1,
     height: 14,
     width: 14,
