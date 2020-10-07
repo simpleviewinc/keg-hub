@@ -23,7 +23,14 @@ const header = {
   },
 }
 
+const simpleHeader = {
+  main: {
+    marginLeft: 27
+  }
+}
+
 export const checkGroup = {
   main: {},
   header,
+  simpleHeader
 }

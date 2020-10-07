@@ -50,6 +50,11 @@ export const WithSwitch = () => (
   </CheckGroup>
 )
 
+// defined here to work with the `Props` storybook component
+CheckGroup.defaultProps = {
+  initChecked: false,
+}
+
 export {
   CheckGroup
 }

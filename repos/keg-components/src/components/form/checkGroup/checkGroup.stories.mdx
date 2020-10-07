@@ -1,13 +1,9 @@
 <!--- CheckGroup.stories.mdx -->
+
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { Basic, SelectAll, WithSwitch, CheckGroup } from './checkGroup.examples'
 
-import { useState } from 'react'
-import { CheckGroup, Basic, SelectAll, WithSwitch } from './checkGroup.examples'
-
-<Meta 
-  title="Form/CheckGroup" 
-  component={CheckGroup} 
-/>
+<Meta title="Form/CheckGroup" component={CheckGroup} />
 
 # CheckGroup
 
@@ -19,7 +15,7 @@ that selects or deselects all the grouped checkboxes when pressed.
 ### Basic (no select-all box)
 
 <Preview>
-  <Story name='Basic' args={{ check: true }}>
+  <Story name='Basic'>
     <Basic />
   </Story>
 </Preview>
@@ -32,7 +28,6 @@ that selects or deselects all the grouped checkboxes when pressed.
   </Story>
 </Preview>
 
-
 ### With other toggleable components, like Switch
 
 <Preview>
@@ -44,4 +39,3 @@ that selects or deselects all the grouped checkboxes when pressed.
 ### Props
 
 <Props of={CheckGroup} />
-

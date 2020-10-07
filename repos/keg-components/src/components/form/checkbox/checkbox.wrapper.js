@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo, forwardRef, useImperativeHandle } from 'react'
+import React, { useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography'
@@ -6,6 +6,7 @@ import { useThemePath } from '../../../hooks'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
+import { useClassList } from 'KegClassList'
 
 /**
  * Optimizes the check and non-checked styles so they don't have to be rebuilt on each render
@@ -79,9 +80,9 @@ const SideComponent = ({ className, Component, styles, style, onPress }) => {
     </Text>
   ) : (
     renderFromType(Component, {
+      className,
       style,
       styles,
-      className,
       ...sideProps,
     })
   )
@@ -102,14 +103,23 @@ const ChildrenComponent = ({ children, className }) => (
  * @param {RefObject} ref 
  * @param {boolean} isChecked
  * @param {Function} setChecked 
+ * @param {Function} pressHandler - fn responsible for handling presses of the checkbox 
  */
-const useCheckboxHandle = (ref, isChecked, setChecked) => {
+const useCheckboxHandle = (ref, isChecked, setChecked, pressHandler) => {
   return useImperativeHandle(
     ref,
     () => ({ 
+      // allows consumer to fetch the latest checked value
       isChecked,
-      setChecked 
-    })
+
+      // allows consumer to toggle the checked value, which will
+      // also fire the pressHandler
+      setChecked: checked => {
+        setChecked(checked)
+        pressHandler(checked)
+      }
+    }),
+    [ ref, isChecked, setChecked, pressHandler ]
   )
 }
 
@@ -130,11 +140,13 @@ const useCheckboxHandle = (ref, isChecked, setChecked) => {
  * @param {boolean} props.allowAdjacentPress - if true, allows pressing a side component to toggle the checkbox
  * @param {boolean} props.isWeb - indicates current platform is web. Provide by checkbox.js
  * @param {(Component | string)?} props.LeftComponent - an optional component or string to render left of the checkbox
+ * @param {string?} props.leftClassName - optional class name for the left component
  * @param {boolean} props.close - if true, side components will be rendered close to the checkbox. If false, spaced apart.
  * @param {Function?} props.onChange - callback fired when checkbox is toggled
  * @param {Function?} props.onValueChange - callback fired when checkbox is toggled
  * @param {Function?} props.setCheckedSetter - callback called once on initial render. Is passed the `setChecked` callback to provide consumer control of checked/unchecked state if needed.
  * @param {(Component | string)?} props.RightComponent -  an optional component or string to render right of the checkbox 
+ * @param {string?} props.rightClassName - optional class name for the right component
  * @param {Object} props.styles - styles that overwrite default checkbox styles
  * @param {Component?} props.CheckboxComponent - an optional component that overrides the default checkbox element, passed the same props and styles
  * @param {string} props.type - theme type
@@ -157,11 +169,13 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
     allowAdjacentPress = true,
     isWeb,
     LeftComponent,
+    leftClassName,
     close,
     onChange,
     onValueChange,
     setCheckedSetter,
     RightComponent,
+    rightClassName,
     styles,
     CheckboxComponent,
     type,
@@ -174,10 +188,20 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
 
   const [ isChecked, setChecked ] = useState(initCheckedValue)
 
+  // makes the pressHandler function for the checkbox.
+  // if disableCheck is true, prevents isChecked being set to true,
+  // if disableUncheck is true, prevents isChecked being set to false.
+  const pressHandler = useCheckboxPressHandler(
+    isChecked,
+    setChecked,
+    onChange || onValueChange, // support either callback name from consumer
+    { disableCheck, disableUncheck }
+  )
+
   // by default, checkbox manages its own toggled state.
   // however, if the consumer needs to control that, it can by passing
   // in a `ref`, then calling ref.current.setChecked to control the value
-  useCheckboxHandle(ref, isChecked, setChecked)
+  useCheckboxHandle(ref, isChecked, setChecked, pressHandler)
 
   // determine if the handler can be fired, so long as the next check state is allowed
   const canUseHandler =
@@ -200,15 +224,6 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
     className
   )
 
-  // makes the pressHandler function for the checkbox.
-  // if disableCheck is true, prevents isChecked being set to true,
-  // if disableUncheck is true, prevents isChecked being set to false.
-  const pressHandler = useCheckboxPressHandler(
-    isChecked,
-    setChecked,
-    onChange || onValueChange, // support either callback name from consumer
-    { disableCheck, disableUncheck }
-  )
 
   // returns the right props to use
   const pressHandlerProp = canUseHandler
@@ -235,7 +250,7 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
       >
         { LeftComponent &&
             <SideComponent
-              className='keg-checkbox-left'
+              className={useClassList('keg-checkbox-left', leftClassName)}
               Component={LeftComponent}
               style={activeStyles.content.left}
               onPress={allowAdjacentPress && canUseHandler && pressHandler}
@@ -260,7 +275,7 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
 
         { RightComponent &&
             <SideComponent
-              className='keg-checkbox-right'
+              className={useClassList('keg-checkbox-right', rightClassName)}
               Component={RightComponent}
               style={activeStyles.content.right}
               onPress={allowAdjacentPress && canUseHandler && pressHandler}
