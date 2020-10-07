@@ -63,8 +63,8 @@ const Element = React.forwardRef((props, ref) => {
 
   const inputStyle = useMemo(
     () => ({
-      ...checkBoxStyles.input,
       ...styles.input,
+      ...checkBoxStyles.input,
     }),
     [ checkBoxStyles, styles ]
   )

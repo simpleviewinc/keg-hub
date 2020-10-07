@@ -14,7 +14,7 @@ import { isFunc } from '@keg-hub/jsutils'
  * @param {Object} props.style - style rules to apply to the Text element
  * @param {*} props.* - remaining props are passed to the Text element
  */
-export const SimpleHeader = ({ title, className, style, ...rest }) => {
+const SimpleHeader = ({ title, className, style, ...rest }) => {
   const textStyle = useStyle('form.checkGroup.simpleHeader.main', style)
   return (
     <Text 
@@ -35,7 +35,7 @@ export const SimpleHeader = ({ title, className, style, ...rest }) => {
  * @param {Function?} props.onPress - handler for checkbox press
  * @param {boolean} props.checked - initial value of header checkbox
  */
-export const CheckboxHeader = ({ title, className, style, onPress, checked }) => {
+const CheckboxHeader = ({ title, className, style, onPress, checked }) => {
   const headerStyles = useMemo(() => ({
     main: style,
     content: {
