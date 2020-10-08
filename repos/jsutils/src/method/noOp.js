@@ -1,4 +1,5 @@
 /** @module functions */
+
 import { deepFreeze } from '../object/deepFreeze'
 
 /**
