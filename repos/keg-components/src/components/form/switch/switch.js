@@ -2,7 +2,12 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography'
 import { useTheme } from '@keg-hub/re-theme'
-import React, { useState, useImperativeHandle, useMemo, forwardRef } from 'react'
+import React, {
+  useState,
+  useImperativeHandle,
+  useMemo,
+  forwardRef,
+} from 'react'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { useThemePath } from '../../../hooks'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
@@ -16,7 +21,7 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  */
 const KegSwitch = StyleInjector(InternalSwitch, {
   displayName: 'Switch',
-  className: 'keg-switch'
+  className: 'keg-switch',
 })
 
 /**
@@ -112,18 +117,19 @@ const ChildrenComponent = ({ children }) => (
 )
 
 /**
- * Exposes an imperative api for the consumer of switch 
- * @param {RefObject} ref 
+ * Exposes an imperative api for the consumer of switch
+ * @param {RefObject} ref
  * @param {boolean} isChecked
- * @param {Function} setChecked 
+ * @param {Function} setChecked
  */
 const useSwitchHandle = (ref, isChecked, setChecked) => {
   return useImperativeHandle(
     ref,
-    () => ({ 
+    () => ({
       isChecked,
-      setChecked 
-    })
+      setChecked,
+    }),
+    [ ref, isChecked, setChecked ]
   )
 }
 

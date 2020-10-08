@@ -14,7 +14,7 @@ const buildPropsForChild = (childRefs, child, index) => {
   const existingRef = child?.ref
   return {
     key,
-    refFactory: childRef => {
+    ref: childRef => {
       handleRefUpdate(existingRef, childRef)
       childRefs.current[key] = childRef
     },

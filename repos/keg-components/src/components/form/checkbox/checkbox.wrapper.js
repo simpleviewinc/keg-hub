@@ -187,7 +187,6 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
     rightClassName,
     styles,
     CheckboxComponent,
-    refFactory,
     type,
     themePath,
     value,
@@ -211,12 +210,7 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
   // by default, checkbox manages its own toggled state.
   // however, if the consumer needs to control that, it can by passing
   // in `ref`, then calling ref.current.setChecked to control the value
-  useCheckboxHandle(
-    refFactory,
-    isChecked,
-    setChecked,
-    onChange || onValueChange
-  )
+  useCheckboxHandle(ref, isChecked, setChecked, onChange || onValueChange)
 
   // determine if the handler can be fired, so long as the next check state is allowed
   const canUseHandler =
