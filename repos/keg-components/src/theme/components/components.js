@@ -12,6 +12,7 @@ import { section } from './section'
 import { textBox } from './textBox'
 import { modal } from './modal'
 import { header } from './header'
+import { textToggle } from './textToggle'
 
 export const components = {
   button,
@@ -28,4 +29,5 @@ export const components = {
   textBox,
   modal,
   header,
+  textToggle
 }

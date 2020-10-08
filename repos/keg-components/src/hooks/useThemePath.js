@@ -72,7 +72,7 @@ const mergeStyles = (pathStyles, userStyles) => {
  * @param {string} path - Path to the styles on the theme
  * @param {Object} styles - Custom styles to override the theme styles
  *
- * @returns {Array} - Built styles object and function to update the styles
+ * @returns {Object} - Built styles object and function to update the styles
  */
 export const useThemePath = (path, styles = noPropObj) => {
   // Get access to the theme
