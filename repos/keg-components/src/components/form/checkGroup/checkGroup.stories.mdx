@@ -1,7 +1,7 @@
 <!--- CheckGroup.stories.mdx -->
 
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
-import { Basic, SelectAll, WithSwitch } from './checkGroup.examples'
+import { Basic, SelectAll, SelectAllNoArray, SelectAllWithExistingRef, WithSwitch } from './checkGroup.examples'
 import { CheckGroup } from './checkGroup.js'
 
 <Meta title="Form/CheckGroup" component={CheckGroup} />
@@ -29,11 +29,27 @@ that selects or deselects all the grouped checkboxes when pressed.
   </Story>
 </Preview>
 
+### Select-all, but children are defined discretely without `.map`
+
+<Preview>
+  <Story name='Discrete Select-All'>
+    <SelectAllNoArray />
+  </Story>
+</Preview>
+
 ### With other toggleable components, like Switch
 
 <Preview>
-  <Story name='With any checkable component'>
+  <Story name='With Switch'>
     <WithSwitch />
+  </Story>
+</Preview>
+
+### Select-all, with an existing consumer ref
+
+<Preview>
+  <Story name='Select-All with Existing Ref'>
+    <SelectAllWithExistingRef />
   </Story>
 </Preview>
 

@@ -1,5 +1,6 @@
 export * from 'KegAnimateHook'
 export * from './useChildren'
+export * from './useChildrenWithRefs'
 export * from './useInputHandlers'
 export * from './useMediaProps'
 export * from './usePressHandlers'
