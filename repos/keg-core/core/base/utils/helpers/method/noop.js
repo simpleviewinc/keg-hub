@@ -6,6 +6,16 @@ import { deepFreeze } from '@keg-hub/jsutils'
  */
 export const noOp = Object.freeze(() => {})
 
+/**
+ * @summary Frozen empty object
+ *
+ * @returns {object}
+ */
 export const noOpObj = Object.freeze({})
 
+/**
+ * @summary frozen empty array
+ *
+ * @returns {Array}
+ */
 export const noPropArr = deepFreeze([])
