@@ -1,28 +1,29 @@
 import React, { useState } from 'react'
 import { Text, Touchable, ScrollView } from '../'
 import { View } from 'KegView'
-import { useTheme } from '@keg-hub/re-theme'
 import { useClassList } from 'KegClassList'
 import { useThemePath } from '../../hooks'
-import { Animated } from 'react-native'
+import { isValidComponent } from '../../utils'
+import PropTypes from 'prop-types'
 
+/**
+ * @todo
+ * @param {object} props 
+ */
 export const TextToggle = (props) => {
   const {
     text, 
     numOfLines=4, 
     styles, 
     isExpanded=false,
-    className
+    className,
+    CustomToggle,
+    onToggleChange
   } = props
   const [expanded, setExpanded] = useState(isExpanded)
   const textToggleStyles = useThemePath(`textToggle`, styles)
 
-  let numberOfLines = numOfLines
-  let btnText = 'show more'
-  if (expanded) {
-    numberOfLines = 0
-    btnText = 'show less'
-  }
+  let numberOfLines = expanded ? 0 : numOfLines
 
   // if there is no max height then it just continues, no scrolling
   return (
@@ -39,27 +40,54 @@ export const TextToggle = (props) => {
         </Text>
       </ScrollView>
 
-      <Touchable
-        style={textToggleStyles.toggleButton.main}
-        onPress={() => setExpanded(!expanded)}
-      >
-        <Text>
-          {btnText}
-        </Text>
-      </Touchable>
+      <ToggleComponent 
+        onPress={() => {
+          setExpanded(!expanded)
+          onToggleChange && onToggleChange(!expanded)
+        }}
+        isExpanded={expanded}
+        styles={textToggleStyles.toggleButton}
+        CustomComponent={CustomToggle}
+      />
     </View>
   )
 }
 
-const ToggleButton = ({onPress, styles, btnText}) => {
+
+/**
+ * @todo
+ * @param {object} props 
+ */
+const ToggleComponent = ({onPress, styles, CustomComponent, isExpanded}) => {
+  const defaultText = isExpanded ? 'show less' : 'show more'
+
   return (
     <Touchable
       style={styles.main}
       onPress={onPress}
     >
-      <Text>
-        {btnText}
-      </Text>
+      {
+        isValidComponent(CustomComponent)
+          ? <CustomComponent isExpanded={isExpanded}/>
+          : <Text>
+              {defaultText}
+            </Text>
+      }
+      
     </Touchable>
   )
+}
+
+
+TextToggle.propTypes = {
+  text: PropTypes.string,
+  numOfLines: PropTypes.number,
+  isExpanded: PropTypes.bool,
+  styles: PropTypes.object,
+  className: PropTypes.string,
+  CustomToggle: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.elementType,
+  ]),
+  onToggleChange: PropTypes.func
 }
