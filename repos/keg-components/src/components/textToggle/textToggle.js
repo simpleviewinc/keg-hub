@@ -81,7 +81,10 @@ export const TextToggle = props => {
       style={mainStyle.main}
       className={useClassList('keg-text-toggle', className)}
     >
-      <ScrollView style={mainStyle.textContainer}>
+      <ScrollView
+        style={mainStyle.textContainer?.main}
+        contentContainerStyle={mainStyle.textContainer?.contentContainerStyle}
+      >
         <Text
           style={mainStyle.text}
           numberOfLines={numberOfLines}

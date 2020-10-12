@@ -48,7 +48,9 @@ const CustomToggleContent = ({ isExpanded }) => {
 
 const limitHeightStyles = {
   textContainer: {
-    maxHeight: 200,
+    main: {
+      maxHeight: 200,
+    },
   },
 }
 
