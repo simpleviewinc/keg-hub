@@ -7,9 +7,9 @@ import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
 
 /**
- * build the styles object pased on position
+ * build the styles object based on togglePosition
  * @param {object} theme 
- * @param {object} helpers - of the form { position, styles }
+ * @param {object} helpers - of the form { togglePosition, styles }
  */
 const buildStyles = (theme, helpers) => {
   const textToggleStyles = theme.get(`textToggle`, helpers?.styles)
@@ -19,10 +19,10 @@ const buildStyles = (theme, helpers) => {
   switch (helpers?.togglePosition) {
     case 'left':
       align = 'flex-start'
-      break;
+      break
     case 'center':
       align = 'center'
-      break;
+      break
   }
   return theme.get(
     textToggleStyles,
