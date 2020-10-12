@@ -9,10 +9,12 @@ export const textToggle = {
   text: {
 
   },
-  toggleButton: {
+  toggleComponent: {
     main: {
       mV: 15,
-      alI: 'flex-end'
+      alI: 'flex-end',
+      txDc: 'underline',
+
     }
   }
 }

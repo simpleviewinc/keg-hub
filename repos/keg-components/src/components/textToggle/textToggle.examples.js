@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { TextToggle } from './textToggle'
-import {Text, View, Icon} from '../'
+import {Text, View, Icon, Button} from '../'
 import { ChevronDown } from '../../assets/icons'
 import { useStylesCallback } from '@keg-hub/re-theme'
 
@@ -29,25 +29,6 @@ const buildCustomToggleStyles = (_, helpers) => {
   }
 }
 
-export const Basic = () => {
-  return (
-      <TextToggle
-        text={longText}
-      />    
-  )
-}
-
-
-export const CustomToggle = () => {
-  return (
-      <TextToggle
-        text={longText}
-        CustomToggle={CustomToggleContent}
-      />    
-  )
-}
-
-
 const CustomToggleContent = ({isExpanded}) => {
 
   const styles = useStylesCallback(buildCustomToggleStyles, [ isExpanded ], { isExpanded })
@@ -67,12 +48,43 @@ const CustomToggleContent = ({isExpanded}) => {
   )
 }
 
-
 const limitHeightStyles = {
   textContainer: {
     maxHeight: 200
   }
 }
+
+const TogglePositionStyles = {
+  buttonsContainer: {
+    flexDirection: 'row', 
+    alignSelf:'center', 
+    paddingBottom: 10
+  },
+  button: {
+    main: {
+      marginHorizontal: 8
+    }
+  }
+}
+
+export const Basic = () => {
+  return (
+      <TextToggle
+        text={longText}
+      />    
+  )
+}
+
+
+export const CustomToggle = () => {
+  return (
+      <TextToggle
+        text={longText}
+        CustomToggle={CustomToggleContent}
+      />    
+  )
+}
+
 export const LimitHeight = () => {
   return (
       <View>
@@ -85,9 +97,42 @@ export const LimitHeight = () => {
   )
 }
 
+export const TogglePosition = () => {
+  const [position, setPosition] = useState('left')
+  return (
+      <View>
+        <View style={TogglePositionStyles.buttonsContainer}>
+          <Button
+            styles={TogglePositionStyles.button}
+            themePath='button.contained.secondary'
+            onClick={() => setPosition('left')}
+            content={'set left'}
+          />
+          <Button
+            styles={TogglePositionStyles.button}
+            themePath='button.contained.secondary'
+            onClick={() => setPosition('center')}
+            content={'set center'}
+          />
+          <Button
+            styles={TogglePositionStyles.button}
+            themePath='button.contained.secondary'
+            onClick={() => setPosition('right')}
+            content={'set right'}
+          />
+        </View>
+        <TextToggle
+          togglePosition={position}
+          text={extraLongText}
+        />    
+      </View>
+  )
+}
+
 TextToggle.defaultProps = {
   numOfLines: 4,
   isExpanded: false,
+  togglePosition:'right'
 }
 
 // Re-export the Component with the default props defined to be used in the MDX story
