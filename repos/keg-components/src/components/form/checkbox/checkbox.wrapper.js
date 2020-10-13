@@ -125,7 +125,7 @@ const useCheckboxHandle = (ref, isChecked, setChecked, pressHandler) => {
       // also fire the pressHandler
       setChecked: checked => {
         setChecked(checked)
-        pressHandler(checked)
+        pressHandler({}, checked)
       },
     }),
     [ ref, isChecked, setChecked, pressHandler ]
@@ -182,7 +182,6 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
     close,
     onChange,
     onValueChange,
-    setCheckedSetter,
     RightComponent,
     rightClassName,
     styles,

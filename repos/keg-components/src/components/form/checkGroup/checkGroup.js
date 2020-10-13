@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { Text } from '../../typography/text'
@@ -6,7 +6,7 @@ import { Checkbox } from 'KegCheckbox'
 import { useStyle } from '@keg-hub/re-theme'
 import { useClassList } from 'KegClassList'
 import { useChildrenWithRefs } from '../../../hooks/useChildrenWithRefs'
-import { mapObj } from '@keg-hub/jsutils'
+import { mapObj, noOp } from '@keg-hub/jsutils'
 
 /**
  * Simple header for CheckGroup, without a checkbox
@@ -15,7 +15,12 @@ import { mapObj } from '@keg-hub/jsutils'
  * @param {Object} props.style - style rules to apply to the Text element
  * @param {*} props.* - remaining props are passed to the Text element
  */
-const SimpleHeader = ({ title, className, style, ...rest }) => {
+const SimpleHeader = React.forwardRef((props, ref) => {
+  const { title, className, style, ...rest } = props
+
+  // add no-op handle here just for consistency with other header
+  useImperativeHandle(ref, () => ({ isChecked: undefined, setChecked: noOp }))
+
   const textStyle = useStyle('form.checkGroup.simpleHeader.main', style)
   return (
     <Text
@@ -26,7 +31,7 @@ const SimpleHeader = ({ title, className, style, ...rest }) => {
       { title }
     </Text>
   )
-}
+})
 
 /**
  * Header for CheckGroup, with a checkbox for select-all functionality
@@ -36,7 +41,8 @@ const SimpleHeader = ({ title, className, style, ...rest }) => {
  * @param {Function?} props.onPress - handler for checkbox press
  * @param {boolean} props.checked - initial value of header checkbox
  */
-const CheckboxHeader = ({ title, className, style, onPress, checked }) => {
+const CheckboxHeader = React.forwardRef((props, ref) => {
+  const { title, className, style, onPress, checked } = props
   const headerStyles = useMemo(
     () => ({
       main: style,
@@ -56,10 +62,11 @@ const CheckboxHeader = ({ title, className, style, onPress, checked }) => {
       styles={headerStyles}
       checked={checked}
       onChange={onChangeHandler}
+      ref={ref}
       close
     />
   )
-}
+})
 
 /**
  * A group of checkbox items with a header.
@@ -69,14 +76,15 @@ const CheckboxHeader = ({ title, className, style, onPress, checked }) => {
  * @param {string} props.headerClassName - css class name for header text
  * @param {string} props.title - title of the group
  * @param {boolean?} props.initChecked - initial checked value of the group header box, if you are using it
- * @param {boolean?} props.check - true if you want a group header check box
+ * @param {boolean?} props.showHeaderCheckbox - true if you want a group header check box, with select-all functionality
+ * @param {boolean?} props.showHeader - true by default. If false, hides the header entirely, only showing children
  * @param {Function?} props.onGroupPress - handler of header checkbox
  * @param {*} props.children - components in the group (@see CheckboxGroup.Item)
  * @param {Object?} props.styles
  * @param {Object?} props.styles.main
  * @param {Object?} props.styles.header
  */
-export const CheckGroup = props => {
+export const CheckGroup = React.forwardRef((props, ref) => {
   const {
     className,
     headerClassName,
@@ -85,13 +93,17 @@ export const CheckGroup = props => {
     styles,
     initChecked = false,
     onGroupPress,
-    check = false,
+    showHeaderCheckbox = false,
+    showHeader = true,
   } = props
 
   const groupStyles = useStyle('form.checkGroup', styles)
 
   // get children updated with ref props, and the refs themselves
-  const [ childrenWithProps, childRefs ] = useChildrenWithRefs(children, check)
+  const [ childrenWithProps, childRefs ] = useChildrenWithRefs(
+    children,
+    showHeaderCheckbox
+  )
 
   // callback that manages select-all behavior on click of the header checkbox
   const headerCheckHandler = useCallback(
@@ -102,38 +114,45 @@ export const CheckGroup = props => {
     [childRefs]
   )
 
+  const Header = () =>
+    showHeaderCheckbox ? (
+      <CheckboxHeader
+        className={headerClassName}
+        style={groupStyles?.header}
+        title={title}
+        onPress={showHeaderCheckbox && headerCheckHandler}
+        checked={showHeaderCheckbox ? initChecked : undefined}
+        ref={ref}
+      />
+    ) : (
+      <SimpleHeader
+        className={headerClassName}
+        style={groupStyles?.header}
+        title={title}
+        ref={ref}
+      />
+    )
+
   return (
     <View
       className={useClassList('keg-check-group', className)}
       style={groupStyles?.main}
     >
-      { check ? (
-        <CheckboxHeader
-          className={headerClassName}
-          style={groupStyles?.header}
-          title={title}
-          onPress={check && headerCheckHandler}
-          checked={check ? initChecked : undefined}
-        />
-      ) : (
-        <SimpleHeader
-          className={headerClassName}
-          style={groupStyles?.header}
-          title={title}
-        />
-      ) }
-      { /* { renderedChildren } */ }
+      { showHeader && <Header /> }
       { childrenWithProps }
     </View>
   )
-}
+})
+
 CheckGroup.Item = Checkbox
 
 CheckGroup.propTypes = {
   className: PropTypes.oneOfType([ PropTypes.array, PropTypes.string ]),
   headerClassName: PropTypes.oneOfType([ PropTypes.array, PropTypes.string ]),
   title: PropTypes.string,
-  styles: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   initChecked: PropTypes.bool,
+  showHeaderCheckbox: PropTypes.bool,
+  showHeader: PropTypes.bool,
   onGroupPress: PropTypes.func,
+  styles: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
 }

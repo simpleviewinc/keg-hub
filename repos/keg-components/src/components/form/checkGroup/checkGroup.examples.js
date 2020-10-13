@@ -28,13 +28,27 @@ export const Basic = () => {
   )
 }
 
+export const DisabledHeader = () => {
+  return (
+    <CheckGroup showHeader={false}>
+      { goats.map(breed => (
+        <CheckGroup.Item
+          key={breed}
+          RightComponent={breed}
+          close={true}
+        />
+      )) }
+    </CheckGroup>
+  )
+}
+
 export const SelectAll = () => {
   return (
     <CheckGroup
       title={'Goats'}
       initChecked={initialCheckValue}
       onGroupPress={action('header check')}
-      check
+      showHeaderCheckbox
     >
       { goats.map(breed => (
         <CheckGroup.Item
@@ -55,7 +69,7 @@ export const SelectAllNoArray = () => {
       title={'Goats'}
       initChecked={initialCheckValue}
       onGroupPress={action('header check')}
-      check
+      showHeaderCheckbox
     >
       <CheckGroup.Item
         RightComponent={goats[0]}
@@ -81,7 +95,53 @@ export const SelectAllNoArray = () => {
   )
 }
 
-export const SelectAllWithExistingRef = () => {
+export const HeaderRefControl = () => {
+  const headerRef = useRef()
+
+  const toggle = () =>
+    headerRef.current.setChecked(!headerRef.current.isChecked)
+
+  return (
+    <>
+      <Button
+        styles={{ main: { width: 220, backgroundColor: 'coral', margin: 15 } }}
+        onPress={toggle}
+      >
+        Toggle All (using ref to header)
+      </Button>
+      <CheckGroup
+        ref={headerRef}
+        title={'Goats'}
+        initChecked={initialCheckValue}
+        onGroupPress={action('header check')}
+        showHeaderCheckbox
+      >
+        <CheckGroup.Item
+          RightComponent={goats[0]}
+          initChecked={initialCheckValue}
+          onChange={action(`${goats[0]} toggled`)}
+          close
+        />
+
+        <CheckGroup.Item
+          RightComponent={goats[1]}
+          initChecked={initialCheckValue}
+          onChange={action(`${goats[1]} toggled`)}
+          close
+        />
+
+        <CheckGroup.Item
+          RightComponent={goats[2]}
+          initChecked={initialCheckValue}
+          onChange={action(`${goats[2]} toggled`)}
+          close
+        />
+      </CheckGroup>
+    </>
+  )
+}
+
+export const ChildRefControl = () => {
   const ref = useRef({})
 
   const toggle = () => {
@@ -101,7 +161,7 @@ export const SelectAllWithExistingRef = () => {
         title={'Goats'}
         initChecked={initialCheckValue}
         onGroupPress={action('header check')}
-        check
+        showHeaderCheckbox
       >
         <CheckGroup.Item
           ref={ref}
@@ -120,7 +180,7 @@ export const WithSwitch = () => (
     title={'Goats'}
     initChecked={initialCheckValue}
     onGroupPress={action('header check')}
-    check
+    showHeaderCheckbox
   >
     { goats.map(breed => (
       <Switch
