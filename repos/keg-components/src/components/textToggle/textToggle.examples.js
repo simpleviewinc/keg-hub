@@ -4,6 +4,8 @@ import { Text, View, Icon, Button } from '../'
 import { ChevronDown } from '../../assets/icons'
 import { useStylesCallback } from '@keg-hub/re-theme'
 
+const shortText =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 const longText =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
@@ -48,9 +50,7 @@ const CustomToggleContent = ({ isExpanded }) => {
 
 const limitHeightStyles = {
   textContainer: {
-    main: {
-      maxHeight: 200,
-    },
+    maxHeight: 200,
   },
 }
 
@@ -122,8 +122,17 @@ export const TogglePosition = () => {
   )
 }
 
+export const NoToggle = () => {
+  return (
+    <View>
+      <TextToggle
+        text={shortText}
+        collapsedHeight={100}
+      />
+    </View>
+  )
+}
 TextToggle.defaultProps = {
-  numOfLines: 4,
   isExpandedInit: false,
   togglePosition: 'right',
 }

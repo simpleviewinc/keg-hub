@@ -1,7 +1,7 @@
 <!--- Drawer.stories.mdx -->
 
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
-import { Basic, CustomToggle, LimitHeight, TogglePosition } from './textToggle.examples'
+import { Basic, CustomToggle, LimitHeight, TogglePosition, NoToggle } from './textToggle.examples'
 import { TextToggle } from './textToggle'
 
 <Meta title="Interactions/TextToggle" component={TextToggle}/>
@@ -38,6 +38,13 @@ Component for toggling text by interacting with the show more/less button
 <Preview>
   <Story name='toggle position'>
     <TogglePosition />
+  </Story>
+</Preview>
+
+### Does not show the toggle button if the given text fits the line limit
+<Preview>
+  <Story name='no toggle'>
+    <NoToggle />
   </Story>
 </Preview>
 

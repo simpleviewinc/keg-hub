@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import { Text, Touchable, ScrollView } from '../'
+import { Text, Touchable } from '../'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
 import { isValidComponent } from '../../utils'
 import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
+import LinearGradient from 'react-native-web-linear-gradient'
 
 /**
  * build the styles object based on togglePosition
@@ -35,25 +36,26 @@ const buildStyles = (theme, helpers) => {
  * TextToggle
  * @param {object} props
  * @param {string} props.text - text to display as the content
- * @param {number=} props.numOfLines - max # of lines before it cuts off until 'show more' is toggled
  * @param {object=} props.styles
  * @param {boolean=} props.isExpandedInit - whether the content is expanded or not initially
  * @param {string=} props.className
+ * @param {Function=} props.onToggleChange - optional. callback whenever the toggle component is pressed
+ * @param {'left'|'center'|'right'=} props.togglePosition - optional. where to position the toggle component. default 'right'
+ * @param {Number=} props.collapsedHeight - optional. height of the textview when collapsed. takes precedence over minHeightPercentage
+ * @param {Number=} props.collapsedHeightPercentage - optional. sets the collapsed height based on percentage of the full text height
  * @param {Component=} props.CustomToggle - optional toggle component to use instead of the default
- * @param {Function=} props.onToggleChange - callback whenever the toggle component is pressed
- * @param {'left'|'center'|'right'=} props.togglePosition - where to position the toggle component. default 'right'
- *
  */
 export const TextToggle = props => {
   const {
     text,
-    numOfLines = 4,
     styles,
     isExpandedInit = false,
     className,
     CustomToggle,
     onToggleChange,
     togglePosition = 'right',
+    collapsedHeight,
+    collapsedHeightPercentage = 0.5,
   } = props
 
   const [ expanded, setExpanded ] = useState(isExpandedInit)
@@ -74,33 +76,99 @@ export const TextToggle = props => {
     setExpanded(!expanded)
     onToggleChange && onToggleChange(!expanded)
   }, [ expanded, onToggleChange ])
-  const numberOfLines = expanded ? 0 : numOfLines
-
+  const [ helper, setHelper ] = useState({
+    textParentStyles: { height: 0 },
+    textMaxHeight: null,
+  })
+  const showToggle = shouldDisplayToggler(collapsedHeight, helper.textMaxHeight)
   return (
     <View
-      style={mainStyle.main}
+      style={[mainStyle.main]}
       className={useClassList('keg-text-toggle', className)}
     >
-      <ScrollView
-        style={mainStyle.textContainer?.main}
-        contentContainerStyle={mainStyle.textContainer?.contentContainerStyle}
+      <View
+        style={[ mainStyle.textContainer, !expanded && helper.textParentStyles ]}
       >
         <Text
           style={mainStyle.text}
-          numberOfLines={numberOfLines}
+          onLayout={useCallback(
+            event =>
+              onTextLayout(
+                event,
+                collapsedHeight,
+                collapsedHeightPercentage,
+                helper,
+                setHelper
+              ),
+            [ collapsedHeight, collapsedHeightPercentage, helper, setHelper ]
+          )}
         >
           { text }
         </Text>
-      </ScrollView>
-
-      <ToggleComponent
-        onPress={onToggleCb}
-        isExpanded={expanded}
-        styles={mainStyle.toggleComponent}
-        CustomComponent={CustomToggle}
-      />
+        { showToggle && !expanded && (
+          <LinearGradient
+            colors={[ 'rgba(255,255,255,0)', 'white' ]}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 25,
+            }}
+          />
+        ) }
+      </View>
+      { showToggle && (
+        <ToggleComponent
+          onPress={onToggleCb}
+          isExpanded={expanded}
+          styles={mainStyle.toggleComponent}
+          CustomComponent={CustomToggle}
+        />
+      ) }
     </View>
   )
+}
+
+/**
+ * Helper for the Text onLayout event
+ *
+ * @param {object} event
+ * @param {number|null} collapsedHeight
+ * @param {number} collapsedHeightPercentage
+ * @param {object} helper
+ * @param {Function} setHelper
+ */
+const onTextLayout = (
+  event,
+  collapsedHeight,
+  collapsedHeightPercentage,
+  helper,
+  setHelper
+) => {
+  const height = event.nativeEvent.layout.height
+  const collapsedHt = collapsedHeight || height * collapsedHeightPercentage
+  if (helper.textParentStyles.height === collapsedHt) return
+
+  setHelper({
+    textParentStyles: {
+      height: collapsedHt,
+      overflow: 'hidden',
+    },
+    textMaxHeight: height,
+  })
+}
+
+/**
+ * only show toggle if user-defined height DNE
+ *  or the given text does not fit in the user-defined height
+ * @param {number=} minHeight
+ * @param {number=} textMaxHeight
+ *
+ * @return {boolean}
+ */
+const shouldDisplayToggler = (minHeight, textMaxHeight) => {
+  return !minHeight || textMaxHeight > minHeight
 }
 
 /**

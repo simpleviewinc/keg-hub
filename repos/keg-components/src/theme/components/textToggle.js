@@ -2,11 +2,10 @@ export const textToggle = {
   main: {
     flex: 1,
   },
-  textContainer: {
-    main: {},
-    contentContainerStyle: {},
+  textContainer: {},
+  text: {
+    fontSize: 20,
   },
-  text: {},
   toggleComponent: {
     main: {
       mV: 15,
