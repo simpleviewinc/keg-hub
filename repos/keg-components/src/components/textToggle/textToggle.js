@@ -5,19 +5,20 @@ import { useClassList } from 'KegClassList'
 import { isValidComponent } from '../../utils'
 import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
-import LinearGradient from 'react-native-web-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient'
+import { isFunc } from '@keg-hub/jsutils'
 
 /**
  * build the styles object based on togglePosition
  * @param {object} theme
- * @param {object} helpers - of the form { togglePosition, styles }
+ * @param {object} styleHelper - of the form { togglePosition, styles }
  */
-const buildStyles = (theme, helpers) => {
-  const textToggleStyles = theme.get(`textToggle`, helpers?.styles)
+const buildStyles = (theme, styleHelper) => {
+  const textToggleStyles = theme.get(`textToggle`, styleHelper?.styles)
 
   // default right position
   let align = 'flex-end'
-  switch (helpers?.togglePosition) {
+  switch (styleHelper?.togglePosition) {
   case 'left':
     align = 'flex-start'
     break
@@ -44,6 +45,7 @@ const buildStyles = (theme, helpers) => {
  * @param {Number=} props.collapsedHeight - optional. height of the textview when collapsed. takes precedence over minHeightPercentage
  * @param {Number=} props.collapsedHeightPercentage - optional. sets the collapsed height based on percentage of the full text height
  * @param {Component=} props.CustomToggle - optional toggle component to use instead of the default
+ * @param {string} props.fadeColor - optional color for the fade on collapsed text
  */
 export const TextToggle = props => {
   const {
@@ -56,10 +58,12 @@ export const TextToggle = props => {
     togglePosition = 'right',
     collapsedHeight,
     collapsedHeightPercentage = 0.5,
+    fadeColor = 'white',
   } = props
 
   const [ expanded, setExpanded ] = useState(isExpandedInit)
-  const helpers = useMemo(
+
+  const styleHelper = useMemo(
     () => ({
       styles,
       togglePosition,
@@ -70,17 +74,21 @@ export const TextToggle = props => {
   const mainStyle = useStylesCallback(
     buildStyles,
     [ togglePosition, styles ],
-    helpers
+    styleHelper
   )
-  const onToggleCb = useCallback(() => {
-    setExpanded(!expanded)
-    onToggleChange && onToggleChange(!expanded)
-  }, [ expanded, onToggleChange ])
+
   const [ helper, setHelper ] = useState({
     textParentStyles: { height: 0 },
     textMaxHeight: null,
   })
+
   const showToggle = shouldDisplayToggler(collapsedHeight, helper.textMaxHeight)
+
+  const onToggleCb = useCallback(() => {
+    setExpanded(!expanded)
+    isFunc(onToggleChange) && onToggleChange(!expanded)
+  }, [ expanded, onToggleChange ])
+
   return (
     <View
       style={[mainStyle.main]}
@@ -107,14 +115,8 @@ export const TextToggle = props => {
         </Text>
         { showToggle && !expanded && (
           <LinearGradient
-            colors={[ 'rgba(255,255,255,0)', 'white' ]}
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 25,
-            }}
+            colors={[ 'transparent', fadeColor ]}
+            style={mainStyle.linearGradient}
           />
         ) }
       </View>
@@ -132,7 +134,7 @@ export const TextToggle = props => {
 
 /**
  * Helper for the Text onLayout event
- *
+ * store the heights based on text
  * @param {object} event
  * @param {number|null} collapsedHeight
  * @param {number} collapsedHeightPercentage
@@ -198,11 +200,13 @@ const ToggleComponent = ({ onPress, styles, CustomComponent, isExpanded }) => {
 
 TextToggle.propTypes = {
   text: PropTypes.string,
-  numOfLines: PropTypes.number,
   isExpandedInit: PropTypes.bool,
   styles: PropTypes.object,
   className: PropTypes.string,
   CustomToggle: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
   onToggleChange: PropTypes.func,
   togglePosition: PropTypes.oneOf([ 'left', 'center', 'right' ]),
+  collapsedHeight: PropTypes.number,
+  collapsedHeightPercentage: PropTypes.number,
+  fadeColor: PropTypes.string,
 }

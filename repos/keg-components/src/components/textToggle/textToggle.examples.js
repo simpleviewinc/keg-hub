@@ -48,12 +48,6 @@ const CustomToggleContent = ({ isExpanded }) => {
   )
 }
 
-const limitHeightStyles = {
-  textContainer: {
-    maxHeight: 200,
-  },
-}
-
 const TogglePositionStyles = {
   buttonsContainer: {
     flexDirection: 'row',
@@ -76,18 +70,6 @@ export const CustomToggle = () => {
     text={longText}
     CustomToggle={CustomToggleContent}
   />
-}
-
-export const LimitHeight = () => {
-  return (
-    <View>
-      <TextToggle
-        styles={limitHeightStyles}
-        text={extraLongText}
-        CustomToggle={CustomToggleContent}
-      />
-    </View>
-  )
 }
 
 export const TogglePosition = () => {
@@ -135,6 +117,8 @@ export const NoToggle = () => {
 TextToggle.defaultProps = {
   isExpandedInit: false,
   togglePosition: 'right',
+  collapsedHeightPercentage: 0.5,
+  fadeColor: 'white',
 }
 
 // Re-export the Component with the default props defined to be used in the MDX story
