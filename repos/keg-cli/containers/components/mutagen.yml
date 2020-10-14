@@ -21,6 +21,28 @@ sync:
 
 # TODO: Remove once the actions service is complete
 actions:
+  jsutils:
+    install:
+      location: /keg/keg-components/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/keg-components/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/keg-components/node_modules/@keg-hub/jsutils
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/keg-components/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - bash
   retheme:
     install:
       location: /keg/keg-components/node_modules/@keg-hub/re-theme

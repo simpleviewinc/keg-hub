@@ -2,7 +2,12 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Text } from '../../typography'
 import { useTheme } from '@keg-hub/re-theme'
-import React, { useState, useMemo } from 'react'
+import React, {
+  useState,
+  useImperativeHandle,
+  useMemo,
+  forwardRef,
+} from 'react'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
 import { useThemePath } from '../../../hooks'
 import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
@@ -16,7 +21,7 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  */
 const KegSwitch = StyleInjector(InternalSwitch, {
   displayName: 'Switch',
-  className: 'keg-switch'
+  className: 'keg-switch',
 })
 
 /**
@@ -112,12 +117,29 @@ const ChildrenComponent = ({ children }) => (
 )
 
 /**
+ * Exposes an imperative api for the consumer of switch
+ * @param {RefObject} ref
+ * @param {boolean} isChecked
+ * @param {Function} setChecked
+ */
+const useSwitchHandle = (ref, isChecked, setChecked) => {
+  return useImperativeHandle(
+    ref,
+    () => ({
+      isChecked,
+      setChecked,
+    }),
+    [ ref, isChecked, setChecked ]
+  )
+}
+
+/**
  * Switch
  * Wraps the Internal KegSwitch which should be a Switch for the platform type
  * @param {Object} props - see PropTypes below
  *
  */
-export const Switch = props => {
+export const Switch = forwardRef((props, ref) => {
   const {
     className,
     checked,
@@ -128,10 +150,10 @@ export const Switch = props => {
     close,
     onChange,
     onValueChange,
-    ref,
     RightComponent,
     styles,
     SwitchComponent,
+    setCheckedSetter,
     type,
     themePath,
     thumbColor,
@@ -141,6 +163,11 @@ export const Switch = props => {
   } = props
 
   const [ isChecked, setChecked ] = useState(toBool(checked || value))
+
+  // by default, switch manages its own toggled state.
+  // however, if the consumer needs to control that, it can by passing
+  // in a `ref`, then calling ref.current.setChecked to control the value
+  useSwitchHandle(ref, isChecked, setChecked)
 
   const elThemePath =
     themePath || `form.switch.${(close && 'close') || 'default'}`
@@ -205,7 +232,7 @@ export const Switch = props => {
       </View>
     )
   )
-}
+})
 
 Switch.propTypes = {
   checked: PropTypes.bool,
@@ -239,7 +266,6 @@ Switch.propTypes = {
   ]),
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
-  ref: PropTypes.object,
   styles: PropTypes.object,
   text: PropTypes.string,
   themePath: PropTypes.string,

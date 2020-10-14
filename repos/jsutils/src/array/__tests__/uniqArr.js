@@ -26,5 +26,19 @@ describe('uniqArr', () => {
 
   })
 
+  it ('should work with a testFn as well, to handle non-primitives', () => {
+    const arr = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 3 },
+      { id: 3 },
+    ]
+
+    const uniq = Arr.uniqArr(arr, e => e.id)
+    const idThreeElements = uniq.filter(element => element.id === 3)
+    expect(idThreeElements.length).toEqual(1)
+  })
+
 })
 

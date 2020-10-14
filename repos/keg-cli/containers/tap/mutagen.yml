@@ -30,6 +30,17 @@ actions:
       privileged: true
       cmds:
         - bash
+  jsutils:
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn install
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn dev
   retheme:
     install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme

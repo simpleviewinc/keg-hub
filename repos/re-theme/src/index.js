@@ -22,6 +22,7 @@ import {
 
 import {
   useStylesCallback,
+  useStyle,
   useTheme,
   useThemeActive,
   useThemeFocus,
@@ -46,6 +47,7 @@ export {
   withTheme,
   // Theme hooks
   useStylesCallback,
+  useStyle,
   useTheme,
   useThemeActive,
   useThemeFocus,
@@ -53,5 +55,4 @@ export {
   // Context Exports
   ReThemeContext,
   ReThemeProvider,
-
 }

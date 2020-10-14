@@ -1,5 +1,4 @@
 import React from 'react'
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 import { useClassName } from 'KegClassName'
 
 /**

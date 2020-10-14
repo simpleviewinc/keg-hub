@@ -9,7 +9,9 @@ import { isObj, checkCall } from '@keg-hub/jsutils'
  */
 export const handleRefUpdate = (ref, update) => {
   // Update the ref based on it's type
-  return isObj(ref) && 'current' in ref
-    ? (ref.current = update)
-    : checkCall(ref, update)
+  return !ref
+    ? update
+    : isObj(ref) && 'current' in ref
+      ? (ref.current = update)
+      : checkCall(ref, update)
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { Image } from 'KegImg'
 import { get } from '@keg-hub/jsutils'
-import { useStyle } from 'KegHooks'
+import { useStyle } from '@keg-hub/re-theme'
 
 const noHeader = { marginTop: 0 }
 

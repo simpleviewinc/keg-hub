@@ -37,6 +37,7 @@ env:
   # Defines the location in a docker container for a dependency
   # This allows mutagen to know where to sync the local version of the dependency
   DOC_RETHEME_PATH: /keg/keg-components/node_modules/@keg-hub/re-theme
+  DOC_JSUTILS_PATH: /keg/keg-components/node_modules/@keg-hub/jsutils
 
   # --- KEG-PROXY ENVs --- #
   # See https://github.com/whitestrake/caddy-gen for more information
