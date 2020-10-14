@@ -5,24 +5,27 @@ import { useThemePath } from '../../hooks'
 import { noOpObj } from '../../utils/helpers/noop'
 import { Animated } from 'react-native'
 import { useClassName } from 'KegClassName'
-import React, { useState, useLayoutEffect, useRef } from 'react'
+import React, { useState, useLayoutEffect, useCallback, useRef } from 'react'
 import { isValidComponent } from '../../utils/validate/isValidComponent'
 /**
  * Checks if the animation should NOT run
  * @param {boolean} toggled - Current state of the Drawer toggled open
  * @param {number} current - Current height of the Drawer / animated.value
- * @param {number} heights - Ref that holds the initial and max heights of the slider
+ * @param {number} contentMaxHeight
+ * @param {number} collapsedHeight
  *
  * @returns {boolean} - If the animation should NOT run
  */
-const noAnimate = (toggled, current, { initial, max }) =>
-  (!toggled && current === initial) || (toggled && current === max)
+const noAnimate = (toggled, current, collapsedHeight, contentMaxHeight) =>
+  (!toggled && current === collapsedHeight) ||
+  (toggled && current === contentMaxHeight)
 
 /**
  * Drawer
  * @param {Object} props - props passed from parent component
- * @param {number} props.initial - Initial height of the slider
  * @param {Function|Component} props.children - Child components placed inside the drawer
+ * @param {Number=} props.collapsedHeight - optional. height of the collapsed view
+ * @param {string=} props.className
  * @param {Function|Component} props.Element - Child Element of the Drawer. Overrides the default children prop
  * @param {string} props.type - Animation type from the Animated API that accepts an animated config
  * @param {Object} props.config - Animation config object passed on to the Animated type method
@@ -33,22 +36,37 @@ const noAnimate = (toggled, current, { initial, max }) =>
  * @returns {Component} - Drawer Component
  */
 export const Drawer = props => {
-  const { initial, Element, styles, toggled, className, type='timing', config=noOpObj, ...childProps } = props
+  const {
+    Element,
+    styles,
+    toggled,
+    className,
+    type = 'timing',
+    config = noOpObj,
+    collapsedHeight = 0,
+    ...childProps
+  } = props
 
-  // Define the default heights as a ref
-  const heights = useRef({ initial: initial || 0, max: 0 })
+  // Define the default max height as a ref
+  const contentMaxHeight = useRef(null)
+
   // Define the animated value as a ref
-  const [ animation, setAnimation ] = useState(new Animated.Value(initial))
+  const [ animation, setAnimation ] = useState(
+    new Animated.Value(collapsedHeight)
+  )
 
   // Define a helper to update the total max height of the slider
   // Gets called from the onLayout callback of the View wrapper
-  const setMaxHeight = event => {
-    const maxHeight = event.nativeEvent.layout.height
-    if (!heights.current || heights.current.max === maxHeight) return
+  const setMaxHeight = useCallback(
+    event => {
+      const maxHeight = event.nativeEvent.layout.height
+      if (contentMaxHeight.current === maxHeight) return
 
-    heights.current.max = maxHeight
-    toggled && setAnimation(new Animated.Value(maxHeight))
-  }
+      contentMaxHeight.current = maxHeight
+      toggled && setAnimation(new Animated.Value(maxHeight))
+    },
+    [ contentMaxHeight, toggled, setAnimation ]
+  )
 
   // Use useLayoutEffect to check if the slider should be animated
   // Within the hook, toggled flag defines how to update the animated value
@@ -57,14 +75,19 @@ export const Drawer = props => {
   useLayoutEffect(() => {
     // Check if we should animate the slider
     // If the values have not changed, no need to animate
-    if (noAnimate(toggled, animation._value, heights.current)) return
-
-    const { initial, max } = heights.current
-
+    if (
+      noAnimate(
+        toggled,
+        animation._value,
+        collapsedHeight,
+        contentMaxHeight.current
+      )
+    )
+      return
     // Define the from and to values for the animation based on toggled flag
     const heightChanges = toggled
-      ? { from: initial, to: max }
-      : { from: max, to: initial }
+      ? { from: collapsedHeight, to: contentMaxHeight.current }
+      : { from: contentMaxHeight.current, to: collapsedHeight }
 
     // Update the animation value to animate from
     animation.setValue(heightChanges.from)
@@ -75,7 +98,7 @@ export const Drawer = props => {
     Animated[type](animation, animationConfig).start()
 
     // Add toggled as a dep, so anytime it changes, we run the hook code
-  }, [toggled, type, config ])
+  }, [ toggled, type, config, collapsedHeight ])
 
   const drawerStyles = useThemePath(`drawer`, styles)
   const classRef = useClassName('keg-drawer', className)
@@ -107,8 +130,8 @@ Drawer.propTypes = {
   className: PropTypes.oneOfType([ PropTypes.array, PropTypes.string ]),
   config: PropTypes.object,
   Element: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
-  initial: PropTypes.number,
   styles: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   toggled: PropTypes.bool,
   type: PropTypes.oneOf([ 'decay', 'spring', 'timing' ]),
+  collapsedHeight: PropTypes.number,
 }

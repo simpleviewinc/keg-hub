@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import { Text, Touchable } from '../'
+import { Text, Touchable, Drawer } from '../'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
 import { isValidComponent } from '../../utils'
@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
 import LinearGradient from 'react-native-linear-gradient'
 import { isFunc } from '@keg-hub/jsutils'
+
 /**
  * build the styles object based on togglePosition
  * @param {object} theme
@@ -41,8 +42,7 @@ const buildStyles = (theme, styleHelper) => {
  * @param {string=} props.className
  * @param {Function=} props.onToggleChange - optional. callback whenever the toggle component is pressed
  * @param {'left'|'center'|'right'=} props.togglePosition - optional. where to position the toggle component. default 'right'
- * @param {Number=} props.collapsedHeight - optional. height of the textview when collapsed. takes precedence over minHeightPercentage
- * @param {Number=} props.collapsedHeightPercentage - optional. sets the collapsed height based on percentage of the full text height
+ * @param {Number=} props.collapsedHeight - optional. height of the textview when collapsed
  * @param {Component=} props.CustomToggle - optional toggle component to use instead of the default
  * @param {string} props.fadeColor - optional color for the fade on collapsed text
  */
@@ -55,8 +55,7 @@ export const TextToggle = props => {
     CustomToggle,
     onToggleChange,
     togglePosition = 'right',
-    collapsedHeight,
-    collapsedHeightPercentage = 0.5,
+    collapsedHeight = 100,
     fadeColor = 'white',
   } = props
 
@@ -77,49 +76,47 @@ export const TextToggle = props => {
     styleHelper
   )
 
-  const [ helper, setHelper ] = useState({
-    textParentStyles: { height: 0 },
-    textMaxHeight: null,
-  })
+  const [ textMaxHeight, setTextMaxHeight ] = useState(0)
 
-  const showToggle = shouldDisplayToggler(collapsedHeight, helper.textMaxHeight)
+  const showToggle = shouldDisplayToggler(collapsedHeight, textMaxHeight)
 
   const onToggleCb = useCallback(() => {
     setExpanded(!expanded)
     isFunc(onToggleChange) && onToggleChange(!expanded)
   }, [ expanded, onToggleChange ])
 
+  const onTextLayout = useCallback(
+    event => {
+      const height = event.nativeEvent.layout.height
+      if (textMaxHeight === height) return
+      setTextMaxHeight(height)
+    },
+    [ textMaxHeight, setTextMaxHeight ]
+  )
+
   return (
     <View
       style={[mainStyle.main]}
       className={useClassList('keg-text-toggle', className)}
     >
-      <View
-        style={[ mainStyle.textContainer, !expanded && helper.textParentStyles ]}
+      <Drawer
+        collapsedHeight={collapsedHeight}
+        toggled={expanded}
       >
         <Text
           style={mainStyle.text}
-          onLayout={useCallback(
-            event =>
-              updateHeightHelper(
-                event,
-                collapsedHeight,
-                collapsedHeightPercentage,
-                helper,
-                setHelper
-              ),
-            [ collapsedHeight, collapsedHeightPercentage, helper, setHelper ]
-          )}
+          onLayout={onTextLayout}
         >
           { text }
         </Text>
-        { showToggle && !expanded && (
-          <LinearGradient
-            colors={[ 'transparent', fadeColor ]}
-            style={mainStyle.linearGradient}
-          />
-        ) }
-      </View>
+      </Drawer>
+
+      { showToggle && !expanded && (
+        <LinearGradient
+          colors={[ 'transparent', fadeColor ]}
+          style={mainStyle.linearGradient}
+        />
+      ) }
       { showToggle && (
         <ToggleComponent
           onPress={onToggleCb}
@@ -130,35 +127,6 @@ export const TextToggle = props => {
       ) }
     </View>
   )
-}
-
-/**
- * Helper for the Text onLayout event
- * store the heights based on text
- * @param {object} event
- * @param {number|null} collapsedHeight
- * @param {number} collapsedHeightPercentage
- * @param {object} helper
- * @param {Function} setHelper
- */
-const updateHeightHelper = (
-  event,
-  collapsedHeight,
-  collapsedHeightPercentage,
-  helper,
-  setHelper
-) => {
-  const height = event.nativeEvent.layout.height
-  const collapsedHt = collapsedHeight || height * collapsedHeightPercentage
-  if (helper.textParentStyles.maxHeight === collapsedHt) return
-
-  setHelper({
-    textParentStyles: {
-      maxHeight: collapsedHt,
-      overflow: 'hidden',
-    },
-    textMaxHeight: height,
-  })
 }
 
 /**
@@ -207,6 +175,5 @@ TextToggle.propTypes = {
   onToggleChange: PropTypes.func,
   togglePosition: PropTypes.oneOf([ 'left', 'center', 'right' ]),
   collapsedHeight: PropTypes.number,
-  collapsedHeightPercentage: PropTypes.number,
   fadeColor: PropTypes.string,
 }

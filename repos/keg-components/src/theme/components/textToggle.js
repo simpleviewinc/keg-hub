@@ -1,17 +1,23 @@
 export const textToggle = {
   main: {
-    flex: 1,
+    fl: 1,
   },
   textContainer: {},
   text: {
-    fontSize: 20,
+    ftSz: 20,
   },
   linearGradient: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    pos: 'absolute',
+    bt: 40,
+    lt: 0,
+    rt: 0,
     height: 50,
+  },
+  drawer: {
+    main: {
+      ovf: 'hidden',
+      width: '100%',
+    },
   },
   toggleComponent: {
     main: {

@@ -62,7 +62,10 @@ const TogglePositionStyles = {
 }
 
 export const Basic = () => {
-  return <TextToggle text={longText} />
+  return <TextToggle
+    text={longText}
+    collapsedHeight={100}
+  />
 }
 
 export const CustomToggle = () => {
@@ -115,7 +118,7 @@ export const NoToggle = () => {
   )
 }
 
-const placeHolderText = '50'
+const placeHolderText = '100'
 export const DynamicCollapsedHeight = () => {
   const [ collapsedHeight, setCollapsedHeight ] = useState(
     parseInt(placeHolderText)
@@ -132,6 +135,7 @@ export const DynamicCollapsedHeight = () => {
     inputRef.current.focus()
     if (inputVal !== placeHolderText) inputRef.current.value = inputVal
   }, [inputVal])
+
   return (
     <View>
       <View style={{ flexDirection: 'row', marginBottom: 15 }}>
@@ -159,7 +163,7 @@ export const DynamicCollapsedHeight = () => {
 TextToggle.defaultProps = {
   isExpandedInit: false,
   togglePosition: 'right',
-  collapsedHeightPercentage: 0.5,
+  collapsedHeight: 100,
   fadeColor: 'white',
 }
 
