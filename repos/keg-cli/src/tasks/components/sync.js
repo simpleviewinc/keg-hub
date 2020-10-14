@@ -11,7 +11,7 @@ const { syncService } = require('KegUtils/services')
  * @returns {void}
  */
 const componentsSync = async args => {
-  return syncService(args, { ...args.params, container: 'keg-components' })
+  return syncService(args, { container: 'keg-components' })
 }
 
 module.exports = {

@@ -14,7 +14,7 @@ const { DOCKER } = require('KegConst/docker')
 const action = args => {
   return syncService(
     { ...args, __internal: { ...args.__internal, actionOnly: true } },
-    { container: 'core', ...args.params }
+    { container: 'keg-core' }
   )
 }
 
