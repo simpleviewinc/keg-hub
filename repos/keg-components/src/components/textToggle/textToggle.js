@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
 import LinearGradient from 'react-native-linear-gradient'
 import { isFunc } from '@keg-hub/jsutils'
-
 /**
  * build the styles object based on togglePosition
  * @param {object} theme
@@ -61,6 +60,7 @@ export const TextToggle = props => {
     fadeColor = 'white',
   } = props
 
+  if (!text) return null
   const [ expanded, setExpanded ] = useState(isExpandedInit)
 
   const styleHelper = useMemo(
@@ -150,7 +150,7 @@ const updateHeightHelper = (
 ) => {
   const height = event.nativeEvent.layout.height
   const collapsedHt = collapsedHeight || height * collapsedHeightPercentage
-  if (helper.textParentStyles.height === collapsedHt) return
+  if (helper.textParentStyles.maxHeight === collapsedHt) return
 
   setHelper({
     textParentStyles: {

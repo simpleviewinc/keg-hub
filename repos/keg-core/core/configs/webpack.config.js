@@ -23,6 +23,7 @@ const resolveCoreAlias = {
     '@keg-hub/re-theme/build/esm/web/styleInjector.js',
   '@keg-hub/keg-components':
     '@keg-hub/keg-components/build/esm/kegComponents.js',
+  'react-native-linear-gradient': 'react-native-web-linear-gradient'
 }
 
 /**
