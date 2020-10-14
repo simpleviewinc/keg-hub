@@ -153,7 +153,6 @@ const useCheckboxHandle = (ref, isChecked, setChecked, pressHandler) => {
  * @param {boolean} props.close - if true, side components will be rendered close to the checkbox. If false, spaced apart.
  * @param {Function?} props.onChange - callback fired when checkbox is toggled
  * @param {Function?} props.onValueChange - callback fired when checkbox is toggled
- * @param {Function?} props.setCheckedSetter - callback called once on initial render. Is passed the `setChecked` callback to provide consumer control of checked/unchecked state if needed.
  * @param {(Component | string)?} props.RightComponent -  an optional component or string to render right of the checkbox
  * @param {string?} props.rightClassName - optional class name for the right component
  * @param {Object} props.styles - styles that overwrite default checkbox styles
