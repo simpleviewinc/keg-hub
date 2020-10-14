@@ -47,3 +47,7 @@ BUG:
 * After killing the service it asks for a container, figure out why?
 * Fix tests to no rely on globalConfig values
   * Users can customize their config values, which means tests will fail
+
+Expo / React-Native-Package IP's
+  * Update envs EXPO_DEVTOOLS_LISTEN_ADDRESS && REACT_NATIVE_PACKAGER_HOSTNAME
+    * Need to bind IP's to 0.0.0.0 inside the docker container when using docker-for-desktop

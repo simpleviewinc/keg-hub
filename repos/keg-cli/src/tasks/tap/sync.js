@@ -1,6 +1,6 @@
 const { syncService } = require('KegUtils/services')
 const { DOCKER } = require('KegConst/docker')
-
+const { get } = require('@keg-hub/jsutils')
 /**
  * Sync a local folder into the tap docker container
  * @param {Object} args - arguments passed from the runTask method
@@ -11,8 +11,20 @@ const { DOCKER } = require('KegConst/docker')
  *
  * @returns {void}
  */
-const sync = args => {
-  return syncService(args, { container: 'tap', ...args.params })
+const sync = async args => {
+  
+  // TODO: move this to the syncService
+  // That way if can be re-used for all repos
+  const dependency = get(args, 'params.dependency')
+  const toSync = dependency.indexOf(',') !== -1
+    ? dependency.split(',')
+    : [dependency]
+  
+  return toSync.reduce(async (toResolve, dep) => {
+    const resolved = await toResolve
+    return syncService(args, { container: 'tap', ...args.params, dependency: dep })
+  }, Promise.resolve({}))
+
 }
 
 module.exports = {

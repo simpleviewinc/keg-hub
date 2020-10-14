@@ -37,6 +37,9 @@ env:
   DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
   DOC_JSUTILS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
 
+  # Allow access to expo dev tools within the docker container
+  EXPO_DEVTOOLS_LISTEN_ADDRESS: 0.0.0.0
+
   # --- KEG-PROXY ENVs --- #
   # See https://github.com/whitestrake/caddy-gen for more information
   CADDY_HOST: tap.kegdev.xyz
