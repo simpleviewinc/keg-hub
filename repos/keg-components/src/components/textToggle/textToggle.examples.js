@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { TextToggle } from './textToggle'
-import { Text, View, Icon, Button } from '../'
+import { Text, View, Icon, Button, Input } from '../'
 import { ChevronDown } from '../../assets/icons'
 import { useStylesCallback } from '@keg-hub/re-theme'
 
@@ -110,6 +110,48 @@ export const NoToggle = () => {
       <TextToggle
         text={shortText}
         collapsedHeight={100}
+      />
+    </View>
+  )
+}
+
+const placeHolderText = '50'
+export const DynamicCollapsedHeight = () => {
+  const [ collapsedHeight, setCollapsedHeight ] = useState(
+    parseInt(placeHolderText)
+  )
+  const [ inputVal, setInputVal ] = useState(placeHolderText)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    !inputRef.current &&
+      console.error(
+        `Input ref did not get set. Something is wrong with the input component!`
+      )
+
+    inputRef.current.focus()
+    if (inputVal !== placeHolderText) inputRef.current.value = inputVal
+  }, [inputVal])
+  return (
+    <View>
+      <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+        <Input
+          ref={inputRef}
+          style={{ marginRight: 15 }}
+          onValueChange={setInputVal}
+          value={inputVal}
+        />
+        <Button
+          themePath='button.contained.primary'
+          onClick={() =>
+            setCollapsedHeight(parseInt(inputRef.current.value) || 50)
+          }
+          content={'apply height'}
+        />
+      </View>
+      <TextToggle
+        text={longText}
+        collapsedHeight={collapsedHeight}
       />
     </View>
   )
