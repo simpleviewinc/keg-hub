@@ -101,7 +101,7 @@ export const TextToggle = props => {
           style={mainStyle.text}
           onLayout={useCallback(
             event =>
-              onTextLayout(
+              updateHeightHelper(
                 event,
                 collapsedHeight,
                 collapsedHeightPercentage,
@@ -141,7 +141,7 @@ export const TextToggle = props => {
  * @param {object} helper
  * @param {Function} setHelper
  */
-const onTextLayout = (
+const updateHeightHelper = (
   event,
   collapsedHeight,
   collapsedHeightPercentage,
@@ -154,7 +154,7 @@ const onTextLayout = (
 
   setHelper({
     textParentStyles: {
-      height: collapsedHt,
+      maxHeight: collapsedHt,
       overflow: 'hidden',
     },
     textMaxHeight: height,
