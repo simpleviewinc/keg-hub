@@ -98,7 +98,7 @@ const syncService = async (args, { container }) => {
   
   return toSync.reduce(async (toResolve, dep) => {
     const resolved = await toResolve
-    return buildSync(args, { container, ...args.params, dependency: dep })
+    return buildContainerSync(args, { container, ...args.params, dependency: dep })
   }, Promise.resolve({}))
 }
 
