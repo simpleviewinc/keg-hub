@@ -19,7 +19,7 @@ const { buildContainerContext } = require('../builders/buildContainerContext')
  *
  * @returns {void}
  */
-const buildContainerSync = (args, argsExt) => {
+const buildContainerSync = async (args, argsExt) => {
   const serviceArgs = getServiceArgs(args, argsExt)
 
   const { globalConfig, params, __internal={} } = serviceArgs
