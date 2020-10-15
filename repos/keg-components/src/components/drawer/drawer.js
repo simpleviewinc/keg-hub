@@ -106,7 +106,7 @@ export const Drawer = props => {
   return (
     <Animated.View
       ref={classRef}
-      style={[ drawerStyles.main, get(styles, 'main'), { height: animation }]}
+      style={[ drawerStyles.main, get(styles, 'main'), { maxHeight: animation }]}
     >
       <View
         className='keg-drawer-content'
