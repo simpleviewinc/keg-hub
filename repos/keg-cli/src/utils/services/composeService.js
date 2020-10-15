@@ -1,6 +1,6 @@
 const { Logger } = require('KegLog')
 const { get, isArr, set } = require('@keg-hub/jsutils')
-const { syncService } = require('./syncService')
+const { buildContainerSync } = require('./syncService')
 const { mutagenService } = require('./mutagenService')
 const { getServiceArgs } = require('./getServiceArgs')
 const { runInternalTask } = require('../task/runInternalTask')
@@ -25,7 +25,7 @@ const createSyncs = async (args, containerContext) => {
     await sync.reduce(async (toResolve, dependency) => {
       const resolved = await toResolve
       resolved.push(
-        await syncService(
+        await buildContainerSync(
           { ...args, params: { dependency, tap, context, __injected } },
           { container: dockerContainer, dependency }
         )

@@ -11,8 +11,8 @@ const { DOCKER } = require('KegConst/docker')
  *
  * @returns {void}
  */
-const sync = args => {
-  return syncService(args, { container: 'tap', ...args.params })
+const sync = async args => {
+  return syncService(args, { container: 'tap' })
 }
 
 module.exports = {

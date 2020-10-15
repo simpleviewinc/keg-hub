@@ -1,6 +1,4 @@
-const { Logger } = require('KegLog')
 const { get } = require('@keg-hub/jsutils')
-const { getGitPath } = require('../git/getGitPath')
 const { getServiceArgs } = require('./getServiceArgs')
 const { generalError } = require('../error/generalError')
 const { getLocalPath } = require('../getters/getLocalPath')
@@ -11,27 +9,7 @@ const { findDependencyName } = require('../helpers/findDependencyName')
 const { buildContainerContext } = require('../builders/buildContainerContext')
 
 /**
- * Ensure the path to sync and the context path are not the same
- * This type of sync gets setup within the start service. We should not create duplicate syncs
- * @param {boolean} syncForce - Should the sync be forced
- * @param {string} contextPath - Path to the root repo running the docker container
- * @param {string} localPath - Local path the to folder to be synced
- *
- * @returns {boolean} - If the sync paths are valid or not
- */
-const checkSyncPaths = (syncForce, contextPath, localPath) => {
-  try {
-    !syncForce && contextPath === localPath && generalError(`Invalid dependency path. The dependency path can not be the same as the context path.\nContext Path: ${ contextPath }\nDependency Path: ${ localPath }`)
-  }
-  catch(err){
-    return false
-  }
-
-  return true
-}
-
-/**
- * Starts a mutagen sync between local and a docker container
+ * Builds a mutagen sync between local and a docker container
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {Object} args.params - Formatted object of the passed in options 
@@ -41,11 +19,11 @@ const checkSyncPaths = (syncForce, contextPath, localPath) => {
  *
  * @returns {void}
  */
-const syncService = async (args, argsExt) => {
+const buildContainerSync = async (args, argsExt) => {
   const serviceArgs = getServiceArgs(args, argsExt)
 
   const { globalConfig, params, __internal={} } = serviceArgs
-  const { local, remote, syncForce, tap } = params
+  const { local, remote } = params
   const { actionOnly } = __internal
 
   const [ dependency, ...syncActions ] = params.dependency.includes(':')
@@ -54,8 +32,6 @@ const syncService = async (args, argsExt) => {
 
   const containerContext = await buildContainerContext(serviceArgs)
   const { context, id } = containerContext
-
-  const contextPath = getGitPath(globalConfig, tap || context)
 
   const localPath = getLocalPath(globalConfig, context, dependency, local)
   !localPath && generalError(`Local path could not be found!`)
@@ -100,9 +76,33 @@ const syncService = async (args, argsExt) => {
   })
 
   return mutagenContext
+}
 
+/**
+ * Checks the params.dependency for syncs to run
+ * Calls buildSync for any found syncs
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {Object} args.globalConfig - Global config object for the keg-cli
+ * @param {Object} args.params - Formatted object of the passed in options 
+ * @param {string} params.container - Name of the container to run ( core / components / tap )
+ * @param {string} params.tap - Name of tap, if container arg value is `tap`
+ * @param {string} params.location - Location where the command should be run
+ *
+ * @returns {void}
+ */
+const syncService = async (args, { container }) => {
+  const dependency = get(args, 'params.dependency')
+  const toSync = dependency.indexOf(',') !== -1
+    ? dependency.split(',')
+    : [dependency]
+  
+  return toSync.reduce(async (toResolve, dep) => {
+    const resolved = await toResolve
+    return buildContainerSync(args, { container, ...args.params, dependency: dep })
+  }, Promise.resolve({}))
 }
 
 module.exports = {
+  buildContainerSync,
   syncService
 }

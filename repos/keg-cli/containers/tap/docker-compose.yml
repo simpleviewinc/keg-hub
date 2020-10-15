@@ -18,12 +18,14 @@ services:
         - DOC_COMPONENTS_PATH
         - DOC_RESOLVER_PATH
         - DOC_RETHEME_PATH
+        - EXPO_DEVTOOLS_LISTEN_ADDRESS
         - GIT_CLI_URL
         - GIT_CORE_URL
         - GIT_COMPONENTS_URL
         - GIT_RETHEME_URL
         - GIT_RESOLVER_URL
         - GIT_APP_URL
+        - KEG_DOCKER_IP
         - KEG_IMAGE_FROM
         - KEG_EXEC_CMD
         - KEG_NM_INSTALL
@@ -45,6 +47,7 @@ services:
       - DOC_RESOLVER_PATH
       - DOC_RETHEME_PATH
       - DOC_JSUTILS_PATH
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS
       - GIT_CLI_URL
       - GIT_CORE_URL
       - GIT_COMPONENTS_URL

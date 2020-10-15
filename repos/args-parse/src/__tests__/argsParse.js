@@ -1,4 +1,4 @@
-const { testTask1, testTask2, testTask3, testTask4 } = require('../__mocks__/testTasks')
+const { testTask1, testTask2, testTask3, testTask4, testTask5 } = require('../__mocks__/testTasks')
 const Ask = require('../__mocks__/ask')
 jest.setMock('@keg-hub/ask-it', Ask)
 
@@ -162,6 +162,18 @@ describe('argsParse', () => {
 
     expect(parsed.foo).toBe('alias')
     expect(parsed.zoo).toBe(undefined)
+
+  })
+
+  it('should convert --no-* arguments to false value', async () => {
+
+    const parsed = await argsParse({
+      args: [ '--no-foo', '--bar' ],
+      task: testTask5,
+    })
+
+    expect(parsed.foo).toBe(false)
+    expect(parsed.bar).toBe(true)
 
   })
 
