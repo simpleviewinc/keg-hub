@@ -73,4 +73,19 @@ module.exports = {
   testTask4: {
     name: 'testTask4',
   },
+  testTask5: {
+    name: 'testTask5',
+    options: {
+      foo: {
+        description: "defaults to true",
+        type: 'bool',
+        default: true
+      },
+      bar: {
+        description: "defaults to false",
+        type: 'bool',
+        default: false
+      },
+    }
+  },
 }
