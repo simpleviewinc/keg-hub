@@ -10,18 +10,17 @@ describe('getInternalIp', () => {
 
     const internalIp = getInternalIp()
     const ipSplit = internalIp.split('.')
+    const possibleIPParts = [ '192', '172', '127', '0', '10' ]
 
     expect(ipSplit.length).not.toBe(0)
-    expect(ipSplit[0]).toBe('192')
-    expect(ipSplit[1]).toBe('168')
-    
+    expect(possibleIPParts).toContain(ipSplit[0])
+
     const secondLastNum = parseInt(ipSplit[2])
     expect(isNum(secondLastNum)).toBe(true)
     expect(secondLastNum <= 255).toBe(true)
     expect(secondLastNum >= 0).toBe(true)
 
     const lastNum = parseInt(ipSplit[3])
-
     expect(isNum(lastNum)).toBe(true)
     expect(lastNum <= 255).toBe(true)
     expect(lastNum > 0).toBe(true)
