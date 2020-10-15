@@ -113,7 +113,7 @@ export const TextToggle = props => {
 
       { showToggle && !expanded && (
         <LinearGradient
-          colors={[ 'transparent', fadeColor ]}
+          colors={[ 'rgba(255,255,255,0)', fadeColor ]}
           style={mainStyle.linearGradient}
         />
       ) }
