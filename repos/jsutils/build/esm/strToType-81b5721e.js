@@ -14,3 +14,4 @@ const strToType = val => {
 };
 
 export { strToType as s };
+//# sourceMappingURL=strToType-81b5721e.js.map

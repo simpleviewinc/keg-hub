@@ -20,3 +20,4 @@ const pipeline = (item, ...functions) => {
 const hasOwn = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
 
 export { applyToFunc as a, hasOwn as h, pipeline as p };
+//# sourceMappingURL=hasOwn-deb5bbb8.js.map

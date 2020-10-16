@@ -16,3 +16,4 @@ const cloneFunc = func => {
 };
 
 export { cloneFunc as c };
+//# sourceMappingURL=cloneFunc-8a9b7642.js.map
