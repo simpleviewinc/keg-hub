@@ -37,3 +37,4 @@ const cloneObjWithPrototypeAndProperties = objectWithPrototype => {
 exports.cloneObjWithPrototypeAndProperties = cloneObjWithPrototypeAndProperties;
 exports.deepClone = deepClone;
 exports.set = set;
+//# sourceMappingURL=deepClone-2b548986.js.map

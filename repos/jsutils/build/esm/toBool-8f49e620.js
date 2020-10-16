@@ -8,3 +8,4 @@ const convertToStrBool = val => isBool(val) ? toStr(val) : !val || val === 'fals
 const toBool = val => isStrBool(val) ? val === 'true' : convertToStrBool(val) === 'true';
 
 export { convertToStrBool as c, isStrBool as i, toBool as t };
+//# sourceMappingURL=toBool-8f49e620.js.map

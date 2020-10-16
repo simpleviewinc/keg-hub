@@ -209,7 +209,7 @@ var ensureClassArray = function ensureClassArray(classList) {
 };
 
 var handleRefUpdate = function handleRefUpdate(ref, update) {
-  return jsutils.isObj(ref) && 'current' in ref ? ref.current = update : jsutils.checkCall(ref, update);
+  return !ref ? update : jsutils.isObj(ref) && 'current' in ref ? ref.current = update : jsutils.checkCall(ref, update);
 };
 
 var useClassName = function useClassName(defClass, className, ref) {
@@ -355,13 +355,6 @@ var getTarget = function getTarget(isWeb, target) {
     target: target
   } : {};
 };
-
-var noOp = Object.freeze(function () {});
-var noOpObj = Object.freeze({});
-var noPropObj = jsutils.deepFreeze({
-  content: {}
-});
-var noPropArr = jsutils.deepFreeze([]);
 
 var states = {
 	defaultType: "default",
@@ -649,6 +642,34 @@ var useChildren = function useChildren(defaults, overrides) {
   }, [].concat(_toConsumableArray(Object.values(defaults.values)), _toConsumableArray(Object.values(overrides))));
 };
 
+var buildPropsForChild = function buildPropsForChild(childRefs, child, index) {
+  var key = (child === null || child === void 0 ? void 0 : child.key) || index || child;
+  var existingRef = child === null || child === void 0 ? void 0 : child.ref;
+  return {
+    key: key,
+    ref: function ref(childRef) {
+      handleRefUpdate(existingRef, childRef);
+      childRefs.current[key] = childRef;
+    }
+  };
+};
+var useCloneChildCallback = function useCloneChildCallback(childRefs) {
+  return React.useCallback(function (child) {
+    var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    var props = buildPropsForChild(childRefs, child, index);
+    return React__default.isValidElement(child) ? React__default.cloneElement(child, props) : child;
+  }, [childRefs]);
+};
+var useChildrenWithRefs = function useChildrenWithRefs(children) {
+  var enable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var childRefs = React.useRef({});
+  var cloneChild = useCloneChildCallback(childRefs);
+  var updatedChildren = React.useMemo(function () {
+    return enable ? React__default.Children.count(children) > 1 ? children.map(cloneChild) : cloneChild(children) : children;
+  }, [enable, children]);
+  return [updatedChildren, childRefs];
+};
+
 var makeHandlerObject = function makeHandlerObject(handler, _ref) {
   var onChange = _ref.onChange,
       onValueChange = _ref.onValueChange,
@@ -681,7 +702,7 @@ var getMediaType = function getMediaType(mediaTypes, styles) {
       media: value,
       styles: !jsutils.isObj(styles) ? styles : styles.media
     } : mediaData;
-  }, {}) : noOpObj;
+  }, {}) : jsutils.noOpObj;
 };
 var useMediaProps = function useMediaProps(_ref) {
   var Media = _ref.Media,
@@ -783,25 +804,15 @@ var useSpin = function useSpin() {
   });
 };
 
-var useStyle = function useStyle() {
-  for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {
-    styles[_key] = arguments[_key];
-  }
-  var theme = reTheme.useTheme();
-  return React.useMemo(function () {
-    return theme.get.apply(theme, styles);
-  }, [].concat(styles));
-};
-
 var validateStyles = function validateStyles(styles) {
-  return !Boolean(!styles || styles === noPropObj || jsutils.isEmptyColl(styles));
+  return !Boolean(!styles || styles === jsutils.noPropObj || jsutils.isEmptyColl(styles));
 };
 var getStylesFromPath = function getStylesFromPath(theme, path) {
   return path && jsutils.get(theme, path) || function () {
   }();
 };
 var mergeStyles = function mergeStyles(pathStyles, userStyles) {
-  if (!userStyles || userStyles === noPropObj) return pathStyles;
+  if (!userStyles || userStyles === jsutils.noPropObj) return pathStyles;
   var pathKeys = Object.keys(pathStyles);
   var userKeys = Object.keys(userStyles);
   return !userKeys.length ? pathStyles : pathKeys.indexOf(userKeys[0]) !== -1 ?
@@ -812,12 +823,12 @@ var mergeStyles = function mergeStyles(pathStyles, userStyles) {
   }, {});
 };
 var useThemePath = function useThemePath(path) {
-  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noPropObj;
+  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : jsutils.noPropObj;
   var theme = reTheme.useTheme();
   return React.useMemo(function () {
     var pathStyles = getStylesFromPath(theme, path);
     var validStyles = validateStyles(styles);
-    return validStyles ? mergeStyles(pathStyles, styles) : pathStyles || noPropObj;
+    return validStyles ? mergeStyles(pathStyles, styles) : pathStyles || jsutils.noPropObj;
   }, [theme, path, styles]);
 };
 
@@ -859,7 +870,7 @@ var useFromToAnimation = function useFromToAnimation(params) {
       _ref$duration = _ref.duration,
       duration = _ref$duration === void 0 ? 500 : _ref$duration,
       _ref$onFinish = _ref.onFinish,
-      onFinish = _ref$onFinish === void 0 ? noOp : _ref$onFinish,
+      onFinish = _ref$onFinish === void 0 ? jsutils.noOp : _ref$onFinish,
       _ref$loop = _ref.loop,
       loop = _ref$loop === void 0 ? false : _ref$loop,
       easing = _ref.easing;
@@ -881,11 +892,11 @@ var useFromToAnimation = function useFromToAnimation(params) {
 };
 
 var useClassList = function useClassList(className) {
-  var classList = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noPropArr;
+  var classList = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : jsutils.noPropArr;
   var classListArr = jsutils.eitherArr(classList, [classList]);
   return React.useMemo(function () {
     return ensureClassArray(classListArr).concat([className]);
-  }, [className].concat(_toConsumableArray(classListArr)));
+  }, [className, classListArr.join(' ')]);
 };
 
 var useThemeType = function useThemeType(themeLoc, defClass) {
@@ -895,7 +906,7 @@ var useThemeType = function useThemeType(themeLoc, defClass) {
     var themeSplit = themeLoc.split('.');
     var surface = themeSplit.pop();
     var typeRef = themeSplit.pop();
-    var surfaces = Object.keys(jsutils.get(colors$1, 'surface', noOpObj));
+    var surfaces = Object.keys(jsutils.get(colors$1, 'surface', jsutils.noOpObj));
     return typeRef && surfaces.indexOf(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
   }, [themeLoc, defClass]);
 };
@@ -988,7 +999,7 @@ var withTouch = function withTouch(Component) {
     var _props$touchThemePath = props.touchThemePath,
         touchThemePath = _props$touchThemePath === void 0 ? '' : _props$touchThemePath,
         _props$touchStyle = props.touchStyle,
-        touchStyle = _props$touchStyle === void 0 ? noPropObj : _props$touchStyle,
+        touchStyle = _props$touchStyle === void 0 ? jsutils.noPropObj : _props$touchStyle,
         onPress = props.onPress,
         otherProps = _objectWithoutProperties(props, ["touchThemePath", "touchStyle", "onPress"]);
     var theme = reTheme.useTheme();
@@ -1039,7 +1050,7 @@ var SvgIcon = function SvgIcon(props) {
       size = props.size,
       stroke = props.stroke,
       _props$style = props.style,
-      style = _props$style === void 0 ? noPropObj : _props$style,
+      style = _props$style === void 0 ? jsutils.noPropObj : _props$style,
       viewBox = props.viewBox,
       attrs = _objectWithoutProperties(props, ["border", "color", "delta", "fill", "name", "size", "stroke", "style", "viewBox"]);
   var theme = reTheme.useTheme();
@@ -1174,7 +1185,7 @@ var CardCallout = function CardCallout(_ref) {
       subtitle = _ref.subtitle,
       title = _ref.title,
       _ref$styles = _ref.styles,
-      styles = _ref$styles === void 0 ? noPropObj : _ref$styles;
+      styles = _ref$styles === void 0 ? jsutils.noPropObj : _ref$styles;
   var calloutStyles = jsutils.get(styles, "callout");
   return React__default.createElement(View$1, {
     className: useClassList('keg-card-callout', className),
@@ -1191,7 +1202,7 @@ var CardCallout = function CardCallout(_ref) {
 var CardContent = function CardContent(_ref) {
   var children = _ref.children,
       _ref$styles = _ref.styles,
-      styles = _ref$styles === void 0 ? noPropObj : _ref$styles,
+      styles = _ref$styles === void 0 ? jsutils.noPropObj : _ref$styles,
       subtitle = _ref.subtitle,
       title = _ref.title;
   return React__default.createElement(View$1, {
@@ -1212,10 +1223,10 @@ CardContent.propTypes = {
 var CardContainer = function CardContainer(_ref) {
   var className = _ref.className,
       _ref$attributes = _ref.attributes,
-      attributes = _ref$attributes === void 0 ? noOpObj : _ref$attributes,
+      attributes = _ref$attributes === void 0 ? jsutils.noOpObj : _ref$attributes,
       children = _ref.children,
       _ref$styles = _ref.styles,
-      styles = _ref$styles === void 0 ? noPropObj : _ref$styles;
+      styles = _ref$styles === void 0 ? jsutils.noPropObj : _ref$styles;
   return React__default.createElement(View$1, _extends({
     className: useClassList('keg-card', className)
   }, attributes, {
@@ -1401,8 +1412,8 @@ var Image$1 = React.forwardRef(function (props, ref) {
       useLoading = _props$useLoading === void 0 ? true : _props$useLoading,
       attrs = _objectWithoutProperties(props, ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"]);
   var builtStyles = useThemePath(themePath, styles);
-  var loadingStyles = useStyle(builtStyles.loading, builtStyles.image);
-  var loadedStyles = useStyle(loadingStyles, builtStyles.loaded);
+  var loadingStyles = reTheme.useStyle(builtStyles.loading, builtStyles.image);
+  var loadedStyles = reTheme.useStyle(loadingStyles, builtStyles.loaded);
   var _useThemeHover = reTheme.useThemeHover(loadedStyles, builtStyles.hover, {
     internalRef: internalRef
   }),
@@ -1456,7 +1467,7 @@ var MediaFromType = function MediaFromType(_ref) {
       container = styles.container,
       loading = styles.loading,
       loadingComp = styles.loadingComp;
-  var mediaStyles = useStyle(type === 'image' && image && {
+  var mediaStyles = reTheme.useStyle(type === 'image' && image && {
     image: image
   }, type === 'video' && video && {
     video: video
@@ -1610,7 +1621,10 @@ var H6 = KegText$1('h6');
 
 var Label = KegText$1('label');
 
-var P = KegText$1('paragraph');
+var Paragraph = KegText$1('paragraph');
+var P = function P(props) {
+  return React__default.createElement(React__default.Fragment, null, React__default.createElement(Paragraph, props), '\n');
+};
 
 var Subtitle = KegText$1('subtitle');
 
@@ -1705,87 +1719,131 @@ var useCheckedState = function useCheckedState(isChecked, themeStyles) {
         indicator: _objectSpread2(_objectSpread2({}, jsutils.get(themeStyles, 'content.indicator.off')), isChecked && jsutils.get(themeStyles, 'content.indicator.on'))
       })
     });
-  }, [isChecked]);
+  }, [isChecked, themeStyles]);
 };
-var setCheckedValue = function setCheckedValue(isChecked, setChecked, onChange) {
-  return function (event) {
-    setChecked(!isChecked);
+var useCheckboxPressHandler = function useCheckboxPressHandler(isChecked, setChecked, onChange, _ref) {
+  var _ref$disableCheck = _ref.disableCheck,
+      disableCheck = _ref$disableCheck === void 0 ? false : _ref$disableCheck,
+      _ref$disableUncheck = _ref.disableUncheck,
+      disableUncheck = _ref$disableUncheck === void 0 ? true : _ref$disableUncheck;
+  return React.useCallback(function (event) {
+    if (isChecked) !disableUncheck && setChecked(false);else !disableCheck && setChecked(true);
     jsutils.checkCall(onChange, event, !isChecked);
-  };
+  }, [isChecked, setChecked, onChange, disableCheck, disableUncheck]);
 };
-var SideComponent = function SideComponent(_ref) {
-  var className = _ref.className,
-      Component = _ref.Component,
-      style = _ref.style;
-  return jsutils.isStr(Component) ? React__default.createElement(Text, {
+var SideComponent = function SideComponent(_ref2) {
+  var className = _ref2.className,
+      Component = _ref2.Component,
+      styles = _ref2.styles,
+      style = _ref2.style,
+      onPress = _ref2.onPress;
+  var sideProps = onPress ? {
+    onPress: onPress
+  } : undefined;
+  return jsutils.isStr(Component) ? React__default.createElement(Text, _extends({
     className: className,
     style: style
-  }, Component) : renderFromType(Component, {
-    style: styles.content,
-    className: className
-  });
+  }, sideProps), Component) : renderFromType(Component, _objectSpread2({
+    className: className,
+    style: style,
+    styles: styles
+  }, sideProps));
 };
-var ChildrenComponent = function ChildrenComponent(_ref2) {
-  var children = _ref2.children,
-      className = _ref2.className;
+var ChildrenComponent = function ChildrenComponent(_ref3) {
+  var children = _ref3.children,
+      className = _ref3.className;
   return React__default.createElement(React__default.Fragment, null, renderFromType(children, {
     className: className
   }, null));
 };
-var CheckboxWrapper = function CheckboxWrapper(props) {
+var useCheckboxHandle = function useCheckboxHandle(ref, isChecked, _setChecked, pressHandler) {
+  return React.useImperativeHandle(ref, function () {
+    return {
+      isChecked: isChecked,
+      setChecked: function setChecked(checked) {
+        _setChecked(checked);
+        pressHandler({}, checked);
+      }
+    };
+  }, [ref, isChecked, _setChecked, pressHandler]);
+};
+var CheckboxWrapper = React.forwardRef(function (props, ref) {
   var className = props.className,
+      initChecked = props.initChecked,
       checked = props.checked,
       children = props.children,
       elType = props.elType,
       Element = props.Element,
+      CheckIcon = props.CheckIcon,
       disabled = props.disabled,
+      _props$disableCheck = props.disableCheck,
+      disableCheck = _props$disableCheck === void 0 ? false : _props$disableCheck,
+      _props$disableUncheck = props.disableUncheck,
+      disableUncheck = _props$disableUncheck === void 0 ? false : _props$disableUncheck,
+      _props$allowAdjacentP = props.allowAdjacentPress,
+      allowAdjacentPress = _props$allowAdjacentP === void 0 ? true : _props$allowAdjacentP,
       isWeb = props.isWeb,
       LeftComponent = props.LeftComponent,
+      leftClassName = props.leftClassName,
       close = props.close,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
-      ref = props.ref,
       RightComponent = props.RightComponent,
+      rightClassName = props.rightClassName,
       styles = props.styles,
       CheckboxComponent = props.CheckboxComponent,
       type = props.type,
       themePath = props.themePath,
       value = props.value,
-      elProps = _objectWithoutProperties(props, ["className", "checked", "children", "elType", "Element", "disabled", "isWeb", "LeftComponent", "close", "onChange", "onValueChange", "ref", "RightComponent", "styles", "CheckboxComponent", "type", "themePath", "value"]);
-  var _useState = React.useState(jsutils.toBool(checked || value)),
+      elProps = _objectWithoutProperties(props, ["className", "initChecked", "checked", "children", "elType", "Element", "CheckIcon", "disabled", "disableCheck", "disableUncheck", "allowAdjacentPress", "isWeb", "LeftComponent", "leftClassName", "close", "onChange", "onValueChange", "RightComponent", "rightClassName", "styles", "CheckboxComponent", "type", "themePath", "value"]);
+  var initCheckedValue = jsutils.toBool(checked || initChecked || value);
+  var _useState = React.useState(initCheckedValue),
       _useState2 = _slicedToArray(_useState, 2),
       isChecked = _useState2[0],
       setChecked = _useState2[1];
+  var pressHandler = useCheckboxPressHandler(isChecked, setChecked, onChange || onValueChange,
+  {
+    disableCheck: disableCheck,
+    disableUncheck: disableUncheck
+  });
+  useCheckboxHandle(ref, isChecked, setChecked, onChange || onValueChange);
+  var canUseHandler = !disabled && (isChecked && !disableUncheck || !isChecked && !disableCheck);
   var elThemePath = themePath || "form.".concat(elType, ".").concat(close && 'close' || 'default');
   var themeStyles = useThemePath(elThemePath, styles);
-  var activeStyles = useCheckedState(isChecked, themeStyles);
+  var disabledStyles = useThemePath("form.".concat(elType, ".disabled"), themeStyles);
+  var activeStyles = useCheckedState(isChecked, canUseHandler ? themeStyles : disabledStyles);
   var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-checkbox', className);
-  return children && React__default.createElement(View$1, {
+  var pressHandlerProp = canUseHandler ? getOnChangeHandler(isWeb, pressHandler) : undefined;
+  var ChildrenView = children && React__default.createElement(View$1, {
     className: typeClassName,
     style: activeStyles.main
   }, React__default.createElement(ChildrenComponent, {
     className: "keg-checkbox-container",
     children: children
-  })) || React__default.createElement(View$1, {
+  }));
+  return ChildrenView || React__default.createElement(View$1, {
     className: typeClassName,
     style: activeStyles.main
   }, LeftComponent && React__default.createElement(SideComponent, {
-    className: "keg-checkbox-left",
+    className: useClassList('keg-checkbox-left', leftClassName),
     Component: LeftComponent,
-    style: activeStyles.content.left
+    style: activeStyles.content.left,
+    onPress: allowAdjacentPress && canUseHandler && pressHandler
   }), CheckboxComponent ? renderFromType(CheckboxComponent, _objectSpread2(_objectSpread2({}, props), {}, {
     styles: activeStyles.content
   })) : React__default.createElement(Element, _extends({
     className: "keg-checkbox-container",
     elProps: elProps,
     disabled: disabled,
-    styles: activeStyles.content
-  }, getChecked(isWeb, isChecked), getOnChangeHandler(isWeb, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent, {
-    className: "keg-checkbox-right",
+    styles: activeStyles.content,
+    CheckIcon: CheckIcon
+  }, getChecked(isWeb, isChecked), pressHandlerProp)), RightComponent && React__default.createElement(SideComponent, {
+    className: useClassList('keg-checkbox-right', rightClassName),
     Component: RightComponent,
-    style: activeStyles.content.right
+    style: activeStyles.content.right,
+    onPress: allowAdjacentPress && canUseHandler && pressHandler
   }));
-};
+});
 CheckboxWrapper.propTypes = {
   checked: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
@@ -1795,20 +1853,22 @@ CheckboxWrapper.propTypes = {
   LeftComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
   RightComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
   CheckboxComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
+  CheckIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
-  ref: PropTypes.object,
   styles: PropTypes.object,
   text: PropTypes.string,
   themePath: PropTypes.string,
   type: PropTypes.string,
-  value: PropTypes.bool
+  value: PropTypes.bool,
+  disableCheck: PropTypes.bool,
+  disableUncheck: PropTypes.bool,
+  allowAdjacentPress: PropTypes.bool
 };
 
 var checkBoxStyles = {
   icon: {
     position: 'relative',
-    fontSize: 14,
     zIndex: 1,
     height: 14,
     width: 14,
@@ -1835,16 +1895,20 @@ var Input$2 = styleInjector.StyleInjector(Input, {
   displayName: 'Checkbox',
   className: 'keg-checkbox'
 });
-var Element$1 = React__default.forwardRef(function (_ref, ref) {
-  var className = _ref.className,
-      elProps = _ref.elProps,
-      _ref$styles = _ref.styles,
-      styles = _ref$styles === void 0 ? noPropObj : _ref$styles,
-      icon = _ref.icon,
-      checked = _ref.checked,
-      props = _objectWithoutProperties(_ref, ["className", "elProps", "styles", "icon", "checked"]);
+var Element$1 = React__default.forwardRef(function (props, ref) {
+  var className = props.className,
+      elProps = props.elProps,
+      _props$styles = props.styles,
+      styles = _props$styles === void 0 ? jsutils.noPropObj : _props$styles,
+      _props$CheckIcon = props.CheckIcon,
+      CheckIcon = _props$CheckIcon === void 0 ? Check : _props$CheckIcon,
+      checked = props.checked,
+      attributes = _objectWithoutProperties(props, ["className", "elProps", "styles", "CheckIcon", "checked"]);
   var checkStyle = React.useMemo(function () {
-    return _objectSpread2(_objectSpread2({}, styles.indicator), checkBoxStyles.icon);
+    return _objectSpread2(_objectSpread2({}, checkBoxStyles.icon), styles.indicator);
+  }, [checkBoxStyles, styles]);
+  var inputStyle = React.useMemo(function () {
+    return _objectSpread2(_objectSpread2({}, styles.input), checkBoxStyles.input);
   }, [checkBoxStyles, styles]);
   return React__default.createElement(View$1, {
     style: styles.main,
@@ -1852,26 +1916,27 @@ var Element$1 = React__default.forwardRef(function (_ref, ref) {
   }, React__default.createElement(View$1, {
     className: "keg-checkbox-area",
     style: styles.area
-  }), checked && React__default.createElement(Check, {
+  }), checked && React__default.createElement(CheckIcon, {
     className: "keg-checkbox-icon",
     style: checkStyle
   }), React__default.createElement(Input$2, _extends({
     className: "keg-checkbox"
-  }, elProps, props, {
+  }, elProps, attributes, {
     role: "checkbox",
     checked: checked,
     type: "checkbox",
     ref: ref,
-    style: checkBoxStyles.input
+    style: inputStyle
   })));
 });
-var Checkbox = function Checkbox(props) {
+var Checkbox = React.forwardRef(function (props, ref) {
   return React__default.createElement(CheckboxWrapper, _extends({}, props, {
     elType: 'checkbox',
     Element: Element$1,
-    isWeb: true
+    isWeb: true,
+    ref: ref
   }));
-};
+});
 Checkbox.propTypes = _objectSpread2({}, CheckboxWrapper.propTypes);
 
 var Form = React__default.forwardRef(function (props, ref) {
@@ -1964,7 +2029,8 @@ var Input$4 = React__default.forwardRef(function (props, ref) {
     onClick: onClick,
     onPress: onPress
   }), elProps, {
-    style: [inputStyles, style]
+    style: [inputStyles, style],
+    ref: ref
   }));
 });
 Input$4.propTypes = _objectSpread2(_objectSpread2({}, KegInput.propTypes), {}, {
@@ -2122,7 +2188,7 @@ var useCheckedState$1 = function useCheckedState(isChecked, themeStyles) {
     });
   }, [isChecked]);
 };
-var setCheckedValue$1 = function setCheckedValue(isChecked, setChecked, onChange) {
+var setCheckedValue = function setCheckedValue(isChecked, setChecked, onChange) {
   return function (event) {
     setChecked(!isChecked);
     jsutils.checkCall(onChange, event, !isChecked);
@@ -2141,7 +2207,15 @@ var ChildrenComponent$1 = function ChildrenComponent(_ref3) {
   var children = _ref3.children;
   return React__default.createElement(React__default.Fragment, null, renderFromType(children, {}, null));
 };
-var Switch$1 = function Switch(props) {
+var useSwitchHandle = function useSwitchHandle(ref, isChecked, setChecked) {
+  return React.useImperativeHandle(ref, function () {
+    return {
+      isChecked: isChecked,
+      setChecked: setChecked
+    };
+  }, [ref, isChecked, setChecked]);
+};
+var Switch$1 = React.forwardRef(function (props, ref) {
   var className = props.className,
       checked = props.checked,
       children = props.children,
@@ -2151,20 +2225,21 @@ var Switch$1 = function Switch(props) {
       close = props.close,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
-      ref = props.ref,
       RightComponent = props.RightComponent,
       styles = props.styles,
       SwitchComponent = props.SwitchComponent,
+      setCheckedSetter = props.setCheckedSetter,
       type = props.type,
       themePath = props.themePath,
       thumbColor = props.thumbColor,
       trackColor = props.trackColor,
       value = props.value,
-      elProps = _objectWithoutProperties(props, ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "ref", "RightComponent", "styles", "SwitchComponent", "type", "themePath", "thumbColor", "trackColor", "value"]);
+      elProps = _objectWithoutProperties(props, ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "RightComponent", "styles", "SwitchComponent", "setCheckedSetter", "type", "themePath", "thumbColor", "trackColor", "value"]);
   var _useState = React.useState(jsutils.toBool(checked || value)),
       _useState2 = _slicedToArray(_useState, 2),
       isChecked = _useState2[0],
       setChecked = _useState2[1];
+  useSwitchHandle(ref, isChecked, setChecked);
   var elThemePath = themePath || "form.switch.".concat(close && 'close' || 'default');
   var themeStyles = useThemePath(elThemePath, styles);
   var activeStyles = useCheckedState$1(isChecked, themeStyles);
@@ -2188,12 +2263,12 @@ var Switch$1 = function Switch(props) {
     elProps: elProps,
     disabled: disabled,
     styles: activeStyles.content
-  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue$1(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent$1, {
+  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent$1, {
     className: "keg-switch-right",
     Component: RightComponent,
     style: activeStyles.content.right
   }));
-};
+});
 Switch$1.propTypes = {
   checked: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
@@ -2204,7 +2279,6 @@ Switch$1.propTypes = {
   SwitchComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.element]),
   onChange: PropTypes.func,
   onValueChange: PropTypes.func,
-  ref: PropTypes.object,
   styles: PropTypes.object,
   text: PropTypes.string,
   themePath: PropTypes.string,
@@ -2212,6 +2286,107 @@ Switch$1.propTypes = {
   trackColor: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.bool
+};
+
+var SimpleHeader = React__default.forwardRef(function (props, ref) {
+  var title = props.title,
+      className = props.className,
+      style = props.style,
+      rest = _objectWithoutProperties(props, ["title", "className", "style"]);
+  React.useImperativeHandle(ref, function () {
+    return {
+      isChecked: undefined,
+      setChecked: jsutils.noOp
+    };
+  });
+  var textStyle = reTheme.useStyle('form.checkGroup.simpleHeader.main', style);
+  return React__default.createElement(Text, _extends({
+    className: className,
+    style: textStyle
+  }, rest), title);
+});
+var CheckboxHeader = React__default.forwardRef(function (props, ref) {
+  var title = props.title,
+      className = props.className,
+      style = props.style,
+      onPress = props.onPress,
+      checked = props.checked;
+  var headerStyles = React.useMemo(function () {
+    return {
+      main: style,
+      content: {
+        right: {}
+      }
+    };
+  }, [style]);
+  var onChangeHandler = React.useCallback(function (_, val) {
+    return onPress === null || onPress === void 0 ? void 0 : onPress(val);
+  }, [onPress]);
+  return React__default.createElement(Checkbox, {
+    RightComponent: title,
+    rightClassName: className,
+    styles: headerStyles,
+    checked: checked,
+    onChange: onChangeHandler,
+    ref: ref,
+    close: true
+  });
+});
+var CheckGroup = React__default.forwardRef(function (props, ref) {
+  var className = props.className,
+      headerClassName = props.headerClassName,
+      title = props.title,
+      children = props.children,
+      styles = props.styles,
+      _props$initChecked = props.initChecked,
+      initChecked = _props$initChecked === void 0 ? false : _props$initChecked,
+      onGroupPress = props.onGroupPress,
+      _props$showHeaderChec = props.showHeaderCheckbox,
+      showHeaderCheckbox = _props$showHeaderChec === void 0 ? false : _props$showHeaderChec,
+      _props$showHeader = props.showHeader,
+      showHeader = _props$showHeader === void 0 ? true : _props$showHeader;
+  var groupStyles = reTheme.useStyle('form.checkGroup', styles);
+  var _useChildrenWithRefs = useChildrenWithRefs(children, showHeaderCheckbox),
+      _useChildrenWithRefs2 = _slicedToArray(_useChildrenWithRefs, 2),
+      childrenWithProps = _useChildrenWithRefs2[0],
+      childRefs = _useChildrenWithRefs2[1];
+  var headerCheckHandler = React.useCallback(function (checked) {
+    onGroupPress === null || onGroupPress === void 0 ? void 0 : onGroupPress(checked);
+    jsutils.mapObj(childRefs.current, function (_, child) {
+      var _child$setChecked;
+      return child === null || child === void 0 ? void 0 : (_child$setChecked = child.setChecked) === null || _child$setChecked === void 0 ? void 0 : _child$setChecked.call(child, checked);
+    });
+  }, [childRefs]);
+  var Header = function Header() {
+    return showHeaderCheckbox ? React__default.createElement(CheckboxHeader, {
+      className: headerClassName,
+      style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
+      title: title,
+      onPress: showHeaderCheckbox && headerCheckHandler,
+      checked: showHeaderCheckbox ? initChecked : undefined,
+      ref: ref
+    }) : React__default.createElement(SimpleHeader, {
+      className: headerClassName,
+      style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
+      title: title,
+      ref: ref
+    });
+  };
+  return React__default.createElement(View$1, {
+    className: useClassList('keg-check-group', className),
+    style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.main
+  }, showHeader && React__default.createElement(Header, null), childrenWithProps);
+});
+CheckGroup.Item = Checkbox;
+CheckGroup.propTypes = {
+  className: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  headerClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  title: PropTypes.string,
+  initChecked: PropTypes.bool,
+  showHeaderCheckbox: PropTypes.bool,
+  showHeader: PropTypes.bool,
+  onGroupPress: PropTypes.func,
+  styles: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 var useHasWidth = function useHasWidth(styles) {
@@ -2228,7 +2403,7 @@ var Container = function Container(_ref) {
       flexDir = _ref.flexDir,
       size = _ref.size,
       _ref$style = _ref.style,
-      style = _ref$style === void 0 ? noPropObj : _ref$style,
+      style = _ref$style === void 0 ? jsutils.noPropObj : _ref$style,
       props = _objectWithoutProperties(_ref, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
   var containerStyles = jsutils.isArr(style) ? style : [style];
   var hasWidth = useHasWidth(containerStyles);
@@ -2477,7 +2652,7 @@ var Modal = function Modal(props) {
       onAnimateIn = props.onAnimateIn,
       onAnimateOut = props.onAnimateOut,
       _props$onBackdropTouc = props.onBackdropTouch,
-      onBackdropTouch = _props$onBackdropTouc === void 0 ? noOp : _props$onBackdropTouc,
+      onBackdropTouch = _props$onBackdropTouc === void 0 ? jsutils.noOp : _props$onBackdropTouc,
       styles = props.styles,
       themePath = props.themePath,
       _props$type = props.type,
@@ -2618,7 +2793,7 @@ var Side = function Side(props) {
       children = props.children,
       right = props.right;
   var position = right ? 'right' : 'left';
-  var contentStyles = jsutils.get(styles, [position, 'content'], noPropObj);
+  var contentStyles = jsutils.get(styles, [position, 'content'], jsutils.noPropObj);
   var iconProps = {
     styles: styles,
     IconElement: IconElement,
@@ -2688,6 +2863,81 @@ var ScrollView$1 = styleInjector.StyleInjector(ScrollView, {
   className: 'keg-scrollview'
 });
 ScrollView$1.propTypes = ScrollView.propTypes;
+
+var noAnimate = function noAnimate(toggled, current, _ref) {
+  var initial = _ref.initial,
+      max = _ref.max;
+  return !toggled && current === initial || toggled && current === max;
+};
+var Drawer = function Drawer(props) {
+  var initial = props.initial,
+      Element = props.Element,
+      styles = props.styles,
+      toggled = props.toggled,
+      className = props.className,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'timing' : _props$type,
+      _props$config = props.config,
+      config = _props$config === void 0 ? jsutils.noOpObj : _props$config,
+      childProps = _objectWithoutProperties(props, ["initial", "Element", "styles", "toggled", "className", "type", "config"]);
+  var heights = React.useRef({
+    initial: initial || 0,
+    max: 0
+  });
+  var _useState = React.useState(new reactNative.Animated.Value(initial)),
+      _useState2 = _slicedToArray(_useState, 2),
+      animation = _useState2[0],
+      setAnimation = _useState2[1];
+  var setMaxHeight = function setMaxHeight(event) {
+    var maxHeight = event.nativeEvent.layout.height;
+    if (!heights.current || heights.current.max === maxHeight) return;
+    heights.current.max = maxHeight;
+    toggled && setAnimation(new reactNative.Animated.Value(maxHeight));
+  };
+  React.useLayoutEffect(function () {
+    if (noAnimate(toggled, animation._value, heights.current)) return;
+    var _heights$current = heights.current,
+        initial = _heights$current.initial,
+        max = _heights$current.max;
+    var heightChanges = toggled ? {
+      from: initial,
+      to: max
+    } : {
+      from: max,
+      to: initial
+    };
+    animation.setValue(heightChanges.from);
+    var animationConfig = config ? _objectSpread2(_objectSpread2({}, config), {}, {
+      toValue: heightChanges.to
+    }) : {
+      toValue: heightChanges.to
+    };
+    reactNative.Animated[type](animation, animationConfig).start();
+  }, [toggled, type, config]);
+  var drawerStyles = useThemePath("drawer", styles);
+  var classRef = useClassName('keg-drawer', className);
+  return React__default.createElement(reactNative.Animated.View, {
+    ref: classRef,
+    style: [drawerStyles.main, jsutils.get(styles, 'main'), {
+      height: animation
+    }]
+  }, React__default.createElement(View$1, {
+    className: "keg-drawer-content",
+    onLayout: setMaxHeight,
+    style: jsutils.get(styles, 'content')
+  }, isValidComponent(Element) ? React__default.createElement(Element, _extends({}, childProps, {
+    styles: styles
+  })) : props.children));
+};
+Drawer.propTypes = {
+  className: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  config: PropTypes.object,
+  Element: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType]),
+  initial: PropTypes.number,
+  styles: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  toggled: PropTypes.bool,
+  type: PropTypes.oneOf(['decay', 'spring', 'timing'])
+};
 
 var transition = function transition() {
   var prop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
@@ -3691,9 +3941,6 @@ var checkboxDefault = {
       },
       on: {}
     },
-    disabled: {
-      opacity: 0.4
-    },
     left: {
       flex: 1,
       textAlign: 'left'
@@ -3723,9 +3970,63 @@ var checkboxClose = jsutils.deepMerge(checkboxDefault, {
     }
   }
 });
+var disabledRules = {
+  $all: {
+    opacity: 0.4
+  },
+  $web: {
+    cursor: 'not-allowed'
+  }
+};
+var checkboxDisabled = {
+  main: disabledRules,
+  content: {
+    main: disabledRules,
+    input: {
+      cursor: 'not-allowed'
+    },
+    right: {
+      cursor: 'not-allowed'
+    }
+  }
+};
 var checkbox = {
   default: checkboxDefault,
-  close: checkboxClose
+  close: checkboxClose,
+  disabled: checkboxDisabled
+};
+
+var header$1 = {
+  $all: {
+    $xsmall: {
+      width: '70%',
+      color: colors$1.lightGray,
+      lineHeight: 19,
+      padding: 1,
+      paddingBottom: 6,
+      marginBottom: 4,
+      borderBottomWidth: 1,
+      borderStyle: 'dotted'
+    },
+    $small: {
+      padding: 2,
+      paddingBottom: 12,
+      marginBottom: 7
+    }
+  },
+  $web: {
+    letterSpacing: '0.105em'
+  }
+};
+var simpleHeader = {
+  main: {
+    marginLeft: 27
+  }
+};
+var checkGroup = {
+  main: {},
+  header: header$1,
+  simpleHeader: simpleHeader
 };
 
 var defaults$9 = getThemeDefaults();
@@ -3892,6 +4193,7 @@ var switchStyles = {
 
 var form$2 = {
   checkbox: checkbox,
+  checkGroup: checkGroup,
   form: form$1,
   input: input,
   option: option,
@@ -3994,7 +4296,8 @@ var typography = {
     letterSpacing: 0.25
   }, compFontDefs.h4),
   h5: _objectSpread2({
-    fontSize: 20
+    fontSize: 20,
+    marginBottom: margin.size
   }, compFontDefs.h5),
   h6: _objectSpread2({
     color: colors$1.opacity._60,
@@ -4011,7 +4314,9 @@ var typography = {
   }, compFontDefs.label),
   paragraph: _objectSpread2({
     fontSize: fontDefs.size || 16,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
+    marginBottom: margin.size,
+    lineHeight: 20
   }, compFontDefs.paragraph),
   subtitle: _objectSpread2({
     fontSize: 14,
@@ -4038,9 +4343,11 @@ exports.AppHeader = AppHeader;
 exports.Button = Button;
 exports.Caption = Caption;
 exports.Card = Card;
+exports.CheckGroup = CheckGroup;
 exports.Checkbox = Checkbox;
 exports.Column = Column;
 exports.Divider = Divider;
+exports.Drawer = Drawer;
 exports.FilePicker = FilePicker;
 exports.Form = Form;
 exports.Grid = Grid;
@@ -4079,6 +4386,7 @@ exports.renderFromType = renderFromType;
 exports.theme = theme;
 exports.useAnimate = useAnimate;
 exports.useChildren = useChildren;
+exports.useChildrenWithRefs = useChildrenWithRefs;
 exports.useClassList = useClassList;
 exports.useClassName = useClassName;
 exports.useFromToAnimation = useFromToAnimation;
@@ -4087,7 +4395,6 @@ exports.useMediaProps = useMediaProps;
 exports.usePressHandlers = usePressHandlers;
 exports.useSelectHandlers = useSelectHandlers;
 exports.useSpin = useSpin;
-exports.useStyle = useStyle;
 exports.useTextAccessibility = useTextAccessibility;
 exports.useThemePath = useThemePath;
 exports.useThemeTypeAsClass = useThemeTypeAsClass;

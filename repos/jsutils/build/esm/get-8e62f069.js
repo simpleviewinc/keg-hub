@@ -26,3 +26,4 @@ const updateColl = (obj, path, type, val) => {
 const get = (obj, path, fallback) => updateColl(obj, path, 'get', fallback);
 
 export { get as g, updateColl as u };
+//# sourceMappingURL=get-8e62f069.js.map

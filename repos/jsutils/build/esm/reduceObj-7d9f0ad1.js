@@ -4,3 +4,4 @@ import { i as isFunc } from './isFunc-40ceeef8.js';
 const reduceObj = (obj, cb, start = {}) => isObj(obj) && isFunc(cb) && Object.entries(obj).reduce((data, [key, value]) => cb(key, value, data), start) || start;
 
 export { reduceObj as r };
+//# sourceMappingURL=reduceObj-7d9f0ad1.js.map
