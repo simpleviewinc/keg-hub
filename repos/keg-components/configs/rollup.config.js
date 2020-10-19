@@ -35,6 +35,8 @@ const shared = {
     'expo-fonts',
     'react-native-svg-web',
     'react-native-svg',
+    'react-native-web-linear-gradient',
+    'react-native-linear-gradient'
   ],
   watch: {
     clearScreen: false
