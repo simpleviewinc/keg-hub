@@ -40,11 +40,13 @@ const buildStyles = (theme, styleHelper) => {
  * @param {object=} props.styles
  * @param {boolean=} props.isExpandedInit - whether the content is expanded or not initially
  * @param {string=} props.className
- * @param {Function=} props.onToggleChange - optional. callback whenever the toggle component is pressed
+ * @param {Function=} props.onToggle - optional. callback whenever the toggle component is pressed
  * @param {'left'|'center'|'right'=} props.togglePosition - optional. where to position the toggle component. default 'right'
  * @param {Number=} props.collapsedHeight - optional. height of the textview when collapsed
  * @param {Component=} props.CustomToggle - optional toggle component to use instead of the default
- * @param {string} props.fadeColor - optional color for the fade on collapsed text
+ * @param {string=} props.fadeColor - optional color for the fade on collapsed text
+ * @param {string=} props.expandedToggleText - optional text for the button when it's expanded
+ * @param {string=} props.collapsedToggleText - optional text for the button when it's collapsed
  */
 export const TextToggle = props => {
   const {
@@ -53,10 +55,12 @@ export const TextToggle = props => {
     isExpandedInit = false,
     className,
     CustomToggle,
-    onToggleChange,
+    onToggle,
     togglePosition = 'right',
     collapsedHeight = 100,
     fadeColor = 'white',
+    collapsedToggleText = 'show more',
+    expandedToggleText = 'show less',
   } = props
 
   if (!text) return null
@@ -82,8 +86,8 @@ export const TextToggle = props => {
 
   const onToggleCb = useCallback(() => {
     setExpanded(!expanded)
-    isFunc(onToggleChange) && onToggleChange(!expanded)
-  }, [ expanded, onToggleChange ])
+    isFunc(onToggle) && onToggle(!expanded)
+  }, [ expanded, onToggle ])
 
   const onTextLayout = useCallback(
     event => {
@@ -123,6 +127,8 @@ export const TextToggle = props => {
           isExpanded={expanded}
           styles={mainStyle.toggleComponent}
           CustomComponent={CustomToggle}
+          collapsedToggleText={collapsedToggleText}
+          expandedToggleText={expandedToggleText}
         />
       ) }
     </View>
@@ -148,9 +154,18 @@ const shouldDisplayToggler = (minHeight, textMaxHeight) => {
  * @param {object} props.styles
  * @param {Component=} props.CustomComponent - optional Component to override the default text component
  * @param {boolean} props.isExpanded - whether to show expanded state or not
+ * @param {string} props.expandedToggleText - optional text for the button when it's expanded
+ * @param {string} props.collapsedToggleText - optional text for the button when it's collapsed
  */
-const ToggleComponent = ({ onPress, styles, CustomComponent, isExpanded }) => {
-  const defaultText = isExpanded ? 'show less' : 'show more'
+const ToggleComponent = ({
+  onPress,
+  styles,
+  CustomComponent,
+  isExpanded,
+  expandedToggleText,
+  collapsedToggleText,
+}) => {
+  const defaultText = isExpanded ? expandedToggleText : collapsedToggleText
 
   return (
     <Touchable
@@ -172,8 +187,10 @@ TextToggle.propTypes = {
   styles: PropTypes.object,
   className: PropTypes.string,
   CustomToggle: PropTypes.oneOfType([ PropTypes.func, PropTypes.elementType ]),
-  onToggleChange: PropTypes.func,
+  onToggle: PropTypes.func,
   togglePosition: PropTypes.oneOf([ 'left', 'center', 'right' ]),
   collapsedHeight: PropTypes.number,
   fadeColor: PropTypes.string,
+  expandedToggleText: PropTypes.string,
+  collapsedToggleText: PropTypes.string,
 }

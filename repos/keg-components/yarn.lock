@@ -2296,15 +2296,15 @@
     "@babel/runtime" "^7.7.2"
     core-js "^3.4.1"
 
-"@keg-hub/jsutils@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
-  integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
+"@keg-hub/jsutils@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-6.1.0.tgz#880329665ac2a173d5fbadfe4ff8f2eedc94c0cc"
+  integrity sha512-h8uE8UBUqGeI0QWJL+93gG2/SuV9Z7xoELIwtT0Zp1qJNQRlW91U/23S+Mt1V91cfZ3og0Dx3LcDknwWKXisgQ==
 
-"@keg-hub/re-theme@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-6.0.0.tgz#bfb2a270c93c8e0510bf6387d6ed2a9c651a79af"
-  integrity sha512-25PCZi34V3PKntY8e4L4YMixBvjN5cJztGCWUe+Y8sCfNApTgGZjuZBozcQj4d0Bh1CBk5/07cIlgksIT5iYLQ==
+"@keg-hub/re-theme@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-6.1.0.tgz#f942080be6922c121fd48f65aa9bbf3b46518487"
+  integrity sha512-lEKzJFCoGjNPKkH7EHjrjZWNz9yHrqhG9HOjqWvH8+jAXmZmZoR4IBj5gHEqYxnzAUHezI3bR6ki5PcNiOHVDw==
 
 "@mdx-js/loader@^1.5.1":
   version "1.6.18"

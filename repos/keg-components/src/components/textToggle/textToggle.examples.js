@@ -165,6 +165,8 @@ TextToggle.defaultProps = {
   togglePosition: 'right',
   collapsedHeight: 100,
   fadeColor: 'white',
+  expandedToggleText: 'show less',
+  collapsedToggleText: 'show more',
 }
 
 // Re-export the Component with the default props defined to be used in the MDX story
