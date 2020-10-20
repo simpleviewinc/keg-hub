@@ -31,16 +31,16 @@
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "dependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/core": "7.10.5",
-    "@babel/preset-env": "7.10.4",
-    "@babel/preset-react": "7.10.4",
-    "@babel/runtime": "7.10.5",
+    "@babel/cli": "7.12.1",
+    "@babel/core": "7.12.3",
+    "@babel/preset-env": "7.12.1",
+    "@babel/preset-react": "7.12.1",
+    "@babel/runtime": "7.12.1",
     "@keg-hub/jsutils": "0.0.1",
     "app-root-path": "3.0.0",
     "babel-loader": "8.1.0",
     "babel-plugin-module-resolver": "4.0.0",
-    "babel-plugin-react-native-web": "0.13.3",
+    "babel-plugin-react-native-web": "0.14.3",
     "babel-preset-expo": "8.3.0",
     "core-js": "3.6.4"
   },

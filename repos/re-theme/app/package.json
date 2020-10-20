@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://simpleviewinc.github.io/re-theme",
   "dependencies": {
-    "@babel/core": "7.10.5",
+    "@babel/core": "7.12.3",
     "@fortawesome/fontawesome-svg-core": "1.2.26",
     "@fortawesome/free-solid-svg-icons": "5.12.0",
     "@fortawesome/react-fontawesome": "0.1.8",
