@@ -1,4 +1,5 @@
 import { isArr, checkCall, isObj } from '@keg-hub/jsutils'
+import { getCSSRules } from './getCSSRules'
 import { validateArguments } from './validate'
 import { addToDom } from './addToDom'
 import { cssToJs } from './cssToJs'
@@ -14,8 +15,10 @@ import { cssToJs } from './cssToJs'
  * @returns {Object|string} - CssInJs object or string of the converted styles
  */
 const loopSheetCssRules = (formatted, sheet, classNames, callback) => {
+  const rules = getCSSRules(sheet)
+
   // Check the rules of each styleSheet for a matching class
-  return Array.from(sheet.cssRules)
+  return Array.from(rules)
     .reduce((formatted, cssRule) => {
 
       if (!cssRule.selectorText || !cssRule.cssText) return formatted
