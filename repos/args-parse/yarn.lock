@@ -1053,6 +1053,11 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
   integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
+"@keg-hub/jsutils@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-6.1.0.tgz#880329665ac2a173d5fbadfe4ff8f2eedc94c0cc"
+  integrity sha512-h8uE8UBUqGeI0QWJL+93gG2/SuV9Z7xoELIwtT0Zp1qJNQRlW91U/23S+Mt1V91cfZ3og0Dx3LcDknwWKXisgQ==
+
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.6.0", "@sinonjs/commons@^1.7.0", "@sinonjs/commons@^1.7.2":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"
