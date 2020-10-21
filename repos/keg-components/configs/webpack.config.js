@@ -20,7 +20,6 @@ const addAliases = {
   'react-native-svg': 'react-native-svg-web',
   '@keg-hub/jsutils': '@keg-hub/jsutils/build/esm',
   '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/web',
-  'react-native-linear-gradient': 'react-native-web-linear-gradient'
 }
 
 // Hard coded Rules
