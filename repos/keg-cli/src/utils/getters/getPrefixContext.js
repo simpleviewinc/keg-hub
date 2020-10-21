@@ -25,13 +25,9 @@ const buildPrefixData = (toFilter, prefix) => {
   // It's essentially a shortcut to know if its an internal repo
   const hasContext = Boolean(CONTAINER_TO_CONTEXT[prefixData.noPrefix])
 
-  // If the getKegContext(context) equals the context then there's no keg-prefix
-  // So check if there's a tap prefix
-  const hasTapPrefix = prefixData.context === context && context.indexOf('tap-') === 0
-   
-  // If we have a container context or if we have a tap prefix
+  // If we have a container context
   // Return the prefix data, otherwise we assume its a tap
-  return hasContext || hasTapPrefix
+  return hasContext
     ? prefixData
     : { ...prefixData, context: 'tap', tap: context }
 
