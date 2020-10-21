@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const { aliases } = require('./aliases.config')
+const { getAliases } = require('./aliases.config')
 const babelConfig = require('./babel.config.js')
 const { get } = require('@keg-hub/jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
@@ -20,7 +20,6 @@ const addAliases = {
   'react-native-svg': 'react-native-svg-web',
   '@keg-hub/jsutils': '@keg-hub/jsutils/build/esm',
   '@keg-hub/re-theme': '@keg-hub/re-theme/build/esm/web',
-  'react-native-linear-gradient': 'react-native-web-linear-gradient'
 }
 
 // Hard coded Rules
@@ -51,6 +50,7 @@ const customExtensions = extensions => {
 // Set custom aliases based on the platform
 const customAliases = wpAliases => {
 
+  const aliases = getAliases('')
   // Loop over the aliases and set the platform
   const updated = Object
     .keys(aliases)
