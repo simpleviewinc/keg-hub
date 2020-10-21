@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/keg-components",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
   "publishConfig": {
@@ -60,8 +60,8 @@
     "@babel/plugin-transform-object-assign": "7.10.4",
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.4",
-    "@keg-hub/jsutils": "6.1.0",
-    "@keg-hub/re-theme": "6.1.0",
+    "@keg-hub/jsutils": "6.2.0",
+    "@keg-hub/re-theme": "6.2.0",
     "@rollup/plugin-alias": "3.1.1",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-replace": "2.3.3",
@@ -128,8 +128,8 @@
     }
   },
   "peerDependencies": {
-    "@keg-hub/jsutils": "6.1.0",
-    "@keg-hub/re-theme": "6.1.0",
+    "@keg-hub/jsutils": "6.2.0",
+    "@keg-hub/re-theme": "6.2.0",
     "expo": "^38.0.0",
     "expo-font": "^8.0.0",
     "react": "^16.12.0",

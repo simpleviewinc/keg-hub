@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import { Text, Touchable, Drawer } from '../'
+import { Text } from '../typography/text'
+import { Touchable } from '../touchable'
+import { Drawer } from '../drawer'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
 import { isValidComponent } from '../../utils'

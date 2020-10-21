@@ -82,5 +82,5 @@ export const ruleHelpers = {
   ltrS: `letterSpacing`,
   txAl: `textAlign`,
   txDc: `textDecoration`,
-
+  txDL: 'textDecorationLine',
 }
