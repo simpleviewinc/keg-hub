@@ -6,19 +6,12 @@ import commonjs from 'rollup-plugin-commonjs'
 import cleanup from 'rollup-plugin-cleanup'
 import sourcemaps from 'rollup-plugin-sourcemaps'
 import alias from '@rollup/plugin-alias'
-import pathAlias from './aliases.json'
 import buildHook from './buildHook'
+const { getAliases } = require('./aliases.config')
 
 const { DEV_MODE, BUILD_HOOK } = process.env
 const babelConfig = require('./babel.config.js')
 
-const getAliases = platform => Object
-  .keys(pathAlias)
-  .reduce((updated, key) => {
-    updated[key] = pathAlias[key].replace(/\$\{platform\}/g, platform)
-
-    return updated
-  }, {})
 
 
 const shared = {
@@ -65,18 +58,19 @@ const shared = {
 export default Array
   .from([ 'web', 'native' ])
   .map(platform => {
-    const ext = platform !== 'web' ? `${platform}.js` : 'js'
+    const ext = platform !== 'web' ? `.${platform}` : ''
+
     return {
       ...shared,
       input: `./src/index.js`,
       output: [
         {
-          file: `./build/cjs/kegComponents.${ext}`,
+          file: `./build/cjs/kegComponents${ext}.js`,
           format: 'cjs',
           sourcemap: true
         },
         {
-          file: `./build/esm/kegComponents.${ext}`,
+          file: `./build/esm/kegComponents${ext}.js`,
           format: 'esm',
           sourcemap: true
         },
@@ -85,7 +79,7 @@ export default Array
       plugins: [
         ...shared.plugins(platform),
         alias({
-          entries: getAliases(platform),
+          entries: getAliases(ext),
         })
       ]
     }

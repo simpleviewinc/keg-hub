@@ -21,7 +21,7 @@ import PropTypes from 'prop-types'
  * @param {object} props.style
  * @param {string=} props.className
  */
-const LinearGradient = props => {
+export const LinearGradient = props => {
   const {
     start = {
       x: 0.5,
@@ -131,5 +131,3 @@ LinearGradient.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
 }
-
-export default LinearGradient

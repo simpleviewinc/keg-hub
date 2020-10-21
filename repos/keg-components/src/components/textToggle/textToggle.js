@@ -1,11 +1,13 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import { Text, Touchable, Drawer } from '../'
+import { Text } from '../typography/text'
+import { Touchable } from '../touchable'
+import { Drawer } from '../drawer'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
 import { isValidComponent } from '../../utils'
 import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
-import LinearGradient from 'KegLinearGradient'
+import { LinearGradient } from 'KegLinearGradient'
 import { isFunc } from '@keg-hub/jsutils'
 
 /**
