@@ -1,4 +1,4 @@
-const { CONTAINER_PREFIXES } = require('KegConst/constants')
+const { CONTAINER_PREFIXES, CONTAINER_TO_CONTEXT } = require('KegConst/constants')
 const { getKegContext } = require('./getKegContext')
 const { isStr } = require('@keg-hub/jsutils')
 
@@ -21,11 +21,20 @@ const buildPrefixData = (toFilter, prefix) => {
     noPrefix: context,
   }
 
-  // If the keg-context equals the context, then there's no keg-prefix
-  // so check if there's a tap prefix, and if so update the prefix data
-  return prefixData.kegContext === context && context.indexOf('tap-') === 0
+  // This will be true for internal repos like keg-core / keg-components / retheme
+  // It's essentially a shortcut to know if its an internal repo
+  const hasContext = Boolean(CONTAINER_TO_CONTEXT[prefixData.noPrefix])
+
+  // If the getKegContext(context) equals the context then there's no keg-prefix
+  // So check if there's a tap prefix
+  const hasTapPrefix = prefixData.context === context && context.indexOf('tap-') === 0
+   
+  // If we have a container context or if we have a tap prefix
+  // Return the prefix data, otherwise we assume its a tap
+  return hasContext || hasTapPrefix
     ? prefixData
     : { ...prefixData, context: 'tap', tap: context }
+
 }
 
 /**
@@ -39,6 +48,7 @@ const getPrefixContext = toCheck => {
   if(!isStr(toCheck)) return {}
 
   // Loop the prefixes and check if the context has a prefix
+  // Will look something like img-keg-core || package-tap-events-force
   const hasPrefix = Object.values(CONTAINER_PREFIXES)
     .reduce((hasPrefix, value) => {
       return hasPrefix || (toCheck.indexOf(value) === 0 && value)

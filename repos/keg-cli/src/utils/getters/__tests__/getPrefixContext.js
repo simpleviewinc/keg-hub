@@ -35,7 +35,7 @@ describe('getPrefixContext', () => {
   it('should only remove keg from the context when its in the container map', () => {
     const { context, noPrefix } = getPrefixContext('package-keg-foo')
 
-    expect(context).toBe('keg-foo')
+    expect(context).toBe('tap')
     expect(noPrefix).toBe('keg-foo')
 
   })

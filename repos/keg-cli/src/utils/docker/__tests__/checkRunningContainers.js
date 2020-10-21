@@ -20,18 +20,14 @@ describe('checkRunningContainers', () => {
     done()
   })
 
-  it('should return a list of running containers managed by the Keg-CLI', async done => {
+  it('should return a list of running containers managed by the Keg-CLI', async () => {
 
     const containers = await docker.container.list()
-    const ids = containers.map(cont => { return cont.id })
-
-    expect(containers.length).toBe(3)
+    expect(containers.length).toBe(5)
 
     const running = await checkRunningContainers()
-
     expect(running.length).toBe(2)
 
-    done()
   })
 
   it('should NOT return containers NOT managed by the Keg-CLI', async done => {
