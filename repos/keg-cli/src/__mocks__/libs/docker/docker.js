@@ -209,14 +209,17 @@ const docker = {
     get: jest.fn(image => {
       return global.testDocker.images[image] ||
         Object.values(global.testDocker.images)
-          .reduce((found, data) => {
-            return found
-              ? found
-              : data.id === image || data.image === image || data.name === image
-                ? data
-                : found
-          }, false)
+          .find((data) => {
+            return data.id === image || data.image === image || data.name === image
+          })
     }),
+    exists: jest.fn(image => {
+      return global.testDocker.images[image] ||
+        Object.values(global.testDocker.images)
+          .find((data) => {
+            return data.id === image || data.image === image || data.name === image
+          })
+    })
   }
 }
 
