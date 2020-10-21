@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/args-parse",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@keg-hub/ask-it": "0.0.1",
-    "@keg-hub/jsutils": "6.2.0",
+    "@keg-hub/jsutils": "6.2.1",
     "app-root-path": "3.0.0"
   },
   "devDependencies": {
