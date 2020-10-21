@@ -7,7 +7,7 @@ import { useClassList } from 'KegClassList'
 import { isValidComponent } from '../../utils'
 import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
-import LinearGradient from 'react-native-linear-gradient'
+import { LinearGradient } from 'KegLinearGradient'
 import { isFunc } from '@keg-hub/jsutils'
 
 /**
