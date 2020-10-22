@@ -111,7 +111,7 @@ SvgIcon.propTypes = {
   delta: PropTypes.string,
   fill: PropTypes.string,
   fillRule: PropTypes.string,
-  size: PropTypes.string,
+  size: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
   stroke: PropTypes.string,
   style: PropTypes.object,
   svgFill: PropTypes.string,
