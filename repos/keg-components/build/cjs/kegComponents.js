@@ -2879,14 +2879,11 @@ var ScrollView$1 = styleInjector.StyleInjector(ScrollView, {
 });
 ScrollView$1.propTypes = ScrollView.propTypes;
 
-var noAnimate = function noAnimate(toggled, current, _ref) {
-  var initial = _ref.initial,
-      max = _ref.max;
-  return !toggled && current === initial || toggled && current === max;
+var noAnimate = function noAnimate(toggled, current, collapsedHeight, contentMaxHeight) {
+  return !toggled && current === collapsedHeight || toggled && current === contentMaxHeight;
 };
 var Drawer = function Drawer(props) {
-  var initial = props.initial,
-      Element = props.Element,
+  var Element = props.Element,
       styles = props.styles,
       toggled = props.toggled,
       className = props.className,
@@ -2894,32 +2891,28 @@ var Drawer = function Drawer(props) {
       type = _props$type === void 0 ? 'timing' : _props$type,
       _props$config = props.config,
       config = _props$config === void 0 ? jsutils.noOpObj : _props$config,
-      childProps = _objectWithoutProperties(props, ["initial", "Element", "styles", "toggled", "className", "type", "config"]);
-  var heights = React.useRef({
-    initial: initial || 0,
-    max: 0
-  });
-  var _useState = React.useState(new reactNative.Animated.Value(initial)),
+      _props$collapsedHeigh = props.collapsedHeight,
+      collapsedHeight = _props$collapsedHeigh === void 0 ? 0 : _props$collapsedHeigh,
+      childProps = _objectWithoutProperties(props, ["Element", "styles", "toggled", "className", "type", "config", "collapsedHeight"]);
+  var contentMaxHeight = React.useRef(null);
+  var _useState = React.useState(new reactNative.Animated.Value(collapsedHeight)),
       _useState2 = _slicedToArray(_useState, 2),
       animation = _useState2[0],
       setAnimation = _useState2[1];
-  var setMaxHeight = function setMaxHeight(event) {
+  var setMaxHeight = React.useCallback(function (event) {
     var maxHeight = event.nativeEvent.layout.height;
-    if (!heights.current || heights.current.max === maxHeight) return;
-    heights.current.max = maxHeight;
+    if (contentMaxHeight.current === maxHeight) return;
+    contentMaxHeight.current = maxHeight;
     toggled && setAnimation(new reactNative.Animated.Value(maxHeight));
-  };
+  }, [contentMaxHeight, toggled, setAnimation]);
   React.useLayoutEffect(function () {
-    if (noAnimate(toggled, animation._value, heights.current)) return;
-    var _heights$current = heights.current,
-        initial = _heights$current.initial,
-        max = _heights$current.max;
+    if (noAnimate(toggled, animation._value, collapsedHeight, contentMaxHeight.current)) return;
     var heightChanges = toggled ? {
-      from: initial,
-      to: max
+      from: collapsedHeight,
+      to: contentMaxHeight.current
     } : {
-      from: max,
-      to: initial
+      from: contentMaxHeight.current,
+      to: collapsedHeight
     };
     animation.setValue(heightChanges.from);
     var animationConfig = config ? _objectSpread2(_objectSpread2({}, config), {}, {
@@ -2928,13 +2921,13 @@ var Drawer = function Drawer(props) {
       toValue: heightChanges.to
     };
     reactNative.Animated[type](animation, animationConfig).start();
-  }, [toggled, type, config]);
+  }, [toggled, type, config, collapsedHeight]);
   var drawerStyles = useThemePath("drawer", styles);
   var classRef = useClassName('keg-drawer', className);
   return React__default.createElement(reactNative.Animated.View, {
     ref: classRef,
     style: [drawerStyles.main, jsutils.get(styles, 'main'), {
-      height: animation
+      maxHeight: animation
     }]
   }, React__default.createElement(View$1, {
     className: "keg-drawer-content",
@@ -2948,10 +2941,211 @@ Drawer.propTypes = {
   className: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   config: PropTypes.object,
   Element: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType]),
-  initial: PropTypes.number,
   styles: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   toggled: PropTypes.bool,
-  type: PropTypes.oneOf(['decay', 'spring', 'timing'])
+  type: PropTypes.oneOf(['decay', 'spring', 'timing']),
+  collapsedHeight: PropTypes.number
+};
+
+var LinearGradient = function LinearGradient(props) {
+  var _props$start = props.start,
+      start = _props$start === void 0 ? {
+    x: 0.5,
+    y: 0
+  } : _props$start,
+      _props$end = props.end,
+      end = _props$end === void 0 ? {
+    x: 0.5,
+    y: 1
+  } : _props$end,
+      _props$colors = props.colors,
+      colors = _props$colors === void 0 ? jsutils.noPropArr : _props$colors,
+      _props$locations = props.locations,
+      locations = _props$locations === void 0 ? jsutils.noPropArr : _props$locations,
+      _props$useAngle = props.useAngle,
+      useAngle = _props$useAngle === void 0 ? false : _props$useAngle,
+      angleCenter = props.angleCenter,
+      _props$angle = props.angle,
+      angle = _props$angle === void 0 ? 0 : _props$angle,
+      style = props.style,
+      children = props.children,
+      className = props.className,
+      otherProps = _objectWithoutProperties(props, ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"]);
+  var _useState = React.useState(1),
+      _useState2 = _slicedToArray(_useState, 2),
+      width = _useState2[0],
+      setWidth = _useState2[1];
+  var _useState3 = React.useState(1),
+      _useState4 = _slicedToArray(_useState3, 2),
+      height = _useState4[0],
+      setHeight = _useState4[1];
+  var measure = React.useCallback(function (_ref) {
+    var nativeEvent = _ref.nativeEvent;
+    setWidth(nativeEvent.layout.width);
+    setHeight(nativeEvent.layout.height);
+  }, [setWidth, setHeight]);
+  var newAngle = useAngle && angle ? "".concat(angle, "deg") : calculateAngle(width, height, start, end);
+  return React__default.createElement(View$1, _extends({
+    className: useClassList("keg-linear-gradient", className)
+  }, otherProps, {
+    style: [style, {
+      backgroundImage: "linear-gradient(".concat(newAngle, ",").concat(getColors(colors, locations), ")")
+    }],
+    onLayout: measure
+  }), children);
+};
+var calculateAngle = function calculateAngle(width, height, start, end) {
+  var newAngle = Math.atan2(width * (end.y - start.y), height * (end.x - start.x)) + Math.PI / 2;
+  return newAngle + 'rad';
+};
+var getColors = function getColors() {
+  var colors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noPropArr;
+  var locations = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : jsutils.noPropArr;
+  return colors.map(function (color, index) {
+    var location = locations[index];
+    var locationStyle = '';
+    if (location) {
+      locationStyle = ' ' + location * 100 + '%';
+    }
+    return color + locationStyle;
+  }).join(',');
+};
+LinearGradient.propTypes = {
+  locations: PropTypes.array,
+  colors: PropTypes.array,
+  start: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number
+  }),
+  end: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number
+  }),
+  useAngle: PropTypes.bool,
+  angleCenter: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number
+  }),
+  angle: PropTypes.number,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType]),
+  style: PropTypes.object,
+  className: PropTypes.string
+};
+
+var buildStyles = function buildStyles(theme, styleHelper) {
+  var textToggleStyles = theme.get("textToggle", styleHelper === null || styleHelper === void 0 ? void 0 : styleHelper.styles);
+  var align = 'flex-end';
+  switch (styleHelper === null || styleHelper === void 0 ? void 0 : styleHelper.togglePosition) {
+    case 'left':
+      align = 'flex-start';
+      break;
+    case 'center':
+      align = 'center';
+      break;
+  }
+  return theme.get(textToggleStyles, {
+    main: {
+      alignItems: align
+    }
+  });
+};
+var TextToggle = function TextToggle(props) {
+  var text = props.text,
+      styles = props.styles,
+      _props$isExpandedInit = props.isExpandedInit,
+      isExpandedInit = _props$isExpandedInit === void 0 ? false : _props$isExpandedInit,
+      className = props.className,
+      CustomToggle = props.CustomToggle,
+      onToggle = props.onToggle,
+      _props$togglePosition = props.togglePosition,
+      togglePosition = _props$togglePosition === void 0 ? 'right' : _props$togglePosition,
+      _props$collapsedHeigh = props.collapsedHeight,
+      collapsedHeight = _props$collapsedHeigh === void 0 ? 100 : _props$collapsedHeigh,
+      _props$fadeColor = props.fadeColor,
+      fadeColor = _props$fadeColor === void 0 ? 'white' : _props$fadeColor,
+      _props$collapsedToggl = props.collapsedToggleText,
+      collapsedToggleText = _props$collapsedToggl === void 0 ? 'show more' : _props$collapsedToggl,
+      _props$expandedToggle = props.expandedToggleText,
+      expandedToggleText = _props$expandedToggle === void 0 ? 'show less' : _props$expandedToggle;
+  if (!text) return null;
+  var _useState = React.useState(isExpandedInit),
+      _useState2 = _slicedToArray(_useState, 2),
+      expanded = _useState2[0],
+      setExpanded = _useState2[1];
+  var styleHelper = React.useMemo(function () {
+    return {
+      styles: styles,
+      togglePosition: togglePosition
+    };
+  }, [styles, togglePosition]);
+  var mainStyle = reTheme.useStylesCallback(buildStyles, [togglePosition, styles], styleHelper);
+  var _useState3 = React.useState(0),
+      _useState4 = _slicedToArray(_useState3, 2),
+      textMaxHeight = _useState4[0],
+      setTextMaxHeight = _useState4[1];
+  var showToggle = shouldDisplayToggler(collapsedHeight, textMaxHeight);
+  var onToggleCb = React.useCallback(function () {
+    setExpanded(!expanded);
+    jsutils.isFunc(onToggle) && onToggle(!expanded);
+  }, [expanded, onToggle]);
+  var onTextLayout = React.useCallback(function (event) {
+    var height = event.nativeEvent.layout.height;
+    if (textMaxHeight === height) return;
+    setTextMaxHeight(height);
+  }, [textMaxHeight, setTextMaxHeight]);
+  return React__default.createElement(View$1, {
+    style: [mainStyle.main],
+    className: useClassList('keg-text-toggle', className)
+  }, React__default.createElement(Drawer, {
+    collapsedHeight: collapsedHeight,
+    toggled: expanded
+  }, React__default.createElement(Text, {
+    style: mainStyle.text,
+    onLayout: onTextLayout
+  }, text)), showToggle && !expanded && React__default.createElement(LinearGradient, {
+    colors: ['rgba(255,255,255,0)', fadeColor],
+    style: mainStyle.linearGradient
+  }), showToggle && React__default.createElement(ToggleComponent, {
+    onPress: onToggleCb,
+    isExpanded: expanded,
+    styles: mainStyle.toggleComponent,
+    CustomComponent: CustomToggle,
+    collapsedToggleText: collapsedToggleText,
+    expandedToggleText: expandedToggleText
+  }));
+};
+var shouldDisplayToggler = function shouldDisplayToggler(minHeight, textMaxHeight) {
+  return !minHeight || textMaxHeight > minHeight;
+};
+var ToggleComponent = function ToggleComponent(_ref) {
+  var onPress = _ref.onPress,
+      styles = _ref.styles,
+      CustomComponent = _ref.CustomComponent,
+      isExpanded = _ref.isExpanded,
+      expandedToggleText = _ref.expandedToggleText,
+      collapsedToggleText = _ref.collapsedToggleText;
+  var defaultText = isExpanded ? expandedToggleText : collapsedToggleText;
+  return React__default.createElement(Touchable$1, {
+    style: styles === null || styles === void 0 ? void 0 : styles.main,
+    onPress: onPress
+  }, isValidComponent(CustomComponent) ? React__default.createElement(CustomComponent, {
+    isExpanded: isExpanded
+  }) : React__default.createElement(Text, {
+    style: styles === null || styles === void 0 ? void 0 : styles.text
+  }, defaultText));
+};
+TextToggle.propTypes = {
+  text: PropTypes.string,
+  isExpandedInit: PropTypes.bool,
+  styles: PropTypes.object,
+  className: PropTypes.string,
+  CustomToggle: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType]),
+  onToggle: PropTypes.func,
+  togglePosition: PropTypes.oneOf(['left', 'center', 'right']),
+  collapsedHeight: PropTypes.number,
+  fadeColor: PropTypes.string,
+  expandedToggleText: PropTypes.string,
+  collapsedToggleText: PropTypes.string
 };
 
 var transition = function transition() {
@@ -3838,6 +4032,36 @@ var header = {
   itemHeader: itemHeader
 };
 
+var textToggle = {
+  main: {
+    fl: 1
+  },
+  textContainer: {},
+  text: {
+    ftSz: 20
+  },
+  linearGradient: {
+    pos: 'absolute',
+    bt: 40,
+    lt: 0,
+    rt: 0,
+    height: 50
+  },
+  drawer: {
+    main: {
+      ovf: 'hidden',
+      width: '100%'
+    }
+  },
+  toggleComponent: {
+    main: {
+      mV: 15,
+      alI: 'flex-end',
+      txDc: 'underline'
+    }
+  }
+};
+
 var components = {
   button: button,
   card: card,
@@ -3852,7 +4076,8 @@ var components = {
   section: section$1,
   textBox: textBox,
   modal: modal$1,
-  header: header
+  header: header,
+  textToggle: textToggle
 };
 
 var display = {
@@ -4393,6 +4618,7 @@ exports.SvgIcon = SvgIcon;
 exports.Switch = Switch$1;
 exports.Text = Text;
 exports.TextBox = TextBox;
+exports.TextToggle = TextToggle;
 exports.Touchable = Touchable$1;
 exports.TouchableIcon = TouchableIcon;
 exports.View = View$1;

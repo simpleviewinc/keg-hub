@@ -1,11 +1,12 @@
-import React__default, { useRef, useCallback, useMemo, isValidElement, useEffect, useState, useLayoutEffect, createElement, forwardRef, useImperativeHandle } from 'react';
-import { View as View$2, Text as Text$2, Dimensions, Animated, Platform, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, Clipboard, ActivityIndicator, Image as Image$2, TextInput, Picker, Switch as Switch$2, ScrollView as ScrollView$2 } from 'react-native';
-import { eitherArr, isObj, isArr, isStr, checkCall, capitalize, isFunc, get, reduceObj, deepMerge, validate, flatMap, mapEntries, noOpObj, noPropObj, isEmptyColl, noOp, noPropArr, toBool, mapObj, pickKeys, trainCase, isNum, deepClone, set } from '@keg-hub/jsutils';
+import React__default, { useMemo, isValidElement, useRef, useCallback, useState, useLayoutEffect, useEffect, createElement, forwardRef, useImperativeHandle } from 'react';
+import { View as View$1, Text as Text$2, Dimensions, Animated, Platform, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, Clipboard, ActivityIndicator, Image as Image$2, TextInput, Picker, Switch as Switch$2, ScrollView as ScrollView$2 } from 'react-native';
 import PropTypes from 'prop-types';
+import { capitalize, isFunc, isArr, isObj, isStr, get, checkCall, reduceObj, deepMerge, validate, flatMap, mapEntries, noOpObj, noPropObj, isEmptyColl, noOp, noPropArr, toBool, isNum, mapObj, pickKeys, eitherArr, trainCase, deepClone, set } from '@keg-hub/jsutils';
+import { useTheme, useDimensions, useThemeHover, useThemeActive, useStyle, withTheme, useStylesCallback } from '@keg-hub/re-theme';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { useTheme, useDimensions, useThemeHover, useThemeActive, useStyle, withTheme } from '@keg-hub/re-theme';
 import { opacity, shadeHex } from '@keg-hub/re-theme/colors';
 import Svg, { Path } from 'react-native-svg';
+import LinearGradient from 'react-native-linear-gradient';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -182,34 +183,8 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-var platform = "native"  ;
-var getPlatform = function getPlatform() {
-  return platform;
-};
-
-var ensureClassArray = function ensureClassArray(classList) {
-  var ensured = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  return eitherArr(classList, [classList]).reduce(function (classNames, item) {
-    isObj(item) ? item.className ? ensureClassArray(item.className, classNames) :
-    Object.keys(item).map(function (key) {
-      return isObj(item[key]) && ensureClassArray(item[key], classNames);
-    }) : isArr(item) ? ensureClassArray(item, classNames) : isStr(item) && item.split(' ').map(function (item) {
-      return item && classNames.push(item);
-    });
-    return classNames;
-  }, ensured);
-};
-
-var handleRefUpdate = function handleRefUpdate(ref, update) {
-  return !ref ? update : isObj(ref) && 'current' in ref ? ref.current = update : checkCall(ref, update);
-};
-
 var useClassName = function useClassName(defClass, className, ref) {
-  var classArr = eitherArr(className, [className]);
-  var classRef = useRef(classArr);
-  return useCallback(function (element) {
-    handleRefUpdate(ref, element);
-  }, [defClass, classArr.join(' '), ref]);
+  return ref;
 };
 
 var View = React__default.forwardRef(function (_ref, ref) {
@@ -217,19 +192,13 @@ var View = React__default.forwardRef(function (_ref, ref) {
       className = _ref.className,
       props = _objectWithoutProperties(_ref, ["children", "className"]);
   var classRef = useClassName('keg-view', className, ref);
-  return React__default.createElement(View$2, _extends({}, props, {
+  return React__default.createElement(View$1, _extends({}, props, {
     ref: classRef
   }), children);
 });
-View.propTypes = _objectSpread2(_objectSpread2({}, View$2.propTypes), {}, {
+View.propTypes = _objectSpread2(_objectSpread2({}, View$1.propTypes), {}, {
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 });
-
-var View$1 = StyleInjector(View, {
-  displayName: 'View',
-  className: 'keg-view'
-});
-View$1.propTypes = View.propTypes;
 
 var headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 var useTextAccessibility = function useTextAccessibility(element, accessibilityRole) {
@@ -346,6 +315,15 @@ var getTarget = function getTarget(isWeb, target) {
   return isWeb && target ? {
     target: target
   } : {};
+};
+
+var handleRefUpdate = function handleRefUpdate(ref, update) {
+  return !ref ? update : isObj(ref) && 'current' in ref ? ref.current = update : checkCall(ref, update);
+};
+
+var platform = "native"  ;
+var getPlatform = function getPlatform() {
+  return platform;
 };
 
 var states = {
@@ -611,18 +589,7 @@ var useAnimate = function useAnimate(_ref) {
       startCb = _ref.startCb,
       startDelay = _ref.startDelay;
   var aniRef = useRef(ref);
-  var animate = function animate() {
-    var element = aniRef.current;
-    element && isFunc(element.animate) && element.animate(animation, config);
-  };
-  useEffect(function () {
-    var timeout = setTimeout(function () {
-      return animate();
-    }, startDelay || 0);
-    return function () {
-      return clearTimeout(timeout);
-    };
-  }, []);
+  console.warn('useAnimate not implemented on native');
   return [aniRef];
 };
 
@@ -883,32 +850,12 @@ var useFromToAnimation = function useFromToAnimation(params) {
   return [fromVal];
 };
 
-var useClassList = function useClassList(className) {
-  var classList = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noPropArr;
-  var classListArr = eitherArr(classList, [classList]);
-  return useMemo(function () {
-    return ensureClassArray(classListArr).concat([className]);
-  }, [className, classListArr.join(' ')]);
+var useClassList = function useClassList() {
+  return noPropArr;
 };
 
-var useThemeType = function useThemeType(themeLoc, defClass) {
-  return useMemo(function () {
-    var defClassArr = eitherArr(defClass, [defClass]);
-    if (!themeLoc) return defClassArr;
-    var themeSplit = themeLoc.split('.');
-    var surface = themeSplit.pop();
-    var typeRef = themeSplit.pop();
-    var surfaces = Object.keys(get(colors$1, 'surface', noOpObj));
-    return typeRef && surfaces.indexOf(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
-  }, [themeLoc, defClass]);
-};
 var useThemeTypeAsClass = function useThemeTypeAsClass() {
-  var themeLoc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  var defClass = arguments.length > 1 ? arguments[1] : undefined;
-  var className = arguments.length > 2 ? arguments[2] : undefined;
-  var themeTypeCls = useThemeType(themeLoc, defClass);
-  var classList = isArr(className) ? className.concat(themeTypeCls) : [].concat(_toConsumableArray(themeTypeCls), [className]);
-  return useClassList(defClass, classList);
+  return noPropArr;
 };
 
 var Icon = React__default.forwardRef(function (props, ref) {
@@ -934,8 +881,8 @@ var Icon = React__default.forwardRef(function (props, ref) {
     color: color || iconStyles.color || get(iconStyles, 'icon.color') || get(theme, 'typography.default.color'),
     size: parseInt(size || get(iconStyles, 'icon.fontSize') || get(theme, 'typography.default.fontSize', 15) * 2, 10)
   };
-  return React__default.createElement(View$1, {
-    className: useClassList("keg-icon", className),
+  return React__default.createElement(View, {
+    className: useClassList(),
     style: iconStyles.container
   }, renderFromType(Element, _objectSpread2(_objectSpread2({}, attrs), iconProps)));
 });
@@ -1092,10 +1039,10 @@ var TextBox = function TextBox(props) {
       _props$useClipboard = props.useClipboard,
       useClipboard = _props$useClipboard === void 0 ? false : _props$useClipboard;
   var style = useThemePath(themePath, styles);
-  return React__default.createElement(View$1, {
-    className: useThemeTypeAsClass(themePath || type, 'keg-textbox', className),
+  return React__default.createElement(View, {
+    className: useThemeTypeAsClass(),
     style: style.main
-  }, React__default.createElement(View$1, {
+  }, React__default.createElement(View, {
     className: "keg-textbox-container",
     style: get(style, 'content.wrapper')
   }, React__default.createElement(Text, {
@@ -1153,7 +1100,7 @@ var Button = React__default.forwardRef(function (props, ref) {
       themeStyles = _useThemeActive2[1];
   return React__default.createElement(Touchable$1, _extends({
     accessibilityRole: "button",
-    className: useThemeTypeAsClass(themePath || type, 'keg-button', className)
+    className: useThemeTypeAsClass()
   }, elProps, {
     touchRef: themeRef,
     style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
@@ -1179,8 +1126,8 @@ var CardCallout = function CardCallout(_ref) {
       _ref$styles = _ref.styles,
       styles = _ref$styles === void 0 ? noPropObj : _ref$styles;
   var calloutStyles = get(styles, "callout");
-  return React__default.createElement(View$1, {
-    className: useClassList('keg-card-callout', className),
+  return React__default.createElement(View, {
+    className: useClassList(),
     style: calloutStyles.overlay
   }, title && React__default.createElement(Text, {
     className: "keg-card-title",
@@ -1197,7 +1144,7 @@ var CardContent = function CardContent(_ref) {
       styles = _ref$styles === void 0 ? noPropObj : _ref$styles,
       subtitle = _ref.subtitle,
       title = _ref.title;
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     className: "keg-card-content",
     style: styles.main
   }, (title || subtitle) && React__default.createElement(CardCallout, {
@@ -1219,11 +1166,11 @@ var CardContainer = function CardContainer(_ref) {
       children = _ref.children,
       _ref$styles = _ref.styles,
       styles = _ref$styles === void 0 ? noPropObj : _ref$styles;
-  return React__default.createElement(View$1, _extends({
-    className: useClassList('keg-card', className)
+  return React__default.createElement(View, _extends({
+    className: useClassList()
   }, attributes, {
     style: styles.main
-  }), React__default.createElement(View$1, {
+  }), React__default.createElement(View, {
     className: "keg-card-container",
     style: styles.container
   }, children));
@@ -1251,7 +1198,7 @@ var CardSection = function CardSection(_ref2) {
   var Section = _ref2.Section,
       props = _objectWithoutProperties(_ref2, ["Section"]);
   var type = props.type || 'section';
-  return Section && React__default.createElement(View$1, {
+  return Section && React__default.createElement(View, {
     className: "keg-card-".concat(type),
     style: [get(props, "styles.main"), props.showBorder === false && get(props, "styles.noBorder.main")]
   }, renderFromType(Section, props, SectionWrap));
@@ -1275,7 +1222,7 @@ var IndicatorWrapper = function IndicatorWrapper(props) {
       themePath = props.themePath,
       elProps = _objectWithoutProperties(props, ["alt", "Element", "isWeb", "resizeMode", "size", "styles", "type", "themePath"]);
   var builtStyles = useThemePath(themePath || "indicator.".concat(type), styles);
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     style: builtStyles.container
   }, React__default.createElement(Element, _extends({}, elProps, {
     alt: alt || 'Loading',
@@ -1293,8 +1240,8 @@ var Element = function Element(_ref) {
       size = _ref.size,
       color = _ref.color,
       attrs = _objectWithoutProperties(_ref, ["className", "style", "size", "color"]);
-  return React__default.createElement(View$1, {
-    className: useClassList('keg-indicator', className)
+  return React__default.createElement(View, {
+    className: useClassList()
   }, React__default.createElement(ActivityIndicator, {
     size: size,
     color: style.color || color
@@ -1323,7 +1270,7 @@ var Progress = function Progress(props) {
       type = props.type,
       size = props.size;
   var LoadingIndicator = loadIndicator || Indicator;
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     style: styles.progress,
     className: "keg-progress"
   }, isValidComponent(LoadingIndicator) ? React__default.createElement(LoadingIndicator, {
@@ -1347,9 +1294,9 @@ var Loading = function Loading(props) {
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type;
   var builtStyles = useThemePath(themePath || "loading.".concat(type), styles);
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     style: builtStyles.main,
-    className: useClassList('keg-loading', className)
+    className: useClassList()
   }, children || React__default.createElement(Progress, {
     styles: builtStyles,
     text: text,
@@ -1419,8 +1366,8 @@ var Image$1 = forwardRef(function (props, ref) {
     checkCall(props.onLoad, props);
     isFunc(imgRef) ? imgRef(internalRef.current) : imgRef && (imgRef.current = internalRef.current);
   }, [src, source, internalRef.current]);
-  return React__default.createElement(View$1, {
-    className: useClassList("keg-image-container", className),
+  return React__default.createElement(View, {
+    className: useClassList(),
     style: builtStyles.container
   }, loading && useLoading && React__default.createElement(Loading, {
     className: "keg-image-loading",
@@ -1494,7 +1441,7 @@ var CardMedia = function CardMedia(_ref2) {
       subtitle = _ref2.subtitle,
       styles = _ref2.styles,
       title = _ref2.title;
-  return Media || !mediaProps ? Media || null : React__default.createElement(View$1, {
+  return Media || !mediaProps ? Media || null : React__default.createElement(View, {
     className: "keg-card-media",
     style: [get(styles, 'main'), hasHeader === false && noHeader]
   }, React__default.createElement(MediaFromType, {
@@ -1586,9 +1533,9 @@ var Divider = function Divider(_ref) {
       style = _ref.style,
       props = _objectWithoutProperties(_ref, ["className", "style"]);
   var theme = useTheme();
-  return React__default.createElement(View$1, _extends({
+  return React__default.createElement(View, _extends({
     accessibilityRole: "separator",
-    className: useClassList('keg-divider', className)
+    className: useClassList()
   }, props, {
     style: [get(theme, ['divider']), style]
   }));
@@ -1620,87 +1567,8 @@ var P = function P(props) {
 
 var Subtitle = KegText$1('subtitle');
 
-var Input = React__default.forwardRef(function (_ref, ref) {
-  var className = _ref.className,
-      props = _objectWithoutProperties(_ref, ["className"]);
-  var classRef = useClassName('keg-input', className, ref);
-  return React__default.createElement("input", _extends({
-    ref: classRef
-  }, props));
-});
-
-var Input$1 = StyleInjector(Input, {
-  displayName: 'FilePickerInput',
-  className: 'keg-file-picker-input'
-});
-var FilePicker = React__default.forwardRef(function (props, _ref) {
-  var className = props.className,
-      onChange = props.onChange,
-      title = props.title,
-      children = props.children,
-      _props$style = props.style,
-      style = _props$style === void 0 ? {} : _props$style,
-      _props$showFile = props.showFile,
-      showFile = _props$showFile === void 0 ? true : _props$showFile,
-      onFilePicked = props.onFilePicked,
-      _props$themePath = props.themePath,
-      themePath = _props$themePath === void 0 ? 'filePicker.default' : _props$themePath,
-      _props$buttonThemePat = props.buttonThemePath,
-      buttonThemePath = _props$buttonThemePat === void 0 ? 'button.contained.default' : _props$buttonThemePat,
-      capture = props.capture,
-      _props$openOnMount = props.openOnMount,
-      openOnMount = _props$openOnMount === void 0 ? false : _props$openOnMount,
-      args = _objectWithoutProperties(props, ["className", "onChange", "title", "children", "style", "showFile", "onFilePicked", "themePath", "buttonThemePath", "capture", "openOnMount"]);
-  var componentTheme = useThemePath(themePath);
-  var _useState = useState({}),
-      _useState2 = _slicedToArray(_useState, 2),
-      file = _useState2[0],
-      setFile = _useState2[1];
-  var handleInputChange = useCallback(function (event) {
-    onChange && onChange(event);
-    var file = event.target.files[0];
-    file && onFilePicked && onFilePicked(file);
-    file && setFile(file);
-  }, [onChange, onFilePicked, setFile]);
-  var refToInput = useRef();
-  var clickInput = useCallback(function () {
-    return refToInput.current && refToInput.current.click();
-  }, [refToInput]);
-  useEffect(function () {
-    openOnMount && clickInput();
-  }, []);
-  return React__default.createElement(View$1, {
-    className: useThemeTypeAsClass(themePath || type, 'keg-filepicker', className),
-    style: [get(componentTheme, 'main'), style]
-  }, React__default.createElement(Button, {
-    content: title,
-    onClick: clickInput,
-    style: get(componentTheme, 'content.button'),
-    themePath: buttonThemePath
-  }, children),
-  showFile && React__default.createElement(P, {
-    style: get(componentTheme, 'content.file')
-  }, file.name), React__default.createElement(Input$1, _extends({}, args, {
-    ref: function ref(input) {
-      _ref && (_ref.current = input);
-      refToInput.current = input;
-    },
-    onChange: handleInputChange,
-    style: get(componentTheme, 'content.input'),
-    type: "file",
-    capture: capture
-  })));
-});
-FilePicker.propTypes = {
-  title: PropTypes.string,
-  style: PropTypes.object,
-  buttonStyle: PropTypes.object,
-  fileStyle: PropTypes.object,
-  themePath: PropTypes.string,
-  buttonThemePath: PropTypes.string,
-  onChange: PropTypes.func,
-  onFilePicked: PropTypes.func,
-  showFile: PropTypes.bool
+var FilePicker = function FilePicker(props) {
+  return React__default.createElement(View, null, React__default.createElement(P, null, "FilePicker Not yet implemented for native."));
 };
 
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
@@ -1804,20 +1672,20 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
   var themeStyles = useThemePath(elThemePath, styles);
   var disabledStyles = useThemePath("form.".concat(elType, ".disabled"), themeStyles);
   var activeStyles = useCheckedState(isChecked, canUseHandler ? themeStyles : disabledStyles);
-  var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-checkbox', className);
+  var typeClassName = useThemeTypeAsClass();
   var pressHandlerProp = canUseHandler ? getOnChangeHandler(isWeb, pressHandler) : undefined;
-  var ChildrenView = children && React__default.createElement(View$1, {
+  var ChildrenView = children && React__default.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
   }, React__default.createElement(ChildrenComponent, {
     className: "keg-checkbox-container",
     children: children
   }));
-  return ChildrenView || React__default.createElement(View$1, {
+  return ChildrenView || React__default.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
   }, LeftComponent && React__default.createElement(SideComponent, {
-    className: useClassList('keg-checkbox-left', leftClassName),
+    className: useClassList(),
     Component: LeftComponent,
     style: activeStyles.content.left,
     onPress: allowAdjacentPress && canUseHandler && pressHandler
@@ -1830,7 +1698,7 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
     styles: activeStyles.content,
     CheckIcon: CheckIcon
   }, getChecked(isWeb, isChecked), pressHandlerProp)), RightComponent && React__default.createElement(SideComponent, {
-    className: useClassList('keg-checkbox-right', rightClassName),
+    className: useClassList(),
     Component: RightComponent,
     style: activeStyles.content.right,
     onPress: allowAdjacentPress && canUseHandler && pressHandler
@@ -1858,6 +1726,15 @@ CheckboxWrapper.propTypes = {
   allowAdjacentPress: PropTypes.bool
 };
 
+var Input = React__default.forwardRef(function (_ref, ref) {
+  var className = _ref.className,
+      props = _objectWithoutProperties(_ref, ["className"]);
+  var classRef = useClassName('keg-input', className, ref);
+  return React__default.createElement("input", _extends({
+    ref: classRef
+  }, props));
+});
+
 var checkBoxStyles = {
   icon: {
     position: 'relative',
@@ -1883,7 +1760,7 @@ var checkBoxStyles = {
     cursor: 'pointer'
   }
 };
-var Input$2 = StyleInjector(Input, {
+var Input$1 = StyleInjector(Input, {
   displayName: 'Checkbox',
   className: 'keg-checkbox'
 });
@@ -1902,16 +1779,16 @@ var Element$1 = React__default.forwardRef(function (props, ref) {
   var inputStyle = useMemo(function () {
     return _objectSpread2(_objectSpread2({}, styles.input), checkBoxStyles.input);
   }, [checkBoxStyles, styles]);
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     style: styles.main,
     className: className
-  }, React__default.createElement(View$1, {
+  }, React__default.createElement(View, {
     className: "keg-checkbox-area",
     style: styles.area
   }), checked && React__default.createElement(CheckIcon, {
     className: "keg-checkbox-icon",
     style: checkStyle
-  }), React__default.createElement(Input$2, _extends({
+  }), React__default.createElement(Input$1, _extends({
     className: "keg-checkbox"
   }, elProps, attributes, {
     role: "checkbox",
@@ -1942,9 +1819,9 @@ var Form = React__default.forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "form.form.".concat(type || 'default') : _props$themePath,
       elProps = _objectWithoutProperties(props, ["children", "className", "elType", "style", "type", "themePath"]);
   var formTheme = useThemePath(themePath);
-  return React__default.createElement(View$1, _extends({
+  return React__default.createElement(View, _extends({
     accessibilityRole: "form",
-    className: useClassList('keg-form', className)
+    className: useClassList()
   }, elProps, {
     style: [get(theme, 'form.form.default'), formTheme, style],
     ref: ref
@@ -1958,7 +1835,7 @@ Form.propTypes = {
   type: PropTypes.string
 };
 
-var Input$3 = forwardRef(function (_ref, ref) {
+var Input$2 = forwardRef(function (_ref, ref) {
   var className = _ref.className,
       props = _objectWithoutProperties(_ref, ["className"]);
   var classRef = useClassName('keg-input', className, ref);
@@ -1971,11 +1848,11 @@ var Input$3 = forwardRef(function (_ref, ref) {
     ref: classRef
   }));
 });
-Input$3.propTypes = _objectSpread2(_objectSpread2({}, TextInput.propTypes), {}, {
+Input$2.propTypes = _objectSpread2(_objectSpread2({}, TextInput.propTypes), {}, {
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 });
 
-var KegInput = StyleInjector(Input$3, {
+var KegInput = StyleInjector(Input$2, {
   displayName: 'Input',
   className: 'keg-input'
 });
@@ -1987,7 +1864,7 @@ var getValue = function getValue(_ref) {
     value: setValue
   } : {};
 };
-var Input$4 = React__default.forwardRef(function (props, ref) {
+var Input$3 = React__default.forwardRef(function (props, ref) {
   var className = props.className,
       children = props.children,
       _props$disabled = props.disabled,
@@ -2025,7 +1902,7 @@ var Input$4 = React__default.forwardRef(function (props, ref) {
     ref: ref
   }));
 });
-Input$4.propTypes = _objectSpread2(_objectSpread2({}, KegInput.propTypes), {}, {
+Input$3.propTypes = _objectSpread2(_objectSpread2({}, KegInput.propTypes), {}, {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
   onClick: PropTypes.func,
   onPress: PropTypes.func,
@@ -2038,28 +1915,45 @@ Input$4.propTypes = _objectSpread2(_objectSpread2({}, KegInput.propTypes), {}, {
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 });
 
+var SelectOption = Picker.Item;
+var useable = function useable(item) {
+  return (isStr(item) || isNum(item)) && item;
+};
+var getVal = function getVal(value, text, children, label) {
+  return useable(value) || useable(text) || useable(children) || useable(label);
+};
 var Option = function Option(props) {
-  var children = props.children,
-      label = props.label,
-      style = props.style,
+  var label = props.label,
+      children = props.children,
       text = props.text,
-      value = props.value,
-      args = _objectWithoutProperties(props, ["children", "label", "style", "text", "value"]);
-  return React__default.createElement("option", _extends({}, args, {
-    value: value || label || text
-  }), label || value || text || children);
+      value = props.value;
+  return React__default.createElement(SelectOption, {
+    label: getVal(label, value, text),
+    value: getVal(value, text, children, label)
+  });
 };
 Option.propTypes = {
-  style: PropTypes.object,
+  children: PropTypes.string,
   label: PropTypes.string,
   text: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
-var Radio = function Radio(props) {
-  return React__default.createElement(Input$4, _extends({}, props, {
-    type: "radio"
-  }));
+var Radio = withTheme(function (props) {
+  var theme = props.theme,
+      children = props.children,
+      style = props.style,
+      onClick = props.onClick,
+      onPress = props.onPress,
+      text = props.text,
+      args = _objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress", "text"]);
+  return React__default.createElement(Text, _extends({}, args, {
+    style: [get(theme, ['form', 'radio']), style]
+  }), text);
+});
+Radio.propTypes = {
+  style: PropTypes.object,
+  text: PropTypes.string
 };
 
 var Select = React__default.forwardRef(function (_ref, ref) {
@@ -2105,9 +1999,9 @@ var Select$1 = React__default.forwardRef(function (props, ref) {
       value = props.value,
       elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
   var selectStyles = useThemePath(themePath, styles);
-  var selectClasses = useThemeTypeAsClass(themePath || type, 'keg-select', className);
+  var selectClasses = useThemeTypeAsClass();
   var classRef = useClassName('keg-select', selectClasses, ref);
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     style: [selectStyles.main, style]
   }, React__default.createElement(KegSelect, _extends({
     ref: classRef
@@ -2133,10 +2027,6 @@ Select$1.propTypes = _objectSpread2(_objectSpread2({}, Select.propTypes), {}, {
   type: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 });
-
-var Slider = function Slider() {
-  return null;
-};
 
 var Switch = React__default.forwardRef(function (_ref, ref) {
   var className = _ref.className,
@@ -2235,14 +2125,14 @@ var Switch$1 = forwardRef(function (props, ref) {
   var elThemePath = themePath || "form.switch.".concat(close && 'close' || 'default');
   var themeStyles = useThemePath(elThemePath, styles);
   var activeStyles = useCheckedState$1(isChecked, themeStyles);
-  var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-switch', className);
-  return children && React__default.createElement(View$1, {
+  var typeClassName = useThemeTypeAsClass();
+  return children && React__default.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
   }, React__default.createElement(ChildrenComponent$1, {
     className: "keg-switch-container",
     children: children
-  })) || React__default.createElement(View$1, {
+  })) || React__default.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
   }, LeftComponent && React__default.createElement(SideComponent$1, {
@@ -2364,8 +2254,8 @@ var CheckGroup = React__default.forwardRef(function (props, ref) {
       ref: ref
     });
   };
-  return React__default.createElement(View$1, {
-    className: useClassList('keg-check-group', className),
+  return React__default.createElement(View, {
+    className: useClassList(),
     style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.main
   }, showHeader && React__default.createElement(Header, null), childrenWithProps);
 });
@@ -2403,7 +2293,7 @@ var Container = function Container(_ref) {
     flexDirection: flexDir,
     flex: size ? size : hasWidth ? 0 : 1
   } : {};
-  return React__default.createElement(View$1, _extends({}, props, {
+  return React__default.createElement(View, _extends({}, props, {
     style: [flexStyle].concat(_toConsumableArray(containerStyles))
   }, getPressHandler(getPlatform(), onClick || onPress)), children);
 };
@@ -2423,7 +2313,7 @@ var Row = function Row(_ref) {
       props = _objectWithoutProperties(_ref, ["className", "children", "style"]);
   var theme = useTheme();
   return React__default.createElement(Container, _extends({}, props, {
-    className: useClassList('keg-row', className),
+    className: useClassList(),
     style: [get(theme, 'layout.grid.row'), style],
     flexDir: "row"
   }), children);
@@ -2466,7 +2356,7 @@ var Grid = function Grid(_ref) {
       isRow = _getChildAttrs.isRow,
       isCenter = _getChildAttrs.isCenter;
   return React__default.createElement(Container, _extends({}, props, {
-    className: useClassList('keg-grid', className),
+    className: useClassList(),
     flexDir: isRow ? 'column' : 'row',
     size: 1,
     style: [get(theme, ['layout', 'grid', 'wrapper']), style, isCenter && buildCenterStyles(isCenter)]
@@ -2499,7 +2389,7 @@ var Column = function Column(_ref) {
       props = _objectWithoutProperties(_ref, ["className", "children", "size", "center"]);
   var theme = useTheme();
   return React__default.createElement(Container, _extends({}, props, {
-    className: useClassList('keg-column', className),
+    className: useClassList(),
     size: size,
     flexDir: "column",
     style: [get(theme, ['layout', 'grid', 'column']), props.style, getColumnWidth(size, theme)]
@@ -2560,7 +2450,7 @@ var Element$2 = React__default.forwardRef(function (props, ref) {
       target = props.target,
       attrs = _objectWithoutProperties(props, ["children", "className", "elProps", "href", "onPress", "style", "target"]);
   return React__default.createElement(Touchable$1, _extends({
-    className: useClassList('keg-link', className)
+    className: useClassList()
   }, elProps, attrs, {
     touchRef: ref
   }), React__default.createElement(Text$1, {
@@ -2592,8 +2482,8 @@ var Section = withTheme(function (props) {
       style = props.style,
       type = props.type,
       args = _objectWithoutProperties(props, ["className", "theme", "children", "style", "type"]);
-  return React__default.createElement(View$1, _extends({}, args, {
-    className: useClassList('keg-section', className),
+  return React__default.createElement(View, _extends({}, args, {
+    className: useClassList(),
     accessibilityRole: "region",
     style: theme.get("section.default", type && "section.".concat(type), style)
   }), children);
@@ -2619,7 +2509,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
   }),
       _useFromToAnimation2 = _slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
-  var classRef = useClassName('keg-modal-content', className);
+  var classRef = useClassName();
   return React__default.createElement(Animated.View, {
     ref: classRef,
     style: _objectSpread2(_objectSpread2({}, defaultStyle), {}, {
@@ -2671,8 +2561,8 @@ var Modal = function Modal(props) {
     } else if (isFunc(onAnimateIn)) onAnimateIn();
   }, [onAnimateOut, onAnimateIn, visible]);
   return (
-    React__default.createElement(View$1, {
-      className: useClassList('keg-modal', className),
+    React__default.createElement(View, {
+      className: useClassList(),
       style: renderModal ? modalStyles.main : hideModalStyle
     }, React__default.createElement(Touchable$1, {
       className: 'keg-modal-backdrop',
@@ -2721,11 +2611,11 @@ var ItemHeader = function ItemHeader(props) {
       children = props.children,
       elProps = _objectWithoutProperties(props, ["appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
   var headerStyles = useThemePath(themePath || "header.itemHeader", styles);
-  return React__default.createElement(View$1, _extends({
-    className: useClassList('keg-header', className)
+  return React__default.createElement(View, _extends({
+    className: useClassList()
   }, elProps, {
     style: [headerStyles.main, appHeader && get(headerStyles, ['appHeader', 'main']), shadow && get(headerStyles, ['shadow', 'main'])]
-  }),  shadow && React__default.createElement(View$1, {
+  }),  shadow && React__default.createElement(View, {
     style: headerStyles === null || headerStyles === void 0 ? void 0 : (_headerStyles$shadow = headerStyles.shadow) === null || _headerStyles$shadow === void 0 ? void 0 : _headerStyles$shadow.cover
   }), children || React__default.createElement(React__default.Fragment, null, React__default.createElement(Side, {
     styles: headerStyles.content,
@@ -2768,7 +2658,7 @@ var Center = function Center(props) {
       _props$ellipsis = props.ellipsis,
       ellipsis = _props$ellipsis === void 0 ? true : _props$ellipsis,
       children = props.children;
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     className: "keg-header-center",
     style: styles.main
   }, children && renderFromType(children, {}, null) || React__default.createElement(H5, {
@@ -2793,14 +2683,14 @@ var Side = function Side(props) {
     position: position
   };
   var showIcon = isValidComponent(IconElement);
-  return React__default.createElement(View$1, {
+  return React__default.createElement(View, {
     className: "keg-header-".concat(position),
     style: get(styles, [position, 'main'])
   }, children && renderFromType(children, {}, null) || (action ? React__default.createElement(Button, {
     className: "keg-header-".concat(position, "-button"),
     styles: contentStyles.button,
     onClick: action
-  }, showIcon && React__default.createElement(CustomIcon, iconProps)) : showIcon && React__default.createElement(View$1, {
+  }, showIcon && React__default.createElement(CustomIcon, iconProps)) : showIcon && React__default.createElement(View, {
     className: "keg-header-".concat(position, "-icon"),
     style: contentStyles.main
   }, React__default.createElement(CustomIcon, iconProps))));
@@ -2824,7 +2714,7 @@ var AppHeader = function AppHeader(props) {
       otherProps = _objectWithoutProperties(props, ["className"]);
   return React__default.createElement(ItemHeader, _extends({
     accessibilityRole: "banner",
-    className: useClassList('keg-app-header', className),
+    className: useClassList(),
     appHeader: true
   }, otherProps));
 };
@@ -2856,14 +2746,11 @@ var ScrollView$1 = StyleInjector(ScrollView, {
 });
 ScrollView$1.propTypes = ScrollView.propTypes;
 
-var noAnimate = function noAnimate(toggled, current, _ref) {
-  var initial = _ref.initial,
-      max = _ref.max;
-  return !toggled && current === initial || toggled && current === max;
+var noAnimate = function noAnimate(toggled, current, collapsedHeight, contentMaxHeight) {
+  return !toggled && current === collapsedHeight || toggled && current === contentMaxHeight;
 };
 var Drawer = function Drawer(props) {
-  var initial = props.initial,
-      Element = props.Element,
+  var Element = props.Element,
       styles = props.styles,
       toggled = props.toggled,
       className = props.className,
@@ -2871,32 +2758,28 @@ var Drawer = function Drawer(props) {
       type = _props$type === void 0 ? 'timing' : _props$type,
       _props$config = props.config,
       config = _props$config === void 0 ? noOpObj : _props$config,
-      childProps = _objectWithoutProperties(props, ["initial", "Element", "styles", "toggled", "className", "type", "config"]);
-  var heights = useRef({
-    initial: initial || 0,
-    max: 0
-  });
-  var _useState = useState(new Animated.Value(initial)),
+      _props$collapsedHeigh = props.collapsedHeight,
+      collapsedHeight = _props$collapsedHeigh === void 0 ? 0 : _props$collapsedHeigh,
+      childProps = _objectWithoutProperties(props, ["Element", "styles", "toggled", "className", "type", "config", "collapsedHeight"]);
+  var contentMaxHeight = useRef(null);
+  var _useState = useState(new Animated.Value(collapsedHeight)),
       _useState2 = _slicedToArray(_useState, 2),
       animation = _useState2[0],
       setAnimation = _useState2[1];
-  var setMaxHeight = function setMaxHeight(event) {
+  var setMaxHeight = useCallback(function (event) {
     var maxHeight = event.nativeEvent.layout.height;
-    if (!heights.current || heights.current.max === maxHeight) return;
-    heights.current.max = maxHeight;
+    if (contentMaxHeight.current === maxHeight) return;
+    contentMaxHeight.current = maxHeight;
     toggled && setAnimation(new Animated.Value(maxHeight));
-  };
+  }, [contentMaxHeight, toggled, setAnimation]);
   useLayoutEffect(function () {
-    if (noAnimate(toggled, animation._value, heights.current)) return;
-    var _heights$current = heights.current,
-        initial = _heights$current.initial,
-        max = _heights$current.max;
+    if (noAnimate(toggled, animation._value, collapsedHeight, contentMaxHeight.current)) return;
     var heightChanges = toggled ? {
-      from: initial,
-      to: max
+      from: collapsedHeight,
+      to: contentMaxHeight.current
     } : {
-      from: max,
-      to: initial
+      from: contentMaxHeight.current,
+      to: collapsedHeight
     };
     animation.setValue(heightChanges.from);
     var animationConfig = config ? _objectSpread2(_objectSpread2({}, config), {}, {
@@ -2905,15 +2788,15 @@ var Drawer = function Drawer(props) {
       toValue: heightChanges.to
     };
     Animated[type](animation, animationConfig).start();
-  }, [toggled, type, config]);
+  }, [toggled, type, config, collapsedHeight]);
   var drawerStyles = useThemePath("drawer", styles);
-  var classRef = useClassName('keg-drawer', className);
+  var classRef = useClassName();
   return React__default.createElement(Animated.View, {
     ref: classRef,
     style: [drawerStyles.main, get(styles, 'main'), {
-      height: animation
+      maxHeight: animation
     }]
-  }, React__default.createElement(View$1, {
+  }, React__default.createElement(View, {
     className: "keg-drawer-content",
     onLayout: setMaxHeight,
     style: get(styles, 'content')
@@ -2925,10 +2808,126 @@ Drawer.propTypes = {
   className: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   config: PropTypes.object,
   Element: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType]),
-  initial: PropTypes.number,
   styles: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   toggled: PropTypes.bool,
-  type: PropTypes.oneOf(['decay', 'spring', 'timing'])
+  type: PropTypes.oneOf(['decay', 'spring', 'timing']),
+  collapsedHeight: PropTypes.number
+};
+
+var buildStyles = function buildStyles(theme, styleHelper) {
+  var textToggleStyles = theme.get("textToggle", styleHelper === null || styleHelper === void 0 ? void 0 : styleHelper.styles);
+  var align = 'flex-end';
+  switch (styleHelper === null || styleHelper === void 0 ? void 0 : styleHelper.togglePosition) {
+    case 'left':
+      align = 'flex-start';
+      break;
+    case 'center':
+      align = 'center';
+      break;
+  }
+  return theme.get(textToggleStyles, {
+    main: {
+      alignItems: align
+    }
+  });
+};
+var TextToggle = function TextToggle(props) {
+  var text = props.text,
+      styles = props.styles,
+      _props$isExpandedInit = props.isExpandedInit,
+      isExpandedInit = _props$isExpandedInit === void 0 ? false : _props$isExpandedInit,
+      className = props.className,
+      CustomToggle = props.CustomToggle,
+      onToggle = props.onToggle,
+      _props$togglePosition = props.togglePosition,
+      togglePosition = _props$togglePosition === void 0 ? 'right' : _props$togglePosition,
+      _props$collapsedHeigh = props.collapsedHeight,
+      collapsedHeight = _props$collapsedHeigh === void 0 ? 100 : _props$collapsedHeigh,
+      _props$fadeColor = props.fadeColor,
+      fadeColor = _props$fadeColor === void 0 ? 'white' : _props$fadeColor,
+      _props$collapsedToggl = props.collapsedToggleText,
+      collapsedToggleText = _props$collapsedToggl === void 0 ? 'show more' : _props$collapsedToggl,
+      _props$expandedToggle = props.expandedToggleText,
+      expandedToggleText = _props$expandedToggle === void 0 ? 'show less' : _props$expandedToggle;
+  if (!text) return null;
+  var _useState = useState(isExpandedInit),
+      _useState2 = _slicedToArray(_useState, 2),
+      expanded = _useState2[0],
+      setExpanded = _useState2[1];
+  var styleHelper = useMemo(function () {
+    return {
+      styles: styles,
+      togglePosition: togglePosition
+    };
+  }, [styles, togglePosition]);
+  var mainStyle = useStylesCallback(buildStyles, [togglePosition, styles], styleHelper);
+  var _useState3 = useState(0),
+      _useState4 = _slicedToArray(_useState3, 2),
+      textMaxHeight = _useState4[0],
+      setTextMaxHeight = _useState4[1];
+  var showToggle = shouldDisplayToggler(collapsedHeight, textMaxHeight);
+  var onToggleCb = useCallback(function () {
+    setExpanded(!expanded);
+    isFunc(onToggle) && onToggle(!expanded);
+  }, [expanded, onToggle]);
+  var onTextLayout = useCallback(function (event) {
+    var height = event.nativeEvent.layout.height;
+    if (textMaxHeight === height) return;
+    setTextMaxHeight(height);
+  }, [textMaxHeight, setTextMaxHeight]);
+  return React__default.createElement(View, {
+    style: [mainStyle.main],
+    className: useClassList()
+  }, React__default.createElement(Drawer, {
+    collapsedHeight: collapsedHeight,
+    toggled: expanded
+  }, React__default.createElement(Text, {
+    style: mainStyle.text,
+    onLayout: onTextLayout
+  }, text)), showToggle && !expanded && React__default.createElement(LinearGradient, {
+    colors: ['rgba(255,255,255,0)', fadeColor],
+    style: mainStyle.linearGradient
+  }), showToggle && React__default.createElement(ToggleComponent, {
+    onPress: onToggleCb,
+    isExpanded: expanded,
+    styles: mainStyle.toggleComponent,
+    CustomComponent: CustomToggle,
+    collapsedToggleText: collapsedToggleText,
+    expandedToggleText: expandedToggleText
+  }));
+};
+var shouldDisplayToggler = function shouldDisplayToggler(minHeight, textMaxHeight) {
+  return !minHeight || textMaxHeight > minHeight;
+};
+var ToggleComponent = function ToggleComponent(_ref) {
+  var onPress = _ref.onPress,
+      styles = _ref.styles,
+      CustomComponent = _ref.CustomComponent,
+      isExpanded = _ref.isExpanded,
+      expandedToggleText = _ref.expandedToggleText,
+      collapsedToggleText = _ref.collapsedToggleText;
+  var defaultText = isExpanded ? expandedToggleText : collapsedToggleText;
+  return React__default.createElement(Touchable$1, {
+    style: styles === null || styles === void 0 ? void 0 : styles.main,
+    onPress: onPress
+  }, isValidComponent(CustomComponent) ? React__default.createElement(CustomComponent, {
+    isExpanded: isExpanded
+  }) : React__default.createElement(Text, {
+    style: styles === null || styles === void 0 ? void 0 : styles.text
+  }, defaultText));
+};
+TextToggle.propTypes = {
+  text: PropTypes.string,
+  isExpandedInit: PropTypes.bool,
+  styles: PropTypes.object,
+  className: PropTypes.string,
+  CustomToggle: PropTypes.oneOfType([PropTypes.func, PropTypes.elementType]),
+  onToggle: PropTypes.func,
+  togglePosition: PropTypes.oneOf(['left', 'center', 'right']),
+  collapsedHeight: PropTypes.number,
+  fadeColor: PropTypes.string,
+  expandedToggleText: PropTypes.string,
+  collapsedToggleText: PropTypes.string
 };
 
 var transition = function transition() {
@@ -3815,6 +3814,36 @@ var header = {
   itemHeader: itemHeader
 };
 
+var textToggle = {
+  main: {
+    fl: 1
+  },
+  textContainer: {},
+  text: {
+    ftSz: 20
+  },
+  linearGradient: {
+    pos: 'absolute',
+    bt: 40,
+    lt: 0,
+    rt: 0,
+    height: 50
+  },
+  drawer: {
+    main: {
+      ovf: 'hidden',
+      width: '100%'
+    }
+  },
+  toggleComponent: {
+    main: {
+      mV: 15,
+      alI: 'flex-end',
+      txDc: 'underline'
+    }
+  }
+};
+
 var components = {
   button: button,
   card: card,
@@ -3829,7 +3858,8 @@ var components = {
   section: section$1,
   textBox: textBox,
   modal: modal$1,
-  header: header
+  header: header,
+  textToggle: textToggle
 };
 
 var display = {
@@ -4330,5 +4360,5 @@ var theme = _objectSpread2({
   typography: typography
 }, components);
 
-export { Link as A, AppHeader, Button, Caption, Card, CheckGroup, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image$1 as Image, Input$4 as Input, ItemHeader, Label, Link, Loading, Modal, Option, P, Radio, Row, ScrollView$1 as ScrollView, Section, Select$1 as Select, Slider, Subtitle, SvgIcon, Switch$1 as Switch, Text, TextBox, Touchable$1 as Touchable, TouchableIcon, View$1 as View, isValidComponent, renderFromType, theme, useAnimate, useChildren, useChildrenWithRefs, useClassList, useClassName, useFromToAnimation, useInputHandlers, useMediaProps, usePressHandlers, useSelectHandlers, useSpin, useTextAccessibility, useThemePath, useThemeTypeAsClass, useThemeWithHeight, withTouch };
+export { Link as A, AppHeader, Button, Caption, Card, CheckGroup, Checkbox, Column, Divider, Drawer, FilePicker, Form, Grid, H1, H2, H3, H4, H5, H6, Icon, Image$1 as Image, Input$3 as Input, ItemHeader, Label, Link, Loading, Modal, Option, P, Radio, Row, ScrollView$1 as ScrollView, Section, Select$1 as Select, Subtitle, SvgIcon, Switch$1 as Switch, Text, TextBox, TextToggle, Touchable$1 as Touchable, TouchableIcon, View, isValidComponent, renderFromType, theme, useAnimate, useChildren, useChildrenWithRefs, useClassList, useClassName, useFromToAnimation, useInputHandlers, useMediaProps, usePressHandlers, useSelectHandlers, useSpin, useTextAccessibility, useThemePath, useThemeTypeAsClass, useThemeWithHeight, withTouch };
 //# sourceMappingURL=kegComponents.native.js.map
