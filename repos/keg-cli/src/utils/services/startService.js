@@ -20,6 +20,7 @@ const startService = async (args, exArgs) => {
   const isBuilt = await buildService(args, exArgs)
 
   // Update the build param so we don't rebuild the tap
+  // Setting it to false, tells it to NOT build the image
   get(args, 'params.build') && set(args, 'params.build', !isBuilt) 
 
   // Call and return the compose server
