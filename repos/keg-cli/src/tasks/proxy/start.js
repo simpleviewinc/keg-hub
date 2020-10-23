@@ -1,5 +1,5 @@
 const { DOCKER } = require('KegConst/docker')
-const { serviceOptions, startService } = require('KegUtils/services')
+const { serviceOptions, composeService } = require('KegUtils/services')
 
 /**
  * Start keg-proxy with docker-compose
@@ -12,10 +12,11 @@ const { serviceOptions, startService } = require('KegUtils/services')
  * @returns {void}
  */
 const startProxy = async (args) => {
-  return startService({
+  return composeService({
     ...args,
     __internal: {
       ...args.__internal,
+      skipDockerExec: true,
       locationContext: args.task.locationContext,
     },
   },

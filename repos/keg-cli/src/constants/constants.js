@@ -121,6 +121,7 @@ module.exports = deepFreeze({
     comp: 'keg-components',
     components: 'keg-components',
     core: 'keg-core',
+    proxy: 'keg-proxy',
   },
 
   // Map shortcuts and variations between the container cmdContext and the container
@@ -133,6 +134,8 @@ module.exports = deepFreeze({
     'keg-components': 'components',
     kegcore: 'core',
     'keg-core': 'core',
+    kegproxy: 'proxy',
+    'keg-proxy': 'proxy',
   },
 
   // docker exec constants and options for the utils/services/composeService.js
