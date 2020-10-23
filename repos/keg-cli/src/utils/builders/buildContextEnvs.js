@@ -54,7 +54,7 @@ const buildContextEnvs = async (args) => {
     // Set the compose project`s name last
     // This way it does not get overwritten
     // It will ensure all projects are on the same network
-    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME,
+    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME || 'kegdev',
   }
 
   return built
