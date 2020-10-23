@@ -48,7 +48,7 @@ global.testDocker = {
       ports: '80/tcp, 443/tcp, 873/tcp, 8080-8082/tcp, 0.0.0.0:19002->19002/tcp, 19000-19001/tcp, 60710/tcp, 0.0.0.0:19006->19006/tcp',
       runningFor: '27 minutes ago',
       size: '0B',
-      status: 'Up 27 minutes',
+      status: 'Exited (137) 11 hours ago',
       context: 'base',
       prefix: 'img-keg-base',
       noPrefix: 'keg-base'
@@ -70,6 +70,95 @@ global.testDocker = {
       context: 'random',
       prefix: 'test-random',
       noPrefix: 'random'
+    },
+    ['package-test-tap']: {
+      command: 'docker-entrypoint.s…',
+      createdAt: '2020-06-25 23:22:34 -0700 MST',
+      id: '56aa46fa11ba',
+      image: 'package-test-tap',
+      labels: '',
+      localVolumes: '0',
+      mounts: '',
+      name: 'package-test-tap',
+      networks: 'bridge',
+      ports: '80/tcp, 443/tcp, 873/tcp, 8080-8082/tcp, 0.0.0.0:19002->19002/tcp, 19000-19001/tcp, 60710/tcp, 0.0.0.0:19006->19006/tcp',
+      runningFor: '27 minutes ago',
+      size: '0B',
+      status: 'Exited (137) 11 hours ago',
+      context: 'tap',
+      prefix: 'package-test-tap',
+      noPrefix: 'test-tap'
+    }
+  },
+  images: {
+    tap: {
+      "containers": "N/A",
+      "createdAt": "2020-10-20 17:02:46 -0700 MST",
+      "createdSince": "5 hours ago",
+      "digest": "<none>",
+      "id": "a2aba7cf204f",
+      "repository": "docker.pkg.github.com/simpleviewinc/keg-packages/tap",
+      "sharedSize": "N/A",
+      "size": "2.15GB",
+      "tag": "zen-371-booking-button-states",
+      "uniqueSize": "N/A",
+      "virtualSize": "2.154GB",
+      "tags": [
+        "zen-371-booking-button-states"
+      ],
+      "rootId": "tap"
+    },
+    core: {
+      "containers": "N/A",
+      "createdAt": "2020-10-20 17:35:56 -0700 MST",
+      "createdSince": "4 hours ago",
+      "digest": "<none>",
+      "id": "b80dcb1cac10",
+      "repository": "keg-core",
+      "sharedSize": "N/A",
+      "size": "714MB",
+      "tag": "0.0.1",
+      "uniqueSize": "N/A",
+      "virtualSize": "713.6MB",
+      "tags": [
+        "0.0.1"
+      ],
+      "rootId": "keg-core"
+    },
+    base: {
+      "containers": "N/A",
+      "createdAt": "2020-10-16 12:00:47 -0700 MST",
+      "createdSince": "4 days ago",
+      "digest": "<none>",
+      "id": "3b74af475ff2",
+      "repository": "keg-base",
+      "sharedSize": "N/A",
+      "size": "430MB",
+      "tag": "latest",
+      "uniqueSize": "N/A",
+      "virtualSize": "429.7MB",
+      "tags": [
+        "0.0.1",
+        "latest"
+      ],
+      "rootId": "keg-base"
+    },
+    components: {
+      "containers": "N/A",
+      "createdAt": "2020-10-20 21:39:10 -0700 MST",
+      "createdSince": "About a minute ago",
+      "digest": "<none>",
+      "id": "a56406239194",
+      "repository": "keg-components",
+      "sharedSize": "N/A",
+      "size": "850MB",
+      "tag": "0.0.1",
+      "uniqueSize": "N/A",
+      "virtualSize": "849.5MB",
+      "tags": [
+        "0.0.1"
+      ],
+      "rootId": "keg-components"
     }
   }
 }
@@ -89,15 +178,19 @@ const dockerOutput = {
 
 const docker = {
   container: {
-    get: jest.fn(() => {
-      return global.testDocker.containers.core
+    get: jest.fn(container => {
+      return global.testDocker.containers[container] ||
+        Object.values(global.testDocker.containers)
+          .reduce((found, data) => {
+            return found
+              ? found
+              : data.id === container || data.image === container || data.name === container
+                ? data
+                : found
+          }, false)
     }),
     list: jest.fn(() => {
-      return [
-        global.testDocker.containers.core,
-        global.testDocker.containers.random,
-        global.testDocker.containers.base,
-      ]
+      return Object.values(global.testDocker.containers)
     }),
     port: jest.fn((args) => {
       return args.format === 'json'
@@ -105,16 +198,27 @@ const docker = {
         : `19006/tcp -> 0.0.0.0:80`
     }),
     ps: jest.fn((args) => {
-      return [
-        global.testDocker.containers.core,
-        global.testDocker.containers.tap,
-        global.testDocker.containers.random,
-      ]
+      return Object.values(global.testDocker.containers)
+        .filter(container => container.status.indexOf(`Up`) !== 0)
     })
   },
   image: {
     getCmd: jest.fn(async ({ image }) => {
       return dockerOutput.image.getCmd[image]
+    }),
+    get: jest.fn(image => {
+      return global.testDocker.images[image] ||
+        Object.values(global.testDocker.images)
+          .find((data) => {
+            return data.id === image || data.image === image || data.name === image
+          })
+    }),
+    exists: jest.fn(image => {
+      return global.testDocker.images[image] ||
+        Object.values(global.testDocker.images)
+          .find((data) => {
+            return data.id === image || data.image === image || data.name === image
+          })
     })
   }
 }

@@ -5,50 +5,6 @@ const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 
 /**
- * Gets the correct context for the command
- * If no context exists, it asks user to select a container for context
- * @function
- *
- * @returns {Object} - context, and container to exec
- */
-const ensureContainerAndContext = async ({ context, tap, __injected={} }, { containerContext={} }) => {
-
-  // Check if the name already exists from an injected app
-  const injectedName = __injected.container || __injected.image
-
-  // Get the container / image from the context
-  const name = containerContext.id
-    ? containerContext.id
-      : injectedName
-      ? injectedName
-      : context === 'tap'
-        ? 'tap'
-        : !context
-          ? false
-          : context.includes('keg')
-            ? context
-            : `keg-${context}`
-
-  // Try to get the container from the context
-  let container = name && await docker.container.get(name)
-
-  // If no container, then ask which container to use
-  container = container || await containerSelect(containers => {
-    return containers.filter(container => !container.status.includes('Exited'))
-  })
-
-  // If no context, use the container image to find the context
-  const useContext = __injected.context
-    ? __injected.context
-    : tap
-      ? 'tap'
-      : context|| container && container.image.replace('keg', '').split(':')[0]
-
-  return { container, context: useContext }
-
-}
-
-/**
  * Execute a docker command on a running container
  * @function
  * @param {Object} args - arguments passed from the runTask method
@@ -59,8 +15,7 @@ const ensureContainerAndContext = async ({ context, tap, __injected={} }, { cont
  */
 const dockerExec = async args => {
   const { params, task, __internal={} } = args
-  const { cmd, detach, options, workdir } = params
-  const { context, container } = await ensureContainerAndContext(params, __internal)
+  const { cmd, detach, options, workdir, context } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
@@ -73,7 +28,7 @@ const dockerExec = async args => {
     params: { ...params, context }
   })
 
-  const { contextEnvs, location, prefix, image } = execContext
+  const { contextEnvs, location, prefix, image, container } = execContext
 
   // Get the name of the container to run the docker exec cmd on
   const containerName = container && container.name || prefix || image

@@ -19,7 +19,7 @@ const getKegContext = context => {
 
   // Check if the context exists in the container const
   // Injected apps should have been added by this point, so injected apps will exist as well
-  return DOCKER.CONTAINERS[found.toUpperCase()]
+  return Boolean(DOCKER.CONTAINERS[found.toUpperCase()])
     ? found
     : context
 

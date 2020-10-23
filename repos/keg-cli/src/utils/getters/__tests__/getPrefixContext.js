@@ -35,9 +35,32 @@ describe('getPrefixContext', () => {
   it('should only remove keg from the context when its in the container map', () => {
     const { context, noPrefix } = getPrefixContext('package-keg-foo')
 
-    expect(context).toBe('keg-foo')
+    expect(context).toBe('tap')
     expect(noPrefix).toBe('keg-foo')
 
   })
+
+  it('should return the correct prefix context for taps', () => {
+    const repImg = getPrefixContext('img-tap-test-container')
+    const repPack = getPrefixContext('package-tap-test-container')
+
+    expect(JSON.stringify(repImg)).toEqual(JSON.stringify({
+      prefix: 'img',
+      context: 'tap',
+      withPrefix: 'img-tap-test-container',
+      noPrefix: 'tap-test-container',
+      tap: 'tap-test-container'
+    }))
+
+    expect(JSON.stringify(repPack)).toEqual(JSON.stringify({
+      prefix: 'package',
+      context: 'tap',
+      withPrefix: 'package-tap-test-container',
+      noPrefix: 'tap-test-container',
+      tap: 'tap-test-container'
+    }))
+
+  })
+
 
 })
