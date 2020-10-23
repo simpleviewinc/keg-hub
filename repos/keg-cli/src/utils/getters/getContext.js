@@ -60,6 +60,13 @@ const imageContext = async (toFind, prefixData={}, __injected, askFor) => {
 
 }
 
+/**
+ * Gets the context from a prefixData object
+ * @function
+ * @param {string} prefixData - Parsed prefix data of an image of container
+ *
+ * @returns {Object} - context object with the prefixData and a found image or container
+ */
 const contextFromPrefix = async prefixData => {
 
   let context = {}
@@ -68,7 +75,7 @@ const contextFromPrefix = async prefixData => {
   const container = await docker.container.get(dockerRef)
   if(container) context = { container }
 
-  const image = !container || await docker.image.get(dockerRef)
+  const image = !container && await docker.image.get(dockerRef)
   if(image) context = { image }
 
   return { ...prefixData, ...context }
