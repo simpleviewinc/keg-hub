@@ -5,7 +5,9 @@ const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 const { CONTAINERS } = DOCKER
 const { loadTemplate } = require('KegUtils/template')
+const { generateLabels } = require('./generateLabels')
 const { generalError } = require('KegUtils/error/generalError')
+const { exists } = require('fs')
 
 const composeArgs = {
   clean: '--force-rm',
@@ -39,11 +41,20 @@ const writeInjectedCompose = async (injectedCompose, data) => {
  *
  * @returns {string} - Filled docker-compose.yml template file
  */
-const addInjectedTemplate = async (dockerCmd, data) => {
-  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${data.image}.yml`)
+const addInjectedTemplate = async (dockerCmd, data={}) => {
+  const image = get(data, `params.__injected.image`)
+  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${image}.yml`)
+
+  // Flatten the data so it can be accessed at a single consistent level
+  const templateArgs = {
+    ...data,
+    ...data.params,
+    ...data.params.__injected,
+    generatedLabels: generateLabels('', data)
+  }
 
   const [ err, exists ] = await pathExists(injectedCompose)
-  !exists && await writeInjectedCompose(injectedCompose, data)
+  !exists && await writeInjectedCompose(injectedCompose, templateArgs)
 
   return `${dockerCmd} -f ${injectedCompose}`
 }
@@ -69,21 +80,28 @@ const addComposeFile = (dockerCmd='', container, env, composeFile) => {
  * Adds the paths to the docker compose file for the env
  * @function
  * @param {string} dockerCmd - Docker command to add the compile file paths to
- * @param {string} context - Context the docker command is being run in ( core / tap )
+ * @param {Object} args - Arguments passed on from the current Task
+ * @param {string} args.cmdContext - Current docker image context
+ * @param {Object} args.params - Parse options passed from the cmd line
+ * @param {Object} args.globalConfig - CLI Global Config object
+ * @param {Object} args.contextEnvs - ENVs for the current context
+ * 
  *
  * @returns {string} - dockerCmd string with the file paths added
  */
-const addComposeFiles = async (dockerCmd, context='', __injected={}) => {
+const addComposeFiles = async (dockerCmd, args) => {
 
-  // TODO: add helper to env here and replace curENV
-  const curENV = 'LOCAL'
+  const curENV = get(args, `params.env`, 'LOCAL')
+  const container = get(args, 'cmdContext', '').toUpperCase()
 
-  const container = context.toUpperCase()
+  if(!container) return dockerCmd
+  
+  const injectedComposePath = get(args, 'params.__injected.composePath')
 
   // Check if the compose file path has been injected
   // Or get the default docker compose file
-  dockerCmd = __injected.composePath
-    ? addComposeFile(dockerCmd, container, ``, __injected.composePath )
+  dockerCmd = injectedComposePath
+    ? addComposeFile(dockerCmd, container, ``, injectedComposePath)
     : addComposeFile(dockerCmd, container, `KEG_COMPOSE_DEFAULT`)
 
   // Get the docker compose file from the repo
@@ -95,8 +113,8 @@ const addComposeFiles = async (dockerCmd, context='', __injected={}) => {
   // Get the docker compose file for the container and ENV
   dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_${ container }_${ curENV }`)
 
-  return __injected.composePath
-    ? addInjectedTemplate(dockerCmd, __injected)
+  return injectedComposePath
+    ? addInjectedTemplate(dockerCmd, args)
     : dockerCmd
 }
 
@@ -165,13 +183,16 @@ const getDownArgs = (dockerCmd, remove) => {
  *
  * @returns {string} - Built docker command
  */
-const buildComposeCmd = async (globalConfig, cmd, cmdContext, params={}) => {
-  const { attach, build, remove } = params
+const buildComposeCmd = async args => {
+  const { cmd, params={}, } = args
+
+  const { attach, remove } = params
 
   let dockerCmd = `docker-compose`
-  dockerCmd = await addComposeFiles(dockerCmd, cmdContext, params.__injected)
+  dockerCmd = await addComposeFiles(dockerCmd, args)
+
   dockerCmd = `${dockerCmd} ${cmd}`
-  
+
   if(cmd === 'up')  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
   if(cmd === 'build') dockerCmd = addCmdOpts(dockerCmd, params)
   if(cmd === 'down') dockerCmd = remove ? getDownArgs(dockerCmd, remove) : dockerCmd

@@ -1,6 +1,5 @@
 const path = require('path')
 const { Logger } = require('KegLog')
-const { get } = require('@keg-hub/jsutils')
 const { removeFile, pathExists } = require('KegFileSys/fileSys')
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 

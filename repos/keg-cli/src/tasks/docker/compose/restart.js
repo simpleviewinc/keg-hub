@@ -29,12 +29,13 @@ const composeRestart = async args => {
   const { location, cmdContext, contextEnvs, tap, image } = containerContext
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd(
-    globalConfig,
-    'restart',
+  const dockerCmd = await buildComposeCmd({
+    params,
     cmdContext,
-    params
-  )
+    contextEnvs,
+    globalConfig,
+    cmd: 'restart',
+  })
 
   // Log the virtual url so users know how to access the running containers
   logVirtualUrl(cmdContext)

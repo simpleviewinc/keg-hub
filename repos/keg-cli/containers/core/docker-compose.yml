@@ -7,9 +7,9 @@ services:
     privileged: true
     labels:
       - traefik.enable=true
-      - traefik.http.routers.tap.rule=Host(`${KEG_PROXY_HOST}`)
-      - traefik.http.routers.tap.entrypoints=${KEG_PROXY_ENTRY}
-      - traefik.http.services.tap.loadbalancer.server.port=${DOC_APP_PORT}
+      - traefik.http.routers.core.rule=Host(`${KEG_PROXY_HOST}`)
+      - traefik.http.routers.core.entrypoints=${KEG_PROXY_ENTRY}
+      - traefik.http.services.core.loadbalancer.server.port=${DOC_APP_PORT}
       - com.keg.env.context=core
       - com.keg.env.cmd=${KEG_EXEC_CMD:-start}
       - com.keg.env.port=${DOC_APP_PORT:-19006}

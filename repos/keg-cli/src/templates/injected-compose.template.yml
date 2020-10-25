@@ -3,6 +3,10 @@ services:
   {{ image }}:
     image: {{ image }}
     container_name: {{ container }}
+    tty: true
+    stdin_open: true
     build:
       context: {{ injectPath }}
       dockerfile: {{ dockerPath }}
+    labels:
+{{ generatedLabels }}

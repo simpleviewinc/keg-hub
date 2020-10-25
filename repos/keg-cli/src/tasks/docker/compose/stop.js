@@ -21,12 +21,13 @@ const composeStop = async args => {
   const { location, cmdContext, contextEnvs } = containerContext
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd(
-    globalConfig,
-    'stop',
+  const dockerCmd = await buildComposeCmd({
+    params,
     cmdContext,
-    params
-  )
+    cmd: 'stop',
+    contextEnvs,
+    globalConfig,
+  })
 
   // Get the name of the docker-compose service
   const serviceName = buildServiceName(cmdContext, contextEnvs)

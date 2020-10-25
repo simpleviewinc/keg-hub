@@ -7,9 +7,9 @@ services:
     privileged: true
     labels:
       - traefik.enable=true
-      - traefik.http.routers.tap.rule=Host(`${KEG_PROXY_HOST}`)
-      - traefik.http.routers.tap.entrypoints=${KEG_PROXY_ENTRY}
-      - traefik.http.services.tap.loadbalancer.server.port=${DOC_APP_PORT:-60710}
+      - traefik.http.routers.components.rule=Host(`${KEG_PROXY_HOST}`)
+      - traefik.http.routers.components.entrypoints=${KEG_PROXY_ENTRY}
+      - traefik.http.services.components.loadbalancer.server.port=${DOC_APP_PORT:-60710}
       - com.keg.env.context=components
       - com.keg.env.cmd=${KEG_EXEC_CMD:-start}
       - com.keg.env.port=${DOC_APP_PORT:-60710}
@@ -45,5 +45,4 @@ services:
       - KEG_NM_INSTALL
       - NODE_ENV
       - PUBLIC_GIT_KEY
-    ports:
-      - 80:${DOC_APP_PORT}
+

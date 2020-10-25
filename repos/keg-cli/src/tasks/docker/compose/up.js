@@ -42,12 +42,13 @@ const composeUp = async args => {
   })
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd(
-    globalConfig,
-    'up',
+  const dockerCmd = await buildComposeCmd({
+    params,
+    cmd: 'up',
     cmdContext,
-    params
-  )
+    contextEnvs,
+    globalConfig,
+  })
 
   // Log the virtual url so users know how to access the running containers
   logVirtualUrl(cmdContext)
