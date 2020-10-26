@@ -189,6 +189,13 @@ const docker = {
                 : found
           }, false)
     }),
+    exists: jest.fn(container => {
+      return Boolean(global.testDocker.containers[container]) ||
+        Object.values(global.testDocker.containers)
+          .find((data) => {
+            return data.id === container || data.image === container || data.name === container
+          })
+    }),
     list: jest.fn(() => {
       return Object.values(global.testDocker.containers)
     }),

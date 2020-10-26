@@ -63,7 +63,7 @@ const proxyLabels = [
   [
     'KEG_PROXY_PORT',
     ['contextEnvs.KEG_PROXY_PORT', 'contextEnvs.DOC_APP_PORT'],
-    ['- traefik.http.services.{{ params.context }}.loadbalancer.server.port=${KEG_PROXY_PORT}',]
+    ['- traefik.http.services.{{ params.context }}.loadbalancer.server.port={{ KEG_PROXY_PORT }}',]
   ],
 ]
 
