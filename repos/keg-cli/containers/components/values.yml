@@ -38,6 +38,7 @@ env:
   # This allows mutagen to know where to sync the local version of the dependency
   DOC_RETHEME_PATH: /keg/keg-components/node_modules/@keg-hub/re-theme
   DOC_JSUTILS_PATH: /keg/keg-components/node_modules/@keg-hub/jsutils
+  KEG_EXEC_CMD: start
 
   # --- KEG-PROXY ENVs --- #
   KEG_PROXY_HOST: components.local.kegdev.xyz

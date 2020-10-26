@@ -1,26 +1,7 @@
 version: "3.8"
 services:
   keg-core:
-    image: ${IMAGE}
-    tty: true
-    stdin_open: true
     privileged: true
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.core.rule=Host(`${KEG_PROXY_HOST}`)
-      - traefik.http.routers.core.entrypoints=${KEG_PROXY_ENTRY}
-      - traefik.http.services.core.loadbalancer.server.port=${DOC_APP_PORT}
-      - com.keg.env.context=core
-      - com.keg.env.cmd=${KEG_EXEC_CMD:-start}
-      - com.keg.env.port=${DOC_APP_PORT:-19006}
-      - com.keg.env.service=${KEG_COMPOSE_SERVICE:-keg-core}
-      - com.keg.path.context=${KEG_CONTEXT_PATH}
-      - com.keg.path.container=${DOC_APP_PATH}
-      - com.keg.path.compose=${KEG_COMPOSE_DEFAULT}
-      - com.keg.path.values=${KEG_VALUES_FILE}
-      - com.keg.path.docker=${KEG_DOCKER_FILE}
-    volumes:
-      - ${CLI_PATH}:${DOC_CLI_PATH}
     build:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
@@ -43,7 +24,6 @@ services:
         - KEG_NM_INSTALL
         - NODE_ENV
         - PUBLIC_GIT_KEY
-    container_name: ${CONTAINER_NAME}
     environment:
       - CHOKIDAR_USEPOLLING
       - DOC_APP_PATH
@@ -68,4 +48,3 @@ services:
       - PUBLIC_GIT_KEY
     ports:
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
-      - 80:${DOC_APP_PORT}

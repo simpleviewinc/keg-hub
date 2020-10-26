@@ -22,6 +22,8 @@ env:
     # KEG_COMPOSE_CORE_<ENV>: "/path/to/override.yml"
     # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
 
+  KEG_EXEC_CMD: tap:start
+
   # --- DOCKER ENV CONTEXT --- #
 
   DOC_APP_PATH: "/keg/keg-core"
@@ -31,7 +33,6 @@ env:
   DOC_JSUTILS_PATH: "/keg/keg-core/node_modules/@keg-hub/jsutils"
   DOC_RETHEME_PATH: "/keg/keg-core/node_modules/@keg-hub/re-theme"
   DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@keg-hub/tap-resolver"
-
 
   # --- KEG-PROXY ENVs --- #
   KEG_PROXY_HOST: core.local.kegdev.xyz
