@@ -39,6 +39,44 @@ const checkExists = async container => {
 }
 
 /**
+ * TODO: Make this more dynamic, so it can handel of types of containers
+ * Should pull in the image to be built, and use the labels from that image
+ * If missing the correct labels, then use the current code below
+ * Also move this to utils, so it can be reused by other tasks ( i.e. image run task )
+*/
+
+/**
+ * Adds the required keg-proxy labels to the docker command options
+ * <br/>This allows the container to register with the keg-proxy
+ * @function
+ * @param {Array} opts - Options for the docker run command
+ * @param {Object} containerContext - Parsed container context from the buildContainerContext method
+ * @param {Object} containerContext.contextEnvs - Envs for the container
+ * @param {Object} parsed - Parsed docker package url
+ * @param {string} parsed.tag - Tag || branch of the docker package url
+ * @param {string} parsed.image - Name of the image to build the container from
+ *
+ * @returns {Array} - opts array with the keg-proxy labels added
+ */
+const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }) => {
+  const proxyHost = get(contextEnvs, `KEG_PROXY_HOST`, `tap.local.kegdev.xyz`).replace('tap', tag)
+  const hostLabel = `traefik.http.routers.${tag}.rule=Host(\`${proxyHost}\`)`
+  opts.push(`--label ${hostLabel}`)
+
+  const proxyPort = get(contextEnvs, `DOC_APP_PORT`, get(contextEnvs, `KEG_PROXY_PORT`))
+  const portLabel = `traefik.http.services.${tag}.loadbalancer.server.port=${proxyPort}`
+  opts.push(`--label ${portLabel}`)
+  
+  const proxyEntry = `traefik.http.routers.${tag}.entrypoints=keg`
+  opts.push(`--label ${proxyEntry}`)
+
+  // TODO: update this to pull from constants, and not be hard coded
+  opts.push(`--network keg-hub-net`)
+
+  return opts
+}
+
+/**
  * Builds a docker container so it can be run
  * @function
  * @param {Object} args - arguments passed from the runTask method
@@ -86,7 +124,6 @@ const dockerPackageRun = async args => {
   const parsed = parsePackageUrl(packageUrl)
   const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
 
-
   /*
   * ----------- Step 2 ----------- *
   * Pull the image from the provider and tag it
@@ -102,19 +139,20 @@ const dockerPackageRun = async args => {
   * ----------- Step 3 ----------- *
   * Build the container context information
   */
-  const { cmdContext, contextEnvs, location } = await buildContainerContext({
+  const containerContext = await buildContainerContext({
     task,
     globalConfig,
     params: { ...params, context: isInjected ? context : parsed.image },
   })
+  const { cmdContext, contextEnvs, location } = containerContext
 
   /*
   * ----------- Step 4 ----------- *
   * Check if a container with the same name is already running
   * If it is, ask the user if they want to remove it
   */
-  const exists = await checkExists(containerName)
-  if(exists) return Logger.info(`Exiting "package run" task!`)
+  // const exists = await checkExists(containerName)
+  // if(exists) return Logger.info(`Exiting "package run" task!`)
 
   /*
   * ----------- Step 5 ----------- *
@@ -129,7 +167,8 @@ const dockerPackageRun = async args => {
 
   cleanup && opts.push(`--rm`)
   network && opts.push(`--network ${ network }`)
-  
+
+  opts = addProxyOptions(opts, containerContext, parsed)
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
   try {

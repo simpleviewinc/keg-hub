@@ -11,12 +11,10 @@ const { HTTP_PORT_ENV } = require('KegConst/constants')
  */
 const getBoundServicePorts = async (contextEnvs, composeConfig) => {
   const servicePorts = await getServicePorts(contextEnvs, composeConfig) || []
-  
+
   return Object.keys(contextEnvs).reduce((ports, key) => {
-    const addPort = key.includes('_PORT')
-      ? key === HTTP_PORT_ENV
-        ? `-p 80:${contextEnvs[key]}`.trim()
-        : `-p ${contextEnvs[key]}:${contextEnvs[key]}`.trim()
+    const addPort = key !== `DOC_APP_PORT` && key.includes('_PORT')
+      ? `-p ${contextEnvs[key]}:${contextEnvs[key]}`.trim()
       : null
 
     return addPort && ports.indexOf(addPort) === -1

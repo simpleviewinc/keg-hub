@@ -1,7 +1,13 @@
 const { get } = require('@keg-hub/jsutils')
+const { Logger } = require('KegLog')
 const { getBoundServicePorts } = require('./getServicePorts')
 const { getServiceVolumes } = require('./getServiceVolumes')
 const { getComposeConfig } = require('./getComposeConfig')
+
+/**
+ * TODO: This should be updated to pull from the image, not the docker-compose config
+ * This will allow for more dynamic values, and less error from a missing docker-comose file
+*/
 
 /**
  * Gets values from the docker-compose.yml config based on service name
@@ -13,18 +19,25 @@ const { getComposeConfig } = require('./getComposeConfig')
  */
 const getServiceValues = async ({ composePath, contextEnvs, opts=[], volumes }) => {
 
-  const composeConfig = await getComposeConfig(contextEnvs, composePath)
-  if(!composeConfig) return opts
+  try {
+    const composeConfig = await getComposeConfig(contextEnvs, composePath)
+    if(!composeConfig) return opts
 
-  const ports = await getBoundServicePorts(contextEnvs, composeConfig)
-  opts = opts.concat(ports)
+    const ports = await getBoundServicePorts(contextEnvs, composeConfig)
+    opts = opts.concat(ports)
 
-  if(!volumes) return opts
+    if(!volumes) return opts
 
-  const vols = await getServiceVolumes(contextEnvs, composeConfig)
-  opts = opts.concat(vols)
+    const vols = await getServiceVolumes(contextEnvs, composeConfig)
+    opts = opts.concat(vols)
 
-  return opts
+    return opts
+  }
+  catch(err){
+    Logger.warn(err.stack)
+
+    return opts
+  }
 
 }
 
