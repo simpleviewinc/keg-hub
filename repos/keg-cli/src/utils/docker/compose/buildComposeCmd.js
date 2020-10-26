@@ -196,7 +196,7 @@ const buildComposeCmd = async args => {
 
   if(cmd === 'up')  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
   if(cmd === 'build') dockerCmd = addCmdOpts(dockerCmd, params)
-  if(cmd === 'down') dockerCmd = remove ? getDownArgs(dockerCmd, params) : dockerCmd
+  if(cmd === 'down') dockerCmd = params.remove ? getDownArgs(dockerCmd, params) : dockerCmd
 
   return dockerCmd
 }

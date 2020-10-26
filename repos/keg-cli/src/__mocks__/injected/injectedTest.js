@@ -87,7 +87,6 @@ const injectedTest = {
     PUBLIC_GIT_KEY: '6896f66723ee8b67239384e095d4e894fe15434d',
     NODE_ENV: 'development',
     KEG_COPY_LOCAL: true,
-    COMPOSE_PROJECT_NAME: 'kegdev'
   }
 }
 

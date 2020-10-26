@@ -40,8 +40,6 @@ env:
   DOC_JSUTILS_PATH: /keg/keg-components/node_modules/@keg-hub/jsutils
 
   # --- KEG-PROXY ENVs --- #
-
-  COMPOSE_PROJECT_NAME: kegdev
   KEG_PROXY_HOST: components.local.kegdev.xyz
   KEG_PROXY_ENTRY: keg
 

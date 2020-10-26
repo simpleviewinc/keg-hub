@@ -50,11 +50,7 @@ const buildContextEnvs = async (args) => {
     // Get any params that should be converted into ENVs passed to docker
     ...convertParamsToEnvs(params),
 
-    // ---- IMPORTANT ---- //
-    // Set the compose project`s name last
-    // This way it does not get overwritten
-    // It will ensure all projects are on the same network
-    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME || 'kegdev',
+    
   }
 
   return built

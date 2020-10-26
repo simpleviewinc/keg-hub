@@ -12,10 +12,6 @@ env:
   # Turn off auto-creating a keg-proxy sync
   KEG_AUTO_SYNC: false
 
-  # Forces the trafik proxy to be on the same network of all of the keg contianers
-  # Do not remove this or the proxy will not work
-  COMPOSE_PROJECT_NAME: kegdev
-
   # Proxy port testing to be exposed by docker
   PROXY_INSECURE_PORT: 80
   PROXY_SECURE_PORT: 443

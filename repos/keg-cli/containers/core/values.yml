@@ -34,8 +34,6 @@ env:
 
 
   # --- KEG-PROXY ENVs --- #
-
-  COMPOSE_PROJECT_NAME: kegdev
   KEG_PROXY_HOST: core.local.kegdev.xyz
   KEG_PROXY_ENTRY: keg
 

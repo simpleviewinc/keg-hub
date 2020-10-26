@@ -1,11 +1,12 @@
 version: "3.8"
-
 services:
   keg-proxy:
     image: traefik:v2.2
     tty: true
     stdin_open: true
     privileged: true
+    networks:
+      - keg-hub-net
     container_name: keg-proxy
     command:
       - --log.level=${PROXY_LOG_LEVEL:-ERROR}
@@ -19,3 +20,7 @@ services:
       - ${PROXY_DASHBOARD_PORT}:${PROXY_DASHBOARD_PORT:-8080}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+networks:
+    keg-hub-net:
+        driver: bridge
+        name: keg-hub-net
