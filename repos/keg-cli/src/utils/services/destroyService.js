@@ -35,7 +35,7 @@ const destroyService = async (args, argsExt) => {
   // Bring down the docker-compose services and remove the docker-container
   await runInternalTask('docker.tasks.compose.tasks.down', {
     ...serviceArgs,
-    params: { ...serviceArgs.params, remove: 'orphans,volumes' }
+    params: { ...serviceArgs.params, remove: get(serviceArgs, `params.remove`, `volumes`) }
   })
 
   // Remove the image if option is passed in

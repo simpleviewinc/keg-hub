@@ -7,7 +7,6 @@ const { CONTAINERS } = DOCKER
 const { loadTemplate } = require('KegUtils/template')
 const { generateLabels } = require('./generateLabels')
 const { generalError } = require('KegUtils/error/generalError')
-const { exists } = require('fs')
 
 const composeArgs = {
   clean: '--force-rm',
@@ -161,7 +160,9 @@ const addCmdOpts = (dockerCmd, params) => {
  *
  * @returns {string} - Docker compose command, with remove args added
  */
-const getDownArgs = (dockerCmd, remove) => {
+const getDownArgs = (dockerCmd, params) => {
+  const { remove } = params
+
   return remove.split(',').reduce((builtCmd, toRemove) => {
     if(toRemove === 'all' || toRemove === 'local')
       dockerCmd = `${dockerCmd} -rmi ${toRemove}`
@@ -186,7 +187,7 @@ const getDownArgs = (dockerCmd, remove) => {
 const buildComposeCmd = async args => {
   const { cmd, params={}, } = args
 
-  const { attach, remove } = params
+  const { attach } = params
 
   let dockerCmd = `docker-compose`
   dockerCmd = await addComposeFiles(dockerCmd, args)
@@ -195,7 +196,7 @@ const buildComposeCmd = async args => {
 
   if(cmd === 'up')  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
   if(cmd === 'build') dockerCmd = addCmdOpts(dockerCmd, params)
-  if(cmd === 'down') dockerCmd = remove ? getDownArgs(dockerCmd, remove) : dockerCmd
+  if(cmd === 'down') dockerCmd = remove ? getDownArgs(dockerCmd, params) : dockerCmd
 
   return dockerCmd
 }
