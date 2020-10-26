@@ -1,24 +1,7 @@
 version: "3.8"
 services:
   tap:
-    image: ${IMAGE}
-    tty: true
-    stdin_open: true
     privileged: true
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.tap.rule=Host(`${KEG_PROXY_HOST}`)
-      - traefik.http.routers.tap.entrypoints=${KEG_PROXY_ENTRY}
-      - traefik.http.services.tap.loadbalancer.server.port=${DOC_APP_PORT}
-      - com.keg.env.context=${IMAGE:-tap}
-      - com.keg.env.cmd=${KEG_EXEC_CMD:-tap:start}
-      - com.keg.env.port=${DOC_APP_PORT:-19006}
-      - com.keg.env.service=${KEG_COMPOSE_SERVICE:-tap}
-      - com.keg.path.context=${KEG_CONTEXT_PATH}
-      - com.keg.path.container=${DOC_APP_PATH}
-      - com.keg.path.compose=${KEG_COMPOSE_DEFAULT}
-      - com.keg.path.values=${KEG_VALUES_FILE}
-      - com.keg.path.docker=${KEG_DOCKER_FILE}
     volumes:
       - ${CLI_PATH}:${DOC_CLI_PATH}
     build:
@@ -46,7 +29,6 @@ services:
         - NODE_ENV
         - PUBLIC_GIT_KEY
         - TAP
-    container_name: ${CONTAINER_NAME}
     environment:
       - CHOKIDAR_USEPOLLING
       - DOC_APP_PATH
@@ -71,4 +53,3 @@ services:
       - TAP
     ports:
       - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
-      - ${DOC_APP_PORT}:${DOC_APP_PORT}

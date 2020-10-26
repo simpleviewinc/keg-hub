@@ -24,6 +24,7 @@ const composeDown = async args => {
   const dockerCmd = await buildComposeCmd({
     params,
     cmdContext,
+    contextEnvs,
     cmd: 'down',
     globalConfig,
   })

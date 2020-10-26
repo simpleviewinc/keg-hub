@@ -11,7 +11,7 @@ services:
     networks:
       - keg-hub-net
     build:
-      context: {{ injectPath }}
+      context: {{ buildContextPath }}
       dockerfile: {{ dockerPath }}
     labels:
 {{ generatedLabels }}
