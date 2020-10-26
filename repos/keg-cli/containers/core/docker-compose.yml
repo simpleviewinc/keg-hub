@@ -46,5 +46,3 @@ services:
       - KEG_NM_INSTALL
       - NODE_ENV
       - PUBLIC_GIT_KEY
-    ports:
-      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}

@@ -51,5 +51,3 @@ services:
       - NODE_ENV
       - PUBLIC_GIT_KEY
       - TAP
-    ports:
-      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
