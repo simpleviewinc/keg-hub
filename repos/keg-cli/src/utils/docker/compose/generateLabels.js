@@ -36,6 +36,7 @@ const buildLabel = (generated, data, labelData) => {
  * @returns {string} - Updated generated labels with new labels added to it
  */
 const generateLabels = (generated = '', data) => {
+
   const genLabels = proxyLabels.reduce((labels, item) => {
     return buildLabel(labels, data, item)
   }, generated)

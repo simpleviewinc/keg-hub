@@ -1,7 +1,7 @@
 const kegLabels = [
   [
     'image',
-    'params.image',
+    ['params.image', 'contextEnvs.IMAGE'],
     ['- com.keg.env.context={{ image }}']
   ],
   [
