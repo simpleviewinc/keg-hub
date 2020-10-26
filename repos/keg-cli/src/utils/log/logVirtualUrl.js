@@ -5,6 +5,8 @@ const { TAP_URL } = require('KegConst/constants')
  * Helper that Gets and logs the Virtual Machines IP address
  */
 const logVirtualUrl = (context) => {
+  if(context === 'proxy') return Logger.empty()
+
   const useUrl = context
     ? context === 'components'
       ? TAP_URL.replace('tap.', 'comp.')

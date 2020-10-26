@@ -10,14 +10,14 @@ const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
  *
  * @returns {Void}
  */
-const removeInjected = async name => {
+const removeInjected = async (name, log=true) => {
   try {
     const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${name}.yml`)
     const [ err, exists ] = await pathExists(injectedCompose)
     exists && await removeFile(injectedCompose)
   }
   catch(err){
-    Logger.error(err.stack)
+    log && Logger.error(err.stack)
   }
 
 }

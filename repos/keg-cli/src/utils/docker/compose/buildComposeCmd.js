@@ -1,12 +1,15 @@
 const path = require('path')
 const { get } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
-const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
-const { CONTAINERS } = DOCKER
 const { loadTemplate } = require('KegUtils/template')
 const { generateLabels } = require('./generateLabels')
+const { removeInjected } = require('./removeInjected')
+const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error/generalError')
+const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
+
+const { CONTAINERS } = DOCKER
+
 
 const composeArgs = {
   clean: '--force-rm',
@@ -41,7 +44,10 @@ const writeInjectedCompose = async (injectedCompose, data) => {
  * @returns {string} - Filled docker-compose.yml template file
  */
 const addInjectedTemplate = async (dockerCmd, data={}) => {
-  const image = get(data, `params.__injected.image`)
+  const image = get(data, `params.__injected.image`, get(data, `params.image`, get(data, `image`)))
+
+  if(!image) return dockerCmd
+
   const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${image}.yml`)
 
   // Flatten the data so it can be accessed at a single consistent level
@@ -52,8 +58,8 @@ const addInjectedTemplate = async (dockerCmd, data={}) => {
     generatedLabels: generateLabels('', data)
   }
 
-  const [ err, exists ] = await pathExists(injectedCompose)
-  !exists && await writeInjectedCompose(injectedCompose, templateArgs)
+  await removeInjected(image)
+  await writeInjectedCompose(injectedCompose, templateArgs)
 
   return `${dockerCmd} -f ${injectedCompose}`
 }
@@ -112,9 +118,7 @@ const addComposeFiles = async (dockerCmd, args) => {
   // Get the docker compose file for the container and ENV
   dockerCmd = addComposeFile(dockerCmd, container, `KEG_COMPOSE_${ container }_${ curENV }`)
 
-  return injectedComposePath
-    ? addInjectedTemplate(dockerCmd, args)
-    : dockerCmd
+  return addInjectedTemplate(dockerCmd, args)
 }
 
 /**
@@ -166,9 +170,9 @@ const getDownArgs = (dockerCmd, params) => {
   return remove.split(',').reduce((builtCmd, toRemove) => {
     if(toRemove === 'all' || toRemove === 'local')
       dockerCmd = `${dockerCmd} -rmi ${toRemove}`
-    else if(toRemove === 'v' || toRemove === 'volumes')
+    else if(toRemove === 'all' || toRemove === 'v' || toRemove === 'volumes')
       dockerCmd = `${dockerCmd} --volumes`
-    else if(toRemove === 'or' || toRemove === 'orphans')
+    else if(toRemove === 'all' || toRemove === 'or' || toRemove === 'orphans')
       dockerCmd = `${dockerCmd} --remove-orphans`
 
     return dockerCmd
