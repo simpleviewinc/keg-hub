@@ -5,7 +5,7 @@ const { buildComposeCmd, removeInjected } = require('KegUtils/docker/compose')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 /**
- * Runs the docker-compose build command
+ * Runs the docker-compose down command for the passed in context
  * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
@@ -37,7 +37,7 @@ const composeDown = async args => {
     !Boolean(__internal),
   )
 
-  const image = get(params, '__injected.image')
+  const image = get(params, '__injected.image', get(containerContext, 'image', get(contextEnvs, 'IMAGE')))
   image && await removeInjected(image)
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `destroyed!`)

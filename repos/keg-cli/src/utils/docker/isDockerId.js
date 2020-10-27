@@ -1,4 +1,3 @@
-const { isFunc, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Checks if the passed in value is a Hex value
@@ -19,7 +18,12 @@ const isHex = toTest => {
  * @returns {boolean} - If value is a valid short docker it
  */
 const isDockerId = toTest => {
-  return isHex(toTest) && toTest.length === 12
+  try {
+    return isHex(toTest) && toTest.length === 12
+  }
+  catch(err){
+    return false
+  }
 } 
 
 

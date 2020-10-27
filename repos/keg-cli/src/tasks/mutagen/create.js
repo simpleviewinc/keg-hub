@@ -1,8 +1,6 @@
-const docker = require('KegDocCli')
 const { get } = require('@keg-hub/jsutils')
 const { Logger } = require('KegLog')
 const { mutagen } = require('KegMutagen')
-const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { getMutagenConfig } = require('KegUtils/getters/getMutagenConfig')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
@@ -55,15 +53,16 @@ const getSyncParams = async (contextData, params) => {
 }
 
 /**
- * Start the mutagen daemon
+ * Ensures the mutagen daemon is running
+ * <br/>Then creates a mutagen sync based on passed in arguments
  * @param {Object} args - Arguments passed to the task
  * @param {Object} params - Response from the getSyncParams helper
  *
- * @returns {void}
+ * @returns {boolean} - True if the sync was created
  */
 const createMutagenSync = async (args, params, __internal={}) => {
 
-  const { skipExists, skipLog } = __internal
+  const { skipExists, skipLog, skipThrow } = __internal
 
   // Make sure the mutagen daemon is running
   await runInternalTask('mutagen.tasks.daemon.tasks.start', args)
@@ -80,13 +79,13 @@ const createMutagenSync = async (args, params, __internal={}) => {
   return skipLog
     ? true
     : exists
-      ? Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
-      : Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `already exists!`)
+      ? Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `already exists!`) 
+      : Logger.highlight(`Mutagen sync`, `"${ params.name }"`, `created!`)
 
 }
 
 /**
- * Start the mutagen daemon
+ * Create a mutagen sync bettween two endpoints
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line
@@ -96,7 +95,7 @@ const createMutagenSync = async (args, params, __internal={}) => {
  * @returns {void}
  */
 const mutagenCreate = async args => {
-  const { command, globalConfig, params, task, __internal={} } = args
+  const { globalConfig, params, task, __internal={} } = args
   const { context, container } = params
   const { actionOnly } = __internal
 
@@ -135,7 +134,6 @@ module.exports = {
     example: 'keg mutagen create <options>',
     options: {
       context: {
-        allowed: DOCKER.IMAGES,
         description: 'Context or name of the container to sync with',
         example: 'keg mutagen create --context core',
         enforced: true,
