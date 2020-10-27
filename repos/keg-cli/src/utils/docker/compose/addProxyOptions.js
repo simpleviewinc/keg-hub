@@ -1,6 +1,6 @@
 const docker = require('KegDocCli')
 const { get } = require('@keg-hub/jsutils')
-const { DOCKER_NETWORK } = require('KegConst/docker')
+const { KEG_DOCKER_NETWORK } = require('KegConst/docker')
 
 /**
  * TODO: Make this more dynamic, so it can handel of types of containers
@@ -49,7 +49,7 @@ const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }) => {
   addOption(
     opts,
     `network`,
-    DOCKER_NETWORK
+    KEG_DOCKER_NETWORK
   )
 
   return opts

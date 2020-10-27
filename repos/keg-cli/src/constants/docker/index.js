@@ -14,9 +14,10 @@ const DOCKER = {
   IMAGES: images,
   CLI_KEY_MAP: cliKeyMap,
   MUTAGEN_MAP: mutagenMap,
-  DOCKER_NETWORK: 'keg-hub-net',
   LOCATION_CONTEXT: locationContext,
   CONTAINERS_PATH: containersPath,
+  // TODO: Update this to load from the global ENVs
+  KEG_DOCKER_NETWORK: 'keg-hub-net',
 }
 
 // Add the CONTAINERS property, with a get function do it only get called when referenced
