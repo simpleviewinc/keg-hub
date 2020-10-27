@@ -51,3 +51,6 @@ BUG:
 Expo / React-Native-Package IP's
   * Update envs EXPO_DEVTOOLS_LISTEN_ADDRESS && REACT_NATIVE_PACKAGER_HOSTNAME
     * Need to bind IP's to 0.0.0.0 inside the docker container when using docker-for-desktop
+
+Docker-Compose
+  * Injected docker-compose.yml config files are not being properly removed when the service is killed
