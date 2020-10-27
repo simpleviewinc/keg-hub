@@ -41,9 +41,7 @@ const warnOfStylesheetError = (stylesheet, error) => {
  */
 export const getCSSRules = stylesheet => {
   try {
-    return stylesheet
-      ? stylesheet.cssRules
-      : []
+    return stylesheet?.cssRules || []
   }
   catch (e) {
     warnOfStylesheetError(stylesheet, e)
