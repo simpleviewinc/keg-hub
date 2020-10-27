@@ -10,10 +10,20 @@ services:
     container_name: keg-proxy
     command:
       - --log.level=${PROXY_LOG_LEVEL:-ERROR}
+      # TODO: update to turn this off for production environment
+      - --api=true
       - --api.insecure=${PROXY_INSECURE:-true}
       - --providers.docker
+      # Set the default network, but can be overridden at the container level with a `traefik.docker.network` label
+      - --providers.docker.network=keg-hub-net
+      # If this is set to false, the containers must have the label "traefik.enable=true"
+      # We may want to switch to this to allow dynamically exposing containers based on environment
       - --providers.docker.exposedbydefault=${PROXY_EXPOSED:-true}
-      - --entrypoints.keg.address=:${PROXY_KEG_ENTRY:-80}
+      - --entrypoints.keg.address=:${PROXY_ENTRY_PORT:-80}
+    labels:
+      # These labels will route traffic at local.kegdev.xyz to the traefik dashboard
+      - traefik.http.routers.api.rule=Host(`${KEG_PROXY_HOST}`)
+      - traefik.http.routers.api.service=api@internal
     ports:
       - ${PROXY_INSECURE_PORT}:${PROXY_INSECURE_PORT:-80}
       - ${PROXY_SECURE_PORT}:${PROXY_SECURE_PORT:-443}

@@ -23,8 +23,16 @@ const getServiceValues = async ({ composePath, contextEnvs, opts=[], volumes }) 
     const composeConfig = await getComposeConfig(contextEnvs, composePath)
     if(!composeConfig) return opts
 
-    const ports = await getBoundServicePorts(contextEnvs, composeConfig)
-    opts = opts.concat(ports)
+    // TODO: make this more dynamic so we can run multiple taps at the same time
+    // Would be nice to find a way to dynamically bind any extra bound ports to 
+    // Other a different port when current port is already used
+    // For now, with this commented out, ports other then KEG_PROXY_PORT will not be accessible
+    // 
+    // Another idea is to expose the other ports through keg-proxy
+    // Would need to dynamically set labels with the exposed ports
+    // Which keg-proxy would then see and map as needed 
+    // const ports = await getBoundServicePorts(contextEnvs, composeConfig)
+    // opts = opts.concat(ports)
 
     if(!volumes) return opts
 

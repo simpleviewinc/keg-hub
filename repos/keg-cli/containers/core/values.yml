@@ -27,7 +27,6 @@ env:
   # --- DOCKER ENV CONTEXT --- #
 
   DOC_APP_PATH: "/keg/keg-core"
-  DOC_APP_PORT: 19006
   DOC_CORE_PATH: "/keg/keg-core"
   DOC_COMPONENTS_PATH: "/keg/keg-core/node_modules/@keg-hub/keg-components"
   DOC_JSUTILS_PATH: "/keg/keg-core/node_modules/@keg-hub/jsutils"
@@ -37,6 +36,9 @@ env:
   # --- KEG-PROXY ENVs --- #
   KEG_PROXY_HOST: core.local.kegdev.xyz
   KEG_PROXY_ENTRY: keg
+  # Port the application will use when running
+  # Allows keg-proxy to route traffic to it
+  KEG_PROXY_PORT: 19006
 
   # --- GENERAL CONTEXT ENVs --- #
 

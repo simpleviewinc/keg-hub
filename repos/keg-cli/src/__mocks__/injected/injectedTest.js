@@ -74,7 +74,7 @@ const injectedTest = {
     KEG_COMPOSE_DEFAULT: `${homeDir}/keg-hub/taps/tap-injected-test/container/docker-compose.yml`,
     DOC_RETHEME_PATH: '/keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme',
     DOC_JSUTILS_PATH: '/keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils',
-    DOC_APP_PORT: 19006,
+    KEG_PROXY_PORT: 19006,
     API_PORT: 5005,
     KEG_PROXY_HOST: 'tap-injected-test.local.kegdev.xyz',
     KEG_PROXY_ENTRY: 'keg',
@@ -84,7 +84,7 @@ const injectedTest = {
     VERSION: '0.0.1',
     DOCKER_BUILDKIT: 1,
     COMPOSE_DOCKER_CLI_BUILD: 1,
-    PUBLIC_GIT_KEY: '6896f66723ee8b67239384e095d4e894fe15434d',
+    PUBLIC_GIT_KEY: 'N/A',
     NODE_ENV: 'development',
     KEG_COPY_LOCAL: true,
   }

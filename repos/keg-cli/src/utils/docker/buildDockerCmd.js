@@ -84,10 +84,6 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     tap ? `${context}-${tap}` : context,
   )
 
-  // Temp helper to map port 80 to the DOC_APP_PORT
-  // This should be removed when keg-proxy is setup
-  // dockerCmd = getPortMap(dockerCmd, context)
-
   // Add the env to the docker command
   dockerCmd = addContainerEnv(dockerCmd, {
     TAP: tap,

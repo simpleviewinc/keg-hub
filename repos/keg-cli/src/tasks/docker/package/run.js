@@ -63,7 +63,7 @@ const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }) => {
   const hostLabel = `traefik.http.routers.${tag}.rule=Host(\`${proxyHost}\`)`
   opts.push(`--label ${hostLabel}`)
 
-  const proxyPort = get(contextEnvs, `DOC_APP_PORT`, get(contextEnvs, `KEG_PROXY_PORT`))
+  const proxyPort = get(contextEnvs, `KEG_PROXY_PORT`)
   const portLabel = `traefik.http.services.${tag}.loadbalancer.server.port=${proxyPort}`
   opts.push(`--label ${portLabel}`)
   

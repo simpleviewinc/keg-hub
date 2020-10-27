@@ -30,10 +30,6 @@ env:
   # Defines the WORKDIR within the Dockerfile and docker-compose.yml
   DOC_APP_PATH: /keg/keg-components
 
-  # Port the application will use when running
-  # Will be bound to port 80 of the local host
-  DOC_APP_PORT: 60710
-  
   # Defines the location in a docker container for a dependency
   # This allows mutagen to know where to sync the local version of the dependency
   DOC_RETHEME_PATH: /keg/keg-components/node_modules/@keg-hub/re-theme
@@ -43,6 +39,9 @@ env:
   # --- KEG-PROXY ENVs --- #
   KEG_PROXY_HOST: components.local.kegdev.xyz
   KEG_PROXY_ENTRY: keg
+  # Port the application will use when running
+  # Allows keg-proxy to route traffic to it
+  KEG_PROXY_PORT: 60710
 
   # --- GENERAL CONTEXT ENVs --- #
 

@@ -10,9 +10,9 @@ const kegLabels = [
     ['- com.keg.env.cmd=${KEG_EXEC_CMD}']
   ],
   [
-    'DOC_APP_PORT',
-    'contextEnvs.DOC_APP_PORT',
-    ['- com.keg.env.port=${DOC_APP_PORT}']
+    'KEG_PROXY_PORT',
+    'contextEnvs.KEG_PROXY_PORT',
+    ['- com.keg.env.port=${KEG_PROXY_PORT}']
   ],
   [
     'KEG_COMPOSE_SERVICE',
@@ -62,7 +62,9 @@ const proxyLabels = [
   ],
   [
     'KEG_PROXY_PORT',
-    ['contextEnvs.KEG_PROXY_PORT', 'contextEnvs.DOC_APP_PORT'],
+    'contextEnvs.KEG_PROXY_PORT',
+    // TODO: Update this to use the ${KEG_PROXY_PORT} to be consistent with other labels
+    // Also allows the label to be dynamic and happen at build time, not when the template is generated
     ['- traefik.http.services.{{ params.context }}.loadbalancer.server.port={{ KEG_PROXY_PORT }}',]
   ],
 ]

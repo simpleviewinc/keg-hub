@@ -12,6 +12,9 @@ env:
   # Turn off auto-creating a keg-proxy sync
   KEG_AUTO_SYNC: false
 
+  # Default host for the keg proxy
+  KEG_PROXY_HOST: local.kegdev.xyz
+
   # Proxy port testing to be exposed by docker
   PROXY_INSECURE_PORT: 80
   PROXY_SECURE_PORT: 443
@@ -25,4 +28,4 @@ env:
   PROXY_LOG_LEVEL: ERROR
 
   # Entry port for trafik to route to keg containers
-  PROXY_KEG_ENTRY: 80
+  PROXY_ENTRY_PORT: 80

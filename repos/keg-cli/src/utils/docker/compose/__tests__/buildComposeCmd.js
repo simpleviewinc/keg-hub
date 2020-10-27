@@ -39,13 +39,16 @@ describe('buildComposeCmd', () => {
 
   afterAll(() => jest.resetAllMocks())
 
-  it('It should build the correct docker-compose command for keg-code', async () => {
+  it('It should build the correct docker-compose command for keg-core', async () => {
     const resp = await buildComposeCmd(args.core)
     expect(isStr(resp)).toBe(true)
-    const [ compose, fileKey, filePath, ...cmdArgs ] = resp.split(' ')
+    const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+
     expect(compose).toBe('docker-compose')
-    expect(fileKey).toBe('-f')
-    expect(filePath.indexOf(`core/docker-compose.yml`) !== -1).toBe(true)
+    expect(injectedFileKey).toBe('-f')
+    expect(injectedFilePath.indexOf(`.tmp/keg-core.yml`) !== -1).toBe(true)
+    expect(defaultFileKey).toBe('-f')
+    expect(defaultFilePath.indexOf(`core/docker-compose.yml`) !== -1).toBe(true)
     expect(cmdArgs.indexOf('up')).not.toBe(-1)
     expect(cmdArgs.indexOf('--detach')).not.toBe(-1)
 

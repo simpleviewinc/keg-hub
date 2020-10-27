@@ -13,7 +13,7 @@ const getBoundServicePorts = async (contextEnvs, composeConfig) => {
   const servicePorts = await getServicePorts(contextEnvs, composeConfig) || []
 
   return Object.keys(contextEnvs).reduce((ports, key) => {
-    const addPort = key !== `DOC_APP_PORT` && key.includes('_PORT')
+    const addPort = key !== `KEG_PROXY_PORT` && key.includes('_PORT')
       ? `-p ${contextEnvs[key]}:${contextEnvs[key]}`.trim()
       : null
 
