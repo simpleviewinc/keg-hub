@@ -1,6 +1,5 @@
 const { get, template } = require('@keg-hub/jsutils')
 const { getComposeConfig } = require('./getComposeConfig')
-const { HTTP_PORT_ENV } = require('KegConst/constants')
 
 /**
  * Maps the defined ports in the ENVS to -p docker argument

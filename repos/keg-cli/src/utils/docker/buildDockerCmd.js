@@ -7,7 +7,6 @@ const {
   addContainerName,
   addContainerEnv,
   getDockerArgs,
-  getPortMap,
 } = require('./getDockerArgs')
 
 /**

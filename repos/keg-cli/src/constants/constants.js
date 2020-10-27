@@ -102,10 +102,6 @@ module.exports = deepFreeze({
   // URLs for navigating to the application
   TAP_URL: `http://tap.local.kegdev.xyz/`,
 
-  // ENV port to map to port 80 inside the docker container
-  // TODO: This should not be needed with the keg-proxy updates
-  HTTP_PORT_ENV: `KEG_PROXY_PORT`,
-
   SYNC_PREFIXES: {
     BDD_SERVICE: 'bdd',
   },
