@@ -207,9 +207,9 @@ const getDownArgs = (dockerCmd, params) => {
   return remove.split(',').reduce((builtCmd, toRemove) => {
     if(toRemove === 'all' || toRemove === 'local')
       dockerCmd = `${dockerCmd} -rmi ${toRemove}`
-    else if(toRemove === 'all' || toRemove === 'v' || toRemove === 'volumes')
+    else if(toRemove === 'v' || toRemove === 'volumes')
       dockerCmd = `${dockerCmd} --volumes`
-    else if(toRemove === 'all' || toRemove === 'or' || toRemove === 'orphans')
+    else if(toRemove === 'or' || toRemove === 'orphans')
       dockerCmd = `${dockerCmd} --remove-orphans`
 
     return dockerCmd

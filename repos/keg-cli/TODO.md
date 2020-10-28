@@ -38,19 +38,12 @@
       * If location is overwritten, location should be updated in global config
   * Auto clean up docker images / cache
     * Figure out how to call this in the background as tasks are called
-  * Add tags to tap docker images
-    * This will allow us to see if the image for that tap exists or not
   * Look into building tap images without the name tap
 
 BUG: 
-* Sometimes when killing a service,
-* After killing the service it asks for a container, figure out why?
 * Fix tests to no rely on globalConfig values
   * Users can customize their config values, which means tests will fail
 
-Expo / React-Native-Package IP's
-  * Update envs EXPO_DEVTOOLS_LISTEN_ADDRESS && REACT_NATIVE_PACKAGER_HOSTNAME
-    * Need to bind IP's to 0.0.0.0 inside the docker container when using docker-for-desktop
 
 Docker-Compose
   * Injected docker-compose.yml config files are not being properly removed when the service is killed
