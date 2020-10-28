@@ -32,5 +32,5 @@ const checkContainerExists = async container => {
 }
 
 module.exports = {
-  checkExists
+  checkContainerExists
 }
