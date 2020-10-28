@@ -7,7 +7,7 @@
  *
  * @return {string} - Name of the docker-compose service
  */
-const buildServiceName = (cmdContext, contextEnvs) => {
+const buildServiceName = (cmdContext, contextEnvs={}) => {
   return contextEnvs.KEG_COMPOSE_SERVICE || contextEnvs.IMAGE || cmdContext
 }
 

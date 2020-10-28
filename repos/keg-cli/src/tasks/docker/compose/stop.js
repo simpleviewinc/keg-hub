@@ -2,7 +2,7 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-const { buildComposeCmd, buildServiceName } = require('KegUtils/docker/compose')
+const { buildComposeCmd } = require('KegUtils/docker/compose')
 
 /**
  * Runs the docker-compose build command
@@ -28,9 +28,6 @@ const composeStop = async args => {
     contextEnvs,
     globalConfig,
   })
-
-  // Get the name of the docker-compose service
-  const serviceName = buildServiceName(cmdContext, contextEnvs)
 
   // Ensure we have a valid context path for the container
   // If it's set to INITIAL, the it has not been set
