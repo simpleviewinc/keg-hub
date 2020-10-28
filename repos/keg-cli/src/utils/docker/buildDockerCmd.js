@@ -1,8 +1,9 @@
 const { isObj } = require('@keg-hub/jsutils')
 const { getBuildTags } = require('./getBuildTags')
-const { getDirsToMount, getAppMount, getVolumeMounts } = require('./buildDockerMounts')
 const { getDockerImg } = require('./getDockerImg')
 const { getBuildArgs } = require('./getBuildArgs')
+const { getBuildLabels } = require('./getBuildLabels')
+const { getDirsToMount, getVolumeMounts } = require('./buildDockerMounts')
 const {
   addContainerName,
   addContainerEnv,
@@ -26,6 +27,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
     location,
     context,
     branch,
+    labels,
     options=[],
     tap,
     version
@@ -34,8 +36,27 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   // Ensure we have an image name to build
   const image = getDockerImg(params.image, container)
 
-  // Add any options if needed
-  dockerCmd = getBuildTags({ dockerCmd, container, image, context, options, version })
+  // Add any build tags
+  dockerCmd = getBuildTags({
+    dockerCmd,
+    container,
+    image,
+    context,
+    options,
+    version
+  })
+
+  // Add any build labels
+  dockerCmd = getBuildLabels(globalConfig, {
+    dockerCmd,
+    container,
+    image,
+    context,
+    labels,
+    options,
+    tap,
+    version
+  })
 
   // Add the build args for the github key and tap git url
   dockerCmd = await getBuildArgs(globalConfig, {

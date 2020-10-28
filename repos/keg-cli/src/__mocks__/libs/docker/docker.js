@@ -173,8 +173,17 @@ const dockerOutput = {
       'keg-base': 'node',
       tap: '/bin/sh -c /bin/bash $DOC_CLI_PATH/containers/tap/run.sh "sleep"'
     },
-  }
+  },
 }
+
+const dockerLabels = {
+  base: `--label com.keg.env.context=keg-base --label com.keg.env.service=keg-base --label com.keg.path.context=keg-cli --label com.keg.path.container=/keg/keg-cli --label com.keg.path.compose=keg-cli/containers/base/docker-compose.yml --label com.keg.path.values=keg-cli/containers/base/values.yml --label com.keg.path.docker=keg-cli/containers/base/Dockerfile`,
+  core: `--label com.keg.env.context=keg-core --label com.keg.env.cmd=tap:start --label com.keg.env.port=19006 --label com.keg.env.service=keg-core --label com.keg.path.context=keg-core --label com.keg.path.container=/keg/keg-core --label com.keg.path.compose=keg-cli/containers/core/docker-compose.yml --label com.keg.path.values=keg-cli/containers/core/values.yml --label com.keg.path.docker=keg-cli/containers/core/Dockerfile`,
+  components: `--label com.keg.env.context=keg-components --label com.keg.env.cmd=start --label com.keg.env.port=60710 --label com.keg.env.service=keg-components --label com.keg.path.context=keg-components --label com.keg.path.container=/keg/keg-components --label com.keg.path.compose=keg-cli/containers/components/docker-compose.yml --label com.keg.path.values=keg-cli/containers/components/values.yml --label com.keg.path.docker=keg-cli/containers/components/Dockerfile`,
+  proxy: `--label com.keg.path.container=/keg/tap --label com.keg.path.compose=keg-cli/containers/proxy/docker-compose.yml --label com.keg.path.values=keg-cli/containers/proxy/values.yml --label com.keg.path.docker=keg-cli/containers/proxy/Dockerfile`,
+  tap: `--label com.keg.env.context=tap --label com.keg.env.port=19006 --label com.keg.env.service=tap --label com.keg.path.context=INITIAL --label com.keg.path.container=/keg/tap --label com.keg.path.compose=keg-cli/containers/tap/docker-compose.yml --label com.keg.path.values=keg-cli/containers/tap/values.yml --label com.keg.path.docker=keg-cli/containers/tap/Dockerfile`,
+}
+
 
 const docker = {
   container: {
@@ -232,5 +241,6 @@ const docker = {
 
 module.exports = {
   docker,
+  dockerLabels,
   dockerOutput
 }

@@ -1,4 +1,4 @@
-const { kegLabels, proxyLabels } = require('KegConst/docker/composeLabels')
+const { kegLabels, proxyLabels } = require('KegConst/docker/labels')
 const { get, eitherArr } = require('@keg-hub/jsutils')
 const { fillTemplate } = require('KegUtils/template')
 
@@ -6,7 +6,7 @@ const { fillTemplate } = require('KegUtils/template')
  * Generates a docker-compose label from the passed in arguments
  * @param {string} generated - Already generated labels
  * @param {Object} data - Data to generate the labels from
- * @param {Array} labelData - Constant label data defined in keg-cli/constants/docker/composeLabels
+ * @param {Array} labelData - Constant label data defined in keg-cli/constants/docker/labels
  *
  * @returns {string} - Updated generated labels with new labels added to it
  */
@@ -21,7 +21,7 @@ const buildLabel = (generated, data, labelData) => {
   const labels = eitherArr(label, [ label ])
   return labels.reduce((filled, label) => {
     const item = value && fillTemplate({ template: label, data: { ...data, [key]: value }})
-    item && (filled += `      ${item}\n`)
+    item && (filled += `      - ${item}\n`)
 
     return filled
   }, generated)
