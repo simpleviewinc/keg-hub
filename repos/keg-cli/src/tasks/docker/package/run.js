@@ -56,7 +56,7 @@ const dockerPackageRun = async args => {
 
   const parsed = parsePackageUrl(packageUrl)
   const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
-
+  const imageTaggedName = `${parsed.image}:${parsed.tag}`
   /*
   * ----------- Step 2 ----------- *
   * Pull the image from the provider and tag it
@@ -64,7 +64,7 @@ const dockerPackageRun = async args => {
   await docker.pull(packageUrl)
   await docker.image.tag({
     item: packageUrl,
-    tag: `${parsed.image}:${parsed.tag}`,
+    tag: imageTaggedName,
     provider: true
   })
 
@@ -84,6 +84,7 @@ const dockerPackageRun = async args => {
   * Get the options for the docker run command
   */
   let opts = await getServiceValues({
+    imageTaggedName,
     volumes,
     contextEnvs,
     opts: [ `-it` ],

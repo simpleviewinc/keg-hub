@@ -31,13 +31,16 @@ const buildContainerName = async cmdContext => {
 
 const getImageContext = async (args) => {
   const { globalConfig, params, task } = args
-  const { tag } = params
+
+  const [image, tag] = params.context && params.context.includes(':')
+    ? params.context.split(':')
+    : [params.context, params.tag]
 
   // Get the context data for the command to be run
   const containerContext = await buildContainerContext({
-    globalConfig,
     task,
-    params,
+    globalConfig,
+    params: { ...params, image, tag },
   })
 
   // Build the name for the container
@@ -118,7 +121,6 @@ const runDockerImage = async args => {
       __internal.skipExists
     )
 
-
   let opts = connect
     ? options.concat([ `-it` ])
     : options.concat([ `-d` ])
@@ -131,6 +133,7 @@ const runDockerImage = async args => {
     opts,
     volumes,
     contextEnvs,
+    imageTaggedName: tag ? `${image}:${tag}` : image,
     composePath: get(params, '__injected.composePath'),
   })
 

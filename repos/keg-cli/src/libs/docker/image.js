@@ -116,8 +116,13 @@ const getImage = async (image, log=false) => {
   return images &&
     images.length &&
     images.find(image => {
-      const hasMatch = image.id === imgRef || image.repository === imgRef
-      return hasMatch && tag  ? image.tag === tag : hasMatch
+      if(tag && (image.tag !== tag || !image.tags.includes(tag))) return false
+
+      const hasMatch = image.id === imgRef || image.repository === imgRef || image.rootId === imgRef
+
+      return !hasMatch || (hasMatch && !tag)
+        ? hasMatch
+        : image.tag === tag || image.tags.includes(tag)
     })
 }
 

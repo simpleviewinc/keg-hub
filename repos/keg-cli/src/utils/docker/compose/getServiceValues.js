@@ -1,8 +1,8 @@
-const { get } = require('@keg-hub/jsutils')
+const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { getBoundServicePorts } = require('./getServicePorts')
-const { getServiceVolumes } = require('./getServiceVolumes')
+const { get } = require('@keg-hub/jsutils')
 const { getComposeConfig } = require('./getComposeConfig')
+const { getServiceVolumes } = require('./getServiceVolumes')
 
 /**
  * TODO: This should be updated to pull from the image, not the docker-compose config
@@ -11,13 +11,15 @@ const { getComposeConfig } = require('./getComposeConfig')
 
 /**
  * Gets values from the docker-compose.yml config based on service name
- * @param {string=} composePath - Path to the docker-compose.yml file to load
- * @param {Object} contextEnvs - Defined environment variables for the container
- * @param {Array} opts - Already added docker command arguments 
+ * @param {string=} param.imageTaggedName - Image name with a tag
+ * @param {string=} param.composePath - Path to the docker-compose.yml file to load
+ * @param {Object} param.contextEnvs - Defined environment variables for the container
+ * @param {Array} param.opts - Already added docker command arguments 
  *
  * @returns {Array} - opts array updated with docker-compose service values
  */
-const getServiceValues = async ({ composePath, contextEnvs, opts=[], volumes }) => {
+const getServiceValues = async param => {
+  const { composePath, contextEnvs, imageTaggedName, opts=[], volumes } = param
 
   try {
     const composeConfig = await getComposeConfig(contextEnvs, composePath)
