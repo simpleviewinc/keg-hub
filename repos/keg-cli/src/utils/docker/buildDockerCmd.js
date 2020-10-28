@@ -93,11 +93,6 @@ const createRunCmd = (globalConfig, dockerCmd, params) => {
     ...(isObj(envs) && envs),
   })
 
-  // Mount the tap location by default
-  // TODO: Add a setting to globalConfig which sets mount docker app by default
-  // Commenting out for now, must explicitly set the mount option from command line
-  // dockerCmd = getAppMount(dockerCmd, context, location)
-
   // First fet the directory paths to mount
   const toMount = getDirsToMount(
     globalConfig,

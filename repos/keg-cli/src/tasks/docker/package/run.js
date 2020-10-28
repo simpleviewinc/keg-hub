@@ -1,80 +1,13 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { ask } = require('@keg-hub/ask-it')
 const { isUrl, get } = require('@keg-hub/jsutils')
-const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
+const { addProxyOptions } = require('KegUtils/docker/compose/addProxyOptions')
 const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-
+const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
 
-/**
- * Checks if a docker container already exists
- * <br/>If it does, asks user if they want to remove it
- * @function
- * @param {string} container - Name of the container that already exists
- *
- * @returns {string} - Name of the current branch
- */
-const checkExists = async container => {
-  const exists = await docker.container.get(container)
-  if(!exists) return false
-  
-  Logger.empty()
-  Logger.print(
-    Logger.colors.brightYellow(`A docker container already exists with the name`),
-    Logger.colors.cyan(`"${ container }"\n`),
-    Logger.colors.brightRed(`Running container must be removed before this container can be run!`)
-  )
-
-  Logger.empty()
-  const remove = await ask.confirm(`Would you like to remove it?`)
-  Logger.empty()
-
-  return remove
-    ? await docker.container.destroy(container) && false
-    : true
-
-}
-
-/**
- * TODO: Make this more dynamic, so it can handel of types of containers
- * Should pull in the image to be built, and use the labels from that image
- * If missing the correct labels, then use the current code below
- * Also move this to utils, so it can be reused by other tasks ( i.e. image run task )
-*/
-
-/**
- * Adds the required keg-proxy labels to the docker command options
- * <br/>This allows the container to register with the keg-proxy
- * @function
- * @param {Array} opts - Options for the docker run command
- * @param {Object} containerContext - Parsed container context from the buildContainerContext method
- * @param {Object} containerContext.contextEnvs - Envs for the container
- * @param {Object} parsed - Parsed docker package url
- * @param {string} parsed.tag - Tag || branch of the docker package url
- * @param {string} parsed.image - Name of the image to build the container from
- *
- * @returns {Array} - opts array with the keg-proxy labels added
- */
-const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }) => {
-  const proxyHost = get(contextEnvs, `KEG_PROXY_HOST`, `tap.local.kegdev.xyz`).replace('tap', tag)
-  const hostLabel = `traefik.http.routers.${tag}.rule=Host(\`${proxyHost}\`)`
-  opts.push(`--label ${hostLabel}`)
-
-  const proxyPort = get(contextEnvs, `KEG_PROXY_PORT`)
-  const portLabel = `traefik.http.services.${tag}.loadbalancer.server.port=${proxyPort}`
-  opts.push(`--label ${portLabel}`)
-  
-  const proxyEntry = `traefik.http.routers.${tag}.entrypoints=keg`
-  opts.push(`--label ${proxyEntry}`)
-
-  // TODO: update this to pull from constants, and not be hard coded
-  opts.push(`--network keg-hub-net`)
-
-  return opts
-}
 
 /**
  * Builds a docker container so it can be run
@@ -148,15 +81,7 @@ const dockerPackageRun = async args => {
 
   /*
   * ----------- Step 4 ----------- *
-  * Check if a container with the same name is already running
-  * If it is, ask the user if they want to remove it
-  */
-  // const exists = await checkExists(containerName)
-  // if(exists) return Logger.info(`Exiting "package run" task!`)
-
-  /*
-  * ----------- Step 5 ----------- *
-  * Run the image in a container
+  * Get the options for the docker run command
   */
   let opts = await getServiceValues({
     volumes,
@@ -171,13 +96,17 @@ const dockerPackageRun = async args => {
   opts = addProxyOptions(opts, containerContext, parsed)
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
+  /*
+  * ----------- Step 5 ----------- *
+  * Run the docker image as a container
+  */
   try {
     await docker.image.run({
       ...parsed,
       opts,
       location,
       envs: { ...contextEnvs, [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun },
-      name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
+      name: containerName,
       cmd: isInjected ? command : defCmd,
       overrideDockerfileCmd: Boolean(!isInjected || command),
     })

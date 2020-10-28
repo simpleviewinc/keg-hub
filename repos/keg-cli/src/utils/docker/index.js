@@ -4,6 +4,7 @@ module.exports = {
   ...require('./buildDockerCmd'),
   ...require('./buildDockerMounts'),
   ...require('./buildExecParams'),
+  ...require('./checkContainerExists'),
   ...require('./compose'),
   ...require('./containerSelect'),
   ...require('./checkRunningContainers'),
