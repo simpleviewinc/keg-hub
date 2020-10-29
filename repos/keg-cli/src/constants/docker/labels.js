@@ -63,8 +63,6 @@ const proxyLabels = [
   [
     'KEG_PROXY_PORT',
     'contextEnvs.KEG_PROXY_PORT',
-    // TODO: Update this to use the ${KEG_PROXY_PORT} to be consistent with other labels
-    // Also allows the label to be dynamic and happen at build time, not when the template is generated
     ['traefik.http.services.{{ params.context }}.loadbalancer.server.port=${KEG_PROXY_PORT}',]
   ],
 ]
