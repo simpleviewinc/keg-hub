@@ -19,7 +19,7 @@ services:
       # If this is set to false, the containers must have the label "traefik.enable=true"
       # We may want to switch to this to allow dynamically exposing containers based on environment
       - --providers.docker.exposedbydefault=${PROXY_EXPOSED:-true}
-      - --entrypoints.keg.address=:${PROXY_ENTRY_PORT:-80}
+      - --entrypoints.${KEG_PROXY_ENTRY}.address=:${PROXY_ENTRY_PORT:-80}
     labels:
       # These labels will route traffic at the root host to the traefik dashboard
       # All other docker containers use a sub-domain

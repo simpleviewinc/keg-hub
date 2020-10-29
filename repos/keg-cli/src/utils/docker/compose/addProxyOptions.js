@@ -1,4 +1,4 @@
-const { get } = require('@keg-hub/jsutils')
+const { pickKeys } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { KEG_ENVS } = require('KegConst/envs')
 const { CONTAINER_TO_CONTEXT } = require('KegConst/constants')
@@ -53,8 +53,20 @@ const getProxyHost = (kegProxyHost, image, tag) => {
 const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }, network) => {
   const proxyContext = tag || image
 
+  const {
+    KEG_PROXY_ENTRY='keg',
+    KEG_PROXY_HOST='',
+    KEG_PROXY_PORT,
+    KEG_DOCKER_NETWORK=DOCKER.KEG_DOCKER_NETWORK,
+  } = pickKeys(contextEnvs, [
+    'KEG_PROXY_ENTRY',
+    'KEG_PROXY_HOST',
+    'KEG_PROXY_PORT',
+    'KEG_DOCKER_NETWORK',
+  ])
+
   const proxyHost = getProxyHost(
-    get(contextEnvs, `KEG_PROXY_HOST`, ''),
+    KEG_PROXY_HOST || '',
     image,
     tag
   )
@@ -67,18 +79,18 @@ const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }, network) => {
   addOption(
     opts,
     `label`,
-    `traefik.http.routers.${proxyContext}.entrypoints=keg`
+    `traefik.http.routers.${proxyContext}.entrypoints=${KEG_PROXY_ENTRY}`
   )
   addOption(
     opts,
     `label`,
-    `traefik.http.services.${proxyContext}.loadbalancer.server.port=${get(contextEnvs, `KEG_PROXY_PORT`)}`
+    `traefik.http.services.${proxyContext}.loadbalancer.server.port=${KEG_PROXY_PORT}`
   )
 
   addOption(
     opts,
     `network`,
-    network || get(contextEnvs, `KEG_DOCKER_NETWORK`, DOCKER.KEG_DOCKER_NETWORK)
+    network || KEG_DOCKER_NETWORK
   )
 
   return opts
