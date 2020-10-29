@@ -37,6 +37,7 @@ env:
   KEG_EXEC_CMD: start
 
   # --- KEG-PROXY ENVs --- #
+
   # Most Keg-Proxy Envs are not needed, but can be overwritten to allow customization
   # When not set, the proxy will use keg-cli defaults as defined in the keg-cli default envs
   
@@ -51,7 +52,7 @@ env:
     # the default is 'keg-hub-net'
 
   # Port the application will use when running within the container
-  # Allows keg-proxy to route traffic to it
+  # Required to allow the keg-proxy to route traffic to it
   KEG_PROXY_PORT: 60710
 
   # --- GENERAL CONTEXT ENVs --- #

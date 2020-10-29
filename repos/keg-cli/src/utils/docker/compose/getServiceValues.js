@@ -1,6 +1,4 @@
-const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { get } = require('@keg-hub/jsutils')
 const { getComposeConfig } = require('./getComposeConfig')
 const { getServiceVolumes } = require('./getServiceVolumes')
 

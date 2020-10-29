@@ -30,6 +30,9 @@ env:
 
   # Default location of the tap in the docker container
   DOC_APP_PATH: /keg/tap
+
+  # Defines the location in a docker container for a dependency
+  # This allows mutagen to know where to sync the local version of the dependency
   DOC_CORE_PATH: /keg/tap/node_modules/keg-core
   DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
   DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
@@ -40,6 +43,7 @@ env:
   EXPO_DEVTOOLS_LISTEN_ADDRESS: 0.0.0.0
 
   # --- KEG-PROXY ENVs --- #
+
   # To override the host header used by the proxy to route traffic to this container
   # add KEG_PROXY_HOST env and set it's value to the what the host header should be
   # the default is <container-context>-<image-tag>.local.kegdev.xyz
@@ -50,8 +54,8 @@ env:
     # add KEG_PROXY_HOST env and set it's value to the what network should be used
     # the default is 'keg-hub-net'
 
-  # Port the application will use when running
-  # Allows keg-proxy to route traffic to it
+  # Port the application will use when running within the container
+  # Required to allow the keg-proxy to route traffic to it
   KEG_PROXY_PORT: 19006
 
   # --- GENERAL CONTEXT ENVs --- #
