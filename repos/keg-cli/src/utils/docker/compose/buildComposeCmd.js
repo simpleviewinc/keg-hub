@@ -46,6 +46,12 @@ const getComposeContextData = data => {
     get(data, `contextEnvs.KEG_DOCKER_FILE`, '${KEG_DOCKER_FILE}')
   )
 
+  // Get the shared docker network
+  composeContext.dockerNetwork = get(
+    data, `contextEnvs.KEG_DOCKER_NETWORK`,
+    get(DOCKER, `KEG_DOCKER_NETWORK`, '${KEG_DOCKER_NETWORK}')
+  )
+
   return composeContext
 }
 

@@ -1,11 +1,9 @@
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
-const { get, checkCall } = require('@keg-hub/jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
 const { buildComposeCmd, buildServiceName } = require('KegUtils/docker')
-const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
-const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
+const { buildContainerContext } = require('KegUtils/builders')
 
 /**
  * Runs docker-compose up command for (components | core | tap)

@@ -2,10 +2,8 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
 const { logVirtualUrl } = require('KegUtils/log')
-const { checkCall } = require('@keg-hub/jsutils')
 const { buildComposeCmd } = require('KegUtils/docker/compose')
 const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
-const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
 
 /**
  * Runs docker-compose up command for (components | core | tap)
@@ -33,13 +31,6 @@ const composeUp = async args => {
   // This allow use of BuildKit which is faster, and has better caching
   // Docker compose currently does NOT support BuildKit, so we do it manually
   build && await buildDockerImage(args, cmdContext, tap)
-
-  const alreadyRunning = await checkKillRunning(args, [ image ])
-
-  alreadyRunning && checkCall(() => {
-    Logger.spaceMsg(`Exiting Keg-CLI task!`)
-    process.exit(0)
-  })
 
   // Build the docker compose command
   const dockerCmd = await buildComposeCmd({
