@@ -77,9 +77,9 @@ export const convertToCss = (style, config) => {
  * <br/>After converting it, it appends it to the Dom
  * <br/>It also keeps a hash of all appended styles rules to avoid duplication
  * @param {Object} style - Styles rules to be converted and added to the Dom
- * @param {string|Array[string]} className - Css selector of the style fules
+ * @param {string|Array<string>} className - Css selector(s) of the style fules
  * 
- * @returns {string} - className Css selector of the added style rules
+ * @returns {Object} - className Css selector of the added style rules
  */
 export const useStyleTag = (style, className='', config) => {
   // Ensure config is an object
@@ -93,7 +93,7 @@ export const useStyleTag = (style, className='', config) => {
     const { blocks, filtered } = convertToCss(style, config)
 
     // Create a unique selector based on the className and built blocks
-    const selector = getSelector(className, blocks.join(''))
+    const selector = getSelector(className, blocks.join(''), 'keg')
 
     // Adds the css selector ( className ) to each block
     const css = blocks.reduce((css, block) => {

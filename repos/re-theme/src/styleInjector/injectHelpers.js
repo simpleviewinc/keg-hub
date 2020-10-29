@@ -122,17 +122,27 @@ export const filterRules = (style, filter) => {
 /**
  * Creates a unique selector based on the passed in className and cssString
  * @function
- * @param {string} className - Original className used as a css selector
+ * @param {string|Array<string>} className - Original className(s) used as a css selector
  * @param {string} cssString - Css rules for the className in string format
- *
+ * @param {string=} filterPrefix - optional prefix to filter by
+ * 
  * @returns {string} - Hashed version of the string
  */
-export const getSelector = (className, cssString) => {
+export const getSelector = (className, cssString, filterPrefix) => {
+
+  // filter by prefix if passed in
+  const filterWithPrefix = cls => {
+    return cls && filterPrefix
+      ? cls.startsWith(filterPrefix)
+      : cls
+  }
+
   const selector = !exists(className)
     ? false
     : isArr(className)
-      ? className.filter(cls => cls).join('.').trim()
-      : isStr(className) && className.split(' ').join('.').trim()
+      ? className.filter(filterWithPrefix).join('.').trim()
+      : isStr(className) && className.split(' ').filter(filterWithPrefix).join('.').trim()
+
 
   return selector
     ? `.${selector}.keg-${hashString(cssString)}`.trim()

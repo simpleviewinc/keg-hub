@@ -119,6 +119,28 @@ describe('injectHelpers', () => {
       expect(getSelector(undefined, `my-test-styles`)).toBe(`.keg-275181350`)
     })
 
+    it('should filter out classnames without prefix `keg`', () => {
+
+      // check if string includes all of the values in the array
+      const includes = (str, values) => {
+        return values.reduce((accumulator, value) => 
+          accumulator && str.includes(value)
+        , true)
+      }
+      // array classnames
+      const selector = getSelector([`test-class`, `test-keg-2`, `keg-text`], `my-test-styles`, 'keg')
+      const includeTestClass = includes(selector, [`test-class`, `test-keg-2`])
+      expect(includeTestClass).toBe(false)
+      expect(selector.includes('keg-text')).toBe(true)
+
+      // string classnames
+      const selector2 = getSelector(`keg-text test-class test-class-2`, `my-test-styles`, 'keg')
+      const includeTestClass2 = includes(selector2, [`test-class`, `test-class-2`])
+      expect(includeTestClass2).toBe(false)
+      expect(selector.includes('keg-text')).toBe(true)
+
+    })
+
   })
 
   describe('clearStyleSheet', () => {

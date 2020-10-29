@@ -23,7 +23,9 @@ export const textToggle = {
     main: {
       mV: 15,
       alI: 'flex-end',
-      txDc: 'underline',
+    },
+    text: {
+      txDL: 'underline',
     },
   },
 }
