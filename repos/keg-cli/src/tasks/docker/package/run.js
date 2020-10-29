@@ -3,7 +3,6 @@ const { Logger } = require('KegLog')
 const { isUrl, get } = require('@keg-hub/jsutils')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { addProxyOptions } = require('KegUtils/docker/compose/addProxyOptions')
-const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
@@ -83,14 +82,8 @@ const dockerPackageRun = async args => {
   * ----------- Step 4 ----------- *
   * Get the options for the docker run command
   */
-  let opts = await getServiceValues({
-    imageTaggedName,
-    volumes,
-    contextEnvs,
-    opts: [ `-it` ],
-    composePath: get(params, '__injected.composePath'),
-  })
 
+  let opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
 
   opts = addProxyOptions(opts, containerContext, parsed, network)

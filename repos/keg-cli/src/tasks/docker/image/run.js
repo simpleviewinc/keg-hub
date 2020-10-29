@@ -1,12 +1,10 @@
 
 const docker = require('KegDocCli')
-const { spawnCmd } = require('KegProc')
 const { get } = require('@keg-hub/jsutils')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
-const { getContainerConst } = require('KegUtils/docker/getContainerConst')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
-const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
+const { addProxyOptions } = require('KegUtils/docker/compose/addProxyOptions')
 const { throwDupContainerName } = require('KegUtils/error/throwDupContainerName')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { IMAGE } = CONTAINER_PREFIXES
@@ -29,12 +27,14 @@ const buildContainerName = async cmdContext => {
   return imgContainer
 }
 
-const getImageContext = async (args) => {
-  const { globalConfig, params, task } = args
+const getImageTag = ({ context, image, tag }) => {
+  return context && context.includes(':')
+    ? context.split(':')
+    : [context, tag]
+}
 
-  const [image, tag] = params.context && params.context.includes(':')
-    ? params.context.split(':')
-    : [params.context, params.tag]
+const getImageContext = async (args, image, tag) => {
+  const { globalConfig, params, task } = args
 
   // Get the context data for the command to be run
   const containerContext = await buildContainerContext({
@@ -49,11 +49,11 @@ const getImageContext = async (args) => {
   return { ...containerContext, container, tag }
 }
 
-const getImageData = async args => {
+const getImageData = async (args, imageName, tag) => {
   const { globalConfig, task, params } = args
 
-  const image = params.image &&
-    await docker.image.get(params.image) ||
+  const image = (params.image || imageName) &&
+    await docker.image.get(params.image || imageName) ||
     await imageSelect(args)
 
   // Get the context data for the command to be run
@@ -69,7 +69,7 @@ const getImageData = async args => {
   return {
     ...containerContext,
     container,
-    tag: image.tag,
+    tag: image.tag | tag,
     image: image.rootId,
   }
 
@@ -104,10 +104,11 @@ const handelContainerExists = (container, exists, imageContext, skipExists) => {
 const runDockerImage = async args => {
   const { globalConfig, params, task, __internal={} } = args
   const { context, connect, cleanup, cmd, entry, log, network, options, volumes } = params
+  const [imageName, tagName] = getImageTag(params)
 
   const imageContext = context
-    ? await getImageContext(args)
-    : await getImageData(args)
+    ? await getImageContext(args, imageName, tagName)
+    : await getImageData(args, imageName, tagName)
 
   const { tag, location, contextEnvs, container, image } = imageContext
 
@@ -126,16 +127,10 @@ const runDockerImage = async args => {
     : options.concat([ `-d` ])
 
   cleanup && opts.push(`--rm`)
-  network && opts.push(`--network ${ network }`)
   entry && opts.push(`--entrypoint ${ entry }`)
 
-  opts = await getServiceValues({
-    opts,
-    volumes,
-    contextEnvs,
-    imageTaggedName: tag ? `${image}:${tag}` : image,
-    composePath: get(params, '__injected.composePath'),
-  })
+  opts = addProxyOptions(opts, imageContext, { tag, image }, network)
+
 
   await docker.image.run({
     tag,
