@@ -12,7 +12,12 @@ const { getAliases } = require('./aliases.config')
 const { DEV_MODE, BUILD_HOOK } = process.env
 const babelConfig = require('./babel.config.js')
 
-
+const inputs = {
+  components: 'src/components',
+  // hocs: 'src/hocs',
+  // hooks: 'src/hooks',
+  // theme: 'src/theme'
+}
 
 const shared = {
   external: [
@@ -62,15 +67,17 @@ export default Array
 
     return {
       ...shared,
-      input: `./src/index.js`,
+      input: inputs,//`./src/index.js`,
       output: [
         {
-          file: `./build/cjs/kegComponents${ext}.js`,
+          dir: `./build/cjs/kegComponents${ext}`,
+          // file: `./build/cjs/kegComponents${ext}.js`,
           format: 'cjs',
           sourcemap: true
         },
         {
-          file: `./build/esm/kegComponents${ext}.js`,
+          dir: `./build/es/kegComponents${ext}`,
+          // file: `./build/esm/kegComponents${ext}.js`,
           format: 'esm',
           sourcemap: true
         },
