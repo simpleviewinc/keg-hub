@@ -2,7 +2,7 @@ const path = require('path')
 const { get } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { loadTemplate } = require('KegUtils/template')
-const { generateLabels } = require('./generateLabels')
+const { generateComposeLabels } = require('KegUtils/proxy/generateComposeLabels')
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error/generalError')
 const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
@@ -93,7 +93,7 @@ const addInjectedTemplate = async (dockerCmd, data={}) => {
     ...data.params,
     ...data.params.__injected,
     ...composeData,
-    generatedLabels: generateLabels('', data)
+    generatedLabels: generateComposeLabels('', data)
   }
 
   // Don't auto remove the inject compose file

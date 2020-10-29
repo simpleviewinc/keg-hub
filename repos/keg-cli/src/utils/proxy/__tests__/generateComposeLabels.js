@@ -1,7 +1,7 @@
 const globalConfig = global.getGlobalCliConfig()
 const { generatedLabels } = require('KegMocks/libs/docker/compose')
 const { injectedTest } = require('KegMocks/injected/injectedTest')
-const { generateLabels } = require('../generateLabels')
+const { generateComposeLabels } = require('../generateComposeLabels')
 const { DOCKER } = require('KegConst/docker')
 
 const args = {
@@ -35,22 +35,22 @@ const args = {
   }
 }
 
-describe('generateLabels', () => {
+describe('generateComposeLabels', () => {
 
   afterAll(() => jest.resetAllMocks())
 
   it('It generate the correct labels for keg-core', async () => {
-    const labels = generateLabels('', args.core)
+    const labels = generateComposeLabels('', args.core)
     expect(labels).toEqual(generatedLabels.core)
   })
 
   it('It generate the correct labels for keg-components', async () => {
-    const labels = generateLabels('', args.components)
+    const labels = generateComposeLabels('', args.components)
     expect(labels).toEqual(generatedLabels.components)
   })
 
   it('It generate the correct labels for injected apps', async () => {
-    const labels = generateLabels('', args.injected)
+    const labels = generateComposeLabels('', args.injected)
     expect(labels).toEqual(generatedLabels.injected)
   })
 
