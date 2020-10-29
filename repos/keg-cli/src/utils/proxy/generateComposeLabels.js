@@ -1,6 +1,7 @@
 const { kegLabels, proxyLabels } = require('KegConst/docker/labels')
 const { get, eitherArr } = require('@keg-hub/jsutils')
 const { fillTemplate } = require('KegUtils/template')
+const { getProxyHost } = require('./getProxyHost')
 
 /**
  * Generates a docker-compose label from the passed in arguments
@@ -14,17 +15,17 @@ const buildLabel = (generated, data, labelData) => {
   const [ key, valuePath, label ] = labelData
   const lookupPaths = eitherArr(valuePath, [ valuePath ])
   
-  const value = lookupPaths.reduce((found, lookup) => {
-    return found || get(data, lookup)
-  }, '')
+  const value = key !== 'KEG_PROXY_HOST'
+    ? lookupPaths.reduce((found, lookup) => found || get(data, lookup), '')
+    : getProxyHost(
+        get(data, valuePath, get(data, `contextEnvs.${key}`)),
+        get(data, 'contextEnvs.IMAGE', get(data, 'contextEnvs.CONTAINER'))
+      )
 
-  const labels = eitherArr(label, [ label ])
-  return labels.reduce((filled, label) => {
-    const item = value && fillTemplate({ template: label, data: { ...data, [key]: value }})
-    item && (filled += `      - ${item}\n`)
+  const item = value ? fillTemplate({ template: label, data: { ...data, [key]: value }}) : label
+  item && (generated += `      - ${item}\n`)
 
-    return filled
-  }, generated)
+  return generated
 
 }
 

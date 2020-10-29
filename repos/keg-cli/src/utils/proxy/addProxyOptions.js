@@ -1,40 +1,35 @@
-const { pickKeys } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { KEG_ENVS } = require('KegConst/envs')
-const { CONTAINER_TO_CONTEXT } = require('KegConst/constants')
+const { pickKeys } = require('@keg-hub/jsutils')
+const { getProxyHost } = require('./getProxyHost')
+const { proxyLabels } = require('KegConst/docker/labels')
+const { buildLabel } = require('KegUtils/helpers/buildLabel')
 
 /**
- * Builds the an option string to be added to a docker command
+ * Gets the envs to replace the values in the proxy label tempaltes
  * @function
- * @param {Array} opts - Array of already built options
- * @param {string} name - Option name to build ( label, network, etc... )
- * @param {string} value - Value of the option
+ * @param {Object} contextEnvs - Envs for the container
  *
- * @returns {Array} - opts array with the keg-proxy labels added
+ * @returns {Object} - Envs used in the proxy label templates
  */
-const addOption = (opts, name, value) => {
-  opts.push(`--${name} ${value}`)
-  return opts
-}
+const getProxyEnvs = contextEnvs => {
+  const {
+    KEG_PROXY_ENTRY='keg',
+    KEG_PROXY_HOST='',
+    KEG_PROXY_PORT,
+    KEG_DOCKER_NETWORK=DOCKER.KEG_DOCKER_NETWORK,
+  } = pickKeys(contextEnvs, [
+    'KEG_PROXY_ENTRY',
+    'KEG_PROXY_HOST',
+    'KEG_PROXY_PORT',
+    'KEG_DOCKER_NETWORK',
+  ])
 
-/**
- * Builds the full keg-proxy host domain using the passed in image and tag
- * @function
- * @param {string} kegProxyHost - ENV Value of KEG_PROXY_HOST for the image
- * @param {string} tag - Tag || branch of the docker package url
- * @param {string} image - Name of the image to build the container from
- *
- * @returns {Array} - opts array with the keg-proxy labels added
- */
-const getProxyHost = (kegProxyHost, image, tag) => {
-  const context = CONTAINER_TO_CONTEXT[image] || image
-  const subDomain = tag && context ? `${context}-${tag}.` : !context  ? `${tag}.` : `${context}.`
-  
-  // If the padded in proxyHost is not the same as the default, then use it
-  // Otherwise build the host with the subDomain and default proxy host
-  return kegProxyHost !== KEG_ENVS.KEG_PROXY_HOST
-    ? kegProxyHost
-    : `${subDomain}${KEG_ENVS.KEG_PROXY_HOST}`
+  return {
+    KEG_PROXY_ENTRY,
+    KEG_PROXY_HOST,
+    KEG_PROXY_PORT,
+    KEG_DOCKER_NETWORK,
+  }
 }
 
 /**
@@ -51,49 +46,32 @@ const getProxyHost = (kegProxyHost, image, tag) => {
  * @returns {Array} - opts array with the keg-proxy labels added
  */
 const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }, network) => {
+
+  const proxyEnvs = getProxyEnvs(contextEnvs)
   const proxyContext = tag || image
-
-  const {
-    KEG_PROXY_ENTRY='keg',
-    KEG_PROXY_HOST='',
-    KEG_PROXY_PORT,
-    KEG_DOCKER_NETWORK=DOCKER.KEG_DOCKER_NETWORK,
-  } = pickKeys(contextEnvs, [
-    'KEG_PROXY_ENTRY',
-    'KEG_PROXY_HOST',
-    'KEG_PROXY_PORT',
-    'KEG_DOCKER_NETWORK',
-  ])
-
   const proxyHost = getProxyHost(
-    KEG_PROXY_HOST || '',
+    proxyEnvs.KEG_PROXY_HOST || '',
     image,
     tag
   )
 
-  addOption(
-    opts,
-    `label`,
-    `traefik.http.routers.${proxyContext}.rule=Host(\`${proxyHost}\`)`
-  )
-  addOption(
-    opts,
-    `label`,
-    `traefik.http.routers.${proxyContext}.entrypoints=${KEG_PROXY_ENTRY}`
-  )
-  addOption(
-    opts,
-    `label`,
-    `traefik.http.services.${proxyContext}.loadbalancer.server.port=${KEG_PROXY_PORT}`
-  )
+  proxyLabels.map(item => {
+    const envKey = item[0]
+    const label = item[item.length -1] 
+    opts.push(
+      buildLabel(
+        '',
+        [label.replace('{{ params.context }}', proxyContext)],
+        envKey,
+        envKey === 'KEG_PROXY_HOST' ? proxyHost : proxyEnvs[envKey]
+      )
+    )
+  })
 
-  addOption(
-    opts,
-    `network`,
-    network || KEG_DOCKER_NETWORK
-  )
+  opts.push(`--network ${network || proxyEnvs.KEG_DOCKER_NETWORK}`)
 
   return opts
+
 }
 
 module.exports = {

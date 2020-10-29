@@ -49,19 +49,17 @@ describe('addProxyOptions', () => {
 
   it('Should only use the tag for the proxy host label when no image exists', async () => {
     const optArgs = [ ...buildArgs().core ]
-    const parsed = 
     optArgs.push({ ...optArgs.pop(), tag: 'only-tag', image: false })
     const resp = addProxyOptions(...optArgs)
-    const hostLabel = resp[1]
+    const hostLabel = resp[2]
     expect(hostLabel).toBe('--label traefik.http.routers.only-tag.rule=Host(`only-tag.local.kegdev.xyz`)')
   })
 
   it('Should only use the image for the proxy host label when no tag exists', async () => {
     const optArgs = [ ...buildArgs().core ]
-    const parsed = 
     optArgs.push({ ...optArgs.pop(), tag: false, image: `only-image` })
     const resp = addProxyOptions(...optArgs)
-    const hostLabel = resp[1]
+    const hostLabel = resp[2]
     expect(hostLabel).toBe('--label traefik.http.routers.only-image.rule=Host(`only-image.local.kegdev.xyz`)')
   })
 
@@ -74,7 +72,7 @@ describe('addProxyOptions', () => {
       KEG_PROXY_HOST: `custom.proxy.host.com`
     }
     const resp = addProxyOptions(optArgs.pop(), containerContext, parsed)
-    const hostLabel = resp[1]
+    const hostLabel = resp[2]
     expect(hostLabel).toBe('--label traefik.http.routers.test-core.rule=Host(`custom.proxy.host.com`)')
   })
 

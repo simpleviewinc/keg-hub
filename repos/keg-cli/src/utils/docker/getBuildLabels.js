@@ -1,7 +1,8 @@
 const homeDir = require('os').homedir()
 const { DOCKER } = require('KegConst/docker')
-const { isArr, isStr, get, exists } = require('@keg-hub/jsutils')
 const { kegLabels } = require('KegConst/docker/labels')
+const { buildLabel } = require('KegUtils/helpers/buildLabel')
+const { isArr, isStr, get, exists, eitherArr } = require('@keg-hub/jsutils')
 
 const kegHubRepos = `keg-hub/repos/`
 
@@ -33,31 +34,6 @@ const cleanUpValue = (value, key, contextEnvs) => {
 }
 
 /**
- * Build the default keg-cli docker labels, and adds them to the passed in docker command
- * @param {string} dockerCmd - docker command being built
- * @param {string} labels - Array of labels to be added
- * @param {string} key - ENV Keg from the context envs that holds the label value
- * @param {string} value - Value to set to the label
- *
- * @returns {string} - Docker command with the passed in labels added
- */
-const buildLabel = (dockerCmd, labels, key, value) => {
-  return labels.reduce((cmdWLabels, label) => {
-    if(!key && !value) return `${cmdWLabels} --label ${label}`.trim()
-    
-    const regReplace = new RegExp('{{\\s*' + key + '\\s*}}')
-    const regTemplate = new RegExp('\\${\\s*' + key + '\\s*}')
-
-    return cmdWLabels += (
-      ' ' + `--label ` + label
-      .replace(regReplace, value)
-      .replace(regTemplate, value)
-      .trim()
-    )
-  }, dockerCmd).trim()
-}
-
-/**
  * Formats the custom docker labels into an array
  * @param {string|Array} labels - Custom labels to be added
  *
@@ -77,7 +53,7 @@ const buildDefaultLabels = (dockerCmd, context, tap) => {
   const { ENV:contextEnvs } = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
 
   return kegLabels.reduce((cmdWLabels, labelData) => {
-    const [ key, __, labels ] = labelData
+    const [ key, __, label ] = labelData
 
     const value = cleanUpValue(
       get(contextEnvs, key.toUpperCase()),
@@ -85,8 +61,8 @@ const buildDefaultLabels = (dockerCmd, context, tap) => {
       contextEnvs
     )
 
-    return value ? buildLabel(cmdWLabels, labels, key, value) : cmdWLabels
-    
+    return value ? buildLabel(cmdWLabels, eitherArr(label, [ label ]), key, value) : cmdWLabels
+
   }, dockerCmd)
 
 }

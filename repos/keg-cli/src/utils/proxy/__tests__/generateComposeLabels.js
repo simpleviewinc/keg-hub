@@ -1,8 +1,8 @@
 const globalConfig = global.getGlobalCliConfig()
+const { DOCKER } = require('KegConst/docker')
 const { generatedLabels } = require('KegMocks/libs/docker/compose')
 const { injectedTest } = require('KegMocks/injected/injectedTest')
 const { generateComposeLabels } = require('../generateComposeLabels')
-const { DOCKER } = require('KegConst/docker')
 
 const args = {
   core: {

@@ -211,12 +211,14 @@ const dockerPackage = {
 const dockerProxyOpts = {
   core: [
     '--option-core',
+    '--label traefik.enable=true',
     '--label traefik.http.routers.test-core.rule=Host(`core-test-core.local.kegdev.xyz`)',
     '--label traefik.http.services.test-core.loadbalancer.server.port=19006',
     '--label traefik.http.routers.test-core.entrypoints=keg',
     '--network keg-hub-net'
   ],
   components: [
+    '--label traefik.enable=true',
     '--label traefik.http.routers.test-components.rule=Host(`components-test-components.local.kegdev.xyz`)',
     '--label traefik.http.services.test-components.loadbalancer.server.port=60710',
     '--label traefik.http.routers.test-components.entrypoints=keg',
@@ -224,6 +226,7 @@ const dockerProxyOpts = {
   ],
   tap: [
     '--option-tap',
+    '--label traefik.enable=true',
     '--label traefik.http.routers.test-tap.rule=Host(`tap-test-tap.local.kegdev.xyz`)',
     '--label traefik.http.services.test-tap.loadbalancer.server.port=19006',
     '--label traefik.http.routers.test-tap.entrypoints=keg',
