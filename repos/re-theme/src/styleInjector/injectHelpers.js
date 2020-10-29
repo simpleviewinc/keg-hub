@@ -132,7 +132,7 @@ export const getSelector = (className, cssString, filterPrefix) => {
 
   // filter by prefix if passed in
   const filterWithPrefix = cls => {
-    return filterPrefix
+    return cls && filterPrefix
       ? cls.startsWith(filterPrefix)
       : cls
   }
