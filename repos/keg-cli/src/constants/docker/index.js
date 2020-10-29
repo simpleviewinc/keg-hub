@@ -1,4 +1,5 @@
 const containers = require('./containers')
+const { KEG_ENVS } = require('../envs')
 
 const {
   cliKeyMap,
@@ -16,8 +17,7 @@ const DOCKER = {
   MUTAGEN_MAP: mutagenMap,
   LOCATION_CONTEXT: locationContext,
   CONTAINERS_PATH: containersPath,
-  // TODO: Update this to load from the global ENVs
-  KEG_DOCKER_NETWORK: 'keg-hub-net',
+  KEG_DOCKER_NETWORK: KEG_ENVS.KEG_DOCKER_NETWORK,
 }
 
 // Add the CONTAINERS property, with a get function do it only get called when referenced

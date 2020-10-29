@@ -37,9 +37,20 @@ env:
   KEG_EXEC_CMD: start
 
   # --- KEG-PROXY ENVs --- #
-  KEG_PROXY_HOST: components.local.kegdev.xyz
-  KEG_PROXY_ENTRY: keg
-  # Port the application will use when running
+  # Most Keg-Proxy Envs are not needed, but can be overwritten to allow customization
+  # When not set, the proxy will use keg-cli defaults as defined in the keg-cli default envs
+  
+  # KEG_PROXY_HOST: custom-host.local.kegdev.xyz
+    # To override the host header used by the proxy to route traffic to this container
+    # add KEG_PROXY_HOST env and set it's value to the what the host header should be
+    # the default is <container-context>-<image-tag>.<KEG_PROXY_HOST>
+  
+  # KEG_DOCKER_NETWORK: custom-docker-network
+    # To override the default docker network used by the proxy to route traffic to this container
+    # add KEG_PROXY_HOST env and set it's value to the what network should be used
+    # the default is 'keg-hub-net'
+
+  # Port the application will use when running within the container
   # Allows keg-proxy to route traffic to it
   KEG_PROXY_PORT: 60710
 

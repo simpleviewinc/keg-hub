@@ -92,9 +92,8 @@ const dockerPackageRun = async args => {
   })
 
   cleanup && opts.push(`--rm`)
-  network && opts.push(`--network ${ network }`)
 
-  opts = addProxyOptions(opts, containerContext, parsed)
+  opts = addProxyOptions(opts, containerContext, parsed, network)
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
   /*

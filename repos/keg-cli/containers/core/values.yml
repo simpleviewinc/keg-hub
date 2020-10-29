@@ -34,8 +34,16 @@ env:
   DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@keg-hub/tap-resolver"
 
   # --- KEG-PROXY ENVs --- #
-  KEG_PROXY_HOST: core.local.kegdev.xyz
-  KEG_PROXY_ENTRY: keg
+  # To override the host header used by the proxy to route traffic to this container
+  # add KEG_PROXY_HOST env and set it's value to the what the host header should be
+  # the default is <container-context>-<image-tag>.local.kegdev.xyz
+    # KEG_PROXY_HOST: core.local.kegdev.xyz
+
+  # KEG_DOCKER_NETWORK: custom-docker-network
+    # To override the default docker network used by the proxy to route traffic to this container
+    # add KEG_PROXY_HOST env and set it's value to the what network should be used
+    # the default is 'keg-hub-net'
+
   # Port the application will use when running
   # Allows keg-proxy to route traffic to it
   KEG_PROXY_PORT: 19006
