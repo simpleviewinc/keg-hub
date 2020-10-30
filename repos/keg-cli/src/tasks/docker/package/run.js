@@ -1,6 +1,7 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { pathExists } = require('KegFileSys')
+const { DOCKER } = require('KegConst/docker')
 const { isUrl, get } = require('@keg-hub/jsutils')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { addProxyOptions } = require('KegUtils/proxy/addProxyOptions')
@@ -81,21 +82,58 @@ const dockerPackageRun = async args => {
   const [error, locExists] = await pathExists(location)
   cmdLocation = locExists ? location : undefined
 
-  const imgInspect = await docker.image.inspect({ image: id || parsed.image })
-  const port = imgInspect && imgInspect.Config.Labels[proxyLabelPort]
-
   /*
   * ----------- Step 4 ----------- *
   * Get the options for the docker run command
   */
   let opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
-  opts = addProxyOptions(
-    opts,
-    { contextEnvs: { ...containerContext.contextEnvs, KEG_PROXY_PORT: port } },
-    { ...parsed, context: cmdContext },
-    network
-  )
+  opts.push(`--network ${network || contextEnvs.KEG_DOCKER_NETWORK || DOCKER.KEG_DOCKER_NETWORK }`)
+
+
+  /*
+  * ----------- Step 4.1 ----------- *
+  * Parse the image labels looking for docker-compose or traefik labels
+  * Update the traefik host label to use the branch
+  * Clear out the docker-compose labels, so it does not think it controls this container
+  */
+  const imgInspect = await docker.image.inspect({ image: id || parsed.image })
+  const imgLabels = get(imgInspect, 'Config.Labels', {})
+
+  let labelContext = cmdContext
+  Object.entries(imgLabels).map(([ key, value ]) => {
+    if(!key.includes('traefik') && !key.includes('com.docker.compose')) return
+
+    if(key.includes('com.docker.compose')) opts.push(`--label ${key}`)
+
+    if(key.includes('traefik.http.routers') && value.includes('Host(')){
+      labelContext = key.split('.rule')[0].replace('traefik.http.routers.', '')
+      opts.push(`--label ${key}=${value.replace(labelContext, (labelContext || parsed.image) + '-' + parsed.tag)}`)
+    }
+
+  })
+
+  // Commenting out for now until the label issue can be resolved
+  // Currently the labels of the image are saved with the image
+  // So they reused when the image is run again at a later time
+  // Which means we can't define custom labels here
+  // If we to define more then one router on a container,
+  // Traefic kills all routing for both routers, and the container can not be accessed
+  // 
+  // To fix me need to modify the image before it's packaged, and remove the labels from it
+  // This will then allow us to define our own labels when it's run at a later time
+
+  // const port = imgInspect && imgInspect.Config.Labels[proxyLabelPort]
+  // const imgInspect = await docker.image.inspect({ image: id || parsed.image })
+  // const port = imgInspect && imgInspect.Config.Labels[proxyLabelPort]
+  // opts = addProxyOptions(
+  //   opts,
+  //   { contextEnvs: { ...containerContext.contextEnvs, KEG_PROXY_PORT: port } },
+  //   { ...parsed, context: cmdContext },
+  //   network
+  // )
+  
+  
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
   /*
@@ -111,7 +149,10 @@ const dockerPackageRun = async args => {
       location: cmdLocation,
       cmd: isInjected ? command : defCmd,
       overrideDockerfileCmd: Boolean(command),
-      envs: { ...contextEnvs, [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun },
+      envs: {
+        ...contextEnvs,
+        [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun,
+      },
     })
   }
   catch(err){
