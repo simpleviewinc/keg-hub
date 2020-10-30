@@ -15,11 +15,6 @@ const kegLabels = [
     'com.keg.env.port=${KEG_PROXY_PORT}'
   ],
   [
-    'KEG_COMPOSE_SERVICE',
-    'contextEnvs.KEG_COMPOSE_SERVICE',
-    'com.keg.env.service=${KEG_COMPOSE_SERVICE}'
-  ],
-  [
     'KEG_CONTEXT_PATH',
     'contextEnvs.KEG_CONTEXT_PATH',
     'com.keg.path.context=${KEG_CONTEXT_PATH}'

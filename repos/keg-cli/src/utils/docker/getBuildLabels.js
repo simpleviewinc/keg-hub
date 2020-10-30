@@ -15,10 +15,6 @@ const kegHubRepos = `keg-hub/repos/`
  * @returns {string} - Docker command with the passed in labels added
  */
 const cleanUpValue = (value, key, contextEnvs) => {
-  // Default the compose service to the image name
-  if(!value && key === 'KEG_COMPOSE_SERVICE' && contextEnvs.IMAGE)
-    value = contextEnvs.IMAGE
-
   // If no value to add, just return
   if(!exists(value) || !isStr(value)) return value
 

@@ -9,7 +9,6 @@ const proxyLabels = (type, proxyHost) => {
 
 const kegShared = `      - com.keg.env.cmd=${asENV('KEG_EXEC_CMD')}
       - com.keg.env.port=${asENV('KEG_PROXY_PORT')}
-      - com.keg.env.service=${asENV('KEG_COMPOSE_SERVICE')}
       - com.keg.path.context=${asENV('KEG_CONTEXT_PATH')}
       - com.keg.path.container=${asENV('DOC_APP_PATH')}
       - com.keg.path.compose=${asENV('KEG_COMPOSE_DEFAULT')}

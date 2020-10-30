@@ -1,12 +1,9 @@
-const { get } = require('@keg-hub/jsutils')
-const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { buildTapContext } = require('./buildTapContext')
 const { getSetting } = require('../globalConfig/getSetting')
+const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { convertParamsToEnvs } = require('../task/convertParamsToEnvs')
-const { getServiceName } = require('../docker/compose/getServiceName')
-const { getKegContext } = require('../getters/getKegContext')
-const { buildServiceName } = require('../docker/compose/buildServiceName')
+
 /**
  * Builds the ENVs for the passed in cmdContext
  * @function
@@ -24,7 +21,7 @@ const buildContextEnvs = async (args) => {
   const containerEnvs = getContainerConst(cmdContext, 'env', {})
 
   // Get the ENV vars for the command context and merge with any passed in envs
-  const built = {
+  return {
 
     // Get the ENV context for the command
     ...containerEnvs,
@@ -51,14 +48,6 @@ const buildContextEnvs = async (args) => {
 
   }
 
-  // Get the name of the docker-compose service after the other ENVs have been built
-  // That way we can build the service name, if getServiceName does not return anything
-  built.KEG_COMPOSE_SERVICE = await getServiceName({
-    context: getKegContext(cmdContext),
-    skipThrow: true
-  }) || buildServiceName(cmdContext, built)
-
-  return built
 }
 
 module.exports = {

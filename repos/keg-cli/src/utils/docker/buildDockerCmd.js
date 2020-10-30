@@ -1,14 +1,8 @@
-const { isObj } = require('@keg-hub/jsutils')
 const { getBuildTags } = require('./getBuildTags')
 const { getDockerImg } = require('./getDockerImg')
 const { getBuildArgs } = require('./getBuildArgs')
+const { getDockerArgs } = require('./getDockerArgs')
 const { getBuildLabels } = require('./getBuildLabels')
-const { getDirsToMount, getVolumeMounts } = require('./buildDockerMounts')
-const {
-  addContainerName,
-  addContainerEnv,
-  getDockerArgs,
-} = require('./getDockerArgs')
 
 /**
  * Creates a docker run command as a string. Adds any needed volume mounts
@@ -75,61 +69,6 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
 }
 
 /**
- * Creates a docker run command as a string. Adds any needed volume mounts
- * @param {Object} globalConfig - Global config object for the keg-cli
- * @param {Object} params - Data to build the docker command
- * @param {string} params.dockerCmd - docker command being built
- * @param {string} params.image - docker image to use when running the container
- * @param {Array} params.mounts - Key names of repos to be mounted
- *
- * @returns {string} - Built docker run command
- */
-const createRunCmd = (globalConfig, dockerCmd, params) => {
-  const {
-    container,
-    env,
-    envs={},
-    execCmd,
-    context,
-    branch,
-    image,
-    mounts,
-    platform,
-    tap
-  } = params
-
-  // Get the name for the docker container
-  dockerCmd = addContainerName(
-    dockerCmd,
-    tap ? `${context}-${tap}` : context,
-  )
-
-  // Add the env to the docker command
-  dockerCmd = addContainerEnv(dockerCmd, {
-    TAP: tap,
-    GIT_BRANCH: branch,
-    PLATFORM: platform,
-    KEG_EXEC_CMD: execCmd,
-    // Join the envs object to be added as envs to the docker container
-    ...(isObj(envs) && envs),
-  })
-
-  // First fet the directory paths to mount
-  const toMount = getDirsToMount(
-    globalConfig,
-    mounts,
-    env,
-    container
-  )
-
-  // Then build the docker volume string for each mount path
-  dockerCmd = toMount ? getVolumeMounts(toMount, dockerCmd) : dockerCmd
-
-  // Add the location last. This is the location the container will be built from
-  return `${ dockerCmd } ${ getDockerImg(image, container, 'latest') }`
-}
-
-/**
  * Builds a docker command to be passed to the command line
  * @param {Object} globalConfig - Global config object for the keg-cli
  * @param {Object} params - Data to build the docker command
@@ -171,11 +110,7 @@ const buildDockerCmd = (globalConfig, params) => {
     dockerCmd: `docker ${cmd} ${docker}`.trim()
   })
 
-  // Figure out which docker command to run
-  return cmd === 'build'
-    ? createBuildCmd(globalConfig, dockerCmd, params)
-    // createRunCmd not currently used!
-    : createRunCmd(globalConfig, dockerCmd, params)
+  return createBuildCmd(globalConfig, dockerCmd, params)
 
 }
 
