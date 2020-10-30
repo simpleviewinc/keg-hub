@@ -19,14 +19,14 @@
   "KegLinearGradient": "src/components/linearGradient/linearGradient${platform}.js",
   "KegView": "src/components/view/view${platform}.js",
   "KegGetPlatform": "src/utils/helpers/getPlatform.js",
-  "KegAnimateHook": "src/hooks/useAnimate${platform}.js",
+  "KegAnimateHook": "src/hooks/useAnimate/useAnimate${platform}.js",
   "KegAssets": "src/assets/index.js",
   "KegTheme": "src/theme/index.js",
   "KegHocs": "src/hocs/index.js",
   "KegHooks": "src/hooks/index.js",
   "KegUtils": "src/utils/index.js",
   "StoryWrap": ".storybook/storyWrap.js",
-  "KegClassList": "src/hooks/useClassList${platform}.js",
-  "KegClassName": "src/hooks/useClassName${platform}.js",
-  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass${platform}.js"
+  "KegClassList": "src/hooks/useClassList/useClassList${platform}.js",
+  "KegClassName": "src/hooks/useClassName/useClassName${platform}.js",
+  "KegTypeAsClass": "src/hooks/useThemeTypeAsClass/useThemeTypeAsClass${platform}.js"
 }
