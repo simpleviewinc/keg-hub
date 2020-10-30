@@ -37,16 +37,21 @@ const getImageContext = async (args, image, tag) => {
   const { globalConfig, params, task } = args
 
   // Get the context data for the command to be run
-  const containerContext = await buildContainerContext({
+  const imageContext = await buildContainerContext({
     task,
     globalConfig,
     params: { ...params, image, tag },
   })
 
   // Build the name for the container
-  const container = await buildContainerName(containerContext.cmdContext)
+  const container = await buildContainerName(imageContext.cmdContext)
 
-  return { ...containerContext, container, tag }
+  return {
+    ...imageContext,
+    container,
+    tag : imageContext.tag,
+    image: imageContext.rootId,
+  }
 }
 
 const getImageData = async (args, imageName, tag) => {
@@ -57,17 +62,17 @@ const getImageData = async (args, imageName, tag) => {
     await imageSelect(args)
 
   // Get the context data for the command to be run
-  const containerContext = await buildContainerContext({
+  const imageContext = await buildContainerContext({
     task,
     globalConfig,
     params: { ...params, context: image.rootId },
   })
 
   // Build the name for the container
-  const container = await buildContainerName(containerContext.cmdContext)
+  const container = await buildContainerName(imageContext.cmdContext)
 
   return {
-    ...containerContext,
+    ...imageContext,
     container,
     tag: image.tag | tag,
     image: image.rootId,
@@ -129,8 +134,7 @@ const runDockerImage = async args => {
   cleanup && opts.push(`--rm`)
   entry && opts.push(`--entrypoint ${ entry }`)
 
-  opts = addProxyOptions(opts, imageContext, { tag, image }, network)
-
+  opts = addProxyOptions(opts, imageContext, { tag, image, context: imageContext.cmdContext }, network)
 
   await docker.image.run({
     tag,

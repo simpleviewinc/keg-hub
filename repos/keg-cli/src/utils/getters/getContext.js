@@ -32,7 +32,7 @@ const containerContext = async (toFind, prefixData={}, __injected, askFor) => {
   const container = found || askFor && await askWhenNoContext('container')
 
   return !container
-    ? prefixData
+    ? false
     : __injected
       ? { ...container, ...prefixData }
       : { ...container, ...prefixData, ...getPrefixContext(container.name) }
@@ -53,7 +53,7 @@ const imageContext = async (toFind, tag, prefixData={}, __injected, askFor) => {
   const image = found || askFor && await askWhenNoContext('image')
 
   return !image
-    ? prefixData
+    ? false
     : __injected
       ? { ...image, ...prefixData }
       : { ...image, ...prefixData, ...getPrefixContext(image.rootId) }
@@ -106,13 +106,10 @@ const getContext = async (params, askFor) => {
       ? getPrefixContext(contextRef)
       : {}
 
-  const foundContext = container
-    ? await containerContext(container, prefixData, __injected, askFor)
-    : image
-      ? await imageContext(image, tag, prefixData, __injected, askFor)
-      : prefixData.withPrefix || prefixData.id
-        ? await contextFromPrefix(prefixData)
-        : prefixData
+  let foundContext = container && await containerContext(container, prefixData, __injected, askFor)
+  foundContext = foundContext || image && await imageContext(image, tag, prefixData, __injected, askFor)
+  foundContext = foundContext || ((prefixData.withPrefix || prefixData.id) && await contextFromPrefix(prefixData))
+  foundContext = foundContext || prefixData
 
   return context === 'tap'
     ? { tap, context, ...foundContext }

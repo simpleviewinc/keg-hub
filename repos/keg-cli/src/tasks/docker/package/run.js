@@ -1,12 +1,13 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
+const { pathExists } = require('KegFileSys')
 const { isUrl, get } = require('@keg-hub/jsutils')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { addProxyOptions } = require('KegUtils/proxy/addProxyOptions')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
-
+const proxyLabelPort = 'traefik.http.services.herkin.loadbalancer.server.port'
 
 /**
  * Builds a docker container so it can be run
@@ -74,19 +75,27 @@ const dockerPackageRun = async args => {
   const containerContext = await buildContainerContext({
     task,
     globalConfig,
-    params: { ...params, context: isInjected ? context : parsed.image },
+    params: { image: parsed.image, tag: parsed.tag },
   })
-  const { cmdContext, contextEnvs, location } = containerContext
+  const { cmdContext, contextEnvs, location, id } = containerContext
+  const [error, locExists] = await pathExists(location)
+  cmdLocation = locExists ? location : undefined
+
+  const imgInspect = await docker.image.inspect({ image: id || parsed.image })
+  const port = imgInspect && imgInspect.Config.Labels[proxyLabelPort]
 
   /*
   * ----------- Step 4 ----------- *
   * Get the options for the docker run command
   */
-
   let opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
-
-  opts = addProxyOptions(opts, containerContext, parsed, network)
+  opts = addProxyOptions(
+    opts,
+    { contextEnvs: { ...containerContext.contextEnvs, KEG_PROXY_PORT: port } },
+    { ...parsed, context: cmdContext },
+    network
+  )
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
 
   /*
@@ -97,11 +106,12 @@ const dockerPackageRun = async args => {
     await docker.image.run({
       ...parsed,
       opts,
-      location,
-      envs: { ...contextEnvs, [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun },
+      cmd: command,
       name: containerName,
+      location: cmdLocation,
       cmd: isInjected ? command : defCmd,
-      overrideDockerfileCmd: Boolean(!isInjected || command),
+      overrideDockerfileCmd: Boolean(command),
+      envs: { ...contextEnvs, [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun },
     })
   }
   catch(err){

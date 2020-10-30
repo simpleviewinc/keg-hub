@@ -13,9 +13,9 @@ const { buildLabel } = require('KegUtils/helpers/buildLabel')
  */
 const getProxyEnvs = contextEnvs => {
   const {
+    KEG_PROXY_PORT=19006,
     KEG_PROXY_ENTRY='keg',
-    KEG_PROXY_HOST='',
-    KEG_PROXY_PORT,
+    KEG_PROXY_HOST=DOCKER.KEG_PROXY_HOST,
     KEG_DOCKER_NETWORK=DOCKER.KEG_DOCKER_NETWORK,
   } = pickKeys(contextEnvs, [
     'KEG_PROXY_ENTRY',
@@ -45,13 +45,16 @@ const getProxyEnvs = contextEnvs => {
  *
  * @returns {Array} - opts array with the keg-proxy labels added
  */
-const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }, network) => {
-
+const addProxyOptions = (opts=[], { contextEnvs }, { tag, image, context }, network) => {
+  const proxyRef = (context || image)
+    .replace(/keg-/g, '')
+    .replace(/tap-/g, '')
+    .replace(/-/g, '')
+  
   const proxyEnvs = getProxyEnvs(contextEnvs)
-  const proxyContext = tag || image
   const proxyHost = getProxyHost(
     proxyEnvs.KEG_PROXY_HOST || '',
-    image,
+    proxyRef,
     tag
   )
 
@@ -64,7 +67,7 @@ const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }, network) => {
         label,
         envKey,
         envKey === 'KEG_PROXY_HOST' ? proxyHost : proxyEnvs[envKey],
-        proxyContext
+        proxyRef
       )
     )
   })
