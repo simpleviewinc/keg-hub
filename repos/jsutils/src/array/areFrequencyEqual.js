@@ -6,7 +6,7 @@ import { isArr } from './isArr'
 /**
  * Builds a map of elements mapped to their frequency counts
  * @param {Array<*>} arr 
- * @return {Map<*, Number>}
+ * @return {Map<*, number>}
  */
 export const buildElementCountMap = arr => {
   const counts = new Map()
@@ -20,8 +20,8 @@ export const buildElementCountMap = arr => {
 
 /**
  * Returns true if the maps 
- * @param {*} mapA 
- * @param {*} mapB 
+ * @param {Map<*, number>} mapA 
+ * @param {Map<*, number>} mapB 
  */
 export const areCountMapsEqual = (mapA, mapB) => {
   if (mapA.size !== mapB.size) return false
