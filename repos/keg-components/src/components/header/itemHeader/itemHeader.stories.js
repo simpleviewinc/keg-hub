@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ItemHeader, Button, View, Image, Touchable } from '../'
-import { Android, ArrowLeft, Search } from '../../assets/icons'
+import { ItemHeader, Button, View, Image, Touchable } from '../..'
+import { Android, ArrowLeft, Search } from '../../../assets/icons'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
 
