@@ -1,8 +1,8 @@
 
 const asENV = item => ('${' + item +  '}')
 
-const proxyLabels = (type, port) => {
-  return `      - traefik.http.routers.${type}.rule=Host(${ '\`${KEG_PROXY_HOST}\`' })
+const proxyLabels = (type, proxyHost) => {
+  return `      - traefik.http.routers.${type}.rule=Host(\`${proxyHost}\`)
       - traefik.http.routers.${type}.entrypoints=${asENV('KEG_PROXY_ENTRY')}
       - traefik.http.services.${type}.loadbalancer.server.port=${asENV('KEG_PROXY_PORT')}`
 }
@@ -18,17 +18,17 @@ const kegShared = `      - com.keg.env.cmd=${asENV('KEG_EXEC_CMD')}
 
 const generatedLabels = {
   core: `      - traefik.enable=true
-${proxyLabels('core', 19006)}
+${proxyLabels('core', 'core.local.kegdev.xyz')}
       - com.keg.env.context=keg-core
 ${kegShared}
 `,
       components: `      - traefik.enable=true
-${proxyLabels('components', 60710)}
+${proxyLabels('components', 'components.local.kegdev.xyz')}
       - com.keg.env.context=keg-components
 ${kegShared}
 `,
       injected: `      - traefik.enable=true
-${proxyLabels('tap-injected-test', 19006)}
+${proxyLabels('tap-injected-test', 'tap-injected-test.local.kegdev.xyz')}
       - com.keg.env.context=tap-injected-test
 ${kegShared}
 `

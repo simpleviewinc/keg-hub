@@ -34,8 +34,8 @@ describe('getBuildLabels', () => {
     const addedLabels = `com.test.label="my-test-label",com.test.other="my-other-test-label"`
     const labels = getBuildLabels(globalConfig, { dockerCmd: '', context: 'base', labels: addedLabels })
 
-    expect(labels.indexOf(`--label com.test.label="my-test-label" `)).not.toBe(-1)
-    expect(labels.indexOf(`--label com.test.other="my-other-test-label" `)).not.toBe(-1)
+    expect(labels.indexOf(`--label com.test.label="my-test-label"`)).not.toBe(-1)
+    expect(labels.indexOf(`--label com.test.other="my-other-test-label"`)).not.toBe(-1)
   })
 
   it('Should add extra labels when they are passed in as an array', () => {
@@ -45,8 +45,8 @@ describe('getBuildLabels', () => {
     ]
     const labels = getBuildLabels(globalConfig, { dockerCmd: '', context: 'base', labels: addedLabels })
 
-    expect(labels.indexOf(`--label com.test.label="my-test-label" `)).not.toBe(-1)
-    expect(labels.indexOf(`--label com.test.other="my-other-test-label" `)).not.toBe(-1)
+    expect(labels.indexOf(`--label com.test.label="my-test-label"`)).not.toBe(-1)
+    expect(labels.indexOf(`--label com.test.other="my-other-test-label"`)).not.toBe(-1)
   })
 
 })

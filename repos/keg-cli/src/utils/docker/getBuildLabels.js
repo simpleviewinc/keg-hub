@@ -2,7 +2,7 @@ const homeDir = require('os').homedir()
 const { DOCKER } = require('KegConst/docker')
 const { kegLabels } = require('KegConst/docker/labels')
 const { buildLabel } = require('KegUtils/helpers/buildLabel')
-const { isArr, isStr, get, exists, eitherArr } = require('@keg-hub/jsutils')
+const { isArr, isStr, get, exists } = require('@keg-hub/jsutils')
 
 const kegHubRepos = `keg-hub/repos/`
 
@@ -39,7 +39,16 @@ const cleanUpValue = (value, key, contextEnvs) => {
  *
  * @returns {Array} - All custom labels to add to the image
  */
-const getLabelsToAdd = labels => isStr(labels) ? labels.split(',') : isArr(labels) ? labels : []
+const buildCustomLabels = labels => {
+  return !labels || !labels.length 
+    ? ''
+    : isStr(labels)
+      ? `--label ${labels.split(',').join(` --label `)}`.trim()
+      : isArr(labels)
+        ? `--label ${labels.join(` --label `)}`.trim()
+        : ''
+}
+
 
 /**
  * Build the default keg-cli docker labels, and adds them to the passed in docker command
@@ -61,7 +70,9 @@ const buildDefaultLabels = (dockerCmd, context, tap) => {
       contextEnvs
     )
 
-    return value ? buildLabel(cmdWLabels, eitherArr(label, [ label ]), key, value) : cmdWLabels
+    return value
+      ? `${cmdWLabels} --label ${buildLabel(label, key, value, tap || context)}`.trim()
+      : cmdWLabels
 
   }, dockerCmd)
 
@@ -79,13 +90,12 @@ const buildDefaultLabels = (dockerCmd, context, tap) => {
  * @returns {string} - Docker command with labels added
  */
 const getBuildLabels = (globalConfig, { dockerCmd='', labels, context, tap }) => {
-  const addLabels = getLabelsToAdd(labels)
+  const cmdWLabels = buildDefaultLabels(dockerCmd, context, tap)
 
-  dockerCmd = isArr(addLabels)
-    ? buildLabel(dockerCmd, addLabels)
-    : dockerCmd
+  return labels
+    ? `${cmdWLabels} ${buildCustomLabels(labels)}`
+    : cmdWLabels
 
-  return buildDefaultLabels(dockerCmd, context, tap)
 }
 
 module.exports = {

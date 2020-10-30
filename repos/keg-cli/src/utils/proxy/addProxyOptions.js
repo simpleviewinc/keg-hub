@@ -59,11 +59,12 @@ const addProxyOptions = (opts=[], { contextEnvs }, { tag, image }, network) => {
     const envKey = item[0]
     const label = item[item.length -1] 
     opts.push(
+      `--label ` +
       buildLabel(
-        '',
-        [label.replace('{{ params.context }}', proxyContext)],
+        label,
         envKey,
-        envKey === 'KEG_PROXY_HOST' ? proxyHost : proxyEnvs[envKey]
+        envKey === 'KEG_PROXY_HOST' ? proxyHost : proxyEnvs[envKey],
+        proxyContext
       )
     )
   })
