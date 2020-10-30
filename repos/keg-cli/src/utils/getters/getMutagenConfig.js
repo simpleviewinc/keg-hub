@@ -39,7 +39,7 @@ const parseOptions = options => {
  *
  * @returns {Object} - Loaded mutagen config file
  */
-const getMutagenConfig = (params) => {
+const getMutagenConfig = async params => {
   const { context, options, configPath, __injected, overrides={} } = params
 
   try {
