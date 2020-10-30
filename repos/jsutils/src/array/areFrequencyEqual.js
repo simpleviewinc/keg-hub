@@ -48,6 +48,7 @@ export const areFrequencyEqual = (arr, otherArr) => {
   const [ valid ] = validate({ arr, otherArr }, { $default: isArr })
   if (!valid) return null
 
+  if (arr === otherArr) return true
   if (arr.length !== otherArr.length) return false
 
   const arrCounts = buildElementCountMap(arr)

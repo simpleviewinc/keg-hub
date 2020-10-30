@@ -15,6 +15,8 @@ export const areSetEqual = (arr, otherArr) => {
   const [ valid ] = validate({ arr, otherArr }, { $default: isArr })
   if (!valid) return null
 
+  if (arr === otherArr) return true
+
   const longest = arr.length > otherArr.length
     ? arr
     : otherArr
