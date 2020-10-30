@@ -46,16 +46,15 @@ const getProxyEnvs = contextEnvs => {
  * @returns {Array} - opts array with the keg-proxy labels added
  */
 const addProxyOptions = (opts=[], { contextEnvs }, { tag, image, context }, network) => {
-  const proxyRef = (context || image)
+  const proxyRef = (context || image || tag)
     .replace(/keg-/g, '')
     .replace(/tap-/g, '')
-    .replace(/-/g, '')
-  
+
   const proxyEnvs = getProxyEnvs(contextEnvs)
   const proxyHost = getProxyHost(
     proxyEnvs.KEG_PROXY_HOST || '',
     proxyRef,
-    tag
+    proxyRef !== tag ? tag : ''
   )
 
   proxyLabels.map(item => {

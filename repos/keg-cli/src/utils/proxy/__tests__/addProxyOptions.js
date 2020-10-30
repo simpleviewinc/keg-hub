@@ -73,7 +73,7 @@ describe('addProxyOptions', () => {
     }
     const resp = addProxyOptions(optArgs.pop(), containerContext, parsed)
     const hostLabel = resp[2]
-    expect(hostLabel).toBe('--label traefik.http.routers.test-core.rule=Host(`custom.proxy.host.com`)')
+    expect(hostLabel).toBe('--label traefik.http.routers.core.rule=Host(`custom.proxy.host.com`)')
   })
 
   it('Should override the default network with the passed in option', async () => {

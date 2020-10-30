@@ -212,24 +212,24 @@ const dockerProxyOpts = {
   core: [
     '--option-core',
     '--label traefik.enable=true',
-    '--label traefik.http.routers.test-core.rule=Host(`core-test-core.local.kegdev.xyz`)',
-    '--label traefik.http.services.test-core.loadbalancer.server.port=19006',
-    '--label traefik.http.routers.test-core.entrypoints=keg',
+    '--label traefik.http.routers.core.rule=Host(`core-test-core.local.kegdev.xyz`)',
+    '--label traefik.http.services.core.loadbalancer.server.port=19006',
+    '--label traefik.http.routers.core.entrypoints=keg',
     '--network keg-hub-net'
   ],
   components: [
     '--label traefik.enable=true',
-    '--label traefik.http.routers.test-components.rule=Host(`components-test-components.local.kegdev.xyz`)',
-    '--label traefik.http.services.test-components.loadbalancer.server.port=60710',
-    '--label traefik.http.routers.test-components.entrypoints=keg',
+    '--label traefik.http.routers.components.rule=Host(`components-test-components.local.kegdev.xyz`)',
+    '--label traefik.http.services.components.loadbalancer.server.port=60710',
+    '--label traefik.http.routers.components.entrypoints=keg',
     '--network keg-hub-net'
   ],
   tap: [
     '--option-tap',
     '--label traefik.enable=true',
-    '--label traefik.http.routers.test-tap.rule=Host(`tap-test-tap.local.kegdev.xyz`)',
-    '--label traefik.http.services.test-tap.loadbalancer.server.port=19006',
-    '--label traefik.http.routers.test-tap.entrypoints=keg',
+    '--label traefik.http.routers.tap.rule=Host(`tap-test-tap.local.kegdev.xyz`)',
+    '--label traefik.http.services.tap.loadbalancer.server.port=19006',
+    '--label traefik.http.routers.tap.entrypoints=keg',
     '--network keg-hub-net'
   ]
 }
