@@ -46,6 +46,8 @@ const buildContextEnvs = async (args) => {
     // Get any params that should be converted into ENVs passed to docker
     ...convertParamsToEnvs(params),
 
+    // Set the project name to allow linking services if needed
+    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME || cmdContext,
   }
 
 }
