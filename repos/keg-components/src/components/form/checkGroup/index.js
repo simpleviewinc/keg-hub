@@ -1,1 +1,1 @@
-export * from './checkGroup'
+export * from 'KegCheckGroup'

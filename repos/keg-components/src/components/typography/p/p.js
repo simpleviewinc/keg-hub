@@ -6,7 +6,7 @@ export const P = props => {
   return (
     <>
       <Paragraph {...props} />
-      {'\n'}
+      { '\n' }
     </>
   )
 }
