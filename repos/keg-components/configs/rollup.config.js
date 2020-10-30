@@ -74,8 +74,7 @@ const ignoreList = [
 
 const createObject = (dir, items=[]) => {
 
-  const copy = Array.from(items)
-  let obj = {}
+  const obj = {}
   console.log(items)
   items.forEach((item) => {
     const newPath = path.join(dir, item)
@@ -85,17 +84,18 @@ const createObject = (dir, items=[]) => {
     if (isDir) {
       const newItems = getFilesFromDir(newPath, ignoreList)
       const newObj = createObject(newPath, newItems)
-      obj = {
-        ...obj,
-        ...newObj
-      }
+      // append to the original object
+      Object.assign(obj, newObj)
     }
     else {
       // ex: button: 'src/components/button',
-      // take the index of that
+      // take the index file of that
       const indexPath = path.join(dir, 'index.js')
-      if (fs.existsSync(indexPath))
-        obj[item.replace('.js', '')] = indexPath
+      fs.existsSync(indexPath) &&
+        Object.assign(obj, {
+          [item.replace('.js', '')]: indexPath
+        })        
+        // obj[item.replace('.js', '')] = indexPath
     }
 
   })
@@ -104,29 +104,19 @@ const createObject = (dir, items=[]) => {
 }
 const getFiles = (rootDir) => {
   const rootArr = getFilesFromDir(rootDir, [...ignoreList, 'index.js'])
-  console.log(rootArr)
+  console.log(rootArr, 'root dirs')
 
-  
-  // const inputs = {}
+  const inputs = {}
   rootArr.forEach((val) => {
     
     if (!parentFolders.includes(val)) return
     // parentList will always be a folder structure - TODO account for files
     const newPath = path.join(rootDir, val)
     const newList = getFilesFromDir(newPath, ignoreList)
-    const ab = createObject(newPath, newList)
-    console.log(ab)
-    // console.log(path.join(rootDir, val))
-    // const childFiles = !val.endsWith('.js') && getFilesFromDir(path.join(rootDir, val), ignoreList)
-    // console.log(childFiles)
-    // childFiles && childFiles.forEach(file => {
-    //   inputs[file.replace('.js', '')] = path.join(rootDir, val, file)
-    // })
-    // console.log(childFiles)
+    Object.assign(inputs, createObject(newPath, newList))
   })
-  // return inputs
-  // for each one that is not a .js file
-  // return checkFilesAndChildren(componentsArr, rootDir)
+
+  return inputs
 }
 
 // TODO:
@@ -136,10 +126,11 @@ const getFiles = (rootDir) => {
  * put any files that has a web and native counterpart in a folder so the alias plugin can pick it up
  */
 const files = getFiles('./src')
-console.log(files)
+console.log(files,'files')
 const inputs = {
   svgIcons: 'src/assets/icons/svgIcon',
-  ...files
+  ...files,
+  index: 'src/index.js' // testing
 }
 
 const shared = {
@@ -193,12 +184,14 @@ export default Array
       input: inputs,//`./src/index.js`,
       output: [
         {
-          dir: `./build/cjs/kegComponents${ext}`,
+          dir: `./build/esm/${platform}`,
+          // dir: `./build/cjs/kegComponents${ext}`,
           format: 'cjs',
           sourcemap: true
         },
         {
-          dir: `./build/esm/kegComponents${ext}`,
+          dir: `./build/esm/${platform}`,
+          // dir: `./build/esm/kegComponents${ext}`,
           format: 'esm',
           sourcemap: true
         },
