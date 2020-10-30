@@ -62,6 +62,3 @@ env:
   VERSION: "0.0.1"
   CONTAINER_NAME: "keg-core"
   CHOKIDAR_USEPOLLING: 1
-
-  # --- Override the default progress output for expo-webpack in keg-core --- #
-  KEG_CORE_PROGRESS: true

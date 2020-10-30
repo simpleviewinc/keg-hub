@@ -1,6 +1,5 @@
 const path = require('path')
 const { Logger } = require('../libs/logger')
-const { tryCatch } = require('../utils/helpers/tryCatch')
 const { copyFileSync, loadENV } = require('../libs/fileSys')
 const { CLI_ROOT, GLOBAL_CONFIG_FOLDER, DEFAULT_ENV } = require('../constants')
 
@@ -45,27 +44,24 @@ const getDefaultENVs = cliRootDir => {
   const globalDefEnv = path.join(GLOBAL_CONFIG_FOLDER, '/', DEFAULT_ENV)
 
   // Try to load the default envs
-  tryCatch(
-    () => {
-      __DEFAULT_ENVS = {
-        // Join the local cli default envs with the users global envs
-        // This ensures all needed envs get loaded
-        ...loadENV({ envPath: cliDefaultEnvs }),
-        // Add the users global envs last to ensure they override the cli defaults
-        ...loadENV({ envPath: globalDefEnv })
-      }
-    },
-    err => {
-      // Log the error when no ENVs can be loaded
-      noENVLog(err)
-
-      // Copy the local default.env file to the global defaults env directory
-      copyFileSync(cliDefaultEnvs, globalDefEnv)
-
-      // Load the default envs
-      __DEFAULT_ENVS = loadENV({ envPath: globalDefEnv })
+  try {
+    __DEFAULT_ENVS = {
+      // Join the local cli default envs with the users global envs
+      // This ensures all needed envs get loaded
+      ...loadENV({ envPath: cliDefaultEnvs }),
+      // Add the users global envs last to ensure they override the cli defaults
+      ...loadENV({ envPath: globalDefEnv })
     }
-  )
+
+  }
+  catch(err){
+    // Log the error when no ENVs can be loaded
+    noENVLog(err)
+    // Copy the local default.env file to the global defaults env directory
+    copyFileSync(cliDefaultEnvs, globalDefEnv)
+    // Load the default envs
+    __DEFAULT_ENVS = loadENV({ envPath: globalDefEnv })
+  }
 
   return __DEFAULT_ENVS
 

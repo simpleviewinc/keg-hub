@@ -42,7 +42,6 @@ services:
       - KEG_IMAGE_FROM
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
-      - KEG_CORE_PROGRESS
       - KEG_NM_INSTALL
       - NODE_ENV
       - PUBLIC_GIT_KEY

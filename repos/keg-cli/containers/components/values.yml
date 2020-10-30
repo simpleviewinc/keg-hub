@@ -34,9 +34,8 @@ env:
   # This allows mutagen to know where to sync the local version of the dependency
   DOC_RETHEME_PATH: /keg/keg-components/node_modules/@keg-hub/re-theme
   DOC_JSUTILS_PATH: /keg/keg-components/node_modules/@keg-hub/jsutils
-  
-  # Define the yarn command to run inside of the docker container
-  # KEG_EXEC_CMD: start
+
+  KEG_EXEC_CMD: sb
 
   # --- KEG-PROXY ENVs --- #
 

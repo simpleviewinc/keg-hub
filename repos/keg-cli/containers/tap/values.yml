@@ -41,6 +41,7 @@ env:
 
   # Allow access to expo dev tools within the docker container
   EXPO_DEVTOOLS_LISTEN_ADDRESS: 0.0.0.0
+  KEG_EXEC_CMD: tap:start
 
   # --- KEG-PROXY ENVs --- #
 
