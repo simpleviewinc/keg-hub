@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./addProxyOptions'),
   ...require('./generateComposeLabels'),
-  ...require('./getProxyDomain'),
+  ...require('./getProxyDomainFromBranch'),
+  ...require('./getProxyDomainFromLabel'),
 }

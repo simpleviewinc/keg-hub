@@ -3,7 +3,7 @@ const { injectedTest } = require('KegMocks/injected/injectedTest')
 const { DOCKER } = require('KegConst/docker')
 const { isStr } = require('@keg-hub/jsutils')
 const kegFileSys = require('KegFileSys/fileSys')
-const { removeInjected } = require('../removeInjected')
+const { removeInjectedCompose } = require('../removeInjectedCompose')
 
 const writeFileError = false
 const writeFileMock = jest.fn(data => {
@@ -55,8 +55,8 @@ describe('buildComposeCmd', () => {
   describe('cmd === up', () => {
 
     beforeEach(async () => {
-      await removeInjected(`keg-core`)
-      await removeInjected(`keg-components`)
+      await removeInjectedCompose(`keg-core`)
+      await removeInjectedCompose(`keg-components`)
     })
 
     it('Should build the correct docker-compose up command for keg-core', async () => {
@@ -121,8 +121,8 @@ describe('buildComposeCmd', () => {
   describe('cmd === down', () => {
 
     beforeEach(async () => {
-      await removeInjected(`keg-core`)
-      await removeInjected(`keg-components`)
+      await removeInjectedCompose(`keg-core`)
+      await removeInjectedCompose(`keg-components`)
     })
 
     it('Should build the correct docker-compose down command for keg-core', async () => {

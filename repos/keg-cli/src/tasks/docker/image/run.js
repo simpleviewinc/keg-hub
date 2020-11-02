@@ -3,8 +3,8 @@ const docker = require('KegDocCli')
 const { get } = require('@keg-hub/jsutils')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
+const { removeLabels } = require('KegUtils/docker/removeLabels')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
-const { addProxyOptions } = require('KegUtils/proxy/addProxyOptions')
 const { throwDupContainerName } = require('KegUtils/error/throwDupContainerName')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { IMAGE } = CONTAINER_PREFIXES
@@ -134,7 +134,8 @@ const runDockerImage = async args => {
   cleanup && opts.push(`--rm`)
   entry && opts.push(`--entrypoint ${ entry }`)
 
-  opts = addProxyOptions(opts, imageContext, { tag, image, context: imageContext.cmdContext }, network)
+  // Clear out the docker-compose labels, so it does not think it controls this container
+  opts = await removeLabels(image, 'com.docker.compose', opts)
 
   await docker.image.run({
     tag,

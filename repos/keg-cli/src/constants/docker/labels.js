@@ -39,6 +39,11 @@ const kegLabels = [
     'contextEnvs.KEG_DOCKER_FILE',
     'com.keg.path.docker=${KEG_DOCKER_FILE}'
   ],
+  [
+    'KEG_PROXY_DOMAIN',
+    'proxyDomain',
+    'com.keg.proxy.domain={{ proxyDomain }}'
+  ],
 ]
 
 const proxyLabels = [
@@ -61,7 +66,7 @@ const proxyLabels = [
     'KEG_PROXY_PORT',
     'contextEnvs.KEG_PROXY_PORT',
     'traefik.http.services.{{ proxyDomain }}.loadbalancer.server.port=${KEG_PROXY_PORT}'
-  ],
+  ]
 ]
 
 module.exports = {

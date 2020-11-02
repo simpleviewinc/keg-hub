@@ -2,8 +2,6 @@ const { KEG_ENVS } = require('KegConst/envs')
 const { kegLabels, proxyLabels } = require('KegConst/docker/labels')
 const { get, eitherArr } = require('@keg-hub/jsutils')
 const { fillTemplate } = require('KegUtils/template')
-const { getProxyHost } = require('./getProxyHost')
-const { buildLabel } = require('KegUtils/helpers/buildLabel')
 
 /**
  * Build the host url label used by keg-proxy
@@ -18,9 +16,8 @@ const buildProxyHost = (data, labelData) => {
 
   const proxyHost = get(data, `contextEnvs.${key}`, get(data, valuePath, KEG_ENVS.KEG_PROXY_HOST))
   const subDomain = get(data, 'proxyDomain', get(data, 'image'))
-  const value = getProxyHost(proxyHost, subDomain)
 
-  return fillTemplate({ template: label, data: { ...data, [key]: value }})
+  return fillTemplate({ template: label, data: { ...data, [key]: `${subDomain}.${proxyHost}` }})
 
 }
 

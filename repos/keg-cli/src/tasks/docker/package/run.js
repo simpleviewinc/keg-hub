@@ -4,11 +4,20 @@ const { pathExists } = require('KegFileSys')
 const { DOCKER } = require('KegConst/docker')
 const { isUrl, get } = require('@keg-hub/jsutils')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
-const { addProxyOptions } = require('KegUtils/proxy/addProxyOptions')
+const { removeLabels } = require('KegUtils/docker/removeLabels')
+const { checkContainerExists } = require('KegUtils/docker/checkContainerExists')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
-const proxyLabelPort = 'traefik.http.services.herkin.loadbalancer.server.port'
+
+
+const checkForExistingContainers = async (parsed, containerName, context, args) => {
+  const containerImage = await checkContainerExists(parsed.image, context, args)
+  const containerWithTag = !containerImage && await checkContainerExists(`${parsed.image}-${parsed.tag}`, context, args)
+  const containerByName = !containerWithTag && await checkContainerExists(containerName, context, args)
+
+  return containerImage || containerWithTag || containerByName
+}
 
 /**
  * Builds a docker container so it can be run
@@ -58,6 +67,16 @@ const dockerPackageRun = async args => {
   const parsed = parsePackageUrl(packageUrl)
   const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
   const imageTaggedName = `${parsed.image}:${parsed.tag}`
+
+  /*
+  * ----------- Step 1.1 ----------- *
+  * Check if the container already exists, and if it should be removed!
+  */
+  const containerExists = await checkForExistingContainers(parsed, containerName, parsed.image, args)
+  if(containerExists)
+    return Logger.highlight(`Exiting task because container`, `"${containerExists}"`, `is still running!\n`)
+
+
   /*
   * ----------- Step 2 ----------- *
   * Pull the image from the provider and tag it
@@ -89,57 +108,14 @@ const dockerPackageRun = async args => {
   let opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
   opts.push(`--network ${network || contextEnvs.KEG_DOCKER_NETWORK || DOCKER.KEG_DOCKER_NETWORK }`)
-
-
-  /*
-  * ----------- Step 4.1 ----------- *
-  * Parse the image labels looking for docker-compose or traefik labels
-  * Update the traefik host label to use the branch
-  * Clear out the docker-compose labels, so it does not think it controls this container
-  */
-  const imgInspect = await docker.image.inspect({ image: id || parsed.image })
-  const imgLabels = get(imgInspect, 'Config.Labels', {})
-
-  let labelContext = cmdContext
-  Object.entries(imgLabels).map(([ key, value ]) => {
-    if(!key.includes('traefik') && !key.includes('com.docker.compose')) return
-
-    if(key.includes('com.docker.compose')) opts.push(`--label ${key}`)
-
-    if(key.includes('traefik.http.routers') && value.includes('Host(')){
-      labelContext = key.split('.rule')[0].replace('traefik.http.routers.', '')
-      opts.push(`--label ${key}=${value.replace(labelContext, (labelContext || parsed.image) + '-' + parsed.tag)}`)
-    }
-
-  })
-
-  // Commenting out for now until the label issue can be resolved
-  // Currently the labels of the image are saved with the image
-  // So they reused when the image is run again at a later time
-  // Which means we can't define custom labels here
-  // If we to define more then one router on a container,
-  // Traefic kills all routing for both routers, and the container can not be accessed
-  // 
-  // To fix me need to modify the image before it's packaged, and remove the labels from it
-  // This will then allow us to define our own labels when it's run at a later time
-
-  // const port = imgInspect && imgInspect.Config.Labels[proxyLabelPort]
-  // const imgInspect = await docker.image.inspect({ image: id || parsed.image })
-  // const port = imgInspect && imgInspect.Config.Labels[proxyLabelPort]
-  // opts = addProxyOptions(
-  //   opts,
-  //   { contextEnvs: { ...containerContext.contextEnvs, KEG_PROXY_PORT: port } },
-  //   { ...parsed, context: cmdContext },
-  //   network
-  // )
-  
-  
-  const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
+  // Clear out the docker-compose labels, so it does not think it controls this container
+  opts = await removeLabels(id || parsed.image, 'com.docker.compose', opts)
 
   /*
   * ----------- Step 5 ----------- *
   * Run the docker image as a container
   */
+  const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
   try {
     await docker.image.run({
       ...parsed,

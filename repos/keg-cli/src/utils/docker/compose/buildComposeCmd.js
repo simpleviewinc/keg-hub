@@ -45,25 +45,27 @@ const writeInjectedCompose = async (injectedCompose, data) => {
 const addInjectedTemplate = async (dockerCmd, data={}) => {
   const composeData = await getComposeContextData(data)
 
+  // Build the path of the injected compose file, based on the proxyDomain ( app name + git branch name )
+  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.proxyDomain}.yml`)
+  const dockCmdWithCompose = `${dockerCmd} -f ${injectedCompose}`
+
+  // Check if it already exists, and if it does, then just return
+  // Don't auto remove the inject compose file
+  const [ err, exists ] = await pathExists(injectedCompose)
+  if(exists) return dockCmdWithCompose
+
   if(!composeData || !composeData.image){
     Logger.warn(`Could not build injected compose file. Invalid composeDate object, missing image or proxyDomain!`, composeData)
     return dockerCmd
   }
 
-  // Build the path of the injected compose file, based on the proxyDomain ( app name + git branch name )
-  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.proxyDomain}.yml`)
-
-  // Join the composeData and the generated labels together
-  const templateArgs = {
+  // Join the composeData and the generated labels together, and write the injected compose file
+  await writeInjectedCompose(injectedCompose, {
     ...composeData,
     generatedLabels: generateComposeLabels({ ...data, ...composeData })
-  }
+  })
 
-  // Don't auto remove the inject compose file
-  const [ err, exists ] = await pathExists(injectedCompose)
-  !exists && await writeInjectedCompose(injectedCompose, templateArgs)
-
-  return `${dockerCmd} -f ${injectedCompose}`
+  return dockCmdWithCompose
 }
 
 /**

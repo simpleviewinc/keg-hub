@@ -1,5 +1,4 @@
 const { get } = require('@keg-hub/jsutils')
-const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { runInternalTask } = require('../task/runInternalTask')
 const { getServiceArgs } = require('./getServiceArgs')

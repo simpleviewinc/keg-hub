@@ -4,5 +4,5 @@ module.exports = {
   ...require('./checkKillRunning'),
   ...require('./getComposeConfig'),
   ...require('./loadComposeConfig'),
-  ...require('./removeInjected'),
+  ...require('./removeInjectedCompose'),
 }

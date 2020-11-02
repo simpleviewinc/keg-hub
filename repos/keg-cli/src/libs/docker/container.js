@@ -11,7 +11,6 @@ const { isArr, toStr, isStr, deepMerge, checkCall } = require('@keg-hub/jsutils'
 
 // Container commands the require an item argument of the container id or name
 const containerItemCmds = [
-  'inspect',
   'kill',
   'logs',
   'pause',
@@ -88,6 +87,26 @@ const clean = async args => {
     [ 'rm' ].concat(stopped)
   )
 
+}
+
+/**
+ * Calls docker container inspect, on the passed in item container reference
+ * @function
+ * @param {Object} args - Arguments used to modify the docker api call
+ * @param {string} args.item - Container reference
+ * @param {string} args.container - Container reference
+ * @param {string} args.containerRef - Container reference
+ * @param {string} args.format - Format of the docker command output
+ *
+ * @returns {*} - Response from the docker command
+ */
+const inspect = async ({ item, container, containerRef, ...cmdArgs }) => {
+  const toInspect = item || container || containerRef
+  if(!toInspect && !cmdArgs.skipError) return noItemError(`docker.container.inspect`, true)
+
+  const res = await runDockerCmd({ format: 'json', ...cmdArgs }, ['inspect', toInspect])
+
+  return isArr(res) ? res[0] : res
 }
 
 /**
@@ -354,6 +373,7 @@ Object.assign(container, {
   exec,
   exists,
   get,
+  inspect,
   list,
   remove: removeContainer,
   port,

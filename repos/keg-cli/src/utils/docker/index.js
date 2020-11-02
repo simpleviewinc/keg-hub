@@ -3,6 +3,7 @@ module.exports = {
   ...require('./buildProviderUrl'),
   ...require('./buildDockerCmd'),
   ...require('./buildExecParams'),
+  ...require('./checkContainerExists'),
   ...require('./compose'),
   ...require('./containerSelect'),
   ...require('./checkRunningContainers'),
@@ -17,4 +18,5 @@ module.exports = {
   ...require('./imageSelect'),
   ...require('./isDockerId'),
   ...require('./mountSocket'),
+  ...require('./removeLabels'),
 }
