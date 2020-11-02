@@ -40,17 +40,17 @@ describe('generateComposeLabels', () => {
   afterAll(() => jest.resetAllMocks())
 
   it('It generate the correct labels for keg-core', async () => {
-    const labels = generateComposeLabels('', args.core)
+    const labels = generateComposeLabels(args.core)
     expect(labels).toEqual(generatedLabels.core)
   })
 
   it('It generate the correct labels for keg-components', async () => {
-    const labels = generateComposeLabels('', args.components)
+    const labels = generateComposeLabels(args.components)
     expect(labels).toEqual(generatedLabels.components)
   })
 
   it('It generate the correct labels for injected apps', async () => {
-    const labels = generateComposeLabels('', args.injected)
+    const labels = generateComposeLabels(args.injected)
     expect(labels).toEqual(generatedLabels.injected)
   })
 

@@ -6,53 +6,14 @@ const { generateComposeLabels } = require('KegUtils/proxy/generateComposeLabels'
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error/generalError')
 const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
-
+const { Logger } = require('KegLog')
+const { getComposeContextData } = require('./getComposeContextData')
 const { CONTAINERS } = DOCKER
 
 const composeArgs = {
   clean: '--force-rm',
   cache: '--no-cache',
   pull: '--pull'
-}
-
-/**
- * Builds context data needed to create the injected docker-compose file
- * @function
- * @param {Object} data - Data to fill the compose template with
- *
- * @returns {Object} - Build compose context data
- */
-const getComposeContextData = data => {
-  const composeContext = {}
-
-  // The the docker image name for the service being started
-  composeContext.image = get(
-    data,
-    `params.__injected.image`,
-    get(data, `contextEnvs.IMAGE`)
-  )
-
-  // Get the root path where the docker container should be built from
-  composeContext.buildContextPath = get(
-    data,
-    `params.__injected.injectPath`,
-    get(data, `contextEnvs.KEG_CONTEXT_PATH`, '${KEG_CONTEXT_PATH}')
-  )
-
-  // Get the path to the Dockerfile
-  composeContext.dockerPath = get(
-    data,
-    `params.__injected.dockerPath`,
-    get(data, `contextEnvs.KEG_DOCKER_FILE`, '${KEG_DOCKER_FILE}')
-  )
-
-  // Get the shared docker network
-  composeContext.dockerNetwork = get(
-    data, `contextEnvs.KEG_DOCKER_NETWORK`,
-    get(DOCKER, `KEG_DOCKER_NETWORK`, '${KEG_DOCKER_NETWORK}')
-  )
-
-  return composeContext
 }
 
 /**
@@ -82,18 +43,20 @@ const writeInjectedCompose = async (injectedCompose, data) => {
  * @returns {string} - Filled docker-compose.yml template file
  */
 const addInjectedTemplate = async (dockerCmd, data={}) => {
-  const composeData = getComposeContextData(data)
-  if(!composeData || !composeData.image) return dockerCmd
+  const composeData = await getComposeContextData(data)
 
-  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.image}.yml`)
+  if(!composeData || !composeData.image){
+    Logger.warn(`Could not build injected compose file. Invalid composeDate object, missing image or proxyDomain!`, composeData)
+    return dockerCmd
+  }
 
-  // Flatten the data so it can be accessed at a single consistent level
+  // Build the path of the injected compose file, based on the proxyDomain ( app name + git branch name )
+  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.proxyDomain}.yml`)
+
+  // Join the composeData and the generated labels together
   const templateArgs = {
-    ...data,
-    ...data.params,
-    ...data.params.__injected,
     ...composeData,
-    generatedLabels: generateComposeLabels('', data)
+    generatedLabels: generateComposeLabels({ ...data, ...composeData })
   }
 
   // Don't auto remove the inject compose file
