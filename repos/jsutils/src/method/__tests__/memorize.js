@@ -1,5 +1,3 @@
-const { isArr } = require('../../array/isArr')
-const { isStr } = require('../../string/isStr')
 const Method = require('../')
 
 describe('memorize', () => {
@@ -19,67 +17,109 @@ describe('memorize', () => {
   it('should call the getCacheKey function if its passed as a function', () => {
     const func = data => { return data }
     const key = 'test'
-    const getKey = jest.fn(() => key)
-    const memo = Method.memorize(func, getKey)
+    const getCacheKey = jest.fn(() => key)
+    const memo = Method.memorize(func, { getCacheKey })
 
     memo()
 
-    expect(getKey).toHaveBeenCalled()
+    expect(getCacheKey).toHaveBeenCalled()
 
     memo.destroy()
 
   })
 
   it('should return the last response and not call the passed in method', () => {
-    const func = jest.fn(data => { return data })
     const key = 'test'
-    const getKey = jest.fn(() => key)
-    const memo = Method.memorize(func, getKey)
+    const getCacheKey = jest.fn(() => key)
 
-    expect(memo('test')).toBe(memo('test'))
-    
-    expect(func).toHaveBeenCalledTimes(1)
-    
+    ;[ getCacheKey, null ].map(getCacheKey => {
+      const func = jest.fn(data => { return data })
+      const memo = Method.memorize(func, { getCacheKey })
+      expect(memo('test')).toBe(memo('test'))
+      expect(func).toHaveBeenCalledTimes(1)
+      memo.destroy()
+    })
+  })
+
+  it ('should memoize empty args', () => {
+    const func = jest.fn(() => 1)
+    const memo = Method.memorize(func)
+    expect(memo()).toEqual(1)
+    expect(memo()).toEqual(1)
+    expect(func).toBeCalledTimes(1)
+  })
+
+  it ('should work with reference-types, by default', () => {
+      const func = jest.fn((...args) => { return args })
+      const memo = Method.memorize(func)
+      const input = [
+        { a: 1 },
+        [ 1, 2, 3 ]
+      ]
+      expect(memo(...input)).toBe(memo(...input))
+
+      expect(func).toHaveBeenCalledTimes(1)
+
+      memo.destroy()
+  })
+
+  it ('should memoize all arguments, by default', () => {
+    const func = jest.fn((...args) => args)
+    const memo = Method.memorize(func)
+
+    const input = [ 1, 'hello' ]
+    const otherInput = [ 1 ]
+
+    expect(memo(...input)).toEqual(input)
+    expect(memo(...otherInput)).toEqual(otherInput)
+    expect(func).toHaveBeenCalledTimes(2)
+    expect(
+      memo(...input)
+    ).not.toBe(memo(...otherInput))
+
     memo.destroy()
-
   })
 
   it('should return a function with cache object added to it', () => {
-
-    const func = jest.fn(data => { return data })
     const key = 'test'
-    const getKey = jest.fn(() => key)
-    const memo = Method.memorize(func, getKey)
+    const getCacheKey = jest.fn(() => key)
 
-    memo('test')
+    ;[ getCacheKey, null ].map(getCacheKey => {
+      const func = jest.fn(data => { return data })
+      const memo = Method.memorize(func, { getCacheKey })
 
-    expect(typeof memo.cache).toBe('object')
+      memo('test')
 
-    memo.destroy()
+      expect(typeof memo.cache).toBe('object')
+
+      memo.destroy()
+    })
 
   })
 
   it('should set the response to the memorize cache', () => {
 
-    const func = jest.fn(data => { return data })
     const key = 'test'
-    const getKey = jest.fn(() => key)
-    const memo = Method.memorize(func, getKey)
+    const getCacheKey = jest.fn(() => key)
 
-    const resp = memo('test')
-    
-    expect(memo.cache[key]).toBe(resp)
+    ;[ getCacheKey, null ].map(getCacheKey => {
+      const func = jest.fn(data => { return data })
+      const memo = Method.memorize(func, { getCacheKey })
 
-    memo.destroy()
+      const resp = memo('test')
+      
+      expect(memo.cache.get([key])).toBe(resp)
 
+      memo.destroy()
+    })
   })
 
   it('should return a function with destroy function added to it', () => {
 
     const func = jest.fn(data => { return data })
     const key = 'test'
-    const getKey = jest.fn(() => key)
-    const memo = Method.memorize(func, getKey)
+    const getCacheKey = jest.fn(() => key)
+    const memo = Method.memorize(func, { getCacheKey })
 
     memo('test')
 
@@ -93,12 +133,12 @@ describe('memorize', () => {
 
     const func = jest.fn(data => { return data })
     const key = 'test'
-    const getKey = jest.fn(() => key)
-    const memo = Method.memorize(func, getKey)
+    const getCacheKey = jest.fn(() => key)
+    const memo = Method.memorize(func, { getCacheKey })
 
     const resp = memo('test')
 
-    expect(typeof getKey).toBe('function')
+    expect(typeof getCacheKey).toBe('function')
 
     memo.destroy()
 
@@ -107,63 +147,58 @@ describe('memorize', () => {
 
   })
 
-  it('should reset cache after the limit has been reached', () => {
+  it('should have no limit by default', () => {
 
     let count = 0
     const func = jest.fn(data => { return count++ })
-    const getKey = jest.fn(() => count)
-    const memo = Method.memorize(func, getKey)
+    const memo = Method.memorize(func)
 
     const respFoo = memo('foo')
-    expect(memo.cache[0]).toBe(respFoo)
+    expect(memo.cache.get(['foo'])).toBe(respFoo)
 
     const respBar = memo('bar')
-    expect(memo.cache[0]).toBe(undefined)
-    expect(memo.cache[1]).toBe(respBar)
+    expect(memo.cache.get(['foo'])).toBe(respFoo)
+    expect(memo.cache.get(['bar'])).toBe(respBar)
 
     memo.destroy()
-
   })
 
-
-  it('should change the limit based on the third passed in parameter', () => {
+  it('should change the limit based on the limit option', () => {
 
     let count = 0
-    const func = jest.fn(data => { return count++ })
-    const getKey = jest.fn(() => count)
-    const memo = Method.memorize(func, getKey, 2)
+    const func = jest.fn(_ => { return count++ })
+    const memo = Method.memorize(func, { limit: 2 })
 
     const respFoo = memo('foo')
     const respBar = memo('bar')
 
-    expect(memo.cache[0]).toBe(respFoo)
-    expect(memo.cache[1]).toBe(respBar)
+    expect(memo.cache.get(['foo'])).toBe(respFoo)
+    expect(memo.cache.get(['bar'])).toBe(respBar)
 
     const respBaz = memo('baz')
 
-    expect(memo.cache[0]).toBe(undefined)
-    expect(memo.cache[1]).toBe(undefined)
-    expect(memo.cache[2]).toBe(respBaz)
+    expect(memo.cache.get(['foo'])).toBe(undefined)
+    expect(memo.cache.get(['bar'])).toBe(undefined)
+    expect(memo.cache.get(['baz'])).toBe(respBaz)
 
     memo.destroy()
 
   })
 
 
-  it('should NOT change the limit if the third parameter is not a number', () => {
+  it('should have no limit if the limit option is not a number', () => {
 
     let count = 0
     const func = jest.fn(data => { return count++ })
-    const getKey = jest.fn(() => count)
-    const memo = Method.memorize(func, getKey, 'test')
+    const memo = Method.memorize(func, { limit: 'test: not a number!' })
 
     const respFoo = memo('foo')
-    expect(memo.cache[0]).toBe(respFoo)
+    expect(memo.cache.get(['foo'])).toBe(respFoo)
 
     const respBar = memo('bar')
 
-    expect(memo.cache[0]).toBe(undefined)
-    expect(memo.cache[1]).toBe(respBar)
+    expect(memo.cache.get(['foo'])).toBe(respFoo)
+    expect(memo.cache.get(['bar'])).toBe(respBar)
 
     memo.destroy()
 
