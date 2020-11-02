@@ -41,5 +41,4 @@ services:
       - 8082:8082
       - 8083:8083
       - 60710:60710
-    volumes:
-      - ${KEG_CONFIG_PATH}:/keg/.kegConfig
+

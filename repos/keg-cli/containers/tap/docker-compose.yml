@@ -2,8 +2,6 @@ version: "3.8"
 services:
   tap:
     privileged: true
-    volumes:
-      - ${CLI_PATH}:${DOC_CLI_PATH}
     build:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
