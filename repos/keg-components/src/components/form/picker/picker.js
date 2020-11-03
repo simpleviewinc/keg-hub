@@ -16,7 +16,7 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 
-export default class ModalPicker extends Component {
+export class ModalPicker extends Component {
   constructor(props) {
     super(props)
     this.state = { modalVisible: false }

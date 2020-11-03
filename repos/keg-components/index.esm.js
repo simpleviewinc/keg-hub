@@ -1,1 +1,1 @@
-export * from './kegComponents'
+export * from './web'
