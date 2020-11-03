@@ -1,13 +1,13 @@
 const path = require('path')
-const { get, exists } = require('@keg-hub/jsutils')
+const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
+const { get, exists } = require('@keg-hub/jsutils')
 const { loadTemplate } = require('KegUtils/template')
-const { generateComposeLabels } = require('KegUtils/proxy/generateComposeLabels')
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error/generalError')
-const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
-const { Logger } = require('KegLog')
 const { getComposeContextData } = require('./getComposeContextData')
+const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
+const { generateComposeLabels } = require('KegUtils/proxy/generateComposeLabels')
 const { CONTAINERS } = DOCKER
 
 const composeArgs = {

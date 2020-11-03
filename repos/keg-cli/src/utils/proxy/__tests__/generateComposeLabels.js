@@ -12,6 +12,7 @@ const args = {
       image: 'keg-core',
     },
     cmd: 'up',
+    proxyDomain: 'core',
     cmdContext: 'core',
     contextEnvs: {
       ...DOCKER.CONTAINERS.CORE.ENV,
@@ -24,6 +25,7 @@ const args = {
       image: 'keg-components',
     },
     cmd: 'up',
+    proxyDomain: 'components',
     cmdContext: 'components',
     contextEnvs: {
       ...DOCKER.CONTAINERS.COMPONENTS.ENV,
@@ -31,6 +33,7 @@ const args = {
   },
   injected: {
     globalConfig,
+    proxyDomain: 'injected',
     ...injectedTest
   }
 }

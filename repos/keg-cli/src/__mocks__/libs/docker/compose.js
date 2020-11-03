@@ -17,19 +17,22 @@ const kegShared = `      - com.keg.env.cmd=${asENV('KEG_EXEC_CMD')}
 
 const generatedLabels = {
   core: `      - traefik.enable=true
-${proxyLabels('core', 'core.local.kegdev.xyz')}
+${proxyLabels('core', 'core.${KEG_PROXY_HOST}')}
       - com.keg.env.context=keg-core
 ${kegShared}
+      - com.keg.proxy.domain=core
 `,
       components: `      - traefik.enable=true
-${proxyLabels('components', 'components.local.kegdev.xyz')}
+${proxyLabels('components', 'components.${KEG_PROXY_HOST}')}
       - com.keg.env.context=keg-components
 ${kegShared}
+      - com.keg.proxy.domain=components
 `,
       injected: `      - traefik.enable=true
-${proxyLabels('tap-injected-test', 'tap-injected-test.local.kegdev.xyz')}
+${proxyLabels('injected', 'injected.${KEG_PROXY_HOST}')}
       - com.keg.env.context=tap-injected-test
 ${kegShared}
+      - com.keg.proxy.domain=injected
 `
 }
 

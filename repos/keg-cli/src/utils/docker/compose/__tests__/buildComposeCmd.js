@@ -14,6 +14,14 @@ const writeFileMock = jest.fn(data => {
 
 jest.setMock('KegFileSys/fileSys', { ...kegFileSys, writeFile: writeFileMock })
 
+const getKegProxyDomainMock = jest.fn((data, contextEnvs) => {
+  return contextEnvs.IMAGE 
+})
+
+jest.setMock('../../../proxy/getKegProxyDomain', {  getKegProxyDomain: getKegProxyDomainMock })
+
+
+
 const args = {
   core: {
     globalConfig,
@@ -57,6 +65,7 @@ describe('buildComposeCmd', () => {
     beforeEach(async () => {
       await removeInjectedCompose(`keg-core`)
       await removeInjectedCompose(`keg-components`)
+      getKegProxyDomainMock.mockClear()
     })
 
     it('Should build the correct docker-compose up command for keg-core', async () => {
@@ -71,6 +80,7 @@ describe('buildComposeCmd', () => {
       expect(defaultFilePath.indexOf(`core/docker-compose.yml`) !== -1).toBe(true)
       expect(cmdArgs.indexOf('up')).not.toBe(-1)
       expect(cmdArgs.indexOf('--detach')).not.toBe(-1)
+      expect(getKegProxyDomainMock).toHaveBeenCalled()
 
     })
 
@@ -86,6 +96,7 @@ describe('buildComposeCmd', () => {
       expect(defaultFilePath.indexOf(`components/docker-compose.yml`) !== -1).toBe(true)
       expect(cmdArgs.indexOf('up')).not.toBe(-1)
       expect(cmdArgs.indexOf('--detach')).not.toBe(-1)
+      expect(getKegProxyDomainMock).toHaveBeenCalled()
 
     })
 
@@ -101,6 +112,7 @@ describe('buildComposeCmd', () => {
       expect(defaultFilePath.indexOf(`tap-injected-test/container/docker-compose.yml`) !== -1).toBe(true)
       expect(cmdArgs.indexOf('up')).not.toBe(-1)
       expect(cmdArgs.indexOf('--detach')).not.toBe(-1)
+      expect(getKegProxyDomainMock).toHaveBeenCalled()
 
     })
 
