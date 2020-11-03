@@ -1,5 +1,6 @@
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
+const { get } = require('@keg-hub/jsutils')
 const { buildComposeCmd } = require('KegUtils/docker/compose/buildComposeCmd')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { getProxyDomainFromLabel } = require('KegUtils/proxy/getProxyDomainFromLabel')
