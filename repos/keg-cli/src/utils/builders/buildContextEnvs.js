@@ -3,7 +3,6 @@ const { getSetting } = require('../globalConfig/getSetting')
 const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { convertParamsToEnvs } = require('../task/convertParamsToEnvs')
-const { getKegProxyDomain } = require('../proxy/getKegProxyDomain')
 
 /**
  * Builds the ENVs for the passed in cmdContext
@@ -22,7 +21,7 @@ const buildContextEnvs = async (args) => {
   const containerEnvs = getContainerConst(cmdContext, 'env', {})
 
   // Get the ENV vars for the command context and merge with any passed in envs
-  const contextEnvs = {
+  return {
 
     // Get the ENV context for the command
     ...containerEnvs,
@@ -50,13 +49,6 @@ const buildContextEnvs = async (args) => {
     // Set the project name to allow linking services if needed
     COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME || cmdContext,
   }
-
-  // Get the proxy domain for routing to the service
-  // For images it will look for an image label first
-  const proxyDomain = await getKegProxyDomain(args, contextEnvs)
-  proxyDomain && (contextEnvs.KEG_PROXY_DOMAIN = proxyDomain)
-
-  return contextEnvs
 
 }
 

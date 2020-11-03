@@ -51,10 +51,10 @@ const getDomainBranch = (params, contextEnvs, contextData) => {
  *
  * @returns {string} - The found proxyDomain
  */
-const getKegProxyDomain = ({ params, contextData }, contextEnvs) => {
+const getKegProxyDomain = ({ params={}, contextData={} }, contextEnvs) => {
   // If it has a rootId then we are geting the proxyDomain for a docker image
   // Of a docker image will have a rootId
-  return contextData.rootId
+  return contextData.rootId || contextData.id
     ? getDomainLabel(params, contextData)
     : getDomainBranch(params, contextEnvs, contextData)
 }

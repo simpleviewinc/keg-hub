@@ -22,7 +22,7 @@ const getProxyDomainFromBranch = async (contextName, contextPath) => {
 
   // Can't build the domain without a branch, so throw an error.
   // This means a git repo is required!
-  !branchName && throwNoGitBranch(composeContext.buildContextPath)
+  !branchName && throwNoGitBranch(contextPath)
 
   // If we have a branch name, join it with the app name and return
   return `${contextName}-${branchName}`

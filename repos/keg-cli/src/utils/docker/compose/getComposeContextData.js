@@ -1,6 +1,6 @@
 const { get } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
-
+const { getKegProxyDomain } = require('KegUtils/proxy/getKegProxyDomain')
 /**
  * Builds context data needed to create the injected docker-compose file
  * @function
@@ -43,7 +43,7 @@ const getComposeContextData = async data => {
     )
   )
 
-  composeContext.proxyDomain = get(data, `contextEnvs.KEG_PROXY_DOMAIN`, '${KEG_PROXY_DOMAIN}')
+  composeContext.proxyDomain = await getKegProxyDomain(data, data.contextEnvs)
 
   return composeContext
 }
