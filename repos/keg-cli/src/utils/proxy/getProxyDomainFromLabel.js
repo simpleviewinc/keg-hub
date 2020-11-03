@@ -12,7 +12,6 @@ const { get } = require('@keg-hub/jsutils')
  * @returns {string|false} - Found proxy domain if it exists or false
  */
 const getProxyDomainFromLabel = async (itemRef, type='container', logErr) => {
-  
   try {
     const item = CONTAINER_TO_CONTEXT[itemRef] || itemRef
     const itemInspect = await docker[type].inspect({ item, log: false, skipError: true })
