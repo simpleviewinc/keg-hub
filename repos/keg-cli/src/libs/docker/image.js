@@ -300,12 +300,14 @@ const getCmd = async ({ clean, ...args }) => {
  *
  * @returns {string|Object} - Docker image information
  */
-const inspect = async ({ envs, image, filter, format='json', location, parse=true }) => {
+const inspect = async ({ envs, image, item, filter, location, parse=true }) => {
+  const imageRef = image || item
+
   let cmdToRun = [ `docker image inspect` ]
   filter && (cmdToRun.push(filter))
-  image && (cmdToRun.push(image))
+  imageRef && (cmdToRun.push(imageRef))
 
-  const imgInfo = image && await dockerCli(
+  const imgInfo = imageRef && await dockerCli(
     { opts: cmdToRun },
     { options: { env: envs }, cwd: location },
   )

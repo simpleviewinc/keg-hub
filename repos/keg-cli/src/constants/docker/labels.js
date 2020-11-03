@@ -55,17 +55,17 @@ const proxyLabels = [
   [
     'KEG_PROXY_HOST',
     'contextEnvs.KEG_PROXY_HOST',
-    'traefik.http.routers.{{ proxyDomain }}.rule=Host(`{{ proxyDomain }}.${KEG_PROXY_HOST}`)',
+    'traefik.http.routers.${KEG_PROXY_DOMAIN}.rule=Host(`${KEG_PROXY_DOMAIN}.${KEG_PROXY_HOST}`)',
   ],
   [
     'KEG_PROXY_ENTRY',
     'contextEnvs.KEG_PROXY_ENTRY',
-    'traefik.http.routers.{{ proxyDomain }}.entrypoints=${KEG_PROXY_ENTRY}'
+    'traefik.http.routers.${KEG_PROXY_DOMAIN}.entrypoints=${KEG_PROXY_ENTRY}'
   ],
   [
     'KEG_PROXY_PORT',
     'contextEnvs.KEG_PROXY_PORT',
-    'traefik.http.services.{{ proxyDomain }}.loadbalancer.server.port=${KEG_PROXY_PORT}'
+    'traefik.http.services.${KEG_PROXY_DOMAIN}.loadbalancer.server.port=${KEG_PROXY_PORT}'
   ]
 ]
 

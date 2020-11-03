@@ -46,7 +46,7 @@ const addInjectedTemplate = async (dockerCmd, data={}) => {
   const composeData = await getComposeContextData(data)
 
   // Build the path of the injected compose file, based on the proxyDomain ( app name + git branch name )
-  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.proxyDomain}.yml`)
+  const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.proxyDomain || composeData.image}.yml`)
   const dockCmdWithCompose = `${dockerCmd} -f ${injectedCompose}`
 
   // Check if it already exists, and if it does, then just return
@@ -62,7 +62,7 @@ const addInjectedTemplate = async (dockerCmd, data={}) => {
   // Join the composeData and the generated labels together, and write the injected compose file
   await writeInjectedCompose(injectedCompose, {
     ...composeData,
-    generatedLabels: generateComposeLabels({ ...data, ...composeData })
+    generatedLabels: composeData.proxyDomain ? generateComposeLabels({ ...data, ...composeData }) : ''
   })
 
   return dockCmdWithCompose

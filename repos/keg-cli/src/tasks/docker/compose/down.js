@@ -23,7 +23,7 @@ const composeDown = async args => {
 
   // Get the proxy domain from the label, and use it to remove the injected compose config form the temp dir
   // Have to get the domain before bringing the containers down so we have access to the label
-  const proxyDomain = await getProxyDomainFromLabel(containerContext.id || containerContext.name )
+  const proxyDomain = get(contextEnvs, `KEG_PROXY_DOMAIN`) || await getProxyDomainFromLabel(containerContext.id || containerContext.name)
 
   // Build the docker compose down command
   const dockerCmd = await buildComposeCmd({

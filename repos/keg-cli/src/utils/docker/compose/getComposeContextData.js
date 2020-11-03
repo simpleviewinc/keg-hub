@@ -1,6 +1,5 @@
 const { get } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
-const { getProxyDomainFromBranch } = require('KegUtils/proxy/getProxyDomainFromBranch')
 
 /**
  * Builds context data needed to create the injected docker-compose file
@@ -44,20 +43,7 @@ const getComposeContextData = async data => {
     )
   )
 
-  // Get the name of the tap or use the context for internal applications
-  const contextName = get(
-    data, `params.__injected.tap`,
-    get(data, `params.tap`,
-      get(data, `params.__injected.context`,
-        get(data, `params.context`)
-      ),
-    )
-  )
-
-  composeContext.proxyDomain = await getProxyDomainFromBranch(
-    contextName,
-    composeContext.buildContextPath
-  )
+  composeContext.proxyDomain = get(data, `contextEnvs.KEG_PROXY_DOMAIN`, '${KEG_PROXY_DOMAIN}')
 
   return composeContext
 }
