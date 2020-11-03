@@ -1,6 +1,8 @@
-const { CONTAINER_TO_CONTEXT } = require('KegConst/constants')
 const docker = require('KegDocCli')
 const { get } = require('@keg-hub/jsutils')
+const { kegLabelKeys } = require('KegConst/docker/labels')
+const { CONTAINER_TO_CONTEXT } = require('KegConst/constants')
+const { KEG_PROXY_DOMAIN } = kegLabelKeys
 
 /**
  * Finds the proxy domain from a label of the passed in docker reference item
@@ -19,7 +21,7 @@ const getProxyDomainFromLabel = async (itemRef, type='container', logErr) => {
 
     return Object.entries(itemLabels)
       .reduce((proxyDomain, [ key, value ]) => {
-        return proxyDomain || (key === 'com.keg.proxy.domain' && value)
+        return proxyDomain || (key === KEG_PROXY_DOMAIN && value)
       }, false)
   }
   catch(err){

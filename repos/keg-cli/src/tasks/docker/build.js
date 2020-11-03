@@ -84,32 +84,37 @@ const dockerBuild = async args => {
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
+  const containerContext = await buildContainerContext({
+    ...args,
+    task,
+    params
+  })
+
   const {
     tap,
     image,
     location,
     cmdContext,
     contextEnvs,
-  } = await buildContainerContext({
-    ...args,
-    task,
-    params
-  })
-
+  } = containerContext
 
   // If using a tap, and no location is found, throw an error
   cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)
 
   // Build the docker build command with options
-  const dockerCmd = await buildDockerCmd(globalConfig, {
-    ...params,
-    location,
-    cmd: `build`,
-    options: options,
-    context: cmdContext,
-    ...(tap && { tap }),
-    ...(image && { image }),
-    ...(params.args && { buildArgs: contextEnvs }),
+  const dockerCmd = await buildDockerCmd({
+    ...args,
+    containerContext,
+    params: {
+      ...params,
+      location,
+      cmd: `build`,
+      options: options,
+      context: cmdContext,
+      ...(tap && { tap }),
+      ...(image && { image }),
+      ...(params.args && { buildArgs: contextEnvs }),
+    }
   })
 
   Logger.info(`Building docker image "${ image || cmdContext }" ...`)

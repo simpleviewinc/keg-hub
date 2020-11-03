@@ -6,22 +6,22 @@ const { getBuildLabels } = require('./getBuildLabels')
 
 /**
  * Creates a docker run command as a string. Adds any needed volume mounts
- * @param {Object} globalConfig - Global config object for the keg-cli
- * @param {Object} params - Data to build the docker command
- * @param {string} params.dockerCmd - docker command being built
- * @param {string} params.context - Name of the image to be built
- * @param {Array} params.tags - Tag names for the image being built
+ * @param {Object} args - Arguments passed to the task
+ * @param {Object} args.globalConfig - Global config object for the keg-cli
+ * @param {Object} args.params - Data to build the docker command
+ * @param {string} args.params.dockerCmd - docker command being built
+ * @param {string} args.params.context - Name of the image to be built
+ * @param {Array} args.params.tags - Tag names for the image being built
  *
  * @returns {string} - Built docker build command
  */
-const createBuildCmd = async (globalConfig, dockerCmd, params) => {
+const createBuildCmd = async (args, dockerCmd, container) => {
+  const { globalConfig, params } = args
   const {
     buildArgs,
-    container,
     location,
     context,
     branch,
-    labels,
     options=[],
     tap,
     version
@@ -41,16 +41,7 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   })
 
   // Add any build labels
-  dockerCmd = getBuildLabels(globalConfig, {
-    dockerCmd,
-    container,
-    image,
-    context,
-    labels,
-    options,
-    tap,
-    version
-  })
+  dockerCmd = getBuildLabels(args, dockerCmd)
 
   // Add the build args for the github key and tap git url
   dockerCmd = await getBuildArgs(globalConfig, {
@@ -63,14 +54,13 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
   })
 
   // Add the location last. This is the location the container will be built from
-  return location
-    ? `${dockerCmd} ${location}`
-    : dockerCmd
+  return location ? `${dockerCmd} ${location}` : dockerCmd
 }
 
 /**
  * Builds a docker command to be passed to the command line
- * @param {Object} globalConfig - Global config object for the keg-cli
+ * @param {Object} args - Arguments passed to the task
+ * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {Object} params - Data to build the docker command
  * @param {Object} params.cmd - The docker command to run
  * @param {Object} params.context - Name of the docker container to run
@@ -79,7 +69,8 @@ const createBuildCmd = async (globalConfig, dockerCmd, params) => {
  *
  * @returns {string} - Built docker command
  */
-const buildDockerCmd = (globalConfig, params) => {
+const buildDockerCmd = args => {
+  const { params={} } = args
   const {
     branch,
     cmd,
@@ -100,7 +91,7 @@ const buildDockerCmd = (globalConfig, params) => {
   } = params
   
   // In no container is set, try to use the context of the docker image to build
-  params.container = (container || context).toUpperCase()
+  const buildContainer = (container || context).toUpperCase()
 
   // Get the default docker arguments
   const dockerCmd = getDockerArgs({
@@ -110,7 +101,7 @@ const buildDockerCmd = (globalConfig, params) => {
     dockerCmd: `docker ${cmd} ${docker}`.trim()
   })
 
-  return createBuildCmd(globalConfig, dockerCmd, params)
+  return createBuildCmd(args, dockerCmd, buildContainer)
 
 }
 

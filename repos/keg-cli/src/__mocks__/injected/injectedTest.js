@@ -87,6 +87,30 @@ const injectedTest = {
   }
 }
 
+const injectedContainer = {
+  ARGS: {
+    GIT_KEY: 'GIT_KEY',
+    GIT_CLI_URL: 'GIT_CLI_URL'
+  },
+  DEFAULTS: {
+    clean: true,
+    connect: true,
+    entrypoint: false,
+    file: true,
+    nocache: false,
+  },
+  VALUES: {
+    file: `-f ${ injectedTest.contextEnvs.KEG_DOCKER_FILE }`,
+    clean: '--rm',
+    nocache: '--no-cache',
+    entrypoint: '--entrypoint',
+    connect: '-it'
+  },
+  ENV: injectedTest.contextEnvs,
+  BUILD_ARGS_FILTER: [],
+}
+
 module.exports = {
-  injectedTest
+  injectedTest,
+  injectedContainer
 }

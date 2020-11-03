@@ -69,7 +69,15 @@ const proxyLabels = [
   ]
 ]
 
+const kegLabelKeys = kegLabels.reduce((map, meta) => {
+  const key = meta[2].split('=').shift()
+  map[key.replace(/\./g, '_').toUpperCase().replace('COM_', '')] = key
+
+  return map
+}, {})
+
 module.exports = {
   kegLabels,
+  kegLabelKeys,
   proxyLabels,
 }
