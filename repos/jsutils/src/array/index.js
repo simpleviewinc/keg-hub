@@ -1,6 +1,5 @@
 export * from './areFrequencyEqual'
 export * from './areSetEqual'
-export * from './areShallowEqual'
 export * from './cloneArr'
 export * from './eitherArr'
 export * from './flatMap'
