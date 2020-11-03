@@ -4,6 +4,11 @@ const { ask } = require('@keg-hub/ask-it')
 const { stopService } = require('KegUtils/services/stopService')
 
 /**
+ * TODO: Find way to get the proxyDomain of all running containers
+ * Then compare with the proxyDomain of the passed in ID
+ */
+
+/**
  * Checks if a docker container already exists
  * <br/>If it does, asks user if they want to remove it
  * @function
@@ -11,8 +16,9 @@ const { stopService } = require('KegUtils/services/stopService')
  *
  * @returns {string} - Name of the current branch
  */
-const checkContainerExists = async (containerRef, context, args) => {
-  const exists = await docker.container.get(containerRef)
+const checkContainerExists = async ({ containerRef, context, id, args }) => {
+  let exists = await docker.container.get(containerRef)
+
   if(!exists) return false
 
   Logger.empty()

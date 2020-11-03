@@ -10,15 +10,6 @@ const { buildContainerContext } = require('KegUtils/builders/buildContainerConte
 const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
 
-
-const checkForExistingContainers = async (parsed, containerName, context, args) => {
-  const containerImage = await checkContainerExists(parsed.image, context, args)
-  const containerWithTag = !containerImage && await checkContainerExists(`${parsed.image}-${parsed.tag}`, context, args)
-  const containerByName = !containerWithTag && await checkContainerExists(containerName, context, args)
-
-  return containerImage || containerWithTag || containerByName
-}
-
 /**
  * Builds a docker container so it can be run
  * @function
@@ -69,15 +60,6 @@ const dockerPackageRun = async args => {
   const imageTaggedName = `${parsed.image}:${parsed.tag}`
 
   /*
-  * ----------- Step 1.1 ----------- *
-  * Check if the container already exists, and if it should be removed!
-  */
-  const containerExists = await checkForExistingContainers(parsed, containerName, parsed.image, args)
-  if(containerExists)
-    return Logger.highlight(`Exiting task because container`, `"${containerExists}"`, `is still running!\n`)
-
-
-  /*
   * ----------- Step 2 ----------- *
   * Pull the image from the provider and tag it
   */
@@ -100,6 +82,19 @@ const dockerPackageRun = async args => {
   const { cmdContext, contextEnvs, location, id } = containerContext
   const [error, locExists] = await pathExists(location)
   cmdLocation = locExists ? location : undefined
+
+  /*
+  * ----------- Step 3.1 ----------- *
+  * Check if the container already exists, and if it should be removed!
+  */
+  const containerExists = await checkContainerExists({
+    id,
+    args,
+    context: parsed.image,
+    containerRef: containerName,
+  })
+  if(containerExists)
+    return Logger.highlight(`Exiting task because container`, `"${containerExists}"`, `is still running!\n`)
 
   /*
   * ----------- Step 4 ----------- *

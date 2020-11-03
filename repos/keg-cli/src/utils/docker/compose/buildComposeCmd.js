@@ -1,5 +1,5 @@
 const path = require('path')
-const { get } = require('@keg-hub/jsutils')
+const { get, exists } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { loadTemplate } = require('KegUtils/template')
 const { generateComposeLabels } = require('KegUtils/proxy/generateComposeLabels')
@@ -55,7 +55,7 @@ const addInjectedTemplate = async (dockerCmd, data={}) => {
   if(exists) return dockCmdWithCompose
 
   if(!composeData || !composeData.image){
-    Logger.warn(`Could not build injected compose file. Invalid composeDate object, missing image or proxyDomain!`, composeData)
+    Logger.warn(`Could not build injected compose file. Invalid composeData object, missing image or proxyDomain!`, composeData)
     return dockerCmd
   }
 
@@ -105,9 +105,14 @@ const addComposeFiles = async (dockerCmd, args) => {
 
   if(!container) return dockerCmd
 
-  // Add injected docker-compose file first
-  // This way other compose files can override the injected one when needed
-  dockerCmd = await addInjectedTemplate(dockerCmd, args)
+  // Check if we should add the injected docker compose file
+  const noInjectedCompose = get(args, `contextEnvs.KEG_NO_INJECTED_COMPOSE`)
+
+  // Check if we should add the injected docker-compose file
+  // Add it first, so other compose files can override the injected one as needed
+  dockerCmd = exists(noInjectedCompose)
+    ? dockerCmd
+    : await addInjectedTemplate(dockerCmd, args)
 
   const injectedComposePath = get(args, 'params.__injected.composePath')
 
@@ -197,7 +202,7 @@ const getDownArgs = (dockerCmd, params) => {
  * @returns {string} - Built docker command
  */
 const buildComposeCmd = async args => {
-  const { cmd, params={}, } = args
+  const { cmd, params={} } = args
 
   const { attach } = params
 

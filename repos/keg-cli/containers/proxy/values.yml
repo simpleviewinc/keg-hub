@@ -6,6 +6,9 @@ env:
   KEG_VALUES_FILE: "{{ cli.paths.containers }}/proxy/values.yml"
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/proxy/docker-compose.yml"
 
+  # Turn off adding an injected compose config for keg-proxy
+  KEG_NO_INJECTED_COMPOSE: true
+
   # Turn off auto-building the keg-base image
   KEG_FROM_BASE: false
 
