@@ -45,15 +45,21 @@ env:
   # KEG_PROXY_HOST: custom-host.local.kegdev.xyz
     # To override the host header used by the proxy to route traffic to this container
     # add KEG_PROXY_HOST env and set it's value to the what the host header should be
-    # the default is <container-context>-<image-tag>.<KEG_PROXY_HOST>
+    # the default is <container-context>-<git-branch-name>.<KEG_PROXY_HOST>
   
   # KEG_DOCKER_NETWORK: custom-docker-network
     # To override the default docker network used by the proxy to route traffic to this container
+    # There should be no reason to need to overwrite this, but you can if you want
     # add KEG_PROXY_HOST env and set it's value to the what network should be used
     # the default is 'keg-hub-net'
 
-  # Port the application will use when running within the container
-  # Required to allow the keg-proxy to route traffic to it
+  # KEG_PROXY_PORT - 80
+    # If not set, then port 80 will be used by default
+    # Port the proxy will route traffic to within the container
+    # This should be the port the application expects to receive traffic on
+    # This port should not be ( You can still do these things, but it's better not to )
+    #   * Exposed publicly on the container
+    #   * Bound to the host machine
   KEG_PROXY_PORT: 60710
 
   # --- GENERAL CONTEXT ENVs --- #
