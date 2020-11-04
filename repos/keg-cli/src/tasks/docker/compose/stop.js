@@ -21,7 +21,7 @@ const composeStop = async args => {
   const { location, cmdContext, contextEnvs } = containerContext
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd({
+  const { dockerCmd } = await buildComposeCmd({
     params,
     cmdContext,
     cmd: 'stop',

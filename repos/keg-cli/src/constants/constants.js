@@ -99,9 +99,6 @@ module.exports = deepFreeze({
     'tap'
   ],
 
-  // URLs for navigating to the application
-  TAP_URL: `http://tap.local.kegdev.xyz/`,
-
   SYNC_PREFIXES: {
     BDD_SERVICE: 'bdd',
   },

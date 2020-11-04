@@ -2,6 +2,7 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { pathExists } = require('KegFileSys')
 const { DOCKER } = require('KegConst/docker')
+const { logVirtualUrl } = require('KegUtils/log')
 const { isUrl, get } = require('@keg-hub/jsutils')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { removeLabels } = require('KegUtils/docker/removeLabels')
@@ -9,6 +10,37 @@ const { checkContainerExists } = require('KegUtils/docker/checkContainerExists')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
+
+/**
+ * Builds a docker container so it can be run
+ * @function
+ * @param {Array} opts - Options to pass to the docker run command
+ * @param {string} imageRef - Reference used to find the docker image
+ * @param {Object} parsed - The parsed docker package url
+ *
+ * @returns {Array} - Opts array with the labels to be overwritten
+ */
+const updateImageLabels = async (opts, imageRef, parsed) => {
+  // Clear out the docker-compose labels, so it does not think it controls this container
+  const imgInspect = await docker.image.inspect({ image: imageRef })
+  opts = imgInspect && await removeLabels(imgInspect, 'com.docker.compose', opts)
+
+  // Get the proxy url from the label, so it can be printed to the terminal
+  let proxyUrl = imgInspect && Object.entries(get(imgInspect, 'Config.Labels', {}))
+    .reduce((proxyUrl, [ key, value ]) => {
+      return value.indexOf(`Host(\``) === 0  ? value.split('`')[1] : proxyUrl
+    }, false)
+
+  // We might be able to build the proxyUrl if it can't be found
+  // But this would expect a consistent pattern for creating images
+  // So commenting out for now
+  // proxyUrl = proxyUrl || `${parsed.image}-${parsed.tag}.${contextEnvs.KEG_PROXY_HOST || DOCKER.KEG_PROXY_HOST}`
+
+  // If a proxy url is found, log it for easy access to the url
+  proxyUrl && logVirtualUrl(proxyUrl)
+
+  return opts
+}
 
 /**
  * Builds a docker container so it can be run
@@ -103,8 +135,7 @@ const dockerPackageRun = async args => {
   let opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
   opts.push(`--network ${network || contextEnvs.KEG_DOCKER_NETWORK || DOCKER.KEG_DOCKER_NETWORK }`)
-  // Clear out the docker-compose labels, so it does not think it controls this container
-  opts = await removeLabels(id || parsed.image, 'com.docker.compose', opts)
+  opts = await updateImageLabels(opts, id || parsed.image, parsed)
 
   /*
   * ----------- Step 5 ----------- *

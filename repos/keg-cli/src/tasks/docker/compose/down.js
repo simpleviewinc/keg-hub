@@ -26,7 +26,7 @@ const composeDown = async args => {
   const proxyDomain = await getProxyDomainFromLabel(containerContext.id || containerContext.name)
 
   // Build the docker compose down command
-  const dockerCmd = await buildComposeCmd({
+  const { dockerCmd, composeData } = await buildComposeCmd({
     params,
     cmdContext,
     contextEnvs,
@@ -44,9 +44,7 @@ const composeDown = async args => {
 
   // Check if we have a proxy domain, and remove the injected compose file after running the compose command
   // Otherwise the injected compose file will just be recreated
-  ;proxyDomain
-    ? await removeInjectedCompose(proxyDomain, true)
-    : Logger.warn(`Could not parse proxyDomain from labels. Injected compose file can not be removed!`)
+  ;proxyDomain && await removeInjectedCompose(proxyDomain, true)
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `destroyed!`)
 

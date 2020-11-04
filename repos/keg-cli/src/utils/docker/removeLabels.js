@@ -1,6 +1,6 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { get } = require('@keg-hub/jsutils')
+const { get, isObj } = require('@keg-hub/jsutils')
 
 /**
  * Parse the imageRef labels looking for for matches to labelRef
@@ -16,7 +16,10 @@ const removeLabels = async (imageRef, labelRef, opts=[], logErr) => {
 
   // Wrap it a try catch, cause we may not care if the labels can not be nulled out
   try {
-    const imgInspect = await docker.image.inspect({ image: imageRef })
+    const imgInspect = isObj(imageRef) && isObj(imageRef.Config)
+      ? imageRef
+      : await docker.image.inspect({ image: imageRef })
+
     const imgLabels = get(imgInspect, 'Config.Labels', {})
 
     Object.entries(imgLabels)

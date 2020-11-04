@@ -25,7 +25,7 @@ const buildDockerCompose = async args => {
   })
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd({
+  const { dockerCmd } = await buildComposeCmd({
     params,
     cmdContext,
     contextEnvs,

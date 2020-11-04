@@ -42,8 +42,7 @@ const writeInjectedCompose = async (injectedCompose, data) => {
  *
  * @returns {string} - Filled docker-compose.yml template file
  */
-const addInjectedTemplate = async (dockerCmd, data={}) => {
-  const composeData = await getComposeContextData(data)
+const addInjectedTemplate = async (dockerCmd, data={}, composeData) => {
 
   // Build the path of the injected compose file, based on the proxyDomain ( app name + git branch name )
   const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${composeData.proxyDomain || composeData.image}.yml`)
@@ -98,21 +97,18 @@ const addComposeFile = (dockerCmd='', container, env, composeFile) => {
  *
  * @returns {string} - dockerCmd string with the file paths added
  */
-const addComposeFiles = async (dockerCmd, args) => {
+const addComposeFiles = async (dockerCmd, args, composeData) => {
 
   const curENV = get(args, `params.env`, 'LOCAL')
   const container = get(args, 'cmdContext', '').toUpperCase()
 
   if(!container) return dockerCmd
 
-  // Check if we should add the injected docker compose file
-  const noInjectedCompose = get(args, `contextEnvs.KEG_NO_INJECTED_COMPOSE`)
-
   // Check if we should add the injected docker-compose file
   // Add it first, so other compose files can override the injected one as needed
-  dockerCmd = exists(noInjectedCompose)
-    ? dockerCmd
-    : await addInjectedTemplate(dockerCmd, args)
+  dockerCmd = composeData
+    ? await addInjectedTemplate(dockerCmd, args, composeData)
+    : dockerCmd
 
   const injectedComposePath = get(args, 'params.__injected.composePath')
 
@@ -207,7 +203,12 @@ const buildComposeCmd = async args => {
   const { attach } = params
 
   let dockerCmd = `docker-compose`
-  dockerCmd = await addComposeFiles(dockerCmd, args)
+
+  // Get the compose data for filling out the injected compose template
+  // only if the KEG_NO_INJECTED_COMPOSE env does not exist
+  const composeData = !exists(get(args, `contextEnvs.KEG_NO_INJECTED_COMPOSE`)) && await getComposeContextData(args)
+
+  dockerCmd = await addComposeFiles(dockerCmd, args, composeData)
 
   dockerCmd = `${dockerCmd} ${cmd}`
 
@@ -215,7 +216,7 @@ const buildComposeCmd = async args => {
   if(cmd === 'build') dockerCmd = addCmdOpts(dockerCmd, params)
   if(cmd === 'down') dockerCmd = params.remove ? getDownArgs(dockerCmd, params) : dockerCmd
 
-  return dockerCmd
+  return { dockerCmd, composeData }
 }
 
 module.exports = {

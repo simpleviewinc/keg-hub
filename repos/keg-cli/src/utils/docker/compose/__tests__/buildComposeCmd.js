@@ -69,9 +69,9 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should build the correct docker-compose up command for keg-core', async () => {
-      const resp = await buildComposeCmd(args.core)
-      expect(isStr(resp)).toBe(true)
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd(args.core)
+      expect(isStr(dockerCmd)).toBe(true)
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = dockerCmd.split(' ')
 
       expect(compose).toBe('docker-compose')
       expect(injectedFileKey).toBe('-f')
@@ -85,9 +85,9 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should build the correct docker-compose up command for keg-components', async () => {
-      const resp = await buildComposeCmd(args.components)
-      expect(isStr(resp)).toBe(true)
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd(args.components)
+      expect(isStr(dockerCmd)).toBe(true)
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = dockerCmd.split(' ')
     
       expect(compose).toBe('docker-compose')
       expect(injectedFileKey).toBe('-f')
@@ -101,9 +101,9 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should build the correct docker-compose up command for injected taps', async () => {
-      const resp = await buildComposeCmd(args.injected)
-      expect(isStr(resp)).toBe(true)
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd(args.injected)
+      expect(isStr(dockerCmd)).toBe(true)
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = dockerCmd.split(' ')
 
       expect(compose).toBe('docker-compose')
       expect(injectedFileKey).toBe('-f')
@@ -117,15 +117,15 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should add the detached argument, when attach param is false', async () => {
-      const resp = await buildComposeCmd({ ...args.core, params: { ...args.core.params,  attach: false }})
-      expect(isStr(resp)).toBe(true)
-      expect(resp.indexOf('--detach')).not.toBe(-1)
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, params: { ...args.core.params,  attach: false }})
+      expect(isStr(dockerCmd)).toBe(true)
+      expect(dockerCmd.indexOf('--detach')).not.toBe(-1)
     })
 
     it('Should not add the detached argument, when attach param is true', async () => {
-      const resp = await buildComposeCmd({ ...args.core, params: { ...args.core.params,  attach: true }})
-      expect(isStr(resp)).toBe(true)
-      expect(resp.indexOf('--detach')).toBe(-1)
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, params: { ...args.core.params,  attach: true }})
+      expect(isStr(dockerCmd)).toBe(true)
+      expect(dockerCmd.indexOf('--detach')).toBe(-1)
     })
 
   })
@@ -138,9 +138,9 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should build the correct docker-compose down command for keg-core', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down' })
-      expect(isStr(resp)).toBe(true)
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down' })
+      expect(isStr(dockerCmd)).toBe(true)
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = dockerCmd.split(' ')
 
       expect(compose).toBe('docker-compose')
       expect(injectedFileKey).toBe('-f')
@@ -152,9 +152,9 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should build the correct docker-compose down command for keg-components', async () => {
-      const resp = await buildComposeCmd({ ...args.components, cmd: 'down' })
-      expect(isStr(resp)).toBe(true)
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.components, cmd: 'down' })
+      expect(isStr(dockerCmd)).toBe(true)
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = dockerCmd.split(' ')
     
       expect(compose).toBe('docker-compose')
       expect(injectedFileKey).toBe('-f')
@@ -166,9 +166,9 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should build the correct docker-compose down command for injected taps', async () => {
-      const resp = await buildComposeCmd({ ...args.injected, cmd: 'down' })
-      expect(isStr(resp)).toBe(true)
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.injected, cmd: 'down' })
+      expect(isStr(dockerCmd)).toBe(true)
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, ...cmdArgs ] = dockerCmd.split(' ')
 
       expect(compose).toBe('docker-compose')
       expect(injectedFileKey).toBe('-f')
@@ -180,46 +180,46 @@ describe('buildComposeCmd', () => {
     })
 
     it('Should include -rmi all args when remove param is all', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'all' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'all' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
       expect(cmdArgs[0]).toBe('-rmi')
       expect(cmdArgs[1]).toBe('all')
     })
 
     it('Should include -rmi local args when remove param is local', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'local' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'local' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
       expect(cmdArgs[0]).toBe('-rmi')
       expect(cmdArgs[1]).toBe('local')
     })
 
     it('Should include --volumes arg when remove param is volumes', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'volumes' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'volumes' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
       expect(cmdArgs[0]).toBe('--volumes')
     })
 
     it('Should include --volumes arg when remove param is v', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'v' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'v' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
       expect(cmdArgs[0]).toBe('--volumes')
     })
 
     it('Should include --orphans arg when remove param is orphans', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'orphans' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'orphans' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
       expect(cmdArgs[0]).toBe('--remove-orphans')
     })
 
     it('Should include --orphans arg when remove param is or', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'or' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'or' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
       expect(cmdArgs[0]).toBe('--remove-orphans')
     })
 
     it('Should include multiple remove args when remove param is a lit seperated by comma', async () => {
-      const resp = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'or,v,local' }})
-      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = resp.split(' ')
+      const { dockerCmd, composeData } = await buildComposeCmd({ ...args.core, cmd: 'down', params: { ...args.core.params, remove: 'or,v,local' }})
+      const [ compose, injectedFileKey, injectedFilePath, defaultFileKey, defaultFilePath, cmd, ...cmdArgs ] = dockerCmd.split(' ')
 
       ;([ '--remove-orphans', '--volumes', '-rmi', 'local' ]).map(arg => expect(cmdArgs.indexOf(arg)).not.toBe(-1))
     })

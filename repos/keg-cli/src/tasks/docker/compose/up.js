@@ -33,16 +33,13 @@ const composeUp = async args => {
   build && await buildDockerImage(args, cmdContext, tap)
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd({
+  const { dockerCmd, composeData } = await buildComposeCmd({
     params,
     cmd: 'up',
     cmdContext,
     contextEnvs,
     globalConfig,
   })
-
-  // Log the virtual url so users know how to access the running containers
-  logVirtualUrl(cmdContext)
 
   // Run the docker-compose up command
   await spawnCmd(
@@ -53,6 +50,9 @@ const composeUp = async args => {
   )
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `is up!`)
+
+  // Log the virtual url so users know how to access the running containers
+  logVirtualUrl(composeData, contextEnvs.KEG_PROXY_HOST)
 
   // Return the built context info, so it can be reused if needed
   return containerContext
