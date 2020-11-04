@@ -126,7 +126,7 @@ export const filterRules = (style, filter) => {
  * @param {string} cssString - Css rules for the className in string format
  * @param {string=} filterPrefix - optional prefix to filter by
  * 
- * @returns {string} - Hashed version of the string
+ * @returns {{hashClass:string, selector:string}} - returns selector string and hashClass string
  */
 export const getSelector = (className, cssString, filterPrefix) => {
 
@@ -140,13 +140,16 @@ export const getSelector = (className, cssString, filterPrefix) => {
   const selector = !exists(className)
     ? false
     : isArr(className)
-      ? className.filter(filterWithPrefix).join('.').trim()
-      : isStr(className) && className.split(' ').filter(filterWithPrefix).join('.').trim()
+      ? className.filter(filterWithPrefix).pop()
+      : isStr(className) && className.split(' ').filter(filterWithPrefix).pop()
 
-
-  return selector
-    ? `.${selector}.keg-${hashString(cssString)}`.trim()
-    : `.keg-${hashString(cssString)}`.trim()
+  const hashClass = `keg-${hashString(cssString)}`
+  return {
+    hashClass,
+    selector: selector
+      ? `.${selector.trim()}.${hashClass}`.trim()
+      : `.${hashClass}`.trim()
+  } 
 }
 
 /**
