@@ -4,6 +4,7 @@ const path = require('path')
 const tapPath = require('app-root-path').path
 const kegPath = path.join(__dirname, '../../')
 const getExpoConfig = require('@expo/webpack-config')
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin")
 const babelConfig = require(path.join(kegPath, './babel.config'))()
 const { NODE_ENV } = process.env
 
@@ -85,6 +86,13 @@ module.exports = rootDir => {
      * Define aliases to the core versions of node_modules
      */
     config.resolve.alias = buildResolveCoreAlias(config.resolve.alias)
+
+
+    /**
+     * Add the fast refresh plugin only in development
+     */
+    config.mode === "development" &&
+      config.plugins.push(new ReactRefreshWebpackPlugin())
 
     return config
   }

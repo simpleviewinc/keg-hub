@@ -56,6 +56,7 @@
     "@keg-hub/keg-components": "6.3.0",
     "@keg-hub/re-theme": "6.3.0",
     "@keg-hub/tap-resolver": "1.1.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@testing-library/react-hooks": "3.2.1",
     "app-root-path": "3.0.0",
     "axios": "0.19.2",
@@ -88,10 +89,10 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native-linear-gradient": "2.5.6",
     "react-native-screens": "2.9.0",
     "react-native-svg": "12.1.0",
     "react-native-svg-web": "1.0.9",
-    "react-native-linear-gradient": "2.5.6",
     "react-native-web": "0.13.3",
     "react-redux": "7.2.0",
     "react-router": "5.2.0",
@@ -101,7 +102,8 @@
     "redux": "4.0.5",
     "redux-devtools-extension": "2.13.8",
     "rimraf": "3.0.2",
-    "rollup": "2.23.1"
+    "rollup": "2.23.1",
+    "webpack-hot-middleware": "2.25.0"
   },
   "nodemonConfig": {
     "ext": "js",

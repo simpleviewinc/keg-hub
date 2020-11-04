@@ -1,7 +1,7 @@
 const tapPath = require('app-root-path').path
 const getAppConfig = require('@keg-hub/tap-resolver/src/resolvers/getAppConfig')
 const tapResolver = require('@keg-hub/tap-resolver')
-const { checkCall, deepMerge, set, get, unset } = require('@keg-hub/jsutils')
+const { exists, deepMerge, set, get, unset } = require('@keg-hub/jsutils')
 const tapConfig = getAppConfig(tapPath, false, false)
 const kegConfig = require('./app.json')
 const configOverrides = get(kegConfig, [ 'keg', 'overrides' ])
@@ -21,7 +21,8 @@ const joinConfigs = () => {
 }
 
 module.exports = api => {
-  checkCall(api && api.cache, true)
+  // Cache the Babel config by environment
+  exists(get(api, 'cache.using')) && api.cache.using(() => process.env.NODE_ENV)
 
   return tapResolver({
     tapPath,
