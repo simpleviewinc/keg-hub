@@ -71,7 +71,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "0.63.3",
-    "react-native-web": "0.13.7",
+    "react-native-web": "0.14.7",
     "rimraf": "3.0.2",
     "rollup": "2.23.1",
     "rollup-jest": "0.0.2",
