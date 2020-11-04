@@ -36,7 +36,7 @@ const composeRestart = async args => {
   })
 
   // Get the name of the docker-compose service
-  const serviceName = buildServiceName(cmdContext, contextEnvs.KEG_PROXY_HOST)
+  const serviceName = buildServiceName(cmdContext, contextEnvs)
 
   // Run the docker-compose restart command
   await spawnCmd(
@@ -49,7 +49,7 @@ const composeRestart = async args => {
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `is restarting!`)
 
   // Log the virtual url so users know how to access the running containers
-  logVirtualUrl(composeData, contextEnvs)
+  logVirtualUrl(composeData, contextEnvs.KEG_PROXY_HOST)
 
   // Return the built context info, so it can be reused if needed
   return containerContext

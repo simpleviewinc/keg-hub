@@ -26,7 +26,7 @@ const composeDown = async args => {
   const proxyDomain = await getProxyDomainFromLabel(containerContext.id || containerContext.name)
 
   // Build the docker compose down command
-  const { dockerCmd, composeData } = await buildComposeCmd({
+  const { dockerCmd } = await buildComposeCmd({
     params,
     cmdContext,
     contextEnvs,
