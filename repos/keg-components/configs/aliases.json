@@ -13,7 +13,7 @@
   "KegOption": "src/components/form/option/option${platform}.js",
   "KegRadio": "src/components/form/radio/radio${platform}.js",
   "KegSelect": "src/components/form/select/select.js",
-  "KegSlider": "src/components/form/slider/slider${platform}.js",
+  "KegSlider": "src/components/form/slider/slider.js",
   "KegSwitch": "src/components/form/switch/switch.js",
   "KegText": "src/components/typography/kegText/kegText.js",
   "KegLinearGradient": "src/components/linearGradient/linearGradient${platform}.js",
