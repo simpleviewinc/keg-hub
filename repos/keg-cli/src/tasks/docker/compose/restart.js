@@ -1,11 +1,9 @@
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
-const { get, checkCall } = require('@keg-hub/jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
 const { buildComposeCmd, buildServiceName } = require('KegUtils/docker')
-const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
-const { checkKillRunning } = require('KegUtils/docker/compose/checkKillRunning')
+const { buildContainerContext } = require('KegUtils/builders')
 
 /**
  * Runs docker-compose up command for (components | core | tap)
@@ -29,15 +27,13 @@ const composeRestart = async args => {
   const { location, cmdContext, contextEnvs, tap, image } = containerContext
 
   // Build the docker compose command
-  const dockerCmd = await buildComposeCmd(
-    globalConfig,
-    'restart',
+  const { dockerCmd, composeData } = await buildComposeCmd({
+    params,
     cmdContext,
-    params
-  )
-
-  // Log the virtual url so users know how to access the running containers
-  logVirtualUrl(cmdContext)
+    contextEnvs,
+    globalConfig,
+    cmd: 'restart',
+  })
 
   // Get the name of the docker-compose service
   const serviceName = buildServiceName(cmdContext, contextEnvs)
@@ -51,6 +47,9 @@ const composeRestart = async args => {
   )
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `is restarting!`)
+
+  // Log the virtual url so users know how to access the running containers
+  logVirtualUrl(composeData, contextEnvs.KEG_PROXY_HOST)
 
   // Return the built context info, so it can be reused if needed
   return containerContext

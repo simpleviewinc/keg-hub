@@ -1,12 +1,12 @@
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
-const { get } = require('@keg-hub/jsutils')
-const { DOCKER } = require('KegConst/docker')
-const { buildComposeCmd, removeInjected } = require('KegUtils/docker/compose')
+const { buildComposeCmd } = require('KegUtils/docker/compose/buildComposeCmd')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+const { getProxyDomainFromLabel } = require('KegUtils/proxy/getProxyDomainFromLabel')
+const { removeInjectedCompose } = require('KegUtils/docker/compose/removeInjectedCompose')
 
 /**
- * Runs the docker-compose build command
+ * Runs the docker-compose down command for the passed in context
  * @function
  * @param {Object} args - arguments passed from the runTask method
  * @param {Object} args.globalConfig - Global config object for the keg-cli
@@ -21,13 +21,18 @@ const composeDown = async args => {
   const containerContext = await buildContainerContext(args)
   const { location, cmdContext, contextEnvs } = containerContext
 
-  // Build the docker compose command
-  const dockerCmd = await buildComposeCmd(
-    globalConfig,
-    'down',
+  // Get the proxy domain from the label, and use it to remove the injected compose config form the temp dir
+  // Have to get the domain before bringing the containers down so we have access to the label
+  const proxyDomain = await getProxyDomainFromLabel(containerContext.id || containerContext.name)
+
+  // Build the docker compose down command
+  const { dockerCmd } = await buildComposeCmd({
+    params,
     cmdContext,
-    params
-  )
+    contextEnvs,
+    cmd: 'down',
+    globalConfig,
+  })
 
   // Run the docker compose down command
   await spawnCmd(
@@ -37,8 +42,9 @@ const composeDown = async args => {
     !Boolean(__internal),
   )
 
-  const image = get(params, '__injected.image')
-  image && await removeInjected(image)
+  // Check if we have a proxy domain, and remove the injected compose file after running the compose command
+  // Otherwise the injected compose file will just be recreated
+  ;proxyDomain && await removeInjectedCompose(proxyDomain, true)
 
   log && Logger.highlight(`Compose service`, `"${ cmdContext }"`, `destroyed!`)
 

@@ -41,6 +41,12 @@ module.exports = {
         example: 'keg tap destroy --image',
         default: false
       },
+      remove: {
+        alias: [ 'rm' ],
+        allowed: [ 'images', 'volumes', 'all', 'orphans' ],
+        description: 'Remove collateral docker items while removing tap',
+        example: 'keg tap down --remove images,volumes'
+      },
     }
   }
 }

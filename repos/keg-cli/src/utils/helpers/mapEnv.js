@@ -9,7 +9,7 @@ const { ENV_MAP } = require('KegConst/constants')
  *
  * @returns {string} - Full env value if found or the original value
  */
-const mapEnv = (value, meta) => {
+const mapEnv = (value, meta={}) => {
   let foundEnv
   return reduceObj(ENV_MAP, (environment, shortcuts, defaultEnv) => {
     !foundEnv &&

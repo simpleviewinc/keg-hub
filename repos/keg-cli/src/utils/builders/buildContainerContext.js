@@ -80,6 +80,7 @@ const buildContainerContext = async args => {
     envs,
     params,
     cmdContext,
+    contextData,
     globalConfig,
   })
 

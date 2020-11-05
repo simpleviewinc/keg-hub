@@ -1,6 +1,5 @@
 const path = require('path')
 const { Logger } = require('KegLog')
-const { get } = require('@keg-hub/jsutils')
 const { removeFile, pathExists } = require('KegFileSys/fileSys')
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 
@@ -11,18 +10,20 @@ const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
  *
  * @returns {Void}
  */
-const removeInjected = async name => {
+const removeInjectedCompose = async (name, log=true) => {
   try {
     const injectedCompose = path.join(GLOBAL_INJECT_FOLDER, `${name}.yml`)
     const [ err, exists ] = await pathExists(injectedCompose)
+    if(err && log) Logger.error(err.stack || err)
+
     exists && await removeFile(injectedCompose)
   }
   catch(err){
-    Logger.error(err.stack)
+    log && Logger.error(err.stack)
   }
 
 }
 
 module.exports = {
-  removeInjected
+  removeInjectedCompose
 }

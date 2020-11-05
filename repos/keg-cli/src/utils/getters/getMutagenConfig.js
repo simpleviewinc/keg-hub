@@ -1,7 +1,6 @@
 const path = require('path')
 const { DOCKER } = require('KegConst/docker')
 const { yml } = require('KegFileSys/yml')
-const { tryCatch } = require('../helpers/tryCatch')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { get, deepMerge, isStr, styleCase, checkCall } = require('@keg-hub/jsutils')
 const { MUTAGEN_MAP } = DOCKER
@@ -36,36 +35,41 @@ const parseOptions = options => {
 
 /**
  * Loads the mutagen config for the passed in content
- * <br/> Wrapped in a tryCatch that returns an empty object when error is thrown
  * @param {Object} context - Parent folder name of the mutagen config file
  *
  * @returns {Object} - Loaded mutagen config file
  */
-const getMutagenConfig = (params) => tryCatch(async () => {
-
+const getMutagenConfig = async params => {
   const { context, options, configPath, __injected, overrides={} } = params
 
-  const mutagenPath = __injected &&
-    __injected.mutagenPath ||
-    getContainerConst(context, `ENV.KEG_MUTAGEN_PATH`)
+  try {
 
-  if(!mutagenPath) return deepMerge(overrides, parseOptions(options))
+    const mutagenPath = __injected &&
+      __injected.mutagenPath ||
+      getContainerConst(context, `ENV.KEG_MUTAGEN_PATH`)
 
-  const ymlConfig = await yml.load(mutagenPath)
+    if(!mutagenPath) return deepMerge(overrides, parseOptions(options))
 
-  if(!configPath) return ymlConfig
+    const ymlConfig = await yml.load(mutagenPath)
 
-  const config = get(ymlConfig, configPath, {})
+    if(!configPath) return ymlConfig
 
-  const mappedConf = Object.keys(config)
-    .reduce((conf, key) => {
-      conf[ MUTAGEN_MAP[key] || key ] = config[ key ]
-      return conf
-    }, {})
+    const config = get(ymlConfig, configPath, {})
 
-  return deepMerge(mappedConf, overrides, parseOptions(options))
+    const mappedConf = Object.keys(config)
+      .reduce((conf, key) => {
+        conf[ MUTAGEN_MAP[key] || key ] = config[ key ]
+        return conf
+      }, {})
 
-}, () => (overrides))
+    return deepMerge(mappedConf, overrides, parseOptions(options))
+
+  }
+  catch(err){
+    return overrides
+  }
+
+}
 
 
 module.exports = {

@@ -50,7 +50,6 @@ const DEFAULT = {
  * @returns {Object} - Built container config
 */
 const containerConfig = (container, currentEnv, __internal={}) => {
-  const upperCase = container.toUpperCase()
   const dockerFile = __internal.dockerPath || path.join(containersPath, container, `Dockerfile`)
 
   // Merge the container config with the default config and return

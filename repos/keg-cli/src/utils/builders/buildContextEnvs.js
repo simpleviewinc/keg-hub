@@ -1,11 +1,8 @@
-const { get } = require('@keg-hub/jsutils')
-const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { buildTapContext } = require('./buildTapContext')
 const { getSetting } = require('../globalConfig/getSetting')
+const { getPublicGitKey } = require('../git/getPublicGitKey')
 const { getContainerConst } = require('../docker/getContainerConst')
 const { convertParamsToEnvs } = require('../task/convertParamsToEnvs')
-const { getServiceName } = require('../docker/compose/getServiceName')
-const { getKegContext } = require('../getters/getKegContext')
 
 /**
  * Builds the ENVs for the passed in cmdContext
@@ -19,14 +16,12 @@ const { getKegContext } = require('../getters/getKegContext')
  * @returns {Object} - Flat object containing the ENVs for the cmdContext
  */
 const buildContextEnvs = async (args) => {
+
   const { cmdContext, envs={}, globalConfig, params={}, tap } = args
-
   const containerEnvs = getContainerConst(cmdContext, 'env', {})
-  // Get the ENV vars for the command context and merge with any passed in envs
-  const built = {
 
-    // Get the name of the docker-compose service
-    KEG_COMPOSE_SERVICE: await getServiceName({ context: getKegContext(cmdContext) }),
+  // Get the ENV vars for the command context and merge with any passed in envs
+  return {
 
     // Get the ENV context for the command
     ...containerEnvs,
@@ -47,17 +42,13 @@ const buildContextEnvs = async (args) => {
 
     // Add the git key so we can call github within the image / container
     PUBLIC_GIT_KEY: await getPublicGitKey(globalConfig),
+
     // Get any params that should be converted into ENVs passed to docker
     ...convertParamsToEnvs(params),
 
-    // ---- IMPORTANT ---- //
-    // Set the compose project name last
-    // This way it does not get overwritten
-    // It will ensure all projects are on the same network
-    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME,
+    // Set the project name to allow linking services if needed
+    COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME || cmdContext,
   }
-
-  return built
 
 }
 

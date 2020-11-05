@@ -49,11 +49,11 @@ const mutagenMap = { mode: 'syncMode' }
  */
 const buildImages = () => {
   __IMAGES = getFoldersSync(containersPath)
-    .filter(folder => pathExistsSync(path.join(
-      containersPath,
-      folder,
-      `Dockerfile`
-    )))
+    .filter(folder => {
+      const containerPath = path.join(containersPath, folder)
+      return pathExistsSync(path.join(containerPath, `Dockerfile`)) ||
+        pathExistsSync(path.join(containerPath, `docker-compose.yml`))
+    })
 
   return __IMAGES
 }

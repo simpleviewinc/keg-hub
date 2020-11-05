@@ -32,7 +32,7 @@ const containerContext = async (toFind, prefixData={}, __injected, askFor) => {
   const container = found || askFor && await askWhenNoContext('container')
 
   return !container
-    ? prefixData
+    ? false
     : __injected
       ? { ...container, ...prefixData }
       : { ...container, ...prefixData, ...getPrefixContext(container.name) }
@@ -46,17 +46,17 @@ const containerContext = async (toFind, prefixData={}, __injected, askFor) => {
  *
  * @returns {Object} - Image, context, and the original with the prefix
  */
-const imageContext = async (toFind, prefixData={}, __injected, askFor) => {
+const imageContext = async (toFind, tag, prefixData={}, __injected, askFor) => {
 
-  let found = await docker.image.get(toFind)
+  let found = await docker.image.get(tag ? `${toFind}:${tag}` : toFind)
   found = found || prefixData.withPrefix && await docker.image.get(prefixData.withPrefix)
   const image = found || askFor && await askWhenNoContext('image')
 
   return !image
-    ? prefixData
+    ? false
     : __injected
-      ? { ...container, ...prefixData }
-      : { ...image, ...prefixData, ...getPrefixContext(image.repository) }
+      ? { ...image, ...prefixData }
+      : { ...image, ...prefixData, ...getPrefixContext(image.rootId) }
 
 }
 
@@ -95,8 +95,10 @@ const contextFromPrefix = async prefixData => {
  * @returns {Object} - Found context, and prefix if it exists
  */
 const getContext = async (params, askFor) => {
-  const { context, container, image, tap, __injected } = params
-  const contextRef = context || container || image || (tap && 'tap')
+  const { context, container, image, tap, __injected, tag } = params
+  const contextRef = image && tag
+    ? image
+    : context || container || image || (tap && 'tap')
 
   const prefixData = isDockerId(contextRef)
     ? { id: contextRef }
@@ -104,13 +106,10 @@ const getContext = async (params, askFor) => {
       ? getPrefixContext(contextRef)
       : {}
 
-  const foundContext = container
-    ? await containerContext(container, prefixData, __injected, askFor)
-    : image
-      ? await imageContext(image, prefixData, __injected, askFor)
-      : prefixData.withPrefix || prefixData.id
-        ? await contextFromPrefix(prefixData)
-        : prefixData
+  let foundContext = container && await containerContext(container, prefixData, __injected, askFor)
+  foundContext = foundContext || image && await imageContext(image, tag, prefixData, __injected, askFor)
+  foundContext = foundContext || ((prefixData.withPrefix || prefixData.id) && await contextFromPrefix(prefixData))
+  foundContext = foundContext || prefixData
 
   return context === 'tap'
     ? { tap, context, ...foundContext }

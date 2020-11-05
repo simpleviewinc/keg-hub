@@ -116,8 +116,13 @@ const getImage = async (image, log=false) => {
   return images &&
     images.length &&
     images.find(image => {
-      const hasMatch = image.id === imgRef || image.repository === imgRef
-      return hasMatch && tag  ? image.tag === tag : hasMatch
+      if(tag && (image.tag !== tag || !image.tags.includes(tag))) return false
+
+      const hasMatch = image.id === imgRef || image.repository === imgRef || image.rootId === imgRef
+
+      return !hasMatch || (hasMatch && !tag)
+        ? hasMatch
+        : image.tag === tag || image.tags.includes(tag)
     })
 }
 
@@ -295,12 +300,14 @@ const getCmd = async ({ clean, ...args }) => {
  *
  * @returns {string|Object} - Docker image information
  */
-const inspect = async ({ envs, image, filter, format='json', location, parse=true }) => {
+const inspect = async ({ envs, image, item, filter, location, parse=true }) => {
+  const imageRef = image || item
+
   let cmdToRun = [ `docker image inspect` ]
   filter && (cmdToRun.push(filter))
-  image && (cmdToRun.push(image))
+  imageRef && (cmdToRun.push(imageRef))
 
-  const imgInfo = image && await dockerCli(
+  const imgInfo = imageRef && await dockerCli(
     { opts: cmdToRun },
     { options: { env: envs }, cwd: location },
   )

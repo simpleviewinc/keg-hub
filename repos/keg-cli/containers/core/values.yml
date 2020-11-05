@@ -22,26 +22,44 @@ env:
     # KEG_COMPOSE_CORE_<ENV>: "/path/to/override.yml"
     # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
 
+  KEG_EXEC_CMD: tap:start
+
   # --- DOCKER ENV CONTEXT --- #
 
   DOC_APP_PATH: "/keg/keg-core"
-  DOC_APP_PORT: 19006
+
+  # Port the application will use when running within the container
+  # Required to allow the keg-proxy to route traffic to it
+
+  # Defines the location in a docker container for a dependency
+  # This allows mutagen to know where to sync the local version of the dependency
   DOC_CORE_PATH: "/keg/keg-core"
   DOC_COMPONENTS_PATH: "/keg/keg-core/node_modules/@keg-hub/keg-components"
   DOC_JSUTILS_PATH: "/keg/keg-core/node_modules/@keg-hub/jsutils"
   DOC_RETHEME_PATH: "/keg/keg-core/node_modules/@keg-hub/re-theme"
   DOC_RESOLVER_PATH: "/keg/keg-core/node_modules/@keg-hub/tap-resolver"
 
-
   # --- KEG-PROXY ENVs --- #
-  # See https://github.com/whitestrake/caddy-gen for more information
-  CADDY_HOST: core.kegdev.xyz
-  CADDY_PROXY_PARAMS: transparent,websocket
 
-  # Uncomment to lock down a folder path on the server
-  # Format [path]:[user]:[pass], where [path] is the directory to protect
-  # Declare multiple by separating them with commas.
-  # CADDY_BASIC_AUTH: /:foo:bar
+  # KEG_PROXY_HOST: custom-host.local.kegdev.xyz
+    # To override the host header used by the proxy to route traffic to this container
+    # add KEG_PROXY_HOST env and set it's value to the what the host header should be
+    # the default is <container-context>-<git-branch-name>.<KEG_PROXY_HOST>
+  
+  # KEG_DOCKER_NETWORK: custom-docker-network
+    # To override the default docker network used by the proxy to route traffic to this container
+    # There should be no reason to need to overwrite this, but you can if you want
+    # add KEG_PROXY_HOST env and set it's value to the what network should be used
+    # the default is 'keg-hub-net'
+
+  # KEG_PROXY_PORT - 80
+    # If not set, then port 80 will be used by default
+    # Port the proxy will route traffic to within the container
+    # This should be the port the application expects to receive traffic on
+    # This port should not be ( You can still do these things, but it's better not to )
+    #   * Exposed publicly on the container
+    #   * Bound to the host machine
+  KEG_PROXY_PORT: 19006
 
   # --- GENERAL CONTEXT ENVs --- #
 
@@ -50,6 +68,3 @@ env:
   VERSION: "0.0.1"
   CONTAINER_NAME: "keg-core"
   CHOKIDAR_USEPOLLING: 1
-
-  # --- Override the default progress output for expo-webpack in keg-core --- #
-  KEG_CORE_PROGRESS: true
