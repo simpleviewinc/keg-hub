@@ -48,7 +48,7 @@ const buildCustomLabels = labels => {
 /**
  * Replaces a placeholder value with the real value on a label
  * <br/>Used when building a container, and adding default labels
- * @param {string} cmdWLabels - Already built labels
+ * @param {string} cmdWithLabels - docker command with generated labels
  * @param {string} label - Label to be built
  * @param {Object} args - Arguments passed to the task
  * @param {string} key - Key of the label to be replaced
@@ -56,19 +56,22 @@ const buildCustomLabels = labels => {
  *
  * @returns {string} - Docker command with default labels added
  */
-const buildLabel = (cmdWLabels, label, args, key, value) => {
+const buildLabel = (cmdWithLabels, label, args, key, value) => {
 
+  // TODO: Investigate if this is needed
+  // The fillTemplate call should already handle this type of template so validate if this is needed
   const regReplace = new RegExp('{{\\s*' + key + '\\s*}}')
+
   const regTemplate = new RegExp('\\${\\s*' + key + '\\s*}')
-  
+
   const builtLabel = fillTemplate({ template: label, data: { ...args, [key]: value }})
     .replace(regReplace, value)
     .replace(regTemplate, value)
     .trim()
 
   return builtLabel
-    ? `${cmdWLabels} --label ${builtLabel}`.trim()
-    : cmdWLabels
+    ? `${cmdWithLabels} --label ${builtLabel}`.trim()
+    : cmdWithLabels
 
 }
 
@@ -85,7 +88,7 @@ const buildDefaultLabels = (args, dockerCmd) => {
   const { context } = params
   const { ENV:contextEnvs } = get(DOCKER, `CONTAINERS.${context.toUpperCase()}`)
 
-  return kegLabels.reduce((cmdWLabels, labelData) => {
+  return kegLabels.reduce((cmdWithLabels, labelData) => {
     const [ key, valuePath, label ] = labelData
 
     const value = cleanUpValue(
@@ -93,8 +96,8 @@ const buildDefaultLabels = (args, dockerCmd) => {
     )
 
     return value
-      ? buildLabel(cmdWLabels, label, args, key, value)
-      : cmdWLabels
+      ? buildLabel(cmdWithLabels, label, args, key, value)
+      : cmdWithLabels
 
   }, dockerCmd)
 
@@ -113,12 +116,12 @@ const buildDefaultLabels = (args, dockerCmd) => {
  * @returns {string} - Docker command with labels added
  */
 const getBuildLabels = (args, dockerCmd='') => {
-  const cmdWLabels = buildDefaultLabels(args, dockerCmd)
+  const cmdWithLabels = buildDefaultLabels(args, dockerCmd)
   const labels = get(args, 'params.labels')
 
   return labels
-    ? `${cmdWLabels} ${buildCustomLabels(labels)}`
-    : cmdWLabels
+    ? `${cmdWithLabels} ${buildCustomLabels(labels)}`
+    : cmdWithLabels
 
 }
 
