@@ -1,8 +1,8 @@
 {
   "name": "@keg-hub/keg-components",
   "version": "6.3.0",
-  "main": "build/cjs/index.js",
-  "module": "build/esm/index.js",
+  "main": "build/cjs",
+  "module": "build/esm",
   "publishConfig": {
     "access": "public"
   },
@@ -27,7 +27,7 @@
     "clean:full": "yarn clean:nm; yarn clean:cache; yarn clean:build; yarn clean:docs",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "clean:install": "yarn clean:full; yarn install --force",
-    "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.esm.js build/esm/index.js; cp ./index.native.esm.js build/esm/index.native.js",
+    "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.native.cjs.js build/cjs/index.native.js; cp ./index.esm.js build/esm/index.js; cp ./index.native.esm.js build/esm/index.native.js",
     "dev": "nodemon --watch ./configs --exec 'NODE_ENV=production rollup -c ./configs/rollup.config.js -w'",
     "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslint.config.js {{changed}} --fix",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
