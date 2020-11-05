@@ -163,6 +163,7 @@ reports
 # Any local ENV files in the docker container folder
 repos/**/containers/**/.env
 repos/**/container/.env
+!repos/keg-cli/containers/proxy/.env
 repos/**/container/run.sh
 !repos/**/build
 repos/**/run.sh

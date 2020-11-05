@@ -18,7 +18,6 @@ describe('convertParamsToEnvs', () => {
     expect(converted.KEG_FOO).toBe('BAR')
     expect(converted.KEG_BAZ).toBe('BAS')
     expect(converted.KEG_EXEC_CMD).toBe('run')
-    expect(converted.EXEC_CMD).toBe('run')
     expect(converted.KEG_NM_INSTALL).toBe(true)
     expect(converted.KEG_COPY_LOCAL).toBe(true)
     
@@ -30,7 +29,6 @@ describe('convertParamsToEnvs', () => {
 
     expect(converted2.KEG_NM_INSTALL).toBe(undefined)
     expect(converted2.KEG_EXEC_CMD).toBe('duper')
-    expect(converted2.EXEC_CMD).toBe('duper')
 
   })
 

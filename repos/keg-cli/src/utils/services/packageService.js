@@ -1,7 +1,7 @@
 const { get } = require('@keg-hub/jsutils')
+const { proxyService } = require('./proxyService')
 const { getServiceArgs } = require('./getServiceArgs')
 const { runInternalTask } = require('../task/runInternalTask')
-
 /**
  * Creates a docker package for the passed in arguments
  * @param {Object} args - Default arguments passed to all tasks
@@ -12,11 +12,15 @@ const { runInternalTask } = require('../task/runInternalTask')
 const packageService = async (args, argsExt) => {
   // Build the service arguments
   const serviceArgs = getServiceArgs(args, argsExt)
+  const isRun = get(serviceArgs, `params.service`) === 'run'
+
+  if(!isRun) return runInternalTask('docker.tasks.package', serviceArgs)
+
+  // Call the proxy service to make sure that is running
+  await proxyService(args)
 
   // Run the docker package task
-  return get(serviceArgs, `params.service`) === 'run'
-    ? runInternalTask('docker.tasks.package.tasks.run', serviceArgs)
-    : runInternalTask('docker.tasks.package', serviceArgs)
+  return runInternalTask('docker.tasks.package.tasks.run', serviceArgs)
 
 }
 

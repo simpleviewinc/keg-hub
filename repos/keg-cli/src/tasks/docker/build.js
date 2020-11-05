@@ -64,40 +64,57 @@ const removeLocalPackageJson = async (globalConfig, location) => {
  * @returns {Object} - Build image as a json object
  */
 const dockerBuild = async args => {
-  const { globalConfig, options, task, tasks } = args
+  const { globalConfig, options, __internal={} } = args
+  // Check if an internal location context was passed
+
+  // Make a copy of the task, so we don't modify the original
+  const task = {
+    ...args.task,
+    // If it was, update to the task location context to match it
+    locationContext: __internal.locationContext || args.task.locationContext
+  }
 
   // Remove container from the params if it exists
   // Otherwise it would cause getContext to fail
   // Because it thinks it needs to ask for the non-existent container
   const { container,  ...params } = args.params
-  const { context, core, log } = params
+  const { context, log } = params
 
   // Ensure we have a content to build the container
   !context && throwRequired(task, 'context', task.options.context)
 
   // Get the context data for the command to be run
+  const containerContext = await buildContainerContext({
+    ...args,
+    task,
+    params
+  })
+
   const {
     tap,
     image,
     location,
     cmdContext,
     contextEnvs,
-  } = await buildContainerContext({ ...args, params })
-
+  } = containerContext
 
   // If using a tap, and no location is found, throw an error
   cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)
 
   // Build the docker build command with options
-  const dockerCmd = await buildDockerCmd(globalConfig, {
-    ...params,
-    location,
-    cmd: `build`,
-    options: options,
-    context: cmdContext,
-    ...(tap && { tap }),
-    ...(image && { image }),
-    ...(params.args && { buildArgs: contextEnvs }),
+  const dockerCmd = await buildDockerCmd({
+    ...args,
+    containerContext,
+    params: {
+      ...params,
+      location,
+      cmd: `build`,
+      options: options,
+      context: cmdContext,
+      ...(tap && { tap }),
+      ...(image && { image }),
+      ...(params.args && { buildArgs: contextEnvs }),
+    }
   })
 
   Logger.info(`Building docker image "${ image || cmdContext }" ...`)

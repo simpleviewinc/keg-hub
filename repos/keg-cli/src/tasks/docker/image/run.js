@@ -1,12 +1,10 @@
 
 const docker = require('KegDocCli')
-const { spawnCmd } = require('KegProc')
 const { get } = require('@keg-hub/jsutils')
 const { CONTAINERS } = require('KegConst/docker/containers')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
-const { getContainerConst } = require('KegUtils/docker/getContainerConst')
+const { removeLabels } = require('KegUtils/docker/removeLabels')
 const { CONTAINER_PREFIXES } = require('KegConst/constants')
-const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
 const { throwDupContainerName } = require('KegUtils/error/throwDupContainerName')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { IMAGE } = CONTAINER_PREFIXES
@@ -29,44 +27,54 @@ const buildContainerName = async cmdContext => {
   return imgContainer
 }
 
-const getImageContext = async (args) => {
+const getImageTag = ({ context, image, tag }) => {
+  return context && context.includes(':')
+    ? context.split(':')
+    : [context, tag]
+}
+
+const getImageContext = async (args, image, tag) => {
   const { globalConfig, params, task } = args
-  const { tag } = params
 
   // Get the context data for the command to be run
-  const containerContext = await buildContainerContext({
-    globalConfig,
+  const imageContext = await buildContainerContext({
     task,
-    params,
+    globalConfig,
+    params: { ...params, image, tag },
   })
 
   // Build the name for the container
-  const container = await buildContainerName(containerContext.cmdContext)
+  const container = await buildContainerName(imageContext.cmdContext)
 
-  return { ...containerContext, container, tag }
+  return {
+    ...imageContext,
+    container,
+    tag : imageContext.tag,
+    image: imageContext.rootId,
+  }
 }
 
-const getImageData = async args => {
+const getImageData = async (args, imageName, tag) => {
   const { globalConfig, task, params } = args
 
-  const image = params.image &&
-    await docker.image.get(params.image) ||
+  const image = (params.image || imageName) &&
+    await docker.image.get(params.image || imageName) ||
     await imageSelect(args)
 
   // Get the context data for the command to be run
-  const containerContext = await buildContainerContext({
+  const imageContext = await buildContainerContext({
     task,
     globalConfig,
     params: { ...params, context: image.rootId },
   })
 
   // Build the name for the container
-  const container = await buildContainerName(containerContext.cmdContext)
+  const container = await buildContainerName(imageContext.cmdContext)
 
   return {
-    ...containerContext,
+    ...imageContext,
     container,
-    tag: image.tag,
+    tag: image.tag | tag,
     image: image.rootId,
   }
 
@@ -101,10 +109,11 @@ const handelContainerExists = (container, exists, imageContext, skipExists) => {
 const runDockerImage = async args => {
   const { globalConfig, params, task, __internal={} } = args
   const { context, connect, cleanup, cmd, entry, log, network, options, volumes } = params
+  const [imageName, tagName] = getImageTag(params)
 
   const imageContext = context
-    ? await getImageContext(args)
-    : await getImageData(args)
+    ? await getImageContext(args, imageName, tagName)
+    : await getImageData(args, imageName, tagName)
 
   const { tag, location, contextEnvs, container, image } = imageContext
 
@@ -118,21 +127,15 @@ const runDockerImage = async args => {
       __internal.skipExists
     )
 
-
   let opts = connect
     ? options.concat([ `-it` ])
     : options.concat([ `-d` ])
 
   cleanup && opts.push(`--rm`)
-  network && opts.push(`--network ${ network }`)
   entry && opts.push(`--entrypoint ${ entry }`)
 
-  opts = await getServiceValues({
-    opts,
-    volumes,
-    contextEnvs,
-    composePath: get(params, '__injected.composePath'),
-  })
+  // Clear out the docker-compose labels, so it does not think it controls this container
+  opts = await removeLabels(image, 'com.docker.compose', opts)
 
   await docker.image.run({
     tag,

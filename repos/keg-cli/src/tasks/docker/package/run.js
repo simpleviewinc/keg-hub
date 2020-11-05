@@ -1,41 +1,46 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { ask } = require('@keg-hub/ask-it')
+const { pathExists } = require('KegFileSys')
+const { DOCKER } = require('KegConst/docker')
+const { logVirtualUrl } = require('KegUtils/log')
 const { isUrl, get } = require('@keg-hub/jsutils')
-const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
-const { getServiceValues } = require('KegUtils/docker/compose/getServiceValues')
+const { removeLabels } = require('KegUtils/docker/removeLabels')
+const { checkContainerExists } = require('KegUtils/docker/checkContainerExists')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
-
+const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
 
 /**
- * Checks if a docker container already exists
- * <br/>If it does, asks user if they want to remove it
+ * Builds a docker container so it can be run
  * @function
- * @param {string} container - Name of the container that already exists
+ * @param {Array} opts - Options to pass to the docker run command
+ * @param {string} imageRef - Reference used to find the docker image
+ * @param {Object} parsed - The parsed docker package url
  *
- * @returns {string} - Name of the current branch
+ * @returns {Array} - Opts array with the labels to be overwritten
  */
-const checkExists = async container => {
-  const exists = await docker.container.get(container)
-  if(!exists) return false
-  
-  Logger.empty()
-  Logger.print(
-    Logger.colors.brightYellow(`A docker container already exists with the name`),
-    Logger.colors.cyan(`"${ container }"\n`),
-    Logger.colors.brightRed(`Running container must be removed before this container can be run!`)
-  )
+const updateImageLabels = async (opts, imageRef, parsed) => {
+  // Clear out the docker-compose labels, so it does not think it controls this container
+  const imgInspect = await docker.image.inspect({ image: imageRef })
+  // TODO: Update to NOT overwrite the opts value
+  opts = imgInspect && await removeLabels(imgInspect, 'com.docker.compose', opts)
 
-  Logger.empty()
-  const remove = await ask.confirm(`Would you like to remove it?`)
-  Logger.empty()
+  // Get the proxy url from the label, so it can be printed to the terminal
+  let proxyUrl = imgInspect && Object.entries(get(imgInspect, 'Config.Labels', {}))
+    .reduce((proxyUrl, [ key, value ]) => {
+      return value.indexOf(`Host(\``) === 0  ? value.split('`')[1] : proxyUrl
+    }, false)
 
-  return remove
-    ? await docker.container.destroy(container) && false
-    : true
+  // We might be able to build the proxyUrl if it can't be found
+  // But this would expect a consistent pattern for creating images
+  // So commenting out for now
+  // proxyUrl = proxyUrl || `${parsed.image}-${parsed.tag}.${contextEnvs.KEG_PROXY_HOST || DOCKER.KEG_PROXY_HOST}`
 
+  // If a proxy url is found, log it for easy access to the url
+  proxyUrl && logVirtualUrl(proxyUrl)
+
+  return opts
 }
 
 /**
@@ -85,7 +90,7 @@ const dockerPackageRun = async args => {
 
   const parsed = parsePackageUrl(packageUrl)
   const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
-
+  const imageTaggedName = `${parsed.image}:${parsed.tag}`
 
   /*
   * ----------- Step 2 ----------- *
@@ -94,7 +99,7 @@ const dockerPackageRun = async args => {
   await docker.pull(packageUrl)
   await docker.image.tag({
     item: packageUrl,
-    tag: `${parsed.image}:${parsed.tag}`,
+    tag: imageTaggedName,
     provider: true
   })
 
@@ -102,45 +107,55 @@ const dockerPackageRun = async args => {
   * ----------- Step 3 ----------- *
   * Build the container context information
   */
-  const { cmdContext, contextEnvs, location } = await buildContainerContext({
+  const containerContext = await buildContainerContext({
     task,
     globalConfig,
-    params: { ...params, context: isInjected ? context : parsed.image },
+    params: { image: parsed.image, tag: parsed.tag },
   })
+  const { cmdContext, contextEnvs, location, id } = containerContext
+  const [error, locExists] = await pathExists(location)
+  cmdLocation = locExists ? location : undefined
+
+  /*
+  * ----------- Step 3.1 ----------- *
+  * Check if the container already exists, and if it should be removed!
+  */
+  const containerExists = await checkContainerExists({
+    id,
+    args,
+    context: parsed.image,
+    containerRef: containerName,
+  })
+  if(containerExists)
+    return Logger.highlight(`Exiting task because container`, `"${containerExists}"`, `is still running!\n`)
 
   /*
   * ----------- Step 4 ----------- *
-  * Check if a container with the same name is already running
-  * If it is, ask the user if they want to remove it
+  * Get the options for the docker run command
   */
-  const exists = await checkExists(containerName)
-  if(exists) return Logger.info(`Exiting "package run" task!`)
+  let opts = [ `-it` ]
+  cleanup && opts.push(`--rm`)
+  opts.push(`--network ${network || contextEnvs.KEG_DOCKER_NETWORK || DOCKER.KEG_DOCKER_NETWORK }`)
+  opts = await updateImageLabels(opts, id || parsed.image, parsed)
 
   /*
   * ----------- Step 5 ----------- *
-  * Run the image in a container
+  * Run the docker image as a container
   */
-  let opts = await getServiceValues({
-    volumes,
-    contextEnvs,
-    opts: [ `-it` ],
-    composePath: get(params, '__injected.composePath'),
-  })
-
-  cleanup && opts.push(`--rm`)
-  network && opts.push(`--network ${ network }`)
-  
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
-
   try {
     await docker.image.run({
       ...parsed,
       opts,
-      location,
-      envs: { ...contextEnvs, [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun },
-      name: `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`,
+      cmd: command,
+      name: containerName,
+      location: cmdLocation,
       cmd: isInjected ? command : defCmd,
-      overrideDockerfileCmd: Boolean(!isInjected || command),
+      overrideDockerfileCmd: Boolean(command),
+      envs: {
+        ...contextEnvs,
+        [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun,
+      },
     })
   }
   catch(err){

@@ -9,6 +9,4 @@ module.exports = {
   ...require('./mapEnv'),
   ...require('./optionsHasArg'),
   ...require('./parseJson'),
-  ...require('./tryCatch'),
-  ...require('./waitForIt'),
 }

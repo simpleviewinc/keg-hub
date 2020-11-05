@@ -37,6 +37,7 @@ module.exports = globalConfig => {
     ...initialize('hub', globalConfig),
     ...initialize('mutagen', globalConfig),
     ...initialize('network', globalConfig),
+    ...initialize('proxy', globalConfig),
     ...initialize('tap', globalConfig),
   }
 }

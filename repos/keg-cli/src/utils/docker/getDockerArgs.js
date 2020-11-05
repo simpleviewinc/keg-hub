@@ -1,48 +1,7 @@
 const docker = require('KegDocCli')
 const { DOCKER } = require('KegConst/docker')
 const { exists } = require('KegUtils/helpers/exists')
-const { HTTP_PORT_ENV } = require('KegConst/constants')
 const { reduceObj, get, isStr } = require('@keg-hub/jsutils')
-const { loadComposeConfig } = require('./compose/loadComposeConfig')
-const { getBoundServicePorts } = require('./compose/getServicePorts')
-const { getComposeConfig } = require('./compose/getComposeConfig')
-
-/**
- * Temp helper method to map the app port to port 80
- * <br/> Once keg-proxy is setup this method will not be needed
- * @param {string} [dockerCmd=''] - Docker command to add the name to
- * @param {string} context - Context of the docker container
- *
- * @returns {string} - dockerCmd with the port arg added
- */
-const getPortMap = async (context, contextEnvs, __injected={}) => {
-  const envPath = `CONTAINERS.${context.toUpperCase()}.ENV`
-
-  // Get the compose path for the app
-  const composePath = __injected.composePath || get(DOCKER, `${ envPath }.KEG_COMPOSE_DEFAULT`)
-
-  // Load the docker-compose file as a json object
-  const composeConfig = await getComposeConfig(contextEnvs, composePath)
-
-  const exposedPorts = composeConfig
-    ? await getBoundServicePorts(contextEnvs, composeConfig)
-    : []
-
-  // Get the doc app port and bind it to 80 if it exists
-  const appPort = get(DOCKER, `${ envPath }.${ HTTP_PORT_ENV }`)
-
-  // Bind the app port to port 80 so we can access it from the browser
-  // This is only needed until keg-proxy is setup
-  const boundPort = appPort && `-p 80:${appPort}`.trim()
-
-  // Add the bound port if it does not already exist
-  boundPort &&
-    !exposedPorts.includes(boundPort) &&
-    exposedPorts.unshift(boundPort)
-
-  return exposedPorts
-}
-
 
 /**
  * Loops over the passed in args and maps them to the docker constants
@@ -142,5 +101,4 @@ module.exports = {
   addContainerEnv,
   addContainerName,
   getDockerArgs,
-  getPortMap,
 }

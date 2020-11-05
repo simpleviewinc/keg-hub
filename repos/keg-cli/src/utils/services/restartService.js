@@ -1,5 +1,6 @@
 const { Logger } = require('KegLog')
 const { get } = require('@keg-hub/jsutils')
+const { proxyService } = require('./proxyService')
 const { mutagenService } = require('./mutagenService')
 const { getServiceArgs } = require('./getServiceArgs')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
@@ -18,6 +19,9 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
  */
 const restartService = async (args, exArgs) => {
   const { context, tap } = exArgs
+
+  // Call the proxy service to make sure that is running
+  await proxyService(args)
 
   // Build the service arguments
   const serviceArgs = getServiceArgs(args, exArgs)

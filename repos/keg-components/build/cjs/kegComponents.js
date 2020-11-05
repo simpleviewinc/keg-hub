@@ -1056,26 +1056,44 @@ var useColor = function useColor(fill, stroke, color, border, style, theme) {
 var SvgIcon = function SvgIcon(props) {
   var border = props.border,
       color = props.color,
+      clipRule = props.clipRule,
       delta = props.delta,
       fill = props.fill,
-      name = props.name,
+      fillRule = props.fillRule,
       size = props.size,
       stroke = props.stroke,
       _props$style = props.style,
       style = _props$style === void 0 ? jsutils.noPropObj : _props$style,
+      svgFill = props.svgFill,
       viewBox = props.viewBox,
-      attrs = _objectWithoutProperties(props, ["border", "color", "delta", "fill", "name", "size", "stroke", "style", "viewBox"]);
+      attrs = _objectWithoutProperties(props, ["border", "color", "clipRule", "delta", "fill", "fillRule", "size", "stroke", "style", "svgFill", "viewBox"]);
   var theme = reTheme.useTheme();
   var sizeStyle = useSize(size, style, theme);
   var colorStyle = useColor(fill, stroke, color, border, style, theme);
   return React__default.createElement(Svg__default, _extends({}, attrs, {
+    fill: svgFill,
     viewBox: viewBox,
     style: [style, sizeStyle]
   }), React__default.createElement(Svg.Path, {
     stroke: colorStyle.stroke,
     fill: colorStyle.fill,
-    d: delta
+    d: delta,
+    fillRule: fillRule,
+    clipRule: clipRule
   }));
+};
+SvgIcon.propTypes = {
+  border: PropTypes.string,
+  color: PropTypes.string,
+  clipRule: PropTypes.string,
+  delta: PropTypes.string,
+  fill: PropTypes.string,
+  fillRule: PropTypes.string,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  stroke: PropTypes.string,
+  style: PropTypes.object,
+  svgFill: PropTypes.string,
+  viewBox: PropTypes.string
 };
 
 var Check = function Check(props) {
@@ -4056,8 +4074,10 @@ var textToggle = {
   toggleComponent: {
     main: {
       mV: 15,
-      alI: 'flex-end',
-      txDc: 'underline'
+      alI: 'flex-end'
+    },
+    text: {
+      txDL: 'underline'
     }
   }
 };

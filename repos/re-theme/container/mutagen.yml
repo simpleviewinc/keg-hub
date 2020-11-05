@@ -22,3 +22,25 @@ sync:
         - "/reports"
         - "/build"
         - "/docs"
+actions:
+  jsutils:
+    install:
+      location: /keg/app/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/app/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/app/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/app/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - bash

@@ -1,9 +1,9 @@
 const docker = require('KegDocCli')
 const { get } = require('@keg-hub/jsutils')
-const { DOCKER } = require('KegConst/docker')
+const { proxyService } = require('./proxyService')
+const { getServiceArgs } = require('./getServiceArgs')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { throwContainerNotFound } = require('KegUtils/error/throwContainerNotFound')
-const { getServiceArgs } = require('./getServiceArgs')
 
 /**
  * Runs the run service, to run a container directly, but overwrite the entry point
@@ -23,6 +23,9 @@ const runService = async (args, exArgs) => {
   const serviceArgs = getServiceArgs(args, exArgs)
   const { params } = serviceArgs
   const { sync, local, remote } = params
+
+  // Call the proxy service to make sure that is running
+  await proxyService(args)
 
   // Step 1 - Run the docker container, but don't attach to it
   // We do this so we can create a mutagen sync after the container has been started

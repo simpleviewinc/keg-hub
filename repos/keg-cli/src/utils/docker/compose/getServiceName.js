@@ -12,7 +12,6 @@ const { loadComposeConfig } = require('./loadComposeConfig')
  * @returns {string} - The first found service name
  */
 const getServiceName = async (args={}) => {
-
   const composeConfig = args.composeConfig || await loadComposeConfig(args)
   const services = composeConfig && get(composeConfig, 'services')
 

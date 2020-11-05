@@ -1966,15 +1966,20 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
   integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
-"@keg-hub/keg-components@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/@keg-hub/keg-components/-/keg-components-6.0.0.tgz#39e632ec9b42bcf881a937c3856af9f6920184c5"
-  integrity sha512-isArLtaQi5I4yX4nUsO63BUzBeqb/XSNdNjZLz49jz0XCwPEuKTJMi7DPM2sfofOha0q6FdVX3J/BrX0HG8YUw==
+"@keg-hub/jsutils@6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-6.2.1.tgz#0d9dbf562e313eb7690d36a2b8e9147b1e08d52a"
+  integrity sha512-aCZ86nB+f6awWbDIPd6VPaePQjm8AYNXvGrwe2Ip06F6oVJZ7tiOIBwFHeK/gAKqmw1wnxl4B0z21vQeINd6dw==
 
-"@keg-hub/re-theme@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-6.0.0.tgz#bfb2a270c93c8e0510bf6387d6ed2a9c651a79af"
-  integrity sha512-25PCZi34V3PKntY8e4L4YMixBvjN5cJztGCWUe+Y8sCfNApTgGZjuZBozcQj4d0Bh1CBk5/07cIlgksIT5iYLQ==
+"@keg-hub/keg-components@6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/keg-components/-/keg-components-6.3.0.tgz#2bae5cc491ddc7daeeaa931ac266d3ecadf325c5"
+  integrity sha512-uQavFm4OGPLByj7ZrAeZDfSGrvgWx/Auk0gVfv5EObBEugAqKb0sK7GF2kowJEdxan5t4fpNTlu+uj4XO2APIg==
+
+"@keg-hub/re-theme@6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-6.3.0.tgz#907c2453eb6f3f2bf832e8afe5121a9b4bc03829"
+  integrity sha512-eHz+NtQgtI+tWxwGMgzCutRlpYEp491LSlkVTaCKXThGnl8N4UK+rYnlXlz28qBCwXXOuidQiu0SUIDK/i6ueQ==
 
 "@keg-hub/tap-resolver@1.1.1":
   version "1.1.1"
@@ -11331,6 +11336,11 @@ react-is@^16.12.0, react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-native-linear-gradient@2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
+  integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
 react-native-safe-area-context@3.0.2:
   version "3.0.2"

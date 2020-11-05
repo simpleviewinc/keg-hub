@@ -1,8 +1,17 @@
 version: "3.8"
+networks:
+  {{ dockerNetwork }}:
+    external: true
 services:
   {{ image }}:
     image: {{ image }}
     container_name: {{ container }}
+    tty: true
+    stdin_open: true
+    networks:
+      - {{ dockerNetwork }}
     build:
-      context: {{ injectPath }}
+      context: {{ buildContextPath }}
       dockerfile: {{ dockerPath }}
+    labels:
+{{ generatedLabels }}

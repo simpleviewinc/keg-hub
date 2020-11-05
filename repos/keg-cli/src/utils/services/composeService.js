@@ -49,6 +49,7 @@ const createSyncs = async (args, containerContext) => {
  */
 const composeService = async (args, exArgs) => {
   const { context, tap } = exArgs
+  const __skipDockerExec = get(args, '__internal.skipDockerExec')
   
   // Build the service arguments
   const serviceArgs = getServiceArgs(args, exArgs)
@@ -98,24 +99,21 @@ const composeService = async (args, exArgs) => {
   * Connect to the service and run the start cmd
   */
   const { cmdContext, image } = composeContext
-  return runInternalTask('tasks.docker.tasks.exec', {
-    ...args,
-    __internal: { containerContext: composeContext },
-    params: {
-      ...params,
-      ...buildExecParams(
-        serviceArgs.params,
-        { detach: Boolean(get(serviceArgs, 'params.detach')) },
-      ),
-      cmd: await getContainerCmd({ context: cmdContext, image }),
-      context: cmdContext,
-    },
-  })
-
-  // Check if we should start logging the output of the service
-  // get(serviceArgs, 'params.follow') &&
-  //   await runInternalTask('docker.tasks.log', serviceArgs)
-  // return composeContext
+  return __skipDockerExec
+    ? composeContext
+    : runInternalTask('tasks.docker.tasks.exec', {
+        ...args,
+        __internal: { containerContext: composeContext },
+        params: {
+          ...params,
+          ...buildExecParams(
+            serviceArgs.params,
+            { detach: Boolean(get(serviceArgs, 'params.detach')) },
+          ),
+          cmd: await getContainerCmd({ context: cmdContext, image }),
+          context: cmdContext,
+        },
+      })
 
 }
 

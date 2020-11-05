@@ -13,10 +13,11 @@ const buildExecParams = ({ detach }, action={}) => {
   const detachMode = isBool(detach) ? detach : actionParams.detach
 
   return {
+    privileged: true,
     ...actionParams,
     detach: detachMode,
     options: detachMode ? '' : '-it',
-    ...(workdir || location && { workdir: workdir || location }),
+    ...((workdir || location) && { workdir: workdir || location }),
   }
 
 }
