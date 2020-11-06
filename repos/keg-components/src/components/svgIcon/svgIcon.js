@@ -75,6 +75,9 @@ export const SvgIcon = props => {
     fillRule,
     size,
     stroke,
+    strokeWidth,
+    strokeLinecap,
+    strokeLinejoin,
     style = noPropObj,
     svgFill,
     viewBox,
@@ -94,6 +97,9 @@ export const SvgIcon = props => {
     >
       <Path
         stroke={colorStyle.stroke}
+        strokeWidth={strokeWidth}
+        strokeLinecap={strokeLinecap}
+        strokeLinejoin={strokeLinejoin}
         fill={colorStyle.fill}
         d={delta}
         fillRule={fillRule}

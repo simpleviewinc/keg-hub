@@ -31,7 +31,7 @@
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "dependencies": {
-    "@keg-hub/args-parse": "0.0.1",
+    "@keg-hub/args-parse": "6.1.0",
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/jsutils": "0.0.1",
     "@keg-hub/spawn-cmd": "0.0.1",
