@@ -23,6 +23,7 @@ const { PACKAGE } = CONTAINER_PREFIXES
 const updateImageLabels = async (opts, imageRef, parsed) => {
   // Clear out the docker-compose labels, so it does not think it controls this container
   const imgInspect = await docker.image.inspect({ image: imageRef })
+  // TODO: Update to NOT overwrite the opts value
   opts = imgInspect && await removeLabels(imgInspect, 'com.docker.compose', opts)
 
   // Get the proxy url from the label, so it can be printed to the terminal
