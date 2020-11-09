@@ -165,6 +165,7 @@ const shared = {
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
       "process.env.RE_PLATFORM": JSON.stringify(platform),
       "process.env.PLATFORM": JSON.stringify(platform),
+      "import 'prop-types';": "",
     }),
     resolve(),
     json(),

@@ -79,6 +79,8 @@
     "babel-preset-expo": "8.3.0",
     "babel-plugin-module-resolver": "4.0.0",
     "babel-plugin-react-native-web": "0.14.7",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
+    "babel-preset-react-native": "4.0.1",
     "eslint": "7.4.0",
     "eslint-plugin-jest": "23.18.0",
     "eslint-plugin-react": "7.20.0",
