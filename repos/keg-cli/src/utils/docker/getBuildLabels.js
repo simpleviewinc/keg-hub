@@ -126,5 +126,6 @@ const getBuildLabels = (args, dockerCmd='') => {
 }
 
 module.exports = {
-  getBuildLabels
+  getBuildLabels,
+  buildLabel
 }

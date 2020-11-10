@@ -4,12 +4,77 @@ const { pathExists } = require('KegFileSys')
 const { DOCKER } = require('KegConst/docker')
 const { logVirtualUrl } = require('KegUtils/log')
 const { isUrl, get } = require('@keg-hub/jsutils')
-const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
+const { proxyLabels } = require('KegConst/docker/labels')
+const { buildLabel } = require('KegUtils/docker/getBuildLabels')
 const { removeLabels } = require('KegUtils/docker/removeLabels')
+const { parsePackageUrl } = require('KegUtils/package/parsePackageUrl')
 const { checkContainerExists } = require('KegUtils/docker/checkContainerExists')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { CONTAINER_PREFIXES, KEG_DOCKER_EXEC, KEG_EXEC_OPTS } = require('KegConst/constants')
 const { PACKAGE } = CONTAINER_PREFIXES
+
+/**
+ * Loops the proxy labels and builds them in a format the docker run command needs
+ * <br>Also gets the value for the proxy host so it can be logged
+ * @function
+ * @param {Array} optsWLabels - Options to pass to the docker run command
+ * @param {Object} args - Contains values used to create the proxy labels
+ * @param {string} args.proxyDomain - The subdomain for the proxy url
+ * @param {string} args.contextEnvs - Environment variables of the image
+ *
+ * @returns {Object} - The options array with the proxy labels and the full proxy url
+ */
+const addProxyLabels = (optsWLabels, args) => {
+  const builtOpts = [ ...optsWLabels ]
+  let fullProxyUrl
+  proxyLabels.map(labelData => {
+    const [ key, valuePath, label ] = labelData
+    const value = get(args.contextEnvs, key.toUpperCase(), get(args, valuePath))
+
+    const builtLabel = value && buildLabel('', label, args, key, value)
+    builtLabel && builtOpts.push(builtLabel)
+    // Check if the key is for the proxy host, and get the url to be logged
+    builtLabel && 
+      key === 'KEG_PROXY_HOST' &&
+      (fullProxyUrl = builtLabel.split('`')[1])
+
+  })
+
+  return { builtOpts, fullProxyUrl }
+}
+
+/**
+ * Checks if the proxy host label already exists
+ * <br>If it does not, it will try to build them based on the ENVs
+ * <br>Logs out the proxy url for accessing the container in the browser
+ * @function
+ * @param {Array} optsWLabels - Options to pass to the docker run command
+ * @param {Object} imgLabels - Labels already on the docker image
+ * @param {Object} args - Contains values used to create the proxy labels
+ * @param {string} args.proxyDomain - The subdomain for the proxy url
+ * @param {string} args.contextEnvs - Environment variables of the image
+ *
+ * @returns {Array} - Built options array with the proxy labels added if needed
+ */
+const checkProxyUrl = (optsWLabels, imgLabels, args) => {
+  // Get the proxy url from the label, so it can be printed to the terminal
+  let proxyUrl = Object.entries(imgLabels)
+    .reduce((proxyUrl, [ key, value ]) => {
+      return value.indexOf(`Host(\``) === 0  ? value.split('`')[1] : proxyUrl
+    }, false)
+
+  // If no proxyUrl is set, then the proxy labels don't exist
+  // So make call to try and add them to the image
+  // Otherwise use the labels from the image, and don't add the proxy labels to the options array
+  const { builtOpts, fullProxyUrl } = !proxyUrl
+    ? addProxyLabels(optsWLabels, args)
+    : { builtOpts: optsWLabels, fullProxyUrl: proxyUrl }
+
+  // Log out the proxy url for easy access
+  logVirtualUrl(fullProxyUrl)
+
+  return builtOpts
+}
 
 /**
  * Builds a docker container so it can be run
@@ -20,27 +85,34 @@ const { PACKAGE } = CONTAINER_PREFIXES
  *
  * @returns {Array} - Opts array with the labels to be overwritten
  */
-const updateImageLabels = async (opts, imageRef, parsed) => {
-  // Clear out the docker-compose labels, so it does not think it controls this container
+const setupLabels = async (opts, imageRef, parsed, contextEnvs={}) => {
+  let optsWLabels = [ ...opts ]
   const imgInspect = await docker.image.inspect({ image: imageRef })
-  // TODO: Update to NOT overwrite the opts value
-  opts = imgInspect && await removeLabels(imgInspect, 'com.docker.compose', opts)
 
-  // Get the proxy url from the label, so it can be printed to the terminal
-  let proxyUrl = imgInspect && Object.entries(get(imgInspect, 'Config.Labels', {}))
-    .reduce((proxyUrl, [ key, value ]) => {
-      return value.indexOf(`Host(\``) === 0  ? value.split('`')[1] : proxyUrl
-    }, false)
+  // If the image can't be found, just return
+  if(!imgInspect) return optsWLabels
 
-  // We might be able to build the proxyUrl if it can't be found
-  // But this would expect a consistent pattern for creating images
-  // So commenting out for now
-  // proxyUrl = proxyUrl || `${parsed.image}-${parsed.tag}.${contextEnvs.KEG_PROXY_HOST || DOCKER.KEG_PROXY_HOST}`
+  // Clear out the docker-compose labels, so it does not think it controls this container
+  optsWLabels = await removeLabels(imgInspect, 'com.docker.compose', optsWLabels)
 
-  // If a proxy url is found, log it for easy access to the url
-  proxyUrl && logVirtualUrl(proxyUrl)
+  // Get the image labels and Envs that were built with the image
+  const imgLabels = get(imgInspect, 'Config.Labels', {})
 
-  return opts
+  // Convert the image ENV's from an array to an object so it can be merged with the contextEnvs
+  const imgEnvs = get(imgInspect, 'Config.Env', [])
+    .reduce((envObj, env) => {
+      const [ key, value ] = env.split('=')
+      key && value && (envObj[key] = value)
+
+      return envObj
+    }, {})
+
+  // Check if the proxy labels should be added based on the proxy url label
+  return checkProxyUrl(optsWLabels, imgLabels, {
+    proxyDomain: `${parsed.image}-${parsed.tag}`,
+    contextEnvs: { ...contextEnvs, ...imgEnvs }
+  })
+
 }
 
 /**
@@ -63,6 +135,7 @@ const dockerPackageRun = async args => {
     context,
     cleanup,
     network,
+    name,
     package,
     provider,
     repo,
@@ -89,7 +162,7 @@ const dockerPackageRun = async args => {
       : `${ get(globalConfig, `docker.providerUrl`) }/${ package }`
 
   const parsed = parsePackageUrl(packageUrl)
-  const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
+  const containerName = name || `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
   const imageTaggedName = `${parsed.image}:${parsed.tag}`
 
   /*
@@ -136,13 +209,15 @@ const dockerPackageRun = async args => {
   let opts = [ `-it` ]
   cleanup && opts.push(`--rm`)
   opts.push(`--network ${network || contextEnvs.KEG_DOCKER_NETWORK || DOCKER.KEG_DOCKER_NETWORK }`)
-  opts = await updateImageLabels(opts, id || parsed.image, parsed)
+  opts = await setupLabels(opts, id || parsed.image, parsed, contextEnvs)
 
   /*
   * ----------- Step 5 ----------- *
   * Run the docker image as a container
   */
+  // TODO: investigate using the cmd from the image.inspect call => const imgCmd = get(imgInspect, 'Config.Cmd', [])
   const defCmd = `/bin/bash ${ contextEnvs.DOC_CLI_PATH }/containers/${ cmdContext }/run.sh`
+
   try {
     await docker.image.run({
       ...parsed,
@@ -190,7 +265,6 @@ module.exports = {
         example: 'keg docker package run --branch develop',
       },
       context: {
-        alias: [ 'name' ],
         allowed: [],
         description: 'Context of the docker package to run',
         example: 'keg docker package run --context core',
@@ -206,6 +280,10 @@ module.exports = {
         alias: [ 'net' ],
         description: 'Set the docker run --network option to this value',
         example: 'keg docker package run --network host'
+      },
+      name: {
+        description: 'Set the name of the docker container being run',
+        example: 'keg docker package run --name my-container',
       },
       provider: {
         alias: [ 'pro' ],
