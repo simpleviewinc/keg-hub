@@ -135,6 +135,7 @@ const dockerPackageRun = async args => {
     context,
     cleanup,
     network,
+    name,
     package,
     provider,
     repo,
@@ -161,7 +162,7 @@ const dockerPackageRun = async args => {
       : `${ get(globalConfig, `docker.providerUrl`) }/${ package }`
 
   const parsed = parsePackageUrl(packageUrl)
-  const containerName = `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
+  const containerName = name || `${ PACKAGE }-${ parsed.image }-${ parsed.tag }`
   const imageTaggedName = `${parsed.image}:${parsed.tag}`
 
   /*
@@ -264,7 +265,6 @@ module.exports = {
         example: 'keg docker package run --branch develop',
       },
       context: {
-        alias: [ 'name' ],
         allowed: [],
         description: 'Context of the docker package to run',
         example: 'keg docker package run --context core',
@@ -280,6 +280,10 @@ module.exports = {
         alias: [ 'net' ],
         description: 'Set the docker run --network option to this value',
         example: 'keg docker package run --network host'
+      },
+      name: {
+        description: 'Set the name of the docker container being run',
+        example: 'keg docker package run --name my-container',
       },
       provider: {
         alias: [ 'pro' ],
