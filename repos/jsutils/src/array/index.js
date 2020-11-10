@@ -1,3 +1,5 @@
+export * from './areFrequencyEqual'
+export * from './areSetEqual'
 export * from './cloneArr'
 export * from './eitherArr'
 export * from './flatMap'
