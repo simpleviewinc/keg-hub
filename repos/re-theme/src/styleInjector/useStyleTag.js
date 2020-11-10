@@ -93,7 +93,7 @@ export const useStyleTag = (style, className='', config) => {
     const { blocks, filtered } = convertToCss(style, config)
 
     // Create a unique selector based on the className and built blocks
-    const selector = getSelector(className, blocks.join(''), 'keg')
+    const {hashClass, selector} = getSelector(className, blocks.join(''), 'keg')
 
     // Adds the css selector ( className ) to each block
     const css = blocks.reduce((css, block) => {
@@ -105,11 +105,10 @@ export const useStyleTag = (style, className='', config) => {
     }, { all: '', rules: [] })
 
     addStylesToDom(selector, css, themeKey)
-
     return {
       css,
       filteredStyle: filtered,
-      classList: selector.split('.').filter(cls => cls)
+      classList: eitherArr(className, [className]).concat([hashClass]),
     }
   }, [style, className, themeSize, themeKey, config])
 

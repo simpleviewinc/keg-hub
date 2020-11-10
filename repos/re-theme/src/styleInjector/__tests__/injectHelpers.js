@@ -99,24 +99,24 @@ describe('injectHelpers', () => {
     })
 
     it('should return a css className selector with a has the passed in className', () => {
-      const selector = getSelector(`test-class`, `my-test-styles`)
+      const {selector} = getSelector(`test-class`, `my-test-styles`)
       expect(selector.includes(`test-class`)).toBe(true)
     })
 
     it('should should add a . to the passed in className', () => {
-      const selector = getSelector(`test-class`, `my-test-styles`)
+      const {selector} = getSelector(`test-class`, `my-test-styles`)
       expect(selector.includes(`.test-class`)).toBe(true)
     })
 
     it('should should accept className as an array', () => {
-      const selector = getSelector([`test-class`, `test-class-2`], `my-test-styles`)
+      const {selector} = getSelector([`test-class`, `test-class-2`], `my-test-styles`)
       expect(selector.includes(`.test-class`)).toBe(true)
       expect(selector.includes(`.test-class-2`)).toBe(true)
     })
 
     it('should not fail when no className is passed in', () => {
-      const selector = getSelector(undefined, `my-test-styles`)
-      expect(getSelector(undefined, `my-test-styles`)).toBe(`.keg-275181350`)
+      const {selector} = getSelector(undefined, `my-test-styles`)
+      expect(selector).toBe(`.keg-275181350`)
     })
 
     it('should filter out classnames without prefix `keg`', () => {
@@ -128,13 +128,13 @@ describe('injectHelpers', () => {
         , true)
       }
       // array classnames
-      const selector = getSelector([`test-class`, `test-keg-2`, `keg-text`], `my-test-styles`, 'keg')
+      const {selector} = getSelector([`test-class`, `test-keg-2`, `keg-text`], `my-test-styles`, 'keg')
       const includeTestClass = includes(selector, [`test-class`, `test-keg-2`])
       expect(includeTestClass).toBe(false)
       expect(selector.includes('keg-text')).toBe(true)
 
       // string classnames
-      const selector2 = getSelector(`keg-text test-class test-class-2`, `my-test-styles`, 'keg')
+      const {selector: selector2} = getSelector(`keg-text test-class test-class-2`, `my-test-styles`, 'keg')
       const includeTestClass2 = includes(selector2, [`test-class`, `test-class-2`])
       expect(includeTestClass2).toBe(false)
       expect(selector.includes('keg-text')).toBe(true)
