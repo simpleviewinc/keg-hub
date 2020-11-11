@@ -171,7 +171,18 @@ const jsonOutput = (data, skipError) => {
           built.rootId = built.repository.indexOf('/') !== -1
             ? built.repository.split('/').pop()
             : built.repository
+        else if(built.image && isStr(built.labels)){
 
+          // Convert container labels from a string to an object
+          built.labelsObj = built.labels.split(',')
+            .reduce((labelObj, label) => {
+              const [ key, value ] = label.split('=')
+              key && value && (labelObj[key] = value)
+
+              return labelObj
+            }, {})
+
+        }
         const existing = indexMap[built.id] && items[ indexMap[built.id] ]
 
         // De-dupes the returned images
