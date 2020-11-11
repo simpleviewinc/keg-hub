@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
-import { Container } from '../container'
+import { Container } from './container'
 import PropTypes from 'prop-types'
 import { useClassList } from 'KegClassList'
 

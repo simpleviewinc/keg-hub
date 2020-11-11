@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react'
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
-import { getPlatform, getPressHandler } from '../../../utils'
+import { getPlatform, getPressHandler } from '../../utils'
 import { pickKeys, isArr, noPropObj } from '@keg-hub/jsutils'
 
 /**
