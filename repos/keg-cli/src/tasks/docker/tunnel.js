@@ -1,11 +1,16 @@
-const ngrok = require('ngrok')
+const path = require('path')
 const { Logger } = require('KegLog')
+const platform = require('os').platform()
 const qrcode = require('qrcode-terminal')
 const { DOCKER } = require('KegConst/docker')
 const { isObj, isStr } = require('@keg-hub/jsutils')
-const { CONTAINER_PREFIXES } = require('KegConst/constants')
+const { CONTAINER_PREFIXES, CLI_ROOT } = require('KegConst/constants')
 const { containerSelect } = require('KegUtils/docker/containerSelect')
 const { PACKAGE, IMAGE } = CONTAINER_PREFIXES
+const { pipeCmd } = require('KegProc')
+
+const NODE_MODULES_BIN = path.join(CLI_ROOT, `node_modules/.bin`)
+const NGROK_BIN = './ngrok' + (platform === 'win32' ? '.exe' : '')
 
 /**
  * Adds the http protocol to the found host header if it does not exist
@@ -100,6 +105,57 @@ const getHostHeader = async host => {
   return addHostHeaderProto(getHostFromLabel(container) || getHostFromName(container.name))
 }
 
+// TODO: Add better parsing for the log message
+/**
+ * Callback for the standard out of the ngrok process
+ * <br/>Looks for the started tunnel message, and parses the ngrok url
+ * <br/>Displays a QR code with or the ngrok url for easy access
+ * @function
+ * @param {boolean} qr - Should a qr code be displayed
+ * @param {boolean} log - Should messages be logged
+ * @param {boolean} tunnelSet - Has the ngrok tunnel be setup
+ *
+ * @returns {function} - Standard out callback for the ngrok process
+ */
+const onStdOut = (qr, log, tunnelSet=false) => {
+
+ /**
+  * Return a callback used by the ngrok process to log message
+  * <br/>This is used to parse the ngrok tunnel url so it can be displayed 
+  * <br/>We also use it to create a QR code for easy access
+  * @function
+  * @param {string} data - Output from the standard out ngrok process
+  *
+  * @returns {void}
+  */
+  return data => {
+
+    // If logging is turned on and it's not the started tunnel message, then log the data
+    if(tunnelSet || data.indexOf(`msg="started tunnel"`) === -1)
+      return tunnelSet && log && Logger.stdout(data)
+
+    // Set tunnel set to turn, so we can start logging
+    tunnelSet = true
+
+    const tunnelUrl = data.split(`url=`)[1].split(' ')[0]
+    const localUrl = data.split(`addr=`)[1].split(' ')[0]
+
+    Logger.spacedMsg('Source:', Logger.color('magenta', localUrl))
+    Logger.spacedMsg('Tunnel:', Logger.color('green', tunnelUrl))
+
+    // If no qr code is set then just return
+    if(!qr) return
+
+    // Show a qr code on the terminal that the user can use to quickly access the tunnel on a mobile device
+    qr && qrcode.generate(tunnelUrl, { small: false })
+    // Set the qr to false to we only log out one qr code
+    qr = false
+
+    Logger.empty()
+  }
+
+}
+
 /**
  * Create a public tunnel the the url (by default, to `kegdev.xyz`)
  * @function
@@ -111,7 +167,7 @@ const getHostHeader = async host => {
  */
 const tunnel = async args => {
   const { params } = args
-  const { qr, source, port, host } = params
+  const { qr, source, port, host, log } = params
 
   const hostHeader = await getHostHeader(host)
   !hostHeader && Logger.warn('Could not find a valid host header from container meta-data!')
@@ -120,16 +176,16 @@ const tunnel = async args => {
   
   Logger.header('Starting tunnel...', 'white')
 
-  const tunnelUrl = await ngrok.connect({
-    host_header: hostHeader,
-    addr: srcUri
+  let ngrokCmd = `${NGROK_BIN} http --log=stdout`
+  hostHeader
+    ? (ngrokCmd += ` -host-header=rewrite ${hostHeader}`)
+    : (ngrokCmd += ` ${srcUri}`)
+
+  await pipeCmd(ngrokCmd.trim(), {
+    cwd: NODE_MODULES_BIN,
+    onStdOut: onStdOut(qr, log),
   })
 
-  Logger.spacedMsg('Source:', Logger.color('magenta', srcUri))
-  Logger.spacedMsg('Tunnel:', Logger.color('green', tunnelUrl))
-
-  // show a qr code on the terminal that the user can use to quickly access the tunnel on a mobile device
-  qr && qrcode.generate(tunnelUrl, { small: false })
 }
 
 module.exports = {
@@ -158,6 +214,11 @@ module.exports = {
       port: {
         description: 'optional override for the source of the tunnel, using this specified port of localhost instead.',
         example: 'keg docker tunnel --port 19006',
+      },
+      log: {
+        description: 'Log output from the tunnel process',
+        example: 'keg docker tunnel --no-log',
+        default: true
       }
     }
   }
