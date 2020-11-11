@@ -1,9 +1,9 @@
 const ROOT_DIR = require('app-root-path').path
-const { aliases } = require('./aliases.config.js')
+const { getAliases } = require('./aliases.config.js')
 const { reduceObj } = require('@keg-hub/jsutils')
 const platform = process.env.RE_PLATFORM || process.env.PLATFORM || 'web'
 
-const mappedNames = reduceObj(aliases, (key, value, updated) => {
+const mappedNames = reduceObj(getAliases(''), (key, value, updated) => {
   updated[key] = `${ROOT_DIR}/${value}`
   return updated
 }, {})

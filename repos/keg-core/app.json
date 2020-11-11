@@ -1,9 +1,9 @@
 {
-  "name": "SVKeg",
-  "displayName": "SVKeg",
+  "name": "Keg-Core",
+  "displayName": "Keg-Core",
   "expo": {
-    "name": "kegexpo",
-    "slug": "kegexpo",
+    "name": "kegcore",
+    "slug": "kegcore",
     "privacy": "public",
     "platforms": [
       "ios",
@@ -29,7 +29,7 @@
     }
   },
   "keg": {
-    "name": "SVKeg",
+    "name": "Keg-Core",
     "routes": {},
     "overrides": {
       "kegName": [
