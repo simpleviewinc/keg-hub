@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { isValidComponent } from 'KegUtils'
-import { noOpObj } from '../utils/helpers/noop'
-import { get, reduceObj, isStr, deepMerge, isObj } from '@keg-hub/jsutils'
+import { get, reduceObj, isStr, deepMerge, isObj, noOpObj } from '@keg-hub/jsutils'
 
 const getMediaType = (mediaTypes, styles) => {
   return mediaTypes

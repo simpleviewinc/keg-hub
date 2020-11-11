@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
-import { get } from '@keg-hub/jsutils'
+import { get, noPropObj } from '@keg-hub/jsutils'
 import Svg, { Path } from 'react-native-svg'
 import { useTheme } from '@keg-hub/re-theme'
-import { noPropObj } from '../../../utils/helpers/noop'
 
 /**
  * Custom hook to find the size from the props and styles

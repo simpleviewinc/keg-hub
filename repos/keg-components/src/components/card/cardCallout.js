@@ -1,8 +1,7 @@
 import React from 'react'
 import { View } from 'KegView'
-import { get } from '@keg-hub/jsutils'
+import { get, noPropObj } from '@keg-hub/jsutils'
 import { Text } from '../typography/text'
-import { noPropObj } from '../../utils/helpers/noop'
 import { useClassList } from 'KegClassList'
 
 export const CardCallout = ({

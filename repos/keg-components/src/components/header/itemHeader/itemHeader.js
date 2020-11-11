@@ -9,7 +9,7 @@ import { H5 } from '../../typography'
 import { renderFromType } from '../../../utils'
 import { useThemePath } from '../../../hooks'
 import { useClassList } from 'KegClassList'
-import { noPropObj } from '../../../utils/helpers/noop'
+import { noPropObj } from '@keg-hub/jsutils'
 import { isValidComponent } from '../../../utils/validate/isValidComponent'
 import { getPlatform } from 'KegGetPlatform'
 

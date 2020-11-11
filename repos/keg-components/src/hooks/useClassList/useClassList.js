@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
-import { noPropArr } from '../../utils/helpers/noop'
-import { eitherArr } from '@keg-hub/jsutils'
+import { eitherArr, noPropArr } from '@keg-hub/jsutils'
 import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
 
 /**

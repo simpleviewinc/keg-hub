@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
-import { noPropObj } from '../utils/helpers/noop'
-import { deepMerge, get, isEmptyColl, reduceObj } from '@keg-hub/jsutils'
+import { deepMerge, get, isEmptyColl, reduceObj, noPropObj } from '@keg-hub/jsutils'
 
 /**
  * Checks if the styles object is not a valid styles object
