@@ -217,8 +217,8 @@ module.exports = {
       },
       log: {
         description: 'Log output from the tunnel process',
-        example: 'keg docker tunnel --no-log',
-        default: true
+        example: 'keg docker tunnel --log',
+        default: false
       }
     }
   }
