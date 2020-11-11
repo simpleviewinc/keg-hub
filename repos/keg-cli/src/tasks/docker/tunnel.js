@@ -134,13 +134,13 @@ const onStdOut = (qr, log, tunnelSet=false) => {
     if(tunnelSet || data.indexOf(`msg="started tunnel"`) === -1)
       return tunnelSet && log && Logger.stdout(data)
 
-    // Set tunnel set to turn, so we can start logging
+    // Set tunnel set to true so we can start logging
     tunnelSet = true
 
-    const tunnelUrl = data.split(`url=`)[1].split(' ')[0]
     const localUrl = data.split(`addr=`)[1].split(' ')[0]
-
     Logger.spacedMsg('Source:', Logger.color('magenta', localUrl))
+
+    const tunnelUrl = data.split(`url=`)[1].split(' ')[0].split('\n')[0]
     Logger.spacedMsg('Tunnel:', Logger.color('green', tunnelUrl))
 
     // If no qr code is set then just return
