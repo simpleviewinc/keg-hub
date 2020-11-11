@@ -18,6 +18,7 @@
   "KegText": "src/components/typography/kegText/kegText.js",
   "KegLinearGradient": "src/components/linearGradient/linearGradient${platform}.js",
   "KegView": "src/components/view/view${platform}.js",
+  "KegSvgIcon": "src/components/svgIcon/svgIcon.js",
   "KegGetPlatform": "src/utils/helpers/getPlatform.js",
   "KegAnimateHook": "src/hooks/useAnimate/useAnimate${platform}.js",
   "KegAssets": "src/assets/index.js",

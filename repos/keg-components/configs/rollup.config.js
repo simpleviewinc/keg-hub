@@ -134,7 +134,6 @@ const getMappings = (rootDir, platform) => {
   */
 const getInputs = (platform) => {
   return {
-    svgIcons: 'src/assets/icons/svgIcon',
     theme: 'src/theme',
     index: 'src/index.js',
     ...getMappings('./src', platform)

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SvgIcon } from '../svgIcon'
+import { SvgIcon } from 'KegSvgIcon'
 
 /**
  * https://fontawesome.com/v4.7.0/icon/spinner
