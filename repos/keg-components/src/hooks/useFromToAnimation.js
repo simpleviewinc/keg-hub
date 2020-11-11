@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { Animated } from 'react-native'
-import { noOp } from 'KegUtils'
-import { isArr } from '@keg-hub/jsutils'
+import { noOp } from '@keg-hub/jsutils'
 import { getPlatform } from 'KegGetPlatform'
 const isWeb = getPlatform() === 'web'
 

@@ -74,9 +74,7 @@ const getNativeFile = (current='', list=[]) => {
  */
 const createExportMappings = (dir, isNative, items=[], ignoreList=[]) => {
 
-  const obj = {}
-  items.forEach((item) => {
-
+  return items.reduce((obj, item) => {
     const newPath = path.join(dir, item)
     const isDir = fs.lstatSync(newPath).isDirectory()
 
@@ -96,10 +94,9 @@ const createExportMappings = (dir, isNative, items=[], ignoreList=[]) => {
         [nameWithoutExtension]: path.join(dir, file)
       })      
     }
+    return obj
 
-  })
-
-  return obj
+  }, {})
 }
 
 /**
