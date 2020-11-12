@@ -17,11 +17,8 @@ const buildPath = `./build`
 
 // List of alternate exports
 // This allows importing only when you need
-// Example => Not all apps that use re-theme need the styleParser
-// So we export it separately to keep bundle size down
 const inputs = {
   styleInjector: './src/styleInjector/index.{{platform}}',
-  styleParser: './src/styleParser/index.{{platform}}',
   colors: './src/helpers/colors.js',
 }
 
