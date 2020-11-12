@@ -1,4 +1,4 @@
-import { noPropArr } from '../utils/helpers/noop'
+import { noPropArr } from '@keg-hub/jsutils'
 
 /**
  * Placeholder hook for Native platforms

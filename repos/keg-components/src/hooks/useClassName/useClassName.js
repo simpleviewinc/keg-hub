@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react'
 import { getPlatform } from 'KegGetPlatform'
 import { eitherArr } from '@keg-hub/jsutils'
-import { updateClassNames } from '../utils/helpers/updateClassNames'
-import { handleRefUpdate } from '../utils/helpers/handleRefUpdate'
+import { updateClassNames } from '../../utils/helpers/updateClassNames'
+import { handleRefUpdate } from '../../utils/helpers/handleRefUpdate'
 
 const isWeb = getPlatform() === 'web'
 

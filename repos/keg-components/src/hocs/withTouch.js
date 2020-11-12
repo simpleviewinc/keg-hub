@@ -3,7 +3,7 @@ import { Touchable } from '../components/touchable'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
-import { noPropObj } from '../utils/helpers/noop'
+import { noPropObj } from '@keg-hub/jsutils'
 
 /**
  * Returns a new component that wraps `Component` with touchable capabilities.

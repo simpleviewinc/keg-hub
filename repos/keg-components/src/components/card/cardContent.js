@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
-import { noPropObj } from '../../utils/helpers/noop'
+import { noPropObj } from '@keg-hub/jsutils'
 import { CardCallout } from './cardCallout'
 
 export const CardContent = ({

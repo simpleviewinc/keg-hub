@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SvgIcon } from '../svgIcon'
+import { SvgIcon } from 'KegSvgIcon'
 
 export const Copy = props => {
   return (

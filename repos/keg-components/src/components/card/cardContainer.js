@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
-import { noOpObj, noPropObj } from '../../utils/helpers/noop'
+import { noOpObj, noPropObj } from '@keg-hub/jsutils'
 
 export const CardContainer = ({
   className,

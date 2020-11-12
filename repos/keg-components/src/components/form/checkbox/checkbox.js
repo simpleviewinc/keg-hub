@@ -2,7 +2,7 @@ import { View } from 'KegView'
 import { Check } from '../../../assets/icons/check'
 import React, { useMemo, forwardRef } from 'react'
 import { CheckboxWrapper } from './checkbox.wrapper'
-import { noPropObj } from '../../../utils/helpers/noop'
+import { noPropObj } from '@keg-hub/jsutils'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 import { Input as KegInput } from '../../internal/input.web'
 

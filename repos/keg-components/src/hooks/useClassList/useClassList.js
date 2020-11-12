@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
-import { noPropArr } from '../utils/helpers/noop'
-import { eitherArr } from '@keg-hub/jsutils'
-import { ensureClassArray } from '../utils/helpers/ensureClassArray'
+import { eitherArr, noPropArr } from '@keg-hub/jsutils'
+import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
 
 /**
  * Builds an array of classNames, memoizes then returns them

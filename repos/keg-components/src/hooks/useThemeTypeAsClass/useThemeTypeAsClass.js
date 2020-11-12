@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
-import { get, isArr, eitherArr } from '@keg-hub/jsutils'
-import { colors } from '../theme/colors'
+import { get, isArr, eitherArr, noOpObj } from '@keg-hub/jsutils'
+import { colors } from '../../theme/colors'
 import { useClassList } from 'KegClassList'
-import { noOpObj } from '../utils/helpers/noop'
 
 /**
  * Uses the surfaces defined in the colors to build surface specific classes for

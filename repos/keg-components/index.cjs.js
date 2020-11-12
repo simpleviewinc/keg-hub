@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = require('./kegComponents')
+module.exports = require('./web')

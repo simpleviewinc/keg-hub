@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { useThemePath, useFromToAnimation } from 'KegHooks'
 import { View } from 'KegView'
 import { isFunc } from '@keg-hub/jsutils'
-import { noOp } from '../../utils/helpers/noop'
+import { noOp } from '@keg-hub/jsutils'
 import { useClassName } from 'KegClassName'
 import { useClassList } from 'KegClassList'
 
