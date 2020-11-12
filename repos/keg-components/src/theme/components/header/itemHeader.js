@@ -2,7 +2,7 @@ import { flex } from '../../flex'
 import { get } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
 
-export const itemHeaderInit = (config) => {
+export const itemHeader = (config) => {
   const { colors } = getThemeDefaults()
 
   const defaultSectionStyle = {
@@ -41,68 +41,70 @@ export const itemHeaderInit = (config) => {
   }
 
   return {
-    main: {
-      $all: {
-        position: 'relative',
-        justifyContent: 'center',
-        backgroundColor: get(colors, 'surface.primary.colors.dark'),
-        width: '100%',
-        flexDirection: 'row',
-        height: 60,
-      },
-      $web: {
-        height: 70,
-      },
-    },
-    shadow: {
+    itemHeader: {
       main: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        position: 'relative',
-        zIndex: 1,
-      },
-      cover: {
-        position: 'absolute',
-        backgroundColor: get(colors, 'surface.primary.colors.dark'),
-        height: 10,
-        width: '100%',
-        flexDirection: 'row',
-        top: -5,
-        zIndex: 2,
-      },
-    },
-    appHeader: {
-      main: {},
-    },
-    content: {
-      left: {
-        main: {
-          ...flex.left,
-          ...defaultSideSectionStyle.main,
+        $all: {
+          position: 'relative',
+          justifyContent: 'center',
+          backgroundColor: get(colors, 'surface.primary.colors.dark'),
+          width: '100%',
+          flexDirection: 'row',
+          height: 60,
         },
-        content: defaultSideSectionStyle.content,
-      },
-      right: {
-        main: {
-          ...flex.right,
-          ...defaultSideSectionStyle.main,
+        $web: {
+          height: 70,
         },
-        content: defaultSideSectionStyle.content,
       },
-      center: {
+      shadow: {
         main: {
-          ...flex.center,
-          ...defaultSectionStyle,
-          width: '60%',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.5,
+          shadowRadius: 2,
+          position: 'relative',
+          zIndex: 1,
         },
-        content: {
-          title: {
-            color: 'white',
+        cover: {
+          position: 'absolute',
+          backgroundColor: get(colors, 'surface.primary.colors.dark'),
+          height: 10,
+          width: '100%',
+          flexDirection: 'row',
+          top: -5,
+          zIndex: 2,
+        },
+      },
+      appHeader: {
+        main: {},
+      },
+      content: {
+        left: {
+          main: {
+            ...flex.left,
+            ...defaultSideSectionStyle.main,
+          },
+          content: defaultSideSectionStyle.content,
+        },
+        right: {
+          main: {
+            ...flex.right,
+            ...defaultSideSectionStyle.main,
+          },
+          content: defaultSideSectionStyle.content,
+        },
+        center: {
+          main: {
+            ...flex.center,
+            ...defaultSectionStyle,
+            width: '60%',
+          },
+          content: {
+            title: {
+              color: 'white',
+            },
           },
         },
       },
-    },
+    }
   }
 }

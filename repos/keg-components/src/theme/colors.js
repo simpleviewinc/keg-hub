@@ -38,9 +38,9 @@ export const colors = (defaults) => {
     (key, value, updated) => {
       updated[key] = {
         colors: {
-          light: colors.palette[`${value.palette}01`],
-          main: colors.palette[`${value.palette}02`],
-          dark: colors.palette[`${value.palette}03`],
+          light: __colors.palette[`${value.palette}01`],
+          main: __colors.palette[`${value.palette}02`],
+          dark: __colors.palette[`${value.palette}03`],
         },
       }
 

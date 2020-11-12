@@ -7,6 +7,8 @@ import { configureActions } from '@storybook/addon-actions'
 import { addDecorator, addParameters } from '@storybook/react'
 import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 
+const componentsTheme = theme({})
+
 const parsePart = (full, part) => {
   return !part || part.indexOf('@summary') === 0
     ? full
@@ -43,7 +45,7 @@ configureActions({
 })
 
 addDecorator(storyFn =>
-  <ReThemeProvider theme={ theme } >
+  <ReThemeProvider theme={ componentsTheme } >
     <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
       { storyFn() }
     </View>

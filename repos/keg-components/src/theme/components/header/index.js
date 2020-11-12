@@ -1,7 +1,9 @@
-import { itemHeaderInit } from './contained'
+import { itemHeader } from './itemHeader'
 
 export const header = (config) => {
   return {
-    itemHeader: itemHeaderInit(config),
+    header: {
+      ...itemHeader(config),
+    }
   }
 }

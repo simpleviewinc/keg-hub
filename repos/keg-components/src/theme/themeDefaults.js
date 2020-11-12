@@ -1,6 +1,6 @@
 import { margin } from './margin'
-import { padding } from './margin'
-import { colors } from '../colors'
+import { padding } from './padding'
+import { colors } from './colors'
 import defaults from './defaults.json'
 import { deepMerge } from '@keg-hub/jsutils'
 
