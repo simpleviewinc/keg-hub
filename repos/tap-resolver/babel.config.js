@@ -1,6 +1,8 @@
 const runSetup = require('./src/runSetup')
+const { deepMerge } = require('@keg-hub/jsutils')
 const { getPlatformData, getResolverFile, validateBabel } = require('./src/babel')
 const { PLATFORM, NODE_ENV, KEG_COMPONENT_RESOLVER } = process.env
+const babelEnv = NODE_ENV || 'development'
 
 /**
  * Sets up the babel config based on the PLATFORM ENV and the passed in options
@@ -57,7 +59,18 @@ const babelSetup = options => {
     ]
   }
 
-  return { ...babel, env: { test: { ...babel }}}
+  return {
+    ...babel,
+    // Merge the babel.env config with the generated babel config for the current environemtn
+    // This ensures any custom env config options are added
+    // By default babel will replace the default config with items defined for the environment
+    // By merging here, we can ensure the both the custom and generated configs are added
+    // This also means config should NOT be duplicated per environment
+    env: deepMerge(
+      babelOpts.env,
+      { [babelEnv]:  babel }
+    )
+  }
 
 }
 

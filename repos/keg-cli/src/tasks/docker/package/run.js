@@ -230,6 +230,7 @@ const dockerPackageRun = async args => {
       envs: {
         ...contextEnvs,
         [KEG_DOCKER_EXEC]: KEG_EXEC_OPTS.packageRun,
+        ...((command || contextEnvs.KEG_EXEC_CMD) && { KEG_EXEC_CMD: command || contextEnvs.KEG_EXEC_CMD })
       },
     })
   }

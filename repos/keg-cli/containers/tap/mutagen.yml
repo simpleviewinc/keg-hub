@@ -19,6 +19,17 @@ sync:
         - "/build"
         - "/docs"
 actions:
+  resolver:
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
+      privileged: true
+      cmds:
+        - yarn install
+    att:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
+      privileged: true
+      cmds:
+        - bash
   core:
     install:
       location: /keg/tap/node_modules/keg-core

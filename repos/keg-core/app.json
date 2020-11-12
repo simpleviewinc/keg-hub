@@ -116,16 +116,28 @@
             "babel-preset-expo"
           ],
           "plugins": [
-            [
-              "react-native-web"
-            ]
-          ]
+            ["react-native-web"]
+          ],
+          "env": {
+            "production": {
+              "plugins": [
+                ["transform-react-remove-prop-types", { "removeImport": "true", "ignoreFilenames": ["node_modules"] }]
+              ]
+            }
+          }
         },
         "native": {
           "presets": [
             "babel-preset-expo"
           ],
-          "plugins": []
+          "plugins": [],
+          "env": {
+            "production": {
+              "plugins": [
+                ["transform-react-remove-prop-types", { "removeImport": "true", "ignoreFilenames": ["node_modules"] }]
+              ]
+            }
+          }
         }
       }
     },

@@ -1,8 +1,22 @@
 import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
-import { get, noPropObj } from '@keg-hub/jsutils'
+import { get, deepMerge, isArr, noPropObj } from '@keg-hub/jsutils'
 import Svg, { Path } from 'react-native-svg'
 import { useTheme } from '@keg-hub/re-theme'
+
+/**
+ * Custom hook to check if the size prop is an array, and merge it. Otherwise just returns the style object
+ * @param {Object|Array=} style - Style object used to apply custom styles to the component
+ *
+ * @returns {Object} - Merged style object
+ */
+const useIconStyle = style => {
+  return useMemo(() => {
+    return isArr(style)
+      ? deepMerge(...style)
+      : style
+  }, [ style ])
+}
 
 /**
  * Custom hook to find the size from the props and styles
@@ -12,15 +26,15 @@ import { useTheme } from '@keg-hub/re-theme'
  *
  * @returns {Object} - Contains the height and width props for the Svg element
  */
-const useSize = (size, style, theme) => {
+const useSize = (size, width, height, style, theme) => {
   return useMemo(() => {
     const iconSize = size || get(style, 'fontSize')
     const themeSize = get(theme, 'typography.default.fontSize', 15) * 2
     return {
-      height: iconSize || get(style, 'height', themeSize),
-      width: iconSize || get(style, 'width', themeSize),
+      height: height || iconSize || get(style, 'height', themeSize),
+      width: width || iconSize || get(style, 'width', themeSize),
     }
-  }, [ size, style ])
+  }, [ size, width, height, style ])
 }
 
 /**
@@ -73,31 +87,40 @@ export const SvgIcon = props => {
     delta,
     fill,
     fillRule,
+    height,
     size,
     stroke,
+    strokeWidth,
+    strokeLinecap,
+    strokeLinejoin,
     style = noPropObj,
     svgFill,
     viewBox,
+    width,
     ...attrs
   } = props
 
+  const iconStyle = useIconStyle(style)
   const theme = useTheme()
-  const sizeStyle = useSize(size, style, theme)
-  const colorStyle = useColor(fill, stroke, color, border, style, theme)
+  const sizeStyle = useSize(size, width, height, iconStyle, theme)
+  const colorStyle = useColor(fill, stroke, color, border, iconStyle, theme)
 
   return (
     <Svg
       {...attrs}
       fill={svgFill}
       viewBox={viewBox}
-      style={[ style, sizeStyle ]}
+      style={[ iconStyle, sizeStyle ]}
     >
       <Path
-        stroke={colorStyle.stroke}
-        fill={colorStyle.fill}
-        d={delta}
-        fillRule={fillRule}
         clipRule={clipRule}
+        d={delta}
+        fill={colorStyle.fill}
+        fillRule={fillRule}
+        stroke={colorStyle.stroke}
+        strokeWidth={strokeWidth}
+        strokeLinecap={strokeLinecap}
+        strokeLinejoin={strokeLinejoin}
       />
     </Svg>
   )
@@ -112,7 +135,7 @@ SvgIcon.propTypes = {
   fillRule: PropTypes.string,
   size: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
   stroke: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   svgFill: PropTypes.string,
   viewBox: PropTypes.string,
 }
