@@ -1,0 +1,10 @@
+{
+  "colors": {
+    "types": {
+      "storybook": { "palette": "turquoise" }
+    },
+    "palette": {
+      "turquoise": [ 20, "#42f5ec", -20 ]
+    }
+  }
+}

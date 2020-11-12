@@ -1,0 +1,50 @@
+<!--- Theme.stories.mdx -->
+
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+
+import { Button } from '../components/button'
+import { View } from '../components/view'
+import { Text } from '../components/typography/text'
+
+
+<Meta title="Theme" />
+
+# Theme
+
+Keg-Components comes with a default theme for basic composition.
+When consuming the Keg-Components, the theme can be easily overwritten by passing in overrides on initializaion.
+This allows full customization to match any style guide or mockup.
+
+## Initialization
+Generally speaking, the theme is generated on intialization.
+Components typically have a corisponding theme function that will construct the theme when called
+Initializing the theme, really means *Call all the theme functions for all the components*
+To initialize the theme, just import the theme export from `Keg-Components`, and call it.
+
+### Example
+```js
+
+import { theme } from '@keg-hub/keg-components'
+const myTheme = theme({ ...options })
+
+```
+
+
+### Basic Example
+
+<Preview>
+  <Story name="Basic">
+    <Button type={'storybook'} >
+      <View style={{ textAlign: 'center' }} >
+        <Text style={{ color: '#FFF' }} >
+          Custom Storybook Type
+        </Text>
+      </View>
+    </Button>
+  </Story>
+</Preview>
+
+The above example sets the `type` prop to the value of `storybook` on the `Button` component.
+Because `storybook` is not a default button type, typically the button would render without a background color
+To ensure the button renders with the correct color, the theme must be initialized with `storybook` type as an override
+

@@ -12,7 +12,7 @@ export const colors = (defaults) => {
   __colors = {
     // Use opacity helper from re-theme
     opacity: opacity,
-
+    types: defTypes,
     // Build out the pallet based on the default colors
     palette: reduceObj(
       defPalette,

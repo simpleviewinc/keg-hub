@@ -6,8 +6,9 @@ import { Dimensions, Platform } from 'react-native'
 import { configureActions } from '@storybook/addon-actions'
 import { addDecorator, addParameters } from '@storybook/react'
 import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
+import customTheme from './theme.custom.json'
 
-const componentsTheme = theme({})
+const componentsTheme = theme({ overrides: customTheme })
 
 const parsePart = (full, part) => {
   return !part || part.indexOf('@summary') === 0

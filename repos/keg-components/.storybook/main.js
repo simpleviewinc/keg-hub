@@ -1,7 +1,11 @@
 const path = require('path')
 
 module.exports = {
-  stories: ['../src/components/**/*.stories.@(js|mdx)'],
+  stories: [
+    '../src/kegComponents.stories.mdx',
+    '../src/components/**/*.stories.@(js|mdx)',
+    '../src/theme/**/*.stories.@(js|mdx)'
+  ],
   addons: [
     {
       name: '@storybook/preset-create-react-app',
@@ -16,7 +20,10 @@ module.exports = {
       options: {
         rule: {
           // test: [/\.stories\.jsx?$/], This is default
-          include: [path.resolve(__dirname, '../src/components')], // You can specify directories
+          include: [
+            path.resolve(__dirname, '../src/components'),
+            path.resolve(__dirname, '../src/theme')
+          ],
         },
         loaderOptions: {
           prettierConfig: { printWidth: 80, singleQuote: false },

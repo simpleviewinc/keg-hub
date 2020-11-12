@@ -1,9 +1,6 @@
-import defaults from '../../theme/defaults'
+import { getThemeDefaults } from '../../theme/themeDefaults'
 import { platformFlatten } from './platformFlatten'
 import { isFunc, isObj, validate, deepMerge, flatMap } from '@keg-hub/jsutils'
-
-const defaultColorTypes = Object.keys(defaults.colors.types)
-const defaultStateTypes = Object.keys(defaults.states.types)
 
 /**
  * builds a single theme object with all combinations of colorTypes and state keys
@@ -16,6 +13,10 @@ const defaultStateTypes = Object.keys(defaults.states.types)
  * @returns { Object } a theme with every colorType and state
  */
 export const buildTheme = (themeFn, options = {}) => {
+  const defaults = getThemeDefaults()
+  const defaultColorTypes = Object.keys(defaults.colors.types)
+  const defaultStateTypes = Object.keys(defaults.states.types)
+
   const [valid] = validate(
     { themeFn, options },
     { themeFn: isFunc, options: isObj },
