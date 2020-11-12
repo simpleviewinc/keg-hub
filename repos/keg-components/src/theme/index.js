@@ -10,7 +10,7 @@ import { typography } from './typography'
 import { setThemeDefaults } from './themeDefaults'
 
 export const theme = (config={}) => {
-  const defaults = setThemeDefaults(config.overrides)
+  const defaults = setThemeDefaults(config.defaults)
 
   return {
     display,

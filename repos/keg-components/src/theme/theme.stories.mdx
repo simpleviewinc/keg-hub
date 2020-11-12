@@ -11,15 +11,15 @@ import { Text } from '../components/typography/text'
 
 # Theme
 
-Keg-Components comes with a default theme for basic composition.
-When consuming the Keg-Components, the theme can be easily overwritten by passing in overrides on initializaion.
+Keg-Components comes with a default theme for basic composition, but the theme can easily be overwritten by passing in overrides on initializaion.
 This allows full customization to match any style guide or mockup.
 
 ## Initialization
 Generally speaking, the theme is generated on intialization.
-Components typically have a corisponding theme function that will construct the theme when called
-Initializing the theme, really means *Call all the theme functions for all the components*
-To initialize the theme, just import the theme export from `Keg-Components`, and call it.
+Components typically have a corisponding theme function that will construct the theme when called.
+
+Initializing the theme, really means *Call all the theme functions for all the components*.
+To do this, just import the theme export from `Keg-Components`, and call it.
 
 ### Example
 ```js
@@ -29,22 +29,26 @@ const myTheme = theme({ ...options })
 
 ```
 
+### Options
+In the above example, the theme initialize function is imported then called and it's passed a single options argument
+This options argument is how the default them can be overridden or modified
 
-### Basic Example
+
+## Usage
+Once the theme has been initialized, it will be used automatically within the components.
+This allows defining all theme changes in a single location, yet they are applied across all components
+For example adding a `type` to the `colors` object of the theme defaults, will make it accessable to the button component automatically
+
+### Custom Type
 
 <Preview>
   <Story name="Basic">
     <Button type={'storybook'} >
-      <View style={{ textAlign: 'center' }} >
-        <Text style={{ color: '#FFF' }} >
-          Custom Storybook Type
-        </Text>
-      </View>
+      Custom Type: Storybook
     </Button>
   </Story>
 </Preview>
 
 The above example sets the `type` prop to the value of `storybook` on the `Button` component.
-Because `storybook` is not a default button type, typically the button would render without a background color
+Because `storybook` is not a default button type, typically the button would render without a background color.
 To ensure the button renders with the correct color, the theme must be initialized with `storybook` type as an override
-

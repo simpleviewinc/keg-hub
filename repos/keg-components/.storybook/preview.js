@@ -8,7 +8,7 @@ import { addDecorator, addParameters } from '@storybook/react'
 import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 import customTheme from './theme.custom.json'
 
-const componentsTheme = theme({ overrides: customTheme })
+const componentsTheme = theme({ defaults: customTheme })
 
 const parsePart = (full, part) => {
   return !part || part.indexOf('@summary') === 0
