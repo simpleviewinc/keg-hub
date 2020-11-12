@@ -1,21 +1,20 @@
+import { get } from '@keg-hub/jsutils'
 import { spaceHelper } from './helpers'
-import { getThemeDefaults } from './themeDefaults'
 
-export const init = () => {
-  const defaults = getThemeDefaults()
-  const size = defaults.layout.padding
+export const padding = (defaults) => {
+  const size = get(defaults, 'layout.padding')
 
-  const padding = (amount, sides = []) => spaceHelper(amount, sides, 'padding')
-  padding.size = size
-  padding.full = { padding: size }
-  padding.all = padding.full
-  padding.vert = { paddingLeft: size, paddingRight: size }
-  padding.left = { paddingLeft: size }
-  padding.right = { paddingRight: size }
-  padding.hor = { paddingTop: size, paddingBottom: size }
-  padding.top = { paddingTop: size }
-  padding.bottom = { paddingBottom: size }
+  const __padding = (amount, sides = []) => spaceHelper(amount, sides, 'padding')
+  __padding.size = size
+  __padding.full = { padding: size }
+  __padding.all = __padding.full
+  __padding.vert = { paddingLeft: size, paddingRight: size }
+  __padding.left = { paddingLeft: size }
+  __padding.right = { paddingRight: size }
+  __padding.hor = { paddingTop: size, paddingBottom: size }
+  __padding.top = { paddingTop: size }
+  __padding.bottom = { paddingBottom: size }
 
-  return padding
+  return __padding
 }
 

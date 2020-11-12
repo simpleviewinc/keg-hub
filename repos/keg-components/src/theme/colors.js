@@ -1,18 +1,15 @@
-import { get, isArr, isStr, reduceObj } from '@keg-hub/jsutils'
-import { getThemeDefaults } from './themeDefaults'
 import { opacity, shadeHex } from '@keg-hub/re-theme/colors'
+import { get, isArr, isStr, reduceObj } from '@keg-hub/jsutils'
 
 let __colors = {}
 
 export const getColorSurface = () => get(__colors, 'surface', {})
-export const getColors = () => __colors
 
-export const init = () => {
-  const defaults = getThemeDefaults()
+export const colors = (defaults) => {
   const defPalette = get(defaults, 'colors.palette', {})
   const defTypes = get(defaults, 'colors.types', {})
   
-  const __colors = {
+  __colors = {
     // Use opacity helper from re-theme
     opacity: opacity,
 
@@ -52,6 +49,6 @@ export const init = () => {
     {}
   )
 
-  return colors
+  return __colors
 }
 

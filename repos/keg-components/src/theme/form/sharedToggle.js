@@ -1,13 +1,11 @@
-import { margin } from '../margin'
 import { flex } from '../flex'
 import { get } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-
-export const init = () => {
-  const defaults = getThemeDefaults()
-  const space = get(defaults, 'form.checkbox.space', 15)
-  const height = get(defaults, 'form.switch.height', 20)
+export const initSharedToggle = (config) => {
+  const { form, margin } = getThemeDefaults()
+  const space = get(form, 'checkbox.space', 15)
+  const height = get(form, 'switch.height', 20)
 
   return {
     container: {

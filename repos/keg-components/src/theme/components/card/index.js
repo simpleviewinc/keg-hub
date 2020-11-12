@@ -1,7 +1,11 @@
 import { containedInit } from './contained'
 
 export const card = (config) => {
+  const contained = containedInit(config)
   return {
-    default: containedInit(config),
+    card: {
+      contained,
+      default: contained,
+    }
   }
 }

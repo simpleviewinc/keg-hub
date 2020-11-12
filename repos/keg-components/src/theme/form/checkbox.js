@@ -1,11 +1,10 @@
-import { colors } from '../colors'
 import { get, deepMerge } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const init = () => {
-  const defaults = getThemeDefaults()
-  const height = get(defaults, 'form.checkbox.height', 20)
-  const width = get(defaults, 'form.checkbox.width', 20)
+export const checkbox = () => {
+  const { form, colors } = getThemeDefaults()
+  const height = get(form, 'checkbox.height', 20)
+  const width = get(form, 'checkbox.width', 20)
 
   const checkboxDefault = {
     main: {
@@ -45,7 +44,7 @@ export const init = () => {
             width: '100%',
             position: 'absolute',
             boxShadow: `inset 0px 0px 5px ${get(colors, 'opacity._15')}`,
-            borderRadius: get(defaults, 'form.border.radius', 5),
+            borderRadius: get(form, 'border.radius', 5),
           },
         },
         on: {

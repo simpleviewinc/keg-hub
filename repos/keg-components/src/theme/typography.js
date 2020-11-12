@@ -1,15 +1,11 @@
-import { colors } from './colors'
-import { margin } from './margin'
-import { get } from '@keg-hub/jsutils'
 import { getThemeDefaults } from './themeDefaults'
 
-
-export const init = () => {
-  const defaults = getThemeDefaults()
-  const fontDefs = get(defaults, 'font', { components: {} })
+export const typography = () => {
+  const { font, colors, margin } = getThemeDefaults()
+  const fontDefs = font || { components: {} }
   const compFontDefs = fontDefs.components
 
-  const typography = {
+  return {
     font: {
       family: {
         $native: {},
@@ -82,7 +78,6 @@ export const init = () => {
       ...compFontDefs.subtitle,
     },
   }
-  
-  return typography
+
 }
 

@@ -2,7 +2,7 @@ import { transition } from '../transition'
 import { get, deepMerge } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const init = () => {
+export const switchStyles = () => {
   const { form, colors } = getThemeDefaults()
   const height = get(form, 'switch.height', 20)
   const width = get(form, 'switch.width', 20)

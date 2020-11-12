@@ -1,6 +1,5 @@
-import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
-import { colors } from './colors'
 import { getThemeDefaults } from './themeDefaults'
+import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
 
 
 export const spaceHelper = (amount, sides = [], type) => {
@@ -32,8 +31,11 @@ export const unitsHelper = value => {
 const align = dir => (isStr(dir) && { textAlign: dir }) || {}
 const background = color => ({ backgroundColor: colors[color] || color || '' })
 const bold = () => ({ fontWeight: getThemeDefaults()?.font?.bold })
-const color = color =>
-  colors[color] ? { color: colors[color] } : { color: color }
+const color = color =>{
+  const { colors } = getThemeDefaults()
+  return colors[color] ? { color: colors[color] } : { color: color }
+}
+
 const size = num => ({ fontSize: unitsHelper(num) })
 const weight = num => ({ fontWeight: num })
 const initial = prop => prop && { [prop]: 'initial' }

@@ -14,36 +14,38 @@ export const indicator = (config) => {
   }
 
   return {
-    default: {
-      container,
-      icon: {
-        color: get(colors, 'surface.default.colors.main'),
+    indicator: {
+      default: {
+        container,
+        icon: {
+          color: get(colors, 'surface.default.colors.main'),
+        },
       },
-    },
-    primary: {
-      container,
-      icon: {
-        color: get(colors, 'surface.primary.colors.main'),
+      primary: {
+        container,
+        icon: {
+          color: get(colors, 'surface.primary.colors.main'),
+        },
       },
-    },
-    secondary: {
-      container,
-      icon: {
-        color: get(colors, 'surface.secondary.colors.main'),
+      secondary: {
+        container,
+        icon: {
+          color: get(colors, 'surface.secondary.colors.main'),
+        },
       },
-    },
-    warn: {
-      container,
-      icon: {
-        color: get(colors, 'surface.warn.colors.main'),
+      warn: {
+        container,
+        icon: {
+          color: get(colors, 'surface.warn.colors.main'),
+        },
       },
-    },
-    danger: {
-      container,
-      icon: {
-        color: get(colors, 'surface.danger.colors.main'),
+      danger: {
+        container,
+        icon: {
+          color: get(colors, 'surface.danger.colors.main'),
+        },
       },
-    },
+    }
   }
 
 }

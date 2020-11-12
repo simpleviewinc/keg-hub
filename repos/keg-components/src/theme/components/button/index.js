@@ -6,8 +6,10 @@ export const button = (config) => {
   const contained = containedInit(config)
 
   return {
-    contained,
-    text: textInit(config, contained),
-    outline: outlineInit(config, contained),
+    button: {
+      contained,
+      text: textInit(config, contained),
+      outline: outlineInit(config, contained),
+    }
   }
 }

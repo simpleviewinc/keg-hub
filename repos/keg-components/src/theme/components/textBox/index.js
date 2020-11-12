@@ -4,7 +4,9 @@ import { outlinedInit } from './textBox.outlined'
 export const textBox = (config) => {
   const contained = containedInit(config)
   return {
-    contained,
-    outlined: outlinedInit(config, contained),
+    textBox: {
+      contained,
+      outlined: outlinedInit(config, contained),
+    }
   }
 }

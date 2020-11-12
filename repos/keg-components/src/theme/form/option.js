@@ -1,1 +1,3 @@
-export const option = {}
+export const option = (config) => {
+  return {}
+}

@@ -1,1 +1,3 @@
-export const radio = {}
+export const radio = (config) => {
+  return {}
+}

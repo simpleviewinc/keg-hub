@@ -27,16 +27,18 @@ export const loading = (config) => {
     },
   }
 
-  return buildSurfaceStyles((colorType, surfaces) => {
-    const surfaceStyles = deepClone(styles)
-    set(
-      surfaceStyles,
-      'indicator.icon.color',
-      get(surfaces, `${colorType}.colors.main`)
-    )
+  return {
+    loading: buildSurfaceStyles((colorType, surfaces) => {
+      const surfaceStyles = deepClone(styles)
+      set(
+        surfaceStyles,
+        'indicator.icon.color',
+        get(surfaces, `${colorType}.colors.main`)
+      )
 
-    return surfaceStyles
-  })
+      return surfaceStyles
+    })
+  }
 
 }
 

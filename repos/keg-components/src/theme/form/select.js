@@ -1,39 +1,44 @@
-import { sharedForm } from './sharedForm'
-import { colors } from '../colors'
+import { getThemeDefaults } from '../themeDefaults'
+import { initSharedForm } from './sharedForm'
 
-export const select = {
-  default: {
-    main: {
-      position: 'relative',
-      ...sharedForm.border,
-      ...sharedForm.inputs,
-      padding: 0,
-      overflow: 'none',
-    },
-    select: {
-      $web: {
+export const select = (config) => {
+  const sharedForm = initSharedForm(config)
+  const { colors } = getThemeDefaults()
+  
+  return {
+    default: {
+      main: {
+        position: 'relative',
+        ...sharedForm.border,
         ...sharedForm.inputs,
-        borderWidth: 0,
-        appearance: 'none',
-        backgroundColor: colors.palette.transparent,
+        padding: 0,
+        overflow: 'none',
       },
-    },
-    icon: {
-      container: {
-        color: colors.opacity._85,
-        position: 'absolute',
-        zIndex: 1,
-        right: 10,
-        top: 10,
-        pointerEvents: 'none',
+      select: {
+        $web: {
+          ...sharedForm.inputs,
+          borderWidth: 0,
+          appearance: 'none',
+          backgroundColor: colors.palette.transparent,
+        },
       },
       icon: {
-        color: colors.opacity._85,
-        fontSize: 15,
-      },
-      disabled: {
-        color: colors.opacity._30,
+        container: {
+          color: colors.opacity._85,
+          position: 'absolute',
+          zIndex: 1,
+          right: 10,
+          top: 10,
+          pointerEvents: 'none',
+        },
+        icon: {
+          color: colors.opacity._85,
+          fontSize: 15,
+        },
+        disabled: {
+          color: colors.opacity._30,
+        },
       },
     },
-  },
+  }
 }

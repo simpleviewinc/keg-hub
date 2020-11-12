@@ -1,9 +1,12 @@
-import { sharedForm } from './sharedForm'
+import { initSharedForm } from './sharedForm'
 
-export const input = {
-  default: {
-    ...sharedForm.border,
-    ...sharedForm.inputs,
-    width: '100%',
-  },
+export const input = (config) => {
+  const sharedForm = initSharedForm(config)
+  return {
+    default: {
+      ...sharedForm.border,
+      ...sharedForm.inputs,
+      width: '100%',
+    },
+  }
 }

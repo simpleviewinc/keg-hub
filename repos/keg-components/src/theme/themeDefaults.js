@@ -1,14 +1,10 @@
-/****************** IMPORTANT ******************/ /*
- * This component is a work in progress
- * It's NOT complete or expected to be working
- * It is NOT exported from the main components export
- * It is NOT included in the keg-components bundle
-/****************** IMPORTANT ******************/
-
-import { deepMerge } from '@keg-hub/jsutils'
+import { margin } from './margin'
+import { padding } from './margin'
+import { colors } from '../colors'
 import defaults from './defaults.json'
+import { deepMerge } from '@keg-hub/jsutils'
 
-let __themeDefaults = defaults
+let __themeDefaults
 
 /**
  * IMPORTANT - This should be called prior to theme initialization
@@ -19,8 +15,11 @@ let __themeDefaults = defaults
  *
  * @return {Object} - Merged theme defaults
  */
-export const setThemeDefaults = overrides => {
+export const setThemeDefaults = (overrides) => {
   __themeDefaults = deepMerge(defaults, overrides)
+  __themeDefaults.colors = colors(__themeDefaults)
+  __themeDefaults.margin = margin(__themeDefaults)
+  __themeDefaults.padding = padding(__themeDefaults)
 
   return __themeDefaults
 }
