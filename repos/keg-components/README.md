@@ -42,6 +42,29 @@ Keg Components leverages [re-theme](https://github.com/simpleviewinc/re-theme) f
   ```
 
 ## Conventions
+**Folder structure:**
+  * if you are creating a function that has a different implementation for `native`
+    * **DO**
+      * place them in a folder with the same name as the export
+      * add an alias for them in the `/configs/aliases.json` file
+      * add a `index.js` exporting the alias
+      ```Javascript
+         /src/components
+            /linearGradient
+               linearGradient.js
+               linearGradient.native.js
+               index.js   
+                
+          // /configs/aliases.json
+          {
+            ...other aliases,
+            "KegLinearGradient": "src/components/linearGradient/linearGradient${platform}.js",
+          }
+
+          // /src/components/linearGradient/index.js
+          export * from 'KegLinearGradient'
+
+      ```
 
 Every component implemented in keg-components that has a theme should define `main` and `content` styles:
 ```javascript
