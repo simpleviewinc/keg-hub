@@ -36,7 +36,15 @@ addParameters({
     },
   },
   options: {
-    enableShortcuts: false
+    enableShortcuts: false,
+    storySort: (a, b) => {
+      const sectionA = a[1].id.split('-')[0]
+      const sectionB = b[1].id.split('-')[0]
+      const compare = sectionA.localeCompare(sectionB)
+      return sectionA === 'keg' || sectionB === 'keg'
+        ? sectionB === 'keg' ? 1 : -1
+        : sectionA.localeCompare(sectionB)
+    }
   }
 })
 

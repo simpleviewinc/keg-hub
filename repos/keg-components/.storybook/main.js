@@ -4,7 +4,8 @@ module.exports = {
   stories: [
     '../src/kegComponents.stories.mdx',
     '../src/components/**/*.stories.@(js|mdx)',
-    '../src/theme/**/*.stories.@(js|mdx)'
+    '../src/theme/**/*.stories.@(js|mdx)',
+    '../src/utils/**/*.stories.@(js|mdx)',
   ],
   addons: [
     {

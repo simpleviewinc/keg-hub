@@ -5,7 +5,9 @@ import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/
 import { Button } from '../components/button'
 import { View } from '../components/view'
 import { Text } from '../components/typography/text'
-
+import customTheme from '../../.storybook/theme.custom.json'
+import { ReThemeProvider } from '@keg-hub/re-theme'
+import { theme } from '../theme'
 
 <Meta title="Theme" />
 
@@ -33,7 +35,6 @@ const myTheme = theme({ ...options })
 In the above example, the theme initialize function is imported then called and it's passed a single options argument
 This options argument is how the default them can be overridden or modified
 
-
 ## Usage
 Once the theme has been initialized, it will be used automatically within the components.
 This allows defining all theme changes in a single location, yet they are applied across all components
@@ -42,11 +43,13 @@ For example adding a `type` to the `colors` object of the theme defaults, will m
 ### Custom Type
 
 <Preview>
-  <Story name="Basic">
-    <Button type={'storybook'} >
-      Custom Type: Storybook
-    </Button>
-  </Story>
+  <ReThemeProvider theme={ theme({ defaults: customTheme }) } >
+    <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
+      <Button type={'storybook'} >
+        Custom Type: Storybook
+      </Button>
+    </View>
+  </ReThemeProvider>
 </Preview>
 
 The above example sets the `type` prop to the value of `storybook` on the `Button` component.
