@@ -1,0 +1,1 @@
+{"version":3,"file":"text.js","sources":["../../../src/components/typography/text.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const Text = KegText('text')\n"],"names":["Text","KegText"],"mappings":";;;;;;;;;;;;;;;;IACaA,IAAI,GAAGC,iBAAO,CAAC,MAAD;;;;"}

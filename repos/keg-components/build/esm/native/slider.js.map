@@ -1,0 +1,1 @@
+{"version":3,"file":"slider.js","sources":["../../../src/components/form/slider/slider.js"],"sourcesContent":["export const Slider = () => {\n  return null\n}\n"],"names":["Slider"],"mappings":"IAAaA,MAAM,GAAG,SAATA,MAAS,GAAM;AAC1B,SAAO,IAAP;AACD;;;;"}

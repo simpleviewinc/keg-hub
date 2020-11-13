@@ -1,0 +1,1 @@
+{"version":3,"file":"h6.js","sources":["../../../src/components/typography/h6.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const H6 = KegText('h6')\n"],"names":["H6","KegText"],"mappings":";;;;;;;;;;;;;;;;IACaA,EAAE,GAAGC,iBAAO,CAAC,IAAD;;;;"}

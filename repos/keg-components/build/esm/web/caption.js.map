@@ -1,0 +1,1 @@
+{"version":3,"file":"caption.js","sources":["../../../src/components/typography/caption.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const Caption = KegText('caption')\n"],"names":["Caption","KegText"],"mappings":";;;;;;;;;;;;;;;IACaA,OAAO,GAAGC,OAAO,CAAC,SAAD;;;;"}
