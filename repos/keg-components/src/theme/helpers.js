@@ -1,6 +1,7 @@
 import { getThemeDefaults } from './themeDefaults'
-import { isNum, isStr, capitalize, isArr } from '@keg-hub/jsutils'
+import { isNum, isStr, capitalize, isArr, deepMerge, noOpObj } from '@keg-hub/jsutils'
 
+let __helpers
 
 export const spaceHelper = (amount, sides = [], type) => {
   const defaults = getThemeDefaults()
@@ -46,13 +47,20 @@ const abs = {
   right: 0,
   bottom: 0,
 }
-export const helpers = {
-  abs,
-  align,
-  background,
-  bold,
-  color,
-  initial,
-  size,
-  weight,
+
+export const helpers = (config=noOpObj) => {
+  if(__helpers) return __helpers
+
+  __helpers = deepMerge({
+    abs,
+    align,
+    background,
+    bold,
+    color,
+    initial,
+    size,
+    weight,
+  }, config.helpers)
+
+  return __helpers
 }

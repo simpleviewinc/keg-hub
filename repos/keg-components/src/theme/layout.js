@@ -1,5 +1,7 @@
-export const layout = (config) => {
-  return {
+import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+
+export const layout = (config=noOpObj) => {
+  return deepMerge({
     full: {
       width: {
         width: '100%',
@@ -25,5 +27,5 @@ export const layout = (config) => {
       },
       columns: 12,
     },
-  }
+  }, config.layout)
 }

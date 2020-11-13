@@ -1,18 +1,19 @@
 import { flex } from '../../flex'
 import { helpers } from '../../helpers'
-import { get } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
+import { deepMerge, get, checkCall, noOpObj } from '@keg-hub/jsutils'
 
-export const containedInit = (config) => {
+export const containedInit = (config=noOpObj) => {
 
   const { colors, margin, padding } = getThemeDefaults()
   const opacity05 = get(colors, 'opacity._5')
   const colorPalette = get(colors, 'palette')
-
+  const __flex = flex(config)
+  const __helpers = helpers(config)
   const section = {
     main: {
-      ...flex.left,
-      ...flex.column,
+      ...__flex.left,
+      ...__flex.column,
       borderColor: colorPalette.gray01,
       borderStyle: 'solid',
       borderBottomWidth: 1,
@@ -41,7 +42,7 @@ export const containedInit = (config) => {
     },
   }
 
-  const contained = {
+  const defStyles = {
     main: {
       $native: {
         shadowColor: opacity05,
@@ -134,11 +135,13 @@ export const containedInit = (config) => {
         backgroundColor: opacity05,
         alignSelf: 'stretch',
         justifyContent: 'center',
-        ...helpers.abs,
+        ...__helpers.abs,
       },
     },
   }
-  
-  return contained
+
+  const custom = get(config, 'button.contained')
+  return checkCall(custom, defStyles) || deepMerge(defStyles, custom)
+
 }
 

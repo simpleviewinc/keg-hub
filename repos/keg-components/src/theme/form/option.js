@@ -1,3 +1,6 @@
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
+
 export const option = (config) => {
-  return {}
+  const defStyles = {}
+  return checkCall(config.option, defStyles) || deepMerge(defStyles, config.option)
 }

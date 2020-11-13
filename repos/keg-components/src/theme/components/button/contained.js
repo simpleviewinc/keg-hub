@@ -1,16 +1,17 @@
 import { transition } from '../../transition'
-import { get } from '@keg-hub/jsutils'
 import { buildTheme } from '../../../utils/styles'
 import { getThemeDefaults } from '../../themeDefaults'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const containedInit = (config) => {
+export const containedInit = (config=noOpObj) => {
   const { colors, states } = getThemeDefaults()
+  const __transition = transition(config)
 
   const containedStyles = (state, colorType) => {
     const opacity = get(states, `types.${state}.opacity`)
     const shade = get(states, `types.${state}.shade`)
     const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
-    return {
+    const defStyles = {
       main: {
         $all: {
           borderWidth: 0,
@@ -23,7 +24,7 @@ export const containedInit = (config) => {
         $web: {
           cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
           boxShadow: 'none',
-          ...transition([ 'backgroundColor', 'borderColor' ], 0.3),
+          ...__transition([ 'backgroundColor', 'borderColor' ], 0.3),
         },
         $native: {},
       },
@@ -37,10 +38,14 @@ export const containedInit = (config) => {
           letterSpacing: 0.5,
           textAlign: 'center',
           $web: {
-            ...transition(['color'], 0.15),
+            ...__transition(['color'], 0.15),
           },
       },
     }
+
+    const custom = get(config, 'button.contained')
+    return checkCall(custom, defStyles, state, colorType) || deepMerge(defStyles, custom)
+
   }
 
   return buildTheme(containedStyles)

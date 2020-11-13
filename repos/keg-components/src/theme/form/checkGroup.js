@@ -1,6 +1,7 @@
 import { getThemeDefaults } from '../themeDefaults'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const checkGroup = (config) => {
+export const checkGroup = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const header = {
@@ -32,9 +33,11 @@ export const checkGroup = (config) => {
     }
   }
 
-  return {
+  const defStyles = {
     main: {},
     header,
     simpleHeader
   }
+
+  return checkCall(config.checkGroup, defStyles) || deepMerge(defStyles, config.checkGroup)
 }

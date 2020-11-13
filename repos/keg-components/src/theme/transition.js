@@ -1,24 +1,31 @@
-import { isArr, isNum, trainCase } from '@keg-hub/jsutils'
+import { isArr, isNum, trainCase, deepMerge, noOpObj } from '@keg-hub/jsutils'
 
-export const transition = (prop = 'all', amount = '1s', type = 'ease') => {
-  prop = isArr(prop) ? prop : [prop]
-  amount = (isNum(amount) && `${amount}s`) || amount
+export const transition = (config=noOpObj) => {
 
-  return {
-    transitionProperty: prop.map(trainCase),
-    transitionDuration: amount,
-    transitionTimingFunction: type,
+  const __transition = (prop = 'all', amount = '1s', type = 'ease') => {
+    prop = isArr(prop) ? prop : [prop]
+    amount = (isNum(amount) && `${amount}s`) || amount
+
+    return {
+      transitionProperty: prop.map(trainCase),
+      transitionDuration: amount,
+      transitionTimingFunction: type,
+    }
   }
-}
 
-transition.move = (amount = 1, type = 'ease') => ({
-  transition: `transform ${amount}s ${type}`,
-})
-transition.opacity = (amount = 1, type = 'ease') => ({
-  transition: `opacity ${amount}s ${type}`,
-})
+  __transition.move = (amount = 1, type = 'ease') => ({
+    transition: `transform ${amount}s ${type}`,
+  })
 
-transition.maxHeight = {
-  overflow: 'hidden',
-  transition: 'max-height 1s ease',
+  __transition.opacity = (amount = 1, type = 'ease') => ({
+    transition: `opacity ${amount}s ${type}`,
+  })
+
+  __transition.maxHeight = {
+    overflow: 'hidden',
+    transition: 'max-height 1s ease',
+  }
+
+  return Object.assign(__transition, config.transition)
+
 }

@@ -1,11 +1,11 @@
-import { get } from '@keg-hub/jsutils'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
 
-export const containedInit = (config) => {
+export const containedInit = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
   const { surface, palette } = colors
 
-  return {
+  const defStyles = {
     default: {
       $all: {
         main: {
@@ -52,4 +52,7 @@ export const containedInit = (config) => {
     hover: {},
     active: {},
   }
+  const custom = get(config, 'textBox.contained')
+
+  return checkCall(custom, defStyles) || deepMerge(defStyles, custom)
 }

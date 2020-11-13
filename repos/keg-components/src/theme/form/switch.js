@@ -1,8 +1,8 @@
 import { transition } from '../transition'
-import { get, deepMerge } from '@keg-hub/jsutils'
+import { get, deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const switchStyles = () => {
+export const switchStyles = (config=noOpObj) => {
   const { form, colors } = getThemeDefaults()
   const height = get(form, 'switch.height', 20)
   const width = get(form, 'switch.width', 20)
@@ -99,8 +99,10 @@ export const switchStyles = () => {
     },
   })
 
-  return {
+  const defStyles = {
     default: switchDefault,
     close: switchClose,
   }
+
+  return checkCall(config.switch, defStyles) || deepMerge(defStyles, config.switch)
 }

@@ -1,14 +1,14 @@
-import { get } from '@keg-hub/jsutils'
 import { buildTheme } from '../../../utils/styles'
 import { getThemeDefaults } from '../../themeDefaults'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const textInit = (config, contained) => {
+export const textInit = (config=noOpObj, contained) => {
   const { colors, states } = getThemeDefaults()
 
   const textStyle = (state, colorType) => {
     const shade = get(states, `types.${state}.shade`)
     const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
-    return {
+    const defStyles = {
       main: {
         $all: {
           backgroundColor:
@@ -23,6 +23,10 @@ export const textInit = (config, contained) => {
         },
       },
     }
+
+    const custom = get(config, 'button.text')
+    return checkCall(custom, defStyles, state, colorType) || deepMerge(defStyles, custom)
+
   }
 
   return buildTheme(textStyle, { inheritFrom: [contained] })

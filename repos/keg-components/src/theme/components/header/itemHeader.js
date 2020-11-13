@@ -1,9 +1,12 @@
 import { flex } from '../../flex'
-import { get } from '@keg-hub/jsutils'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
 
-export const itemHeader = (config) => {
+export const itemHeader = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
+  const colorPalette = get(colors, 'palette')
+  const colorSurface = get(colors, 'surface')
+  const __flex = flex(config)
 
   const defaultSectionStyle = {
     height: '100%',
@@ -21,7 +24,7 @@ export const itemHeader = (config) => {
       ...defaultSectionStyle,
       flexDirection: 'row',
       maxWidth: '20%',
-      ...flex.align.center,
+      ...__flex.align.center,
     },
     content: {
       button: {
@@ -40,71 +43,72 @@ export const itemHeader = (config) => {
     },
   }
 
-  return {
-    itemHeader: {
+  const defStyles = {
+    main: {
+      $all: {
+        position: 'relative',
+        justifyContent: 'center',
+        backgroundColor: get(colorSurface, 'primary.colors.dark'),
+        width: '100%',
+        flexDirection: 'row',
+        height: 60,
+      },
+      $web: {
+        height: 70,
+      },
+    },
+    shadow: {
       main: {
-        $all: {
-          position: 'relative',
-          justifyContent: 'center',
-          backgroundColor: get(colors, 'surface.primary.colors.dark'),
-          width: '100%',
-          flexDirection: 'row',
-          height: 60,
-        },
-        $web: {
-          height: 70,
-        },
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        position: 'relative',
+        zIndex: 1,
       },
-      shadow: {
+      cover: {
+        position: 'absolute',
+        backgroundColor: get(colorSurface, 'primary.colors.dark'),
+        height: 10,
+        width: '100%',
+        flexDirection: 'row',
+        top: -5,
+        zIndex: 2,
+      },
+    },
+    appHeader: {
+      main: {},
+    },
+    content: {
+      left: {
         main: {
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.5,
-          shadowRadius: 2,
-          position: 'relative',
-          zIndex: 1,
+          ...__flex.left,
+          ...defaultSideSectionStyle.main,
         },
-        cover: {
-          position: 'absolute',
-          backgroundColor: get(colors, 'surface.primary.colors.dark'),
-          height: 10,
-          width: '100%',
-          flexDirection: 'row',
-          top: -5,
-          zIndex: 2,
-        },
+        content: defaultSideSectionStyle.content,
       },
-      appHeader: {
-        main: {},
+      right: {
+        main: {
+          ...__flex.right,
+          ...defaultSideSectionStyle.main,
+        },
+        content: defaultSideSectionStyle.content,
       },
-      content: {
-        left: {
-          main: {
-            ...flex.left,
-            ...defaultSideSectionStyle.main,
-          },
-          content: defaultSideSectionStyle.content,
+      center: {
+        main: {
+          ...__flex.center,
+          ...defaultSectionStyle,
+          width: '60%',
         },
-        right: {
-          main: {
-            ...flex.right,
-            ...defaultSideSectionStyle.main,
-          },
-          content: defaultSideSectionStyle.content,
-        },
-        center: {
-          main: {
-            ...flex.center,
-            ...defaultSectionStyle,
-            width: '60%',
-          },
-          content: {
-            title: {
-              color: 'white',
-            },
+        content: {
+          title: {
+            color: colorPalette.white01,
           },
         },
       },
-    }
+    },
   }
+
+  return { itemHeader: checkCall(config.itemHeader, defStyles) || deepMerge(defStyles, config.itemHeader) }
+
 }

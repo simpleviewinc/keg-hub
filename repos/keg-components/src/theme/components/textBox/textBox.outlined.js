@@ -1,13 +1,13 @@
 import { inheritFrom } from '../../../utils'
-import { get } from '@keg-hub/jsutils'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
 
 
-export const outlinedInit = (config, contained) => {
+export const outlinedInit = (config=noOpObj, contained) => {
   const { colors } = getThemeDefaults()
   const { surface } = colors
 
-  const outlined = {
+  const defStyles = {
     default: {
       $all: {
         main: {
@@ -19,6 +19,8 @@ export const outlinedInit = (config, contained) => {
     },
   }
 
+  const custom = get(config, 'textBox.outlined')
+  const outlined = checkCall(custom, defStyles) || deepMerge(defStyles, custom)
   outlined.default = inheritFrom(contained.default, outlined.default)
 
   return outlined

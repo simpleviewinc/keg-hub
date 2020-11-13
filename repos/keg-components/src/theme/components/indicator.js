@@ -1,7 +1,7 @@
-import { get } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const indicator = (config) => {
+export const indicator = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const container = {
@@ -13,40 +13,40 @@ export const indicator = (config) => {
     position: 'relative',
   }
 
-  return {
-    indicator: {
-      default: {
-        container,
-        icon: {
-          color: get(colors, 'surface.default.colors.main'),
-        },
+  const defStyles = {
+    default: {
+      container,
+      icon: {
+        color: get(colors, 'surface.default.colors.main'),
       },
-      primary: {
-        container,
-        icon: {
-          color: get(colors, 'surface.primary.colors.main'),
-        },
+    },
+    primary: {
+      container,
+      icon: {
+        color: get(colors, 'surface.primary.colors.main'),
       },
-      secondary: {
-        container,
-        icon: {
-          color: get(colors, 'surface.secondary.colors.main'),
-        },
+    },
+    secondary: {
+      container,
+      icon: {
+        color: get(colors, 'surface.secondary.colors.main'),
       },
-      warn: {
-        container,
-        icon: {
-          color: get(colors, 'surface.warn.colors.main'),
-        },
+    },
+    warn: {
+      container,
+      icon: {
+        color: get(colors, 'surface.warn.colors.main'),
       },
-      danger: {
-        container,
-        icon: {
-          color: get(colors, 'surface.danger.colors.main'),
-        },
+    },
+    danger: {
+      container,
+      icon: {
+        color: get(colors, 'surface.danger.colors.main'),
       },
-    }
+    },
   }
+
+  return { indicator: checkCall(config.indicator, defStyles) || deepMerge(defStyles, config.indicator) }
 
 }
 

@@ -1,11 +1,12 @@
 import { getThemeDefaults } from '../themeDefaults'
 import { initSharedForm } from './sharedForm'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const select = (config) => {
+export const select = (config=noOpObj) => {
   const sharedForm = initSharedForm(config)
   const { colors } = getThemeDefaults()
   
-  return {
+  const defStyles = {
     default: {
       main: {
         position: 'relative',
@@ -41,4 +42,7 @@ export const select = (config) => {
       },
     },
   }
+
+  return checkCall(config.select, defStyles) || deepMerge(defStyles, config.select)
+
 }

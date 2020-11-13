@@ -1,7 +1,7 @@
-import { get, deepMerge } from '@keg-hub/jsutils'
+import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const checkbox = () => {
+export const checkbox = (config) => {
   const { form, colors } = getThemeDefaults()
   const height = get(form, 'checkbox.height', 20)
   const width = get(form, 'checkbox.width', 20)
@@ -126,12 +126,13 @@ export const checkbox = () => {
     },
   }
 
-  return {
+  const defStyles = {
     default: checkboxDefault,
     close: checkboxClose,
     disabled: checkboxDisabled,
   }
 
+  return checkCall(config.checkbox, defStyles) || deepMerge(defStyles, config.checkbox)
 
 }
 
