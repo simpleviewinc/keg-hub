@@ -1,7 +1,7 @@
 {
   "name": "@keg-hub/tap-resolver",
-  "version": "1.1.1",
-  "description": "Resolves tap files within the SV-Keg",
+  "version": "7.0.0",
+  "description": "Resolves tap files within the keg-core",
   "main": "babel.config.js",
   "author": "Lance Tipton",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "@babel/preset-env": "7.12.1",
     "@babel/preset-react": "7.12.1",
     "@babel/runtime": "7.12.1",
-    "@keg-hub/jsutils": "0.0.1",
+    "@keg-hub/jsutils": "7.0.0",
     "app-root-path": "3.0.0",
     "babel-loader": "8.1.0",
     "babel-plugin-module-resolver": "4.0.0",
