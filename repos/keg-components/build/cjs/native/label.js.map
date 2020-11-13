@@ -1,0 +1,1 @@
+{"version":3,"file":"label.js","sources":["../../../src/components/typography/label.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const Label = KegText('label')\n"],"names":["Label","KegText"],"mappings":";;;;;;;;;;;;;;;;IACaA,KAAK,GAAGC,iBAAO,CAAC,OAAD;;;;"}

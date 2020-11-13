@@ -1,0 +1,1 @@
+{"version":3,"file":"subtitle.js","sources":["../../../src/components/typography/subtitle.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const Subtitle = KegText('subtitle')\n"],"names":["Subtitle","KegText"],"mappings":";;;;;;;;;;;;IACaA,QAAQ,GAAGC,OAAO,CAAC,UAAD;;;;"}

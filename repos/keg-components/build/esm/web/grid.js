@@ -1,0 +1,64 @@
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { get, isArr } from '@keg-hub/jsutils';
+import './defaults-0fca2f7d.js';
+import './colors-3366b3e1.js';
+import '@keg-hub/re-theme/colors';
+import './buildColorStyles.js';
+import './platformFlatten-4856c5dd.js';
+import './buildTheme.js';
+import React__default from 'react';
+import './getPressHandler.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import './updateClassNames.js';
+import 'react-native';
+import './useClassName-477fb4c5.js';
+import './view.native-3802ec98.js';
+import '@keg-hub/re-theme/styleInjector';
+import './view-45334891.js';
+import { useTheme } from '@keg-hub/re-theme';
+import { u as useClassList } from './useClassList-4be992cd.js';
+import { Container } from './container.js';
+import { Row } from './row.js';
+
+var buildCenterStyles = function buildCenterStyles(isCenter) {
+  return isCenter === 'x' || isCenter === 'xaxis' || isCenter === 'x-axis' ? {
+    justifyContent: 'center'
+  } : isCenter === 'y' || isCenter === 'yaxis' || isCenter === 'y-axis' ? {
+    alignItems: 'center'
+  } : isCenter && {
+    alignItems: 'center',
+    justifyContent: 'center'
+  } || {};
+};
+var getChildAttrs = function getChildAttrs(children) {
+  children = isArr(children) && children || [children];
+  return children.reduce(function (attrs, child) {
+    if (attrs.isRow && attrs.isCenter) return attrs;
+    if (!attrs.isRow && child && child.type === Row) attrs.isRow = true;
+    if (!attrs.isCenter && child && child.props && child.props.center) attrs.isCenter = child.props.center.toString().toLowerCase();
+    return attrs;
+  }, {
+    isRow: false,
+    isCenter: false
+  });
+};
+var Grid = function Grid(_ref) {
+  var className = _ref.className,
+      children = _ref.children,
+      style = _ref.style,
+      props = _objectWithoutProperties(_ref, ["className", "children", "style"]);
+  var theme = useTheme();
+  var _getChildAttrs = getChildAttrs(children),
+      isRow = _getChildAttrs.isRow,
+      isCenter = _getChildAttrs.isCenter;
+  return React__default.createElement(Container, _extends({}, props, {
+    className: useClassList('keg-grid', className),
+    flexDir: isRow ? 'column' : 'row',
+    size: 1,
+    style: [get(theme, ['layout', 'grid', 'wrapper']), style, isCenter && buildCenterStyles(isCenter)]
+  }), children);
+};
+
+export { Grid };
+//# sourceMappingURL=grid.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"h5.js","sources":["../../../src/components/typography/h5.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const H5 = KegText('h5')\n"],"names":["H5","KegText"],"mappings":";;;;;;;;;;;;;;;IACaA,EAAE,GAAGC,OAAO,CAAC,IAAD;;;;"}

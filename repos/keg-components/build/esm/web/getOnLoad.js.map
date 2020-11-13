@@ -1,0 +1,1 @@
+{"version":3,"file":"getOnLoad.js","sources":["../../../src/utils/events/getOnLoad.js"],"sourcesContent":["export const getOnLoad = (isWeb, callback) => ({\n  [isWeb ? 'onLoad' : 'onLoadEnd']: callback,\n})\n"],"names":["getOnLoad","isWeb","callback"],"mappings":";;IAAaA,SAAS,GAAG,SAAZA,SAAY,CAACC,KAAD,EAAQC,QAAR;AAAA,6BACtBD,KAAK,GAAG,QAAH,GAAc,WADG,EACWC,QADX;AAAA;;;;"}
