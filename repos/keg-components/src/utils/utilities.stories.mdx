@@ -5,8 +5,13 @@ import { Meta } from '@storybook/addon-docs/blocks'
 <Meta title="Utilities" />
 
 # Utilities
-There a number of utility/helper methods that are also exported from this library.
-Most of them were written to be used internally by the Keg-Components,
-but were also useful when building apps.
-So they were added to the export
+There a number of utility/helper methods that are exported from this library.
+They are used internally by the Keg-Components, but are also useful in other contexts.
 
+## isValidComponent
+* Validates if the passed in parameter is a Component
+* Returns `true` if `React.isValidElement` || `typeof` === `function`
+
+## renderFromType
+* Checks the passed in Elements type and formats it so react can render it
+* Used to return the correct format of a Component from a React render function
