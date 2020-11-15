@@ -8,7 +8,7 @@ import { StoryWrap } from 'StoryWrap'
 
 const buttonStyle = { width: 125, marginRight: 10, margin: 'auto' }
 
-storiesOf('Button/Text', module)
+storiesOf('Components/Button/Text', module)
   .add('Standard', () => (
     <StoryWrap style={{ textAlign: 'center', flexDirection: 'row' }}>
       <Button

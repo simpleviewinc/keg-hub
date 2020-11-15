@@ -6,7 +6,7 @@ import { Checkbox, Form, Input, Label, Option, Select, Switch } from '../../'
 
 const inputStyles = { marginBottom: 15, width: 200 }
 
-storiesOf('Form/Form', module).add('Default', () => (
+storiesOf('Components/Form/Form', module).add('Default', () => (
   <StoryWrap>
     <Form name='story-form'>
       <Label>Enter Some Text</Label>

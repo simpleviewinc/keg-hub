@@ -1,5 +1,5 @@
-import { margin } from './margin'
-import { padding } from './padding'
+import { clearMargin, margin } from './margin'
+import { clearPadding, padding } from './padding'
 import defaults from './defaults.json'
 import { clearHelpersStyles } from './helpers'
 import { clearFlexStyles } from './flex'
@@ -9,8 +9,10 @@ import { deepMerge, noOpObj } from '@keg-hub/jsutils'
 
 let __themeDefaults
 const clearThemeStyles = () => {
-  clearColorsStyles()
+  clearMargin()
+  clearPadding()
   clearFlexStyles()
+  clearColorsStyles()
   clearHelpersStyles()
   clearTransitionStyles()
   __themeDefaults = undefined

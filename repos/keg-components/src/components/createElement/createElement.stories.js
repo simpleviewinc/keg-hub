@@ -22,7 +22,7 @@ const renderElement = (comp, props, ...children) => {
   return createElement(comp, props, ...children)
 }
 
-storiesOf('createElement', module).add('Default', () => (
+storiesOf('Components/createElement', module).add('Default', () => (
   <StoryWrap style={storyStyles}>
     { renderElement('button', testProps, 'Custom Button') }
   </StoryWrap>

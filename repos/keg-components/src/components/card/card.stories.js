@@ -17,7 +17,7 @@ const cardStyles = {
   },
 }
 
-storiesOf('Display/Card', module).add('No Image', () => (
+storiesOf('Components/Display/Card', module).add('No Image', () => (
   <StoryWrap style={wrapStyles}>
     <Card
       Header={'Card Header'}
@@ -73,7 +73,7 @@ storiesOf('Display/Card', module).add('No Image', () => (
   </StoryWrap>
 ))
 
-storiesOf('Display/Card', module).add('With Image', () => (
+storiesOf('Components/Display/Card', module).add('With Image', () => (
   <StoryWrap style={wrapStyles}>
     <Card
       Header={'Goats in Boats'}

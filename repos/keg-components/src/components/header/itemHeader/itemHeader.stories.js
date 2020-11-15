@@ -84,7 +84,7 @@ const headerStyles2 = {
   },
 }
 
-storiesOf('Header/ItemHeader', module)
+storiesOf('Components/Header/ItemHeader', module)
   .add('Custom style & section', () => (
     <StoryWrap style={{ paddingTop: 30 }}>
       <ItemHeader

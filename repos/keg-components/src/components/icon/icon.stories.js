@@ -8,7 +8,7 @@ import { Copy, Home, Flag, Rocket } from '../../assets/icons'
 
 const wrapStyles = { textAlign: 'center' }
 
-storiesOf('Display/Icon', module)
+storiesOf('Components/Display/Icon', module)
   .add('Default', () => (
     <StoryWrap style={wrapStyles}>
       <KegIcon Component={Rocket} />

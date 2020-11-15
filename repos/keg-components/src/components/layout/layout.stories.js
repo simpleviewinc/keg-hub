@@ -12,14 +12,14 @@ const textStyles = {
   borderStyle: 'solid',
 }
 
-storiesOf('Layout/Grid', module).add('Grid', () => (
+storiesOf('Components/Layout/Grid', module).add('Grid', () => (
   <StoryWrap>
     <Grid>
       <P>Keg Grid Component</P>
     </Grid>
   </StoryWrap>
 ))
-storiesOf('Layout/Row', module).add('Row', () => (
+storiesOf('Components/Layout/Row', module).add('Row', () => (
   <StoryWrap>
     <Grid>
       <Row>
@@ -35,7 +35,7 @@ storiesOf('Layout/Row', module).add('Row', () => (
   </StoryWrap>
 ))
 
-storiesOf('Layout/Column', module).add('Column - Auto Size', () => (
+storiesOf('Components/Layout/Column', module).add('Column - Auto Size', () => (
   <StoryWrap>
     <Grid>
       <Column>
@@ -51,7 +51,7 @@ storiesOf('Layout/Column', module).add('Column - Auto Size', () => (
   </StoryWrap>
 ))
 
-storiesOf('Layout/Column', module).add('Column - Manual Size', () => (
+storiesOf('Components/Layout/Column', module).add('Column - Manual Size', () => (
   <StoryWrap>
     <Grid>
       <Column size={3}>
@@ -67,7 +67,7 @@ storiesOf('Layout/Column', module).add('Column - Manual Size', () => (
   </StoryWrap>
 ))
 
-storiesOf('Layout/Grid', module).add('Rows and Columns', () => (
+storiesOf('Components/Layout/Grid', module).add('Rows and Columns', () => (
   <StoryWrap>
     <Grid>
       <Row>

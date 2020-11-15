@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions'
 import { StoryWrap } from 'StoryWrap'
 import { P } from '../typography'
 
-storiesOf('File Picker', module)
+storiesOf('Components/File Picker', module)
   .add('Default', () => (
     <StoryWrap>
       <FilePicker

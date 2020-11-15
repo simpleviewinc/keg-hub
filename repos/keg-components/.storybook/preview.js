@@ -8,7 +8,7 @@ import { addDecorator, addParameters } from '@storybook/react'
 import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 import customTheme from './theme.custom.json'
 
-const componentsTheme = theme({ defaults: customTheme })
+const componentsTheme = theme({})
 
 const parsePart = (full, part) => {
   return !part || part.indexOf('@summary') === 0
@@ -40,10 +40,12 @@ addParameters({
     storySort: (a, b) => {
       const sectionA = a[1].id.split('-')[0]
       const sectionB = b[1].id.split('-')[0]
-      const compare = sectionA.localeCompare(sectionB)
-      return sectionA === 'keg' || sectionB === 'keg'
-        ? sectionB === 'keg' ? 1 : -1
-        : sectionA.localeCompare(sectionB)
+
+      return sectionA === 'welcome' || sectionB === 'welcome'
+        ? sectionB === 'welcome' ? 1 : -1
+        : sectionA === 'components' || sectionB === 'components'
+          ? sectionB === 'components' ? -1 : 1
+          : sectionA.localeCompare(sectionB)
     }
   }
 })

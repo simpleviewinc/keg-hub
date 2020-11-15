@@ -37,7 +37,7 @@ const TextBoxStory = ({ type, useClipboard }) => {
   )
 }
 
-storiesOf('Box/TextBox', module)
+storiesOf('Components/Box/TextBox', module)
   .add('Outlined', () => <TextBoxStory type='outlined' />)
   .add('Clipboard', () => <TextBoxStory
     type='outlined'
