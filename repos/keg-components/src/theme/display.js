@@ -1,7 +1,7 @@
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 export const display = (config=noOpObj) => {
-  return deepMerge({
+  const defStyles = {
     none: { display: 'none' },
     inline: { display: 'inline' },
     inlineBlock: { display: 'inline-block' },
@@ -14,5 +14,7 @@ export const display = (config=noOpObj) => {
     },
     click: { cursor: 'pointer' },
     noRadius: { borderRadius: 0 },
-  }, config.display)
+  }
+
+  return checkCall(config.display, defStyles) || deepMerge(defStyles, config.display)
 }

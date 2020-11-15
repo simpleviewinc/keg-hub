@@ -1,12 +1,12 @@
 import { getThemeDefaults } from './themeDefaults'
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 export const typography = (config=noOpObj) => {
   const { font, colors, margin } = getThemeDefaults()
   const fontDefs = font || { components: {} }
   const compFontDefs = fontDefs.components
 
-  return deepMerge({
+  const defStyles = {
     font: {
       family: {
         $native: {},
@@ -78,7 +78,9 @@ export const typography = (config=noOpObj) => {
       letterSpacing: fontDefs.spacing || 0.15,
       ...compFontDefs.subtitle,
     },
-  }, config.typography)
+  }
+
+  return checkCall(config.typography, defStyles) || deepMerge(defStyles, config.typography)
 
 }
 

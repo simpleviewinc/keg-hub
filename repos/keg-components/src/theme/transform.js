@@ -1,7 +1,7 @@
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 export const transform = (config=noOpObj) => {
-  return deepMerge({
+  const defStyles = {
     rotate: {
       at: amount => ({ transform: `rotate(${amount}deg)` }),
       45: { transform: 'rotate(45deg)' },
@@ -9,5 +9,7 @@ export const transform = (config=noOpObj) => {
       180: { transform: 'rotate(180deg)' },
       270: { transform: 'rotate(270deg)' },
     },
-  }, config.transform)
+  }
+
+  return checkCall(config.transform, defStyles) || deepMerge(defStyles, config.transform)
 }

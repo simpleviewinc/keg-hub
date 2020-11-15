@@ -1,7 +1,7 @@
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 export const layout = (config=noOpObj) => {
-  return deepMerge({
+  const defStyles = {
     full: {
       width: {
         width: '100%',
@@ -27,5 +27,7 @@ export const layout = (config=noOpObj) => {
       },
       columns: 12,
     },
-  }, config.layout)
+  }
+
+  return checkCall(config.layout, defStyles) || deepMerge(defStyles, config.layout)
 }

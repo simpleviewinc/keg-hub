@@ -2,6 +2,7 @@ import { getThemeDefaults } from './themeDefaults'
 import { isNum, isStr, capitalize, isArr, deepMerge, noOpObj } from '@keg-hub/jsutils'
 
 let __helpers
+export const clearHelpersStyles = () => __helpers = undefined
 
 export const spaceHelper = (amount, sides = [], type) => {
   const defaults = getThemeDefaults()

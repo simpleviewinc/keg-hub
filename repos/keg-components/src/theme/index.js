@@ -11,7 +11,7 @@ import { typography } from './typography'
 import { setThemeDefaults } from './themeDefaults'
 
 export const theme = (config=noOpObj) => {
-  const defaults = setThemeDefaults(config.defaults)
+  const defaults = setThemeDefaults(config)
 
   return {
     colors: defaults.colors,

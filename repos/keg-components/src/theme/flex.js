@@ -1,6 +1,7 @@
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 let __flex
+export const clearFlexStyles = () => __flex = undefined
 
 // -------- Flex styles -------- //
 const flex = (config=noOpObj) => {
@@ -50,7 +51,7 @@ const flex = (config=noOpObj) => {
   __flex.align.stretch = { alignItems: 'stretch' }
   __flex.align.base = { alignItems: 'baseline' }
 
-  return deepMerge(__flex, config.flex)
+  return checkCall(config.display, __flex) || deepMerge(__flex, config.flex)
 
 }
 

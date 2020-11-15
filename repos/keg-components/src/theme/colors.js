@@ -1,11 +1,12 @@
 import { opacity, shadeHex } from '@keg-hub/re-theme/colors'
-import { get, isArr, isStr, reduceObj } from '@keg-hub/jsutils'
+import { deepMerge, get, isArr, isStr, reduceObj, noOpObj } from '@keg-hub/jsutils'
 
 let __colors = {}
+export const clearColorsStyles = () => __colors = {}
 
 export const getColorSurface = () => get(__colors, 'surface', {})
 
-export const colors = (defaults) => {
+export const colors = (defaults, config=noOpObj) => {
   const defPalette = get(defaults, 'colors.palette', {})
   const defTypes = get(defaults, 'colors.types', {})
   
@@ -33,21 +34,22 @@ export const colors = (defaults) => {
   }
 
   // Build out the surface colors based on the built palette
-  __colors.surface = reduceObj(
-    defTypes,
-    (key, value, updated) => {
-      updated[key] = {
-        colors: {
-          light: __colors.palette[`${value.palette}01`],
-          main: __colors.palette[`${value.palette}02`],
-          dark: __colors.palette[`${value.palette}03`],
-        },
-      }
+  __colors.surface = deepMerge(
+    reduceObj(
+      defTypes,
+      (key, value, updated) => {
+        updated[key] = {
+          colors: {
+            light: __colors.palette[`${value.palette}01`],
+            main: __colors.palette[`${value.palette}02`],
+            dark: __colors.palette[`${value.palette}03`],
+          },
+        }
 
-      return updated
-    },
-    {}
-  )
+        return updated
+      },
+      {}
+    ), config.colors)
 
   return __colors
 }

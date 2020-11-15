@@ -1,10 +1,20 @@
 import { margin } from './margin'
 import { padding } from './padding'
-import { colors } from './colors'
 import defaults from './defaults.json'
-import { deepMerge } from '@keg-hub/jsutils'
+import { clearHelpersStyles } from './helpers'
+import { clearFlexStyles } from './flex'
+import { colors, clearColorsStyles } from './colors'
+import { clearTransitionStyles } from './transition'
+import { deepMerge, noOpObj } from '@keg-hub/jsutils'
 
 let __themeDefaults
+const clearThemeStyles = () => {
+  clearColorsStyles()
+  clearFlexStyles()
+  clearHelpersStyles()
+  clearTransitionStyles()
+  __themeDefaults = undefined
+}
 
 /**
  * IMPORTANT - This should be called prior to theme initialization
@@ -15,11 +25,13 @@ let __themeDefaults
  *
  * @return {Object} - Merged theme defaults
  */
-export const setThemeDefaults = (overrides) => {
-  __themeDefaults = deepMerge(defaults, overrides)
-  __themeDefaults.colors = colors(__themeDefaults)
-  __themeDefaults.margin = margin(__themeDefaults)
-  __themeDefaults.padding = padding(__themeDefaults)
+export const setThemeDefaults = (config=noOpObj) => {
+  // Clear out the old styles before setting the new defaults
+  clearThemeStyles()
+  __themeDefaults = deepMerge(defaults, config.defaults)
+  __themeDefaults.colors = colors(__themeDefaults, config)
+  __themeDefaults.margin = margin(__themeDefaults, config)
+  __themeDefaults.padding = padding(__themeDefaults, config)
 
   return __themeDefaults
 }
