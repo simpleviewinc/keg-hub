@@ -1,45 +1,22 @@
-import { clearMargin, margin } from './margin'
-import { clearPadding, padding } from './padding'
-import defaults from './defaults.json'
-import { clearHelpersStyles } from './helpers'
-import { clearFlexStyles } from './flex'
-import { colors, clearColorsStyles } from './colors'
-import { clearTransitionStyles } from './transition'
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
-
-let __themeDefaults
-const clearThemeStyles = () => {
-  clearMargin()
-  clearPadding()
-  clearFlexStyles()
-  clearColorsStyles()
-  clearHelpersStyles()
-  clearTransitionStyles()
-  __themeDefaults = undefined
-}
 
 /**
- * IMPORTANT - This should be called prior to theme initialization
- * This way the defaults will be updated before the theme is built
- * Allows overriding the theme defaults.json file with custom values
- * <br/>Merges the passed in overrides file with the defaults file
- * @param {Object} overrides - Overrides for the defaults theme object
- *
- * @return {Object} - Merged theme defaults
+ * Cache holder for the themeDefaults object
+ * @object
  */
-export const setThemeDefaults = (config=noOpObj) => {
-  // Clear out the old styles before setting the new defaults
-  clearThemeStyles()
-  __themeDefaults = deepMerge(defaults, config.defaults)
-  __themeDefaults.colors = colors(__themeDefaults, config)
-  __themeDefaults.margin = margin(__themeDefaults, config)
-  __themeDefaults.padding = padding(__themeDefaults, config)
+let __themeDefaults={}
 
-  return __themeDefaults
-}
+/**
+ * Sets the theme defaults object
+ * @function
+ * @param {Object} themeDefaults - Object to set the internal theme defaults to
+ * 
+ * @return {void}
+ */
+export const setThemeDefaults = (themeDefaults={}) => __themeDefaults = themeDefaults
 
 /**
  * Gets the theme defaults object
+ * @function
  *
  * @return {Object} - Theme defaults object
  */

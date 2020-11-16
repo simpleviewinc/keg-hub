@@ -4,7 +4,7 @@ import { isNum, isStr, capitalize, isArr, deepMerge, noOpObj } from '@keg-hub/js
 let __helpers
 export const clearHelpersStyles = () => __helpers = undefined
 
-export const spaceHelper = (amount, sides = [], type) => {
+export const spaceHelper = (amount, sides=noPropArr, type) => {
   const defaults = getThemeDefaults()
   sides = (sides.length && sides) || defaults.layout.sides
   if (sides === 'all' || (isArr(sides) && sides[0] === 'all'))

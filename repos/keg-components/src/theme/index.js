@@ -1,4 +1,4 @@
-import { noOpObj } from '@keg-hub/jsutils'
+import { noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { components } from './components'
 import { display } from './display'
 import { flex } from './flex'
@@ -8,12 +8,12 @@ import { layout } from './layout'
 import { transform } from './transform'
 import { transition } from './transition'
 import { typography } from './typography'
-import { setThemeDefaults } from './themeDefaults'
+import { buildThemeDefaults } from './buildThemeDefaults'
 
-export const theme = (config=noOpObj) => {
-  const defaults = setThemeDefaults(config)
+export const theme = (config=noOpObj, tapTheme=noOpObj) => {
+  const defaults = buildThemeDefaults(config)
 
-  return {
+  return deepMerge({
     colors: defaults.colors,
     margin: defaults.margin,
     padding: defaults.padding,
@@ -26,5 +26,5 @@ export const theme = (config=noOpObj) => {
     transition: transition(config),
     typography: typography(config),
     ...components(config),
-  }
+  }, tapTheme)
 }
