@@ -14,7 +14,7 @@ const getInternalIp = () => {
     return ipAddress || interfaces[ifName].reduce((ip, iFace) => {
       const { family, internal, address } = iFace
 
-      return ip || (family !== 'IPv4' || internal !== false || address === '127.0.0.1')
+      return ip || (family !== 'IPv4' || internal !== false || address === '127.0.0.1' || address.indexOf('169.254') === 0 )
           ? ip
           : address
 
