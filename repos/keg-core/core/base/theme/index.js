@@ -1,1 +1,1 @@
-export * from 'SVTheme/tapIndex'
+export * from './__kegTheme'
