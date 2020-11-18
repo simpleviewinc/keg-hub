@@ -1,19 +1,22 @@
 import { spaceHelper } from './helpers'
-import { getThemeDefaults } from './themeDefaults'
+import { deepMerge, get, noOpObj } from '@keg-hub/jsutils'
 
-const defaults = getThemeDefaults()
+let __margin
+export const clearMargin = () => __margin = undefined
 
-const size = defaults.layout.margin
+export const margin = (defaults, config=noOpObj) => {
+  const size = get(defaults, 'layout.margin')
 
-const margin = (amount, sides = []) => spaceHelper(amount, sides, 'margin')
-margin.size = size
-margin.full = { margin: size }
-margin.all = margin.full
-margin.vert = { marginLeft: size, marginRight: size }
-margin.left = { marginLeft: size }
-margin.right = { marginRight: size }
-margin.hor = { marginTop: size, marginBottom: size }
-margin.top = { marginTop: size }
-margin.bottom = { marginBottom: size }
+  __margin = (amount, sides = []) => spaceHelper(amount, sides, 'margin')
+  __margin.size = size
+  __margin.full = { margin: size }
+  __margin.all = __margin.full
+  __margin.vert = { marginLeft: size, marginRight: size }
+  __margin.left = { marginLeft: size }
+  __margin.right = { marginRight: size }
+  __margin.hor = { marginTop: size, marginBottom: size }
+  __margin.top = { marginTop: size }
+  __margin.bottom = { marginBottom: size }
 
-export { margin }
+  return Object.assign(__margin, config.margin)
+}

@@ -1,4 +1,9 @@
 import { itemHeader } from './itemHeader'
-export const header = {
-  itemHeader,
+
+export const header = (config) => {
+  return {
+    header: {
+      ...itemHeader(config),
+    }
+  }
 }

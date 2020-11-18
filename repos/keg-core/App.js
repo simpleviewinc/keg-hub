@@ -1,10 +1,8 @@
-import 'SVUtils/overrides/console'
-import { Platform } from 'react-native'
-import { setRNPlatform } from '@keg-hub/re-theme'
-import { enableScreens } from 'react-native-screens'
+import 'SVTheme'
 import { App } from 'SVTap'
+import 'SVUtils/overrides/console'
+import { enableScreens } from 'react-native-screens'
 
-setRNPlatform(Platform)
 enableScreens()
 
 export default App

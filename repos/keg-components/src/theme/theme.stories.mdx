@@ -1,0 +1,106 @@
+<!--- Theme.stories.mdx -->
+
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+
+import { Button } from '../components/button'
+import { View } from '../components/view'
+import { Text } from '../components/typography/text'
+import { ReThemeProvider } from '@keg-hub/re-theme'
+import { theme } from '../theme'
+
+<Meta title="Theme" />
+
+# Theme
+
+Keg-Components comes with a default theme for basic composition, but the theme can easily be overwritten by passing in overrides on initialization.
+This allows full customization to match any style guide or mockup.
+
+## Initialization
+Generally speaking, the theme is generated on initialization.
+Components typically have a corresponding theme function that will construct the theme when called.
+
+Initializing the theme, really means, *"Call all the theme functions for all the components"*.
+To do this, just import the theme export from `Keg-Components`, and call it.
+
+### Basic Example
+```js
+
+import { theme } from '@keg-hub/keg-components'
+const config = {}
+const myTheme = theme(config)
+
+```
+
+### Theme Config
+The initialize function takes two arguments. This fist argument is the **theme config**.
+This argument allows the default theme to be overridden or extended. You must define a `defaults` key on the config object with a object value matching the JSON from `theme.default.json`
+
+###  Defaults Example
+```js
+
+import { theme } from '@keg-hub/keg-components'
+const config = {
+  defaults: {
+    colors: {
+      types: {
+        storybook: { palette: "turquoise" }
+      },
+      palette: {
+        turquoise: [ 20, "#42f5ec", -20 ]
+      }
+    }
+  }
+}
+
+const myTheme = theme(config)
+
+```
+
+### Custom Theme
+The initialize function allows overriding or extending the theme through the second argument.
+The second argument is expected be an object, which can be merged with the default theme
+This merge happeds **AFTER** the theme defaults have been initialized and takes precedence over the default theme.
+
+### Extend Example
+```js
+
+import { theme } from '@keg-hub/keg-components'
+const extendedTheme = { extra: { theme: 'keys' }}
+const config = {}
+const myTheme = theme(config, extendedTheme)
+// myTheme.extra.theme === 'keys'
+
+```
+
+## Usage
+Once the theme has been initialized, it will be used automatically within the components.
+This allows defining all theme changes in a single location, yet they are applied across all components
+For example adding a `type` to the `colors` object of the theme defaults, will make it accessable to the button component automatically
+
+### Custom Type
+
+<Preview>
+  <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
+    <ReThemeProvider theme={theme({
+      defaults: {
+        colors: {
+          types: {
+            storybook: { palette: "turquoise" }
+          },
+          palette: {
+            turquoise: [ 20, "#42f5ec", -20 ]
+          }
+        }
+      }
+    })} >
+        <Button type={'storybook'} >
+          Custom Type: Storybook
+        </Button>
+    </ReThemeProvider>
+  </View>
+</Preview>
+
+The above example, the `type` prop is passed the value of `storybook` on the `Button` component.
+Because `storybook` is not a default button type, normally the button would render without a background color.
+To allow the button to render with the correct color from the storybook type, the theme initialize function is passed a `storybook` type.
+Internally the `Button` component looks up the type and uses it as the style for the component.

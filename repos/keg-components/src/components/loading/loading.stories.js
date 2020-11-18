@@ -42,7 +42,7 @@ const CustomIndicator = ({ size }) => {
   )
 }
 
-storiesOf('Loading', module)
+storiesOf('Components/Loading', module)
   .add('Default', () => (
     <StoryWrap style={storyStyles}>
       <View style={viewStyles}>

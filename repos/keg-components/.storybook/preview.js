@@ -6,6 +6,9 @@ import { Dimensions, Platform } from 'react-native'
 import { configureActions } from '@storybook/addon-actions'
 import { addDecorator, addParameters } from '@storybook/react'
 import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
+import customTheme from './theme.custom.json'
+
+const componentsTheme = theme({})
 
 const parsePart = (full, part) => {
   return !part || part.indexOf('@summary') === 0
@@ -33,7 +36,17 @@ addParameters({
     },
   },
   options: {
-    enableShortcuts: false
+    enableShortcuts: false,
+    storySort: (a, b) => {
+      const sectionA = a[1].id.split('-')[0]
+      const sectionB = b[1].id.split('-')[0]
+
+      return sectionA === 'welcome' || sectionB === 'welcome'
+        ? sectionB === 'welcome' ? 1 : -1
+        : sectionA === 'components' || sectionB === 'components'
+          ? sectionB === 'components' ? -1 : 1
+          : sectionA.localeCompare(sectionB)
+    }
   }
 })
 
@@ -43,7 +56,7 @@ configureActions({
 })
 
 addDecorator(storyFn =>
-  <ReThemeProvider theme={ theme } >
+  <ReThemeProvider theme={ componentsTheme } >
     <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
       { storyFn() }
     </View>

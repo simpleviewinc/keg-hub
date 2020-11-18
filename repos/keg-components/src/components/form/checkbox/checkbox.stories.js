@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions'
 import { StoryWrap, Split } from 'StoryWrap'
 import { Text } from '../../'
 
-storiesOf('Form/Checkbox', module)
+storiesOf('Components/Form/Checkbox', module)
   .add('Default', () => (
     <StoryWrap>
       <Checkbox onChange={action('Checkbox Click!')} />

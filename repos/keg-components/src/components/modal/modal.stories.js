@@ -100,7 +100,7 @@ const TestComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
 
 let isVisible1 = false
 let isVisible2 = false
-storiesOf('Display/Modal', module)
+storiesOf('Components/Display/Modal', module)
   .addDecorator(withKnobs)
   .add('One at a time', () => {
     // allow only 1 modal on the screen at a time

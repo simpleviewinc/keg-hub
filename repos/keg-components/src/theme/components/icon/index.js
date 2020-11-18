@@ -1,1 +1,5 @@
-export * from './icon'
+import { iconInit } from './icon'
+
+export const icon = (config) => {
+  return iconInit(config)
+}

@@ -1,11 +1,9 @@
-import { colors } from '../../theme/colors'
+import { getColorSurface } from '../../theme/colors'
 import { get, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../theme/themeDefaults'
 
-const defaults = getThemeDefaults()
-const colorSurface = get(colors, 'surface', {})
 
-const colorStyles = (type, states, cb) => {
+const colorStyles = (colorSurface, type, states, cb) => {
   // Loop the current stated
   return Object.keys(states).reduce((built, key) => {
     return {
@@ -22,9 +20,12 @@ const colorStyles = (type, states, cb) => {
  * @returns {Object} - Object with keys and styles values of the color types
  */
 export const buildColorStyles = (states, cb) => {
+  const defaults = getThemeDefaults()
+  const colorSurface = getColorSurface()
+  
   return Object.keys(get(defaults, 'colors.types', {})).reduce(
     (built, type) => {
-      const styles = colorStyles(type, states, cb)
+      const styles = colorStyles(colorSurface, type, states, cb)
       styles && (built[type] = styles)
 
       return built
@@ -40,6 +41,7 @@ export const buildColorStyles = (states, cb) => {
  * @returns {Object} - Object with keys and styles values of the surfaces types
  */
 export const buildSurfaceStyles = cb => {
+  const colorSurface = getColorSurface()
   return Object.keys(colorSurface).reduce((surfaceStyles, surface) => {
     surfaceStyles[surface] = checkCall(cb, surface, colorSurface)
     return surfaceStyles
