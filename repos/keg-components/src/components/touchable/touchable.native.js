@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  Pressable
 } from 'react-native'
 import { useClassName } from 'KegClassName'
 
@@ -25,7 +26,7 @@ const TouchableComp =
  */
 export const Touchable = React.forwardRef((props, ref) => {
   const { className, showFeedback = true, touchRef, ...attrs } = props
-  const Component = showFeedback ? TouchableComp : TouchableWithoutFeedback
+  const Component = showFeedback ? Pressable : TouchableWithoutFeedback
   const classRef = useClassName('keg-touchable', className, touchRef || ref)
 
   return <Component
