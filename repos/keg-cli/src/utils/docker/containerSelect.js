@@ -4,6 +4,27 @@ const { checkCall } = require('@keg-hub/jsutils')
 const { throwNoContainers } = require('../error/throwNoContainers')
 
 /**
+ * @param {string} labels - all labels stored as a single csv string
+ * @return {string} the domain label value
+ */
+const getDomain = labels => {
+  const split = labels 
+    ? labels.split(',')
+    : []
+
+  const domain = split.reduce((result, next) => {
+    if (result) return result
+    const [ key, value ] = next.split('=')
+    return (key === 'com.keg.proxy.domain')
+      ? value
+      : result
+  }, null)
+
+  // return the domain, or if not found, the proxy's dashboard
+  return domain || 'local.kegdev.xyz'
+}
+
+/**
  * Prompts user to select a container from the current docker containers
  * @param {function} filter - Method to filter which containers are displayed. Must return array
  *
@@ -24,11 +45,11 @@ const containerSelect = async (filter, throwError=true) => {
   const filtered = checkCall(filter, containers) || containers
 
   // Get a string of each container to print to terminal
-  const items = filtered.map(cont => `${cont.name} | ${ cont.image } | ${ cont.id }`)
+  const items = filtered.map(cont => `${cont.name} | ${ cont.image } | ${ getDomain(cont.labels) } | ${ cont.id }`)
 
   const index = await ask.promptList(
     items,
-    'Docker Containers: ( Name | Image | ID )',
+    'Docker Containers: ( Name | Image | Domain | ID )',
     'Select a container:'
   )
 
