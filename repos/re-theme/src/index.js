@@ -27,6 +27,7 @@ import {
   useThemeActive,
   useThemeFocus,
   useThemeHover,
+  useHover,
 } from './hooks/index.js'
 
 export {
@@ -49,6 +50,7 @@ export {
   useStylesCallback,
   useStyle,
   useTheme,
+  useHover,
   useThemeActive,
   useThemeFocus,
   useThemeHover,
