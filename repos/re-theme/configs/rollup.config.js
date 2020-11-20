@@ -47,14 +47,25 @@ const buildConfig = (type, ext, platform, config) => {
 }
 
 const shared = (platform, ext) => ({
-  external: ['react', 'react-dom', 'react-native', 'jsutils', '@keg-hub/jsutils' ],
+  external: [
+    'react',
+    'react-dom',
+    'react-native',
+    'jsutils',
+    '@keg-hub/jsutils',
+    'react-native-web/dist/modules/prefixStyles',
+    'react-native-web/dist/modules/flattenArray',
+    'react-native-web/dist/exports/StyleSheet/flattenStyle',
+    'react-native-web/dist/exports/StyleSheet/createReactDOMStyle',
+    'react-native-web/dist/exports/StyleSheet/createCompileableStyle',
+  ],
   watch: {
     clearScreen: false
   },
   plugins: [
     buildHook(platform),
     replace({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
     }),
     alias({
       entries: {
@@ -85,7 +96,7 @@ const shared = (platform, ext) => ({
 // Which allows us to loop over the platform types for native and web
 export default Array.from([ 'web', 'native' ])
   .reduce((apps, platform) => {
-    // Get the extention for the inputs and outputs based on platform
+    // Get the extension for the inputs and outputs based on platform
     const ext = platform !== 'web' ? `${platform}.js` : 'js'
 
     const sharedConfig = shared(platform, ext)

@@ -22,6 +22,7 @@
     "build/esm/*"
   ],
   "scripts": {
+    "docker:build": "bash ./scripts/dockerBuild.sh",
     "app": "cd app; yarn start",
     "app:install": "cd app && yarn install",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
