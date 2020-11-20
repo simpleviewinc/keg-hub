@@ -1,16 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Platform,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  TouchableWithoutFeedback,
   Pressable
 } from 'react-native'
 import { useClassName } from 'KegClassName'
-
-const TouchableComp =
-  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
 /**
  * Touchable
@@ -25,11 +18,10 @@ const TouchableComp =
  *
  */
 export const Touchable = React.forwardRef((props, ref) => {
-  const { className, showFeedback = true, touchRef, ...attrs } = props
-  const Component = showFeedback ? Pressable : TouchableWithoutFeedback
+  const { className, touchRef, ...attrs } = props
   const classRef = useClassName('keg-touchable', className, touchRef || ref)
 
-  return <Component
+  return <Pressable
     accessible={true}
     {...attrs}
     ref={classRef}
@@ -37,7 +29,7 @@ export const Touchable = React.forwardRef((props, ref) => {
 })
 
 Touchable.propTypes = {
-  ...TouchableComp.propTypes,
+  ...Pressable.propTypes,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
