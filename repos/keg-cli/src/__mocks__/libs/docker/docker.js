@@ -354,6 +354,9 @@ const docker = {
             return data.id === image || data.image === image || data.name === image
           })
     }),
+    list: jest.fn(() => {
+      return Object.values(global.testDocker.images)
+    }),
     exists: jest.fn(image => {
       return global.testDocker.images[image] ||
         Object.values(global.testDocker.images)
