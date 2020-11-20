@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from '@keg-hub/jsutils'
 import { Touchable } from '../touchable'
+import {View} from 'KegView'
 import { Text } from '../typography/text'
 import { useThemePath } from '../../hooks'
-import { useThemeHover, useThemeActive } from '@keg-hub/re-theme'
-import { getActiveOpacity, getPressHandler, renderFromType } from '../../utils'
+import { getActiveOpacity, renderFromType } from '../../utils'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
-
+import {withPressable} from '../../hocs/withPressable'
 /**
  * Finds the child type and formats it in the proper type to be rendered
  * @param {Object|Array|string} Children - React components to render
@@ -28,20 +28,20 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
 }
 
 /**
- * Button
+ * ButtonChildren
  * @summary Custom button component. All props are optional
  *
- * @param {Object} props - see buttonPropTypes
+ * @param {Object} props
  * @property {String} props.text - button text
  * @property {String} props.type - flat, text, outlined, contained; default 'flat'
- * @property {Object} props.style - custom style
+ * @property {Object} props.styles - custom styles
  * @property {Function} props.onPress - function to do when button is pressed
  * @property {Boolean} props.disabled
  * @property {Object} props.children
  * @property {Object} props.ref - reference to native element
  *
  */
-export const Button = React.forwardRef((props, ref) => {
+const ButtonChildren = (props) => {
   const {
     className,
     children,
@@ -51,7 +51,9 @@ export const Button = React.forwardRef((props, ref) => {
     styles,
     type = 'default',
     themePath,
-    ...elProps
+    hovered,
+    pressed,
+    ...otherProps
   } = props
 
   const btnStyles = useThemePath(
@@ -59,35 +61,48 @@ export const Button = React.forwardRef((props, ref) => {
     styles
   )
 
-  const [ hoverRef, hoverStyles ] = useThemeHover(
-    get(btnStyles, 'default', {}),
-    get(btnStyles, 'hover'),
-    { ref }
-  )
-
-  const [ themeRef, themeStyles ] = useThemeActive(
-    hoverStyles,
-    get(btnStyles, 'active'),
-    { ref: hoverRef }
-  )
+  const childStyles = pressed 
+    ? btnStyles?.active
+    : hovered 
+      ? btnStyles?.hover
+      : btnStyles?.default
 
   return (
-    <Touchable
+    <View
       accessibilityRole='button'
       className={useThemeTypeAsClass(
         themePath || type,
         'keg-button',
         className
       )}
-      {...elProps}
-      touchRef={themeRef}
-      style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}
-      children={getChildren(children || content, themeStyles)}
-      {...getPressHandler(false, onClick, onPress)}
+      style={[
+        checkDisabled(btnStyles?.default?.main, btnStyles, props?.disabled),
+        hovered && btnStyles?.hover?.main,
+        pressed && btnStyles?.active?.main
+      ]}
+      {...otherProps}
       {...getActiveOpacity(false, props, btnStyles)}
-    />
+    >
+      {getChildren(children || content, childStyles)}
+    </View>
   )
-})
+}
+
+/**
+ * Button
+ * @summary Custom button component. All props are paseed onto `ButtonChildren` component
+ *
+ * @param {Object} props
+ * @property {String} props.text - button text
+ * @property {String} props.type - flat, text, outlined, contained; default 'flat'
+ * @property {Object} props.styles - custom styles
+ * @property {Function} props.onPress - function to do when button is pressed
+ * @property {Boolean} props.disabled
+ * @property {Object} props.children
+ * @property {Object} props.ref - reference to native element
+ *
+ */
+export const Button = withPressable(ButtonChildren)
 
 Button.propTypes = {
   ...Touchable.propTypes,
