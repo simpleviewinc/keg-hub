@@ -1,8 +1,26 @@
 /** @module hooks */
 
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
+import { deepMerge } from '@keg-hub/jsutils'
 import { usePointerState } from './pointer/usePointerState'
-import { useCompareState } from './pointer/useCompareState'
+
+/**
+ * Returns the offValue or onValue based on the passed in compareState
+ * @param {*} offValue - return when compareState is false
+ * @param {*} onValue - return when compareState is true
+ * @param {boolean} noMerge - Should the offValue and onValue be merged
+ * @param {boolean} compareState - Current state to check
+ * 
+ * @return {*} offValue, onValue or merged values based on the compareState
+ */
+const useCompareState = (offValue, onValue, noMerge, compareState) => {
+  return useMemo(() => {
+    return compareState
+      ? noMerge ? onValue : deepMerge(offValue, onValue)
+      : offValue
+
+  }, [ offValue, onValue, noMerge, compareState ])
+}
 
 /**
  * Wrapper helper to build hooks for tracking mouse state
@@ -22,7 +40,12 @@ export const useThemeState = pointerState => {
     const currentState = usePointerState({ ...options, ref: options.ref || useRef(null) }, pointerState)
     const pointerRef = currentState.ref
     const compareState = currentState[pointerState]
-    const themeStyles = useCompareState(offValue, onValue, Boolean(options.noMerge), compareState)
+    const themeStyles = useCompareState(
+      offValue,
+      onValue,
+      Boolean(options.noMerge),
+      compareState
+    )
 
     return [pointerRef, themeStyles]
   }
