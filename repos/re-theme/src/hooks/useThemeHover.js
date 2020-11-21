@@ -1,11 +1,9 @@
 /** @module hooks */
 
-import { hookFactory } from './hookFactory'
+import { useThemeState } from './useThemeState'
+
 
 /**
  * Creates an useThemeHover hook based on the 'pointerover' and 'pointerout' events
  */
-export const useThemeHover = hookFactory({
-  on: 'pointerover',
-  off: 'pointerout',
-})
+export const useThemeHover = useThemeState('hovered')
