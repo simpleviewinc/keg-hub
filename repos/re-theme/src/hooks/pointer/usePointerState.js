@@ -2,6 +2,12 @@ import { isHoverEnabled } from "./isHoverEnabled"
 import { useRef, useState, useMemo, useCallback, useEffect } from "react"
 import { checkCall, isFunc, noOpObj } from '@keg-hub/jsutils'
 
+/**
+ * Builds hover state and all hover event listeners
+ * @param {Object} options - Contains callbacks and refs for the pointerState
+ *
+ * @return {Object} - Contains hovered state, and event listeners functions
+ */
 const buildHoverCallbacks = ({ onMouseIn, onMouseOut }) => {
   const [hovered, setHovered] = useState(false)
 
@@ -20,6 +26,12 @@ const buildHoverCallbacks = ({ onMouseIn, onMouseOut }) => {
   return { hovered, handleMouseEnter, handleMouseLeave }
 }
 
+/**
+ * Builds all hover event listeners and hover state
+ * @param {Object} options - Contains callbacks and refs for the pointerState
+ *
+ * @return {Object} - Contains hovered state, and event listeners functions
+ */
 const buildActiveCallBacks = ({ onMouseDown, onMouseUp }) => {
   const [active, setActive] = useState(false)
 
@@ -39,6 +51,13 @@ const buildActiveCallBacks = ({ onMouseDown, onMouseUp }) => {
   return { active, handleMouseDown, handleMouseUp }
 }
 
+/**
+ * Builds all element event listeners to track updates to the mouse state
+ * @param {Object} options - Contains callbacks and refs for the pointerState
+ * @param {string} pointerState - pointer state to track
+ *
+ * @return {Object} - Contains mouse states, and event listeners functions
+ */
 const buildElementEvents = (options, pointerState) => {
 
   const {
@@ -82,6 +101,14 @@ const buildElementEvents = (options, pointerState) => {
   ])
 }
 
+/**
+ * Creates a callback ref to get access to the Element from a ref
+ * @param {Dom Element} element - Element to attach mouse events to
+ * @param {Object} events - Dom events to attach to the element
+ * @param {string} method - Name of the method used to update events on the element
+ * 
+ * @return {void}
+ */
 const loopElementEvents = (element, events, method) => {
   Object.entries(events)
     .map(([ eventName, action ]) => element[method](eventName, action))

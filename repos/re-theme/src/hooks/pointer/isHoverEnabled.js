@@ -2,6 +2,12 @@ import { hasDomAccess } from '../../helpers/hasDomAccess'
 
 let isEnabled = false
 
+/**
+ * Adds mouse event listeners to the document for tracking hover state
+ * Uses mouse move event to enable when hover is enabled 
+ *
+ * @returns {void}
+ */
 const setDomListeners = () => {
   /**
    * Web browsers emulate mouse events (and hover states) after touch events.
@@ -31,6 +37,11 @@ const setDomListeners = () => {
 
 hasDomAccess() && setDomListeners()
 
+/**
+ * Helper to return the hover enabled state
+ *
+ * @returns {boolean} isEnabled - If hover is enabled
+ */
 export const isHoverEnabled = () => {
   return isEnabled
 }
