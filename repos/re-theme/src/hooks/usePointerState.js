@@ -3,34 +3,34 @@ import { useRef, useState, useMemo, useCallback, useEffect } from "react"
 import { checkCall, isFunc, noOpObj } from '@keg-hub/jsutils'
 
 /**
- * Builds hover state and all hover event listeners
+ * Builds all event listeners and state for an elements hover state
  * @param {Object} options - Contains callbacks and refs for the pointerState
  *
- * @return {Object} - Contains hovered state, and event listeners functions
+ * @return {Object} - Contains hover state, and event listeners functions
  */
 const buildHoverCallbacks = ({ onMouseIn, onMouseOut }) => {
-  const [hovered, setHovered] = useState(false)
+  const [hover, setHovered] = useState(false)
 
   const handleMouseEnter = useCallback(event => {
-    if(!isHoverEnabled() || hovered) return
+    if(!isHoverEnabled() || hover) return
 
     checkCall(onMouseIn, event)
     setHovered(true)
-  }, [hovered, onMouseIn])
+  }, [hover, onMouseIn])
 
   const handleMouseLeave = useCallback(event => {
     checkCall(onMouseOut, event)
     setHovered(false)
-  }, [hovered, onMouseOut])
+  }, [hover, onMouseOut])
 
-  return { hovered, handleMouseEnter, handleMouseLeave }
+  return { hover, handleMouseEnter, handleMouseLeave }
 }
 
 /**
- * Builds all hover event listeners and hover state
+ * Builds all event listeners and state for an elements active state
  * @param {Object} options - Contains callbacks and refs for the pointerState
  *
- * @return {Object} - Contains hovered state, and event listeners functions
+ * @return {Object} - Contains active state, and event listeners functions
  */
 const buildActiveCallBacks = ({ onMouseDown, onMouseUp }) => {
   const [active, setActive] = useState(false)
@@ -46,9 +46,31 @@ const buildActiveCallBacks = ({ onMouseDown, onMouseUp }) => {
 
     // Attach the mouseup listener to the document, so it always gets called on mouse-up
     document.addEventListener("mouseup", handleMouseUp, { once: true })
-  }, [setActive, onMouseUp])
+  }, [setActive, onMouseDown])
 
   return { active, handleMouseDown, handleMouseUp }
+}
+
+/**
+ * Builds all event listeners and state for an elements focus/blur state
+ * @param {Object} options - Contains callbacks and refs for the pointerState
+ *
+ * @return {Object} - Contains focus state, and event listeners functions
+ */
+const buildFocusCallBacks = ({ onFocus, onBlur }) => {
+  const [focus, setFocus] = useState(false)
+
+  const handleBlur = useCallback(event => {
+    checkCall(onBlur, event)
+    setFocus(false)
+  }, [setFocus, onBlur])
+
+  const handleFocus = useCallback(event => {
+    checkCall(onFocus, event)
+    setFocus(true)
+  }, [setFocus, onFocus])
+
+  return { focus, handleFocus, handleBlur }
 }
 
 /**
@@ -61,6 +83,8 @@ const buildActiveCallBacks = ({ onMouseDown, onMouseUp }) => {
 const buildElementEvents = (options, pointerState) => {
 
   const {
+    onBlur,
+    onFocus,
     onMouseIn,
     onMouseOut,
     onMouseDown,
@@ -68,10 +92,10 @@ const buildElementEvents = (options, pointerState) => {
   } = options
 
   const {
-    hovered=false,
+    hover=false,
     handleMouseEnter,
     handleMouseLeave
-  } = pointerState === 'hovered'
+  } = pointerState === 'hover'
     ? buildHoverCallbacks(options)
     : noOpObj
 
@@ -83,21 +107,34 @@ const buildElementEvents = (options, pointerState) => {
     ? buildActiveCallBacks(options)
     : noOpObj
 
+  const {
+    focus=false,
+    handleFocus,
+    handleBlur
+  } = pointerState === 'focus'
+    ? buildFocusCallBacks(options)
+    : noOpObj
+
   return useMemo(() => {
     return {
       active,
-      hovered,
-      events: pointerState === 'hovered'
+      hover,
+      events: pointerState === 'hover'
         ? { mouseenter: handleMouseEnter, mouseleave: handleMouseLeave }
-        : { mousedown: handleMouseDown }
+        : pointerState === 'focus'
+          ? { focus: handleFocus, blur: handleBlur }
+          : { mousedown: handleMouseDown }
     }
   }, [
     onMouseIn,
     onMouseOut,
     onMouseDown,
     onMouseUp,
-    hovered,
-    active
+    onFocus,
+    onBlur,
+    active,
+    hover,
+    focus,
   ])
 }
 
@@ -159,11 +196,12 @@ const createCBRef = (options, events, pointerState) => {
  * @return {Object} - States of the pointed relative to the passed in pointerState
  */
 export const usePointerState = (options={}, pointerState) => {
-  const { events, hovered, active } = buildElementEvents(options, pointerState)
+  const { events, hover, active, focus } = buildElementEvents(options, pointerState)
 
   return {
+    hover,
+    focus,
     active,
-    hovered,
     ref: createCBRef(options, events, pointerState),
   }
 }

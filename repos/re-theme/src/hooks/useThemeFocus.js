@@ -1,8 +1,8 @@
 /** @module hooks */
 
-import { hookFactory } from './hookFactory'
+import { useThemeState } from './useThemeState'
 
 /**
  * Creates an useThemeFocus hook based on the 'mouseenter' and 'mouseleave' events
  */
-export const useThemeFocus = hookFactory({ on: 'focus', off: 'blur' })
+export const useThemeFocus = useThemeState('focus')

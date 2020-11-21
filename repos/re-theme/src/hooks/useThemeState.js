@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react'
 import { deepMerge } from '@keg-hub/jsutils'
-import { usePointerState } from './pointer/usePointerState'
+import { usePointerState } from './usePointerState'
 
 /**
  * Returns the offValue or onValue based on the passed in compareState
@@ -37,7 +37,11 @@ export const useThemeState = pointerState => {
    * @returns {Array} - Ref and styles to be applied to the element
    */
   return (offValue, onValue, options={}) => {
-    const currentState = usePointerState({ ...options, ref: options.ref || useRef(null) }, pointerState)
+    const currentState = usePointerState({
+      ...options,
+      ref: options.ref || useRef(null),
+    }, pointerState)
+
     const pointerRef = currentState.ref
     const compareState = currentState[pointerState]
     const themeStyles = useCompareState(

@@ -1,4 +1,4 @@
-import { hasDomAccess } from '../../helpers/hasDomAccess'
+import { hasDomAccess } from '../helpers/hasDomAccess'
 
 let isEnabled = false
 
