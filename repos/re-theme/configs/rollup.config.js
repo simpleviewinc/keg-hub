@@ -26,6 +26,10 @@ const inputs = {
 const buildConfig = (type, ext, platform, config) => {
   return {
     ...config,
+    plugins: [
+      buildHook(platform, type),
+      ...config.plugins,
+    ],
     input: {
       index: `./src/index.${ext}`,
       ...Object.keys(inputs)
@@ -65,7 +69,6 @@ const shared = (platform, ext) => ({
     clearScreen: false
   },
   plugins: [
-    buildHook(platform),
     replace({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
     }),

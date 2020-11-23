@@ -6,15 +6,9 @@ const cmdExec = promisify(exec)
 const reThemeNM = `node_modules/@keg-hub/re-theme/`
 const { DOC_APP_PATH, DOC_RETHEME_PATH } = process.env
 
-const runCmd = async (cmd) => {
-  try {
-    const output = await cmdExec(cmd)
-    return output
-  }
-  catch(err){
-    console.error(err.stack)
-  }
-
+const runCmd = cmd => {
+  try { return cmdExec(cmd) }
+  catch(err){ console.error(err.stack) }
 }
 
 const getFolderPath = (loc1, loc2, condition) => {
@@ -45,27 +39,25 @@ const writeIndexes = indexes => {
   })
 }
 
-export default function buildHook(platform){
+export default function buildHook(platform, ext){
   return {
     name: 'buildHook',
     buildEnd: async () => {
       try {
 
-        // Build the index files for the build export
-        if(platform !== 'native'){
-          writeIndexes(buildIndexes.cjs)
-          writeIndexes(buildIndexes.esm)
-        }
-
         // Only run the build hook if NOT inside a container
-        if(!DOC_APP_PATH || platform === 'native') return
+        if(!DOC_APP_PATH || platform === 'web' || ext === 'cjs') return
+
+        // Build the index files for the build export
+        writeIndexes(buildIndexes.cjs)
+        writeIndexes(buildIndexes.esm)
 
         // Check if we are running the container for ReTheme
         // The retheme folder path and the app path will be the same
         // Otherwise retheme is a node_module in a different app
         const isReThemeContainer = DOC_RETHEME_PATH === DOC_APP_PATH
 
-        // Get the root app path base on the container it's being runing
+        // Get the root app path base on the container it's being running
         const rootPath = getFolderPath(
           path.join(__dirname, '../app'),
           `${DOC_APP_PATH}/`,
@@ -87,7 +79,12 @@ export default function buildHook(platform){
         reThemePath !== nmPath &&
           fs.existsSync(`${reThemePath}build`) &&
           fs.existsSync(`${nmPath}build`) &&
-          await runCmd(`cp -Rf ${reThemePath}build ${ nmPath }build`)
+          setTimeout(async () => {
+            console.log(`Copying reTheme build to app node_modules...`)
+            await runCmd(`rm -Rf ${ nmPath }build`)
+            await runCmd(`cp -Rf ${reThemePath}build ${ nmPath }build`)
+          // Wait a second for all the build files to be created
+          }, 1000)
 
       }
       catch(err){
