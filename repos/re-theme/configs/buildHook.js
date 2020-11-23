@@ -17,6 +17,16 @@ const runCmd = async (cmd) => {
 
 }
 
+const getFolderPath = (loc1, loc2, condition) => {
+  const foundPath = condition
+    ? loc1
+    : loc2
+
+  return foundPath && foundPath[ foundPath.length -1 ] === '/'
+    ? foundPath
+    : `${foundPath}/`
+}
+
 const buildPath = path.join(__dirname, `../build`)
 const buildIndexes = {
   cjs: {
@@ -49,8 +59,6 @@ export default function buildHook(platform){
 
         // Only run the build hook if NOT inside a container
         if(!DOC_APP_PATH || platform === 'native') return
-        
-
 
         // Check if we are running the container for ReTheme
         // The retheme folder path and the app path will be the same
@@ -58,25 +66,28 @@ export default function buildHook(platform){
         const isReThemeContainer = DOC_RETHEME_PATH === DOC_APP_PATH
 
         // Get the root app path base on the container it's being runing
-        const rootPath = isReThemeContainer
-          ? path.join(__dirname, '../app')
-          : `${DOC_APP_PATH}/`
+        const rootPath = getFolderPath(
+          path.join(__dirname, '../app'),
+          `${DOC_APP_PATH}/`,
+          isReThemeContainer
+        )
 
         // Get the path for retheme 
-        const reThemePath = isReThemeContainer
-          ? rootPath
-          : path.join(__dirname, '../')
+        const reThemePath = getFolderPath(path.join(__dirname, '../'), false, true)
 
         // Get the node_module path base on the rootPath
-        const nmPath = isReThemeContainer
-          ? `${rootPath}app/${reThemeNM}`
-          : DOC_RETHEME_PATH
+        const nmPath = getFolderPath(
+          `${rootPath}${reThemeNM}`,
+          DOC_RETHEME_PATH,
+          isReThemeContainer
+        )
 
         // If the current node_module path is not the same as the retheme build path
         // Then copy the build folder into the node_module path
-        ;(reThemePath !== nmPath && reThemePath !== `${nmPath}/`) &&
+        reThemePath !== nmPath &&
           fs.existsSync(`${reThemePath}build`) &&
-          await runCmd(`command cp -Rf ${reThemePath}build ${ nmPath }`)
+          fs.existsSync(`${nmPath}build`) &&
+          await runCmd(`cp -Rf ${reThemePath}build ${ nmPath }build`)
 
       }
       catch(err){
