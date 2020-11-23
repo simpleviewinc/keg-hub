@@ -58,17 +58,17 @@ describe('nativeThemeHook', () => {
     stateOverride = undefined
   })
 
-  it('should return a ref as first item in the reponse array', () => {
+  it('should return a ref as first item in the response array', () => {
     const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
     expect(ref).toBe(refObj)
   })
 
-  it('should return the off value as second item in the reponse array', () => {
+  it('should return the off value as second item in the response array', () => {
     const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
     expect(value).toBe(mockOff)
   })
 
-  it('should return the setValue as third item in the reponse array', () => {
+  it('should return the setValue as third item in the response array', () => {
     const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
     expect(setValue).toBe(updateStateValue)
   })
@@ -86,7 +86,7 @@ describe('nativeThemeHook', () => {
     expect(ref).toBe(customRef)
   })
 
-  it('should call the useLayoutEffect, which shoudl call setValue if the values are not equal', () => {
+  it('should call the useLayoutEffect, which should call setValue if the values are not equal', () => {
     stateOverride = { custom: 'state-override' }
     const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
     effectCB()

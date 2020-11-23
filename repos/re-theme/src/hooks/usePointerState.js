@@ -118,6 +118,7 @@ const buildElementEvents = (options, pointerState) => {
   return useMemo(() => {
     return {
       active,
+      focus,
       hover,
       events: pointerState === 'hover'
         ? { mouseenter: handleMouseEnter, mouseleave: handleMouseLeave }
@@ -126,15 +127,15 @@ const buildElementEvents = (options, pointerState) => {
           : { mousedown: handleMouseDown }
     }
   }, [
-    onMouseIn,
-    onMouseOut,
-    onMouseDown,
-    onMouseUp,
-    onFocus,
-    onBlur,
     active,
-    hover,
     focus,
+    hover,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleFocus,
+    handleBlur,
+    handleMouseDown,
+    pointerState,
   ])
 }
 
@@ -202,6 +203,7 @@ export const usePointerState = (options={}, pointerState) => {
     hover,
     focus,
     active,
+    events,
     ref: createCBRef(options, events, pointerState),
   }
 }

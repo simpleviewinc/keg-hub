@@ -1,14 +1,14 @@
 jest.resetModules()
 jest.resetAllMocks()
 
-const { hookFactory } = require('../hookFactory')
+const { useThemeState } = require('../useThemeState')
 
-const mockHookFactory = jest.fn((...args) => hookFactory(...args))
-jest.setMock('../hookFactory', { hookFactory: mockHookFactory })
+const mockHookFactory = jest.fn((...args) => useThemeState(...args))
+jest.setMock('../useThemeState', { useThemeState: mockHookFactory })
 
 describe('useThemeActive', () => {
 
-  it('should call hookFactory', () => {
+  it('should call useThemeState', () => {
     mockHookFactory.mockClear()
     const { useThemeActive } = require('../useThemeActive')
     expect(mockHookFactory).toHaveBeenCalled()
@@ -16,9 +16,8 @@ describe('useThemeActive', () => {
 
   it('should pass the correct arguments', () => {
     const { useThemeActive } = require('../useThemeActive')
-    const args = mockHookFactory.mock.calls[0][0]
-    expect(args.on).toBe('mousedown')
-    expect(args.off).toBe('mouseup')
+    const arg = mockHookFactory.mock.calls[0][0]
+    expect(arg).toBe('active')
   })
 
   it('should export as a function', () => {

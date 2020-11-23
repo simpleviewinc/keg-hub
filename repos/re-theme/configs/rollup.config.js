@@ -6,6 +6,7 @@ import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
+const { getAliases } = require("./aliases.config")
 
 // Need to require our babel.config.js because it uses module.exports
 const babelConfig = require('../babel.config.js')
@@ -46,6 +47,7 @@ const buildConfig = (type, ext, platform, config) => {
   }
 }
 
+
 const shared = (platform, ext) => ({
   external: [
     'react',
@@ -68,9 +70,7 @@ const shared = (platform, ext) => ({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
     }),
     alias({
-      entries: {
-        ReDimensions: `src/dimensions/dimensions.${ext}`
-      },
+      entries: getAliases(ext),
     }),
     resolve(),
     babel({
