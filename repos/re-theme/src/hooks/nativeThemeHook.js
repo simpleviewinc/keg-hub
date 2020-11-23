@@ -1,5 +1,5 @@
 import { useRef, useState, useLayoutEffect } from 'react'
-import { get, jsonEqual } from '@keg-hub/jsutils'
+import { get, shallowEqual } from '@keg-hub/jsutils'
 
 /**
  * Checks it two passed in objects are equal pointers or equal as json strings
@@ -8,7 +8,7 @@ import { get, jsonEqual } from '@keg-hub/jsutils'
  *
  * @returns {boolean} - If objects are equal
  */
-const checkEqual = (obj1, obj2) => obj1 === obj2 || jsonEqual(obj1, obj2)
+const checkEqual = (obj1, obj2) => obj1 === obj2 || shallowEqual(obj1, obj2)
 
 /**
  * Placeholder hook when on native device

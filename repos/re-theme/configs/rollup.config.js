@@ -7,7 +7,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
 
-// Need to require our babel.config.js because it uses module.expots
+// Need to require our babel.config.js because it uses module.exports
 const babelConfig = require('../babel.config.js')
 
 const isProd = process.env.NODE_ENV === 'production'

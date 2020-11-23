@@ -58,7 +58,7 @@ WORKDIR /
 
 # Path of the app within the docker container
 ARG DOC_APP_PATH=${DOC_APP_PATH:-/keg/app}
-ARG DOC_APP_PORT=${DOC_APP_PORT:-5000}
+ARG KEG_PROXY_PORT=${KEG_PROXY_PORT:-5000}
 
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV
 ARG KEG_DOCKER_IP
@@ -83,11 +83,7 @@ ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
 # Copy over the cloned app
 COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH
 
-# Expose container ports
-EXPOSE 80
-EXPOSE 443
-EXPOSE $DOC_APP_PORT
-
+EXPOSE $KEG_PROXY_PORT
 # Set the current directory to tap repo
 WORKDIR $DOC_APP_PATH
 
