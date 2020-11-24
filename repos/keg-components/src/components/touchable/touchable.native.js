@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Platform,
@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native'
 import { useClassName } from 'KegClassName'
+
 const TouchableComp =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
