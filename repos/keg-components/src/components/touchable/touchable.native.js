@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native'
 import { useClassName } from 'KegClassName'
+import { useClassOnLayout } from 'KegClassOnLayout'
 
 const TouchableComp =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
@@ -24,14 +25,16 @@ const TouchableComp =
  *
  */
 export const Touchable = React.forwardRef((props, ref) => {
-  const { className, showFeedback = true, touchRef, ...attrs } = props
+  const { className, showFeedback = true, touchRef, onLayout, ...attrs } = props
   const Component = showFeedback ? TouchableComp : TouchableWithoutFeedback
   const classRef = useClassName('keg-touchable', className, touchRef || ref)
+  const onClassLayout = useClassOnLayout(className, onLayout)
 
   return <Component
     accessible={true}
     {...attrs}
     ref={classRef}
+    onLayout={onClassLayout}
   />
 })
 

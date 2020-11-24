@@ -1,6 +1,7 @@
 export * from './useAnimate'
 export * from './useChildren'
 export * from './useChildrenWithRefs'
+export * from './useClassesOnLayout'
 export * from './useInputHandlers'
 export * from './useMediaProps'
 export * from './usePressHandlers'
