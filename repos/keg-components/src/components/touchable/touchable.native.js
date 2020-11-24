@@ -11,7 +11,6 @@ import { useClassName } from 'KegClassName'
 const TouchableComp =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
-
 /**
  * Touchable
  * @summary Custom Touch component. All props are optional
