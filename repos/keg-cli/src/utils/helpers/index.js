@@ -10,5 +10,4 @@ module.exports = {
   ...require('./optionsHasArg'),
   ...require('./parseJson'),
   ...require('./runYarnScript'),
-  ...require('./tryCatch'),
 }
