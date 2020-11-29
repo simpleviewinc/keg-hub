@@ -1,16 +1,13 @@
-const { get, isStr } = require('@keg-hub/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
+const { get, } = require('@keg-hub/jsutils')
+const { getRepoPath } = require('KegUtils/getters/getRepoPath')
+const { getTagName } = require('KegUtils/getters/getTagName')
+const { buildProviderUrl } = require('KegUtils/docker/buildProviderUrl')
 const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
-const { throwPackageError } = require('KegUtils/error/throwPackageError')
 const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
-const {
-  askForPackageVersion,
-  buildPackageURL,
-  getPackage,
-  validatePackageVersion,
-} = require('KegUtils/package')
+const { getFromImage } = require('KegUtils/getters/getFromImage')
 
 /**
  * Pulls an image locally from a configured registry provider in the cloud
@@ -27,59 +24,43 @@ const {
 const providerPull = async args => {
   const { globalConfig, params, task } = args
   const {
-    repo,
     branch,
+    latest,
     context,
     version,
-    user=get(globalConfig, 'docker.user'),
+    __injected,
     provider=get(globalConfig, 'docker.providerUrl'),
   } = params
 
-  // Get the command context
-  const { cmdContext, tap } = await buildCmdContext({
+  const location = getRepoPath(params.tap || context)
+  const tagName = await getTagName(params, location)
+
+  // Get the pull context
+  const pullContext = await buildCmdContext(args)
+  const imageName = getFromImage(
     params,
-    globalConfig,
-    allowed: get(task, 'options.context.allowed', DOCKER.IMAGES)
-  })
+    {},
+    __injected && pullContext.tap || pullContext.cmdContext
+  )
 
-  // Get the package that matches the passed in user, context and docker
-  const package = await getPackage({
-    tap,
-    user,
-    type: 'docker',
-    params: { ...params, context: cmdContext, tap },
-  })
-  
-  // Ensure we have a package to work with
-  !package && throwPackageError(`No package found that matches context "${context}"`)
+  // If it's an injected app, use the tap name, otherwise use the cmdContext for internal apps
+  const imageNameWTag = imageName.includes(':')
+    ? imageName
+    : `${imageName}:${tagName}`
 
-  // If the user passed in a version or branch to use, validate it
-  const versionRef = version || branch
-  versionRef && validatePackageVersion(versionRef, package)
+  const url = await buildProviderUrl({}, args)
 
-  // If the user didn't pass in a version, ask the user to select one
-  const selectedVersion = versionRef || await askForPackageVersion(package)
+  const imageUrl = imageNameWTag.includes('/')
+    ? imageNameWTag
+    : `${url}/${imageNameWTag}`
 
-  const url = buildPackageURL({
-    branch,
-    package,
-    provider,
-    globalConfig,
-    version: selectedVersion,
-  })
+  const pulledImg = await docker.pull(imageUrl)
+  pulledImg && Logger.success(`\nFinished pulling Docker image from provider!\n`)
 
-  // Pull the docker image from the built url
-  await docker.pull(url)
+  return { ...pullContext, imageUrl, pulledImg }
 
-  // Tag the image with latest if version is master, otherwise tag with the package version.
-  Logger.info('Tagging image...')
-
-  selectedVersion === 'master'
-    ? await docker.image.tag(url, `${package.image}:latest`)
-    : await docker.image.tag(url, `${package.image}:${selectedVersion}`)
-
-  Logger.spacedMsg(`Finished pulling docker package "${ package.image }"`)
 }
+
 
 module.exports = {
   pull: {

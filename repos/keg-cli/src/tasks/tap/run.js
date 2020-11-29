@@ -18,9 +18,7 @@ const runTap = async (args) => {
   const exArgs = { context: 'tap', tap: args.params.tap, image: 'tap' }
   const isBuilt = await buildService(args, exArgs)
 
-  return isBuilt 
-  ? runInternalTask( 'docker.tasks.image.tasks.run', getServiceArgs(args, { ...exArgs, container: 'tap' }))
-  : generalError(`The ${ args.params.tap } image must be built before it can be run, but the image could not be built!`)
+  return runService(args, { ...exArgs, container: 'tap' }) 
 
 }
 module.exports = {
@@ -63,8 +61,8 @@ module.exports = {
       },
       satisfy: {
         alias: [ 'sat', 'ensure' ],
-        description: 'Will check if required images are built, and build them in necessary.',
-        example: "keg ${ task } ${ action } --satisfy false",
+        description: 'Will check if required docker images are pulled and built. Will then pull and build images as needed',
+        example: `keg tap run --no-satisfy`,
         default: true,
       },
       log: {

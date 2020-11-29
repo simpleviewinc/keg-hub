@@ -1,7 +1,7 @@
-const { getBuildTags } = require('./getBuildTags')
+const { buildTags } = require('./tags/buildTags')
 const { getDockerImg } = require('./getDockerImg')
 const { getBuildArgs } = require('./getBuildArgs')
-const { getDockerArgs } = require('./getDockerArgs')
+const { getDockerCmdArgs } = require('./getDockerCmdArgs')
 const { getBuildLabels } = require('./getBuildLabels')
 
 /**
@@ -15,43 +15,21 @@ const { getBuildLabels } = require('./getBuildLabels')
  *
  * @returns {string} - Built docker build command
  */
-const createBuildCmd = async (args, dockerCmd, container) => {
+const createBuildCmd = async (args, dockerCmd) => {
   const { globalConfig, params } = args
-  const {
-    buildArgs,
-    location,
-    context,
-    branch,
-    options=[],
-    tap,
-    version
-  } = params
+  const { location } = params
 
   // Ensure we have an image name to build
-  const image = getDockerImg(params.image, container)
+  const image = getDockerImg(params.image, params.context)
 
   // Add any build tags
-  dockerCmd = getBuildTags({
-    dockerCmd,
-    container,
-    image,
-    context,
-    options,
-    version
-  })
+  dockerCmd = await buildTags(args, params, dockerCmd)
 
   // Add any build labels
   dockerCmd = getBuildLabels(args, dockerCmd)
 
   // Add the build args for the github key and tap git url
-  dockerCmd = await getBuildArgs(globalConfig, {
-    buildArgs,
-    branch,
-    context,
-    dockerCmd,
-    location,
-    tap
-  })
+  dockerCmd = await getBuildArgs(globalConfig, params, dockerCmd)
 
   // Add the location last. This is the location the container will be built from
   return location ? `${dockerCmd} ${location}` : dockerCmd
@@ -72,36 +50,37 @@ const createBuildCmd = async (args, dockerCmd, container) => {
 const buildDockerCmd = args => {
   const { params={} } = args
   const {
-    branch,
+    buildArgs,
     cmd,
     docker='',
     env,
     envs,
     execCmd,
+    from,
+    tagGit,
     image,
     location,
     mounts,
     context,
-    container,
     platform,
+    tagPackage,
+    pull,
     tags,
     tap,
+    tagVariable,
     version,
     ...dockerOpts
   } = params
-  
-  // In no container is set, try to use the context of the docker image to build
-  const buildContainer = (container || context).toUpperCase()
 
   // Get the default docker arguments
-  const dockerCmd = getDockerArgs({
+  const dockerCmd = getDockerCmdArgs({
     cmd,
     context,
     args: dockerOpts,
     dockerCmd: `docker ${cmd} ${docker}`.trim()
   })
 
-  return createBuildCmd(args, dockerCmd, buildContainer)
+  return createBuildCmd(args, dockerCmd)
 
 }
 

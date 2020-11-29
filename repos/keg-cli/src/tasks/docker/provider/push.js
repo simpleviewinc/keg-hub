@@ -4,7 +4,8 @@ const { get, mapObj } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { generalError, throwRequired, throwNoRepo, throwWrap } = require('KegUtils/error')
-const { getOrBuildImage, buildProviderUrl, addProviderTags, imageSelect } = require('KegUtils/docker')
+const { getOrBuildImage, buildProviderUrl, imageSelect } = require('KegUtils/docker')
+const { addProviderTags } = require('KegUtils/docker/tags/addProviderTags')
 
 /**
  * Pushes a local image registry provider in the cloud

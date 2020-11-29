@@ -1,7 +1,7 @@
-const { get, set } = require('@keg-hub/jsutils')
-const { composeService } = require('./composeService')
-const { buildService } = require('./buildService')
+const { pullService } = require('./pullService')
 const { proxyService } = require('./proxyService')
+const { composeService } = require('./composeService')
+const { checkRunningContainers } = require('../docker/checkRunningContainers')
 
 /**
  * Runs the build service, then the compose service
@@ -17,18 +17,29 @@ const { proxyService } = require('./proxyService')
  */
 const startService = async (args, exArgs) => {
 
-  // Call the build service to ensure required images are built 
-  const isBuilt = await buildService(args, exArgs)
-
   // Call the proxy service to make sure that is running
   await proxyService(args)
 
-  // Update the build param so we don't rebuild the tap
-  // Setting it to false, tells it to NOT build the image
-  get(args, 'params.build') && set(args, 'params.build', !isBuilt) 
+  // Check if newer versions of the image should be pulled before starting
+  // Docker-Compose does not auto-pull new images, so we do it manually
+  const pullContext = await pullService(args, exArgs)
+
+  const recreateContainers = pullContext &&
+    pullContext.pulledImg &&
+    await checkRunningContainers([
+      pullContext.cmdContext,
+      pullContext.context,
+      pullContext.tap,
+    ])
 
   // Call and return the compose server
-  return composeService(args, exArgs)
+  return composeService({
+    ...args,
+    params: {
+      ...args.params,
+      ...(recreateContainers && {recreate: recreateContainers})
+    }
+  }, exArgs)
 
 }
 

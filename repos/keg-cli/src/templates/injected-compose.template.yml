@@ -4,7 +4,7 @@ networks:
     external: true
 services:
   {{ image }}:
-    image: {{ image }}
+    image: {{ imageFrom }}
     container_name: {{ container }}
     tty: true
     stdin_open: true
