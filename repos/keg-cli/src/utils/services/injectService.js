@@ -107,7 +107,7 @@ const injectData = async ({ app, injectPath }, currentEnv, containerPaths) => {
     ENVS: {
       KEG_CONTEXT_PATH: injectPath,
       KEG_CONTAINER_PATH: containerPaths.containerPath,
-      KEG_MUTAGEN_PATH: containerPaths.mutagenPath,
+      KEG_MUTAGEN_FILE: containerPaths.mutagenPath,
       KEG_DOCKER_FILE: containerPaths.dockerPath,
       KEG_VALUES_FILE: containerPaths.valuesPath,
       KEG_COMPOSE_DEFAULT: containerPaths.composePath,
