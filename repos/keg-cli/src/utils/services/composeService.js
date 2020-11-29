@@ -105,7 +105,7 @@ const composeService = async (args, exArgs) => {
         ...args,
         __internal: { containerContext: composeContext },
         params: {
-          ...params,
+          ...serviceArgs.params,
           ...buildExecParams(
             serviceArgs.params,
             { detach: Boolean(get(serviceArgs, 'params.detach')) },

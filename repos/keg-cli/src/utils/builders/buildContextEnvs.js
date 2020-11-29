@@ -44,7 +44,7 @@ const buildContextEnvs = async (args) => {
     PUBLIC_GIT_KEY: await getPublicGitKey(globalConfig),
 
     // Get any params that should be converted into ENVs passed to docker
-    ...convertParamsToEnvs(params),
+    ...convertParamsToEnvs(params, containerEnvs.KEG_COPY_LOCAL),
 
     // Set the project name to allow linking services if needed
     COMPOSE_PROJECT_NAME: containerEnvs.COMPOSE_PROJECT_NAME || cmdContext,
