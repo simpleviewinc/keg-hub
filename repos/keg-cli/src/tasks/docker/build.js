@@ -4,9 +4,10 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { buildDockerCmd } = require('KegUtils/docker')
 const { copyFileSync, removeFileSync } = require('KegFileSys/fileSys')
-const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 const { throwRequired, generalError, throwNoTapLoc } = require('KegUtils/error')
 const { getPathFromConfig } = require('KegUtils/globalConfig/getPathFromConfig')
+const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 
 /**
  * Copies over the keg-core package.json to the taps temp folder
@@ -136,46 +137,21 @@ module.exports = {
     description: `Runs docker build command for a container`,
     example: 'keg docker build <options>',
     locationContext: DOCKER.LOCATION_CONTEXT.REPO,
-    options: {
+    options: mergeTaskOptions(`docker`, `build`, `build`, {
       context: {
+        alias: [ 'name' ],
         allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
         example: 'keg docker build --context core',
         enforced: true,
       },
-      args: {
-        example: 'keg docker build --args false',
-        description: 'Add build args from container env files',
-        default: true
-      },
-      cache: {
-        description: 'Docker will use build cache when building the image',
-        example: `keg docker build --cache false`,
-        default: true
-      },
-      core: {
-        description: 'Use the local keg-core package.json when install node_modules during the build',
-        example: `keg docker build --context tap --core true`,
-        default: false,
-      },
-      local: {
-        description: 'Copy the local repo into the docker container at build time',
-        example: `keg docker build --local`,
-        default: false,
-      },
       tap: {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
         example: `keg docker build --context tap --tap events-force`,
       },
-      tags: {
-        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg docker build tags=my-tag,local,development'
+      local: {
+        default: false,
       },
-      log: {
-        description: 'Log docker command',
-        example: 'keg docker build log=true',
-        default: false
-      },
-    }
+    })
   }
 }
