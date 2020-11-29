@@ -12,7 +12,7 @@ env:
   # Docker / Docker Compose paths
   KEG_DOCKER_FILE: "{{ cli.paths.containers }}/tap/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.paths.containers }}/tap/values.yml"
-  KEG_MUTAGEN_PATH: "{{ cli.paths.containers }}/tap/mutagen.yml"
+  KEG_MUTAGEN_FILE: "{{ cli.paths.containers }}/tap/mutagen.yml"
 
   # The default docker-compose file path
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/tap/docker-compose.yml"

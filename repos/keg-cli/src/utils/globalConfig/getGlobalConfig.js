@@ -1,6 +1,8 @@
 const path = require('path')
+const { deepMerge } = require('@keg-hub/jsutils')
 const { GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE } = require('KegConst/constants')
 const { __getGlobalConfig, __updateGlobalConfig } = require('./globalConfigCache')
+const { defaultConfig } = require('./defaultConfig')
 
 /**
  * Loads the global cli config from the global config folder ( ~/.kegConfig )
@@ -23,7 +25,7 @@ const getGlobalConfig = () => {
     const config = require(path.join(GLOBAL_CONFIG_FOLDER, GLOBAL_CONFIG_FILE))
 
     // Update the globalConfig cache with the loaded globalConfig
-    config && __updateGlobalConfig(config)
+    config && __updateGlobalConfig(deepMerge(defaultConfig(), config))
 
     // // Return the global config after it's been cached
     return __getGlobalConfig()
