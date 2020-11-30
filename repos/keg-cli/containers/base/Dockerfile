@@ -30,12 +30,14 @@ RUN if [ -z "$KEG_COPY_LOCAL" ]; then \
       rm -rf /keg-temp; \
     fi
 
+# Install / Build jsutils
 RUN if [ -d "/keg-hub/repos/jsutils" ]; then \
       cd /keg-hub/repos/jsutils; \
       yarn install; \
       yarn build; \
     fi
 
+# Install keg-cli, then copy over it's keg dependencies
 RUN if [ -d "/keg-hub/repos/keg-cli" ]; then \
       cd /keg-hub/repos/keg-cli; \
       yarn install; \
@@ -57,6 +59,7 @@ RUN if [ -d "/keg-hub/repos/keg-cli" ]; then \
       fi; \
     fi
 
+# Install tap-resolver, then copy over it's keg dependencies
 RUN if [ -d "/keg-hub/repos/tap-resolver" ]; then \
       cd /keg-hub/repos/tap-resolver; \
       yarn install; \
@@ -66,6 +69,7 @@ RUN if [ -d "/keg-hub/repos/tap-resolver" ]; then \
       fi; \
     fi
 
+# Install / Build re-theme, then copy over it's keg dependencies
 RUN if [ -d "/keg-hub/repos/re-theme" ]; then \
       cd /keg-hub/repos/re-theme; \
       yarn install; \
@@ -76,6 +80,7 @@ RUN if [ -d "/keg-hub/repos/re-theme" ]; then \
       yarn build; \
     fi
 
+# Install / Build keg-components, then copy over it's keg dependencies
 RUN if [ -d "/keg-hub/repos/keg-components" ]; then \
       cd /keg-hub/repos/keg-components; \
       yarn install; \
@@ -90,6 +95,7 @@ RUN if [ -d "/keg-hub/repos/keg-components" ]; then \
       yarn build; \
     fi
 
+# Install keg-core, then copy over it's keg dependencies
 RUN if [ -d "/keg-hub/repos/keg-core" ]; then \
       cd /keg-hub/repos/keg-core; \
       yarn install; \
