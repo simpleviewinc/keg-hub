@@ -32,7 +32,7 @@ const providerPush = async (args) => {
   */
   const image = await getOrBuildImage(args) || await imageSelect()
   !image && generalError('No img found!')
-  
+
   /*
   * ----------- Step 2 ----------- *
   * Build the provider url
