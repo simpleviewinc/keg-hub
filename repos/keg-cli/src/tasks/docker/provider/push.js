@@ -79,7 +79,6 @@ module.exports = {
       },
       tag: {
         description: 'Specify the tag tied to the image being pushed',
-        default: 'latest',
       },
       tags: {
         description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
