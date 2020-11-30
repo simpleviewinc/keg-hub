@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, useStyle } from '@keg-hub/re-theme'
+import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
@@ -46,7 +46,7 @@ export const Icon = React.forwardRef((props, ref) => {
     )
 
   const iconStyles = useThemePath(themePath || `icon.${type}`, styles?.default || styles)
-  const activeStyles = useStyle('icon.active', styles?.active || styles)
+
   const iconProps = {
     ref,
     name,
@@ -67,10 +67,7 @@ export const Icon = React.forwardRef((props, ref) => {
   return (
     <View
       className={useClassList(`keg-icon`, className)}
-      style={[
-        iconStyles.container,
-        pressed && activeStyles?.container
-      ]}
+      style={iconStyles.container}
     >
       { renderFromType(Element, { ...attrs, ...iconProps }) }
     </View>
