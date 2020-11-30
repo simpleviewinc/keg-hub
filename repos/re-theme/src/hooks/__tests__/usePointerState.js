@@ -1,16 +1,21 @@
 import { mockReactHooks, clearMockedHooks } from '../../mocks/reactHooks'
 
+// Override the addEventListener to Allow catching the enableHover method
+// This was we can call it when we want to test the onMouseHover method
+let enableHover
+let disableHover
+const addListener = document.addEventListener
+document.addEventListener = (name, method, opts) => {
+  if(name === "mousemove") enableHover = method
+  if(name === "touchstart") disableHover = method  
+  addListener.call(document, name, method, opts)
+}
+
 jest.resetModules()
 jest.resetAllMocks()
 
-let isEnabled = false
-const isHoverEnabled = jest.fn(() => {
-  return isEnabled
-})
-
 const mockRef = () => {}
 const mockedHooks = mockReactHooks('useState', 'useMemo', 'useCallback', 'useRef', 'useEffect')
-jest.setMock('../isHoverEnabled', { isHoverEnabled: isHoverEnabled })
 
 const { usePointerState } = require('../usePointerState')
 
@@ -48,12 +53,27 @@ describe('usePointerState', () => {
       ref: mockRef,
     }, 'hover')
 
-    isEnabled = true
+    enableHover()
     events.mouseenter()
     expect(onMouseIn).toHaveBeenCalled()
     events.mouseleave()
     expect(onMouseOut).toHaveBeenCalled()
-    isEnabled = false
+    disableHover()
+
+  })
+
+  it('should not call the on hover callbacks when hover is disabled', () => {
+    const onMouseIn = jest.fn()
+    const onMouseOut = jest.fn()
+    const { events } = usePointerState({
+      onMouseIn,
+      onMouseOut,
+      ref: mockRef,
+    }, 'hover')
+
+    disableHover()
+    events.mouseenter()
+    expect(onMouseIn).not.toHaveBeenCalled()
   })
 
   it('should return the active event handlers when active is passed as the pointer state', () => {

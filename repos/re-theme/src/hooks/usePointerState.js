@@ -175,9 +175,8 @@ const loopElementEvents = (element, events, method) => {
 /**
  * Creates a callback ref to get access to the Element from a ref
  * @type function
- * @param {Object} options - Contains callbacks and refs for the pointerState
+ * @param {Object} passedRef - Custom react ref to allow reusing a Ref on a component
  * @param {Object} events - Dom events to attach to the element obtained from the ref
- * @param {string} pointerState - pointer state to track
  *
  * @return {function} - callbackRef to apply to the element to be tracked
  */
@@ -219,7 +218,7 @@ const createCBRef = (passedRef, events) => {
  * Gets the current state of the pointer / mouse
  * @type function
  * @param {Object} options - Contains callbacks and refs for the pointerState
- * @param {string} pointerState - pointer state to track
+ * @param {string} pointerState - pointer state to track. Must be one of hover, active, or focus
  * 
  * @return {Object} - States of the pointed relative to the passed in pointerState
  */
