@@ -17,13 +17,15 @@ export const withPressable = (Component, options={}) => {
       onPress,
       ...otherProps
     } = props
+
     return (
       <Touchable
+        disabled={otherProps?.disabled}
         {...getPressHandler(false, onClick, onPress)}
         children={
           ({ pressed, hovered }) => {
             return showFeedback
-              ? <Component {...otherProps} pressed={pressed} hovered={hovered}/>
+              ? <Component {...otherProps} pressed={pressed} hovered={hovered} />
               : <Component {...otherProps} />
           }
         }
