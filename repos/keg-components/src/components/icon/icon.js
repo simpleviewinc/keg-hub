@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from '@keg-hub/re-theme'
+import { useTheme, useStyle } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 import { View } from 'KegView'
@@ -7,6 +7,7 @@ import { isValidComponent } from '../../utils'
 import { useThemePath } from 'KegHooks'
 import { renderFromType } from '../../utils'
 import { useClassList } from 'KegClassList'
+
 /**
  * Icon
  * @summary Custom Icon component
@@ -33,6 +34,8 @@ export const Icon = React.forwardRef((props, ref) => {
     styles,
     themePath,
     type = 'default',
+    hovered,
+    pressed,
     ...attrs
   } = props
 
@@ -42,8 +45,8 @@ export const Icon = React.forwardRef((props, ref) => {
       null
     )
 
-  const iconStyles = useThemePath(themePath || `icon.${type}`, styles)
-
+  const iconStyles = useThemePath(themePath || `icon.${type}`, styles?.default || styles)
+  const activeStyles = useStyle('icon.active', styles?.active || styles)
   const iconProps = {
     ref,
     name,
@@ -64,7 +67,10 @@ export const Icon = React.forwardRef((props, ref) => {
   return (
     <View
       className={useClassList(`keg-icon`, className)}
-      style={iconStyles.container}
+      style={[
+        iconStyles.container,
+        pressed && activeStyles?.container
+      ]}
     >
       { renderFromType(Element, { ...attrs, ...iconProps }) }
     </View>

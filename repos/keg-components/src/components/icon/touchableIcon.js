@@ -1,5 +1,5 @@
 import { Icon } from 'KegIcon'
-import { withTouch } from '../../hocs'
+import { withPressable } from '../../hocs'
 import { Touchable } from '../touchable'
 
 /**
@@ -9,7 +9,7 @@ import { Touchable } from '../touchable'
  * @param { Function } props.onPress - callback for when the user presses the icon
  * @param { Function } props.* - props that are passed to <Icon />. @see The `Icon` component for more details
  */
-export const TouchableIcon = withTouch(Icon)
+export const TouchableIcon = withPressable(Icon)
 
 TouchableIcon.propTypes = {
   ...Touchable.propTypes,
