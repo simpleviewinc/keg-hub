@@ -15,6 +15,10 @@ const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 const buildBase = async (args) => {
   return runInternalTask(`tasks.docker.tasks.build`, {
     ...args,
+    __internal: {
+      ...args.__internal,
+      locationContext: args.task.locationContext,
+    },
     params: { ...args.params, context: 'base', tap: undefined },
   })
 }
@@ -28,6 +32,10 @@ module.exports = {
     locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     description: `Builds a taps docker container`,
     example: 'keg base build <options>',
-    options: mergeTaskOptions(`base`, `build`, `build`)
+    options: mergeTaskOptions(`base`, `build`, `build`, {
+      local: {
+        default: false,
+      },
+    })
   }
 }
