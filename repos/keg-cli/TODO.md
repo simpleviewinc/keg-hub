@@ -49,20 +49,9 @@ Docker-Compose
   * Injected docker-compose.yml config files are not being properly removed when the service is killed
 
 
- ---- Keg Image ---- 
-
-Downloads in install the latest of
-  - Expo
-  - Keg-Hub
-  - Keg-CLI
-
-From Image
- - Uses Keg Image in multistage build
- - Must define the Keg Image first
- - Then use Copy command to copy over things as needed
 
 
-Make container
+### Base Container Updates
 
 Start empty alpine image
 Copy in app/tap code
