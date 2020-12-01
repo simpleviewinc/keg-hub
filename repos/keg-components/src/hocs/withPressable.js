@@ -3,6 +3,7 @@ import { Touchable } from '../components/touchable'
 import { getPressHandler } from '../utils'
 import {View} from 'KegView'
 import { useStyle } from '@keg-hub/re-theme'
+import { noPropObj } from '@keg-hub/jsutils'
 
 /**
  * Wraps child in Touchable component and passes in 'pressed' and 'hovered' state props
@@ -20,13 +21,15 @@ export const withPressable = (Component, options={}) => {
       ...otherProps
     } = props
 
-    // setup default active opacity style here since we can't directly modify the Touchable style
+    // set default active opacity since Pressable has none by default
     const activeStyles = useStyle('pressable.active')
+    const defaultStyles = useStyle('pressable.default')
 
     return (
       <Touchable
         disabled={otherProps?.disabled}
         {...getPressHandler(false, onClick, onPress)}
+        style={defaultStyles}
         children={
           ({ pressed, hovered }) => {
             return showFeedback

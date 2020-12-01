@@ -5,7 +5,12 @@ export const pressable = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const defStyles = {
-    default: {},
+    default: {
+      $web: {
+        width: 'fit-content',
+        height: 'fit-content',
+      }
+    },
     active: {
       backgroundColor: colors?.palette?.white01, 
       opacity: 0.2
