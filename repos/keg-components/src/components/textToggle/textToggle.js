@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import { Text } from '../typography/text'
-import { Touchable } from '../touchable'
 import { Drawer } from '../drawer'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
@@ -9,6 +8,7 @@ import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
 import { LinearGradient } from 'KegLinearGradient'
 import { isFunc } from '@keg-hub/jsutils'
+import { withPressable } from '../../hocs'
 
 /**
  * build the styles object based on togglePosition
@@ -159,27 +159,33 @@ const shouldDisplayToggler = (minHeight, textMaxHeight) => {
  * @param {string} props.expandedToggleText - optional text for the button when it's expanded
  * @param {string} props.collapsedToggleText - optional text for the button when it's collapsed
  */
-const ToggleComponent = ({
-  onPress,
-  styles,
-  CustomComponent,
-  isExpanded,
-  expandedToggleText,
-  collapsedToggleText,
-}) => {
+const ToggleComponent = (props) => {
+  const {
+    onPress,
+    styles,
+    CustomComponent,
+    isExpanded,
+    expandedToggleText,
+    collapsedToggleText,
+  } = props
+
   const defaultText = isExpanded ? expandedToggleText : collapsedToggleText
+  const ToggleChildren = useCallback(() => {
+    return (
+      <View style={styles?.main}>
+        {
+          isValidComponent(CustomComponent) 
+            ? <CustomComponent isExpanded={isExpanded} />
+            : <Text style={styles?.text}>{ defaultText }</Text>
+        }
+      </View>
+    )
+  }, [styles, CustomComponent, isExpanded, defaultText])
+  
+  const ToggleTouch = withPressable(ToggleChildren)
 
   return (
-    <Touchable
-      style={styles?.main}
-      onPress={onPress}
-    >
-      { isValidComponent(CustomComponent) ? (
-        <CustomComponent isExpanded={isExpanded} />
-      ) : (
-        <Text style={styles?.text}>{ defaultText }</Text>
-      ) }
-    </Touchable>
+    <ToggleTouch onPress={onPress} />
   )
 }
 
