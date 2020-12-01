@@ -36,6 +36,7 @@ Touchable.propTypes = {
     PropTypes.array,
     PropTypes.func,
   ]),
+  disabled: PropTypes.bool,
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   onClick: PropTypes.func,
   onPress: PropTypes.func,
