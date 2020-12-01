@@ -58,13 +58,12 @@ export const TextBox = props => {
       </View>
 
       { /* A copy icon that copies the content to system clipboard on press */ }
-      <Text>
+      <Text style={get(style, 'content.clipboard')}>
         { useClipboard && text && (
           <TouchableIcon
             Component={Copy}
             size={15}
             className='keg-textbox-clipboard'
-            touchStyle={get(style, 'content.clipboard')}
             onPress={_ => text && Clipboard.setString(text)}
           />
         ) }
