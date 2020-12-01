@@ -9,7 +9,7 @@ const { get, isStr, isBool } = require('@keg-hub/jsutils')
  *
  * @returns {*} - Response from the docker pull task
  */
-const getTagName = async (args, { latest, branch, version, tag, tagVariable }, location) => {
+const getTagName = async ({ latest, branch, version, tag, tagVariable }, location) => {
   const explicitTag = latest ? 'latest' : tag || version
 
   // If the version or tag is defined explicitly, then use it

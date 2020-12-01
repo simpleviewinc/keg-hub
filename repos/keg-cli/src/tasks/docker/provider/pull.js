@@ -33,7 +33,7 @@ const providerPull = async args => {
   } = params
 
   const location = getRepoPath(params.tap || context)
-  const tagName = await getTagName(params, location)
+  const tagName = await getTagName(params)
 
   // Get the pull context
   const pullContext = await buildCmdContext(args)
@@ -45,7 +45,9 @@ const providerPull = async args => {
 
   // If it's an injected app, use the tap name, otherwise use the cmdContext for internal apps
   const imageNameWTag = imageName.includes(':')
-    ? imageName
+    ? tagName
+      ? `${imageName.split(':')[0]}:${tagName}`
+      : imageName
     : `${imageName}:${tagName}`
 
   const url = await buildProviderUrl({}, args)

@@ -34,7 +34,7 @@ COPY --from=keg-builder /keg-hub/repos/keg-cli /keg/keg-cli
 
 # Copy over the local keg-core repo to a temp dir
 # Copy over the package.json, and yarn.lock files
-COPY package.json $DOC_APP_PATH/
+COPY ./package.json $DOC_APP_PATH/
 COPY *.lock $DOC_APP_PATH/
 
 # Install the dependecies with yarn install, then remove the .npmrc
