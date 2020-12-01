@@ -14,12 +14,12 @@ const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
  * @returns {void}
  */
 const buildTap = async (args) => {
-
-  // Check the base image and build it if it doesn't exist
-  await buildBaseImg(args)
-
   return runInternalTask('tasks.docker.tasks.build', {
     ...args,
+    __internal: {
+      ...args.__internal,
+      locationContext: DOCKER.LOCATION_CONTEXT.REPO
+    },
     params: {
       context: 'tap',
       ...args.params,

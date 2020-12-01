@@ -17,7 +17,7 @@ const { DOCKER } = require('KegConst/docker')
  * @returns {string} - The dockerCmd string with the build args added
  */
 const getBuildArgs = async (globalConfig, params, dockerCmd='') => {
-  const { buildArgs, context, branch, location, makeContext, tap } = params
+  const { buildArgs, context, branch, location, tap } = params
 
   const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
   if(!isObj(containerOpts.ARGS)) return dockerCmd
