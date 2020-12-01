@@ -5,12 +5,7 @@ export const touchable = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const defStyles = {
-    default: {
-      $web: {
-        width: 'fit-content',
-        height: 'fit-content',
-      }
-    },
+    default: {},
     active: {
       backgroundColor: colors?.palette?.white01, 
       opacity: 0.2

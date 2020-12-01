@@ -10,12 +10,12 @@ import { useClassName } from 'KegClassName'
  * @summary Custom Touch component. All props are optional
  *
  * @param {Object} props - see touchablePropTypes
- * @property {String} props.className - Value to set the className to (web platform only)
- * @property {Object} props.style - custom style - Set inline with the style prop
- * @property {Function} props.onPress - function to do when button is pressed
- * @property {Object} props.children - Child components of the component
- * @property {Object} props.ref - reference to native element
- *
+ * @param {String} props.className - Value to set the className to (web platform only)
+ * @param {Object} props.style - custom style - Set inline with the style prop
+ * @param {Function} props.onPress - function to do when button is pressed
+ * @param {Object} props.children - Child components of the component
+ * @param {Object} props.ref - reference to native element
+ * @param {*} props.* - any prop from 'Pressable' propTypes
  */
 export const Touchable = React.forwardRef((props, ref) => {
   const { className, touchRef, ...attrs } = props
@@ -36,7 +36,6 @@ Touchable.propTypes = {
     PropTypes.array,
     PropTypes.func,
   ]),
-  disabled: PropTypes.bool,
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   onClick: PropTypes.func,
   onPress: PropTypes.func,
