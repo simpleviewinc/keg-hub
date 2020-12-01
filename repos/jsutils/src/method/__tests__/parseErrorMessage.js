@@ -1,5 +1,4 @@
-import { parse } from '@babel/core'
-import { parseErrorMessage } from '../parseErrorMessage'
+import { parseErrorMessage } from '../'
 
 describe('parseErrorMessage', () => {
   it('should return the input if it is a string', () => {
