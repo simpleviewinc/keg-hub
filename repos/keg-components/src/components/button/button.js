@@ -35,7 +35,6 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
  * @property {String} props.text - button text
  * @property {String} props.type - flat, text, outlined, contained; default 'flat'
  * @property {Object} props.styles - custom styles
- * @property {Function} props.onPress - function to do when button is pressed
  * @property {Boolean} props.disabled
  * @property {Object} props.children
  * @property {Object} props.ref - reference to native element
@@ -46,8 +45,6 @@ const ButtonChildren = (props) => {
     className,
     children,
     content,
-    onClick,
-    onPress,
     styles,
     type = 'default',
     themePath,

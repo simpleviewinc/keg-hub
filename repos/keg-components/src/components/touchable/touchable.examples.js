@@ -67,7 +67,6 @@ export const WithTouchExample = withTouch(WithTouchChildren)
 
 TouchableNative.defaultProps = {
   disabled: false,
-  showFeedback: true,
 }
 
 // Re-export the Component with the default props defined to be used in the MDX story

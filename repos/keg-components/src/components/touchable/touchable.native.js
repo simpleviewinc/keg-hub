@@ -42,5 +42,4 @@ Touchable.propTypes = {
   onPress: PropTypes.func,
   ref: PropTypes.object,
   styles: PropTypes.object,
-  showFeedback: PropTypes.bool,
 }

@@ -36,6 +36,7 @@ export const withTouch = (Component, options={}) => {
       <Touchable
         disabled={otherProps?.disabled}
         {...getPressHandler(false, onClick, onPress)}
+        pointerEvents={otherProps?.disabled && 'none'}
         style={[defaultStyles, touchStyle]}
         children={
           ({ pressed, hovered }) => {
