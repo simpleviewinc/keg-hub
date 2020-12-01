@@ -7,7 +7,7 @@ import { Text } from '../typography/text'
 import { useThemePath } from '../../hooks'
 import { getActiveOpacity, renderFromType } from '../../utils'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
-import {withPressable} from '../../hocs/withPressable'
+import {withTouch} from '../../hocs/withTouch'
 /**
  * Finds the child type and formats it in the proper type to be rendered
  * @param {Object|Array|string} Children - React components to render
@@ -102,7 +102,7 @@ const ButtonChildren = (props) => {
  * @property {Object} props.ref - reference to native element
  *
  */
-export const Button = withPressable(ButtonChildren)
+export const Button = withTouch(ButtonChildren)
 
 Button.propTypes = {
   ...Touchable.propTypes,

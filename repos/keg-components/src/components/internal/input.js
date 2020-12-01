@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { TextInput } from 'react-native'
 import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
-import { withPressable } from '../../hocs'
+import { withTouch } from '../../hocs'
 
 /**
  * Input
@@ -15,7 +15,7 @@ import { withPressable } from '../../hocs'
  */
 export const Input = forwardRef(({ className, ...props }, ref) => {
   const classRef = useClassName('keg-input', className, ref)
-  const TextInputTouch = withPressable(TextInput, { showFeedback: false })
+  const TextInputTouch = withTouch(TextInput, { showFeedback: false })
 
   return (
     <TextInputTouch

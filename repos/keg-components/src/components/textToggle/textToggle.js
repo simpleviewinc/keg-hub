@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import { useStylesCallback } from '@keg-hub/re-theme'
 import { LinearGradient } from 'KegLinearGradient'
 import { isFunc } from '@keg-hub/jsutils'
-import { withPressable } from '../../hocs'
+import { withTouch } from '../../hocs'
 
 /**
  * build the styles object based on togglePosition
@@ -182,7 +182,7 @@ const ToggleComponent = (props) => {
     )
   }, [styles, CustomComponent, isExpanded, defaultText])
   
-  const ToggleTouch = withPressable(ToggleChildren)
+  const ToggleTouch = withTouch(ToggleChildren)
 
   return (
     <ToggleTouch onPress={onPress} />

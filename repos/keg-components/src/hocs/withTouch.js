@@ -1,57 +1,54 @@
 import React from 'react'
 import { Touchable } from '../components/touchable'
-import { useTheme } from '@keg-hub/re-theme'
-import { get } from '@keg-hub/jsutils'
-import PropTypes from 'prop-types'
-import { noPropObj } from '@keg-hub/jsutils'
+import { getPressHandler } from '../utils'
+import {View} from 'KegView'
+import { useStyle } from '@keg-hub/re-theme'
 
 /**
- * Returns a new component that wraps `Component` with touchable capabilities.
- * @param {Function} Component - a react component to be wrapped
- * @param {Object} options - options obj
- * @param {Boolean} options.showFeedback - if true, show feedback opacity animation (Touchable), otherwise show none (TouchableWithoutFeedback)
- * @returns {Function} - react component that wraps Component
+ * Wraps child in Touchable component and passes in 'pressed' and 'hovered' state props
+ * @see Button component for example usage
+ * @param {Component} Component 
+ * @param {{showFeedback:string}=} options - showFeedback: to show press/hover feedback or not. default true
  */
-export const withTouch = (Component, options = {}) => {
+export const withTouch = (Component, options={}) => {
   const { showFeedback = true } = options
 
   /**
-   * Wrapped react component
-   * @param {Object} props
-   * @param {String} props.touchThemePath - optional theme path for Touchable wrapping the component
-   * @param {Object} props.touchStyle - optional style object for Touchable wrapping the component
-   * @param {Function} props.onPress - callback on touch
-   * @param {...*} props.remaining - remaining props get passed down to the wrapped component
+   * Wrapped
+   * @param {Function=} props.onClick - called when the Component is clicked
+   * @param {Function=} props.onPress - alias for onClick 
+   * @param {Object=} props.touchStyle - style applied to the wrapper  
+   * @param {*} props.* - the rest of the props to pass onto the child Component
    */
-  const wrapped = React.forwardRef((props, ref) => {
+  const Wrapped = React.forwardRef((props, ref) => {
     const {
-      touchThemePath = '',
-      touchStyle = noPropObj,
+      onClick,
       onPress,
+      touchStyle,
       ...otherProps
     } = props
 
-    const theme = useTheme()
+    // set default active opacity since Touchable has none by default
+    const activeStyles = useStyle('touchable.active')
+    const defaultStyles = useStyle('touchable.default')
 
     return (
       <Touchable
-        showFeedback={showFeedback}
-        style={[ get(theme, touchThemePath), touchStyle ]}
-        onPress={onPress}
-      >
-        <Component
-          ref={ref}
-          {...otherProps}
-        />
-      </Touchable>
+        disabled={otherProps?.disabled}
+        {...getPressHandler(false, onClick, onPress)}
+        style={[defaultStyles, touchStyle]}
+        children={
+          ({ pressed, hovered }) => {
+            return showFeedback
+              ? <View style={[pressed && activeStyles]}>
+                  <Component ref={ref} {...otherProps} pressed={pressed} hovered={hovered} />
+                </View>
+              : <Component ref={ref} {...otherProps} />
+          }
+        }
+      />
     )
   })
 
-  wrapped.propTypes = {
-    touchThemePath: PropTypes.string,
-    touchStyle: PropTypes.object,
-    onPress: PropTypes.func,
-  }
-
-  return wrapped
+  return Wrapped
 }

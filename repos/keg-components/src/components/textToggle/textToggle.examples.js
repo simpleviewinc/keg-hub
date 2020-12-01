@@ -141,7 +141,7 @@ export const DynamicCollapsedHeight = () => {
       <View style={{ flexDirection: 'row', marginBottom: 15 }}>
         <Input
           ref={inputRef}
-          style={{ marginRight: 15 }}
+          touchStyle={{ flex:1, marginRight: 15 }}
           onValueChange={setInputVal}
           value={inputVal}
         />

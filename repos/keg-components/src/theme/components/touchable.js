@@ -1,7 +1,7 @@
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const pressable = (config=noOpObj) => {
+export const touchable = (config=noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const defStyles = {
@@ -17,6 +17,6 @@ export const pressable = (config=noOpObj) => {
     }
   }
 
-  return { pressable: checkCall(config?.pressable, defStyles) || deepMerge(defStyles, config?.pressable) }
+  return { touchable: checkCall(config?.pressable, defStyles) || deepMerge(defStyles, config?.touchable) }
 
 }

@@ -13,7 +13,7 @@ import { textBox } from './textBox'
 import { modal } from './modal'
 import { header } from './header'
 import { textToggle } from './textToggle'
-import {pressable} from './pressable'
+import {touchable} from './touchable'
 
 export const components = config => {
   return {
@@ -32,6 +32,6 @@ export const components = config => {
     ...modal(config),
     ...header(config),
     ...textToggle(config),
-    ...pressable(config)
+    ...touchable(config)
   }
 }
