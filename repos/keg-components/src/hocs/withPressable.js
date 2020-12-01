@@ -13,7 +13,7 @@ import { useStyle } from '@keg-hub/re-theme'
 export const withPressable = (Component, options={}) => {
   const { showFeedback = true } = options
 
-  const wrapped = (props) => {
+  const wrapped = React.forwardRef((props, ref) => {
     const {
       onClick,
       onPress,
@@ -31,14 +31,14 @@ export const withPressable = (Component, options={}) => {
           ({ pressed, hovered }) => {
             return showFeedback
               ? <View style={[pressed && activeStyles]}>
-                  <Component {...otherProps} pressed={pressed} hovered={hovered} />
+                  <Component ref={ref} {...otherProps} pressed={pressed} hovered={hovered} />
                 </View>
-              : <Component {...otherProps} />
+              : <Component ref={ref} {...otherProps} />
           }
         }
       />
     )
-  }
+  })
 
   return wrapped
 }
