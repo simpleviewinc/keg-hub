@@ -50,7 +50,7 @@ env:
 
   # Default port of the app to expose from the container
   KEG_PROXY_PORT: 5000
-
+  KEG_EXEC_CMD: app
 
   # --- GENERAL CONTEXT ENVs --- #
 

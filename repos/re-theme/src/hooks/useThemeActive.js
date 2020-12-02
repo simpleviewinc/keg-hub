@@ -1,8 +1,8 @@
 /** @module hooks */
 
-import { hookFactory } from './hookFactory'
+import { useThemeState } from './useThemeState'
 
 /**
- * Creates an useThemeActive hook based on the 'mouseenter' and 'mouseleave' events
+ * Creates an useThemeActive hook based on the 'mousedown' and 'mouseup' events
  */
-export const useThemeActive = hookFactory({ on: 'mousedown', off: 'mouseup' })
+export const useThemeActive = useThemeState('active')

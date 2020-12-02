@@ -22,6 +22,7 @@
     "build/esm/*"
   ],
   "scripts": {
+    "docker:build": "bash ./scripts/dockerBuild.sh",
     "app": "cd app; yarn start",
     "app:install": "cd app && yarn install",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
@@ -38,7 +39,7 @@
     "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix",
     "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
     "start": "yarn copy:indexes; yarn dev",
-    "test": "NODE_ENV=test jest --no-cache --verbose",
+    "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
@@ -81,38 +82,6 @@
   "peerDependencies": {
     "@keg-hub/jsutils": "7.0.0",
     "react": "^16.12.0"
-  },
-  "jest": {
-    "preset": "rollup-jest",
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.js?(x)"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ],
-    "coverageDirectory": "reports/coverage",
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "jsx",
-      "es6"
-    ],
-    "moduleNameMapper": {
-      "^ReDimensions(.*)$": "<rootDir>/src/dimensions/dimensions.js"
-    },
-    "globals": {
-      "__DEV__": true
-    },
-    "testEnvironment": "jsdom",
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/src/mocks"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ]
   },
   "husky": {
     "hooks": {

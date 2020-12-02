@@ -1,3 +1,4 @@
+export * from './usePointerState'
 export * from './useTheme'
 export * from './useStylesCallback'
 export * from './useThemeHover'

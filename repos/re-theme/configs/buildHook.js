@@ -6,15 +6,19 @@ const cmdExec = promisify(exec)
 const reThemeNM = `node_modules/@keg-hub/re-theme/`
 const { DOC_APP_PATH, DOC_RETHEME_PATH } = process.env
 
-const runCmd = async (cmd) => {
-  try {
-    const output = await cmdExec(cmd)
-    return output
-  }
-  catch(err){
-    console.error(err.stack)
-  }
+const runCmd = cmd => {
+  try { return cmdExec(cmd) }
+  catch(err){ console.error(err.stack) }
+}
 
+const getFolderPath = (loc1, loc2, condition) => {
+  const foundPath = condition
+    ? loc1
+    : loc2
+
+  return foundPath && foundPath[ foundPath.length -1 ] === '/'
+    ? foundPath
+    : `${foundPath}/`
 }
 
 const buildPath = path.join(__dirname, `../build`)
@@ -35,48 +39,52 @@ const writeIndexes = indexes => {
   })
 }
 
-export default function buildHook(platform){
+export default function buildHook(platform, ext){
   return {
     name: 'buildHook',
     buildEnd: async () => {
       try {
 
-        // Build the index files for the build export
-        if(platform !== 'native'){
-          writeIndexes(buildIndexes.cjs)
-          writeIndexes(buildIndexes.esm)
-        }
-
         // Only run the build hook if NOT inside a container
-        if(!DOC_APP_PATH || platform === 'native') return
-        
+        if(!DOC_APP_PATH || platform === 'web' || ext === 'cjs') return
 
+        // Build the index files for the build export
+        writeIndexes(buildIndexes.cjs)
+        writeIndexes(buildIndexes.esm)
 
         // Check if we are running the container for ReTheme
         // The retheme folder path and the app path will be the same
         // Otherwise retheme is a node_module in a different app
         const isReThemeContainer = DOC_RETHEME_PATH === DOC_APP_PATH
 
-        // Get the root app path base on the container it's being runing
-        const rootPath = isReThemeContainer
-          ? path.join(__dirname, '../app')
-          : `${DOC_APP_PATH}/`
+        // Get the root app path base on the container it's being running
+        const rootPath = getFolderPath(
+          path.join(__dirname, '../app'),
+          `${DOC_APP_PATH}/`,
+          isReThemeContainer
+        )
 
         // Get the path for retheme 
-        const reThemePath = isReThemeContainer
-          ? rootPath
-          : path.join(__dirname, '../')
+        const reThemePath = getFolderPath(path.join(__dirname, '../'), false, true)
 
         // Get the node_module path base on the rootPath
-        const nmPath = isReThemeContainer
-          ? `${rootPath}app/${reThemeNM}`
-          : DOC_RETHEME_PATH
+        const nmPath = getFolderPath(
+          `${rootPath}${reThemeNM}`,
+          DOC_RETHEME_PATH,
+          isReThemeContainer
+        )
 
         // If the current node_module path is not the same as the retheme build path
         // Then copy the build folder into the node_module path
-        ;(reThemePath !== nmPath && reThemePath !== `${nmPath}/`) &&
+        reThemePath !== nmPath &&
           fs.existsSync(`${reThemePath}build`) &&
-          await runCmd(`command cp -Rf ${reThemePath}build ${ nmPath }`)
+          fs.existsSync(`${nmPath}build`) &&
+          setTimeout(async () => {
+            console.log(`Copying reTheme build to app node_modules...`)
+            await runCmd(`rm -Rf ${ nmPath }build`)
+            await runCmd(`cp -Rf ${reThemePath}build ${ nmPath }build`)
+          // Wait a second for all the build files to be created
+          }, 1000)
 
       }
       catch(err){
