@@ -3,30 +3,42 @@
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
 
 import { Touchable } from './touchable'
-import { View } from '../view'
-import { H6 } from '../typography'
+import {Touchable as TouchableNative} from './touchable.native.js'
+import {Basic, WithStates} from './touchable.examples.js'
 
 <Meta title="Components/Interactions/Touchable" component={Touchable}/>
 
 # Touchable
 
-Base component for handling touch interactions
+Base component for handling touch interactions. 
+Utilizes react-native [Pressable](https://reactnative.dev/docs/pressable) under the hood
 
-### Basic Example
+## Examples
 
+### Basic
 <Preview>
   <Story name="Basic">
-    <Touchable className='basic-example' >
-      <View style={{ textAlign: 'center' }} >
-        <H6 style={{ fontWeight: 'bold' }} >
-          Click Me
-        </H6>
-      </View>
-    </Touchable>
+    <Basic />
   </Story>
 </Preview>
 
+### With States
+You can have control over the states by passing in `children` as a function.
+It gives you access to these 3 states: **pressed**(`web, native`), **hovered**(`web`), **focused**(`web`). The value reflects the current state of the component
+```js
+<Touchable
+  children={({ pressed, hovered }) => {}
+/>
+```
+<Preview>
+  <Story name='With States'>
+    <WithStates/>
+  </Story>
+</Preview>
 
-### Props
+## Props
+Supports all props on [Pressable](https://reactnative.dev/docs/pressable#props) 
+along with: 
 
-<Props of={Touchable} />
+<Props of={TouchableNative} />
+
