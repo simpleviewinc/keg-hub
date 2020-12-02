@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from '@keg-hub/jsutils'
+import { get, isNum } from '@keg-hub/jsutils'
 import { Touchable } from '../touchable'
 import { Text } from '../typography/text'
 import { useThemePath } from '../../hooks'
@@ -39,6 +39,8 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
  * @property {Boolean} [props.showFeedback=false] - Should opacity feebBack be shown when the button is pressed
  * @property {Boolean} props.disabled
  * @property {Object} props.children
+ * @property {Number=} props.activeOpacity - add opacity value to active state
+ * @property {Boolean=} props.disabled - disable button interaction. default false
  * @property {Object} props.ref - reference to native element
  *
  */
@@ -53,6 +55,8 @@ export const Button = React.forwardRef((props, ref) => {
     showFeedback=false,
     type = 'default',
     themePath,
+    activeOpacity,
+    disabled=false,
     ...elProps
   } = props
 
@@ -82,9 +86,10 @@ export const Button = React.forwardRef((props, ref) => {
         className
       )}
       {...elProps}
+      disabled={disabled}
       touchRef={themeRef}
-      showFeedback={showFeedback}
-      style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}
+      showFeedback={isNum(activeOpacity) || showFeedback}
+      style={checkDisabled(themeStyles.main, btnStyles, disabled)}
       children={getChildren(children || content, themeStyles)}
       {...getPressHandler(false, onClick, onPress)}
       {...getActiveOpacity(false, props, btnStyles)}

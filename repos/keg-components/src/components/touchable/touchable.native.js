@@ -13,19 +13,35 @@ import { checkCall, noOpObj } from '@keg-hub/jsutils'
  * @property {Function} props.onPress - function to do when button is pressed
  * @property {Object} props.children - Child components of the component
  * @property {Object} props.ref - reference to native element
- *
+ * @property {Number=} props.activeOpacity - active opacity value. default 0.4
+ * @property {Function=} props.onPress - called after onPressOut
+ * @property {Function=} props.onPressIn - called on touch. before OnPress
+ * @property {Function=} props.onPressOut - called when touch is released
+ * @property {Boolean=} props.showFeedback - enable/disable active style opacity. default true
  */
 export const Touchable = React.forwardRef((props, ref) => {
-  const { className, showFeedback = true, touchRef, onPressIn, onPressOut, onPressOpacity=0.4, style=noOpObj, ...attrs } = props
+  const { 
+    className, 
+    showFeedback = true, 
+    touchRef, 
+    onPress, 
+    onPressIn, 
+    onPressOut, 
+    activeOpacity=0.4, 
+    style=noOpObj, 
+    ...attrs 
+  } = props
   const classRef = useClassName('keg-touchable', className, touchRef || ref)
 
   const [ touchStyles, setTouchStyles ] = useState(style)
 
+  // update the opacity value on a touch in
   const onTouchIn = useCallback((event) => {
     checkCall(onPressIn, event)
-    showFeedback && setTouchStyles({ ...touchStyles, opacity: onPressOpacity })
-  }, [ onPressIn, onPressOpacity, showFeedback, touchStyles, setTouchStyles ])
+    showFeedback && setTouchStyles({ ...touchStyles, opacity: activeOpacity })
+  }, [ onPressIn, activeOpacity, showFeedback, touchStyles, setTouchStyles ])
 
+  // reset the styles back to default on touch out
   const onTouchOut = useCallback((event) => {
     checkCall(onPressOut, event)
     setTouchStyles(style)
@@ -35,6 +51,7 @@ export const Touchable = React.forwardRef((props, ref) => {
     accessible={true}
     {...attrs}
     style={touchStyles}
+    onPress={onPress}
     onPressIn={onTouchIn}
     onPressOut={onTouchOut}
     ref={classRef}
@@ -55,4 +72,8 @@ Touchable.propTypes = {
   ref: PropTypes.object,
   styles: PropTypes.object,
   showFeedback: PropTypes.bool,
+  activeOpacity: PropTypes.number,
+  onPressIn: PropTypes.func,
+  onPressOut: PropTypes.func
+
 }
