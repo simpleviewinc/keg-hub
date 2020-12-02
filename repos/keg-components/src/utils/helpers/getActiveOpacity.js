@@ -1,8 +1,8 @@
 export const getActiveOpacity = (isWeb, props, style) => {
   // Check if opacity is passed from the props, or use the opacity from disabled styles
-  return !isWeb
+  return !isWeb && props.showFeedback !== false
     ? {
-        activeOpacity:
+        onPressOpacity:
           props.activeOpacity ||
           props.opacity ||
           (style && style.opacity) ||

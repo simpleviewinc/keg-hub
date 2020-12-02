@@ -8,7 +8,6 @@ export const containedInit = (config=noOpObj) => {
   const __transition = transition(config)
 
   const containedStyles = (state, colorType) => {
-    const opacity = get(states, `types.${state}.opacity`)
     const shade = get(states, `types.${state}.shade`)
     const activeColor = get(colors, `surface.${colorType}.colors.${shade}`)
     const defStyles = {
@@ -19,7 +18,6 @@ export const containedInit = (config=noOpObj) => {
           backgroundColor: activeColor,
           padding: 9,
           minHeight: 35,
-          opacity,
         },
         $web: {
           cursor: state === 'disabled' ? 'not-allowed' : 'pointer',

@@ -36,6 +36,7 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
  * @property {String} props.type - flat, text, outlined, contained; default 'flat'
  * @property {Object} props.style - custom style
  * @property {Function} props.onPress - function to do when button is pressed
+ * @property {Boolean} [props.showFeedback=false] - Should opacity feebBack be shown when the button is pressed
  * @property {Boolean} props.disabled
  * @property {Object} props.children
  * @property {Object} props.ref - reference to native element
@@ -49,6 +50,7 @@ export const Button = React.forwardRef((props, ref) => {
     onClick,
     onPress,
     styles,
+    showFeedback=false,
     type = 'default',
     themePath,
     ...elProps
@@ -81,6 +83,7 @@ export const Button = React.forwardRef((props, ref) => {
       )}
       {...elProps}
       touchRef={themeRef}
+      showFeedback={showFeedback}
       style={checkDisabled(themeStyles.main, btnStyles, props.disabled)}
       children={getChildren(children || content, themeStyles)}
       {...getPressHandler(false, onClick, onPress)}

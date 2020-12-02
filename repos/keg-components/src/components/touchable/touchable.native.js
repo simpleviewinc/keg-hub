@@ -1,16 +1,8 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Platform,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import { Pressable } from 'react-native'
 import { useClassName } from 'KegClassName'
-
-const TouchableComp =
-  Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
-
+import { checkCall, noOpObj } from '@keg-hub/jsutils'
 /**
  * Touchable
  * @summary Custom Touch component. All props are optional
@@ -24,19 +16,33 @@ const TouchableComp =
  *
  */
 export const Touchable = React.forwardRef((props, ref) => {
-  const { className, showFeedback = true, touchRef, ...attrs } = props
-  const Component = showFeedback ? TouchableComp : TouchableWithoutFeedback
+  const { className, showFeedback = true, touchRef, onPressIn, onPressOut, onPressOpacity=0.4, style=noOpObj, ...attrs } = props
   const classRef = useClassName('keg-touchable', className, touchRef || ref)
 
-  return <Component
+  const [ touchStyles, setTouchStyles ] = useState(style)
+
+  const onTouchIn = useCallback((event) => {
+    checkCall(onPressIn, event)
+    showFeedback && setTouchStyles({ ...touchStyles, opacity: onPressOpacity })
+  }, [ onPressIn, onPressOpacity, showFeedback, touchStyles, setTouchStyles ])
+
+  const onTouchOut = useCallback((event) => {
+    checkCall(onPressOut, event)
+    setTouchStyles(style)
+  }, [ onPressOut, style, setTouchStyles ])
+
+  return <Pressable
     accessible={true}
     {...attrs}
+    style={touchStyles}
+    onPressIn={onTouchIn}
+    onPressOut={onTouchOut}
     ref={classRef}
   />
 })
 
 Touchable.propTypes = {
-  ...TouchableComp.propTypes,
+  ...Pressable.propTypes,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
