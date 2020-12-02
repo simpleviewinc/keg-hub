@@ -133,10 +133,10 @@ const useElementEvents = (options=noOpObj, pointerState) => {
     // Use the Dom event names, NOT the react event names,
     // because these events are directly added to the element through the Dom API
     const events = pointerState === 'hover'
-      ? { mouseenter: onMouseIn, mouseleave: onMouseOut }
+      ? { pointerover: onMouseIn, pointerout: onMouseOut }
       : pointerState === 'focus'
         ? { focus: onFocus, blur: onBlur }
-        : { mousedown: onMouseDown }
+        : { pointerdown: onMouseDown }
 
     return {
       active,
