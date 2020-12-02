@@ -8,7 +8,7 @@ import { useStyle } from '@keg-hub/re-theme'
  * Wraps child in Touchable component and passes in 'pressed' and 'hovered' state props
  * @see Button component for example usage
  * @param {Component} Component 
- * @param {{showFeedback:string}=} options - showFeedback: to show press/hover feedback or not. default true
+ * @param {{showFeedback:boolean}=} options - showFeedback: to show default opacity feedback styles or not. default true
  */
 export const withTouch = (Component, options={}) => {
   const { showFeedback = true } = options
@@ -40,11 +40,11 @@ export const withTouch = (Component, options={}) => {
         style={[defaultStyles, touchStyle]}
         children={
           ({ pressed, hovered }) => {
-            return showFeedback
-              ? <View style={[pressed && activeStyles]}>
-                  <Component ref={ref} {...otherProps} pressed={pressed} hovered={hovered} />
-                </View>
-              : <Component ref={ref} {...otherProps} />
+            return (
+              <View style={[pressed && showFeedback && activeStyles]}>
+                <Component ref={ref} {...otherProps} pressed={pressed} hovered={hovered} />
+              </View>
+            )
           }
         }
       />

@@ -99,7 +99,7 @@ const ButtonChildren = (props) => {
  * @property {Object} props.ref - reference to native element
  *
  */
-export const Button = withTouch(ButtonChildren)
+export const Button = withTouch(ButtonChildren, {showFeedback: false})
 
 Button.propTypes = {
   ...Touchable.propTypes,
