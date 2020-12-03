@@ -40,8 +40,8 @@ describe('usePointerState', () => {
       ref: mockRef,
     }, 'hover')
 
-    expect(typeof events.mouseenter).toBe('function')
-    expect(typeof events.mouseleave).toBe('function')
+    expect(typeof events.pointerover).toBe('function')
+    expect(typeof events.pointerout).toBe('function')
   })
 
   it('should returned event handler should call the passed in hover callbacks', () => {
@@ -54,9 +54,9 @@ describe('usePointerState', () => {
     }, 'hover')
 
     enableHover()
-    events.mouseenter()
+    events.pointerover()
     expect(onMouseIn).toHaveBeenCalled()
-    events.mouseleave()
+    events.pointerout()
     expect(onMouseOut).toHaveBeenCalled()
     disableHover()
 
@@ -72,7 +72,7 @@ describe('usePointerState', () => {
     }, 'hover')
 
     disableHover()
-    events.mouseenter()
+    events.pointerover()
     expect(onMouseIn).not.toHaveBeenCalled()
   })
 
@@ -81,7 +81,7 @@ describe('usePointerState', () => {
       ref: mockRef,
     }, 'active')
 
-    expect(typeof events.mousedown).toBe('function')
+    expect(typeof events.pointerdown).toBe('function')
   })
 
   it('should returned event handler should call the passed in active callbacks', () => {
@@ -91,7 +91,7 @@ describe('usePointerState', () => {
       ref: mockRef,
     }, 'active')
 
-    events.mousedown()
+    events.pointerdown()
     expect(onMouseDown).toHaveBeenCalled()
 
   })
