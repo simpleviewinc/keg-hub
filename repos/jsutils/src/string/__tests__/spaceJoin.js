@@ -1,4 +1,3 @@
-
 const { spaceJoin } = require('../')
 
 const defStr = 'keg-default-class'

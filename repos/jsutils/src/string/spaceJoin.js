@@ -1,7 +1,7 @@
 /** @module string */
 
-import { isStr } from `./isStr`
-import { isArr } from `../array/isArr`
+import { isStr } from './isStr'
+import { isArr } from '../array/isArr'
 
 /**
  * Joins strings and array of string together with spaces
@@ -10,7 +10,7 @@ import { isArr } from `../array/isArr`
  *
  * @returns {string} Joined strings seperated by space
  */
-const spaceJoin = (original, toAdd) => {
+export const spaceJoin = (original, toAdd) => {
   toAdd = isArr(toAdd) ? toAdd : [ toAdd ]
   return toAdd.reduce((joined, item) => {
     return isStr(item)
