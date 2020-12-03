@@ -18,7 +18,7 @@ import { useThemeTypeAsClass } from 'KegTypeAsClass'
  * @returns {React Component|Object|Array}
  */
 const getChildren = (Children, styles = {}) => {
-  return renderFromType(Children, { style: styles.content }, Text)
+  return renderFromType(Children, { style: styles.content, selectable: false }, Text)
 }
 
 const checkDisabled = (mainStyles, btnStyles, disabled) => {

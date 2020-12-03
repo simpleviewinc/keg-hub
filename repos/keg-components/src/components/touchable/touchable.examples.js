@@ -8,7 +8,7 @@ export const Basic = () => {
   return (
     <Touchable onPress={action('Pressed example 1')}>
       <View style={{ textAlign: 'center' }} >
-        <H6 style={{ fontWeight: 'bold' }} >
+        <H6 style={{ fontWeight: 'bold' }}  >
           Click Me
         </H6>
       </View>
@@ -34,7 +34,7 @@ export const WithStates = () => {
 
           return (
             <View>
-              <H6>
+              <H6 selectable={false}>
                 {text}
               </H6>
             </View>
