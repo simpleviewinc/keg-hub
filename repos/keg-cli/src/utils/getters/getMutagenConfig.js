@@ -46,7 +46,7 @@ const getMutagenConfig = async params => {
 
     const mutagenPath = __injected &&
       __injected.mutagenPath ||
-      getContainerConst(context, `ENV.KEG_MUTAGEN_PATH`)
+      getContainerConst(context, `ENV.KEG_MUTAGEN_FILE`)
 
     if(!mutagenPath) return deepMerge(overrides, parseOptions(options))
 

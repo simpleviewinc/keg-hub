@@ -13,7 +13,7 @@ env:
 
   # Defines the location of the mutagen config
   # Without it, mutagen syncs will use the default settings
-  KEG_MUTAGEN_PATH: "{{ cli.paths.containers }}/components/mutagen.yml"
+  KEG_MUTAGEN_FILE: "{{ cli.paths.containers }}/components/mutagen.yml"
   
   # The default docker-compose file path
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/components/docker-compose.yml"
