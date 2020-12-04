@@ -4,6 +4,7 @@ const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
 const { throwPackageError } = require('KegUtils/error/throwPackageError')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 const {
   askForPackageVersion,
   buildPackageURL,
@@ -87,47 +88,6 @@ module.exports = {
     action: providerPull,
     description: 'Pulls an image from a Docker registry provider',
     example: 'keg docker provider pull <options>',
-    options: {
-      context: {
-        allowed: DOCKER.IMAGES,
-        description: 'Context of the docker container to build',
-        example: 'keg docker provider pull --context core',
-        enforced: true,
-      },
-      branch: {
-        description: 'Name of branch name that exists as the image name',
-        example: 'keg docker provider pull --branch develop',
-      },
-      provider: {
-        description: 'Url of the docker registry provider',
-        example: 'keg docker provider pull --provider docker.pkg.github.com',
-        default: 'docker.pkg.github.com'
-      },
-      repo: {
-        description: 'The name of the repository holding docker images to pull',
-        example: 'keg docker provider pull --repo keg-core',
-      },
-      tag: {
-        description: 'Specify the tag tied to the image being pushed',
-        example: 'keg docker provider pull --tag latest',
-        default: 'latest',
-      },
-      tap: {
-        description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
-        example: 'keg docker provider pull --tap visitapps',
-      },
-      token: {
-        description: 'API Token for registry provider to allow logging in',
-        example: 'keg docker provider pull --token 12345',
-      },
-      user: {
-        description: 'User to use when logging into the registry provider. Defaults to the docker.user property in your global config.',
-        example: 'keg docker provider pull --user gituser',
-      },
-      version: {
-        description: 'The version of the image to use. If omitted, the cli will prompt you to select an available version.',
-        example: 'keg docker provider pull --version 0.0.1',
-      },
-    }
+    options: mergeTaskOptions(`docker provider`, `pull`, `pull`),
   }
 }

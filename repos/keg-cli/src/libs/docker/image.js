@@ -1,5 +1,5 @@
 const { Logger } = require('KegLog')
-const { isArr, isStr, isObj } = require('@keg-hub/jsutils')
+const { isArr, isStr, isObj, isFunc } = require('@keg-hub/jsutils')
 const { remove, dockerCli, dynamicCmd, raw } = require('./commands')
 const { buildNames, compareItems, noItemFoundError, toContainerEnvs } = require('./helpers')
 
@@ -99,10 +99,12 @@ const removeTagImage = async (args, imgTag) => {
  * Searches current images for a name or id match
  * @function
  * @param {string} nameOrId - Name or id of the image to get
+ * @param {function} findCb - Callback to filter images
+ * @param {boolean} [log=false] - Should log output
  *
  * @returns {Object} - Found image match
  */
-const getImage = async (image, log=false) => {
+const getImage = async (image, findCb, log=false) => {
 
   // Split the image and tag if : exits in the image name
   const [ imgRef, tag ] = image.indexOf(':') !== -1
@@ -116,14 +118,16 @@ const getImage = async (image, log=false) => {
   return images &&
     images.length &&
     images.find(image => {
-      if(tag && (image.tag !== tag || !image.tags.includes(tag))) return false
+        if(isFunc(findCb)) return findCb(image, imgRef, tag)
 
-      const hasMatch = image.id === imgRef || image.repository === imgRef || image.rootId === imgRef
+        if(tag && (image.tag !== tag || !image.tags.includes(tag))) return false
 
-      return !hasMatch || (hasMatch && !tag)
-        ? hasMatch
-        : image.tag === tag || image.tags.includes(tag)
-    })
+        const hasMatch = image.id === imgRef || image.repository === imgRef || image.rootId === imgRef
+
+        return !hasMatch || (hasMatch && !tag)
+          ? hasMatch
+          : image.tag === tag || image.tags.includes(tag)
+      })
 }
 
 /**
