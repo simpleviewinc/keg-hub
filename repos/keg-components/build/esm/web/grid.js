@@ -1,11 +1,7 @@
 import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { get, isArr } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
+import './getPlatform-95568099.js';
 import React__default from 'react';
 import './getPressHandler.js';
 import './ensureClassArray.js';

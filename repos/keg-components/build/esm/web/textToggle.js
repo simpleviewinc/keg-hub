@@ -1,11 +1,6 @@
 import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { noPropArr, isFunc } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
 import React__default, { useState, useCallback, useMemo } from 'react';
 import { isValidComponent } from './isValidComponent.js';
 import './ensureClassArray.js';

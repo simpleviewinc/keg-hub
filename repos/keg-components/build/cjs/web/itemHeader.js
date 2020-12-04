@@ -6,12 +6,9 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./colors-b60a70f0.js');
 require('@keg-hub/re-theme/colors');
-require('./buildColorStyles.js');
-var platformFlatten = require('./platformFlatten-19172034.js');
-require('./buildTheme.js');
+require('./colors-3022218c.js');
+var getPlatform = require('./getPlatform-ec53cd5e.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 var isValidComponent = require('./isValidComponent.js');
@@ -35,8 +32,8 @@ require('./text.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useClassList = require('./useClassList-2f47489f.js');
-require('./useThemeTypeAsClass-63974a86.js');
-var icon = require('./icon-0a118d5f.js');
+require('./useThemeTypeAsClass-58120adc.js');
+var icon = require('./icon-97ecbfef.js');
 require('./touchable.js');
 var button = require('./button.js');
 require('./caption.js');
@@ -50,7 +47,7 @@ require('./label.js');
 require('./p.js');
 require('./subtitle.js');
 
-var isWeb = platformFlatten.getPlatform() === 'web';
+var isWeb = getPlatform.getPlatform() === 'web';
 var ItemHeader = function ItemHeader(props) {
   var _headerStyles$content;
   var theme = reTheme.useTheme();

@@ -6,9 +6,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-var colors = require('./colors-b60a70f0.js');
 require('@keg-hub/re-theme/colors');
+var colors$3 = require('./colors-3022218c.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./ensureClassArray.js');
@@ -21,8 +20,8 @@ var useThemeType = function useThemeType(themeLoc, defClass) {
     var themeSplit = themeLoc.split('.');
     var surface = themeSplit.pop();
     var typeRef = themeSplit.pop();
-    var surfaces = Object.keys(jsutils.get(colors.colors, 'surface', jsutils.noOpObj));
-    return typeRef && surfaces.indexOf(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
+    var surfaces = Object.keys(jsutils.get(colors$3.colors, 'surface', jsutils.noOpObj));
+    return typeRef && surfaces.includes(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
   }, [themeLoc, defClass]);
 };
 var useThemeTypeAsClass = function useThemeTypeAsClass() {

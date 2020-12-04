@@ -1,10 +1,6 @@
 import { d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { toBool, get, isStr, checkCall } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import React__default, { forwardRef, useState, useImperativeHandle, useMemo } from 'react';
 import './isValidComponent.js';
 import { renderFromType } from './renderFromType.js';

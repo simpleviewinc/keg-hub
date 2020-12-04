@@ -1,10 +1,6 @@
 import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { noOp, mapObj } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import React__default, { useImperativeHandle, useMemo, useCallback } from 'react';
 import './isValidComponent.js';
 import './renderFromType.js';
@@ -28,7 +24,7 @@ import { u as useClassList } from './useClassList.native-70068878.js';
 import './useThemeTypeAsClass.native-a05b9a50.js';
 import 'react-native-svg';
 import './svgIcon-8c133388.js';
-import { C as Checkbox } from './checkbox-2d098169.js';
+import { C as Checkbox } from './checkbox-bafef9e6.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -39,7 +35,7 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import './checkbox.wrapper-04e2db61.js';
+import './checkbox.wrapper-22c62985.js';
 
 var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,

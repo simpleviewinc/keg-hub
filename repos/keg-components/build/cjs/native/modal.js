@@ -6,11 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./buildColorStyles-ca288c4b.js');
 require('@keg-hub/re-theme/colors');
-require('./platformFlatten-3e8e9019.js');
-require('./buildTheme.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 var reactNative = require('react-native');
@@ -23,7 +19,7 @@ require('./useThemeWithHeight.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-54fbb23a.js');
+var touchable$1 = require('./touchable-465d470b.js');
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
   var className = _ref.className,

@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 require('./isArr-39234014.js');
 require('./isFunc-f93803cb.js');
-var template = require('./template-9e390348.js');
+var template = require('./template-0f9ab470.js');
 var isStr = require('./isStr-8a57710e.js');
 var toStr$1 = require('./toStr-8e499966.js');
 var sanitize = require('./sanitize-0a18302d.js');
@@ -33,6 +33,7 @@ exports.plural = template.plural;
 exports.removeDot = template.removeDot;
 exports.singular = template.singular;
 exports.snakeCase = template.snakeCase;
+exports.spaceJoin = template.spaceJoin;
 exports.styleCase = template.styleCase;
 exports.template = template.template;
 exports.trainCase = template.trainCase;

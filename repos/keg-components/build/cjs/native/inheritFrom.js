@@ -4,7 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-var platformFlatten = require('./platformFlatten-3e8e9019.js');
+require('./getPlatform-24228c6c.js');
+var platformFlatten = require('./platformFlatten.js');
 
 var inheritFrom = function inheritFrom() {
   for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {

@@ -1643,10 +1643,10 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
   integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
-"@keg-hub/jsutils@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-7.0.0.tgz#e01edd7aa9a936f3267e1c506b53ea841de2f85f"
-  integrity sha512-/2a+sXmmXeqgaqit9OnqocmEbUee+niQ/9bkvvgqcuA8c1d8rpGMIuprMgj7RqxLCCQhwRJmHh8UePnhdMKNlg==
+"@keg-hub/jsutils@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.0.0.tgz#740e05e10128be53d2ffea72a6c8990b57745679"
+  integrity sha512-omgYOX0p9H6GsQQ5onEJK56pUI/z1CoblFqjWy/SpwANwsuqEFEG3EKDdcRwwpLjaEl8qQWQzfQ1Z6Pc+OOgqQ==
 
 "@keg-hub/spawn-cmd@0.0.1":
   version "0.0.1"

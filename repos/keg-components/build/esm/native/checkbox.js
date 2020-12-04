@@ -1,10 +1,6 @@
 import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import React__default from 'react';
 import './isValidComponent.js';
 import './renderFromType.js';
@@ -34,7 +30,7 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { C as CheckboxWrapper } from './checkbox.wrapper-04e2db61.js';
+import { C as CheckboxWrapper } from './checkbox.wrapper-22c62985.js';
 
 var Element = withTheme(function (props) {
   var theme = props.theme,

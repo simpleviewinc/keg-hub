@@ -4,13 +4,15 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-var defaults$a = require('./defaults-75e5d8bf.js');
-var platformFlatten = require('./platformFlatten-3e8e9019.js');
+var themeDefaults = require('./themeDefaults-f48ffcaf.js');
+require('./getPlatform-24228c6c.js');
+var platformFlatten = require('./platformFlatten.js');
 
-var defaultColorTypes = Object.keys(defaults$a.defaults.colors.types);
-var defaultStateTypes = Object.keys(defaults$a.defaults.states.types);
 var buildTheme = function buildTheme(themeFn) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var defaults = themeDefaults.getThemeDefaults();
+  var defaultColorTypes = Object.keys(defaults.colors.types);
+  var defaultStateTypes = Object.keys(defaults.states.types);
   var _validate = jsutils.validate({
     themeFn: themeFn,
     options: options

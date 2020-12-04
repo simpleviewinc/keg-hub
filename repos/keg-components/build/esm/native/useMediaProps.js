@@ -1,10 +1,6 @@
 import { _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { reduceObj, isObj, noOpObj, isStr, deepMerge, get } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import { useMemo } from 'react';
 import { isValidComponent } from './isValidComponent.js';
 

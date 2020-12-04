@@ -1,10 +1,6 @@
 import { _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import 'react';
 import './isValidComponent.js';
 import './renderFromType.js';
@@ -16,9 +12,9 @@ import '@keg-hub/re-theme/styleInjector';
 import './useThemePath.js';
 import './useThemeWithHeight.js';
 import './useClassList.native-70068878.js';
-import { I as Icon } from './icon-a1faf596.js';
+import { I as Icon } from './icon-2cf7eaa6.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-1df02cd6.js';
+import { T as Touchable } from './touchable-27dab64e.js';
 import { withTouch } from './withTouch.js';
 
 var TouchableIcon = withTouch(Icon);

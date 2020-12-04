@@ -6,11 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./buildColorStyles-ca288c4b.js');
 require('@keg-hub/re-theme/colors');
-require('./platformFlatten-3e8e9019.js');
-require('./buildTheme.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./isValidComponent.js');
@@ -30,12 +26,14 @@ var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-54fbb23a.js');
+var touchable$1 = require('./touchable-465d470b.js');
 
-var getChildren = function getChildren(Children) {
-  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var getChildren = function getChildren(Children, _ref) {
+  var styles = _ref.styles,
+      selectable = _ref.selectable;
   return renderFromType.renderFromType(Children, {
-    style: styles.content
+    style: styles === null || styles === void 0 ? void 0 : styles.content,
+    selectable: selectable
   }, text.Text);
 };
 var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
@@ -48,10 +46,17 @@ var Button = React__default.forwardRef(function (props, ref) {
       onClick = props.onClick,
       onPress = props.onPress,
       styles = props.styles,
+      _props$showFeedback = props.showFeedback,
+      showFeedback = _props$showFeedback === void 0 ? false : _props$showFeedback,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
       themePath = props.themePath,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "content", "onClick", "onPress", "styles", "type", "themePath"]);
+      activeOpacity = props.activeOpacity,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$selectable = props.selectable,
+      selectable = _props$selectable === void 0 ? false : _props$selectable,
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "content", "onClick", "onPress", "styles", "showFeedback", "type", "themePath", "activeOpacity", "disabled", "selectable"]);
   var btnStyles = useThemePath.useThemePath(themePath || "button.contained.".concat(type), styles);
   var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
     ref: ref
@@ -69,9 +74,14 @@ var Button = React__default.forwardRef(function (props, ref) {
     accessibilityRole: "button",
     className: useThemeTypeAsClass_native.useThemeTypeAsClass()
   }, elProps, {
+    disabled: disabled,
     touchRef: themeRef,
-    style: checkDisabled(themeStyles.main, btnStyles, props.disabled),
-    children: getChildren(children || content, themeStyles)
+    showFeedback: jsutils.isNum(activeOpacity) || showFeedback,
+    style: checkDisabled(themeStyles.main, btnStyles, disabled),
+    children: getChildren(children || content, {
+      styles: themeStyles,
+      selectable: selectable
+    })
   }, getPressHandler.getPressHandler(false, onClick, onPress), getActiveOpacity.getActiveOpacity(false, props, btnStyles)));
 });
 

@@ -6,11 +6,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./buildColorStyles-ca288c4b.js');
 require('@keg-hub/re-theme/colors');
-var platformFlatten = require('./platformFlatten-3e8e9019.js');
-require('./buildTheme.js');
+var getPlatform = require('./getPlatform-24228c6c.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 var reactNative = require('react-native');
@@ -20,9 +17,9 @@ require('@keg-hub/re-theme');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
-var indicator_wrapper = require('./indicator.wrapper-cf3077d7.js');
+var indicator_wrapper = require('./indicator.wrapper-628cb0c5.js');
 
-var isWeb = platformFlatten.getPlatform() === 'web';
+var isWeb = getPlatform.getPlatform() === 'web';
 var Element = function Element(_ref) {
   var className = _ref.className,
       _ref$style = _ref.style,

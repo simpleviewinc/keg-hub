@@ -1,11 +1,7 @@
 import { d as _objectWithoutProperties, e as _extends, c as _toConsumableArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { isArr, pickKeys, noPropObj } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import { g as getPlatform } from './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
+import { g as getPlatform } from './getPlatform-95568099.js';
 import React__default, { useMemo } from 'react';
 import { getPressHandler } from './getPressHandler.js';
 import './ensureClassArray.js';

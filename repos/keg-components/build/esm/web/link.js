@@ -1,11 +1,7 @@
 import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import { g as getPlatform } from './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
+import { g as getPlatform } from './getPlatform-95568099.js';
 import React__default from 'react';
 import './getPressHandler.js';
 import './ensureClassArray.js';
@@ -22,7 +18,7 @@ import './kegText.native-67183179.js';
 import { K as KegText } from './kegText-a280e501.js';
 import { u as useClassList } from './useClassList-4be992cd.js';
 import { Touchable } from './touchable.js';
-import { L as LinkWrapper } from './link.wrapper-f4daafc0.js';
+import { L as LinkWrapper } from './link.wrapper-46d83094.js';
 
 var isWeb = getPlatform() === 'web';
 var Text = KegText('link');

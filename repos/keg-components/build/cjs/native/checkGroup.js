@@ -6,11 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./buildColorStyles-ca288c4b.js');
 require('@keg-hub/re-theme/colors');
-require('./platformFlatten-3e8e9019.js');
-require('./buildTheme.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./isValidComponent.js');
@@ -35,7 +31,7 @@ var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./useThemeTypeAsClass.native-90f04031.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-var checkbox = require('./checkbox-4f707032.js');
+var checkbox = require('./checkbox-a254ad3e.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -46,7 +42,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-require('./checkbox.wrapper-1c6769b8.js');
+require('./checkbox.wrapper-1ab61e55.js');
 
 var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,

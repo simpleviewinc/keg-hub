@@ -1,24 +1,25 @@
 import { _ as _objectSpread2, a as _defineProperty } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { get, checkCall } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import { c as colors, g as getThemeDefaults } from './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
+import { g as getColorSurface } from './colors-13c6a916.js';
+import { g as getThemeDefaults } from './themeDefaults-ae219f8e.js';
 
-var defaults = getThemeDefaults();
-var colorSurface = get(colors, 'surface', {});
-var colorStyles = function colorStyles(type, states, cb) {
+var colorStyles = function colorStyles(colorSurface, type, states, cb) {
   return Object.keys(states).reduce(function (built, key) {
     return _objectSpread2(_objectSpread2({}, built), {}, _defineProperty({}, key, checkCall(cb, type, colorSurface[type], key)));
   }, {});
 };
 var buildColorStyles = function buildColorStyles(states, cb) {
+  var defaults = getThemeDefaults();
+  var colorSurface = getColorSurface();
   return Object.keys(get(defaults, 'colors.types', {})).reduce(function (built, type) {
-    var styles = colorStyles(type, states, cb);
+    var styles = colorStyles(colorSurface, type, states, cb);
     styles && (built[type] = styles);
     return built;
   }, {});
 };
 var buildSurfaceStyles = function buildSurfaceStyles(cb) {
+  var colorSurface = getColorSurface();
   return Object.keys(colorSurface).reduce(function (surfaceStyles, surface) {
     surfaceStyles[surface] = checkCall(cb, surface, colorSurface);
     return surfaceStyles;

@@ -1,11 +1,6 @@
 import { b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { isFunc, noOp } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
 import React__default, { useState, useEffect, useCallback } from 'react';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';

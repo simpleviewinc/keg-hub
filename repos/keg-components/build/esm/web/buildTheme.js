@@ -1,12 +1,14 @@
 import { b as _slicedToArray, a as _defineProperty, c as _toConsumableArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { validate, isFunc, isObj, flatMap, deepMerge } from '@keg-hub/jsutils';
-import { d as defaults } from './defaults-0fca2f7d.js';
-import { p as platformFlatten } from './platformFlatten-4856c5dd.js';
+import { g as getThemeDefaults } from './themeDefaults-ae219f8e.js';
+import './getPlatform-95568099.js';
+import { platformFlatten } from './platformFlatten.js';
 
-var defaultColorTypes = Object.keys(defaults.colors.types);
-var defaultStateTypes = Object.keys(defaults.states.types);
 var buildTheme = function buildTheme(themeFn) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var defaults = getThemeDefaults();
+  var defaultColorTypes = Object.keys(defaults.colors.types);
+  var defaultStateTypes = Object.keys(defaults.states.types);
   var _validate = validate({
     themeFn: themeFn,
     options: options

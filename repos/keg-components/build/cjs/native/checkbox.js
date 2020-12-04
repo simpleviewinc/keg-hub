@@ -6,11 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./buildColorStyles-ca288c4b.js');
 require('@keg-hub/re-theme/colors');
-require('./platformFlatten-3e8e9019.js');
-require('./buildTheme.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./isValidComponent.js');
@@ -41,7 +37,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-var checkbox_wrapper = require('./checkbox.wrapper-1c6769b8.js');
+var checkbox_wrapper = require('./checkbox.wrapper-1ab61e55.js');
 
 var Element = reTheme.withTheme(function (props) {
   var theme = props.theme,
