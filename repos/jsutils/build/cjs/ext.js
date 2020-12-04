@@ -13,15 +13,16 @@ require('./softFalsy-3d7ead1c.js');
 require('./isNum-c7164b50.js');
 require('./toNum-9d04f919.js');
 var typeOf = require('./typeOf-51fe5771.js');
-var exists = require('./exists-1fbf0a55.js');
+var isEmpty = require('./isEmpty-73a79cab.js');
+var exists = require('./exists-304d7972.js');
 var strToType = require('./strToType-37916710.js');
 
 
 
 exports.typeOf = typeOf.typeOf;
+exports.isEmpty = isEmpty.isEmpty;
 exports.either = exists.either;
 exports.exists = exists.exists;
-exports.isEmpty = exists.isEmpty;
 exports.isSame = exists.isSame;
 exports.isValidDate = exists.isValidDate;
 exports.strToType = strToType.strToType;
