@@ -22,7 +22,7 @@ let GLOBAL_INJECT_FOLDER = path.join(GLOBAL_CONFIG_FOLDER, '.tmp')
 module.exports = deepFreeze({
 
   // Tasks settings
-  TASK_REQURIED: [
+  TASK_REQUIRED: [
     'prefix',
     'name',
     'action',
