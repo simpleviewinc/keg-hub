@@ -42,7 +42,7 @@ const createEnvFromBuildArgs = buildArgs => {
  * @returns {Object} - Build image as a json object
  */
 const dockerBuild = async args => {
-  const { globalConfig, options, __internal={} } = args
+  const { globalConfig, __internal={} } = args
   // Check if an internal location context was passed
 
   // Make a copy of the task, so we don't modify the original
@@ -87,7 +87,6 @@ const dockerBuild = async args => {
       ...params,
       location,
       cmd: `build`,
-      options: options,
       context: cmdContext,
       buildArgs: {
         ...contextEnvs,

@@ -34,6 +34,7 @@ module.exports = {
     example: 'keg base build <options>',
     options: mergeTaskOptions(`base`, `build`, `build`, {
       local: {
+        // TODO: Update this when image pull code is ready
         default: true,
       },
     })

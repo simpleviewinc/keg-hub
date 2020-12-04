@@ -12,7 +12,6 @@ const { getServiceArgs } = require('./getServiceArgs')
  * @returns {void}
  */
 const buildService = async (args, argsExt) => {
-
   const serviceArgs = getServiceArgs(args, argsExt)
   const { params } = serviceArgs
   const { build, context, container, satisfy, log, service, tap } = params

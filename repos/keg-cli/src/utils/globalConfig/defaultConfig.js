@@ -18,14 +18,18 @@ const defPaths = {
   keg: kegHub,
   config: GLOBAL_CONFIG_FOLDER,
   repos: kegRepos,
+  jsutils: path.join(kegRepos, 'jsutils'),
   resolver: path.join(kegRepos, 'tap-resolver'),
-  proxy: path.join(kegRepos, 'keg-proxy'),
   taps: kegTaps,
 }
 
 const defRepos = {
   hub: 'keg-hub',
   rc: 'tap-release-client',
+}
+
+const defTaps = {
+  retheme: path.join(kegRepos, 're-theme'),
 }
 
 /**
@@ -54,7 +58,10 @@ const defaultConfig = (args={}) => {
     version: packageJson.version,
     name: packageJson.name,
     cli: {
-      paths: buildInstallPaths(args.paths || {})
+      paths: buildInstallPaths(args.paths || {}),
+      taps: {
+        links: defTaps
+      }
     }
   }, cliJson)
 }
