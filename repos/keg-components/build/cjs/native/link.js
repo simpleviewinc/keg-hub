@@ -6,11 +6,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./buildColorStyles-ca288c4b.js');
 require('@keg-hub/re-theme/colors');
-var platformFlatten = require('./platformFlatten-3e8e9019.js');
-require('./buildTheme.js');
+var getPlatform = require('./getPlatform-24228c6c.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./getPressHandler.js');
@@ -25,10 +22,10 @@ require('@keg-hub/re-theme/styleInjector');
 var kegText$1 = require('./kegText-12bc89e1.js');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-54fbb23a.js');
-var link_wrapper = require('./link.wrapper-972b1c8e.js');
+var touchable$1 = require('./touchable-465d470b.js');
+var link_wrapper = require('./link.wrapper-97be0b1c.js');
 
-var isWeb = platformFlatten.getPlatform() === 'web';
+var isWeb = getPlatform.getPlatform() === 'web';
 var Text = kegText$1.KegText('link');
 var Element = React__default.forwardRef(function (props, ref) {
   var children = props.children,

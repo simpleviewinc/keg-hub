@@ -1,11 +1,7 @@
 import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { noOp, mapObj } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
+import './colors-13c6a916.js';
 import React__default, { useImperativeHandle, useMemo, useCallback } from 'react';
 import './isValidComponent.js';
 import './renderFromType.js';
@@ -29,10 +25,10 @@ import { useChildrenWithRefs } from './useChildrenWithRefs.js';
 import './useThemePath.js';
 import './useThemeWithHeight.js';
 import { u as useClassList } from './useClassList-4be992cd.js';
-import './useThemeTypeAsClass-56c26a32.js';
+import './useThemeTypeAsClass-2304ec6a.js';
 import 'react-native-svg';
 import './svgIcon-8c133388.js';
-import './checkbox.wrapper-145d653b.js';
+import './checkbox.wrapper-8e68fe97.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -44,7 +40,7 @@ import './label.js';
 import './p.js';
 import './subtitle.js';
 import './input.web-00da1b52.js';
-import { C as Checkbox } from './checkbox-b6936d71.js';
+import { C as Checkbox } from './checkbox-e5764663.js';
 
 var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,

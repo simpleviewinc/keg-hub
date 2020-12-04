@@ -1,8 +1,7 @@
 import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { eitherArr, get, noOpObj, isArr } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import { c as colors } from './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
+import { c as colors } from './colors-13c6a916.js';
 import { useMemo } from 'react';
 import './ensureClassArray.js';
 import { u as useClassList } from './useClassList-4be992cd.js';
@@ -15,7 +14,7 @@ var useThemeType = function useThemeType(themeLoc, defClass) {
     var surface = themeSplit.pop();
     var typeRef = themeSplit.pop();
     var surfaces = Object.keys(get(colors, 'surface', noOpObj));
-    return typeRef && surfaces.indexOf(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
+    return typeRef && surfaces.includes(surface) ? ["".concat(defClass, "-").concat(typeRef), surface] : surface ? ["".concat(defClass, "-").concat(surface)] : defClassArr;
   }, [themeLoc, defClass]);
 };
 var useThemeTypeAsClass = function useThemeTypeAsClass() {

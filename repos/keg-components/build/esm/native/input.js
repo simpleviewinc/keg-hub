@@ -1,10 +1,6 @@
 import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import React__default from 'react';
 import { getValueFromChildren } from './getInputValue.js';
 import { getReadOnly } from './getReadOnly.js';
@@ -18,9 +14,9 @@ import { usePressHandlers } from './usePressHandlers.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import './touchable.js';
-import './touchable-1df02cd6.js';
+import './touchable-27dab64e.js';
 import './withTouch.js';
-import { I as Input$1 } from './input-fe053d8d.js';
+import { I as Input$1 } from './input-66c5fcfe.js';
 
 var KegInput = StyleInjector(Input$1, {
   displayName: 'Input',

@@ -1,10 +1,6 @@
 import { b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { isFunc, noOp } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './buildColorStyles-a1255086.js';
 import '@keg-hub/re-theme/colors';
-import './platformFlatten-50b3991b.js';
-import './buildTheme.js';
 import React__default, { useState, useEffect, useCallback } from 'react';
 import { Dimensions, Animated } from 'react-native';
 import { u as useClassName } from './useClassName.native-32e8827d.js';
@@ -16,7 +12,7 @@ import './useThemeWithHeight.js';
 import { useFromToAnimation } from './useFromToAnimation.js';
 import { u as useClassList } from './useClassList.native-70068878.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-1df02cd6.js';
+import { T as Touchable } from './touchable-27dab64e.js';
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
   var className = _ref.className,

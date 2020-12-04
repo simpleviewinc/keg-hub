@@ -1,11 +1,6 @@
 import { d as _objectWithoutProperties } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
 import { get } from '@keg-hub/jsutils';
-import './defaults-0fca2f7d.js';
-import './colors-3366b3e1.js';
 import '@keg-hub/re-theme/colors';
-import './buildColorStyles.js';
-import './platformFlatten-4856c5dd.js';
-import './buildTheme.js';
 import React__default from 'react';
 import './isValidComponent.js';
 import { renderFromType } from './renderFromType.js';

@@ -6,12 +6,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./colors-b60a70f0.js');
 require('@keg-hub/re-theme/colors');
-require('./buildColorStyles.js');
-require('./platformFlatten-19172034.js');
-require('./buildTheme.js');
+require('./colors-3022218c.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./isValidComponent.js');
@@ -35,10 +31,10 @@ require('./text.js');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('./useClassList-2f47489f.js');
-require('./useThemeTypeAsClass-63974a86.js');
+require('./useThemeTypeAsClass-58120adc.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-var checkbox_wrapper = require('./checkbox.wrapper-78cdc1c8.js');
+var checkbox_wrapper = require('./checkbox.wrapper-c42d7023.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');

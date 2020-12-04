@@ -6,12 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./colors-b60a70f0.js');
 require('@keg-hub/re-theme/colors');
-require('./buildColorStyles.js');
-require('./platformFlatten-19172034.js');
-require('./buildTheme.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./ensureClassArray.js');
@@ -30,7 +25,7 @@ var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('./touchable.js');
 require('./withTouch.js');
-var input = require('./input-5c8f3124.js');
+var input = require('./input-14ba8d9e.js');
 
 var KegInput = styleInjector.StyleInjector(input.Input, {
   displayName: 'Input',

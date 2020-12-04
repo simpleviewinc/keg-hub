@@ -13,7 +13,7 @@ require('./useClassName.native-3d1a229b.js');
 var reTheme = require('@keg-hub/re-theme');
 require('@keg-hub/re-theme/styleInjector');
 require('./touchable.js');
-var touchable$1 = require('./touchable-54fbb23a.js');
+var touchable$1 = require('./touchable-465d470b.js');
 
 var withTouch = function withTouch(Component) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

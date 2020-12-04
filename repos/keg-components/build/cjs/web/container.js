@@ -6,12 +6,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./colors-b60a70f0.js');
 require('@keg-hub/re-theme/colors');
-require('./buildColorStyles.js');
-var platformFlatten = require('./platformFlatten-19172034.js');
-require('./buildTheme.js');
+var getPlatform = require('./getPlatform-ec53cd5e.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 var getPressHandler = require('./getPressHandler.js');
@@ -48,7 +44,7 @@ var Container = function Container(_ref) {
   } : {};
   return React__default.createElement(view.View, _rollupPluginBabelHelpers._extends({}, props, {
     style: [flexStyle].concat(_rollupPluginBabelHelpers._toConsumableArray(containerStyles))
-  }, getPressHandler.getPressHandler(platformFlatten.getPlatform(), onClick || onPress)), children);
+  }, getPressHandler.getPressHandler(getPlatform.getPlatform(), onClick || onPress)), children);
 };
 
 exports.Container = Container;

@@ -6,7 +6,7 @@ import './useClassName.native-32e8827d.js';
 import { useTheme } from '@keg-hub/re-theme';
 import '@keg-hub/re-theme/styleInjector';
 import './touchable.js';
-import { T as Touchable } from './touchable-1df02cd6.js';
+import { T as Touchable } from './touchable-27dab64e.js';
 
 var withTouch = function withTouch(Component) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

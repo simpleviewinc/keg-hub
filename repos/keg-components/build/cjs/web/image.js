@@ -6,12 +6,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./defaults-75e5d8bf.js');
-require('./colors-b60a70f0.js');
 require('@keg-hub/re-theme/colors');
-require('./buildColorStyles.js');
-require('./platformFlatten-19172034.js');
-require('./buildTheme.js');
+require('./getPlatform-ec53cd5e.js');
 var React = require('react');
 var React__default = _interopDefault(React);
 require('./isValidComponent.js');
@@ -34,7 +30,7 @@ require('./text.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useClassList = require('./useClassList-2f47489f.js');
-require('./indicator.wrapper-6c8f1a8b.js');
+require('./indicator.wrapper-0d4f60a8.js');
 var loading = require('./loading.js');
 var image = require('./image-94aae7b4.js');
 

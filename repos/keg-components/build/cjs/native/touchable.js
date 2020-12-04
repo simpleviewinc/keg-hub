@@ -5,23 +5,47 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var jsutils = require('@keg-hub/jsutils');
 var React = require('react');
 var React__default = _interopDefault(React);
 var reactNative = require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 
-var TouchableComp = reactNative.Platform.OS === 'android' ? reactNative.TouchableNativeFeedback : reactNative.TouchableOpacity;
 var Touchable = React__default.forwardRef(function (props, ref) {
   var className = props.className,
       _props$showFeedback = props.showFeedback,
       showFeedback = _props$showFeedback === void 0 ? true : _props$showFeedback,
       touchRef = props.touchRef,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "showFeedback", "touchRef"]);
-  var Component = showFeedback ? TouchableComp : reactNative.TouchableWithoutFeedback;
+      onPress = props.onPress,
+      onPressIn = props.onPressIn,
+      onPressOut = props.onPressOut,
+      _props$activeOpacity = props.activeOpacity,
+      activeOpacity = _props$activeOpacity === void 0 ? 0.4 : _props$activeOpacity,
+      _props$style = props.style,
+      style = _props$style === void 0 ? jsutils.noOpObj : _props$style,
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "showFeedback", "touchRef", "onPress", "onPressIn", "onPressOut", "activeOpacity", "style"]);
   var classRef = useClassName_native.useClassName('keg-touchable', className, touchRef || ref);
-  return React__default.createElement(Component, _rollupPluginBabelHelpers._extends({
+  var _useState = React.useState(style),
+      _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
+      touchStyles = _useState2[0],
+      setTouchStyles = _useState2[1];
+  var onTouchIn = React.useCallback(function (event) {
+    jsutils.checkCall(onPressIn, event);
+    showFeedback && setTouchStyles(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, touchStyles), {}, {
+      opacity: activeOpacity
+    }));
+  }, [onPressIn, activeOpacity, showFeedback, touchStyles, setTouchStyles]);
+  var onTouchOut = React.useCallback(function (event) {
+    jsutils.checkCall(onPressOut, event);
+    setTouchStyles(style);
+  }, [onPressOut, style, setTouchStyles]);
+  return React__default.createElement(reactNative.Pressable, _rollupPluginBabelHelpers._extends({
     accessible: true
   }, attrs, {
+    style: touchStyles,
+    onPress: onPress,
+    onPressIn: onTouchIn,
+    onPressOut: onTouchOut,
     ref: classRef
   }));
 });
