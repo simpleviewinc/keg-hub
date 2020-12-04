@@ -25,10 +25,8 @@ const gitFetch = async args => {
   // Fetch the branches for the location
   const resp = await git.repo.fetch({ ...fetchParams, log: exists(skipLog) && !skipLog || log, location })
 
-  // Log the outcome of the git fetch command
-  resp === 0
-    ? !skipLog && Logger.spacedMsg(`Finished fetching branches!`)
-    : generalError(`Failed fetching remote git branches.\nExit with code "${ resp }"`)
+  // Log out that the task finished, if logs are not being skipped
+  !skipLog && Logger.spacedMsg(`Finished fetching branches!`)
 
 }
 
