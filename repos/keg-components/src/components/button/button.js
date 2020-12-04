@@ -11,14 +11,14 @@ import { useThemeTypeAsClass } from 'KegTypeAsClass'
 /**
  * Finds the child type and formats it in the proper type to be rendered
  * @param {Object|Array|string} Children - React components to render
- * @param {Object} theme - Re-Theme Object
- * @param {Object} activeStyle - Current styles based on the state of the element
- * @param {Object} [styles={}] - Custom styles passed into the component as a prop
- *
+ * @param {Object} props
+ * @param {Object} props.styles - Custom styles passed into the component as a prop
+ * @param {boolean} props.selectable - whether the text content is selectable or not
+ * 
  * @returns {React Component|Object|Array}
  */
-const getChildren = (Children, styles = {}) => {
-  return renderFromType(Children, { style: styles.content, selectable: false }, Text)
+const getChildren = (Children, {styles, selectable}) => {
+  return renderFromType(Children, { style: styles?.content, selectable }, Text)
 }
 
 const checkDisabled = (mainStyles, btnStyles, disabled) => {
@@ -41,6 +41,7 @@ const checkDisabled = (mainStyles, btnStyles, disabled) => {
  * @property {Object} props.children
  * @property {Number=} props.activeOpacity - add opacity value to active state
  * @property {Boolean=} props.disabled - disable button interaction. default false
+ * @property {Boolean=} props.selectable - whether the button text is selectable or not. default false
  * @property {Object} props.ref - reference to native element
  *
  */
@@ -57,6 +58,7 @@ export const Button = React.forwardRef((props, ref) => {
     themePath,
     activeOpacity,
     disabled=false,
+    selectable=false,
     ...elProps
   } = props
 
@@ -90,7 +92,7 @@ export const Button = React.forwardRef((props, ref) => {
       touchRef={themeRef}
       showFeedback={isNum(activeOpacity) || showFeedback}
       style={checkDisabled(themeStyles.main, btnStyles, disabled)}
-      children={getChildren(children || content, themeStyles)}
+      children={getChildren(children || content, {styles: themeStyles, selectable})}
       {...getPressHandler(false, onClick, onPress)}
       {...getActiveOpacity(false, props, btnStyles)}
     />
@@ -111,16 +113,13 @@ Button.propTypes = {
     PropTypes.array,
     PropTypes.func,
   ]),
-  Touchable: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array,
-  ]),
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   onPress: PropTypes.func,
   ref: PropTypes.object,
   styles: PropTypes.object,
   themePath: PropTypes.string,
+  selectable: PropTypes.bool,
+  activeOpacity: PropTypes.number,
+  showFeedback: PropTypes.bool
 }

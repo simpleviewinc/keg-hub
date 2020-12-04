@@ -45,35 +45,35 @@ describe('usePointerState', () => {
   })
 
   it('should returned event handler should call the passed in hover callbacks', () => {
-    const onMouseIn = jest.fn()
-    const onMouseOut = jest.fn()
+    const onPointerIn = jest.fn()
+    const onPointerOut = jest.fn()
     const { events } = usePointerState({
-      onMouseIn,
-      onMouseOut,
+      onPointerIn,
+      onPointerOut,
       ref: mockRef,
     }, 'hover')
 
     enableHover()
     events.pointerover()
-    expect(onMouseIn).toHaveBeenCalled()
+    expect(onPointerIn).toHaveBeenCalled()
     events.pointerout()
-    expect(onMouseOut).toHaveBeenCalled()
+    expect(onPointerOut).toHaveBeenCalled()
     disableHover()
 
   })
 
   it('should not call the on hover callbacks when hover is disabled', () => {
-    const onMouseIn = jest.fn()
-    const onMouseOut = jest.fn()
+    const onPointerIn = jest.fn()
+    const onPointerOut = jest.fn()
     const { events } = usePointerState({
-      onMouseIn,
-      onMouseOut,
+      onPointerIn,
+      onPointerOut,
       ref: mockRef,
     }, 'hover')
 
     disableHover()
     events.pointerover()
-    expect(onMouseIn).not.toHaveBeenCalled()
+    expect(onPointerIn).not.toHaveBeenCalled()
   })
 
   it('should return the active event handlers when active is passed as the pointer state', () => {
@@ -85,14 +85,14 @@ describe('usePointerState', () => {
   })
 
   it('should returned event handler should call the passed in active callbacks', () => {
-    const onMouseDown = jest.fn()
+    const onPointerDown = jest.fn()
     const { events } = usePointerState({
-      onMouseDown,
+      onPointerDown,
       ref: mockRef,
     }, 'active')
 
     events.pointerdown()
-    expect(onMouseDown).toHaveBeenCalled()
+    expect(onPointerDown).toHaveBeenCalled()
 
   })
 
