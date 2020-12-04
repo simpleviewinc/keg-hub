@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/re-theme",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Simple Theme switcher / builder for React and React Native",
   "main": "build/cjs",
   "module": "build/esm",
@@ -80,7 +80,7 @@
     "rollup-plugin-terser": "6.1.0"
   },
   "peerDependencies": {
-    "@keg-hub/jsutils": "7.0.0",
+    "@keg-hub/jsutils": "8.0.0",
     "react": "^16.12.0"
   },
   "husky": {
