@@ -1,10 +1,8 @@
 const docker = require('KegDocCli')
-const { Logger } = require('KegLog')
 const { get, isStr } = require('@keg-hub/jsutils')
-const { generalError } = require('KegUtils/error')
 const { exists } = require('KegUtils/helpers/exists')
 const { dockerLog } = require('KegUtils/log/dockerLog')
-const { CONTAINERS } = require('KegConst/docker/containers')
+const { DOCKER } = require('KegConst/docker')
 const { imageSelect } = require('KegUtils/docker/imageSelect')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
 const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
@@ -23,6 +21,27 @@ const askRemoveImage = async force => {
 }
 
 /**
+ * 
+ * @param {*} repo
+ * 
+ * @returns {string} - remote docker image ids separated by spaces 
+ */
+const getRemoteIds = async (repo) => {
+  // Get all current images
+  const images = await docker.image.list({ errResponse: [], format: 'json' })
+
+  // filter out by repository
+  return images &&
+    images.length &&
+    images.reduce((toRemove, image) => {
+      image.repository.includes(repo) &&
+        ( toRemove += ` ${ image.id }`)
+  
+      return toRemove
+    }, '').trim()
+}
+
+/**
  * Run a docker image command
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
@@ -35,16 +54,29 @@ const askRemoveImage = async force => {
 const removeDockerImage = async args => {
 
   const { globalConfig, params, __internal={} } = args
-  const { context, tag, image:imageParam } = params
+  const { context, tag, image:imageParam, remote } = params
 
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
-  if(!imageParam && !tag && !context)  return askRemoveImage(force)
+  if(!imageParam && !tag && !context && !remote)  return askRemoveImage(force)
 
   // Get the image name from the context, or use the passed in context
   const imgRef = imageParam || context &&
-    get(CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`) || context
+    get(DOCKER.CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`) || context
 
+    // test cases:
+    // remove all - dont pass in context
+    // remove specific - pass in context
+    // remove with custom remote url
+    // remove with invalid context - show error msg and prompt
+    // help menu with sub options
+  // user could pass in a different remote url
+  const remoteUrl = remote && isStr(remote)
+    ? remote
+    : `${DOCKER.PACKAGE_URL}/${imgRef ? imgRef : ''}`
+    
+  const ids = remote && await getRemoteIds(remoteUrl)
+  // TODO: add error message if remote not found any ids
   // Get the image meta data
   const image = tag
     ? await docker.image.getByTag(tag)
@@ -55,10 +87,10 @@ const removeDockerImage = async args => {
       })
 
   // If we still don't have an image with an id, then again ask for the image
-  if(!image || !image.id) return askRemoveImage(force)
+  if((!image || !image.id) && !ids) return askRemoveImage(force)
 
-  // If we have an image, then remove it
-  const res = await docker.image.remove({ item: image.id, force })
+  // If we have an image(s), then remove it
+  const res = await docker.image.remove({ item: ids || image.id, force })
   dockerLog(res, 'image remove')
 
   return image
@@ -89,6 +121,11 @@ module.exports = {
       force: {
         description: 'Add the force argument to the docker command',
         example: 'keg docker image remove --force ',
+      },
+      remote: {
+        alias: ['github', 'gh'],
+        description: 'only image(s) downloaded from keg-packages github repo',
+        example: 'keg docker image remove --remote'
       },
     },
   }

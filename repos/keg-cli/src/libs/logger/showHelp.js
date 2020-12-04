@@ -176,7 +176,9 @@ const showTaskOptionDetail = (task, option, infoSpacer, dblSpacer) => {
   if (validKey) {
     Logger.empty()
     console.log(colors.brightBlue(`${infoSpacer}Option: ${validKey}`))
-    return showTaskInfo(task.options[validKey], `  ${infoSpacer}`)
+    showTaskInfo(task.options[validKey], `  ${infoSpacer}`)
+    showTaskOptions(task.options[validKey], infoSpacer, dblSpacer)
+    return
   }
 
   // if no key found, default to showing all options

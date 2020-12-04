@@ -19,6 +19,7 @@ const DOCKER = {
   CONTAINERS_PATH: containersPath,
   KEG_PROXY_HOST: KEG_ENVS.KEG_PROXY_HOST,
   KEG_DOCKER_NETWORK: KEG_ENVS.KEG_DOCKER_NETWORK,
+  PACKAGE_URL: 'docker.pkg.github.com/simpleviewinc/keg-packages'
 }
 
 // Add the CONTAINERS property, with a get function do it only get called when referenced
