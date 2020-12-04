@@ -7,7 +7,8 @@ const {
 } = require('./helpers')
 const { Logger } = require('KegLog')
 const { isArr, toStr } = require('@keg-hub/jsutils')
-const { executeCmd, spawnProc } = require('KegProc')
+const { executeCmd, spawnProc, pipeCmd } = require('KegProc')
+const { NEWLINES_MATCH } = require('KegConst/patterns')
 
 /**
  * Calls the docker cli from the command line and returns the response
@@ -149,16 +150,38 @@ const push = async url => {
  *
  * @returns {void}
  */
-const pull = async url => {
+const pull = url => {
+  return new Promise((res, rej) => {
+    Logger.spacedMsg(`Pulling docker image from url`, url)
+    pipeCmd(`docker pull ${ url }`, {
+      cwd: process.cwd(),
+      onStdOut: data => {
+        data.split(NEWLINES_MATCH).map(line => {
+          // If empty line just return
+          if(!line.trim()) return
+          // Parse the label and message
+          const [ label, message ] = line.trim().split(': ')
+          // If not message, just log normally
+          if(!message) return line.trim() && Logger.log(line)
 
-  Logger.spacedMsg(`  Pulling docker image from url`, url)
+          // Otherwise log the label and message as a pair
+          Logger.pair(`${label}:`, message)
+          // Check if this is the status message
+          // Then return if a new image was downloaded
+          return label.trim() === `Status`
+            && res(Boolean(message.indexOf('newer') !== -1))
 
-  const { error, data } = await spawnProc(`docker pull ${ url }`)
-
-  return error && !data
-    ? apiError(error)
-    : Logger.success(`  Finished pulling Docker image from provider!`)
-
+        })
+      },
+      onStdErr: (err, exitCode) => {
+        Logger.error(err)
+        rej(process.exit(exitCode))
+      },
+      onExit: (exitCode) => {
+        res(false)
+      }
+    })
+  })
 }
 
 /**

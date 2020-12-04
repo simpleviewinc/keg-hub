@@ -12,14 +12,13 @@ const { DOCKER } = require('KegConst/docker')
  * @param {Object} params - Data to build the docker command
  * @param {string} params.context - Name of the image to be built
  * @param {string} params.branch - Branch of the repo to clone (defaults to master)
- * @param {string} params.dockerCmd - The docker command being built
+ * @param {string} dockerCmd - The docker command being built
  *
  * @returns {string} - The dockerCmd string with the build args added
  */
-const getBuildArgs = async (globalConfig, params) => {
+const getBuildArgs = async (globalConfig, params, dockerCmd='') => {
   const { buildArgs, context, branch, location, tap } = params
-  let dockerCmd = params.dockerCmd || ''
-  
+
   const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
   if(!isObj(containerOpts.ARGS)) return dockerCmd
   
@@ -38,14 +37,6 @@ const getBuildArgs = async (globalConfig, params) => {
       }
       case 'GIT_CLI_URL':{
         useVal = getGitUrl({ globalConfig, repo: 'cli' })
-        break
-      }
-      case 'GIT_CORE_URL':{
-        useVal = getGitUrl({ globalConfig, repo: 'core' })
-        break
-      }
-      case 'GIT_COMPONENTS_URL':{
-        useVal = getGitUrl({ globalConfig, repo: 'components' })
         break
       }
       case 'GIT_APP_URL':{

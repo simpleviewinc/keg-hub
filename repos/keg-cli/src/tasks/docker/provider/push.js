@@ -3,8 +3,9 @@ const { Logger } = require('KegLog')
 const { get, mapObj } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { addProviderTags } = require('KegUtils/docker/tags/addProviderTags')
+const { getOrBuildImage, buildProviderUrl, imageSelect } = require('KegUtils/docker')
 const { generalError, throwRequired, throwNoRepo, throwWrap } = require('KegUtils/error')
-const { getOrBuildImage, buildProviderUrl, addProviderTags, imageSelect } = require('KegUtils/docker')
 
 /**
  * Pushes a local image registry provider in the cloud
@@ -31,7 +32,7 @@ const providerPush = async (args) => {
   */
   const image = await getOrBuildImage(args) || await imageSelect()
   !image && generalError('No img found!')
-  
+
   /*
   * ----------- Step 2 ----------- *
   * Build the provider url
@@ -78,7 +79,6 @@ module.exports = {
       },
       tag: {
         description: 'Specify the tag tied to the image being pushed',
-        default: 'latest',
       },
       tags: {
         description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',

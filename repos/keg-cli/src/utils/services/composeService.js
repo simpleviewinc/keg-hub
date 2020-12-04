@@ -81,7 +81,6 @@ const composeService = async (args, exArgs) => {
 
   Logger.empty()
 
-
   await createSyncs(serviceArgs, composeContext, exArgs)
 
   // Set a keg-compose service ENV 
@@ -91,7 +90,6 @@ const composeService = async (args, exArgs) => {
   set(composeContext, `contextEnvs.${KEG_DOCKER_EXEC}`, KEG_EXEC_OPTS.start)
 
   /**
-  * Get the start command from the compose file or the Dockerfile
   * Update the default start cmd to just tail dev/null
   * Then run the real start command here
   * This allows us create syncs and update files
@@ -105,7 +103,7 @@ const composeService = async (args, exArgs) => {
         ...args,
         __internal: { containerContext: composeContext },
         params: {
-          ...params,
+          ...serviceArgs.params,
           ...buildExecParams(
             serviceArgs.params,
             { detach: Boolean(get(serviceArgs, 'params.detach')) },
