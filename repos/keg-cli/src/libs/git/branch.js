@@ -3,6 +3,7 @@ const { gitCli, gitCmd } = require('./commands')
 const { checkCall } = require('@keg-hub/jsutils')
 const { NEWLINES_MATCH, WHITESPACE_MATCH } = require('KegConst/patterns')
 const { buildCmdOpts, ensureGitRemote, ensureGitBranch } = require('./helpers')
+
 /**
  * Matches any * or - character that does not have a alphanumeric character following it
  * @example
@@ -26,17 +27,22 @@ const defRemotes = [ 'remotes', 'origin', 'upstream' ]
  * @function
  * @param {string} branches - text response from the gitCli
  * @param {Array} remotes - array of remote objects containing the name and url
+ * @param {boolean} remoteBranches - Are the branches remote branches or local
  *
  * @returns {Array} - Found branches formatted into json objects
  */
-const formatBranches = (branches, remotes) => {
+const formatBranches = (branches, remotes, remoteBranches=false) => {
   const lines = branches.split(NEWLINES_MATCH)
   const remoteNames = defRemotes.concat(remotes.map(remote => remote.name))
 
   return lines.reduce((mapped, line) => {
     return !line.trim()
       ? mapped
-      : mapped.concat([ buildBranch(line, remoteNames) ])
+      : mapped.concat([
+          remoteBranches
+            ? buildName(line.trim(), remoteNames)
+            : buildBranch(line, remoteNames, remoteBranches)
+        ])
   }, [])
 
 }
@@ -120,7 +126,6 @@ const doGitAction = async (git, action, args, cmdOpts) => {
  * @returns {Object} - Formatted branch object
  */
 const buildBranch = (line, remoteNames) => {
-  const branch = {}
   const [ current, name, commit, ...text ] = line.split(WHITESPACE_MATCH)
 
   return {
@@ -162,6 +167,24 @@ class Branch {
     return formatBranches(branches, remotes)
   }
 
+  /**
+  * Gets all REMOTE git branches for the passed in location
+  * @memberof Branch
+  * @param {string} location - Location where the git command should be run
+  *
+  * @returns {Array} - All REMOTE git branches
+  */
+  listRemote = async (location=process.cwd(), options) => {
+    const remoteBranches = await gitCli({
+      opts: [ 'git', 'branch', '-r' ],
+      ...options,
+    }, {}, location)
+
+    const remotes = await this.git.remote.list(location, options)
+
+    return formatBranches(remoteBranches, remotes, true)
+  }
+
 
   get = async (location=process.cwd(), name, options) => {
     const branches = await this.list(location, options)
@@ -193,8 +216,8 @@ class Branch {
   *
   * @returns {string} - Name of current branch
   */
-  name = async ({ location=process.cwd() }) => {
-    const current = await this.current(location)
+  name = async ({ location=process.cwd(), branches }) => {
+    const current = await this.current({ location, branches })
     return current && current.name
   }
 
