@@ -47,3 +47,35 @@ BUG:
 
 Docker-Compose
   * Injected docker-compose.yml config files are not being properly removed when the service is killed
+
+
+
+
+### Base Container Updates
+
+Start empty alpine image
+Copy in app/tap code
+- app can be tap/core/components
+- use ENVs to define paths
+Copy over keg helper files / local repos
+- helper files pull from keg git repos
+- execute helper files based on defined keg repos to pull
+- helpers will pull repo from git and copy to correct location
+- use sync actions to run git commands
+Don’t add labels or any proxy stuff
+Don’t expose any ports for taps
+
+Run questions
+Copy local or pull tap
+Copy local or pull core
+Copy local or pull components
+Copy local or pull resolver / jsutils/ retheme
+- USE ENV *_path ENVs to know which ones to ask questions for copy/pull
+Ask for branch in each copy or use default
+Install and build as needed for each repo
+
+Ask for tags
+default to develop
+Must be explicit for other tags in make task
+
+Use keg package url to push image to provider

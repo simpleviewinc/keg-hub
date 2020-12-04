@@ -43,7 +43,8 @@ module.exports = {
       privileged: {
         alias: [ 'priv', 'pri' ],
         description: 'Run the docker exec task in privileged mode',
-        example: 'keg tap action --privileged',
+        example: 'keg tap action --no-privileged',
+        required: true,
       },
       options: {
         alias: [ 'opts' ],

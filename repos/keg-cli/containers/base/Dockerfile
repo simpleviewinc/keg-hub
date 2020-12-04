@@ -1,78 +1,155 @@
 ARG KEG_NODE_VERSION
 ARG BASE_IMAGE_FROM=node:$KEG_NODE_VERSION
+FROM $BASE_IMAGE_FROM as keg-builder
 
-FROM $BASE_IMAGE_FROM AS builder
+WORKDIR /
 
-# These args are expected to be set as --build-arg
-# Which Allow them to be used durring the build
-ARG PUBLIC_GIT_KEY
-ARG GIT_CLI_URL=INITIAL
+# Set the default expojs version to it's locked down
+ARG EXPO_CLI_VERSION=${EXPO_CLI_VERSION:-3.28.5}
+
+# Pull down dependencies should be used, and setup them up
+RUN apk add --no-cache git; \
+    yarn global add expo-cli@$EXPO_CLI_VERSION nodemon
+
+# Copy over the local keg-core repo to a temp dir
+COPY . /keg-temp/
 
 # Should we use the local copy of the keg-core repo when building
 ARG KEG_COPY_LOCAL
 
-ARG DOC_CLI_PATH=/keg/keg-cli
+# Get the git keg-hub url and branch to pull down
+ARG GIT_HUB_URL=${GIT_HUB_URL:-https://github.com/simpleviewinc/keg-hub.git}
+ARG GIT_HUB_BRANCH=${GIT_HUB_BRANCH:-develop}
 
-# Set the default expojs version to it's locked down
-ARG EXPO_CLI_VERSION
-
-WORKDIR /
-
-# Install git and the expo-cli and sharp-cli
-RUN apk add --no-cache git; \
-    yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli nodemon
-
-# Copy over the local keg-components repo to a temp dir
-COPY . /keg-temp/
-
-# Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-cli locally if GIT_CLI_URL
-# Otherwise copy over the local version from keg-temp
-RUN git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
-    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
-      git clone $GIT_CLI_URL $DOC_CLI_PATH; \
+# Pull down the latest from  git hub it the
+RUN if [ -z "$KEG_COPY_LOCAL" ]; then \
+      git clone --single-branch --branch $GIT_HUB_BRANCH $GIT_HUB_URL /keg-hub; \
     else \
-      cp -R /keg-temp/ $DOC_CLI_PATH; \
-    fi; \
-    rm -rf /keg-temp
+      mkdir -p /keg-hub; \
+      cp -R /keg-temp/* /keg-hub; \
+      rm -rf /keg-temp; \
+    fi
 
-# Copy over our local containers folder to get the updated run scripts
-COPY . $DOC_CLI_PATH/
+# Install / Build jsutils
+RUN if [ -d "/keg-hub/repos/jsutils" ]; then \
+      cd /keg-hub/repos/jsutils; \
+      yarn install; \
+      yarn build; \
+    fi
 
-# ------- New Build Stage ------- #
+# Install keg-cli, then copy over it's keg dependencies
+RUN if [ -d "/keg-hub/repos/keg-cli" ]; then \
+      cd /keg-hub/repos/keg-cli; \
+      yarn install; \
+      if [ -d "/keg-hub/repos/keg-cli/node_modules/@keg-hub/jsutils/build" ]; then \
+        rm -rf /keg-hub/repos/keg-cli/node_modules/@keg-hub/jsutils/build; \
+        cp -R /keg-hub/repos/jsutils/build /keg-hub/repos/keg-cli/node_modules/@keg-hub/jsutils/build; \
+      fi; \
+      if [ -d "/keg-hub/repos/keg-cli/node_modules/@keg-hub/args-parse" ]; then \
+        rm -rf /keg-hub/repos/keg-cli/node_modules/@keg-hub/args-parse; \
+        cp -R /keg-hub/repos/args-parse /keg-hub/repos/keg-cli/node_modules/@keg-hub/args-parse; \
+      fi; \
+      if [ -d "/keg-hub/repos/keg-cli/node_modules/@keg-hub/ask-it" ]; then \
+        rm -rf /keg-hub/repos/keg-cli/node_modules/@keg-hub/ask-it; \
+        cp -R /keg-hub/repos/ask-it /keg-hub/repos/keg-cli/node_modules/@keg-hub/ask-it; \
+      fi; \
+      if [ -d "/keg-hub/repos/keg-cli/node_modules/@keg-hub/spawn-cmd" ]; then \
+        rm -rf /keg-hub/repos/keg-cli/node_modules/@keg-hub/spawn-cmd; \
+        cp -R /keg-hub/repos/spawn-cmd /keg-hub/repos/keg-cli/node_modules/@keg-hub/spawn-cmd; \
+      fi; \
+    fi
+
+# Install tap-resolver, then copy over it's keg dependencies
+RUN if [ -d "/keg-hub/repos/tap-resolver" ]; then \
+      cd /keg-hub/repos/tap-resolver; \
+      yarn install; \
+      if [ -d "/keg-hub/repos/tap-resolver/node_modules/@keg-hub/jsutils/build" ]; then \
+        rm -rf /keg-hub/repos/tap-resolver/node_modules/@keg-hub/jsutils/build; \
+        cp -R /keg-hub/repos/jsutils/build /keg-hub/repos/tap-resolver/node_modules/@keg-hub/jsutils/build; \
+      fi; \
+    fi
+
+# Install / Build re-theme, then copy over it's keg dependencies
+RUN if [ -d "/keg-hub/repos/re-theme" ]; then \
+      cd /keg-hub/repos/re-theme; \
+      yarn install; \
+      if [ -d "/keg-hub/repos/re-theme/node_modules/@keg-hub/jsutils/build" ]; then \
+        rm -rf /keg-hub/repos/re-theme/node_modules/@keg-hub/jsutils/build; \
+        cp -R /keg-hub/repos/jsutils/build /keg-hub/repos/re-theme/node_modules/@keg-hub/jsutils/build; \
+      fi; \
+      yarn build; \
+    fi
+
+# Install / Build keg-components, then copy over it's keg dependencies
+RUN if [ -d "/keg-hub/repos/keg-components" ]; then \
+      cd /keg-hub/repos/keg-components; \
+      yarn install; \
+      if [ -d "/keg-hub/repos/keg-components/node_modules/@keg-hub/jsutils/build" ]; then \
+        rm -rf /keg-hub/repos/keg-components/node_modules/@keg-hub/jsutils/build; \
+        cp -R /keg-hub/repos/jsutils/build /keg-hub/repos/keg-components/node_modules/@keg-hub/jsutils/build; \
+      fi; \
+      if [ -d "/keg-hub/repos/keg-components/node_modules/@keg-hub/re-theme/build" ]; then \
+        rm -rf /keg-hub/repos/keg-components/node_modules/@keg-hub/re-theme/build; \
+        cp -R /keg-hub/repos/re-theme/build /keg-hub/repos/keg-components/node_modules/@keg-hub/re-theme/build; \
+      fi; \
+      yarn build; \
+    fi
+
+# Install keg-core, then copy over it's keg dependencies
+RUN if [ -d "/keg-hub/repos/keg-core" ]; then \
+      cd /keg-hub/repos/keg-core; \
+      yarn install; \
+      if [ -d "/keg-hub/repos/keg-core/node_modules/@keg-hub/jsutils/build" ]; then \
+        rm -rf /keg-hub/repos/keg-core/node_modules/@keg-hub/jsutils/build; \
+        cp -R /keg-hub/repos/jsutils/build /keg-hub/repos/keg-core/node_modules/@keg-hub/jsutils/build; \
+      fi; \
+      if [ -d "/keg-hub/repos/keg-core/node_modules/@keg-hub/re-theme/build" ]; then \
+        rm -rf /keg-hub/repos/keg-core/node_modules/@keg-hub/re-theme/build; \
+        cp -R /keg-hub/repos/re-theme/build /keg-hub/repos/keg-core/node_modules/@keg-hub/re-theme/build; \
+      fi; \
+      if [ -d "/keg-hub/repos/keg-core/node_modules/@keg-hub/keg-components/build" ]; then \
+        rm -rf /keg-hub/repos/keg-core/node_modules/@keg-hub/keg-components/build; \
+        cp -R /keg-hub/repos/keg-components/build /keg-hub/repos/keg-core/node_modules/@keg-hub/keg-components/build; \
+      fi; \
+    fi
+
+# ------- Final Build Stage ------- #
 
 # Use a multi stage build for security
-FROM $BASE_IMAGE_FROM AS gitBuilder
+FROM $BASE_IMAGE_FROM AS final-build
+
 WORKDIR /
 
 # These args are expected to be set as --build-arg
 # Which Allow them to be used durring the build
-ARG DOC_CLI_PATH=/keg/keg-cli
+ARG DOC_CLI_PATH=/keg-hub/repos/keg-cli
 
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV
 ARG KEG_DOCKER_IP
 
-# Used by react native builder to set the ip address, other wise 
+# Used by react native to set the ip address, other wise 
 # Will use the ip address of the docker container.
 ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
 # Install git and bash for the new stage
 # This is so Dockerfiles that uses "FROM keg-base", don't have to install these packages
-RUN apk add --no-cache git bash nano; \
+RUN apk add --no-cache bash git; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
-    git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
     rm -rf /var/cache/apk/*; \
-    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
+    yarn cache clean
 
 # Copy over the globally installed modules from above
-COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+COPY --from=keg-builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 
 # Copy over keg cli from above
-COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
+COPY --from=keg-builder /keg-hub /keg-hub
 
-# Expose the container ports to allow connecting to it externally
-EXPOSE 80
-EXPOSE 443
+WORKDIR /keg-hub
 
-WORKDIR /keg
+# Set the defualt shell to bash
+SHELL [ "/bin/bash" ]
+
+# Run the bash for the default command
+CMD [ "/bin/bash" ]

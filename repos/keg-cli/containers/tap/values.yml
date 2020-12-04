@@ -26,6 +26,11 @@ env:
   # So it should NOT be set inside the .env file
   KEG_CONTEXT_PATH: INITIAL
 
+
+  # TODO: Update this to work without needing the full url. We really only need tap:development
+  # The rest can be automatically generated from the globalConfig
+  KEG_IMAGE_FROM: docker.pkg.github.com/simpleviewinc/keg-packages/tap:development
+
   # --- DOCKER ENV CONTEXT --- #
 
   # Default location of the tap in the docker container

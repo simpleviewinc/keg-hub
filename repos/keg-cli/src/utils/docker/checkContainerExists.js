@@ -16,7 +16,7 @@ const { stopService } = require('KegUtils/services/stopService')
  *
  * @returns {string} - Name of the current branch
  */
-const checkContainerExists = async ({ containerRef, context, id, args }) => {
+const checkContainerExists = async ({ containerRef, context, id, args }, askRemove=true) => {
   let exists = await docker.container.get(containerRef)
 
   if(!exists) return false
@@ -29,7 +29,7 @@ const checkContainerExists = async ({ containerRef, context, id, args }) => {
   )
 
   Logger.empty()
-  const remove = await ask.confirm(`Would you like to stop it?`)
+  const remove = askRemove && await ask.confirm(`Would you like to stop it?`)
   Logger.empty()
 
   if(!remove) return exists.name

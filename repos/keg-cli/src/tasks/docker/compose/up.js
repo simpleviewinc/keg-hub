@@ -22,11 +22,6 @@ const composeUp = async args => {
   const containerContext = await buildContainerContext(args)
   const { location, cmdContext, contextEnvs, tap, image } = containerContext
 
-  // Check if build param is passed, and use the docker build to build container
-  // This allow use of BuildKit which is faster, and has better caching
-  // Docker compose currently does NOT support BuildKit, so we do it manually
-  build && await buildDockerImage(args, cmdContext, tap)
-
   // Build the docker compose command
   const { dockerCmd, composeData } = await buildComposeCmd({
     cmd: 'up',
