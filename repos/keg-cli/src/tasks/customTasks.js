@@ -1,5 +1,5 @@
 const { throwExitError } = require('KegUtils/error/throwExitError')
-const { TASK_REQURIED } = require('../constants')
+const { TASK_REQUIRED } = require('../constants')
 const { get, reduceObj, isObj } = require('@keg-hub/jsutils')
 const appConfig = {}
 
@@ -17,7 +17,7 @@ const validateTask = (key, task) => {
 
   let notValid
   // Ensure each custom task has the required task fields
-  TASK_REQURIED.map(field => {
+  TASK_REQUIRED.map(field => {
     notValid = !task[field] && { valid: false, message: `Task ${key} has a missing or invalid ${field} field!` }
   })
   

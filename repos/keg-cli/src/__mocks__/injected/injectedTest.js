@@ -65,7 +65,7 @@ const injectedTest = {
     DOC_APP_PATH: '/keg/tap',
     KEG_CONTEXT_PATH: `${homeDir}/keg-hub/taps/tap-injected-test`,
     KEG_CONTAINER_PATH: `${homeDir}/keg-hub/taps/tap-injected-test/container`,
-    KEG_MUTAGEN_PATH: `${homeDir}/keg-hub/taps/tap-injected-test/container/mutagen.yml`,
+    KEG_MUTAGEN_FILE: `${homeDir}/keg-hub/taps/tap-injected-test/container/mutagen.yml`,
     KEG_DOCKER_FILE: `${homeDir}/keg-hub/taps/tap-injected-test/container/Dockerfile`,
     KEG_VALUES_FILE: `${homeDir}/keg-hub/taps/tap-injected-test/container/values.yml`,
     KEG_COMPOSE_DEFAULT: `${homeDir}/keg-hub/taps/tap-injected-test/container/docker-compose.yml`,
