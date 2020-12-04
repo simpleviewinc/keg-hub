@@ -40,40 +40,40 @@ describe('usePointerState', () => {
       ref: mockRef,
     }, 'hover')
 
-    expect(typeof events.mouseenter).toBe('function')
-    expect(typeof events.mouseleave).toBe('function')
+    expect(typeof events.pointerover).toBe('function')
+    expect(typeof events.pointerout).toBe('function')
   })
 
   it('should returned event handler should call the passed in hover callbacks', () => {
-    const onMouseIn = jest.fn()
-    const onMouseOut = jest.fn()
+    const onPointerIn = jest.fn()
+    const onPointerOut = jest.fn()
     const { events } = usePointerState({
-      onMouseIn,
-      onMouseOut,
+      onPointerIn,
+      onPointerOut,
       ref: mockRef,
     }, 'hover')
 
     enableHover()
-    events.mouseenter()
-    expect(onMouseIn).toHaveBeenCalled()
-    events.mouseleave()
-    expect(onMouseOut).toHaveBeenCalled()
+    events.pointerover()
+    expect(onPointerIn).toHaveBeenCalled()
+    events.pointerout()
+    expect(onPointerOut).toHaveBeenCalled()
     disableHover()
 
   })
 
   it('should not call the on hover callbacks when hover is disabled', () => {
-    const onMouseIn = jest.fn()
-    const onMouseOut = jest.fn()
+    const onPointerIn = jest.fn()
+    const onPointerOut = jest.fn()
     const { events } = usePointerState({
-      onMouseIn,
-      onMouseOut,
+      onPointerIn,
+      onPointerOut,
       ref: mockRef,
     }, 'hover')
 
     disableHover()
-    events.mouseenter()
-    expect(onMouseIn).not.toHaveBeenCalled()
+    events.pointerover()
+    expect(onPointerIn).not.toHaveBeenCalled()
   })
 
   it('should return the active event handlers when active is passed as the pointer state', () => {
@@ -81,18 +81,18 @@ describe('usePointerState', () => {
       ref: mockRef,
     }, 'active')
 
-    expect(typeof events.mousedown).toBe('function')
+    expect(typeof events.pointerdown).toBe('function')
   })
 
   it('should returned event handler should call the passed in active callbacks', () => {
-    const onMouseDown = jest.fn()
+    const onPointerDown = jest.fn()
     const { events } = usePointerState({
-      onMouseDown,
+      onPointerDown,
       ref: mockRef,
     }, 'active')
 
-    events.mousedown()
-    expect(onMouseDown).toHaveBeenCalled()
+    events.pointerdown()
+    expect(onPointerDown).toHaveBeenCalled()
 
   })
 

@@ -89,15 +89,15 @@ const useElementEvents = (options=noOpObj, pointerState) => {
 
   const {
     hover=false,
-    onMouseIn,
-    onMouseOut
+    onPointerIn,
+    onPointerOut
   } = pointerState === 'hover'
     ? useEventCallBacks({
         pointerState,
-        onName: 'onMouseIn',
-        offName: 'onMouseOut',
-        onEvent: options.onMouseIn,
-        offEvent: options.onMouseOut,
+        onName: 'onPointerIn',
+        offName: 'onPointerOut',
+        onEvent: options.onPointerIn,
+        offEvent: options.onPointerOut,
       })
     : noOpObj
 
@@ -117,13 +117,13 @@ const useElementEvents = (options=noOpObj, pointerState) => {
 
   const {
     active=false,
-    onMouseDown,
+    onPointerDown,
   } = pointerState === 'active'
     ? useEventCallBacks({
         pointerState,
-        onName: 'onMouseDown',
+        onName: 'onPointerDown',
         offName: 'mouseup',
-        onEvent: options.onMouseDown,
+        onEvent: options.onPointerDown,
         offEvent: options.onMouseUp,
       })
     : noOpObj
@@ -133,10 +133,10 @@ const useElementEvents = (options=noOpObj, pointerState) => {
     // Use the Dom event names, NOT the react event names,
     // because these events are directly added to the element through the Dom API
     const events = pointerState === 'hover'
-      ? { mouseenter: onMouseIn, mouseleave: onMouseOut }
+      ? { pointerover: onPointerIn, pointerout: onPointerOut }
       : pointerState === 'focus'
         ? { focus: onFocus, blur: onBlur }
-        : { mousedown: onMouseDown }
+        : { pointerdown: onPointerDown }
 
     return {
       active,
@@ -150,9 +150,9 @@ const useElementEvents = (options=noOpObj, pointerState) => {
     hover,
     onBlur,
     onFocus,
-    onMouseDown,
-    onMouseIn,
-    onMouseOut,
+    onPointerDown,
+    onPointerIn,
+    onPointerOut,
     options.ref,
     pointerState,
   ])

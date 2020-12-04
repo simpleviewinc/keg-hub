@@ -19,7 +19,7 @@ export const containedInit = (config=noOpObj) => {
           backgroundColor: activeColor,
           padding: 9,
           minHeight: 35,
-          opacity,
+          opacity
         },
         $web: {
           cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
