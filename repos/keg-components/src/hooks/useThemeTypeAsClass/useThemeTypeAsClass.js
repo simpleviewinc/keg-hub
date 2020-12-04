@@ -20,8 +20,7 @@ const useThemeType = (themeLoc, defClass) => {
     const surface = themeSplit.pop()
     const typeRef = themeSplit.pop()
     const surfaces = Object.keys(get(colors, 'surface', noOpObj))
-
-    return typeRef && surfaces.indexOf(surface)
+    return typeRef && surfaces.includes(surface)
       ? [ `${defClass}-${typeRef}`, surface ]
       : surface
         ? [`${defClass}-${surface}`]
