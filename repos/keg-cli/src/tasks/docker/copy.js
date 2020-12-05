@@ -1,6 +1,7 @@
 const path = require('path')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
+const { get } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
 const { buildContainerContext } = require('KegUtils/builders/buildContainerContext')
 const { throwRequired, generalError } = require('KegUtils/error')
@@ -56,7 +57,7 @@ const copy = async args => {
     log,
     local,
     remote,
-    container: id,
+    container: id || container || get(params, '__injected.container'),
     fromContainer: source === 'docker'
   })
 
