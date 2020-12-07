@@ -21,8 +21,8 @@ const askRemoveImage = async force => {
 }
 
 /**
- * 
- * @param {*} repo
+ * Gets the image ids based on the passed in repository name
+ * @param {string} repo
  * 
  * @returns {string} - remote docker image ids separated by spaces 
  */
