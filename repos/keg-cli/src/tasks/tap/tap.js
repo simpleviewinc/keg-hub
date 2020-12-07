@@ -30,6 +30,7 @@ module.exports = {
       ...require('./build'),
       ...require('./container'),
       ...require('./destroy'),
+      ...require('./docker'),
       ...require('./link'),
       ...require('./list'),
       ...require('./log'),
