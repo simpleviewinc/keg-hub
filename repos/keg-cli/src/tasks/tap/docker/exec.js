@@ -34,7 +34,7 @@ module.exports = {
     options: {
       cmd: {
         description: 'Docker container command to run. Default ( /bin/bash )',
-        example: 'keg tap exec --cmd test',
+        example: 'keg tap docker exec --cmd test',
         default: 'bash'
       },
       workdir: {

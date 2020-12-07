@@ -43,13 +43,13 @@ module.exports = {
       local: {
         alias: [ 'loc' ],
         description: 'Local path to copy files to and from',
-        example: 'keg tap docker create --local ~/keg/keg-core',
+        example: 'keg tap docker copy --local ~/keg/keg-core',
         enforced: true,
       },
       remote: {
         alias: [ 'rem' ],
         description: 'Remote path to copy files to and from',
-        example: 'keg tap docker --remote keg/keg-core',
+        example: 'keg tap docker copy --remote keg/keg-core',
         enforced: true,
       },
       log: {
