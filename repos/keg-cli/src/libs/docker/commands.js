@@ -85,9 +85,9 @@ const dynamicCmd = async (args, type) => {
  *
  * @returns {void}
  */
-const remove = ({ item, force, skipError, type='' }, cmdOpts) => {
+const remove = async ({ item, force, skipError, type='' }, cmdOpts) => {
   return item
-    ? dockerCli({
+    ? await dockerCli({
         force,
         skipError: skipError,
         opts: `${ type } rm ${ item }`.trim(),

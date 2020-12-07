@@ -64,19 +64,13 @@ const removeDockerImage = async args => {
   const imgRef = imageParam || context &&
     get(DOCKER.CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`) || context
 
-    // test cases:
-    // remove all - dont pass in context
-    // remove specific - pass in context
-    // remove with custom remote url
-    // remove with invalid context - show error msg and prompt
-    // help menu with sub options
   // user could pass in a different remote url
   const remoteUrl = remote && isStr(remote)
     ? remote
     : `${DOCKER.PACKAGE_URL}/${imgRef ? imgRef : ''}`
     
   const ids = remote && await getRemoteIds(remoteUrl)
-  // TODO: add error message if remote not found any ids
+
   // Get the image meta data
   const image = tag
     ? await docker.image.getByTag(tag)
@@ -124,8 +118,8 @@ module.exports = {
       },
       remote: {
         alias: ['github', 'gh'],
-        description: 'only image(s) downloaded from keg-packages github repo',
-        example: 'keg docker image remove --remote'
+        description: 'only image(s) downloaded externally. default keg-packages repo',
+        example: 'keg docker image remove --remote <url>',
       },
     },
   }

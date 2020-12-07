@@ -150,8 +150,8 @@ const getByTag = async (imgRef, log=false) => {
  *
  * @returns {string} - Response from the docker cli command
  */
-const removeImage = args => {
-  return remove({ ...args, type: 'image' })
+const removeImage = async (args) => {
+  return await remove({ ...args, type: 'image' })
 } 
 
 /**
