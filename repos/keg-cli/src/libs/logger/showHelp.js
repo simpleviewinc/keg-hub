@@ -177,7 +177,6 @@ const showTaskOptionDetail = (task, option, infoSpacer, dblSpacer) => {
     Logger.empty()
     console.log(colors.brightBlue(`${infoSpacer}Option: ${validKey}`))
     showTaskInfo(task.options[validKey], `  ${infoSpacer}`)
-    showTaskOptions(task.options[validKey], infoSpacer, dblSpacer)
     return
   }
 
