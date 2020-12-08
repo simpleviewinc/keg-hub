@@ -18,8 +18,8 @@ const defPaths = {
   keg: kegHub,
   config: GLOBAL_CONFIG_FOLDER,
   repos: kegRepos,
+  jsutils: path.join(kegRepos, 'jsutils'),
   resolver: path.join(kegRepos, 'tap-resolver'),
-  proxy: path.join(kegRepos, 'keg-proxy'),
   taps: kegTaps,
 }
 

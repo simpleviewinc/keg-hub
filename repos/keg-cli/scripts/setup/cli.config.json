@@ -31,7 +31,8 @@
         "preConfirm": true,
         "buildKit": true,
         "force": true,
-        "defaultLocalBuild": true
+        "defaultLocalBuild": true,
+        "imagePullPolicy": "Always"
       },
       "checkUpdates": false,
       "editorCmd": "code",
