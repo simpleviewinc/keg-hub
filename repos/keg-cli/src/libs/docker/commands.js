@@ -61,7 +61,7 @@ const dockerCli = async (params={}, cmdOpts={}) => {
  * @param {string} args - Arguments to make the docker cli call
  * @param {boolean} type - Type of docker cli call to make ( image, container )
  *
- * @returns {string|Array} - Response from the dockerCli command
+ * @returns {Promise<string|Array>} - Response from the dockerCli command
  */
 const dynamicCmd = async (args, type) => {
   // Ensure options are an array
@@ -83,11 +83,11 @@ const dynamicCmd = async (args, type) => {
  * @param {string} toRemove - Name or id of item to remove
  * @param {boolean} force - Should force remove the item
  *
- * @returns {void}
+ * @returns {Promise<string|Array>|Error}
  */
-const remove = async ({ item, force, skipError, type='' }, cmdOpts) => {
+const remove = ({ item, force, skipError, type='' }, cmdOpts) => {
   return item
-    ? await dockerCli({
+    ? dockerCli({
         force,
         skipError: skipError,
         opts: `${ type } rm ${ item }`.trim(),

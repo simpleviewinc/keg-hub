@@ -146,12 +146,12 @@ const getByTag = async (imgRef, log=false) => {
 /**
  * Removes a docker image based on passed in toRemove argument
  * @function
-* @param {string} args - Arguments used in the docker remove command
+ * @param {string} args - Arguments used in the docker remove command
  *
- * @returns {string} - Response from the docker cli command
+ * @returns {Promise<string|Array>} - Response from the docker cli command
  */
-const removeImage = async (args) => {
-  return await remove({ ...args, type: 'image' })
+const removeImage = args => {
+  return remove({ ...args, type: 'image' })
 } 
 
 /**

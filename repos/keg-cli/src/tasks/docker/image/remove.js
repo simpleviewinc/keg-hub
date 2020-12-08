@@ -54,7 +54,12 @@ const getRemoteIds = async (repo) => {
 const removeDockerImage = async args => {
 
   const { globalConfig, params, __internal={} } = args
-  const { context, tag, image:imageParam, remote } = params
+  const { 
+    context, 
+    tag, 
+    image:imageParam,
+    remote
+  } = params
 
   const force = exists(params.force) ? params.force : getSetting(`docker.force`)
 
@@ -64,13 +69,17 @@ const removeDockerImage = async args => {
   const imgRef = imageParam || context &&
     get(DOCKER.CONTAINERS, `${context && context.toUpperCase()}.ENV.IMAGE`) || context
 
-  // user could pass in a different remote url
   const remoteUrl = remote && isStr(remote)
     ? remote
-    : `${DOCKER.PACKAGE_URL}/${imgRef ? imgRef : ''}`
-    
-  const ids = remote && await getRemoteIds(remoteUrl)
+    : `${
+        get(globalConfig, 'docker.providerUrl')
+        + '/' 
+        + get(globalConfig, 'docker.namespace') 
+        + '/'
+        + (imgRef ? imgRef : '')
+      }`
 
+  const ids = remote && await getRemoteIds(remoteUrl)
   // Get the image meta data
   const image = tag
     ? await docker.image.getByTag(tag)
@@ -117,7 +126,6 @@ module.exports = {
         example: 'keg docker image remove --force ',
       },
       remote: {
-        alias: ['github', 'gh'],
         description: 'only image(s) downloaded externally. default keg-packages repo',
         example: 'keg docker image remove --remote <url>',
       },
