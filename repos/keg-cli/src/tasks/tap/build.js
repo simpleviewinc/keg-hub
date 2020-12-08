@@ -1,6 +1,7 @@
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
 const { DOCKER } = require('KegConst/docker')
+const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 
 /**
  * Builds a docker container for a tap so it can be run
@@ -13,12 +14,18 @@ const { DOCKER } = require('KegConst/docker')
  * @returns {void}
  */
 const buildTap = async (args) => {
+  const { params:{ tap } } = args
+  const locationContext = tap ? DOCKER.LOCATION_CONTEXT.REPO : DOCKER.LOCATION_CONTEXT.CONTAINERS
 
-  // Check the base image and build it if it doesn't exist
+    // Check the base image and build it if it doesn't exist
   await buildBaseImg(args)
 
   return runInternalTask('tasks.docker.tasks.build', {
     ...args,
+    __internal: {
+      ...args.__internal,
+      locationContext,
+    },
     params: {
       context: 'tap',
       ...args.params,
@@ -35,37 +42,11 @@ module.exports = {
     locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     description: `Builds a taps docker container`,
     example: 'keg tap build <options>',
-    options: {
+    options: mergeTaskOptions(`tap`, `build`, `build`, {
       tap: {
-        alias: [ 'name' ],
         description: 'Name of the tap to build a Docker image for',
-        example: 'keg tap build --tap visitapps',
-        required: true
-      },
-      args: {
-        description: 'Add docker build arguments from container env files',
-        example: 'keg tap build --args false',
-        default: true
-      },
-      cache: {
-        description: 'Docker will use build cache when building the image',
-        example: 'keg tap build --cache false',
-        default: true
-      },
-      core: {
-        description: 'Use the local keg-core package.json when install node_modules during the build',
-        example: `keg tap build --core`,
-        default: false,
-      },
-      local: {
-        description: 'Copy the local repo into the docker container at build time',
-        example: `keg tap build --local false`,
-        default: true,
-      },
-      tags: {
-        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg tap build tags=my-tag,local,development'
-      },
-    }
+        example: 'keg tap build --tap <name-of-linked-tap>',
+      }
+    })
   }
 }

@@ -1,5 +1,5 @@
-const { serviceOptions, startService } = require('KegUtils/services')
-
+const { startService } = require('KegUtils/services')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 /**
  * Start a keg-core with docker-compose
  * @param {Object} args - arguments passed from the runTask method
@@ -26,6 +26,13 @@ module.exports = {
     action: startCore,
     description: `Runs keg-core in a docker container`,
     example: 'keg core start <options>',
-    options: serviceOptions('core', 'start'),
+    options: mergeTaskOptions('core', 'start', 'startService', {
+      recreate: {
+        alias: [ 'rec', `create` ],
+        description: 'Force recreate all the docker containers for the core service',
+        example: 'keg core start --recreate',
+        required: false
+      }
+    }),
   }
 }

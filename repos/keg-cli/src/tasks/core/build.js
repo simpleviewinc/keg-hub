@@ -1,5 +1,6 @@
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { buildBaseImg } = require('KegUtils/builders/buildBaseImg')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 
 /**
  * Build the keg-core in docker, without a tap
@@ -35,31 +36,6 @@ module.exports = {
     action: buildCore,
     description: `Builds the keg-core docker container`,
     example: 'keg core build <options>',
-    options: {
-      args: {
-        description: 'Add build args from container env files',
-        example: `keg core build --args false`,
-        default: true
-      },
-      cache: {
-        description: 'Docker will use build cache when building the image',
-        example: `keg core build --cache false`,
-        default: true
-      },
-      local: {
-        description: 'Copy the local repo into the docker container at build time',
-        example: `keg core build --local`,
-        default: false,
-      },
-      tags: {
-        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg core build tags=my-tag,local,development'
-      },
-      log: {
-        description: 'Log docker command',
-        example: 'keg core build log=true',
-        default: false
-      },
-    }
+    options: mergeTaskOptions(`core`, `build`, `build`)
   }
 }

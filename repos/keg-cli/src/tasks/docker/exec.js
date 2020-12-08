@@ -28,10 +28,10 @@ const dockerExec = async args => {
     params: { ...params, context }
   })
 
-  const { contextEnvs, location, prefix, image, container } = execContext
+  const { contextEnvs, location, prefix, image, container, id:containerId } = execContext
 
   // Get the name of the container to run the docker exec cmd on
-  const containerName = container && container.name || prefix || image
+  const containerName = containerId || container && container.name || prefix || image
 
   const execArgs = { cmd, container: containerName, opts: options, location }
   workdir && (execArgs.workdir = workdir)
@@ -83,8 +83,8 @@ module.exports = {
       privileged: {
         alias: [ 'priv', 'pri' ],
         description: 'Run the docker exec task in privileged mode',
-        example: 'keg docker exec --privileged',
-        default: false,
+        example: 'keg docker exec --no-privileged',
+        default: true,
       },
       options: {
         alias: [ 'opts' ],
