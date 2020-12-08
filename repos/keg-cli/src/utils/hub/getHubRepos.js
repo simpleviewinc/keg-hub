@@ -150,7 +150,7 @@ const runCmdAsync = async (repos, hubReposPath, args) => {
 
 
 /**
- * Loads information about the repos in then keg-hub/repos folder
+ * Loads information about the repos in the keg-hub/repos folder
  * @function
  * @param {Object} args - Define how the repos information should be gathered
  * @param {Object} args.context - Filter which repos should be returned

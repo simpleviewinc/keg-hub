@@ -12,6 +12,7 @@ const { generalError } = require('KegUtils/error/generalError')
  * @returns {void}
  */
 const hubPublish = async args => {
+
   await publishService(args)
 
   return true
@@ -29,13 +30,13 @@ module.exports = {
       context: {
         alias: [ 'ctx' ],
         description: 'Publish context to use from the globalConfig!',
-        example: 'keg hub run --context keg',
+        example: 'keg hub publish --context keg',
         default: 'keg'
       },
       version: {
         alias: [ 'ver' ],
         description: 'The server number or update type (major, minor, patch)',
-        example: 'keg hub run --version <semver type || version number>'
+        example: 'keg hub publish --version <semver type || version number>'
       }
     }
   }

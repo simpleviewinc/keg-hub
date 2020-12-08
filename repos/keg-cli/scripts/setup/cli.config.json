@@ -43,5 +43,47 @@
         "optionsAsk": true
       }
     }
+  },
+  "publish": {
+    "default": {
+      "tasks": {
+        "install": true,
+        "test": true,
+        "build": true,
+        "version": true,
+        "publish": false,
+        "git": false
+      }
+    },
+    "keg": {
+      "name": "keg",
+      "dependent": true,
+      "order": [
+        "@keg-hub/re-theme",
+        "@keg-hub/keg-components",
+        "@keg-hub/keg-core"
+      ]
+    },
+    "retheme": {
+      "name": "retheme",
+      "dependent": false,
+      "order": [
+        "@keg-hub/re-theme"
+      ]
+    },
+    "components": {
+      "name": "components",
+      "dependent": false,
+      "order": [
+        "@keg-hub/keg-components"
+      ]
+    },
+    "core": {
+      "name": "core",
+      "dependent": false,
+      "order": [
+        "@keg-hub/keg-core"
+      ]
+    }
   }
 }
