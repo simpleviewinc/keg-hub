@@ -26,7 +26,13 @@ const buildService = async (args, argsExt) => {
 
   // Check if we should build the container image first
   log && Logger.info(`Checking ${ context } docker image...`)
-  ;(satisfy || build) && await checkBuildImage(serviceArgs, context, image, tap)
+  ;(satisfy || build) && await checkBuildImage({
+    ...serviceArgs,
+    __internal: {
+      ...serviceArgs.__internal,
+      addLatestTag: true
+    }
+  }, context, image, tap)
 
   return true
 

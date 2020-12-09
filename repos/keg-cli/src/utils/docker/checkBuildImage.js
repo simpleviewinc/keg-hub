@@ -4,6 +4,7 @@ const { Logger } = require('KegLog')
 const { generalError } = require('../error/generalError')
 const { buildDockerImage } = require('../builders/buildDockerImage')
 const { getContainerConst } = require('../docker/getContainerConst')
+const { checkAddLatestTag } = require('../helpers/checkAddLatestTag')
 
 /**
  * Checks that the tap image exists. If it doesn't then build it
@@ -19,7 +20,8 @@ const checkBuildImage = async (args, context, defImgName, tap) => {
   const exists = await docker.image.exists(imageName)
 
   // If the image exists, and there's no build param, return
-  if(exists && !get(args, 'params.build')) return true
+  if(exists && !get(args, 'params.build'))
+    return checkAddLatestTag(image, get(args, '__internal.addLatestTag') === true)
 
   // Otherwise print message about the build, then do it
   exists
@@ -28,8 +30,6 @@ const checkBuildImage = async (args, context, defImgName, tap) => {
 
   Logger.empty()
 
-  // TODO: This is not returning the built IMG
-  // Need to investigate
   const builtImg = await buildDockerImage(args, context, tap)
 
   // TODO: Add better error message
