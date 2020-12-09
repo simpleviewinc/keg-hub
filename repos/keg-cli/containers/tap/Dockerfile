@@ -2,7 +2,7 @@
 # Must come before the FROM directive
 ARG KEG_NODE_VERSION
 ARG GIT_STAGE_IMAGE_FROM=node:$KEG_NODE_VERSION
-ARG KEG_IMAGE_FROM=keg-base:develop
+ARG KEG_IMAGE_FROM=keg-base:latest
 FROM $KEG_IMAGE_FROM as builder
 
 WORKDIR /
