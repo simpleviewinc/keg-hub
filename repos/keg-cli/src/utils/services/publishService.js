@@ -225,7 +225,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
  * @returns {Array} - All published repos
  */
 const runPublishContext = (toPublish, repos, params={}, publishContext) => {
-  const { version, skipGit } = publishContext.tasks
+  const { version, git } = publishContext.tasks
 
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
@@ -240,12 +240,13 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
 
       publishArgs.step = [ 0, 'version']
       // Update the version of the repos
+      // validate if newVersion DNE
       const { newVersion } = version
-      ? await versionService(
-          { params },
-          { publishContext, repo, repos }
-        )
-      : {}
+        ? await versionService(
+            { params },
+            { publishContext, repo, repos }
+          )
+        : {}
 
       publishArgs.newVersion = newVersion
       logFormal(repo, `Running publish service`)
@@ -254,9 +255,9 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
       // Check if we should do the git updates, or just return the updated array
       return !publishArgs.wasPublished
         ? false
-        : skipGit
-          ? updated.concat([ repo, publishArgs ])
-          : gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
+        : git
+          ? gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
+          : updated.concat([ repo, publishArgs ])
 
     }
     catch(err){
