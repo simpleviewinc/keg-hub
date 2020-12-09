@@ -50,12 +50,12 @@ RUN yarn install --pure-lockfile
 
 # Copy over keg-cli repo from keg-builder
 COPY --from=keg-builder /keg-hub/repos/keg-core $DOC_APP_PATH/node_modules/keg-core
-COPY --from=keg-builder /keg-hub/repos/keg-cli/containers/tap $DOC_APP_PATH/container
+COPY --from=keg-builder /keg-hub/repos/keg-cli/containers/tap/run.sh /keg/tap-run.sh
 
 # Update the permissions of the run script
-RUN chmod a+x ${DOC_APP_PATH}/container/run.sh
+RUN chmod a+x /keg/tap-run.sh
 
 SHELL [ "/bin/bash" ]
 
 # Run the start script
-CMD [ "/bin/bash", "-c",  "${DOC_APP_PATH}/container/run.sh" ]
+CMD [ "/bin/bash", "/keg/tap-run.sh" ]

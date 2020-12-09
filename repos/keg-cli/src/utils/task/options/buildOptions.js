@@ -59,8 +59,13 @@ const buildOptions = (task, action) => {
       example: `keg ${task} build --no-local`,
       default: true,
     },
+    latest: {
+      description: 'Adds the latest tag to the docker image.',
+      example: 'keg ${task} build --no-latest',
+      default: true
+    },
     log: {
-      description: 'Log docker command',
+      description: 'Log docker command before they are run',
       example: 'keg ${task} build --log true',
       default: false
     },

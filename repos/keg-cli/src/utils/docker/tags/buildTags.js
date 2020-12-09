@@ -46,7 +46,7 @@ const addTagsToCommand = (dockerCmd, imageName, tags) => {
  */
 const buildTags = async (args, params, dockerCmd='') => {
   const { containerContext } = args
-  const { context, tagGit, tagVariable } = params
+  const { context, tagGit, tagVariable, latest=true } = params
 
   // Ensure we have an image name
   const imageName = getImageName(params.image, context)
@@ -70,6 +70,10 @@ const buildTags = async (args, params, dockerCmd='') => {
   gitTag && tags.push(gitTag)
 
   !tags.length && tags.push(env)
+
+  // Always add the latest tag so docker-compose will use this image automatically
+  // Unless the latest param is set to falsy
+  latest && !tags.includes('latest') && tags.push('latest')
 
   // Add the tags to the docker command
   return addTagsToCommand(dockerCmd, imageName, tags)

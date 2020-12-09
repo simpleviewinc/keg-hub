@@ -1,4 +1,5 @@
 const docker = require('KegDocCli')
+const { isObj } = require('@keg-hub/jsutils')
 
 /**
  * Adds the latest tag to the passed in docker image object
@@ -11,8 +12,8 @@ const docker = require('KegDocCli')
 const checkAddLatestTag = async (image, addLatestTag) => {
   addLatestTag && await docker.image.tag({
     log: false,
-    item: image,
     tag: 'latest',
+    ...(isObj(image) ? { image } : { item: image }),
   })
 
   return image

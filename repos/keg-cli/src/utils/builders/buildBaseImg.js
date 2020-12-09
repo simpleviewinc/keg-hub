@@ -47,7 +47,7 @@ const getBaseTag = (params, buildContext) => {
  * @returns {void}
  */
 const buildBaseImg = async args => {
-  const buildContext = get(params, `__injected.tap`, get(args, 'params.context'))
+  const buildContext = get(args, `params.__injected.tap`, get(args, 'params.context'))
 
   // If it's a tap, check if we should build the base image
   const shouldBuildBase = buildContext && getContainerConst(buildContext, `env.keg_from_base`, true)
