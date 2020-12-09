@@ -32,7 +32,7 @@ const ensureDocker = cmd => cmd.trim().indexOf('docker') === 0 ? cmd : `docker $
  * @param {Object} params.errResponse - On an error calling docker, this will be returned.
  *                                      If errResponse is undefined, the current process will exit
  *
- * @returns {Array|string} - JSON array of items || stdout from docker cli call
+ * @returns {Promise<string|Array>} - JSON array of items || stdout from docker cli call
  */
 const dockerCli = async (params={}, cmdOpts={}) => {
   const { opts, errResponse, log, skipError, format='', force } = params
@@ -84,7 +84,7 @@ const dynamicCmd = async (args, type) => {
  * @param {string} toRemove - Name or id of item to remove
  * @param {boolean} force - Should force remove the item
  *
- * @returns {void}
+ * @returns {Promise<string|Array>|Error}
  */
 const remove = ({ item, force, skipError, type='' }, cmdOpts) => {
   return item
