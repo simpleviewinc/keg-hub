@@ -36,9 +36,7 @@ const convertParamsToEnvs = ({ env, command, install, local }, copyLocalEnv) => 
   // Check if we should copy the local repo into the docker container on image build
   getCopyLocal(local, copyLocalEnv) && ( extraENVs.KEG_COPY_LOCAL = true )
 
-  return {
-    ...extraENVs,
-  } 
+  return extraENVs
 }
 
 module.exports = {
