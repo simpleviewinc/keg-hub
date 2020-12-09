@@ -1,6 +1,6 @@
 const { get, set } = require('@keg-hub/jsutils')
 const { composeService } = require('./composeService')
-const { buildService } = require('./buildService')
+const { pullService } = require('./pullService')
 const { proxyService } = require('./proxyService')
 
 /**
@@ -18,14 +18,14 @@ const { proxyService } = require('./proxyService')
 const startService = async (args, exArgs) => {
 
   // Call the build service to ensure required images are built 
-  const isBuilt = await buildService(args, exArgs)
+  const isPulled = await pullService(args, exArgs)
 
   // Call the proxy service to make sure that is running
   await proxyService(args)
 
   // Update the build param so we don't rebuild the tap
   // Setting it to false, tells it to NOT build the image
-  get(args, 'params.build') && set(args, 'params.build', !isBuilt) 
+  get(args, 'params.build') && set(args, 'params.build', !isPulled) 
 
   // Call and return the compose server
   return composeService(args, exArgs)

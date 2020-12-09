@@ -2,7 +2,7 @@
 # Must come before the FROM directive
 ARG KEG_NODE_VERSION
 ARG NODE_IMAGE_FROM=node:$KEG_NODE_VERSION
-ARG KEG_BASE_IMAGE=keg-base:develop
+ARG KEG_BASE_IMAGE=docker.pkg.github.com/simpleviewinc/keg-packages/keg-base:develop
 FROM $KEG_BASE_IMAGE as keg-builder
 
 # ------- Components Build Stage ------- #

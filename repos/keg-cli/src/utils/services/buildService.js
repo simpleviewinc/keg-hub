@@ -14,7 +14,7 @@ const { getServiceArgs } = require('./getServiceArgs')
 const buildService = async (args, argsExt) => {
 
   const serviceArgs = getServiceArgs(args, argsExt)
-  const { params } = serviceArgs
+  const { params, __internal={} } = serviceArgs
   const {
     build,
     container:containerName,
@@ -31,7 +31,7 @@ const buildService = async (args, argsExt) => {
 
   // Check if the base image exists, and if not then build it
   log && Logger.info(`Checking base docker image...`)
-  satisfy && await buildBaseImg(serviceArgs)
+  !__internal.skipBaseBuild && satisfy && await buildBaseImg(serviceArgs)
 
   // Check if we should build the container image first
   log && Logger.info(`Checking ${ context } docker image...`)

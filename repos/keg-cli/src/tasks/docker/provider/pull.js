@@ -57,11 +57,13 @@ const providerPull = async args => {
     ? imageNameWTag
     : `${url}/${imageNameWTag}`
 
-  const pulledImg = await docker.pull(imageUrl, false)
-  pulledImg && Logger.success(`\nFinished pulling Docker image from provider!\n`)
+  const isNewImage = await docker.pull(imageUrl, false)
+  isNewImage && Logger.success(`\nFinished pulling Docker image from provider!\n`)
 
-  return { ...pullContext, imageUrl, pulledImg }
+  // Get the docker image object that was just pulled
+  const imageObj = await docker.image.get(imageUrl)
 
+  return { ...pullContext, imageUrl, isNewImage, imageObj }
 }
 
 
