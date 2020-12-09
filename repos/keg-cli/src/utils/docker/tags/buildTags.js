@@ -69,7 +69,7 @@ const buildTags = async (args, params, dockerCmd='') => {
   const gitTag = tagGit && await getRepoGitTag({ containerContext, params }, tagGit)
   gitTag && tags.push(gitTag)
 
-  !tags.length && tags.push(env)
+  !tags.length && tags.push('latest')
 
   // Add the tags to the docker command
   return addTagsToCommand(dockerCmd, imageName, tags)

@@ -9,6 +9,7 @@ services:
         - GIT_COMPONENTS_URL
         - DOC_APP_PATH
         - KEG_IMAGE_FROM
+        - KEG_NODE_VERSION
         - PUBLIC_GIT_KEY
     environment:
       - CHOKIDAR_USEPOLLING
