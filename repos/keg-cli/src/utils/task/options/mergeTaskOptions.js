@@ -1,3 +1,4 @@
+const { pullOptions } = require('./pullOptions')
 const { pushOptions } = require('./pushOptions')
 const { buildOptions } = require('./buildOptions')
 const { deepMerge, isFunc, isObj } = require('@keg-hub/jsutils')
@@ -5,6 +6,7 @@ const { startServiceOptions } = require('./startServiceOptions')
 
 const optionTypes = {
   build: buildOptions,
+  pull: pullOptions,
   push: pushOptions,
   startService: startServiceOptions,
 }

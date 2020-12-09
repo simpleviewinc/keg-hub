@@ -7,6 +7,7 @@ const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { addProviderTags } = require('KegUtils/docker/tags/addProviderTags')
 const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 const { getOrBuildImage, buildProviderUrl, imageSelect } = require('KegUtils/docker')
+
 /**
  * Pushes a local image registry provider in the cloud
  * @param {Object} args - arguments passed from the runTask method

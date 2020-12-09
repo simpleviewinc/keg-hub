@@ -24,6 +24,7 @@ module.exports = {
     tasks: {
       ...require('./build'),
       ...require('./destroy'),
+      ...require('./push'),
       ...require('./run'),
     },
   }

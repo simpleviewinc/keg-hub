@@ -2,7 +2,7 @@
 env:
   # --- BASE ENV CONTEXT --- #
 
-  KEG_CONTEXT_PATH: "{{ cli.paths.cli }}"
+  KEG_CONTEXT_PATH: "{{ cli.paths.keg }}"
   KEG_DOCKER_FILE: "{{ cli.paths.containers }}/base/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.paths.containers }}/base/values.yml"
   KEG_COMPOSE_DEFAULT: "{{ cli.paths.containers }}/base/docker-compose.yml"
@@ -15,7 +15,10 @@ env:
 
   # --- DOCKER ENV CONTEXT --- #
 
-  DOC_APP_PATH: /keg/keg-cli
+  DOC_APP_PATH: /keg/keg-hub
+
+  # Disable pulling the base image. Other images should pull from this one
+  KEG_IMAGE_PULL_POLICY: never
 
   # Image ENVs
   IMAGE: keg-base
