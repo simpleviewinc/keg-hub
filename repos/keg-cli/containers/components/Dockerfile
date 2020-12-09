@@ -2,7 +2,7 @@
 # Must come before the FROM directive
 ARG KEG_NODE_VERSION
 ARG NODE_IMAGE_FROM=node:$KEG_NODE_VERSION
-ARG KEG_BASE_IMAGE=${KEG_BASE_IMAGE:-docker.pkg.github.com/simpleviewinc/keg-packages/keg-base:develop}
+ARG KEG_BASE_IMAGE=keg-base:develop
 FROM $KEG_BASE_IMAGE as keg-builder
 
 # ------- Components Build Stage ------- #
@@ -28,10 +28,9 @@ RUN apk add --no-cache git bash sudo; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     rm -rf /var/cache/apk/*; \
-    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
-    cd /keg/keg-components; \
-    yarn install; \
-    yarn cache clean
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
+
+RUN yarn install --pure-lockfile
 
 # Copy over keg-hub node_modules from keg-builder AFTER running yarn install
 COPY --from=keg-builder /keg-hub/repos/keg-cli/containers/components/run.sh /keg/keg-components/run.sh
