@@ -1,6 +1,6 @@
 # Allows overwriting where the base image is pulled from
 # Must come before the FROM directive
-ARG KEG_IMAGE_FROM=keg-base:latest
+ARG KEG_IMAGE_FROM=keg-base:develop
 ARG KEG_NODE_VERSION
 ARG GIT_STAGE_IMAGE_FROM=node:$KEG_NODE_VERSION
 
