@@ -15,7 +15,7 @@ const { getContainerConst } = require('KegUtils/docker/getContainerConst')
  * @returns {boolean} - Does the image object have a matching baseFromTag tag
  */
 const checkMatchingTag = (image, baseFromTag) => {
-  return image.tag === baseFromTag || image.tags && image.tag.includes(baseFromTag)
+  return image.tag === baseFromTag || image.tags && image.tags.includes(baseFromTag)
 }
 
 /**
@@ -36,7 +36,6 @@ const getBaseTag = (params, buildContext) => {
   const fromTag = fromImg.includes(':') && fromImg.split(':')[1]
 
   return fromTag || get(params, 'env') || getSetting('defaultEnv')
-
 }
 
 /**
@@ -57,8 +56,9 @@ const buildBaseImg = async args => {
   const exists = await docker.image.exists(baseName)
 
   // Get the base from tag, and check if it matches the found image tag
-  // If it does, then return true
+  // If it does, then we have the correct base image, so no need to build 
   const baseTag = exists && getBaseTag(args.params, buildContext)
+
   if(baseTag && checkMatchingTag(exists, baseTag)) return true
 
   Logger.empty()

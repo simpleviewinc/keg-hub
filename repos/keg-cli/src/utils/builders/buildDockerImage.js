@@ -1,6 +1,4 @@
-const { get } = require('@keg-hub/jsutils')
 const { runInternalTask } = require('../task/runInternalTask')
-const { checkAddLatestTag } = require('../helpers/checkAddLatestTag')
 
 /**
  * Calls the internal task to build the image for the passed in context
@@ -11,13 +9,11 @@ const { checkAddLatestTag } = require('../helpers/checkAddLatestTag')
  *
  * @returns {void}
  */
-const buildDockerImage = async (args, context, tap) => {
-  const builtImage = await runInternalTask(`tasks.docker.tasks.build`, {
+const buildDockerImage = (args, context, tap) => {
+  return runInternalTask(`tasks.docker.tasks.build`, {
     ...args,
     params: { ...args.params, context, tap },
   })
-
-  return checkAddLatestTag(builtImage, get(args, '__internal.addLatestTag') === true)
 }
 
 module.exports = {
