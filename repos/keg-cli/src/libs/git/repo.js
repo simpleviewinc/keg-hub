@@ -1,6 +1,6 @@
 const { gitCli, gitCmd } = require('./commands')
 const { getLogArgs, getFetchArgs, getCheckoutArgs } = require('./helpers')
-
+const { isStr, isBool } = require('@keg-hub/jsutils')
 class Repo {
 
   constructor(git, options){
@@ -64,7 +64,8 @@ class Repo {
   }
 
   /**
-  * Fetches branches from a remote
+  * Fetches all branches from a remote
+  * <br/>Then loop over them and setup the remote branch to be tracked by the local branch
   * @memberof Git
   * @function
   * @param {string} params.location - Location to check
@@ -72,10 +73,32 @@ class Repo {
   *
   * @returns {void}
   */
-  fetch = ({ location=process.cwd(), env, log, ...params }, cmdOpts) => {
-    cmdOpts = location ? { ...cmdOpts, cwd: location } : cmdOpts
+  fetch = async ({ location=process.cwd(), env, log, ...params }, extraOpts) => {
+    const cmdOpts = location ? { ...extraOpts, cwd: location } : extraOpts
 
-    return gitCmd(`fetch ${ getFetchArgs(params) }`.trim(), cmdOpts, log)
+    const response = await gitCmd(`fetch ${ getFetchArgs(params) }`.trim(), cmdOpts, log)
+    // response is the exit code from the git command
+    // So if it is anything other then 0, then there was an error. We just want to return it
+    if(response) return response
+
+    // Get the remote branches to setup tracking
+    const remoteBranches = await this.git.branch.listRemote(location)
+
+    // Loop over each remote branch and set it up to be tracked by the local branch
+    return Promise.all(
+      remoteBranches.map(branch => {
+        try {
+          return gitCli({
+            opts: `branch --track ${branch.name} ${branch.remote}/${branch.name}`,
+            ...params,
+            log: false,
+            skipError: true,
+          }, cmdOpts)
+        }
+        // If tracking fails, we don't really care, so just catch an return
+        catch(err){ return false }
+      })
+    )
   }
 
   checkout = ({ location=process.cwd(), env, log, ...params }, cmdOpts) => {
@@ -84,6 +107,19 @@ class Repo {
   }
 
 
+  commitHash = async ({location=process.cwd(), rev='-1', pretty=true, ...options}, cmdOpts) => {
+    const opts = [ 'log', rev ]
+    isStr(pretty)
+      ? opts.push(`--pretty=${pretty}`)
+      : isBool(pretty) && opts.push(`--pretty=%h`)
+
+    const resp = await gitCli({
+      opts,
+      ...options,
+    }, cmdOpts, location)
+
+    return resp && resp.trim()
+  }
 
 }
 

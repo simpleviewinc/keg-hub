@@ -1,5 +1,5 @@
 const { checkBoolValue } = require('./checkBoolValue')
-const { toBool, toNum } = require('@keg-hub/jsutils')
+const { toBool, toNum, isArr, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Convert JSON string into object, wrapped in a try / catch.
@@ -18,6 +18,25 @@ const parseJSON = (str, logError=true) => {
 }
 
 /**
+ * Convert the passed in value to an array
+ * <br/>If it can't convert to an array, it returns an empty array
+ * @function
+ * @param {string} value - Data passed from cmd line
+ */
+const valueToArray = value => {
+  const parsedArray = parseJSON(value, false)
+  return isArr(parsedArray)
+    ? parsedArray
+    : isArr(value)
+      ? value
+      : isStr(value)
+        ? value.split(',')
+        : value
+          ? [value]
+          : []
+}
+
+/**
  * Convert the passed in value to a type based on the meta
  * @function
  * @param {string} key - Option key from the task
@@ -31,7 +50,7 @@ const checkValueType = (key, value, meta) => {
   switch(meta.type.toLowerCase()){
     case 'arr':
     case 'array': {
-      return parseJSON(value, false) || value && value.split(',')
+      return valueToArray(value)
     }
     case 'obj':
     case 'object': {

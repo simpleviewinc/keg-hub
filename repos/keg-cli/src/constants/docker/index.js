@@ -11,7 +11,6 @@ const {
 
 const DOCKER = {
   ...require('./machine'),
-  ...require('./volumes'),
   IMAGES: images,
   CLI_KEY_MAP: cliKeyMap,
   MUTAGEN_MAP: mutagenMap,
