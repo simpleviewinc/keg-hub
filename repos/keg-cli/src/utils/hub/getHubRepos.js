@@ -153,10 +153,12 @@ const runCmdAsync = async (repos, hubReposPath, args) => {
  * Loads information about the repos in the keg-hub/repos folder
  * @function
  * @param {Object} args - Define how the repos information should be gathered
- * @param {Object} args.context - Filter which repos should be returned
+ * @param {string} args.context - Filter which repos should be returned (keg, retheme, components, etc)
  * @param {Object} args.callback - Callback method to override the default
  * @param {Object} args.format - Repo format the method should respond with
- *
+ * @param {Boolean} args.sync - whether to run the cmd synchronously or not
+ * @param {Boolean} args.full
+ * 
  * @returns {Array} - Group of promises resolving to formatted repo information
  */
 const getHubRepos = async (args={}) => {

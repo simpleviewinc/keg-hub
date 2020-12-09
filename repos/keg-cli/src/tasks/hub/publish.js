@@ -2,7 +2,7 @@ const { publishService } = require('KegUtils/services/publishService')
 const { generalError } = require('KegUtils/error/generalError')
 
 /**
- * Run package.json scripts in keg-hub repos
+ * Push Keg Hub repos to NPM and Github
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
  * @param {Array} args.options - arguments passed from the command line

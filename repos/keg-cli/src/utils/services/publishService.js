@@ -9,7 +9,7 @@ const { runRepoScript } = require('../hub/runRepoScript')
 const { throwPublishError } = require('../error/throwPublishError')
 const { getPublishContext } = require('../publish/getPublishContext')
 const { getPublishContextOrder } = require('../publish/getPublishContextOrder')
-
+const { isValidSemver } = require('../version/validateVersion')
 /**
  * Attempts to rollback changes made to a repo using git
  * @function
@@ -58,6 +58,17 @@ const confirmPublish = async context => {
   
   Logger.warn(`Publish with config ${context} cancelled!`)
   process.exit(0)
+}
+
+/**
+ * gets a valid semver input (minor, major, patch, 1.0.0, etc.)
+ * @function
+ *
+ * @returns {string} - valid semver value
+ */
+const getValidSemver = async () => {
+  const resp = await ask.input(`Please enter a valid version:`)  
+  return isValidSemver(resp) && resp
 }
 
 /**
@@ -199,7 +210,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
     // Publish to NPM
     publishArgs.step = [ 4, 'publish']
     logFormal(repo, `Running yarn publish...`)
-    publish && await runRepoScript(repo, `publish --access ${access}`, scriptError(`publish`))
+    //publish && await runRepoScript(repo, `publish --access ${access}`, scriptError(`publish`))
 
     return true
 
@@ -240,7 +251,6 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
 
       publishArgs.step = [ 0, 'version']
       // Update the version of the repos
-      // validate if newVersion DNE
       const { newVersion } = version
         ? await versionService(
             { params },
@@ -274,6 +284,7 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
  * <br/>Attempts to publish all repos defined in teh loaded publishContext
  * @function
  * @param {Object} args - All arguments passed to the Keg-CLI publish task
+ * @param {Object} args.params - Options passed from the command line
  * @param {Object} publishArgs - Extra arguments to defined how the repos should be published
  * 
  * @returns {Array} - All published repos
@@ -283,10 +294,12 @@ const publishService = async (args, publishArgs) => {
   const { context, version } = params
 
   await confirmPublish(context)
+  const newVersion = !version
+    ? await getValidSemver()
+    : version
 
   // Get all repos / package.json
   const repos = await getHubRepos({
-    ...params,
     sync: true,
     context: 'all',
     full: true,
@@ -296,12 +309,14 @@ const publishService = async (args, publishArgs) => {
 
   // Get the publish context from the globalConfig, and merge with passed in publish args
   const publishContext = getPublishContext(globalConfig, context, publishArgs)
+  console.log(publishContext, 'pubContext')
 
   // Get all the repo's to be published
   const toPublish = getPublishContextOrder(repos, publishContext, params)
+  console.log(toPublish, 'toPublish')
 
   // Update the version of the repos, and 
-  await runPublishContext(toPublish, repos, params, publishContext)
+  await runPublishContext(toPublish, repos, {...params, version: newVersion}, publishContext)
 
 }
 
