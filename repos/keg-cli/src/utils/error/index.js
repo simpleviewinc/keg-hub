@@ -1,6 +1,7 @@
 module.exports = {
   ...require('./generalError'),
   ...require('./mutagenSyncExists'),
+  ...require('./throwComposeFailed'),
   ...require('./throwContainerNotFound'),
   ...require('./throwDockerCreds'),
   ...require('./throwDupContainerName'),
