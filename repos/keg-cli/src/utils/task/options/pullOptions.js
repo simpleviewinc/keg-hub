@@ -9,7 +9,7 @@ const pullOptions = (task, action) => {
     },
     tap: {
       description: 'Name of the tap to pull. Only needed if "context" argument is "tap"',
-      example: 'keg ${ task } pull --tap visitapps',
+      example: 'keg ${ task } pull --tap <name-of-linked-tap>',
     },
     provider: {
       description: 'Override the url of the docker provider',
@@ -24,11 +24,6 @@ const pullOptions = (task, action) => {
     branch: {
       description: 'Name of branch name to use as the tag',
       example: 'keg ${ task } pull --branch develop',
-    },
-    latest: {
-      description: 'Pull the latest docker image. Overrides branch, version, and tag',
-      example: 'keg ${ task } pull --latest',
-      default: false
     },
     tag: {
       description: 'Specify the tag tied to the image being pushed',

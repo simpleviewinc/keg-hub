@@ -1,12 +1,10 @@
-const { get, mapObj, isObj } = require('@keg-hub/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { DOCKER } = require('KegConst/docker')
-const { getContainerConst } = require('../getContainerConst')
 const { throwWrap } = require('KegUtils/error/throwWrap')
-const { generalError } = require('KegUtils/error/generalError')
-const { throwNoGitBranch } = require('KegUtils/error/throwNoGitBranch')
+const { get, mapObj, isObj } = require('@keg-hub/jsutils')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { throwNoGitBranch } = require('KegUtils/error/throwNoGitBranch')
+const { getTagFromBranchEnv } = require('KegUtils/getters/getTagFromBranchEnv')
 
 /**
  * Helper to call an internal task to get the current branch name
@@ -39,55 +37,15 @@ const getGitBranch = async args => {
  *
  * @returns {string} - Validated docker image tag
  */
-const validateProviderTag = args => {
+const buildProviderTag = args => {
   mapObj(args, (key, value) => !value && throwWrap(
     `Could not build image tag for provider.`,
     `Missing value for "${key}"!`
   ))
 
-  return `${ args.url }/${ args.name }:${ args.version }`.toLowerCase()
+  return `${ args.url }/${ args.name }:${ args.tag }`.toLowerCase()
 }
 
-/**
- * Builds the version tag, and adds it to the docker image
- * @param {Object} image - Docker API image object
- * @param {string} context - Docker context to get the version for the image
- * @param {string} url - Docker repository url of the provider
- * @param {string} name - Name of image that will be pushed
- *
- * @returns {string} - Name if the remote git repo
- */
-const buildVersionTag = async (image, context, url, name, tag, branch) => {
-
-  // Use the passed in tag if it's not latest
-  // Otherwise get the container version to build the docker url tag
-  const version = tag && tag !== 'latest'
-    ? tag
-    : branch.name === 'master'
-      ? getContainerConst(context, `ENV.VERSION`)
-      : branch.name
-
-
-  // Ensure we have a version to tag the image with
-  !version && generalError(`Can not tag image with invalid version "${ version || tag }"`)
-
-  // Build the tag to be added to the image
-  const tagVersion = validateProviderTag({
-    url,
-    name,
-    version,
-  })
-
-  // Then call command to add the tag to the image
-  await docker.image.tag({
-    image,
-    log: true,
-    provider: true,
-    tag: tagVersion,
-  })
-
-  return tagVersion
-}
 
 /**
  * Builds the latest tag for the master branch, and adds it to the docker image
@@ -95,24 +53,24 @@ const buildVersionTag = async (image, context, url, name, tag, branch) => {
  *
  * @returns {string} - Name if the remote git repo
  */
-const buildLatestTag = async (image, url, tag, branch, name) => {
-
+const addImageTag = async (image, url, tag, name) => {
   // Check if the latest tag should be added to the image
   // Should only be added when the branch is master
-  const tagLatest = tag === 'latest' && branch.name === 'master' &&
-    validateProviderTag({
-      url,
-      name,
-      version: tag,
-    })
+  const addTag = buildProviderTag({
+    tag,
+    url,
+    name: image.repository,
+  })
 
   // Add the latest tag if needed
-  tagLatest && await docker.image.tag({
+  addTag && await docker.image.tag({
     image,
     log: true,
     provider: true,
-    tag: tagLatest,
+    tag: addTag,
   })
+
+  return addTag
 }
 
 /**
@@ -125,27 +83,28 @@ const buildLatestTag = async (image, url, tag, branch, name) => {
  */
 const addProviderTags = async (image, url, args) => {
   const { params } = args
-  const { context, tag } = params
+  const { context, tag, env } = params
 
   // Check the name and a tag within the context, or use the passed in context and tag
-  const [ nameRef, tagRef ] = context.indexOf(':') !== -1 ? context.split(':') : [ context, tag ]
+  const [ __, tagRef ] = context.includes(':')
+    ? context.split(':')
+    : [ null, tag ]
 
-  // Get the branch name 
-  const branch = await getGitBranch(args)
+  // Get the branch name if no tag reference exists
+  const branch = !tagRef && await getGitBranch(args)
 
-  const name = image.repository
+  // If we have a branch name, check if it's a version of the env
+  // If it is use, the env as the tag, otherwise use the branch name
+  const addTag = tagRef || getTagFromBranchEnv(branch) || branch
 
-  // Build the version tag, and add it to the docker image
-  const tagVersion = await buildVersionTag(image, nameRef, url, name, tagRef, branch)
-
-  // Build the latest tag
-  await buildLatestTag(image, url, tagRef, branch, name)
+  // Build the full tag with the url and image added to it
+  const addedTag = await addImageTag(image, url, addTag)
 
   // If we don't throw, then the tag was successful
-  Logger.success(`Tagged "${nameRef}" image successfully!`)
+  Logger.success(`Tagged "${image.repository}" image successfully!`)
   Logger.empty()
 
-  return tagVersion
+  return addedTag
 
 }
 

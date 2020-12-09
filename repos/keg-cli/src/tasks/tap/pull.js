@@ -13,12 +13,12 @@ const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
  * @returns {void}
  */
 const pullTap = async (args) => {
-  const { params: { tap, branch, tag, version } } = args
+  const { params: { tap, branch, tag, version, env } } = args
 
   return pullService(
     { ...args, __internal: { ...args.__internal, forcePull: true }},
-    // For taps, default to the latest, when no tag, version or branch is passed
-    { tap, context: 'tap', tag: tag || version || branch || 'latest' }
+    // For taps, default to the current env, when no tag, version or branch is passed
+    { tap, context: 'tap', tag: tag || version || branch || env }
   )
 
 }

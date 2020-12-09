@@ -1,6 +1,6 @@
 ARG KEG_NODE_VERSION
-ARG BASE_IMAGE_FROM=node:$KEG_NODE_VERSION
-FROM $BASE_IMAGE_FROM as keg-builder
+ARG KEG_BASE_IMAGE=node:$KEG_NODE_VERSION
+FROM $KEG_BASE_IMAGE as keg-builder
 
 WORKDIR /
 
@@ -21,7 +21,7 @@ ARG KEG_COPY_LOCAL
 ARG GIT_HUB_URL=https://github.com/simpleviewinc/keg-hub.git
 ARG GIT_HUB_BRANCH=develop
 
-# Pull down the latest from  git hub it the
+# Pull down the from github if KEG_COPY_LOCAL is not set
 RUN if [ -z "$KEG_COPY_LOCAL" ]; then \
       git clone --single-branch --branch $GIT_HUB_BRANCH $GIT_HUB_URL /keg-hub; \
     else \
@@ -116,7 +116,7 @@ RUN if [ -d "/keg-hub/repos/keg-core" ]; then \
 # ------- Final Build Stage ------- #
 
 # Use a multi stage build for security
-FROM $BASE_IMAGE_FROM AS final-build
+FROM $KEG_BASE_IMAGE AS final-build
 
 WORKDIR /
 

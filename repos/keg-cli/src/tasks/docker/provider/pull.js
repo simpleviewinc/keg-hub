@@ -2,12 +2,12 @@ const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
 const { get, } = require('@keg-hub/jsutils')
-const { getRepoPath } = require('KegUtils/getters/getRepoPath')
 const { getTagName } = require('KegUtils/getters/getTagName')
+const { getRepoPath } = require('KegUtils/getters/getRepoPath')
+const { getFromImage } = require('KegUtils/getters/getFromImage')
 const { buildProviderUrl } = require('KegUtils/docker/buildProviderUrl')
 const { buildCmdContext } = require('KegUtils/builders/buildCmdContext')
 const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
-const { getFromImage } = require('KegUtils/getters/getFromImage')
 
 /**
  * Pulls an image locally from a configured registry provider in the cloud
@@ -25,7 +25,6 @@ const providerPull = async args => {
   const { globalConfig, params, task } = args
   const {
     branch,
-    latest,
     context,
     version,
     __injected,
