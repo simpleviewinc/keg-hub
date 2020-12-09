@@ -116,6 +116,7 @@ module.exports = {
     action: dockerBuild,
     description: `Runs docker build command for a container`,
     example: 'keg docker build <options>',
+    locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     options: mergeTaskOptions(`docker`, `build`, `build`, {
       context: {
         alias: [ 'name' ],
