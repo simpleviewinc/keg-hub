@@ -90,7 +90,9 @@ class Repo {
         try {
           return gitCli({
             opts: `branch --track ${branch.name} ${branch.remote}/${branch.name}`,
-            ...options,
+            ...params,
+            log: false,
+            skipError: true,
           }, cmdOpts)
         }
         // If tracking fails, we don't really care, so just catch an return
