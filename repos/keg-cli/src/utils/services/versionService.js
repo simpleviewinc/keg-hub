@@ -31,8 +31,24 @@ const updateRepoVersion = async (repo, version, publishContext) => {
   return updateVersion
 }
 
-const versionService = async (args, { publishContext, repo, repos }) => {
+/**
+ * Gets a valid version number to upgrade to for the repo
+ * @function
+ * 
+ * @param {Object} args 
+ * @param {Object} args.params - Options passed from the command line
+ * @param {string} args.params.version - semver version to be used
+ * @param {string} args.params.context
+ * @param {Object} repoData
+ * @param {Object} repoData.publishContext - Object from the global config that defines the repos to be published
+ * @param {Object} repoData.repo - current repo to upgrade
+ * @param {Array<string>} repoData.repos - all found repo names
+ * 
+ * @returns {{newVersion:string, publishContext:Object}} - {newVersion: new version to upgrade to, publishContext}
+ */
+const versionService = async (args, repoData) => {
   const { params } = args
+  const { publishContext, repo, repos } = repoData
   const { version, context } = params
 
   publishContext = (publishContext || get(globalConfig, `publish.${context}`))
