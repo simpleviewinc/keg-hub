@@ -39,6 +39,7 @@
     "cli-progress": "3.8.2",
     "cli-spinners": "2.3.0",
     "colors": "1.4.0",
+    "fs-extra": "9.0.1",
     "js-yaml": "3.14.0",
     "log-update": "4.0.0",
     "module-alias": "2.2.2",
