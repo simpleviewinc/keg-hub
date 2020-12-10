@@ -84,7 +84,7 @@ const versionService = async (args, repoData) => {
   if(!otherRepos || !otherRepos.length)
     return Logger.log(`Could not find any repos to update the dependency version!`)
 
-    // Update all other repos that have the current repo as a dependency
+  // Update all other repos that have the current repo as a dependency
   await updateVersionInDependencies(
     get(repo, 'package.name'),
     repos,

@@ -1,3 +1,4 @@
+const fs = require('fs-extra')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { ask } = require('@keg-hub/ask-it')
@@ -194,14 +195,14 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
     }
 
     // Install all dependencies
-    publishArgs.step = [ 1, 'install']
-    logFormal(repo, `${install ? 'Running' : 'Skipping'} yarn install...`)
-    install && await runRepoScript(repo, `install`, scriptError(`install`))
+    // publishArgs.step = [ 1, 'install']
+    // logFormal(repo, `${install ? 'Running' : 'Skipping'} yarn install...`)
+    // install && await runRepoScript(repo, `install`, scriptError(`install`))
 
     // Run the repos tests
     publishArgs.step = [ 2, 'test']
     logFormal(repo, `${test ? 'Running' : 'Skipping'} yarn test...`)
-    test && await runRepoScript(repo, `test`, scriptError(`test`))
+    // test && await runRepoScript(repo, `test`, scriptError(`test`))
 
     // Build the repo
     publishArgs.step = [ 3, 'build']
@@ -226,6 +227,29 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 }
 
 /**
+ * Copies over new build files to the current repos node_modules
+ * @param {Object} currentRepo 
+ * @param {Array} repos - array of all repos
+ */
+const copyBuildFiles = (currentRepo, repos) => {
+  logFormal(currentRepo, `Copying dependency build files`)
+  repos.map((repo) => {
+    const packageName = get(repo, 'package.name')
+    // check if current repo's deps contain last repo as dependencies
+    if(get(currentRepo, `package.dependencies.${packageName}`)
+      || get(currentRepo, `package.peerDependencies.${packageName}`)
+      || get(currentRepo, `package.devDependencies.${packageName}`)
+    ) {
+      // copy over /build folder from previous repo
+      const from = `${get(repo, 'location')}/build`
+      const to = `${get(currentRepo, 'location')}/node_modules/${packageName}/build`
+      fs.emptyDirSync(to)
+      fs.copySync(from, to, {overwrite: true})
+    }
+  })
+}
+
+/**
  * Runs yarn and git commands to publish the repos defined in the publish context
  * @function
  * @param {Object} globalConfig - Global cli config object
@@ -242,7 +266,8 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
 
-  return toPublish.reduce(async (toResolve, repo) => {
+
+  return toPublish.reduce(async (toResolve, repo, index) => {
     const updated = await toResolve
     const publishArgs = {}
 
@@ -250,7 +275,10 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
       // Get the current git branch
       publishArgs.originalBranch = await runGitCmd(`rev-parse --abbrev-ref HEAD`, repo.location)
 
-      publishArgs.step = [ 0, 'version']
+      // copy over new dependent build files to current repo node_modules
+      index > 0 && copyBuildFiles(repo, toPublish.slice(0, index))
+
+      publishArgs.step = [ 1, 'version']
       // Update the version of the repos
       const { newVersion } = version
         ? await versionService(
@@ -271,6 +299,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
     }
     catch(err){
+      console.log(err)
       Logger.error(`Error publishing ${repo.repo}`)
       return rollbackChanges(repo, publishArgs)
     }
@@ -311,7 +340,16 @@ const publishService = async (args, publishArgs) => {
 
   // Get all the repo's to be published
   const toPublish = getPublishContextOrder(repos, publishContext, params)
-
+  
+  // run yarn install on all toPublish repos prior to any package json updates
+  // then we can just copy over new build files to their node_modules
+  // for cases when: 1. publish == false; 2. possible install delay after publishing to npm
+  const { install } = publishContext.tasks
+  await Promise.all(toPublish.map(async (repo) => {
+    logFormal(repo, `${install ? 'Running' : 'Skipping'} yarn install...`)
+    install && await runRepoScript(repo, `install`)
+  }))
+  console.log(toPublish)
   // Update the version of the repos, commit and publish based on the publishContext
   // return a list of updated repos
   const updatedRepos = await publishRepos(globalConfig, toPublish, repos, {...params, version: newVersion}, publishContext)
