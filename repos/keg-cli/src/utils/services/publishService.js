@@ -181,6 +181,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
     publish,
     access='public',
   } = publishContext.tasks
+  const { newVersion } = publishArgs
 
   try {
     // Callback when an error is throw for a repo script
@@ -194,23 +195,23 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 
     // Install all dependencies
     publishArgs.step = [ 1, 'install']
-    logFormal(repo, `Running yarn install...`)
+    logFormal(repo, `${install ? 'Running' : 'Skipping'} yarn install...`)
     install && await runRepoScript(repo, `install`, scriptError(`install`))
 
     // Run the repos tests
     publishArgs.step = [ 2, 'test']
-    logFormal(repo, `Running yarn test...`)
+    logFormal(repo, `${test ? 'Running' : 'Skipping'} yarn test...`)
     test && await runRepoScript(repo, `test`, scriptError(`test`))
 
     // Build the repo
     publishArgs.step = [ 3, 'build']
-    logFormal(repo, `Running yarn build...`)
+    logFormal(repo, `${build ? 'Running' : 'Skipping'} yarn build...`)
     build && await runRepoScript(repo, `build`, scriptError(`build`))
 
     // Publish to NPM
     publishArgs.step = [ 4, 'publish']
-    logFormal(repo, `Running yarn publish...`)
-    //publish && await runRepoScript(repo, `publish --access ${access}`, scriptError(`publish`))
+    logFormal(repo, `${publish ? 'Running' : 'Skipping'} yarn publish...`)
+    publish && await runRepoScript(repo, `publish --access ${access} --new-version ${newVersion}`, scriptError(`publish`))
 
     return true
 
