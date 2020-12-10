@@ -349,7 +349,7 @@ const publishService = async (args, publishArgs) => {
     logFormal(repo, `${install ? 'Running' : 'Skipping'} yarn install...`)
     install && await runRepoScript(repo, `install`)
   }))
-  console.log(toPublish)
+
   // Update the version of the repos, commit and publish based on the publishContext
   // return a list of updated repos
   const updatedRepos = await publishRepos(globalConfig, toPublish, repos, {...params, version: newVersion}, publishContext)
