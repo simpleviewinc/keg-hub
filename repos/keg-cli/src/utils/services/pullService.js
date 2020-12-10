@@ -42,7 +42,8 @@ const pullService = async (args, argsExt) => {
     params: { ...serviceArgs.params, build: buildImage }
   })
 
-  return true
+  // Return if a new image was built, or a new image was pulled
+  return buildImage || newBaseImg
 }
 
 module.exports = {

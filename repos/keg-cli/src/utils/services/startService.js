@@ -1,4 +1,4 @@
-const { get, set } = require('@keg-hub/jsutils')
+const { get, set, exists } = require('@keg-hub/jsutils')
 const { composeService } = require('./composeService')
 const { pullService } = require('./pullService')
 const { proxyService } = require('./proxyService')
@@ -33,7 +33,7 @@ const startService = async (args, exArgs) => {
       build: false,
       // If a new image was pulled, set recreate params to true
       // To ensure new containers are created
-      recreate: shouldRecreate
+      recreate: shouldRecreate || get(args, 'params.recreate', false)
     }
   }, exArgs)
 
