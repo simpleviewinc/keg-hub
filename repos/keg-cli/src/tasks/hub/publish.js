@@ -1,6 +1,24 @@
 const { publishService } = require('KegUtils/services/publishService')
-const { generalError } = require('KegUtils/error/generalError')
+const { Logger } = require('KegLog')
+const {get} = require('@keg-hub/jsutils')
 
+/**
+ * Logs the summary for the publish task
+ * @param {Array} param.repos 
+ * @param {Array} param.publishContext
+ */
+const logSummary = ({repos, publishContext}) => {
+  Logger.empty()
+  Logger.header(`Publish Summary`)
+  Logger.table(repos.map((repo) => {
+    return {
+      name: repo.repo, 
+      newVersion: get(repo, 'newVersion'),
+      published: get(publishContext, 'tasks.publish')
+    }
+  }))
+  Logger.empty()
+}
 /**
  * Push Keg Hub repos to NPM and Github
  * @param {Object} args - arguments passed from the runTask method
@@ -13,8 +31,7 @@ const { generalError } = require('KegUtils/error/generalError')
  */
 const hubPublish = async args => {
 
-  await publishService(args)
-
+  logSummary(await publishService(args))
   return true
 
 }

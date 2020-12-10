@@ -8,6 +8,16 @@ const { updateVersionInDependencies } = require('../version/updateVersionInDepen
 
 let cachedVersion
 
+/**
+ * Update the package.json of the repo for new version
+ * @function
+ * 
+ * @param {Object} repo - current repo to upgrade 
+ * @param {string} version - semver version to be used 
+ * @param {Object} publishContext - Object from the global config that defines the repos to be published 
+ * 
+ * @returns {string} - version to update to
+ */
 const updateRepoVersion = async (repo, version, publishContext) => {
   const { dependent } = publishContext
 
@@ -36,6 +46,7 @@ const updateRepoVersion = async (repo, version, publishContext) => {
  * @function
  * 
  * @param {Object} args 
+ * @param {Object} args.globalConfig - Global cli config object
  * @param {Object} args.params - Options passed from the command line
  * @param {string} args.params.version - semver version to be used
  * @param {string} args.params.context
@@ -47,9 +58,9 @@ const updateRepoVersion = async (repo, version, publishContext) => {
  * @returns {{newVersion:string, publishContext:Object}} - {newVersion: new version to upgrade to, publishContext}
  */
 const versionService = async (args, repoData) => {
-  const { params } = args
-  const { publishContext, repo, repos } = repoData
+  const { params, globalConfig } = args
   const { version, context } = params
+  let { publishContext, repo, repos } = repoData
 
   publishContext = (publishContext || get(globalConfig, `publish.${context}`))
   !publishContext && generalError(`Publish context ${context} does not exist!`)

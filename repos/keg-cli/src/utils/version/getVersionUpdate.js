@@ -25,7 +25,7 @@ const getVersionUpdate = async (repo, version, publishContext) => {
       ? await ask.input(`Please enter the new version for ${publishContext.name}?`)
       : version
 
-  return validateVersion(publishContext, updateVersion, packageVersion, true)
+  return await validateVersion(publishContext, updateVersion, packageVersion, true)
     ? updateVersion
     : Logger.warn(`Canceled version update for publish context ${publishContext.name}!`)
 
