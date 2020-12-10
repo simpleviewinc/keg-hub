@@ -153,7 +153,7 @@ const gitBranchCommitUpdates = async (repo, publishContext, publishArgs, updated
   catch(err){
     Logger.error(`Error creating git branch`, err.stack)
     // Add rollback call here
-  await rollbackChanges(repo, publishArgs)
+    await rollbackChanges(repo, publishArgs)
   }
 
   // Add the update to updated, so we know this repo was published
@@ -216,7 +216,6 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 
   }
   catch(err){
-    // throwPublishError(publishContext, repo, script)
     Logger.error(`Error publishing ${repo.repo}`)
     await rollbackChanges(repo, publishArgs)
 
@@ -228,15 +227,16 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 /**
  * Runs yarn and git commands to publish the repos defined in the publish context
  * @function
+ * @param {Object} globalConfig - Global cli config object
  * @param {Array} toPublish - Repos to be published
  * @param {Array} repos - All found repos
  * @param {Object} params - Options passed from the command line
  * @param {Object} publishContext - Object from the global config that defines the repos to be published
  * 
- * @returns {Array} - All published repos
+ * @returns {Array} - All updated/published repos
  */
-const runPublishContext = (toPublish, repos, params={}, publishContext) => {
-  const { version, git } = publishContext.tasks
+const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
+  const { version, git=false } = publishContext.tasks
 
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
@@ -253,25 +253,23 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
       // Update the version of the repos
       const { newVersion } = version
         ? await versionService(
-            { params },
+            { params, globalConfig },
             { publishContext, repo, repos }
           )
         : {}
-
       publishArgs.newVersion = newVersion
       logFormal(repo, `Running publish service`)
-      publishArgs.wasPublished = await repoYarnCommands(repo, publishContext, publishArgs)
+      publishArgs.success = await repoYarnCommands(repo, publishContext, publishArgs)
 
       // Check if we should do the git updates, or just return the updated array
-      return !publishArgs.wasPublished
+      return !publishArgs.success
         ? false
         : git
           ? gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
-          : updated.concat([ repo, publishArgs ])
+          : updated.concat([ {...repo, ...publishArgs} ])
 
     }
     catch(err){
-      // throwPublishError(publishContext, repo, script)
       Logger.error(`Error publishing ${repo.repo}`)
       return rollbackChanges(repo, publishArgs)
     }
@@ -287,7 +285,7 @@ const runPublishContext = (toPublish, repos, params={}, publishContext) => {
  * @param {Object} args.params - Options passed from the command line
  * @param {Object} publishArgs - Extra arguments to defined how the repos should be published
  * 
- * @returns {Array} - All published repos
+ * @returns {{newVersion:string, repos:Array}} - returns all updated repos and the updated version
  */
 const publishService = async (args, publishArgs) => {
   const { params, globalConfig } = args
@@ -309,15 +307,18 @@ const publishService = async (args, publishArgs) => {
 
   // Get the publish context from the globalConfig, and merge with passed in publish args
   const publishContext = getPublishContext(globalConfig, context, publishArgs)
-  console.log(publishContext, 'pubContext')
 
   // Get all the repo's to be published
   const toPublish = getPublishContextOrder(repos, publishContext, params)
-  console.log(toPublish, 'toPublish')
 
-  // Update the version of the repos, and 
-  await runPublishContext(toPublish, repos, {...params, version: newVersion}, publishContext)
+  // Update the version of the repos, commit and publish based on the publishContext
+  // return a list of updated repos
+  const updatedRepos = await publishRepos(globalConfig, toPublish, repos, {...params, version: newVersion}, publishContext)
 
+  return {
+    repos: updatedRepos,
+    publishContext
+  }
 }
 
 module.exports = {
