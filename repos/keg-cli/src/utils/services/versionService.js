@@ -67,6 +67,8 @@ const versionService = async (args, repoData) => {
 
   !repo && generalError(`A repo is required to update it's version!`)
 
+  const { updateDeps } = publishContext.tasks
+
   const updateTo = await updateRepoVersion(repo, version, publishContext)
   if(!updateTo) return
 
@@ -82,11 +84,12 @@ const versionService = async (args, repoData) => {
   if(!otherRepos || !otherRepos.length)
     return Logger.log(`Could not find any repos to update the dependency version!`)
 
-  // Update all other repos that have the current repo as a dependency
+    // Update all other repos that have the current repo as a dependency
   await updateVersionInDependencies(
     get(repo, 'package.name'),
     repos,
-    updateTo
+    updateTo,
+    updateDeps
   )
 
   return { publishContext, newVersion: updateTo }
