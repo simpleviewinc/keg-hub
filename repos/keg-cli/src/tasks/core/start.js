@@ -26,13 +26,6 @@ module.exports = {
     action: startCore,
     description: `Runs keg-core in a docker container`,
     example: 'keg core start <options>',
-    options: mergeTaskOptions('core', 'start', 'startService', {
-      recreate: {
-        alias: [ 'rec', `create` ],
-        description: 'Force recreate all the docker containers for the core service',
-        example: 'keg core start --recreate',
-        required: false
-      }
-    }),
+    options: mergeTaskOptions('core', 'start', 'startService'),
   }
 }

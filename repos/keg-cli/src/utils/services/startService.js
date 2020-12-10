@@ -16,19 +16,26 @@ const { proxyService } = require('./proxyService')
  * @returns {*} - Response from the compose service
  */
 const startService = async (args, exArgs) => {
-
   // Call the build service to ensure required images are built 
-  const isPulled = await pullService(args, exArgs)
+  const shouldRecreate = await pullService(args, exArgs)
 
   // Call the proxy service to make sure that is running
   await proxyService(args)
 
-  // Update the build param so we don't rebuild the tap
-  // Setting it to false, tells it to NOT build the image
-  get(args, 'params.build') && set(args, 'params.build', !isPulled) 
-
-  // Call and return the compose server
-  return composeService(args, exArgs)
+  // Call and return the compose service
+  // Update the params based on if a new image was pulled or built
+  return composeService({
+    ...args,
+    params: {
+      ...args.params,
+      // Update the build param so we don't rebuild the image
+      // This is handled by the pull service, so turn it off moving forward
+      build: false,
+      // If a new image was pulled, set recreate params to true
+      // To ensure new containers are created
+      recreate: shouldRecreate
+    }
+  }, exArgs)
 
 }
 

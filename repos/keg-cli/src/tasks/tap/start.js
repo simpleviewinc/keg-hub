@@ -37,12 +37,6 @@ module.exports = {
         example: 'keg tap start --tap events-force',
         required: true,
       },
-      recreate: {
-        alias: [ 'rec', `create` ],
-        description: 'Force recreate all the docker containers for the tap service',
-        example: 'keg tap start --recreate',
-        required: false
-      }
     }),
   }
 }

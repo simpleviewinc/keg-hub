@@ -20,6 +20,7 @@ const pullService = async (args, argsExt) => {
   const serviceArgs = getServiceArgs(args, argsExt)
   const { __internal={}, params } = serviceArgs
   const { context, tap, pull, __injected } = params
+
   const cmdContext = Boolean(__injected) && tap || context
   const paramPull = exists(pull) ? Boolean(pull) : undefined
 
@@ -27,7 +28,7 @@ const pullService = async (args, argsExt) => {
   const { isNewImage:newBaseImg } = await checkPullBaseImage(serviceArgs, cmdContext, paramPull)
 
   // There are 3 cases where a new image should be built
-  // 1. A new base image is pulled
+  // 1. A new base image is pulled && and the context env KEG_FROM_BASE is NOT false
   // 2. The image for the context does not exist
   // 3. The build param was passed, meaning we should force the build
   // So we need to check all three, and if one is true then call the build service

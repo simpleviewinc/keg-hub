@@ -23,7 +23,6 @@ const composeArgs = {
     build: '--build',
     nobuild: '--no-build',
     nocreate:`--no-recreate`,
-    // TODO: Need to FORCE turn this on when a new image is pulled
     recreate: '--force-recreate',
     orphans: '--remove-orphans',
   }

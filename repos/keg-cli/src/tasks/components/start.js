@@ -27,13 +27,6 @@ module.exports = {
     action: startComponents,
     description: `Runs keg-components in a docker container`,
     example: 'keg components start <options>',
-    options: mergeTaskOptions('components', 'start', 'startService', {
-      recreate: {
-        alias: [ 'rec', `create` ],
-        description: 'Force recreate all the docker containers for the components service',
-        example: 'keg components start --recreate',
-        required: false
-      }
-    }),
+    options: mergeTaskOptions('components', 'start', 'startService'),
   }
 }
