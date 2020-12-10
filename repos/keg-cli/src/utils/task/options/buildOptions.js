@@ -45,7 +45,7 @@ const buildOptions = (task, action) => {
     from: fromImage(task, action),
     pull: {
       alias: [ 'pl' ],
-      description: `Pull the most recent image before building. Must be a 'boolean' or name of an image. Uses 'from' option, KEG_IMAGE_FROM ENV, global config setting, or true when not passed!`,
+      description: `Pull the most recent image before building. Gets image name through the 'from' option, KEG_BASE_IMAGE env, or a global config setting!`,
       example: `keg ${task} build --no-pull`,
       default: true
     },

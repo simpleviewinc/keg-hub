@@ -2,7 +2,7 @@ const { allowedTagOpts } = require('../../getters/getTagVarMap')
 
 const fromImage = (task, action) => ({
   alias: [ 'fr' ],
-  description: 'Image to use as the FROM directive when building. Overwrites KEG_IMAGE_FROM env when set. KEG_IMAGE_FROM env must be set as the FROM value in the Dockerfile.',
+  description: 'Image to use as the FROM directive when building. Overwrites KEG_BASE_IMAGE env when set. KEG_BASE_IMAGE env must be set as the FROM value in the Dockerfile.',
   example: `keg ${task} ${action} --from <custom-image-url>`,
 })
 

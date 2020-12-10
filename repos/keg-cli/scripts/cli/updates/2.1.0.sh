@@ -30,6 +30,7 @@ keg_cli_2_1_0_update(){
 
   keg cli env set --key GIT_HUB_URL --value https://github.com/simpleviewinc/keg-hub.git
   keg cli env set --key GIT_HUB_BRANCH --value develop
+  keg cli env set --key KEG_BASE_IMAGE --value docker.pkg.github.com/simpleviewinc/keg-packages/keg-base:develop
 
   # Update the globalConfig
   keg config set --key cli.settings.docker.imagePullPolicy --value Always --confirm false

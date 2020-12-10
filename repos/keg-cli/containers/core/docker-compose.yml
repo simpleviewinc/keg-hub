@@ -20,7 +20,6 @@ services:
       - DOC_RESOLVER_PATH
       - DOC_RETHEME_PATH
       - DOC_JSUTILS_PATH
-      - KEG_IMAGE_FROM
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL

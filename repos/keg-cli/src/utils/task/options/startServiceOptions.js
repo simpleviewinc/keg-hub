@@ -21,12 +21,12 @@ const startServiceOptions = (task='', action='') => {
     },
     pull: {
       alias: [ 'pl' ],
-      description: `Pull an image from a docker provider. Must be a 'boolean' or name of an image. Uses 'from' option or KEG_IMAGE_FROM env when value is a boolean`,
-      example: `keg ${ task } ${ action } --no-pull`,
+      description: `Pull the most recent image before building. Gets image name through the 'from' option, KEG_BASE_IMAGE env, or a global config setting!`,
+      example: `keg ${task} build --no-pull`,
       default: true
     },
     from: {
-      description: 'Image to use as the FROM directive when building. Overwrites KEG_IMAGE_FROM env when set. KEG_IMAGE_FROM env must be set as the FROM value in the Dockerfile.',
+      description: 'Image to use as the FROM directive when building. Overwrites KEG_BASE_IMAGE env when set. KEG_BASE_IMAGE env must be set as the FROM value in the Dockerfile.',
       example: `keg ${ task } ${ action } --from tap:production`,
     },
     command: {
