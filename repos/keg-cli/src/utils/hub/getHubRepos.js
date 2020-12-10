@@ -1,6 +1,7 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { executeCmd } = require('KegProc')
+const { readFileSync } = require('KegFileSys/fileSys')
 const { isFunc, pickKeys } = require('@keg-hub/jsutils')
 const { getRepoPath } = require('../getters/getRepoPath')
 const { generalError } = require('../error/generalError')
@@ -44,7 +45,8 @@ const findSubNodeModules = 'find * -maxdepth 0 -type d | grep -Ev \'^(_)|node_mo
  */
 const getPackageJson = (repoPath, repo) => {
   try {
-    return require(path.resolve(repoPath, 'package.json'))
+    const rawdata = readFileSync(path.resolve(path.resolve(repoPath, 'package.json')))
+    return JSON.parse(rawdata)
   }
   catch(error){
     Logger.warn(`Missing package.json file in keg-hub/repos folder "${repo}"!`)
@@ -62,7 +64,7 @@ const getPackageJson = (repoPath, repo) => {
  * @param {Object} args - Passed from the task caller
  * @param {Object} args.format - Repo format the method should respond with
  *
- * @returns {*} - Formatted repo information
+ * @returns {Object} - Formatted repo information
  */
 const buildRepo = (repo, hubReposPath, args) => {
   const { format, callback, full } = args
