@@ -15,7 +15,7 @@ ARG DOC_APP_PATH=/keg/keg-core
 ENV DOC_APP_PATH=$DOC_APP_PATH
 
 # Set the current directory to keg-core repo
-WORKDIR /keg/keg-core
+WORKDIR $DOC_APP_PATH
 
 # Add yarn's global bin to PATH
 ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
@@ -30,11 +30,9 @@ RUN apk add --no-cache git bash sudo; \
     rm -rf /var/cache/apk/*; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
 
-RUN yarn install --pure-lockfile
-
 # Copy over keg-hub node_modules from keg-builder AFTER running yarn install
 COPY --from=keg-builder /keg-hub/repos/keg-cli/containers/core/run.sh /keg/core-run.sh
-COPY --from=keg-builder /keg-hub/repos/keg-core/node_modules/@keg-hub /keg/keg-core/node_modules/@keg-hub
+COPY --from=keg-builder /keg-hub/repos/keg-core/node_modules $DOC_APP_PATH/node_modules
 
 # Update the permissions of the run script
 RUN chmod a+x /keg/core-run.sh

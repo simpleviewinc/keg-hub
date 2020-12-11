@@ -21,9 +21,6 @@ ARG KEG_DOCKER_IP
 # Will use the ip address of the docker container.
 ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
 
-# Path of the keg cli within the docker container
-ARG DOC_CLI_PATH=/keg/keg-cli
-
 # Path of the app within the docker container
 ARG DOC_APP_PATH=/keg/tap
 ENV DOC_APP_PATH=$DOC_APP_PATH
@@ -44,8 +41,9 @@ RUN apk add git bash sudo; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
 
 # Set the current directory to tap repo
-WORKDIR /keg/tap
+WORKDIR $DOC_APP_PATH
 
+# Install the dependcies
 RUN yarn install --pure-lockfile
 
 # Copy over keg-cli repo from keg-builder
