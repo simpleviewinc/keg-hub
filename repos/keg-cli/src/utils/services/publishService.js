@@ -165,7 +165,7 @@ const gitBranchCommitUpdates = async (repo, publishContext, publishArgs, updated
 }
 
 /**
- * Runs a set of yarn commands to install, test, build and publish a repo
+ * Runs a set of yarn commands to test, build and publish a repo
  * @function
  * @param {Object} repo - Repo object containing meta-data about the current repo
  * @param {Object} publishContext - Defines how the repo should be published
@@ -176,7 +176,6 @@ const gitBranchCommitUpdates = async (repo, publishContext, publishArgs, updated
 const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 
   const {
-    install,
     test,
     build,
     publish,
@@ -193,11 +192,6 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 
       return false
     }
-
-    // Install all dependencies
-    // publishArgs.step = [ 1, 'install']
-    // logFormal(repo, `${install ? 'Running' : 'Skipping'} yarn install...`)
-    // install && await runRepoScript(repo, `install`, scriptError(`install`))
 
     // Run the repos tests
     publishArgs.step = [ 2, 'test']

@@ -52,8 +52,7 @@
         "build": true,
         "version": true,
         "publish": false,
-        "commit": false,
-        "updateDeps": true
+        "commit": false
       }
     },
     "keg": {
