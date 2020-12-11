@@ -134,7 +134,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
 
     // Commit the changes
     publishArgs.step = [ 8, 'git-commit']
-    const message = `Updating ${context} to version ${newVersion}`
+    const message = `Updating-${context}-to-version-${newVersion}`
     await runGitCmd(`commit -m \"${message}\"`, repo.location)
 
     // Push the branch to github
@@ -143,7 +143,6 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
   }
   catch(err){
     Logger.error(`Error creating git branch`, err.stack)
-    // Add rollback call here
     await rollbackChanges(repo, publishArgs)
   }
 
