@@ -249,7 +249,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  * @param {Object} params - Options passed from the command line
  * @param {Object} publishContext - Object from the global config that defines the repos to be published
  * 
- * @returns {Array} - All updated/published repos
+ * @returns {Array|Boolean} - All updated/published repos or false if something failed
  */
 const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
   const { version, commit=false } = publishContext.tasks
@@ -280,7 +280,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
       publishArgs.newVersion = newVersion
       logFormal(repo, `Running publish service`)
       publishArgs.success = await repoYarnCommands(repo, publishContext, publishArgs)
-
+      console.log(`${repo.repo} - ${publishArgs.success}`)
       // Check if we should do the git updates, or just return the updated array
       return !publishArgs.success
         ? false
