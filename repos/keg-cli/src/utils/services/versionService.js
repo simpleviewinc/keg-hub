@@ -31,9 +31,9 @@ const updateRepoVersion = async (repo, versionNumber, publishContext) => {
   if(!isValidSemver(versionNumber) && dependent) process.exit(0)
 
   // Cache the version if it's dependant, so it can be re-used
-  if(dependent) cachedVersion = updateVersion
+  if(dependent) cachedVersion = versionNumber
 
-  writePackageVersion(repo.package, repo.location, updateVersion)
+  writePackageVersion(repo.package, repo.location, versionNumber)
 
 }
 

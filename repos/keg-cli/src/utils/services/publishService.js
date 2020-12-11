@@ -249,8 +249,9 @@ const copyBuildFiles = (currentRepo, repos) => {
  * @returns {Array|Boolean} - All updated/published repos or false if something failed
  */
 const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
-  const { versionNumber, commit=false } = publishContext.tasks
-
+  const { commit=false } = publishContext.tasks
+  const { versionNumber } = params
+  
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
 
