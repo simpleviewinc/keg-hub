@@ -1,8 +1,8 @@
-const fs = require('fs-extra')
 const { git } = require('KegGitCli')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { ask } = require('@keg-hub/ask-it')
+const { copySync, emptyDirSync } = require('KegFileSys/fileSys')
 const { get, exists } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { versionService } = require('./versionService')
@@ -237,8 +237,8 @@ const copyBuildFiles = (currentRepo, repos) => {
       // copy over /build folder from previous repo
       const from = `${get(repo, 'location')}/build`
       const to = `${get(currentRepo, 'location')}/node_modules/${packageName}/build`
-      fs.emptyDirSync(to)
-      fs.copySync(from, to, {overwrite: true})
+      emptyDirSync(to)
+      copySync(from, to)
     }
   })
 }
