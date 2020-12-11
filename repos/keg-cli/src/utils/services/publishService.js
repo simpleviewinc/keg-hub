@@ -1,4 +1,5 @@
 const fs = require('fs-extra')
+const { git } = require('KegGitCli')
 const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { ask } = require('@keg-hub/ask-it')
@@ -21,7 +22,7 @@ const { isValidSemver } = require('../version/validateVersion')
  */
 const rollbackChanges = async (repo, publishArgs) => {
   const { originalBranch, newVersion, wasPublished, currentBranch, step } = publishArgs
-  
+
   logFormal(repo, `Publish service failed on step ${step[1]}!\nRolling back publish changes...`)
 
   const doGitReset = await ask.confirm(`Confirm running a full git reset. ALL CHANGES WILL BE LOST`)
@@ -97,7 +98,6 @@ const logFormal = (repo, message) => {
  * @returns {*} - Response from the git command
  */
 const runGitCmd = (cmd, location) => {
-    // Run the yarn script from the package.json of the passed in location
   return spawnCmd(
     `git ${cmd.trim()}`,
     { cwd: location },
@@ -185,7 +185,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
   const { newVersion } = publishArgs
 
   try {
-    // Callback when an error is throw for a repo script
+    // Callback when an error is thrown for a repo script
     const scriptError = script => async () => {
       // throwPublishError(publishContext, repo, script)
       Logger.error(`Error running script ${script}`)
@@ -202,7 +202,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
     // Run the repos tests
     publishArgs.step = [ 2, 'test']
     logFormal(repo, `${test ? 'Running' : 'Skipping'} yarn test...`)
-    // test && await runRepoScript(repo, `test`, scriptError(`test`))
+    test && await runRepoScript(repo, `test`, scriptError(`test`))
 
     // Build the repo
     publishArgs.step = [ 3, 'build']
@@ -261,7 +261,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  * @returns {Array} - All updated/published repos
  */
 const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
-  const { version, git=false } = publishContext.tasks
+  const { version, commit=false } = publishContext.tasks
 
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
@@ -273,7 +273,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
     try {
       // Get the current git branch
-      publishArgs.originalBranch = await runGitCmd(`rev-parse --abbrev-ref HEAD`, repo.location)
+      publishArgs.originalBranch = await git.branch.name({location: repo.location})
 
       // copy over new dependent build files to current repo node_modules
       index > 0 && copyBuildFiles(repo, toPublish.slice(0, index))
@@ -293,7 +293,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
       // Check if we should do the git updates, or just return the updated array
       return !publishArgs.success
         ? false
-        : git
+        : commit
           ? gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
           : updated.concat([ {...repo, ...publishArgs} ])
 
