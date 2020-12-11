@@ -33,10 +33,13 @@ RUN apk add --no-cache git bash sudo; \
 RUN yarn install --pure-lockfile
 
 # Copy over keg-hub node_modules from keg-builder AFTER running yarn install
-COPY --from=keg-builder /keg-hub/repos/keg-cli/containers/components/run.sh /keg/keg-components/run.sh
+COPY --from=keg-builder /keg-hub/repos/keg-cli/containers/components/run.sh /keg/components-run.sh
 COPY --from=keg-builder /keg-hub/repos/keg-components/node_modules/@keg-hub /keg/keg-components/node_modules/@keg-hub
+
+# Update the permissions of the run script
+RUN chmod a+x /keg/components-run.sh
 
 SHELL [ "/bin/bash" ]
 
 # Run the start script
-CMD [ "/bin/bash", "-c",  "/keg/keg-components/run.sh" ]
+CMD [ "/bin/bash", "/keg/components-run.sh" ]
