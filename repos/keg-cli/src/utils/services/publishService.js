@@ -116,17 +116,16 @@ const runGitCmd = (cmd, location) => {
 const gitBranchCommitUpdates = async (repo, publishContext, publishArgs, updated) => {
   const {
     remote='origin',
-    branch,
     message,
   } = publishContext.tasks
   
-  const { newVersion } = publishArgs
+  const { newVersion, context } = publishArgs
   
   try {
 
     // Build a new branch for the version
     publishArgs.step = [ 5, 'git-branch']
-    const newBranch = branch || `${repo.repo}-${newVersion || 'build-&-publish'}`
+    const newBranch = `${context || repo.repo}-${newVersion || 'build-&-publish'}`
     publishArgs.newBranch = newBranch
 
     // Create a new branch for the repo and version
@@ -250,7 +249,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  */
 const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
   const { commit=false } = publishContext.tasks
-  const { versionNumber } = params
+  const { versionNumber, context } = params
 
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
@@ -261,6 +260,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
     const publishArgs = {}
 
     try {
+      publishArgs.context = context
       // Get the current git branch
       publishArgs.currentBranch = await git.branch.name({location: repo.location})
 
