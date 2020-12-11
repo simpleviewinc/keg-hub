@@ -107,25 +107,20 @@ const runGitCmd = (cmd, location) => {
  * 
  * @function
  * @param {Object} repo - Repo object containing meta-data about the current repo
- * @param {Object} publishContext - Defines how the repo should be published
  * @param {Object} publishArgs - Define the state or the repo being published
  * @param {Object} updated - Any repos that have already been published, within the publishContext
  * 
  * @returns {array} - Passed in updated array, with the passed in repo added
  */
-const gitBranchCommitUpdates = async (repo, publishContext, publishArgs, updated) => {
-  const {
-    remote='origin',
-    message,
-  } = publishContext.tasks
-  
-  const { newVersion, context } = publishArgs
+const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
+
+  const { newVersion, context, remote='origin' } = publishArgs
   
   try {
-
+    logFormal(repo, `Running commit service`)
     // Build a new branch for the version
     publishArgs.step = [ 5, 'git-branch']
-    const newBranch = `${context || repo.repo}-${newVersion || 'build-&-publish'}`
+    const newBranch = `${context}-${newVersion || 'build-&-publish'}`
     publishArgs.newBranch = newBranch
 
     // Create a new branch for the repo and version
@@ -139,7 +134,7 @@ const gitBranchCommitUpdates = async (repo, publishContext, publishArgs, updated
 
     // Commit the changes
     publishArgs.step = [ 8, 'git-commit']
-    message = get(publishContext, 'tasks.message', `Updating ${repo.repo} to version ${newVersion}!`)
+    const message = `Updating ${context} to version ${newVersion}`
     await runGitCmd(`commit -m \"${message}\"`, repo.location)
 
     // Push the branch to github
@@ -280,7 +275,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
       // Check if we should do the git updates, or just return the updated array
       return commit
-        ? gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
+        ? gitBranchCommitUpdates(repo, publishArgs, updated)
         : updated.concat([ {...repo, ...publishArgs} ])
 
     }
