@@ -147,7 +147,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
   }
 
   // Add the update to updated, so we know this repo was published
-  updated.push(repo)
+  updated.concat([ {...repo, ...publishArgs} ])
 
   return updated
 
