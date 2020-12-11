@@ -9,19 +9,13 @@ const { writePackageVersion } = require('./writePackageVersion')
  * @param {string} repoName - Name of the repo to search fro
  * @param {array} repos - Repos to search for the repoName dependency
  * @param {string} version - New version to update to
- * @param {Boolean} force - skips the prompt and just updates it
  * 
  * @returns {string} - The updated version if valid
  */
-const updateVersionInDependencies = async (repoName, repos, version, force=false) => {
-
-  // Check if we should update version in other repos dependencies
-  const confirmed = force || await ask.confirm(
-    `Update repos with dependencies of ${repoName} to version ${version}?`
-  )
+const updateVersionInDependencies = async (repoName, repos, version) => {
 
   // Loop over all the repos and check for the repo as a dependancy
-  return confirmed && repos.map(otherRepo => {
+  return repos.map(otherRepo => {
     const { package } = otherRepo
 
     // Track if a dependency has been updated
