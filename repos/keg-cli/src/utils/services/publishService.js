@@ -251,7 +251,7 @@ const copyBuildFiles = (currentRepo, repos) => {
 const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
   const { commit=false } = publishContext.tasks
   const { versionNumber } = params
-  
+
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
 
@@ -301,7 +301,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
  * @param {Object} args.params - Options passed from the command line
  * @param {Object} publishArgs - Extra arguments to defined how the repos should be published
  * 
- * @returns {{newVersion:string, repos:Array}} - returns all updated repos and the updated version
+ * @returns {Array=} - returns all updated repos
  */
 const publishService = async (args, publishArgs) => {
   const { params, globalConfig } = args
@@ -328,6 +328,7 @@ const publishService = async (args, publishArgs) => {
   const toPublish = getPublishContextOrder(repos, publishContext, params)
   // get the actual version number
   const versionNumber = await getVersionUpdate(toPublish[0], newVersion, publishContext)
+  if (!versionNumber) return null
 
   // run yarn install on all toPublish repos prior to any package json updates
   // then we can just copy over new build files to their node_modules
@@ -340,12 +341,7 @@ const publishService = async (args, publishArgs) => {
 
   // Update the version of the repos, commit and publish based on the publishContext
   // return a list of updated repos
-  const updatedRepos = await publishRepos(globalConfig, toPublish, repos, {...params, versionNumber}, publishContext)
-
-  return {
-    repos: updatedRepos,
-    publishContext
-  }
+  return await publishRepos(globalConfig, toPublish, repos, {...params, versionNumber}, publishContext)
 }
 
 module.exports = {
