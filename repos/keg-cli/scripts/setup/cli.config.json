@@ -52,7 +52,7 @@
         "build": true,
         "version": true,
         "publish": false,
-        "git": false,
+        "commit": false,
         "updateDeps": true
       }
     },

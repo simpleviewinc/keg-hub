@@ -196,7 +196,7 @@ class Branch {
   /**
   * Gets the current branch as an object from the passed in branches
   * @memberof Branch
-  * @param {Array} { branches } - Git object response from git CLI module
+  * @param {Object} { branches } - Git object response from git CLI module
   *
   * @returns {Object} - Current branch object
   */
@@ -212,7 +212,7 @@ class Branch {
   /**
   * Gets the name of the current branch
   * @memberof Branch
-  * @param {Array} { location } - Location of the git repo to get the branch name from
+  * @param {Object} { location } - Location of the git repo to get the branch name from
   *
   * @returns {string} - Name of current branch
   */
