@@ -130,7 +130,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
 
     // Add the build changes
     publishArgs.step = [ 7, 'git-add']
-    await runGitCmd(`add .`, repo.location)
+    await runGitCmd(`add --all`, repo.location)
 
     // Commit the changes
     publishArgs.step = [ 8, 'git-commit']
