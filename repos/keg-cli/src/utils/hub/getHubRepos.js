@@ -45,7 +45,7 @@ const findSubNodeModules = 'find * -maxdepth 0 -type d | grep -Ev \'^(_)|node_mo
  */
 const getPackageJson = (repoPath, repo) => {
   try {
-    const rawdata = readFileSync(path.resolve(path.resolve(repoPath, 'package.json')))
+    const rawdata = readFileSync(path.resolve(repoPath, 'package.json'))
     return JSON.parse(rawdata)
   }
   catch(error){
