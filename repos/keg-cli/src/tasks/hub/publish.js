@@ -14,7 +14,7 @@ const logSummary = ({repos, publishContext}) => {
     return {
       name: repo.repo, 
       newVersion: get(repo, 'newVersion'),
-      published: get(publishContext, 'tasks.publish')
+      published: get(repo, 'isPublished')
     }
   }))
   Logger.empty()
