@@ -3,12 +3,11 @@ const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { ask } = require('@keg-hub/ask-it')
 const { copySync, emptyDirSync } = require('KegFileSys/fileSys')
-const { get, exists } = require('@keg-hub/jsutils')
+const { get } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { versionService } = require('./versionService')
 const { generalError } = require('../error/generalError')
 const { runRepoScript } = require('../hub/runRepoScript')
-const { throwPublishError } = require('../error/throwPublishError')
 const { getPublishContext } = require('../publish/getPublishContext')
 const { getPublishContextOrder } = require('../publish/getPublishContextOrder')
 const { isValidSemver } = require('../version/validateVersion')
@@ -41,7 +40,7 @@ const rollbackChanges = async (repo, publishArgs) => {
 
   logFormal(repo, `Finished rolling back changes.`)
 
-  return null
+  process.exit(0)
 }
 
 /**
@@ -183,10 +182,8 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
   try {
     // Callback when an error is thrown for a repo script
     const scriptError = script => async () => {
-      // throwPublishError(publishContext, repo, script)
       Logger.error(`Error running script ${script}`)
       await rollbackChanges(repo, publishArgs)
-
       return false
     }
 
@@ -203,9 +200,9 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
     // Publish to NPM
     publishArgs.step = [ 4, 'publish']
     logFormal(repo, `${publish ? 'Running' : 'Skipping'} yarn publish...`)
-    publish && await runRepoScript(repo, `publish --access ${access} --new-version ${newVersion}`, scriptError(`publish`))
+    const isPublished = publish && await runRepoScript(repo, `publish --access ${access} --new-version ${newVersion}`, scriptError(`publish`))
 
-    return true
+    return isPublished
 
   }
   catch(err){
@@ -279,14 +276,12 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
         : {}
       publishArgs.newVersion = newVersion
       logFormal(repo, `Running publish service`)
-      publishArgs.success = await repoYarnCommands(repo, publishContext, publishArgs)
-      console.log(`${repo.repo} - ${publishArgs.success}`)
+      publishArgs.isPublished = await repoYarnCommands(repo, publishContext, publishArgs)
+
       // Check if we should do the git updates, or just return the updated array
-      return !publishArgs.success
-        ? false
-        : commit
-          ? gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
-          : updated.concat([ {...repo, ...publishArgs} ])
+      return commit
+        ? gitBranchCommitUpdates(repo, publishContext, publishArgs, updated)
+        : updated.concat([ {...repo, ...publishArgs} ])
 
     }
     catch(err){
