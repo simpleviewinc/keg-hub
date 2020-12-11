@@ -10,7 +10,6 @@ services:
         - KEG_DOCKER_IP
         - DOC_APP_PATH
         - KEG_BASE_IMAGE
-        - KEG_IMAGE_FROM
         - KEG_NODE_VERSION
     environment:
       - CHOKIDAR_USEPOLLING

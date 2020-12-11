@@ -20,6 +20,7 @@ keg_cli_2_1_0_update(){
   keg cli env unset --key KEG_BASE_URL --confirm false --comment false
   keg cli env unset --key KEG_IMAGE_FROM --confirm false --comment false
   keg cli env unset --key KEG_BASE_VERSION --confirm false --comment false
+  keg cli env unset --key RN_PACKAGER_IP --confirm false --comment false
 
   # Clean up git ENVs
   keg cli env unset --key GIT_CLI_URL --confirm false --comment false

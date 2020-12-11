@@ -31,7 +31,7 @@
         "preConfirm": true,
         "buildKit": true,
         "force": true,
-        "defaultLocalBuild": true,
+        "defaultLocalBuild": false,
         "imagePullPolicy": "Always"
       },
       "checkUpdates": false,

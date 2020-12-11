@@ -17,7 +17,6 @@ const parseTemplate = ({ filePath, template, encoding='utf8', data={} }) => {
   // Add the globalConfig, and the process.envs as the data objects
   // This allows values in ENV templates from globalConfig || process.env
   // In the template example: 
-  //    RN_PACKAGER_IP={{ envs.KEG_DOCKER_IP }}
   const fillData = {
     ...deepMerge(globalConfig, data),
     envs: deepMerge(
@@ -34,8 +33,6 @@ const parseTemplate = ({ filePath, template, encoding='utf8', data={} }) => {
   })
 }
 
-  
-  
 module.exports = {
   parseTemplate
 }

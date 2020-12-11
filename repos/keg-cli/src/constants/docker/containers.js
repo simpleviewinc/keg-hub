@@ -35,7 +35,6 @@ const DEFAULT = {
   },
   ARGS: keyMap([
     'GIT_KEY',
-    'GIT_CLI_URL',
   ], true),
   ENV: {},
   // Filter envs from becoming build-args durning the build process
