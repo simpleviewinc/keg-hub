@@ -21,26 +21,23 @@ const { isValidSemver } = require('../version/validateVersion')
  * @returns {Void}
  */
 const rollbackChanges = async (repo, publishArgs) => {
-  const { originalBranch, newVersion, wasPublished, currentBranch, step } = publishArgs
+  const { currentBranch, newVersion, wasPublished, step } = publishArgs
 
   logFormal(repo, `Publish service failed on step ${step[1]}!\nRolling back publish changes...`)
 
   const doGitReset = await ask.confirm(`Confirm running a full git reset. ALL CHANGES WILL BE LOST`)
   if(!doGitReset) return Logger.warn(`Canceling git reset. Rollback did not complete. Current git branch is not clean!`)
 
-  if(step[0] > 3)
+  if(step[0] > 3 && wasPublished)
     return Logger.warn(`\nCan not rollback changes, version ${newVersion} was already published to NPM!\n`)
 
-  if(!originalBranch)
+  if(!currentBranch)
     return Logger.warn(`\nCan not rollback changes, Original git branch does not exist!\n`)
 
   // Do a full git reset
-  logFormal(repo, `Resetting git to branch ${originalBranch}`)
+  logFormal(repo, `Resetting git to branch ${currentBranch}`)
   await runGitCmd(`reset --hard HEAD`, repo.location)
   await runGitCmd(`clean -fd`, repo.location)
-
-  exists(currentBranch) && currentBranch !== originalBranch &&
-    await runGitCmd(`checkout ${originalBranch}`, repo.location)
 
   logFormal(repo, `Finished rolling back changes.`)
 
@@ -267,7 +264,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
     try {
       // Get the current git branch
-      publishArgs.originalBranch = await git.branch.name({location: repo.location})
+      publishArgs.currentBranch = await git.branch.name({location: repo.location})
 
       // copy over new dependent build files to current repo node_modules
       index > 0 && copyBuildFiles(repo, toPublish.slice(0, index))
