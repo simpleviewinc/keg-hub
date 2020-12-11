@@ -1,7 +1,7 @@
 const semver = require('semver')
 const { ask } = require('@keg-hub/ask-it')
-const { VERSION } = require('KegConst/constants')
 const { generalError } = require('../error/generalError')
+const { isValidSemver } = require('./isValidSemver')
 
 /**
  * Validates the passed in version matches semver
@@ -31,25 +31,6 @@ const validateVersion = (publishContext, version, oldVersion, confirm) => {
 
 }
 
-/**
- * TODO: export to another file and add unit test
- * Validates if version is one of: minor,major,patch or specific semver version
- * @function
- * @param {string} version
- * 
- * @returns {Boolean} - whether input is a valid semver value
- */
-const isValidSemver = (version) => {
-  valid = VERSION.TYPES.indexOf(version) !== -1
-    ? true
-    : semver.valid(version)
-
-    return valid 
-      ? valid
-      : generalError(`${version} is not a valid semver value!`)
-}
-
 module.exports = {
   validateVersion,
-  isValidSemver,
 }

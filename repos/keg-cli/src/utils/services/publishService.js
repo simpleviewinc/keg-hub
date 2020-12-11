@@ -10,7 +10,7 @@ const { generalError } = require('../error/generalError')
 const { runRepoScript } = require('../hub/runRepoScript')
 const { getPublishContext } = require('../publish/getPublishContext')
 const { getPublishContextOrder } = require('../publish/getPublishContextOrder')
-const { isValidSemver } = require('../version/validateVersion')
+const { getVersionUpdate, isValidSemver } = require('KegUtils/version')
 /**
  * Attempts to rollback changes made to a repo using git
  * @function
@@ -249,7 +249,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  * @returns {Array|Boolean} - All updated/published repos or false if something failed
  */
 const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
-  const { version, commit=false } = publishContext.tasks
+  const { versionNumber, commit=false } = publishContext.tasks
 
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
@@ -268,13 +268,12 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
       publishArgs.step = [ 1, 'version']
       // Update the version of the repos
-      const { newVersion } = version
-        ? await versionService(
-            { params, globalConfig },
-            { publishContext, repo, repos }
-          )
-        : {}
-      publishArgs.newVersion = newVersion
+      await versionService(
+        { params, globalConfig, versionNumber },
+        { publishContext, repo, repos }
+      )
+
+      publishArgs.newVersion = versionNumber
       logFormal(repo, `Running publish service`)
       publishArgs.isPublished = await repoYarnCommands(repo, publishContext, publishArgs)
 
@@ -326,7 +325,9 @@ const publishService = async (args, publishArgs) => {
 
   // Get all the repo's to be published
   const toPublish = getPublishContextOrder(repos, publishContext, params)
-  
+  // get the actual version number
+  const versionNumber = await getVersionUpdate(toPublish[0], newVersion, publishContext)
+
   // run yarn install on all toPublish repos prior to any package json updates
   // then we can just copy over new build files to their node_modules
   // for cases when: 1. publish == false; 2. possible install delay after publishing to npm
@@ -338,7 +339,7 @@ const publishService = async (args, publishArgs) => {
 
   // Update the version of the repos, commit and publish based on the publishContext
   // return a list of updated repos
-  const updatedRepos = await publishRepos(globalConfig, toPublish, repos, {...params, version: newVersion}, publishContext)
+  const updatedRepos = await publishRepos(globalConfig, toPublish, repos, {...params, versionNumber}, publishContext)
 
   return {
     repos: updatedRepos,
