@@ -125,7 +125,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
 
     // Commit the changes
     publishArgs.step = [ 8, 'git-commit']
-    const message = `Updating-${context}-to-version-${newVersion}`
+    const message = `Updating ${context} to version ${newVersion}`
     await runGitCmd(`commit -m \"${message}\"`, repo.location)
 
     // Push the branch to github
