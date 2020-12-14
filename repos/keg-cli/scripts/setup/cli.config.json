@@ -91,6 +91,34 @@
       "order": {
         "0": "@keg-hub/jsutils"
       }
+    },
+    "resolver": {
+      "name": "resolver",
+      "dependent": false,
+      "order": {
+        "0": "@keg-hub/tap-resolver"
+      }
+    },
+    "spawn-cmd": {
+      "name": "spawn-cmd",
+      "dependent": false,
+      "order": {
+        "0": "@keg-hub/spawn-cmd"
+      }
+    },
+    "ask-it": {
+      "name": "ask-it",
+      "dependent": false,
+      "order": {
+        "0": "@keg-hub/ask-it"
+      }
+    },
+    "args-parse": {
+      "name": "args-parse",
+      "dependent": false,
+      "order": {
+        "0": "@keg-hub/args-parse"
+      }
     }
   }
 }
