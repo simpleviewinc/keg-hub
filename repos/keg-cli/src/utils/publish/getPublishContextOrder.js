@@ -1,17 +1,18 @@
-const { get } = require('@keg-hub/jsutils')
-const { generalError } = require('../error/generalError')
+const { get, noPropObj } = require('@keg-hub/jsutils')
+const { generalError } = require('KegUtils/error')
 
 /**
  * Gets the publish context repos in order, based on the repos defined in the publish context
  * @function
  * @param {Array} repos - Repos found in the keg-hub
  * @param {Object} publishContext - Object that defines how the repos should be published
- * @param {Object} publishArgs - publish context args passed in from the command line
+ * @param {Object} params - publish context args passed in from the command line
  *
  * @returns {Array} - Orders list of repos to be published based on order defined in the publishContext
  */
-const getPublishContextOrder = (repos, publishContext, { context }) => {
+const getPublishContextOrder = (repos, publishContext, params=noPropObj) => {
   const publishOrder = (publishContext || get(globalConfig, `publish.${context}`)).order
+  const { context } = params
 
   !publishOrder && generalError(`Publish context order ${context} does not exist!`)
 

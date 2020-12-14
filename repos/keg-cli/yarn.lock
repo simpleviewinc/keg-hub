@@ -1067,6 +1067,11 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-6.1.0.tgz#880329665ac2a173d5fbadfe4ff8f2eedc94c0cc"
   integrity sha512-h8uE8UBUqGeI0QWJL+93gG2/SuV9Z7xoELIwtT0Zp1qJNQRlW91U/23S+Mt1V91cfZ3og0Dx3LcDknwWKXisgQ==
 
+"@keg-hub/jsutils@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.0.0.tgz#740e05e10128be53d2ffea72a6c8990b57745679"
+  integrity sha512-omgYOX0p9H6GsQQ5onEJK56pUI/z1CoblFqjWy/SpwANwsuqEFEG3EKDdcRwwpLjaEl8qQWQzfQ1Z6Pc+OOgqQ==
+
 "@keg-hub/spawn-cmd@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@keg-hub/spawn-cmd/-/spawn-cmd-0.0.1.tgz#074033451d916d9b82827efe4b65b57565c7303a"
@@ -2297,7 +2302,7 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-fs-extra@^9.0.1:
+fs-extra@9.0.1:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
   integrity sha512-h2iAoN838FqAFJY2/qVpzFXy+EBxfVE220PalAqQLDVsFOHLJrZvut5puAbCdNv6WJk+B8ihI+k0c7JK5erwqQ==

@@ -100,7 +100,7 @@ const buildRepo = (repo, hubReposPath, args) => {
  * @param {Object} hubReposPath - Path to the keg-hub/repos folder
  * @param {Object} args - Passed from the task caller
  *
- * @returns {*} - Formatted repo information
+ * @returns {Array} - Formatted repo information
  */
 const runCmdSync = async (repos, hubReposPath, args) => {
 
@@ -128,7 +128,7 @@ const runCmdSync = async (repos, hubReposPath, args) => {
  * @param {Object} hubReposPath - Path to the keg-hub/repos folder
  * @param {Object} args - Passed from the task caller
  *
- * @returns {*} - Formatted repo information
+ * @returns {Array} - Formatted repo information
  */
 const runCmdAsync = async (repos, hubReposPath, args) => {
   const { context:filter } = args
@@ -164,7 +164,7 @@ const runCmdAsync = async (repos, hubReposPath, args) => {
  * @returns {Array} - Group of promises resolving to formatted repo information
  */
 const getHubRepos = async (args={}) => {
-  const { context:filter, sync } = args
+  const { sync } = args
 
   const hubReposPath = path.join(getRepoPath('hub'), 'repos')
   const { data, error } = await executeCmd(findSubNodeModules, { cwd: hubReposPath })

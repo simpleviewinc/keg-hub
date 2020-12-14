@@ -2,7 +2,15 @@ const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { checkCall } = require('@keg-hub/jsutils')
 
-
+/**
+ * Runs yarn script at a given location
+ * 
+ * @function
+ * @param {string} location - path to run the cmd
+ * @param {string} script - the yarn command with options
+ * @param {Function} errorCB - called if the yarn command throws an error
+ * @param {Boolean} log - show log message or not
+ */
 const runYarnScript = async (location, script, errorCB, log) => {
   log && Logger.log(`Running yarn ${script.trim()}...`)
 

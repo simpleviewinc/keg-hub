@@ -51,8 +51,8 @@
         "test": true,
         "build": true,
         "version": true,
-        "publish": false,
-        "commit": false
+        "publish": true,
+        "commit": true
       }
     },
     "keg": {

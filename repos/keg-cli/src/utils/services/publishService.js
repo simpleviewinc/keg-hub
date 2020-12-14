@@ -10,7 +10,7 @@ const { generalError } = require('../error/generalError')
 const { runRepoScript } = require('../hub/runRepoScript')
 const { getPublishContext } = require('../publish/getPublishContext')
 const { getPublishContextOrder } = require('../publish/getPublishContextOrder')
-const { getVersionUpdate, isValidSemver } = require('KegUtils/version')
+const { getVersionUpdate, getValidSemver } = require('KegUtils/version')
 /**
  * Attempts to rollback changes made to a repo using git
  * @function
@@ -56,17 +56,6 @@ const confirmPublish = async context => {
   
   Logger.warn(`Publish with config ${context} cancelled!`)
   process.exit(0)
-}
-
-/**
- * gets a valid semver input (minor, major, patch, 1.0.0, etc.)
- * @function
- *
- * @returns {string} - valid semver value
- */
-const getValidSemver = async () => {
-  const resp = await ask.input(`Please enter a valid version:`)  
-  return isValidSemver(resp) && resp
 }
 
 /**

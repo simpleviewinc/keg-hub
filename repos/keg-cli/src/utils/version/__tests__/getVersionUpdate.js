@@ -8,9 +8,9 @@ jest.setMock('@keg-hub/ask-it', { ask: AskIt })
 const publishContext =  {
   "name": "test",
   "dependent": true,
-  "order": [
-    '@keg-hub/test-repo',
-  ]
+  "order": {
+    0: '@keg-hub/test-repo'
+  }
 }
 
 let isValid = true
