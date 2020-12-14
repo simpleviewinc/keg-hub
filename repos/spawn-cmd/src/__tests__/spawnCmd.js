@@ -1,8 +1,32 @@
 const { limbo } = require('@keg-hub/jsutils')
-const spawnCmd = require('../spawnCmd')
 const path = require('path')
 
+const spawnCmd = require('../spawnCmd')
+
 describe('/spawnCmd', () => {
+
+
+  describe(`Spawn with escaped arguments`, () => {
+
+    beforeEach(() => jest.resetAllMocks())
+
+    it('should return an successful exitCode with escaped double quoted argument', async () => {
+      const message = 'This is a message!'
+      const exitCode = await spawnCmd(`echo \"${message}\"`)
+
+      expect(exitCode).toBe(0)
+
+    })
+
+    it('should return an successful exitCode with escaped single quoted argument', async () => {
+      const message = 'This is a message!'
+      const exitCode = await spawnCmd(`echo \'${message}\'`)
+
+      expect(exitCode).toBe(0)
+
+    })
+
+  })
 
   describe('Spawn exitCode', () => {
 

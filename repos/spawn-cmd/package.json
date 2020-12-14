@@ -22,7 +22,8 @@
     "clean:full": "yarn clean; yarn clean:cache",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "test": "NODE_ENV=test jest --no-cache --verbose --coverage"
+    "test": "NODE_ENV=test jest --no-cache --verbose",
+    "test:reports": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
     "@keg-hub/jsutils": "0.0.1",
@@ -40,7 +41,10 @@
       "<rootDir>/src/**/__tests__/**/*.js?(x)"
     ],
     "collectCoverageFrom": [
-      "<rootDir>/src/index.js"
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "src/index.js"
     ],
     "coverageDirectory": "reports/coverage",
     "moduleFileExtensions": [
