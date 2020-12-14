@@ -16,7 +16,7 @@ const getPublishContextOrder = (repos, publishContext, { context }) => {
   !publishOrder && generalError(`Publish context order ${context} does not exist!`)
 
   const indexRepos = repos.reduce((toPublish, repo) => {
-    const publishIndex = publishOrder.indexOf(get(repo, 'package.name'))
+    const publishIndex = Object.values(publishOrder).indexOf(get(repo, 'package.name'))
     return publishIndex === -1
       ? toPublish
       : { ...toPublish, [publishIndex]: repo }

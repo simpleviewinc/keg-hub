@@ -58,40 +58,39 @@
     "keg": {
       "name": "keg",
       "dependent": true,
-      "order": [
-        "@keg-hub/jsutils",
-        "@keg-hub/re-theme",
-        "@keg-hub/keg-components",
-        "@keg-hub/keg-core"
-      ]
+      "order": {
+        "0": "@keg-hub/re-theme",
+        "1": "@keg-hub/keg-components",
+        "2": "@keg-hub/keg-core"
+      }
     },
     "retheme": {
       "name": "retheme",
       "dependent": false,
-      "order": [
-        "@keg-hub/re-theme"
-      ]
+      "order": {
+        "0": "@keg-hub/re-theme"
+      }
     },
     "components": {
       "name": "components",
       "dependent": false,
-      "order": [
-        "@keg-hub/keg-components"
-      ]
+      "order": {
+        "0": "@keg-hub/keg-components"
+      }
     },
     "core": {
       "name": "core",
       "dependent": false,
-      "order": [
-        "@keg-hub/keg-core"
-      ]
+      "order": {
+        "0": "@keg-hub/keg-core"
+      }
     },
     "jsutils": {
       "name": "jsutils",
       "dependent": false,
-      "order": [
-        "@keg-hub/jsutils"
-      ]
+      "order": {
+        "0": "@keg-hub/jsutils"
+      }
     }
   }
 }
