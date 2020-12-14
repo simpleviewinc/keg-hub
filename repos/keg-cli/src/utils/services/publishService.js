@@ -109,13 +109,15 @@ const runGitCmd = (cmd, location) => {
  * @param {Object} repo - Repo object containing meta-data about the current repo
  * @param {Object} publishArgs - Define the state or the repo being published
  * @param {Object} updated - Any repos that have already been published, within the publishContext
+ * @param {Object} params - Options passed from the command line
  * 
  * @returns {array} - Passed in updated array, with the passed in repo added
  */
-const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
+const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
 
   const { newVersion, context, remote='origin' } = publishArgs
-  
+  const { dryrun } = params
+
   try {
     logFormal(repo, `Running commit service`)
     // Build a new branch for the version
@@ -139,7 +141,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
 
     // Push the branch to github
     publishArgs.step = [ 9, 'git-push']
-    await runGitCmd(`push ${remote} ${newBranch}`, repo.location)
+    !dryrun && await runGitCmd(`push ${remote} ${newBranch}`, repo.location)
   }
   catch(err){
     Logger.error(`Error creating git branch`, err.stack)
@@ -157,10 +159,11 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated) => {
  * @param {Object} repo - Repo object containing meta-data about the current repo
  * @param {Object} publishContext - Defines how the repo should be published
  * @param {Object} publishArgs - Define the state or the repo being published
+ * @param {Object} params - Options passed from the command line
  * 
  * @returns {Boolean} - True if the repo was published to npm
  */
-const repoYarnCommands = async (repo, publishContext, publishArgs) => {
+const repoYarnCommands = async (repo, publishContext, publishArgs, params) => {
 
   const {
     test,
@@ -169,6 +172,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
     access='public',
   } = publishContext.tasks
   const { newVersion } = publishArgs
+  const { dryrun } = params 
 
   try {
     // Callback when an error is thrown for a repo script
@@ -190,8 +194,9 @@ const repoYarnCommands = async (repo, publishContext, publishArgs) => {
 
     // Publish to NPM
     publishArgs.step = [ 4, 'publish']
-    logFormal(repo, `${publish ? 'Running' : 'Skipping'} yarn publish...`)
-    const isPublished = publish && await runRepoScript(repo, `publish --access ${access} --new-version ${newVersion}`, scriptError(`publish`))
+    const shouldPublish = publish && !dryrun
+    logFormal(repo, `${shouldPublish ? 'Running' : 'Skipping'} yarn publish...`)
+    const isPublished = shouldPublish && await runRepoScript(repo, `publish --access ${access} --new-version ${newVersion}`, scriptError(`publish`))
 
     return isPublished
 
@@ -268,11 +273,11 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
       publishArgs.newVersion = versionNumber
       logFormal(repo, `Running publish service`)
-      publishArgs.isPublished = await repoYarnCommands(repo, publishContext, publishArgs)
+      publishArgs.isPublished = await repoYarnCommands(repo, publishContext, publishArgs, params)
 
       // Check if we should do the git updates, or just return the updated array
       return commit
-        ? gitBranchCommitUpdates(repo, publishArgs, updated)
+        ? gitBranchCommitUpdates(repo, publishArgs, updated, params)
         : updated.concat([ {...repo, ...publishArgs} ])
 
     }
