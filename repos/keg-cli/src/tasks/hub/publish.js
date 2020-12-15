@@ -1,6 +1,6 @@
 const { publishService } = require('KegUtils/services/publishService')
 const { Logger } = require('KegLog')
-const {get} = require('@keg-hub/jsutils')
+const { get } = require('@keg-hub/jsutils')
 
 /**
  * Logs the summary for the publish task
@@ -23,7 +23,7 @@ const logSummary = (repos) => {
  * Push Keg Hub repos to NPM and Github
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Initial command being run
- * @param {Array} args.options - arguments passed from the command line
+ * @param {Array} args.params - arguments passed from the command line
  * @param {Object} args.tasks - All registered tasks of the CLI
  * @param {Object} globalConfig - Global config object for the keg-cli
  *
@@ -31,7 +31,17 @@ const logSummary = (repos) => {
  */
 const hubPublish = async args => {
 
-  logSummary(await publishService(args))
+  const { globalConfig, params } = args
+  const defaultConfig = get(globalConfig, `publish.default`)
+  const validTasks = Object.keys(get(defaultConfig, 'tasks'))
+  const publishArgs = { tasks: {} }
+
+  // break up the params into valid publish args
+  validTasks.map((key) => {
+    if (params[key]) publishArgs.tasks[key] = params[key]
+  })
+
+  logSummary(await publishService(args, publishArgs))
   return true
 
 }
@@ -56,10 +66,22 @@ module.exports = {
         example: 'keg hub publish --version <semver type || version number>'
       },
       dryrun: {
-        alias: ['test', 'dry-run'],
+        alias: ['dry-run'],
         description: 'Does everything publish would do except pushing to git and publishing to npm',
         example: 'keg hub publish --dry-run',
         default: false
+      },
+      build: {
+        description: 'Runs the `yarn build` command on the repos before publishing',
+        example: 'keg hub publish --no-build',
+      },
+      test: {
+        description: 'Runs `yarn test` command on the repos before publishing',
+        example: 'keg hub publish --no-test',
+      },
+      publish: {
+        description: 'Publishes to npm after upgrading',
+        example: 'keg hub publish --no-publish',
       }
     }
   }

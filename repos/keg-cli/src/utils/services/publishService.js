@@ -285,7 +285,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
  * @function
  * @param {Object} args - All arguments passed to the Keg-CLI publish task
  * @param {Object} args.params - Options passed from the command line
- * @param {Object} publishArgs - Extra arguments to defined how the repos should be published
+ * @param {Object=} publishArgs - options passed in to override the publishContext
  * 
  * @returns {Array=} - returns all updated repos
  */
