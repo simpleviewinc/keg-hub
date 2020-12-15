@@ -9,6 +9,8 @@ const { runYarnScript } = require('../helpers/runYarnScript')
  * @param {string} script - name of the script in package.json
  * @param {Function} errorCb - called if the script throws or fails
  * @param {Boolean} log - show log message or not
+ * 
+ * @return {Boolean} - whether  the call was successful or not
  */
 const runRepoScript = (repo, script, errorCb, log) => {
   log && Logger.log(`Running yarn ${script.trim()} for repo ${repo.repo} ...`)

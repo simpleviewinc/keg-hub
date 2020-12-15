@@ -16,18 +16,22 @@ const { getVersionUpdate, getValidSemver } = require('KegUtils/version')
  * @function
  * @param {Object} repo - Repo to be rolled back
  * @param {Object} publishArgs - Define the state or the repo being published
- *
+ * @param {string} publishArgs.currentBranch
+ * @param {string} publishArgs.newVersion - i.e '1.0.0'
+ * @param {Boolean} publishArgs.wasPublished - whether yarn publish was executed
+ * @param {{number:Number, name:string}} publishArgs.step - current step information
+ * 
  * @returns {Void}
  */
 const rollbackChanges = async (repo, publishArgs) => {
   const { currentBranch, newVersion, wasPublished, step } = publishArgs
 
-  logFormal(repo, `Publish service failed on step ${step[1]}!\nRolling back publish changes...`)
+  logFormal(repo, `Publish service failed on step ${step.number}!\nRolling back publish changes...`)
 
   const doGitReset = await ask.confirm(`Confirm running a full git reset. ALL CHANGES WILL BE LOST`)
   if(!doGitReset) return Logger.warn(`Canceling git reset. Rollback did not complete. Current git branch is not clean!`)
 
-  if(step[0] > 3 && wasPublished)
+  if(step.number > 3 && wasPublished)
     return Logger.warn(`\nCan not rollback changes, version ${newVersion} was already published to NPM!\n`)
 
   if(!currentBranch)
@@ -110,26 +114,26 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
   try {
     logFormal(repo, `Running commit service`)
     // Build a new branch for the version
-    publishArgs.step = [ 5, 'git-branch']
+    publishArgs.step = { number: 5, name: 'git-branch' }
     const newBranch = `${context}-${newVersion || 'build-&-publish'}`
     publishArgs.newBranch = newBranch
 
     // Create a new branch for the repo and version
-    publishArgs.step = [ 6, 'git-checkout']
+    publishArgs.step = { number: 6, name: 'git-checkout' }
     await runGitCmd(`checkout -b ${newBranch}`, repo.location)
     publishArgs.currentBranch = newBranch
 
     // Add the build changes
-    publishArgs.step = [ 7, 'git-add']
+    publishArgs.step = { number: 7, name: 'git-add' }
     await runGitCmd(`add --all`, repo.location)
 
     // Commit the changes
-    publishArgs.step = [ 8, 'git-commit']
+    publishArgs.step = { number: 8, name: 'git-commit' }
     const message = `Updating ${context} to version ${newVersion}`
     !dryrun && await runGitCmd(`commit -m \"${message}\"`, repo.location)
 
     // Push the branch to github
-    publishArgs.step = [ 9, 'git-push']
+    publishArgs.step = { number: 9, name: 'git-push' }
     !dryrun && await runGitCmd(`push ${remote} ${newBranch}`, repo.location)
   }
   catch(err){
@@ -172,17 +176,17 @@ const repoYarnCommands = async (repo, publishContext, publishArgs, params) => {
     }
 
     // Run the repos tests
-    publishArgs.step = [ 2, 'test']
+    publishArgs.step = { number: 2, name: 'test' }
     logFormal(repo, `${test ? 'Running' : 'Skipping'} yarn test...`)
     test && await runRepoScript(repo, `test`, scriptError(`test`))
 
     // Build the repo
-    publishArgs.step = [ 3, 'build']
+    publishArgs.step = { number: 3, name: 'build' }
     logFormal(repo, `${build ? 'Running' : 'Skipping'} yarn build...`)
     build && await runRepoScript(repo, `build`, scriptError(`build`))
 
     // Publish to NPM
-    publishArgs.step = [ 4, 'publish']
+    publishArgs.step = { number: 4, name: 'publish' }
     const shouldPublish = publish && !dryrun
     logFormal(repo, `${shouldPublish ? 'Running' : 'Skipping'} yarn publish...`)
     const isPublished = shouldPublish && await runRepoScript(repo, `publish --access ${access} --new-version ${newVersion}`, scriptError(`publish`))
@@ -253,7 +257,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
       // copy over new dependent build files to current repo node_modules
       index > 0 && copyBuildFiles(repo, toPublish.slice(0, index))
 
-      publishArgs.step = [ 1, 'version']
+      publishArgs.step = { number: 1, name: 'version' }
       // Update the version of the repos
       await versionService(
         { params, globalConfig, versionNumber },

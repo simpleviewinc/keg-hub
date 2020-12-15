@@ -10,6 +10,8 @@ const { checkCall } = require('@keg-hub/jsutils')
  * @param {string} script - the yarn command with options
  * @param {Function} errorCB - called if the yarn command throws an error
  * @param {Boolean} log - show log message or not
+ * 
+ * @returns {Boolean} - whether the cmd was successful or not
  */
 const runYarnScript = async (location, script, errorCB, log) => {
   log && Logger.log(`Running yarn ${script.trim()}...`)
