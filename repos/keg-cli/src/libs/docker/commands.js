@@ -152,36 +152,30 @@ const push = async url => {
  * @returns {Promise}
  */
 const pull = (url, exitOnError=true) => {
+  let wasDownloaded = false
   return new Promise((res, rej) => {
-    Logger.spacedMsg(`Pulling docker image from url`, url)
+    // Logger.spacedMsg(`Pulling docker image from url`, url)
     pipeCmd(`docker pull ${ url }`, {
+      loading: {
+        title: `Pulling Image => ${url}`,
+        active: true,
+        offMatch: `Downloaded newer image`,
+        type: 'spinner',
+      },
       cwd: process.cwd(),
       onStdOut: data => {
-        data.split(NEWLINES_MATCH).map(line => {
-          // If empty line just return
-          if(!line.trim()) return
-          // Parse the label and message
-          const [ label, message ] = line.trim().split(': ')
-          // If not message, just log normally
-          if(!message) return line.trim() && Logger.log(line)
-
-          // Otherwise log the label and message as a pair
-          Logger.pair(`${label}:`, message)
-          // Check if this is the status message
-          // Then return if a new image was downloaded
-          return label.trim() === `Status`
-            && res(Boolean(message.indexOf('newer') !== -1))
-
-        })
+        data.includes(`Downloaded newer image`) && (wasDownloaded = true)
+        Logger.label(...(data.split(':')))
       },
       onStdErr: (err, exitCode) => {
-        Logger.error(err)
+        err && Logger.error(err)
         exitOnError
           ? rej(process.exit(exitCode))
-          : res(false)
+          : res(wasDownloaded)
       },
       onExit: (exitCode) => {
-        res(false)
+      // TODO: make call to get check if the image was pulled
+        res(wasDownloaded)
       }
     })
   })
