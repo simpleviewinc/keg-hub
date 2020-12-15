@@ -77,6 +77,11 @@ const dockerBuild = async args => {
     contextEnvs,
   } = containerContext
 
+  console.log(`---------- contextEnvs ----------`)
+  console.log(contextEnvs)
+
+  process.exit(0)
+
   // If using a tap, and no location is found, throw an error
   cmdContext === 'tap' && tap && !location && throwNoTapLoc(globalConfig, tap)
 
@@ -128,9 +133,6 @@ module.exports = {
       tap: {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
         example: `keg docker build --context tap --tap events-force`,
-      },
-      local: {
-        default: false,
       },
     })
   }
