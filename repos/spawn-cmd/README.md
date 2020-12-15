@@ -1,28 +1,27 @@
 ### Spawn-CMD
-  * Spawn child process in Node with ease
+  * Cross-Platform child_process library for Node
 
 ### Dependencies
 * [app-root-path](https://github.com/inxilpro/node-app-root-path)
 * [@keg-hub/jsutils](https://github.com/lancetipton/@keg-hub/jsutils)
 * [tree-kill](https://github.com/pkrumins/node-tree-kill)
+* [cross-spawn](https://github.com/moxystudio/node-cross-spawn)
+* [shell-exec](https://github.com/tiaanduplessis/shell-exec)
 
 ## Install
 
-  * Download the repo
+  * Install with 'yarn' or 'npm'
     ```js
-      // Clone repo
-      git clone https://github.com/lancetipton/spawn-cmd.git
-      // Or Add to package.json
-      "dependencies": {
-        "spawn-cmd": "git+https://github.com/lancetipton/spawn-cmd.git"
-        ...
-      },
+      // With Yarn
+      yarn add @keg-hub/spawn-cmd
+      // With NPM
+      npm install @keg-hub/spawn-cmd
     ```
   * Add to your code
     ```js
 
       // * Require code
-      const { spawnCmd } = require('spawn-cmd')
+      const { spawnCmd } = require('@keg-hub/spawn-cmd')
 
       // Spawns a new terminal session and runs `ls -la` inside of it
       await spawnCmd('ls -la')
@@ -66,7 +65,7 @@
   * Promise resolves consistently
   * Example => 
       ```js
-        const { asyncCmd } = require('spawn-cmd')
+        const { asyncCmd } = require('@keg-hub/spawn-cmd')
         
         ;(()=>{
 

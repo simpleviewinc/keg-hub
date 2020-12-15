@@ -1,6 +1,7 @@
 const { isArr, isStr, isObj, get } = require('@keg-hub/jsutils')
 const rootDir = require('app-root-path').path
 const { errorHandler } = require('./error')
+const { parseQuotes } = require('./parseQuotes')
 
 /**
  * Ensures the args Array is an Array
@@ -30,7 +31,7 @@ const checkExtraArgs = (cmd, args) => {
   cmd = cmdSplit.shift()
 
   args = ensureArgsArray(args)
-  args = cmdSplit.concat(args)
+  args = parseQuotes(cmdSplit.concat(args))
 
   return { cmd, args }
 }
