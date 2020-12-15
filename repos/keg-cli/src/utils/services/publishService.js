@@ -300,7 +300,6 @@ const publishService = async (args, publishArgs) => {
 
   // Get all repos / package.json
   const repos = await getHubRepos({
-    sync: true,
     context: 'all',
     full: true,
   })

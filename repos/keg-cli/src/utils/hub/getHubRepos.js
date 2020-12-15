@@ -96,60 +96,31 @@ const buildRepo = (repo, hubReposPath, args) => {
 }
 
 /**
- * Runs keg-hub commands against repos synchronously
+ * Builds the repos array
  * @function
- * @param {Object} repos - All repos to run command on
+ * @param {Array} repos - All repos to run command on
  * @param {Object} hubReposPath - Path to the keg-hub/repos folder
  * @param {Object} args - Passed from the task caller
  *
  * @returns {Array} - Formatted repo information
  */
-const runCmdSync = async (repos, hubReposPath, args) => {
+const buildRepos = (repos, hubReposPath, args) => {
 
   const { context:filter } = args
 
-  return repos.reduce(async (toResolve, repo) => {
-      const responses = await toResolve
+  return repos.reduce((repos, repo) => {
+    const responses = repos
 
-      const repoData = filter !== 'all' && !repo.includes(filter)
-        ? false
-        : await buildRepo(repo, hubReposPath, args)
-      
-      repoData && responses.push(repoData)
+    const repoData = filter !== 'all' && !repo.includes(filter)
+      ? false
+      : buildRepo(repo, hubReposPath, args)
+    
+    repoData && responses.push(repoData)
 
-      return responses
+    return responses
 
-    }, Promise.resolve([]))
+  }, [])
 
-}
-
-/**
- * Runs keg-hub commands against repos asynchronously
- * @function
- * @param {Object} repos - All repos to run command on
- * @param {Object} hubReposPath - Path to the keg-hub/repos folder
- * @param {Object} args - Passed from the task caller
- *
- * @returns {Array} - Formatted repo information
- */
-const runCmdAsync = async (repos, hubReposPath, args) => {
-  const { context:filter } = args
-
-  const response = await Promise.all(
-    repos.reduce((repos, repo) => {
-
-      const repoData = filter !== 'all' && !repo.includes(filter)
-        ? false
-        : buildRepo(repo, hubReposPath, args)
-
-      return repoData
-        ? repos.concat([ repoData ])
-        : repos
-
-    }, [])
-  )
-
-  return response
 }
 
 
@@ -160,13 +131,11 @@ const runCmdAsync = async (repos, hubReposPath, args) => {
  * @param {string} args.context - Filter which repos should be returned (keg, retheme, components, etc)
  * @param {Object} args.callback - Callback method to override the default
  * @param {Object} args.format - Repo format the method should respond with
- * @param {Boolean} args.sync - whether to run the cmd synchronously or not
  * @param {Boolean} args.full
  * 
  * @returns {Array} - Group of promises resolving to formatted repo information
  */
 const getHubRepos = async (args={}) => {
-  const { sync } = args
 
   const hubReposPath = path.join(getRepoPath('hub'), 'repos')
   const { data, error } = await executeCmd(findSubNodeModules, { cwd: hubReposPath })
@@ -174,10 +143,7 @@ const getHubRepos = async (args={}) => {
 
   const repos = data.trim().split('\n')
 
-  return sync
-    ? runCmdSync(repos, hubReposPath, args)
-    : runCmdAsync(repos, hubReposPath, args)
-
+  return buildRepos(repos, hubReposPath, args)
 }
 
 module.exports = {
