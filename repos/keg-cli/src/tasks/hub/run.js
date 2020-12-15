@@ -17,7 +17,6 @@ const allowedNotDefined = [
   'remove'
 ]
 
-const scriptError = (script) => {Logger.error(`Error running script ${script}`)}
 /**
  * Runs the passed in script from the package.json of the passed in repos
  * <br/>If the script does not exist, it skips it

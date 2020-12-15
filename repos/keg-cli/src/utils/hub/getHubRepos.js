@@ -63,7 +63,9 @@ const getPackageJson = (repoPath, repo) => {
  * @param {Object} hubReposPath - Path to the keg-hub/repos folder
  * @param {Object} args - Passed from the task caller
  * @param {Object} args.format - Repo format the method should respond with
- *
+ * @param {Function} args.callback - custom callback
+ * @param {Boolean} args.full - to build with all the info or not
+ * 
  * @returns {Object} - Formatted repo information
  */
 const buildRepo = (repo, hubReposPath, args) => {

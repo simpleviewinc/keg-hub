@@ -41,7 +41,8 @@ const hubPublish = async args => {
     if (params[key]) publishArgs.tasks[key] = params[key]
   })
 
-  logSummary(await publishService(args, publishArgs))
+  const result = await publishService(args, publishArgs)
+  logSummary(result)
   return true
 
 }

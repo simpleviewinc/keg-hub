@@ -15,15 +15,16 @@ const runYarnScript = async (location, script, errorCB, log) => {
   log && Logger.log(`Running yarn ${script.trim()}...`)
 
   // Run the yarn script from the package.json of the passed in location
-  const scriptRep = await spawnCmd(
+  const exitCode = await spawnCmd(
     `yarn ${script.trim()}`.trim(),
     { cwd: location },
     false
   )
 
-  return scriptRep
-    ? checkCall(errorCB, scriptRep, location, script)
-    : scriptRep || true
+  // 0 = success, 1 = failure
+  return exitCode
+    ? checkCall(errorCB, exitCode, location, script)
+    : exitCode || true
 }
 
 module.exports = {
