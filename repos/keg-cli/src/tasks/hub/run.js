@@ -2,6 +2,7 @@ const { Logger } = require('KegLog')
 const { getHubRepos } = require('KegUtils/hub/getHubRepos')
 const { spawnCmd } = require('KegProc')
 const { get } = require('@keg-hub/jsutils')
+const { runYarnScript } = require('KegUtils/helpers/runYarnScript')
 
 // Update the Max listeners, to ensure all processes can exit properly
 process.setMaxListeners(Infinity)
@@ -16,6 +17,7 @@ const allowedNotDefined = [
   'remove'
 ]
 
+const scriptError = (script) => {Logger.error(`Error running script ${script}`)}
 /**
  * Runs the passed in script from the package.json of the passed in repos
  * <br/>If the script does not exist, it skips it
@@ -42,13 +44,7 @@ const runScript = (repo, package, args={}) => {
     Logger.colors.brightCyan(`"${repo}"`),
   )
 
-  // Run the yarn script from the package.json of the repo
-  return spawnCmd(
-    `yarn ${script.trim()}`.trim(),
-    { cwd: location },
-    false
-  )
-
+  return runYarnScript(location, script)
 }
 
 /**
