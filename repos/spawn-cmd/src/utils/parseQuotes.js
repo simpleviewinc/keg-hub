@@ -1,7 +1,9 @@
+const { isArr, isStr } = require('@keg-hub/jsutils')
+
 const SINGLE_QUOTE = '"((\\\\"|[^"])*?)"'
 const DOUBLE_QUOTE = '\'((\\\\\'|[^\'])*?)\''
-const BAREWORD = `(\\\\[\'"|&;()<> \\t]|[^\\s\'"|&;()<> \\t])+`
-const MATCHER = new RegExp(`(${BAREWORD}|${SINGLE_QUOTE}|${DOUBLE_QUOTE})*`, 'g')
+const BARE_WORD = `(\\\\[\'"|&;()<> \\t]|[^\\s\'"|&;()<> \\t])+`
+const MATCHER = new RegExp(`(${BARE_WORD}|${SINGLE_QUOTE}|${DOUBLE_QUOTE})*`, 'g')
 
 const SQ = "'"
 const DQ = '"'
@@ -17,33 +19,35 @@ const DQ = '"'
  * @returns {Array} - Passed in args, but with quoted arguments joined together
  */
 const parseQuotes = args => {
-  args = Array.isArray(args) ? args.join(' ') : args
-  const matches = args.match(MATCHER).filter(Boolean)
+  const argsStr = Array.isArray(args) ? args.join(' ') : args
 
-  if (!matches) return []
+  // If we don't have a string, just return an empty array
+  if(!isStr(argsStr)) return []
+  
+  const matches = argsStr.match(MATCHER).filter(Boolean)
 
-  return Array.isArray(matches) &&
-    matches.map(match => {
+  return !matches || !isArr(matches)
+    ? args
+    : matches.map(match => {
+        let quote = false
+        let out = ''
 
-      let quote = false
-      let out = ''
+        for (let i = 0, length = match.length; i < length; i++) {
+          let char = match.charAt(i)
 
-      for (let i = 0, length = match.length; i < length; i++) {
-        let char = match.charAt(i)
+          quote
+            ? char === quote
+              ? (quote = false)
+              : (out += char)
+            : char === DQ || char === SQ
+              ? (quote = char)
+              : (out += char)
+        }
 
-        quote
-          ? char === quote
-            ? (quote = false)
-            : (out += char)
-          : char === DQ || char === SQ
-            ? (quote = char)
-            : (out += char)
-      }
+        return out
 
-      return out
-
-    })
-    .reduce((prev, arg) => arg === undefined ? prev : prev.concat(arg),[])
+      })
+      .reduce((prev, arg) => arg === undefined ? prev : prev.concat(arg), [])
 
 }
 
