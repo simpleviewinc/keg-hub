@@ -74,9 +74,8 @@ module.exports = {
         default: true
       },
       local: {
-        description: 'Copy the local repo into the docker container at build time',
-        example: `keg docker build --local`,
-        default: false,
+        description: 'Copy the local repo into the docker container at build time. Dockerfile must support KEG_COPY_LOCAL env. Overrides globalConfig setting!',
+        example: `keg docker compose build --local`,
       },
       log: {
         description: 'Log the compose command to the terminal',

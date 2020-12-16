@@ -1,4 +1,3 @@
-const { fromImage, tagVariable } = require('./singleOptions')
 
 const pushOptions = (task, action) => {
   return {
@@ -12,6 +11,7 @@ const pushOptions = (task, action) => {
       example: `keg ${task} ${action} --no-namespace`,
       default: true
     },
+    // TODO: update to use the tagVersion single option
     tag: {
       description: 'Specify the tag tied to the image being pushed',
       example: `keg ${task} ${action} --tag my-tag`,

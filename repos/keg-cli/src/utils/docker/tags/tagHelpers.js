@@ -74,12 +74,13 @@ const getPackageVersionTag = async ({ containerContext, params }) => {
 /**
  * Gets a git repos current commit hash or branch name based on the containerContext and location
  * @type function
- * @param {Object} containerContext - Metadata about the image to be built ( from buildContainerContext helper )
- * @param {Array} params - Options passed from the command line
+ * @param {Object} args.containerContext - Metadata about the image to be built from buildContainerContext
+ * @param {Array} args.params - Options passed from the command line
+ * @param {string} method - Type string data to get from the git repo ( 'commit' === 'commit hash' )
  *
- * @returns {Promise[string]} - Current commit hash or branch name 
+ * @returns {Promise[string]} - Current commit hash or branch name
  */
-const getRepoGitTag = async ({ containerContext, params }, method) => {
+const getRepoGitTag = ({ containerContext, params }, method) => {
   const location = getLocation(containerContext, params.location)
 
   return !location
