@@ -24,7 +24,7 @@ const { getVersionUpdate, getValidSemver } = require('KegUtils/version')
  * @returns {Void}
  */
 const rollbackChanges = async (repo, publishArgs) => {
-  const { currentBranch, newVersion, wasPublished, step } = publishArgs
+  const { originalBranch, currentBranch, newVersion, wasPublished, step } = publishArgs
 
   logFormal(repo, `Publish service failed on step ${step.number}!\nRolling back publish changes...`)
 
@@ -43,6 +43,13 @@ const rollbackChanges = async (repo, publishArgs) => {
   logFormal(repo, `Resetting git to branch ${currentBranch}`)
   await runGitCmd(`reset --hard HEAD`, repo.location)
   await runGitCmd(`clean -fd`, repo.location)
+
+  // checkout the original branch
+  await runGitCmd(`checkout -b ${originalBranch}`, repo.location)
+  publishArgs.currentBranch = originalBranch
+
+  // delete the generated release branch
+  await runGitCmd(`branch -D ${originalBranch}`, repo.location)
 
   logFormal(repo, `Finished rolling back changes.`)
 
@@ -110,7 +117,7 @@ const runGitCmd = (cmd, location) => {
  */
 const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
 
-  const { newVersion, context, remote='origin' } = publishArgs
+  const { newVersion, context, remote='origin', currentBranch } = publishArgs
   const { dryrun } = params
 
   try {
@@ -118,12 +125,13 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
     // Build a new branch for the version
     publishArgs.step = { number: 5, name: 'git-branch' }
     const newBranch = `${context}-${newVersion || 'build-&-publish'}`
-    publishArgs.newBranch = newBranch
 
     // Create a new branch for the repo and version
     publishArgs.step = { number: 6, name: 'git-checkout' }
-    await runGitCmd(`checkout -b ${newBranch}`, repo.location)
-    publishArgs.currentBranch = newBranch
+    if (newBranch !== currentBranch) {
+      await runGitCmd(`checkout -b ${newBranch}`, repo.location)
+      publishArgs.currentBranch = newBranch
+    }
 
     // Add the build changes
     publishArgs.step = { number: 7, name: 'git-add' }
@@ -246,15 +254,19 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
 
+  const publishArgs = {}
+  // set the original branch
+  const branch = await git.branch.name({location: repo.location})
+  publishArgs.originalBranch = branch
+
+  // current branch gets updated in gitBranchCommitUpdates 
+  publishArgs.currentBranch = branch
 
   return toPublish.reduce(async (toResolve, repo, index) => {
     const updated = await toResolve
-    const publishArgs = {}
 
     try {
       publishArgs.context = context
-      // Get the current git branch
-      publishArgs.currentBranch = await git.branch.name({location: repo.location})
 
       // copy over new dependent build files to current repo node_modules
       index > 0 && copyBuildFiles(repo, toPublish.slice(0, index))
