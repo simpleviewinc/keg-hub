@@ -52,7 +52,7 @@ const rollbackChanges = async (repo, publishArgs) => {
  * @function
  * @param {string} context - Repo context to be published to be rolled back
  *
- * @returns {Boolean} true if the repo context should be published
+ * @returns {Promise<Boolean>} true if the repo context should be published
  */
 const confirmPublish = async context => {
   const resp = await ask.confirm(`Confirm publish with config ${context}?`)

@@ -8,7 +8,8 @@ const { generalError } = require('KegUtils/error')
  * @function
  * @param {string} version
  * 
- * @returns {Boolean} - true if valid. or Throw if invalid
+ * @throws - Will throw if 'version' is invalid semver
+ * @returns {Boolean} - true if valid
  */
 const isValidSemver = (version) => {
   const valid = VERSION.TYPES.indexOf(version) !== -1

@@ -16,9 +16,8 @@ const { isValidSemver } = require('./isValidSemver')
  * @returns {boolean} - If the version is valid or not
  */
 const validateVersion = (publishContext, version, oldVersion, confirm) => {
-  // Validate the updated version
-  !isValidSemver(version) &&
-    generalError(`Invalid version ${version} for publish context ${publishContext.name}!`)
+  // Validate the updated version. it will throw if it's not
+  isValidSemver(version)
 
   // Make sure the new version is greater then the last published version
   oldVersion && semver.lt(version, oldVersion) &&
