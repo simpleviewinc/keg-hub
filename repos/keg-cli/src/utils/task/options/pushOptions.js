@@ -1,4 +1,3 @@
-const { fromImage, tagVariable } = require('./singleOptions')
 
 const pushOptions = (task, action) => {
   return {
