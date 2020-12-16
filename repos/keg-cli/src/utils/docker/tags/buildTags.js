@@ -7,13 +7,13 @@ const { getRepoGitTag, tagsFromParams } = require('KegUtils/docker/tags/tagHelpe
 /**
  * Get the name of the image to be built
  * @type function
- * @param {string} image - Predefined name to use for the image
+ * @param {string} imageName - Predefined name to use for the image
  * @param {string} context - The Keg-CLI context of the image
  *
  * @returns {string} - Name of the image
  */
-const getImageName = (image, context) => {
-  return image ||
+const getImageName = (imageName, context) => {
+  return imageName ||
     getContainerConst(context, 'env.image') ||
     getContainerConst(context, 'env.container_name') ||
     context
@@ -46,10 +46,10 @@ const addTagsToCommand = (dockerCmd, imageName, tags) => {
  */
 const buildTags = async (args, params, dockerCmd='') => {
   const { containerContext } = args
-  const { context, tagGit, image, tagVariable } = params
+  const { context, tagGit, tagVariable, latest=true } = params
 
   // Ensure we have an image name
-  const imageName = getImageName(image, context)
+  const imageName = getImageName(params.image, context)
 
   // Ensure we have an environment
   const env = params.env || getSetting('defaultEnv')
@@ -69,7 +69,11 @@ const buildTags = async (args, params, dockerCmd='') => {
   const gitTag = tagGit && await getRepoGitTag({ containerContext, params }, tagGit)
   gitTag && tags.push(gitTag)
 
-  !tags.length && tags.push('latest')
+  !tags.length && tags.push(env)
+
+  // Always add the latest tag so docker-compose will use this image automatically
+  // Unless the latest param is set to falsy
+  latest && !tags.includes('latest') && tags.push('latest')
 
   // Add the tags to the docker command
   return addTagsToCommand(dockerCmd, imageName, tags)

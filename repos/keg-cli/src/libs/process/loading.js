@@ -4,7 +4,6 @@ const { get, checkCall, deepMerge, isFunc, isArr } = require('@keg-hub/jsutils')
 const cliProgress = require('cli-progress')
 const cliSpinners = require('cli-spinners')
 const logUpdate = require('log-update')
-const { logVirtualUrl } = require('KegUtils/log')
 
 /**
  * Create a new progress bar instance and use shades_classic theme
@@ -46,15 +45,8 @@ const startSpinner = loading => {
   }, interval)
   
   loading.loader.stop = () => {
-
     // Clear the timeout
     clearInterval(timeout)
-
-    // Clear the console
-    console.clear()
-
-    // Log the URL we should be using
-    logVirtualUrl()
   }
 
 }
