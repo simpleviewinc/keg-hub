@@ -1,6 +1,37 @@
 const { publishService } = require('KegUtils/services/publishService')
 const { Logger } = require('KegLog')
-const { get } = require('@keg-hub/jsutils')
+const { get, mapObj } = require('@keg-hub/jsutils')
+const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
+const globalConfig = getGlobalConfig()
+const publishTasks = get(globalConfig, 'publish.default.tasks')
+
+/**
+ * Setup the options object based on the user's keg config
+ * 
+ * @function
+ * @param {Object} tasks - key = task, value = default val. example: { publish: true }
+ * 
+ * @returns {null|Object}
+ */
+const setupOptions = (tasks) => {
+
+  if (!tasks) {
+    Logger.warn('No publish task found. sync to get latest config: `keg config sync`')
+    return null
+  }
+
+  const options = {}
+  // for each task, generate option obj with generic description
+  mapObj(tasks, (key, value) => {
+    options[key] = {
+      description: `Will perform ${key} task during the publish service`,
+      example: `keg hub publish --no-${key}`,
+      default: value
+    }
+  })
+
+  return options
+}
 
 /**
  * Logs the summary for the publish task
@@ -61,29 +92,13 @@ module.exports = {
         example: 'keg hub publish --context keg',
         default: 'keg'
       },
-      version: {
-        alias: [ 'ver' ],
-        description: 'The server number or update type (major, minor, patch)',
-        example: 'keg hub publish --version <semver type || version number>'
-      },
       dryrun: {
         alias: ['dry-run', 'dr'],
         description: 'Does everything publish would do except pushing to git and publishing to npm',
         example: 'keg hub publish --dry-run',
         default: false
       },
-      build: {
-        description: 'Runs the `yarn build` command on the repos before publishing',
-        example: 'keg hub publish --no-build',
-      },
-      test: {
-        description: 'Runs `yarn test` command on the repos before publishing',
-        example: 'keg hub publish --no-test',
-      },
-      publish: {
-        description: 'Publishes to npm after upgrading',
-        example: 'keg hub publish --no-publish',
-      }
+      ...setupOptions(publishTasks)
     }
   }
 }
