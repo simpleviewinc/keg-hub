@@ -24,8 +24,8 @@ const setupOptions = (tasks) => {
   // for each task, generate option obj with generic description
   mapObj(tasks, (key, value) => {
     options[key] = {
-      description: `Will perform ${key} task during the publish service`,
-      example: `keg hub publish --no-${key}`,
+      description: `Will perform ${key} task during the publish service. Default ${value}`,
+      example: `keg hub publish --${key}`,
       default: value
     }
   })

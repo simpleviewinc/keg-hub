@@ -247,7 +247,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  * 
  * @returns {Array|Boolean} - All updated/published repos or false if something failed
  */
-const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
+const publishRepos = async (globalConfig, toPublish, repos, params={}, publishContext) => {
   const { commit=false } = publishContext.tasks
   const { versionNumber, context } = params
 

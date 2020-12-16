@@ -50,7 +50,7 @@
         "install": true,
         "test": true,
         "build": true,
-        "version": true,
+        "version": null,
         "publish": true,
         "commit": true
       }
