@@ -129,9 +129,6 @@ module.exports = {
         description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
         example: `keg docker build --context tap --tap events-force`,
       },
-      local: {
-        default: false,
-      },
     })
   }
 }

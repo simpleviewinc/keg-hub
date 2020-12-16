@@ -14,7 +14,7 @@ describe('convertParamsToEnvs', () => {
     const converted = convertParamsToEnvs(defArgs)
 
     expect(isObj(converted)).toBe(true)
-    expect(converted.NODE_ENV).toBe('develop')
+    expect(converted.NODE_ENV).toBe('development')
     expect(converted.KEG_EXEC_CMD).toBe('run')
     expect(converted.KEG_NM_INSTALL).toBe(true)
     expect(converted.KEG_COPY_LOCAL).toBe(true)

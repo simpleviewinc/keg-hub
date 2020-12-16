@@ -69,9 +69,8 @@ const startServiceOptions = (task='', action='') => {
       default: false,
     },
     local: {
-      description: `Copy the local repo for the context into the docker container. Only valid for tasks that build a docker image`,
-      example: `keg ${ task } ${ action } --local`,
-      default: false,
+      description: 'Copy the local repo into the docker container at build time. Dockerfile must support KEG_COPY_LOCAL env. Overrides globalConfig setting!',
+      example: `keg ${task} ${ action } --local`,
     },
     mounts: {
       description: `List of key names or folder paths to mount into the docker container. Only used when service === 'container'`,
