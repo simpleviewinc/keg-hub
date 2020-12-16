@@ -22,16 +22,16 @@ describe('isValidSemver', () => {
   })
 
   it('should throw on invalid versions', () => {
-    expect(() => isValidSemver('1.foo.0')).toThrow()
-    expect(() => isValidSemver('x.1.5')).toThrow()
-    expect(() => isValidSemver('test')).toThrow()
+    expect(isValidSemver('1.foo.0')).toBe(false)
+    expect(isValidSemver('x.1.5')).toBe(false)
+    expect(isValidSemver('test')).toBe(false)
   })
 
   it('should throw on non strings', () => {
-    expect(() => isValidSemver(123.4)).toThrow()
-    expect(() => isValidSemver({})).toThrow()
-    expect(() => isValidSemver([])).toThrow()
-    expect(() => isValidSemver(true)).toThrow()
+    expect(isValidSemver(123.4)).toBe(false)
+    expect(isValidSemver({})).toBe(false)
+    expect(isValidSemver([])).toBe(false)
+    expect(isValidSemver(true)).toBe(false)
   })
 
 })

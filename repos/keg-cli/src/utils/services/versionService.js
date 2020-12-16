@@ -27,8 +27,8 @@ const updateRepoVersion = async (repo, versionNumber, publishContext) => {
     return
   }
 
-  // If no version to update to and context is dependent, just exit
-  if(!isValidSemver(versionNumber) && dependent) process.exit(0)
+  // If no version to update to and context is dependent, throw error and exit
+  if(!isValidSemver(versionNumber) && dependent) generalError(`Failed updating dependent repos`)
 
   // Cache the version if it's dependant, so it can be re-used
   if(dependent) cachedVersion = versionNumber

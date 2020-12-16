@@ -1,14 +1,13 @@
 const semver = require('semver')
 const { toBool } = require('@keg-hub/jsutils')
 const { VERSION } = require('KegConst/constants')
-const { generalError } = require('KegUtils/error')
+const { Logger } = require('KegLog')
 
 /**
  * Validates if version is one of: minor,major,patch or specific semver version
  * @function
  * @param {string} version
  * 
- * @throws - Will throw if 'version' is invalid semver
  * @returns {Boolean} - true if valid
  */
 const isValidSemver = (version) => {
@@ -16,9 +15,10 @@ const isValidSemver = (version) => {
     ? true
     : semver.valid(version)
 
-  return valid 
-    ? toBool(valid)
-    : generalError(`${version} is not a valid semver value!`)
+  const result = toBool(valid)
+  if (!result) Logger.error(`${version} is not a valid semver value!`)
+  
+  return result
 }
 
 module.exports = {

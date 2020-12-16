@@ -67,7 +67,7 @@ module.exports = {
         example: 'keg hub publish --version <semver type || version number>'
       },
       dryrun: {
-        alias: ['dry-run'],
+        alias: ['dry-run', 'dr'],
         description: 'Does everything publish would do except pushing to git and publishing to npm',
         example: 'keg hub publish --dry-run',
         default: false
