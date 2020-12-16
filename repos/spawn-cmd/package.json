@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/spawn-cmd",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cross platform child_process execution in Node",
   "repository": {
     "url": "git+https://github.com/simpleviewinc/keg-hub.git",
@@ -22,10 +22,11 @@
     "clean:full": "yarn clean; yarn clean:cache",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "test": "NODE_ENV=test jest --no-cache --verbose --coverage"
+    "test": "NODE_ENV=test jest --no-cache --verbose",
+    "test:reports": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
-    "@keg-hub/jsutils": "0.0.1",
+    "@keg-hub/jsutils": "8.0.0",
     "app-root-path": "3.0.0",
     "cross-spawn": "7.0.3",
     "shell-exec": "1.0.2",
@@ -40,7 +41,10 @@
       "<rootDir>/src/**/__tests__/**/*.js?(x)"
     ],
     "collectCoverageFrom": [
-      "<rootDir>/src/index.js"
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "src/index.js"
     ],
     "coverageDirectory": "reports/coverage",
     "moduleFileExtensions": [
