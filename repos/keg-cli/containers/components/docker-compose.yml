@@ -6,11 +6,11 @@ services:
       context: ${KEG_CONTEXT_PATH}
       dockerfile: ${KEG_DOCKER_FILE}
       args:
-        - GIT_COMPONENTS_URL
+        - EXPO_DEVTOOLS_LISTEN_ADDRESS
+        - KEG_DOCKER_IP
         - DOC_APP_PATH
-        - KEG_IMAGE_FROM
+        - KEG_BASE_IMAGE
         - KEG_NODE_VERSION
-        - PUBLIC_GIT_KEY
     environment:
       - CHOKIDAR_USEPOLLING
       - DOC_APP_PATH
@@ -18,12 +18,7 @@ services:
       - DOC_COMPONENTS_PATH
       - DOC_RETHEME_PATH
       - DOC_JSUTILS_PATH
-      - GIT_CLI_URL
-      - GIT_COMPONENTS_URL
-      - GIT_RETHEME_URL
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL
       - NODE_ENV
-      - PUBLIC_GIT_KEY
-

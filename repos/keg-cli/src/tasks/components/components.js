@@ -9,6 +9,7 @@ module.exports = {
       ...require('./attach'),
       ...require('./build'),
       ...require('./destroy'),
+      ...require('./push'),
       ...require('./stop'),
       ...require('./start'),
       ...require('./storybook'),

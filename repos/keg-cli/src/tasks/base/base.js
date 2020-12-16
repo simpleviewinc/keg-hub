@@ -9,6 +9,8 @@ module.exports = {
     tasks: {
       ...require('./build'),
       ...require('./destroy'),
+      ...require('./pull'),
+      ...require('./push'),
       ...require('./run'),
     },
   }

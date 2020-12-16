@@ -44,6 +44,20 @@ BUG:
 * Fix tests to no rely on globalConfig values
   * Users can customize their config values, which means tests will fail
 
+### IMAGE FROM UPDATES
+**Status**
+  Currently images need keg-base:develop image to be built, before they can be built
+  All code is copied from their local, and yarn packages are installed
+  These yarn packages could be out-of date compared to what's on the git develop branch
 
-Docker-Compose
-  * Injected docker-compose.yml config files are not being properly removed when the service is killed
+**Fix**
+Update tasks
+  * Should to pull the keg-base:develop image instead of building it
+    * Pull from provider
+    * Tag the pulled image as keg-base:develop
+  * On every start / build, run check for new keg-base:develop image
+    * When a new image is pulled, then re-build the dependent container with the latest keg-base changes
+  * After building a dependent container
+    * Add the latest tag to the image
+    * This will allow docker-compose to automatically use that image without needing to update the config
+    * Ensure it is removed from the image before pushing it anywhere

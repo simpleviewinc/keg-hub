@@ -1,78 +1,55 @@
 ARG KEG_NODE_VERSION
-ARG BASE_IMAGE_FROM=node:$KEG_NODE_VERSION
+ARG KEG_NODE_IMAGE=node:$KEG_NODE_VERSION
+FROM $KEG_NODE_IMAGE as keg-builder
 
-FROM $BASE_IMAGE_FROM AS builder
+WORKDIR /
 
-# These args are expected to be set as --build-arg
-# Which Allow them to be used durring the build
-ARG PUBLIC_GIT_KEY
-ARG GIT_CLI_URL=INITIAL
-
-# Should we use the local copy of the keg-core repo when building
-ARG KEG_COPY_LOCAL
-
-ARG DOC_CLI_PATH=/keg/keg-cli
+# Pull down dependencies should be used, and setup them up
+RUN apk add bash git
 
 # Set the default expojs version to it's locked down
-ARG EXPO_CLI_VERSION
+ARG EXPO_CLI_VERSION=3.28.5
+RUN yarn global add expo-cli@$EXPO_CLI_VERSION nodemon --pure-lockfile
 
-WORKDIR /
+# Get the git keg-hub url and branch to pull down
+ARG GIT_HUB_URL=https://github.com/simpleviewinc/keg-hub.git
+ARG GIT_HUB_BRANCH=develop
 
-# Install git and the expo-cli and sharp-cli
-RUN apk add --no-cache git; \
-    yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli nodemon
+# Pull down the from github if KEG_COPY_LOCAL is not set
+RUN git clone --single-branch --branch $GIT_HUB_BRANCH $GIT_HUB_URL /keg-hub
 
-# Copy over the local keg-components repo to a temp dir
-COPY . /keg-temp/
+# Set the defualt shell to bash
+SHELL [ "/bin/bash" ]
 
-# Update git calls to github to include the key so private repos can be pulled
-# Pull down the keg-cli locally if GIT_CLI_URL
-# Otherwise copy over the local version from keg-temp
-RUN git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
-    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_CLI_URL" != "INITIAL" ]; then \
-      git clone $GIT_CLI_URL $DOC_CLI_PATH; \
-    else \
-      cp -R /keg-temp/ $DOC_CLI_PATH; \
-    fi; \
-    rm -rf /keg-temp
+# Copy over the local keg-core repo to a temp dir
+COPY ./repos/keg-cli/containers/base/build.sh /keg-temp/build.sh
+RUN /keg-temp/build.sh
 
-# Copy over our local containers folder to get the updated run scripts
-COPY . $DOC_CLI_PATH/
-
-# ------- New Build Stage ------- #
+# ------- Final Build Stage ------- #
 
 # Use a multi stage build for security
-FROM $BASE_IMAGE_FROM AS gitBuilder
+FROM $KEG_NODE_IMAGE AS final-build
+
 WORKDIR /
 
-# These args are expected to be set as --build-arg
-# Which Allow them to be used durring the build
-ARG DOC_CLI_PATH=/keg/keg-cli
-
-# Get the ip of docker-machine from the ARG, so we can set it as an ENV
-ARG KEG_DOCKER_IP
-
-# Used by react native builder to set the ip address, other wise 
-# Will use the ip address of the docker container.
-ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
-
-# Install git and bash for the new stage
+# Install bash for the new stage
 # This is so Dockerfiles that uses "FROM keg-base", don't have to install these packages
-RUN apk add --no-cache git bash nano; \
+RUN apk add bash; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
-    git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
     rm -rf /var/cache/apk/*; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
 
 # Copy over the globally installed modules from above
-COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
+COPY --from=keg-builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 
-# Copy over keg cli from above
-COPY --from=builder $DOC_CLI_PATH $DOC_CLI_PATH
+# Copy over keg hub from keg-builder build stage
+COPY --from=keg-builder /keg-hub /keg-hub
 
-# Expose the container ports to allow connecting to it externally
-EXPOSE 80
-EXPOSE 443
+WORKDIR /keg-hub
 
-WORKDIR /keg
+# Set the defualt shell to bash
+SHELL [ "/bin/bash" ]
+
+# Run the bash for the default command
+CMD [ "/bin/bash" ]

@@ -1,5 +1,4 @@
 
-start: /bin/bash /keg/keg-cli/containers/tap/run.sh
 env:
   # --- LOCAL ENV CONTEXT --- #
   COMPONENTS_PATH: "{{ cli.paths.components }}"
@@ -72,6 +71,3 @@ env:
   VERSION: "0.0.1"
   CONTAINER_NAME: tap
   CHOKIDAR_USEPOLLING: 1
-
-  # Git tap url in github
-  GIT_APP_URL: INITIAL

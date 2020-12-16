@@ -17,6 +17,8 @@ module.exports = {
       ...require('./log'),
       ...require('./new'),
       ...require('./package'),
+      ...require('./pull'),
+      ...require('./push'),
       ...require('./run'),
       ...require('./restart'),
       ...require('./start'),

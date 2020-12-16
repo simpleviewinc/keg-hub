@@ -14,19 +14,35 @@ const { getServiceArgs } = require('./getServiceArgs')
 const buildService = async (args, argsExt) => {
 
   const serviceArgs = getServiceArgs(args, argsExt)
-  const { params } = serviceArgs
-  const { build, context, container, satisfy, log, service, tap } = params
+  const { params, __internal={} } = serviceArgs
+  const {
+    build,
+    container:containerName,
+    context,
+    image:paramImgName,
+    log,
+    satisfy,
+    service,
+    tap,
+  } = params
 
   // Ensure the image name exists. If no image, use container name
-  image = params.image || container
+  const imageName = paramImgName || containerName
 
   // Check if the base image exists, and if not then build it
   log && Logger.info(`Checking base docker image...`)
-  satisfy && await buildBaseImg(serviceArgs)
+  !__internal.skipBaseBuild && satisfy && await buildBaseImg(serviceArgs)
 
   // Check if we should build the container image first
   log && Logger.info(`Checking ${ context } docker image...`)
-  ;(satisfy || build) && await checkBuildImage(serviceArgs, context, image, tap)
+
+  ;(satisfy || build) && await checkBuildImage({
+    ...serviceArgs,
+    __internal: {
+      ...serviceArgs.__internal,
+      addLatestTag: true
+    }
+  }, context, imageName, tap)
 
   return true
 

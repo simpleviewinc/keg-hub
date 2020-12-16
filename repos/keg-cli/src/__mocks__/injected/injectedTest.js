@@ -47,16 +47,11 @@ const injectedTest = {
     RESOLVER_PATH: `${homeDir}/keg-hub/repos/tap-resolver`,
     PROXY_PATH: `${homeDir}/keg-hub/repos/keg-proxy`,
     JSUTILS_PATH: `${homeDir}/keg-hub/repos/jsutils`,
-    EXPO_CLI_VERSION: '3.28.0',
-    EXPO_DEBUG_PORT: 19007,
-    EXPO_APP_PORT: '19006',
+    EXPO_CLI_VERSION: '3.28.5',
     GIT_KEY: 'INITIAL',
-    GIT_CLI_URL: 'https://github.com/simpleviewinc/.git',
-    GIT_CORE_URL: 'https://github.com/simpleviewinc/.git',
-    GIT_COMPONENTS_URL: 'https://github.com/simpleviewinc/.git',
-    GIT_RESOLVER_URL: 'https://github.com/simpleviewinc/.git',
-    GIT_PROXY_URL: 'https://github.com/simpleviewinc/.git',
-    KEG_IMAGE_FROM: 'keg-base:latest',
+    GIT_HUB_URL: 'https://github.com/simpleviewinc/keg-hub.git',
+    GIT_HUB_BRANCH: 'develop',
+    KEG_BASE_IMAGE: 'docker.pkg.github.com/simpleviewinc/keg-packages/keg-base:develop',
     KEG_NODE_VERSION: '14.14.0',
     DOC_CLI_PATH: '/keg/keg-cli',
     DOC_CORE_PATH: '/keg/tap/node_modules/keg-core',
@@ -90,7 +85,6 @@ const injectedTest = {
 const injectedContainer = {
   ARGS: {
     GIT_KEY: 'GIT_KEY',
-    GIT_CLI_URL: 'GIT_CLI_URL'
   },
   DEFAULTS: {
     clean: true,

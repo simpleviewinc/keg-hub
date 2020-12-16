@@ -1,6 +1,6 @@
 const { DOCKER } = require('KegConst/docker')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { buildService, getServiceArgs } = require('KegUtils/services')
+const { pullService } = require('KegUtils/services/pullService')
 const { generalError } = require('KegUtils/error/generalError')
 
 /**
@@ -16,7 +16,7 @@ const { generalError } = require('KegUtils/error/generalError')
 const runTap = async (args) => {
 
   const exArgs = { context: 'tap', tap: args.params.tap, image: 'tap' }
-  const isBuilt = await buildService(args, exArgs)
+  const isPulled = await pullService(args, exArgs)
 
   return runService(args, { ...exArgs, container: 'tap' }) 
 
