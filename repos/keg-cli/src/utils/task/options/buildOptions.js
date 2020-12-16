@@ -53,8 +53,13 @@ const buildOptions = (task, action) => {
       description: 'Copy the local repo into the docker container at build time. Dockerfile must support KEG_COPY_LOCAL env. Overrides globalConfig setting!',
       example: `keg ${task} build --local`,
     },
+    latest: {
+      description: 'Adds the latest tag to the docker image.',
+      example: 'keg ${task} build --no-latest',
+      default: true
+    },
     log: {
-      description: 'Log docker command',
+      description: 'Log docker command before they are run',
       example: 'keg ${task} build --log true',
       default: false
     },
