@@ -7,7 +7,7 @@ const { reduceObj, get, isStr } = require('@keg-hub/jsutils')
  * Loops over the passed in args and maps them to the docker constants
  * Matching keys will use the passed in value or the constants value
  * @example
- * const dockerArgs = getDockerArgs({ network: true, file: '/repo/Dockerfile' })
+ * const dockerArgs = getDockerCmdArgs({ network: true, file: '/repo/Dockerfile' })
  * @param {Object} args - Key/Values to map to docker arguments
  * @param {string|boolean} args.file - Dockerfile to use for the docker command
  * @param {string|boolean} args.network - Type of docker network setup to use
@@ -18,7 +18,7 @@ const { reduceObj, get, isStr } = require('@keg-hub/jsutils')
  *
  * @returns {string} - Joint docker command arguments
  */
-const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
+const getDockerCmdArgs = ({ args, cmd, context, dockerCmd='' }) => {
 
   const containerOpts = get(DOCKER, `CONTAINERS.${ context.toUpperCase() }`)
 
@@ -30,7 +30,7 @@ const getDockerArgs = ({ args, cmd, context, dockerCmd='' }) => {
   // If set to true, then the value from containerOpts.VALUES is added to the cmd
   return reduceObj(containerOpts.VALUES, (key, value, joinedArgs) => {
 
-    // Only add the Dockerfile path when building, not durring run
+    // Only add the Dockerfile path when building, not durning run
     if(key === 'file' && cmd === 'run')  return joinedArgs
 
     // Only add connect '-it' when running, not durning build
@@ -100,5 +100,5 @@ const addContainerEnv = (dockerCmd='', options={}) => {
 module.exports = {
   addContainerEnv,
   addContainerName,
-  getDockerArgs,
+  getDockerCmdArgs,
 }

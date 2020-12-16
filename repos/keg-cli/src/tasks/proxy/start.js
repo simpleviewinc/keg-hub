@@ -1,5 +1,6 @@
 const { DOCKER } = require('KegConst/docker')
-const { serviceOptions, composeService } = require('KegUtils/services')
+const { composeService } = require('KegUtils/services')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 
 /**
  * Start keg-proxy with docker-compose
@@ -35,6 +36,6 @@ module.exports = {
     locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Runs keg-proxy in a docker container`,
     example: 'keg proxy start <options>',
-    options: serviceOptions('proxy', 'start', {}),
+    options: mergeTaskOptions('proxy', 'start', 'startService')
   }
 }

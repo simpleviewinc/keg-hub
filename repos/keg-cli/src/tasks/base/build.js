@@ -1,5 +1,6 @@
-const { runInternalTask } = require('KegUtils/task/runInternalTask')
 const { DOCKER } = require('KegConst/docker')
+const { runInternalTask } = require('KegUtils/task/runInternalTask')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 
 /**
  * Builds a keg base docker image
@@ -14,6 +15,10 @@ const { DOCKER } = require('KegConst/docker')
 const buildBase = async (args) => {
   return runInternalTask(`tasks.docker.tasks.build`, {
     ...args,
+    __internal: {
+      ...args.__internal,
+      locationContext: args.task.locationContext,
+    },
     params: { ...args.params, context: 'base', tap: undefined },
   })
 }
@@ -27,26 +32,10 @@ module.exports = {
     locationContext: DOCKER.LOCATION_CONTEXT.REPO,
     description: `Builds a taps docker container`,
     example: 'keg base build <options>',
-    options: {
-      args: {
-        description: 'Add docker build arguments from container env files',
-        example: 'keg base build --args false',
-        default: true
-      },
-      cache: {
-        description: 'Docker will use build cache when building the image',
-        example: 'keg base build --cache false',
-        default: true
-      },
+    options: mergeTaskOptions(`base`, `build`, `build`, {
       local: {
-        description: 'Copy the local repo into the docker container at build time',
-        example: `keg base build --local false`,
-        default: true,
+        default: false,
       },
-      tags: {
-        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg base build tags=my-tag,local,development'
-      },
-    }
+    })
   }
 }

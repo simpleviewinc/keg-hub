@@ -1,11 +1,12 @@
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
-const { get, mapObj } = require('@keg-hub/jsutils')
 const { DOCKER } = require('KegConst/docker')
+const { get, mapObj } = require('@keg-hub/jsutils')
+const { generalError, throwRequired } = require('KegUtils/error')
 const { runInternalTask } = require('KegUtils/task/runInternalTask')
-const { generalError, throwRequired, throwNoRepo, throwWrap } = require('KegUtils/error')
-const { getOrBuildImage, buildProviderUrl, addProviderTags, imageSelect } = require('KegUtils/docker')
-
+const { addProviderTags } = require('KegUtils/docker/tags/addProviderTags')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
+const { getOrBuildImage, buildProviderUrl, imageSelect } = require('KegUtils/docker')
 /**
  * Pushes a local image registry provider in the cloud
  * @param {Object} args - arguments passed from the runTask method
@@ -31,7 +32,7 @@ const providerPush = async (args) => {
   */
   const image = await getOrBuildImage(args) || await imageSelect()
   !image && generalError('No img found!')
-  
+
   /*
   * ----------- Step 2 ----------- *
   * Build the provider url
@@ -62,37 +63,12 @@ module.exports = {
     action: providerPush,
     description: 'Pushes an image to a Docker registry provider',
     example: 'keg docker provider push <options>',
-    options: {
+    options: mergeTaskOptions(`docker provider`, `push`, `push`, {
       context: {
         allowed: DOCKER.IMAGES,
         description: 'Context of the docker container to build',
         enforced: true,
       },
-      build: {
-        description: 'Build the docker image before pushing to the provider',
-        default: false
-      },
-      namespace: {
-        description: 'Use the docker namespace instead of the user for the docker provider url',
-        default: true
-      },
-      tag: {
-        description: 'Specify the tag tied to the image being pushed',
-        default: 'latest',
-      },
-      tags: {
-        description: 'Extra tags to add to the docker image after its build. Uses commas (,) to separate',
-        example: 'keg docker build tags=my-tag,local,development'
-      },
-      tap: {
-        description: 'Name of the tap to build. Only needed if "context" argument is "tap"',
-      },
-      token: {
-        description: 'API Token for the registry provider'
-      },
-      user: {
-        description: 'User to use when logging into the registry provider'
-      },
-    }
+    }),
   }
 }

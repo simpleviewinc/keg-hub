@@ -1,5 +1,5 @@
-const { serviceOptions, startService } = require('KegUtils/services')
-
+const { startService } = require('KegUtils/services')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 
 /**
  * Start a keg-components inside docker
@@ -27,6 +27,13 @@ module.exports = {
     action: startComponents,
     description: `Runs keg-components in a docker container`,
     example: 'keg components start <options>',
-    options: serviceOptions('components', 'start'),
+    options: mergeTaskOptions('components', 'start', 'startService', {
+      recreate: {
+        alias: [ 'rec', `create` ],
+        description: 'Force recreate all the docker containers for the components service',
+        example: 'keg components start --recreate',
+        required: false
+      }
+    }),
   }
 }
