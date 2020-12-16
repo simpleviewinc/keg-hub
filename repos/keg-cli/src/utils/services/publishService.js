@@ -29,8 +29,10 @@ const rollbackChanges = async (repo, publishArgs) => {
   logFormal(repo, `Publish service failed on step ${step.number}!\nRolling back publish changes...`)
 
   const doGitReset = await ask.confirm(`Confirm running a full git reset. ALL CHANGES WILL BE LOST`)
-  if(!doGitReset) return Logger.warn(`Canceling git reset. Rollback did not complete. Current git branch is not clean!`)
-
+  if(!doGitReset) {
+    Logger.warn(`Canceling git reset. Rollback did not complete. Current git branch is not clean!`)
+    process.exit(0)
+  }
   if(step.number > 3 && wasPublished)
     return Logger.warn(`\nCan not rollback changes, version ${newVersion} was already published to NPM!\n`)
 
@@ -318,6 +320,7 @@ const publishService = async (args, publishArgs) => {
   // get the actual version number
   const versionNumber = await getVersionUpdate(toPublish[0], newVersion, publishContext)
   if (!versionNumber) return null
+  get(params, 'dryrun') && Logger.subHeader('dry-run: Will NOT Publish or Push to GitHub')
 
   // run yarn install on all toPublish repos prior to any package json updates
   // then we can just copy over new build files to their node_modules
