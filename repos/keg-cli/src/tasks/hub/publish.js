@@ -1,7 +1,8 @@
-const { publishService } = require('KegUtils/services/publishService')
 const { Logger } = require('KegLog')
-const { get, mapObj } = require('@keg-hub/jsutils')
+const { get, mapObj, exists } = require('@keg-hub/jsutils')
 const defaultConfig = require('KegScripts/setup/cli.config.json')
+const { publishService } = require('KegUtils/services/publishService')
+
 const publishTasks = get(defaultConfig, 'publish.default.tasks')
 
 /**
@@ -66,12 +67,11 @@ const hubPublish = async args => {
   const publishArgs = { tasks: {} }
 
   // break up the params into valid publish args
-  validTasks.map((key) => {
-    if (params[key]) publishArgs.tasks[key] = params[key]
-  })
+  validTasks.map((key) => exists(params[key]) && (publishArgs.tasks[key] = params[key]))
 
   const result = await publishService(args, publishArgs)
   logSummary(result)
+
   return true
 
 }
@@ -95,6 +95,16 @@ module.exports = {
         description: 'Does everything publish would do except pushing to git and publishing to npm',
         example: 'keg hub publish --dry-run',
         default: false
+      },
+      confirm: {
+        description: 'Asks the user to confirm the updates before publishing. Set to false for CI/CD environments',
+        example: 'keg hub publish --no-confirm',
+        default: true
+      },
+      version: {
+        alias: [ 'ver' ],
+        description: 'New version to be published. Must be valid semver or one of major, minor or patch',
+        example: 'keg hub publish --version 1.0.0',
       },
       ...setupOptions(publishTasks)
     }

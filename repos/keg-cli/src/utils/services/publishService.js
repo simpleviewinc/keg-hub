@@ -39,15 +39,19 @@ const validatePublishTask = async (repo, runTask, scriptName, errorCB) => {
  * @param {string} publishArgs.newVersion - i.e '1.0.0'
  * @param {Boolean} publishArgs.wasPublished - whether yarn publish was executed
  * @param {{number:Number, name:string}} publishArgs.step - current step information
- * 
+ * @param {boolean} [confirm=true] - Should the updates be confirmed by the user
+ *
  * @returns {Void}
  */
-const rollbackChanges = async (repo, publishArgs) => {
+const rollbackChanges = async (repo, publishArgs, confirm=true) => {
   const { originalBranch, currentBranch, newVersion, wasPublished, step } = publishArgs
 
   logFormal(repo, `Publish service failed on step ${step.number}!\nRolling back publish changes...`)
 
-  const doGitReset = await ask.confirm(`Confirm running a full git reset. ALL CHANGES WILL BE LOST`)
+  const doGitReset = confirm
+    ? await ask.confirm(`Confirm running a full git reset. ALL CHANGES WILL BE LOST`)
+    : true
+
   if(!doGitReset) {
     Logger.warn(`Canceling git reset. Rollback did not complete. Current git branch is not clean!`)
     process.exit(0)
@@ -63,11 +67,12 @@ const rollbackChanges = async (repo, publishArgs) => {
   await runGitCmd(`reset --hard HEAD`, repo.location)
   await runGitCmd(`clean -fd`, repo.location)
 
-  // checkout the original branch
-  await runGitCmd(`checkout ${originalBranch}`, repo.location)
-
-  // delete the generated release branch
-  await runGitCmd(`branch -D ${currentBranch}`, repo.location)
+  if(currentBranch !== originalBranch){
+    // checkout the original branch
+    await runGitCmd(`checkout ${originalBranch}`, repo.location)
+    // delete the generated release branch
+    await runGitCmd(`branch -D ${currentBranch}`, repo.location)
+  }
 
   logFormal(repo, `Finished rolling back changes.`)
 
@@ -136,7 +141,7 @@ const runGitCmd = (cmd, location) => {
 const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
 
   const { newVersion, context, remote='origin', currentBranch } = publishArgs
-  const { dryrun } = params
+  const { dryrun, confirm=true } = params
 
   try {
     logFormal(repo, `Running commit service`)
@@ -166,7 +171,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
   }
   catch(err){
     Logger.error(`Error creating git branch`, err.stack)
-    await rollbackChanges(repo, publishArgs)
+    await rollbackChanges(repo, publishArgs, confirm)
   }
 
   // Add the update to updated, so we know this repo was published
@@ -193,13 +198,13 @@ const repoYarnCommands = async (repo, publishContext, publishArgs, params) => {
     access='public',
   } = publishContext.tasks
   const { newVersion } = publishArgs
-  const { dryrun } = params 
+  const { dryrun, confirm=true } = params 
 
   try {
     // Callback when an error is thrown for a repo script
     const scriptError = script => async () => {
       Logger.error(`Error running script ${script}`)
-      await rollbackChanges(repo, publishArgs)
+      await rollbackChanges(repo, publishArgs, confirm)
       return false
     }
     // Run the repos tests
@@ -221,7 +226,7 @@ const repoYarnCommands = async (repo, publishContext, publishArgs, params) => {
   }
   catch(err){
     Logger.error(`Error publishing ${repo.repo}`)
-    await rollbackChanges(repo, publishArgs)
+    await rollbackChanges(repo, publishArgs, confirm)
 
     return false
   }
@@ -264,7 +269,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  */
 const publishRepos = async (globalConfig, toPublish, repos, params={}, publishContext) => {
   const { commit=false } = publishContext.tasks
-  const { versionNumber, context } = params
+  const { versionNumber, context, confirm=true } = params
 
   if(!toPublish.length)
     return Logger.warn(`No repos found to publish for context ${publishContext.name}`)
@@ -306,7 +311,7 @@ const publishRepos = async (globalConfig, toPublish, repos, params={}, publishCo
     catch(err){
       console.log(err)
       Logger.error(`Error publishing ${repo.repo}`)
-      return rollbackChanges(repo, publishArgs)
+      return rollbackChanges(repo, publishArgs, confirm)
     }
 
   }, Promise.resolve([]))
@@ -324,9 +329,15 @@ const publishRepos = async (globalConfig, toPublish, repos, params={}, publishCo
  */
 const publishService = async (args, publishArgs) => {
   const { params, globalConfig } = args
-  const { context, version } = params
+  const { context, confirm=true, version } = params
 
-  await confirmPublish(context)
+  // If running without a confirm, then check that we have a version
+  !confirm &&
+    (!exists(version) || !version) &&
+    generalError(`Can not auto-publish without a valid semver version!`)
+
+  confirm && await confirmPublish(context)
+
   const newVersion = !version
     ? await getValidSemver()
     : version
@@ -344,8 +355,10 @@ const publishService = async (args, publishArgs) => {
 
   // Get all the repo's to be published
   const toPublish = getPublishContextOrder(repos, publishContext, params)
+
   // get the actual version number
-  const versionNumber = await getVersionUpdate(toPublish[0], newVersion, publishContext)
+  const versionNumber = await getVersionUpdate(toPublish[0], newVersion, publishContext, confirm)
+
   if (!versionNumber) return null
   get(params, 'dryrun') && Logger.subHeader('dry-run: Will NOT Publish or Push to GitHub')
 
