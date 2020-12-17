@@ -45,11 +45,10 @@ const rollbackChanges = async (repo, publishArgs) => {
   await runGitCmd(`clean -fd`, repo.location)
 
   // checkout the original branch
-  await runGitCmd(`checkout -b ${originalBranch}`, repo.location)
-  publishArgs.currentBranch = originalBranch
+  await runGitCmd(`checkout ${originalBranch}`, repo.location)
 
   // delete the generated release branch
-  await runGitCmd(`branch -D ${originalBranch}`, repo.location)
+  await runGitCmd(`branch -D ${currentBranch}`, repo.location)
 
   logFormal(repo, `Finished rolling back changes.`)
 
@@ -247,7 +246,7 @@ const copyBuildFiles = (currentRepo, repos) => {
  * 
  * @returns {Array|Boolean} - All updated/published repos or false if something failed
  */
-const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext) => {
+const publishRepos = async (globalConfig, toPublish, repos, params={}, publishContext) => {
   const { commit=false } = publishContext.tasks
   const { versionNumber, context } = params
 
@@ -256,7 +255,7 @@ const publishRepos = (globalConfig, toPublish, repos, params={}, publishContext)
 
   const publishArgs = {}
   // set the original branch
-  const branch = await git.branch.name({location: repo.location})
+  const branch = await git.branch.name({location: repos[0].location})
   publishArgs.originalBranch = branch
 
   // current branch gets updated in gitBranchCommitUpdates 
