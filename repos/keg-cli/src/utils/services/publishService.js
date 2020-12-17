@@ -3,7 +3,7 @@ const { Logger } = require('KegLog')
 const { spawnCmd } = require('KegProc')
 const { ask } = require('@keg-hub/ask-it')
 const { copySync, emptyDirSync } = require('KegFileSys/fileSys')
-const { get } = require('@keg-hub/jsutils')
+const { get, exists } = require('@keg-hub/jsutils')
 const { getHubRepos } = require('../hub/getHubRepos')
 const { versionService } = require('./versionService')
 const { generalError } = require('../error/generalError')
@@ -11,6 +11,24 @@ const { runRepoScript } = require('../hub/runRepoScript')
 const { getPublishContext } = require('../publish/getPublishContext')
 const { getPublishContextOrder } = require('../publish/getPublishContextOrder')
 const { getVersionUpdate, getValidSemver } = require('KegUtils/version')
+
+/**
+ * Validates the package command and runs it if exists
+ * @param {Object} repo 
+ * @param {Boolean} runTask - to run the task or not
+ * @param {string} scriptName - name of the script cmd to run
+ * 
+ * @returns {Void}
+ */
+const validatePublishTask = async (repo, runTask, scriptName) => {
+  logFormal(repo, `${runTask ? 'Running' : 'Skipping'} yarn ${scriptName}...`)
+  if (runTask) {
+    exists(get(repo, `package.scripts[${scriptName}]`, undefined))
+      ? await runRepoScript(repo, scriptName, scriptError(scriptName))
+      : Logger.warn(`could not find script '${scriptName}', skipping`)
+  }
+}
+
 /**
  * Attempts to rollback changes made to a repo using git
  * @function
@@ -186,13 +204,11 @@ const repoYarnCommands = async (repo, publishContext, publishArgs, params) => {
 
     // Run the repos tests
     publishArgs.step = { number: 2, name: 'test' }
-    logFormal(repo, `${test ? 'Running' : 'Skipping'} yarn test...`)
-    test && await runRepoScript(repo, `test`, scriptError(`test`))
+    await validatePublishTask(repo, test, 'test')
 
     // Build the repo
     publishArgs.step = { number: 3, name: 'build' }
-    logFormal(repo, `${build ? 'Running' : 'Skipping'} yarn build...`)
-    build && await runRepoScript(repo, `build`, scriptError(`build`))
+    await validatePublishTask(repo, build, 'build')
 
     // Publish to NPM
     publishArgs.step = { number: 4, name: 'publish' }
