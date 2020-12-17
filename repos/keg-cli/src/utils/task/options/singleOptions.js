@@ -17,7 +17,7 @@ const tagVariable = (task, action) => ({
   alias: [ 'tagvariable', 'variable', 'tVar', 'tvar', 'Var', 'var', 'tagV', 'tagv', 'tv' ],
   allowed: allowedTagOpts,
   description: 'Create a tag through variable replacement using one or more parts',
-  example: `keg ${task} ${action} --variable branch:version`,
+  example: `keg ${task} ${action} --tagVariable branch:version`,
   type: 'array'
 })
 

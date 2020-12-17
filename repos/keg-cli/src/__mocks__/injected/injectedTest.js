@@ -77,7 +77,7 @@ const injectedTest = {
     KEG_PROXY_ENTRY: 'keg',
     KEG_EXEC_CMD: 'dev',
     IMAGE: 'tap-injected-test',
-    CONTAINER_NAME: 'keg-herkin',
+    CONTAINER_NAME: 'tap-injected-test',
     VERSION: '0.0.1',
     DOCKER_BUILDKIT: 1,
     COMPOSE_DOCKER_CLI_BUILD: 1,
@@ -110,7 +110,19 @@ const injectedContainer = {
   BUILD_ARGS_FILTER: [],
 }
 
+const injectedContext = {
+  context: 'tap-injected-test',
+  tap: 'tap-injected-test',
+  noPrefix: 'tap-injected-test',
+  cmdContext: 'tap-injected-test',
+  image: 'tap-injected-test',
+  withPrefix: undefined,
+  location: injectedTest.params.injectPath,
+  contextEnvs: injectedTest.contextEnvs
+}
+
 module.exports = {
   injectedTest,
-  injectedContainer
+  injectedContainer,
+  injectedContext
 }

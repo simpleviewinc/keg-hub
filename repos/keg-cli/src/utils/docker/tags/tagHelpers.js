@@ -13,7 +13,7 @@ const { get, isArr } = require('@keg-hub/jsutils')
 const tagsFromParams = tags => {
   // Loop the tags and ensure they are not empty strings
   return isArr(tags) && tags.length
-    ? params.tags.reduce((customTags, tag) => {
+    ? tags.reduce((customTags, tag) => {
         const addTag = tag && tag.trim()
         addTag && customTags.push(addTag)
 
