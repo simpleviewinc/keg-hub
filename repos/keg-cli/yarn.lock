@@ -1039,13 +1039,13 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@keg-hub/args-parse@6.1.0":
-  version "6.1.0"
-  resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-6.1.0.tgz#10b39cca290a46e61d3ffb517be74125c108b469"
-  integrity sha512-LKkZvTMW5Oof9xlSuL2MXgGoATX+lDa5mVCqPhFW79mSfs9mrBcjJRT/LNjWG2T4Qs9euRnWKM8cHGg7EjddhA==
+"@keg-hub/args-parse@6.2.1":
+  version "6.2.1"
+  resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-6.2.1.tgz#9397a927ff3e19440b45ba39ecd2b2e5a1b4691e"
+  integrity sha512-NnAux727E5kKqBGrFM1rY5+XUn5Rn7JPLoEjzhyDjNZmJx4oGEen/uBKHGn2zPDmTzes5UAnsPIW1rn2qV0lFg==
   dependencies:
     "@keg-hub/ask-it" "0.0.1"
-    "@keg-hub/jsutils" "6.1.0"
+    "@keg-hub/jsutils" "6.2.1"
     app-root-path "3.0.0"
 
 "@keg-hub/ask-it@0.0.1":
@@ -1062,10 +1062,10 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-0.0.1.tgz#6be5fd8398324c51a320f9f8460dbcdcf9faec24"
   integrity sha512-1oAyR0FuHb6ICHd1sacvGhm0O4/w/BDT+RNQO13Lcy1hh7QgAibOG7ylioPFkOQWBFN1nCMdgW9xRVe3peEUVQ==
 
-"@keg-hub/jsutils@6.1.0":
-  version "6.1.0"
-  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-6.1.0.tgz#880329665ac2a173d5fbadfe4ff8f2eedc94c0cc"
-  integrity sha512-h8uE8UBUqGeI0QWJL+93gG2/SuV9Z7xoELIwtT0Zp1qJNQRlW91U/23S+Mt1V91cfZ3og0Dx3LcDknwWKXisgQ==
+"@keg-hub/jsutils@6.2.1":
+  version "6.2.1"
+  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-6.2.1.tgz#0d9dbf562e313eb7690d36a2b8e9147b1e08d52a"
+  integrity sha512-aCZ86nB+f6awWbDIPd6VPaePQjm8AYNXvGrwe2Ip06F6oVJZ7tiOIBwFHeK/gAKqmw1wnxl4B0z21vQeINd6dw==
 
 "@keg-hub/jsutils@8.0.0":
   version "8.0.0"
