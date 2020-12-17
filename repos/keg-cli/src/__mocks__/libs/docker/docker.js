@@ -1,4 +1,4 @@
-global.testDocker = {
+const dockerData = {
   containers: {
     tap: {
       command: 'docker-entrypoint.s…',
@@ -162,6 +162,8 @@ global.testDocker = {
     }
   }
 }
+
+global.testDocker = dockerData
 
 const dockerOutput = {
   container: {
@@ -380,6 +382,7 @@ const docker = {
 
 module.exports = {
   docker,
+  dockerData,
   dockerLabels,
   dockerObjLabels,
   dockerOutput,
