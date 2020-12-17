@@ -256,7 +256,7 @@ const publishRepos = async (globalConfig, toPublish, repos, params={}, publishCo
 
   const publishArgs = {}
   // set the original branch
-  const branch = await git.branch.name({location: repo.location})
+  const branch = await git.branch.name({location: repos[0].location})
   publishArgs.originalBranch = branch
 
   // current branch gets updated in gitBranchCommitUpdates 
