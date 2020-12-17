@@ -147,7 +147,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
     logFormal(repo, `Running commit service`)
     // Build a new branch for the version
     publishArgs.step = { number: 5, name: 'git-branch' }
-    const newBranch = `${context}-${newVersion || 'build-&-publish'}`
+    const newBranch = `${context}-${newVersion}-${await git.repo.commitHash({ location: repo.location })}`
 
     // Create a new branch for the repo and version
     publishArgs.step = { number: 6, name: 'git-checkout' }
