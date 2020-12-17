@@ -90,7 +90,6 @@ const getRepoGitTag = ({ containerContext, params }, method) => {
       : git.branch.name({ location })
 }
 
-
 module.exports = {
   getPassedOptionTag,
   getPackageVersionTag,

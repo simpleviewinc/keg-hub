@@ -1,11 +1,10 @@
 const { DOCKER } = require('KegConst/docker')
-const { deepMerge, get, uuid } = require('@keg-hub/jsutils')
-const { containerContexts } = require('KegMocks/contexts/containerContexts')
 const { getTask } = require('KegMocks/helpers/testTasks')
-
-const { allowedTagOpts } = require('../../../getters/getTagVarMap')
-const { injectedTest, injectedContainer, injectedContext } = require('KegMocks/injected/injectedTest')
+const { deepMerge, get, uuid } = require('@keg-hub/jsutils')
 const tagHelpers = require('KegUtils/docker/tags/tagHelpers')
+const { allowedTagOpts } = require('../../../getters/getTagVarMap')
+const { containerContexts } = require('KegMocks/contexts/containerContexts')
+const { injectedTest, injectedContainer, injectedContext } = require('KegMocks/injected/injectedTest')
 
 const gitTagHash = uuid()
 
@@ -17,9 +16,7 @@ const getRepoGitTagMock = jest.fn((params, method) => {
 
 jest.setMock('KegUtils/docker/tags/tagHelpers', { ...tagHelpers, getRepoGitTag: getRepoGitTagMock })
 
-
 const globalConfig = global.getGlobalCliConfig()
-
 
 const withInjected = {
   ...DOCKER.CONTAINERS,

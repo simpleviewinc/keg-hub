@@ -1,8 +1,9 @@
-const globalConfig = global.getGlobalCliConfig()
+const { git } = require('KegGitCli')
 const { DOCKER } = require('KegConst/docker')
 const { getTask } = require('KegMocks/helpers/testTasks')
 const { dockerData, docker } = require('KegMocks/libs/docker/docker')
-const { git } = require('KegGitCli')
+
+const globalConfig = global.getGlobalCliConfig()
 
 jest.setMock('KegDocCli', docker)
 
