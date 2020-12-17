@@ -1,9 +1,8 @@
 const { publishService } = require('KegUtils/services/publishService')
 const { Logger } = require('KegLog')
 const { get, mapObj } = require('@keg-hub/jsutils')
-const { getGlobalConfig } = require('KegUtils/globalConfig/getGlobalConfig')
-const globalConfig = getGlobalConfig()
-const publishTasks = get(globalConfig, 'publish.default.tasks')
+const defaultConfig = require('KegScripts/setup/cli.config.json')
+const publishTasks = get(defaultConfig, 'publish.default.tasks')
 
 /**
  * Setup the options object based on the user's keg config
@@ -22,11 +21,10 @@ const setupOptions = (tasks) => {
 
   const options = {}
   // for each task, generate option obj with generic description
-  mapObj(tasks, (key, value) => {
+  mapObj(tasks, (key) => {
     options[key] = {
-      description: `Will perform ${key} task during the publish service. Default ${value}`,
+      description: `Will perform ${key} task during the publish service`,
       example: `keg hub publish --${key}`,
-      default: value
     }
   })
 
