@@ -1072,12 +1072,12 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.0.0.tgz#740e05e10128be53d2ffea72a6c8990b57745679"
   integrity sha512-omgYOX0p9H6GsQQ5onEJK56pUI/z1CoblFqjWy/SpwANwsuqEFEG3EKDdcRwwpLjaEl8qQWQzfQ1Z6Pc+OOgqQ==
 
-"@keg-hub/spawn-cmd@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@keg-hub/spawn-cmd/-/spawn-cmd-0.0.1.tgz#074033451d916d9b82827efe4b65b57565c7303a"
-  integrity sha512-PrrPPX0AB+AzzsSUR/nTAYsjEr4/GxmHGiKEOYPx89hvlbRZlkbXPObBNzGyOroYPqPjpZINJo4xpqNKW/QVrA==
+"@keg-hub/spawn-cmd@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@keg-hub/spawn-cmd/-/spawn-cmd-0.1.0.tgz#4050dfa1681f4cfdf85ef27ca11724e1603b2b48"
+  integrity sha512-R+beqPFVga+XXRcnmALZe2VEYVk5S0eyhURLkOGFEJlbeQxvBZgcRdnEGVCQF7x65aw+A5ktDiOPtN9rEWsL8Q==
   dependencies:
-    "@keg-hub/jsutils" "0.0.1"
+    "@keg-hub/jsutils" "8.0.0"
     app-root-path "3.0.0"
     cross-spawn "7.0.3"
     shell-exec "1.0.2"

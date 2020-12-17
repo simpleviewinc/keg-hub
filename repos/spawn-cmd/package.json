@@ -17,6 +17,7 @@
     "access": "public"
   },
   "scripts": {
+    "build": "echo \"N/A\"",
     "clean": "yarn clean:nm",
     "clean:cache": "yarn cache clean",
     "clean:full": "yarn clean; yarn clean:cache",
