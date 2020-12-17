@@ -17,14 +17,15 @@ const { getVersionUpdate, getValidSemver } = require('KegUtils/version')
  * @param {Object} repo 
  * @param {Boolean} runTask - to run the task or not
  * @param {string} scriptName - name of the script cmd to run
+ * @param {Function} errorCB - called when the script being executed throws an error
  * 
  * @returns {Void}
  */
-const validatePublishTask = async (repo, runTask, scriptName) => {
+const validatePublishTask = async (repo, runTask, scriptName, errorCB) => {
   logFormal(repo, `${runTask ? 'Running' : 'Skipping'} yarn ${scriptName}...`)
   if (runTask) {
-    exists(get(repo, `package.scripts[${scriptName}]`, undefined))
-      ? await runRepoScript(repo, scriptName, scriptError(scriptName))
+    exists(get(repo, `package.scripts.${scriptName}`, undefined))
+      ? await runRepoScript(repo, scriptName, errorCB)
       : Logger.warn(`could not find script '${scriptName}', skipping`)
   }
 }
@@ -201,14 +202,13 @@ const repoYarnCommands = async (repo, publishContext, publishArgs, params) => {
       await rollbackChanges(repo, publishArgs)
       return false
     }
-
     // Run the repos tests
     publishArgs.step = { number: 2, name: 'test' }
-    await validatePublishTask(repo, test, 'test')
+    await validatePublishTask(repo, test, 'test', scriptError('test'))
 
     // Build the repo
     publishArgs.step = { number: 3, name: 'build' }
-    await validatePublishTask(repo, build, 'build')
+    await validatePublishTask(repo, build, 'build', scriptError('build'))
 
     // Publish to NPM
     publishArgs.step = { number: 4, name: 'publish' }
