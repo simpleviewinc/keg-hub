@@ -377,6 +377,9 @@ const docker = {
         }
       }
     }),
+    tag: jest.fn(({ image, log, provider, tag }) => {
+    
+    }),
   }
 }
 

@@ -62,7 +62,7 @@ const args = {
       ...defParams,
       context: 'base',
       tap: 'base',
-      location: '/Users/lancetipton/keg-hub/repos/keg-cli',
+      location: DOCKER.CONTAINERS.BASE.ENV.KEG_CONTEXT_PATH,
       cmd: 'build',
       image: 'keg-base',
       buildArgs: {
@@ -79,7 +79,7 @@ const args = {
       ...defParams,
       context: 'core',
       tap: 'core',
-      location: '/Users/lancetipton/keg-hub/repos/keg-core',
+      location: DOCKER.CONTAINERS.CORE.ENV.KEG_CONTEXT_PATH,
       cmd: 'core',
       image: 'keg-core',
       buildArgs: {
@@ -96,7 +96,7 @@ const args = {
       ...defParams,
       context: 'components',
       tap: 'components',
-      location: '/Users/lancetipton/keg-hub/repos/keg-components',
+      location: DOCKER.CONTAINERS.COMPONENTS.ENV.KEG_CONTEXT_PATH,
       cmd: 'components',
       image: 'keg-components',
       buildArgs: {
