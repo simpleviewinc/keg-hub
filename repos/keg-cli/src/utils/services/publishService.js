@@ -45,11 +45,11 @@ const rollbackChanges = async (repo, publishArgs) => {
   await runGitCmd(`clean -fd`, repo.location)
 
   // checkout the original branch
-  await runGitCmd(`checkout -b ${originalBranch}`, repo.location)
-  publishArgs.currentBranch = originalBranch
+  await runGitCmd(`checkout ${originalBranch}`, repo.location)
 
   // delete the generated release branch
-  await runGitCmd(`branch -D ${originalBranch}`, repo.location)
+  await runGitCmd(`branch -D ${currentBranch}`, repo.location)
+  publishArgs.currentBranch = originalBranch
 
   logFormal(repo, `Finished rolling back changes.`)
 
