@@ -12,6 +12,8 @@ const allowedTagOpts = []
 reduceObj(tagMap, (key, value, mapped) => {
   value.alias.map(alias => aliasToTag[alias] = key)
 
+  allowedTagOpts.push(key)
+
   value.combine.map(otherTag => {
     if(!tagMap[otherTag] || !tagMap[otherTag].alias || !tagMap[otherTag].alias.length) return
 
