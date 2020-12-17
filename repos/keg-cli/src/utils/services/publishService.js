@@ -152,7 +152,7 @@ const gitBranchCommitUpdates = async (repo, publishArgs, updated, params) => {
     // Create a new branch for the repo and version
     publishArgs.step = { number: 6, name: 'git-checkout' }
     if (newBranch !== currentBranch) {
-      await runGitCmd(`checkout -b ${newBranch}`, repo.location)
+      await runGitCmd(`switch -c ${newBranch}`, repo.location)
       publishArgs.currentBranch = newBranch
     }
 
