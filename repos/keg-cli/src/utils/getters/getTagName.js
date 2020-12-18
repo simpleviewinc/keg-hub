@@ -1,6 +1,7 @@
 const { git } = require('KegGitCli')
 const { get, isStr, isBool } = require('@keg-hub/jsutils')
-
+const { getTagFromBranchEnv } = require('./getTagFromBranchEnv')
+const { getSetting } = require('KegUtils/globalConfig/getSetting')
 /**
  * Checks if the image name already contains a tagName, and returns it if found
  * @param {string} imageName - Name of the image to tag, that may contain the tag name already
@@ -19,11 +20,10 @@ const checkImageName = imageName => {
  *
  * @returns {*} - Response from the docker pull task
  */
-const getTagName = async ({ latest, branch, version, tag, tagVariable }, imageName, location) => {
-
+const getTagName = async ({ branch, version, tag, tagVariable }, imageName, location) => {
 
   // If the version or tag is defined explicitly, then use it
-  const explicitTag = latest ? 'latest' : tag || version
+  const explicitTag = tag || version
   if(explicitTag) return explicitTag
 
   // If the image already has a tag, then use it
@@ -38,16 +38,11 @@ const getTagName = async ({ latest, branch, version, tag, tagVariable }, imageNa
   // If branch is true or a string, then use the branch name
   if(branch) return branchName
 
-  // Otherwise, if we have a branch name, check if we should use latest
-  const useLatest = branchName && ([`master`, `staging`, `qa`, `develop`])
-    .reduce((useLatest, env) => {
-      return latest || branchName === env
-    }, false)
+  // Otherwise, if we have a branch name, check if we should use env as a tag
+  const useEnvTag = branchName && getTagFromBranchEnv(branchName)
 
-  // Return latest || the branch name if it exists
-  return (branchName && useLatest) || !branchName
-    ? `latest`
-    : branchName
+  // Return develop || the branch name if it exists
+  return useEnvTag || branchName || getSetting('defaultEnv')
 
 }
 

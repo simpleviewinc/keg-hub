@@ -1,9 +1,11 @@
 const { Logger } = require('KegLog')
-const { DOCKER } = require('KegConst/docker')
 const { spawnCmd } = require('KegProc')
+const { DOCKER } = require('KegConst/docker')
+const { pickKeys } = require('@keg-hub/jsutils')
 const { logVirtualUrl } = require('KegUtils/log')
-const { buildComposeCmd } = require('KegUtils/docker/compose/buildComposeCmd')
 const { throwComposeFailed } = require('KegUtils/error/throwComposeFailed')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
+const { buildComposeCmd } = require('KegUtils/docker/compose/buildComposeCmd')
 const { buildContainerContext, buildDockerImage } = require('KegUtils/builders')
 
 /**
@@ -32,7 +34,7 @@ const composeUp = async args => {
     cmdContext,
     contextEnvs,
     globalConfig,
-    // Default no-recreate to true, if recreate is not set or false
+    // Default no-recreate to true, if recreate is falsy
     params: {
       ...params,
       ...(!recreate && { nocreate: true })
@@ -68,29 +70,30 @@ module.exports = {
     action: composeUp,
     description: `Run docker-compose up command`,
     example: 'keg docker compose up <options>',
-    options: {
-      build: {
-        description: 'Build the docker containers before starting',
-        example: 'keg docker compose up --build true',
-        default: false
-      },
-      context: {
-        allowed: DOCKER.IMAGES,
-        description: 'Context of docker compose up command (components || core || tap)',
-        example: 'keg docker compose up --context core',
-        required: true
-      },
-      recreate: {
-        alias: [ 'rec', `create` ],
-        description: 'Force recreate all the docker containers for the compose service',
-        example: 'keg docker compose up --recreate',
-        required: false
-      },
-      log: {
-        description: 'Log the compose command to the terminal',
-        example: 'keg docker compose build --log false',
-        default: true,
-      }
-    }
+    options: pickKeys(
+      mergeTaskOptions('docker compose', 'up', 'startService', {
+        context: {
+          allowed: DOCKER.IMAGES,
+          description: 'Context of docker compose up command (components || core || tap)',
+          example: 'keg docker compose up --context core',
+          required: true
+        },
+      }),
+      [
+        'build',
+        'cache',
+        'command',
+        'context',
+        'destroy',
+        'detached',
+        'docker',
+        'follow',
+        'from',
+        'install',
+        'log',
+        'local',
+        'recreate',
+      ]
+    )
   }
 }

@@ -6,6 +6,7 @@ module.exports = {
   ...require('./getServiceArgs'),
   ...require('./mutagenService'),
   ...require('./packageService'),
+  ...require('./pullService'),
   ...require('./restartService'),
   ...require('./startService'),
   ...require('./stopService'),
