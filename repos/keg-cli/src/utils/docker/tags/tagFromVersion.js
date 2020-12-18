@@ -1,4 +1,4 @@
-const { get } = require('@keg-hub/jsutils')
+const { get, isStr } = require('@keg-hub/jsutils')
 const { getPackageVersionTag } = require('KegUtils/docker/tags/tagHelpers')
 
 /**
@@ -15,11 +15,18 @@ const tagFromVersion = async (params, args) => {
   const { tagPackage, version, context, location } = params
 
   // If a version is explicitly defined, then return it
+  const explicit = isStr(version) && version.length && version
+
   // Else if tagPackage is true, try to get the package.json version
+  const package = !explicit && tagPackage &&
+    await getPackageVersionTag({...args, params: { location }})
+
   // Otherwise, use the version defined in the container constants if it exists
-  return version ||
-    tagPackage && await getPackageVersionTag({...args, params: { location }}) ||
-    containerContext && get(containerContext, 'contextEnvs.VERSION')
+  const constant = !explicit && !package && containerContext &&
+    get(containerContext, 'contextEnvs.VERSION')
+
+  return explicit || package || constant
+
 }
 
 module.exports = {
