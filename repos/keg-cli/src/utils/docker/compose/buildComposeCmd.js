@@ -1,19 +1,31 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
-const { get, exists } = require('@keg-hub/jsutils')
 const { loadTemplate } = require('KegUtils/template')
 const { GLOBAL_INJECT_FOLDER } = require('KegConst/constants')
 const { generalError } = require('KegUtils/error/generalError')
 const { getComposeContextData } = require('./getComposeContextData')
+const { get, isStr, exists, reduceObj } = require('@keg-hub/jsutils')
 const { writeFile, mkDir, pathExists } = require('KegFileSys/fileSys')
 const { generateComposeLabels } = require('KegUtils/proxy/generateComposeLabels')
 const { CONTAINERS } = DOCKER
 
 const composeArgs = {
-  clean: '--force-rm',
-  cache: '--no-cache',
-  pull: '--pull'
+  build: {
+    clean: '--force-rm',
+    cache: '--no-cache',
+    nocreate:`--no-recreate`,
+    pull: '--pull',
+    recreate: '--force-recreate',
+  },
+  up: {
+    abort: '--abort-on-container-exit',
+    build: '--build',
+    nobuild: '--no-build',
+    nocreate:`--no-recreate`,
+    recreate: '--force-recreate',
+    orphans: '--remove-orphans',
+  }
 }
 
 /**
@@ -153,14 +165,16 @@ const addDockerArg = (dockerCmd, toAdd, condition) => {
  *
  * @returns {string} - docker command with params added
  */
-const addCmdOpts = (dockerCmd, params) => {
+const addCmdOpts = (dockerCmd, cmdArgs, params) => {
   return reduceObj(params, (key, value, added) => {
-    return !composeArgs[key]
+    const condition = key === 'cache' ? !Boolean(value) : Boolean(value)
+
+    return !cmdArgs[key]
       ? added
       : addDockerArg(
           added,
-          composeArgs[key],
-          key === 'cache' ? !Boolean(value) : Boolean(value)
+          cmdArgs[key],
+          condition
         )
   }, dockerCmd)
 }
@@ -200,21 +214,32 @@ const getDownArgs = (dockerCmd, params) => {
 const buildComposeCmd = async args => {
   const { cmd, params={} } = args
 
-  const { attach } = params
-
-  let dockerCmd = `docker-compose`
-
   // Get the compose data for filling out the injected compose template
   // only if the KEG_NO_INJECTED_COMPOSE env does not exist
   const composeData = !exists(get(args, `contextEnvs.KEG_NO_INJECTED_COMPOSE`)) && await getComposeContextData(args)
 
+  let dockerCmd = `docker-compose`
   dockerCmd = await addComposeFiles(dockerCmd, args, composeData)
-
   dockerCmd = `${dockerCmd} ${cmd}`
+  const cmdArgs = composeArgs[cmd]
 
-  if(cmd === 'up')  dockerCmd = addDockerArg(dockerCmd, '--detach', !Boolean(attach))
-  if(cmd === 'build') dockerCmd = addCmdOpts(dockerCmd, params)
-  if(cmd === 'down') dockerCmd = params.remove ? getDownArgs(dockerCmd, params) : dockerCmd
+  switch(cmd){
+    case 'build': {
+      dockerCmd = addCmdOpts(dockerCmd, cmdArgs, params)
+      break
+    }
+    case 'up': {
+      dockerCmd = addCmdOpts(
+        addDockerArg(dockerCmd, '--detach', !Boolean(params.attach)),
+        cmdArgs,
+        params
+      )
+    }
+    case 'down': {
+      dockerCmd = params.remove ? getDownArgs(dockerCmd, params) : dockerCmd
+      break
+    }
+  }
 
   return { dockerCmd, composeData }
 }

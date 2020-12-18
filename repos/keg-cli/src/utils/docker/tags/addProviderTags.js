@@ -2,7 +2,7 @@ const { get, mapObj, isObj } = require('@keg-hub/jsutils')
 const docker = require('KegDocCli')
 const { Logger } = require('KegLog')
 const { DOCKER } = require('KegConst/docker')
-const { getContainerConst } = require('./getContainerConst')
+const { getContainerConst } = require('../getContainerConst')
 const { throwWrap } = require('KegUtils/error/throwWrap')
 const { generalError } = require('KegUtils/error/generalError')
 const { throwNoGitBranch } = require('KegUtils/error/throwNoGitBranch')
@@ -127,19 +127,22 @@ const addProviderTags = async (image, url, args) => {
   const { params } = args
   const { context, tag } = params
 
+  // Check the name and a tag within the context, or use the passed in context and tag
+  const [ nameRef, tagRef ] = context.indexOf(':') !== -1 ? context.split(':') : [ context, tag ]
+
   // Get the branch name 
   const branch = await getGitBranch(args)
 
   const name = image.repository
 
   // Build the version tag, and add it to the docker image
-  const tagVersion = await buildVersionTag(image, context, url, name, tag, branch)
+  const tagVersion = await buildVersionTag(image, nameRef, url, name, tagRef, branch)
 
   // Build the latest tag
-  await buildLatestTag(image, url, tag, branch, name)
+  await buildLatestTag(image, url, tagRef, branch, name)
 
   // If we don't throw, then the tag was successful
-  Logger.success(`  Tagged "${context}" image successfully!`)
+  Logger.success(`Tagged "${nameRef}" image successfully!`)
   Logger.empty()
 
   return tagVersion

@@ -1069,7 +1069,7 @@
 
 "@keg-hub/jsutils@8.0.0":
   version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.0.0.tgz#740e05e10128be53d2ffea72a6c8990b57745679"
+  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.0.0.tgz#740e05e10128be53d2ffea72a6c8990b57745679"
   integrity sha512-omgYOX0p9H6GsQQ5onEJK56pUI/z1CoblFqjWy/SpwANwsuqEFEG3EKDdcRwwpLjaEl8qQWQzfQ1Z6Pc+OOgqQ==
 
 "@keg-hub/spawn-cmd@0.1.0":
