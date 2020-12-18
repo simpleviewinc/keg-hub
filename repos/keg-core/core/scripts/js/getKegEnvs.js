@@ -1,4 +1,4 @@
-const { get } = require('@keg-hub/jsutils')
+const { get, isStr } = require('@keg-hub/jsutils')
 const getAppConfig = require('@keg-hub/tap-resolver/src/resolvers/getAppConfig')
 const fs = require('fs')
 const path = require('path')
@@ -41,7 +41,7 @@ const buildEnvs = replaceContext => {
   }
 
   const getFallback = value => 
-    value && (value.startsWith('tap.') || value.startsWith('keg.'))
+    isStr(value) && (value.startsWith('tap.') || value.startsWith('core.'))
       ? undefined
       : value
 
