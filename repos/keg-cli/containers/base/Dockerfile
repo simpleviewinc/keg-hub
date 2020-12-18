@@ -18,12 +18,17 @@ ARG GIT_HUB_BRANCH=develop
 # Pull down the from github if KEG_COPY_LOCAL is not set
 RUN git clone --single-branch --branch $GIT_HUB_BRANCH $GIT_HUB_URL /keg-hub
 
-# Set the defualt shell to bash
-SHELL [ "/bin/bash" ]
-
 # Copy over the local keg-core repo to a temp dir
 COPY ./repos/keg-cli/containers/base/build.sh /keg-temp/build.sh
+
+# Make the build file executable
+RUN chmod +x /keg-temp/build.sh
+
+# Run the build file
 RUN /keg-temp/build.sh
+
+# Add the build keg cli load script so we can auto-load the keg-cli
+COPY ./repos/keg-cli/containers/base/docker-entrypoint.sh /docker-entrypoint.sh
 
 # ------- Final Build Stage ------- #
 
@@ -34,7 +39,7 @@ WORKDIR /
 
 # Install bash for the new stage
 # This is so Dockerfiles that uses "FROM keg-base", don't have to install these packages
-RUN apk add bash; \
+RUN apk add docker-cli bash; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     rm -rf /var/cache/apk/*; \
@@ -52,4 +57,6 @@ WORKDIR /keg-hub
 SHELL [ "/bin/bash" ]
 
 # Run the bash for the default command
-CMD [ "/bin/bash" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+
+CMD ["keg"]
