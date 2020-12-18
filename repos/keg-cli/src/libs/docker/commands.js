@@ -151,7 +151,7 @@ const push = async url => {
  *
  * @returns {Promise}
  */
-const pull = (url, exitOnError=true) => {
+const __pull = (url, exitOnError=true) => {
   let wasDownloaded = false
   return new Promise((res, rej) => {
     // Logger.spacedMsg(`Pulling docker image from url`, url)
@@ -180,6 +180,27 @@ const pull = (url, exitOnError=true) => {
     })
   })
 }
+
+/**
+ * Pulls a docker image from a provider to the local machine
+ * @function
+ * @param {string} url - Url to pull the image from
+ *
+ * @returns {void}
+ */
+const pull = async url => {
+
+  Logger.spacedMsg(`  Pulling docker image from url`, url)
+
+  const { error, data } = await spawnProc(`docker pull ${ url }`)
+
+  return error && !data
+    ? apiError(error)
+    : Logger.success(`  Finished pulling Docker image from provider!`)
+
+}
+
+
 
 /**
  * Runs a raw docker cli command by spawning a child process
