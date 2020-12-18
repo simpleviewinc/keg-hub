@@ -1,9 +1,10 @@
 /* eslint-disable */
-
 const path = require('path')
 const tapPath = require('app-root-path').path
 const kegPath = path.join(__dirname, '../../')
 const getExpoConfig = require('@expo/webpack-config')
+const { environmentPlugin } = require('./plugins/environment.webpack')
+
 const babelConfig = require(path.join(kegPath, './babel.config'))()
 const { NODE_ENV } = process.env
 
@@ -84,6 +85,14 @@ module.exports = rootDir => {
      * Define aliases to the core versions of node_modules
      */
     config.resolve.alias = buildResolveCoreAlias(config.resolve.alias)
+    
+    /**
+     * Define custom plugins
+     */
+    config.plugins = [
+      ...config.plugins,
+      environmentPlugin({ tapPath, kegPath })
+    ]
 
     return config
   }
