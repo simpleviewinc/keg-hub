@@ -2,7 +2,7 @@ const path = require('path')
 
 const homeDir = require('os').homedir()
 const cliRoot = path.join(__dirname, '../../../')
-const kegHub = path.join(homeDir, '/keg-hub')
+const kegHub = process.env.KEG_ROOT_DIR || path.join(homeDir, '/keg-hub')
 const kegRepos = path.join(kegHub, 'repos')
 const kegTaps = path.join(kegHub, 'taps')
 
