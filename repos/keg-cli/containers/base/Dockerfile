@@ -51,10 +51,13 @@ COPY --from=keg-builder /usr/local/share/.config/yarn /usr/local/share/.config/y
 # Copy over keg hub from keg-builder build stage
 COPY --from=keg-builder /keg-hub /keg-hub
 
+# Copy over the docker-entrypoint file
+COPY --from=keg-builder /docker-entrypoint.sh /docker-entrypoint.sh
+
 WORKDIR /keg-hub
 
 # Set the defualt shell to bash
-SHELL [ "/bin/bash" ]
+SHELL [ "/bin/bash", "-c" ]
 
 # Run the bash for the default command
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
