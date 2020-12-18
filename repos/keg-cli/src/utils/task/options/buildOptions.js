@@ -1,4 +1,4 @@
-const { fromImage, tagVariable } = require('./singleOptions')
+const { fromImage, pullImage, tagVariable } = require('./singleOptions')
 
 const buildOptions = (task, action) => {
   return {
@@ -43,12 +43,7 @@ const buildOptions = (task, action) => {
       default: false
     },
     from: fromImage(task, action),
-    pull: {
-      alias: [ 'pl' ],
-      description: `Pull the most recent image before building. Must be a 'boolean' or name of an image. Uses 'from' option, KEG_IMAGE_FROM ENV, global config setting, or true when not passed!`,
-      example: `keg ${task} build --no-pull`,
-      default: true
-    },
+    pull: pullImage(task, action),
     cache: {
       description: 'Skip using docker build cache when building the image',
       example: `keg ${task} build --no-cache`,
