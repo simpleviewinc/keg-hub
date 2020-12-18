@@ -50,18 +50,19 @@ const tagImage = async (args, imgTag) => {
   // Get the image as an object
   let image = args.image || await getImage(item)
 
+  // If no image is found, then throw
+  !image && noItemFoundError('image', image)
+
   const opts = provider
     ? [ 'tag', image.id, tag ]
     : [ 'tag', image.id, `${image.rootId}:${tag}` ]
 
-  // If no image, then just throw, otherwise add the tag to the image
-  return !image
-    ? noItemFoundError('image', image)
-    : dockerCli({
-        ...args,
-        opts,
-        format: '',
-      })
+  // Add the tag to the image
+  return dockerCli({
+    ...args,
+    opts,
+    format: '',
+  })
 }
 
 /**
