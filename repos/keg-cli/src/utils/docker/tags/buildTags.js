@@ -73,7 +73,10 @@ const buildTags = async (args, params, dockerCmd='') => {
 
   // Always add the latest tag so docker-compose will use this image automatically
   // Unless the latest param is set to falsy
-  latest && !tags.includes('latest') && tags.push('latest')
+  context !== 'base' &&
+    latest &&
+    !tags.includes('latest') &&
+    tags.push('latest')
 
   // Add the tags to the docker command
   return addTagsToCommand(dockerCmd, imageName, tags)
