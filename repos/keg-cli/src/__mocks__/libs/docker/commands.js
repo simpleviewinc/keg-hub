@@ -1,10 +1,38 @@
+const { dockerData, dockerOutput } = require('./docker')
+
+const getContainerData = (params, cmdOpts) => {
+  const { opts, errResponse, log, skipError, format='', force } = params
+
+}
+
+const getImageData = (params, cmdOpts) => {
+  const { opts, errResponse, log, skipError, format='', force } = params
+
+  switch(opts[1]){
+    case 'ls': {
+      return Object.values(dockerData.images)
+    }
+  }
+
+}
 
 const dockerCli = jest.fn((params, cmdOpts) => {
-  const { opts, errResponse, log, skipError, format='', force } = params
+  const { opts } = params
+
   return new Promise((res, rej) => {
+    const command = opts[0]
+    const data = command === 'image'
+      ? getImageData(params, cmdOpts)
+      : command === 'container'
+        ? getContainerData(params, cmdOpts)
+        : false
+    
+    if(data) return res(data)
+  
     return format === 'json'
       ? { params, cmdOpts }
       : ''
+
   })
 })
 
@@ -41,8 +69,8 @@ const raw = jest.fn(() => {
 
 })
 
-const remove = jest.fn(() => {
-
+const remove = jest.fn((args) => {
+  return args
 })
 
 

@@ -1,4 +1,4 @@
-const { deepMerge } = require('@keg-hub/jsutils')
+const { fromImage, pullImage } = require('./singleOptions')
 
 /**
  * Builds the options for the compose service
@@ -19,16 +19,8 @@ const startServiceOptions = (task='', action='') => {
       default: true,
       example: `keg ${ task } ${ action } --no-cache`,
     },
-    pull: {
-      alias: [ 'pl' ],
-      description: `Pull an image from a docker provider. Must be a 'boolean' or name of an image. Uses 'from' option or KEG_IMAGE_FROM env when value is a boolean`,
-      example: `keg ${ task } ${ action } --no-pull`,
-      default: true
-    },
-    from: {
-      description: 'Image to use as the FROM directive when building. Overwrites KEG_IMAGE_FROM env when set. KEG_IMAGE_FROM env must be set as the FROM value in the Dockerfile.',
-      example: `keg ${ task } ${ action } --from tap:production`,
-    },
+    pull: pullImage(task, action),
+    from: fromImage(task, action),
     command: {
       alias: [ 'cmd' ],
       description: 'Overwrites the default yarn command. Command must exist in package.json scripts!',
@@ -58,7 +50,7 @@ const startServiceOptions = (task='', action='') => {
       default: true
     },
     install: {
-      description: 'Install node_modules ( yarn install ) in the container before starting the app. Only valid for tasks that run a docker container.',
+      description: 'Install node_modules ( yarn install ) in the container before starting the app. Only valid for tasks that run a docker container and use the KEG_NM_INSTALL env.',
       example: `keg ${ task } ${ action } --install`,
       default: false
     },
@@ -75,6 +67,12 @@ const startServiceOptions = (task='', action='') => {
     mounts: {
       description: `List of key names or folder paths to mount into the docker container. Only used when service === 'container'`,
       example: `keg ${ task } ${ action } --mounts cli,components`,
+    },
+    recreate: {
+      alias: [ 'rec', `create` ],
+      description: 'Force recreate all the docker containers for the tap service',
+      example: 'keg ${ task } ${ action } --recreate',
+      default: false
     },
     sync: {
       alias: [ 'syncs', 'sy' ],

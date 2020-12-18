@@ -39,14 +39,6 @@ const getBuildArgs = async (globalConfig, params, dockerCmd='') => {
         useVal = getGitUrl({ globalConfig, repo: 'cli' })
         break
       }
-      case 'GIT_CORE_URL':{
-        useVal = getGitUrl({ globalConfig, repo: 'core' })
-        break
-      }
-      case 'GIT_COMPONENTS_URL':{
-        useVal = getGitUrl({ globalConfig, repo: 'components' })
-        break
-      }
       case 'GIT_APP_URL':{
         useVal = tapUrl
         break
