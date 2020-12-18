@@ -41,7 +41,8 @@
     "test": "PLATFORM=web NODE_ENV=test jest --no-cache --config=./core/configs/jest.config.js",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/test-results.html && open reports/coverage/lcov-report/index.html",
-    "web": "nodemon --watch ./core/configs --watch ./package.json --exec 'EXPO_DEBUG=true NODE_ENV=development PLATFORM=web expo start --clear --web --dev'"
+    "web": "nodemon --watch ./core/configs --watch ./package.json --exec 'EXPO_DEBUG=true NODE_ENV=development PLATFORM=web expo start --clear --web --dev'",
+    "print:envs": "node core/scripts/js/printKegEnvs.js ./"
   },
   "dependencies": {},
   "devDependencies": {
