@@ -5,7 +5,7 @@ FROM $KEG_NODE_IMAGE as keg-builder
 WORKDIR /
 
 # Pull down dependencies should be used, and setup them up
-RUN apk add bash git
+RUN apk add git
 
 # Set the default expojs version to it's locked down
 ARG EXPO_CLI_VERSION=3.28.5
@@ -27,9 +27,6 @@ RUN chmod +x /keg-temp/build.sh
 # Run the build file
 RUN /keg-temp/build.sh
 
-# Add the build keg cli load script so we can auto-load the keg-cli
-COPY ./repos/keg-cli/containers/base/docker-entrypoint.sh /docker-entrypoint.sh
-
 # ------- Final Build Stage ------- #
 
 # Use a multi stage build for security
@@ -37,13 +34,17 @@ FROM $KEG_NODE_IMAGE AS final-build
 
 WORKDIR /
 
-# Install bash for the new stage
-# This is so Dockerfiles that uses "FROM keg-base", don't have to install these packages
-RUN apk add docker-cli bash; \
+# Add the keg-exec folder to the path, so we can find our keg-cli exec script
+ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin:/keg-temp/keg-exec
+
+# Install git, docker-cli and bash for the new stage
+RUN apk add git docker-cli bash; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     rm -rf /var/cache/apk/*; \
-    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
+    mkdir -p /root/.kegConfig; \
+    mkdir -p /keg-temp/keg-exec
 
 # Copy over the globally installed modules from above
 COPY --from=keg-builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
@@ -51,15 +52,18 @@ COPY --from=keg-builder /usr/local/share/.config/yarn /usr/local/share/.config/y
 # Copy over keg hub from keg-builder build stage
 COPY --from=keg-builder /keg-hub /keg-hub
 
-# Copy over the docker-entrypoint file
-COPY --from=keg-builder /docker-entrypoint.sh /docker-entrypoint.sh
+# Copy over keg cli base container from local
+COPY ./repos/keg-cli/containers/base /keg-hub/repos/keg-cli/containers/base
+
+# Copy over the keg-exec script nad update the permissions so we can execute it
+RUN cp $KEG_ROOT_DIR/repos/keg-cli/containers/base/cli.config.json $KEG_GLOBAL_CONFIG; \
+    cp $KEG_ROOT_DIR/repos/keg-cli/containers/base/keg-exec.sh /keg-temp/keg-exec/keg; \
+    chmod +x /keg-temp/keg-exec/keg
 
 WORKDIR /keg-hub
 
 # Set the defualt shell to bash
-SHELL [ "/bin/bash", "-c" ]
+SHELL [ "/bin/bash"]
 
 # Run the bash for the default command
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
-
-CMD ["keg"]
+CMD [ "/bin/bash" ]

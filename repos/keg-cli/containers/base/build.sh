@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Install / Build jsutils
 if [ -d "/keg-hub/repos/jsutils" ]; then
