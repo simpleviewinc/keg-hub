@@ -16,6 +16,4 @@ const envs = getKegEnvs(
   corePath && path.resolve(corePath)
 )
 
-console.log(path.resolve(tapPath))
-
 console.log(envs)
