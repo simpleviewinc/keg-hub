@@ -25,8 +25,6 @@ export const VersionDisplay = props => {
     homepage = process.env.TAP_HOMEPAGE
   } = props
 
-  console.log( FOO_BAR )
-
   const openHomepage = useOpenHomepageCallback(homepage, version)
 
   return (
