@@ -181,7 +181,6 @@ repos/**/test/reports/*.json
 repos/**/test/reports/*.html
 repos/**/tests/node_modules
 
-repos/**/build
 
 # Taps and tap-release-client
 taps/**/*

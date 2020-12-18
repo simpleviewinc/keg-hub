@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const { checkCall, limbo, isFunc } = require('@keg-hub/jsutils')
 const { generalError } = require('KegUtils/error')
@@ -396,10 +396,51 @@ const ensureDirSync = (dirPath='', logError) => {
   }
 }
 
+/**
+ * Copy a file or a directory
+ * @param {string} from - file or directory path
+ * @param {string} to - file or directory path (if 'from' is a file, 'to' cannot be a directory)
+ * @param {boolean=} logError - If the command fails, should the app throw?
+ * 
+ * @returns {boolean} - whether the cmd is successful or not
+ */
+const copySync = (from, to, logError=false) => {
+  try {
+    fs.copySync(from, to)
+    return true
+  } 
+  catch (err) {
+    logError &&
+      console.error(`copySync error for path "${from} to ${to}"`, err.stack)
+    return false
+  }
+}
+
+/**
+ * Deletes directory contents if the directory is not empty. If the directory does not exist, it is created
+ * @param {string} path 
+ * @param {boolean=} logError 
+ * 
+ * @returns {boolean} - whether the cmd is successful or not
+ */
+const emptyDirSync = (path, logError=false) => {
+  try {
+    fs.emptyDirSync(path)
+    return true
+  } 
+  catch (err) {
+    logError &&
+      console.error(`emptyDirSync error for path "${path}"`, err.stack)
+      return false
+  }
+}
+
 module.exports = {
   copyFile,
+  copySync,
   copyFileSync,
   copyStream,
+  emptyDirSync,
   ensureDirSync,
   getFiles,
   getFilesSync,

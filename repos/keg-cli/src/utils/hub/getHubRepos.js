@@ -1,6 +1,7 @@
 const path = require('path')
 const { Logger } = require('KegLog')
 const { executeCmd } = require('KegProc')
+const { readFileSync } = require('KegFileSys/fileSys')
 const { isFunc, pickKeys } = require('@keg-hub/jsutils')
 const { getRepoPath } = require('../getters/getRepoPath')
 const { generalError } = require('../error/generalError')
@@ -44,7 +45,8 @@ const findSubNodeModules = 'find * -maxdepth 0 -type d | grep -Ev \'^(_)|node_mo
  */
 const getPackageJson = (repoPath, repo) => {
   try {
-    return require(path.resolve(repoPath, 'package.json'))
+    const rawdata = readFileSync(path.resolve(repoPath, 'package.json'))
+    return JSON.parse(rawdata)
   }
   catch(error){
     Logger.warn(`Missing package.json file in keg-hub/repos folder "${repo}"!`)
@@ -61,11 +63,13 @@ const getPackageJson = (repoPath, repo) => {
  * @param {Object} hubReposPath - Path to the keg-hub/repos folder
  * @param {Object} args - Passed from the task caller
  * @param {Object} args.format - Repo format the method should respond with
- *
- * @returns {*} - Formatted repo information
+ * @param {Function} args.callback - custom callback
+ * @param {Boolean} args.full - to build with all the info or not
+ * 
+ * @returns {Object} - Formatted repo information
  */
 const buildRepo = (repo, hubReposPath, args) => {
-  const { format, callback } = args
+  const { format, callback, full } = args
 
   const repoPath =  path.join(hubReposPath, repo)
   const package = getPackageJson(repoPath, repo)
@@ -78,7 +82,9 @@ const buildRepo = (repo, hubReposPath, args) => {
       )
     : !package
       ? false
-      : convertFormat({
+      : full
+        ? { repo, location: repoPath, package }
+        : convertFormat({
           repo,
           location: repoPath,
           ...pickKeys(package, [
@@ -90,39 +96,54 @@ const buildRepo = (repo, hubReposPath, args) => {
 }
 
 /**
- * Loads information about the repos in then keg-hub/repos folder
+ * Builds the repos array
+ * @function
+ * @param {Array} repos - All repos to run command on
+ * @param {Object} hubReposPath - Path to the keg-hub/repos folder
+ * @param {Object} args - Passed from the task caller
+ *
+ * @returns {Array} - Formatted repo information
+ */
+const buildRepos = (repos, hubReposPath, args) => {
+
+  const { context:filter } = args
+
+  return repos.reduce((repos, repo) => {
+    const responses = repos
+
+    const repoData = filter !== 'all' && !repo.includes(filter)
+      ? false
+      : buildRepo(repo, hubReposPath, args)
+    
+    repoData && responses.push(repoData)
+
+    return responses
+
+  }, [])
+
+}
+
+
+/**
+ * Loads information about the repos in the keg-hub/repos folder
  * @function
  * @param {Object} args - Define how the repos information should be gathered
- * @param {Object} args.context - Filter which repos should be returned
+ * @param {string} args.context - Filter which repos should be returned (keg, retheme, components, etc)
  * @param {Object} args.callback - Callback method to override the default
  * @param {Object} args.format - Repo format the method should respond with
- *
+ * @param {Boolean} args.full
+ * 
  * @returns {Array} - Group of promises resolving to formatted repo information
  */
 const getHubRepos = async (args={}) => {
-  const { context:filter } = args
 
   const hubReposPath = path.join(getRepoPath('hub'), 'repos')
   const { data, error } = await executeCmd(findSubNodeModules, { cwd: hubReposPath })
+  error && generalError(error.stack)
 
-  return error
-    ? generalError(error.stack)
-    : Promise.all(
-        data.trim()
-          .split('\n')
-          .reduce((repos, repo) => {
+  const repos = data.trim().split('\n')
 
-            const repoData = filter !== 'all' && !repo.includes(filter)
-              ? false
-              : buildRepo(repo, hubReposPath, args)
-
-            return repoData
-              ? repos.concat([ repoData ])
-              : repos
-
-          }, [])
-      )
-
+  return buildRepos(repos, hubReposPath, args)
 }
 
 module.exports = {

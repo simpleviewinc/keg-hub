@@ -2,6 +2,7 @@ const { Logger } = require('KegLog')
 const { getHubRepos } = require('KegUtils/hub/getHubRepos')
 const { spawnCmd } = require('KegProc')
 const { get } = require('@keg-hub/jsutils')
+const { runYarnScript } = require('KegUtils/helpers/runYarnScript')
 
 // Update the Max listeners, to ensure all processes can exit properly
 process.setMaxListeners(Infinity)
@@ -42,9 +43,7 @@ const runScript = (repo, package, args={}) => {
     Logger.colors.brightCyan(`"${repo}"`),
   )
 
-  // Run the yarn script from the package.json of the repo
-  return spawnCmd(`yarn ${script.trim()}`.trim(), {}, location, false)
-
+  return runYarnScript(location, script)
 }
 
 /**
@@ -58,7 +57,7 @@ const runScript = (repo, package, args={}) => {
  * @returns {void}
  */
 const runRepos = async args => {
-  const { command, globalConfig, options, params, tasks } = args
+  const { params } = args
 
   Logger.empty()
 
@@ -91,6 +90,12 @@ module.exports = {
         example: 'keg hub run --context cli',
         default: 'all'
       },
+      sync: {
+        alias: [ 'sy' ],
+        description: 'Run all commands synchronously',
+        example: 'keg hub run --sync false',
+        default: true
+      }
     }
   }
 }

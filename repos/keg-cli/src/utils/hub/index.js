@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('./getHubRepos')
+  ...require('./getHubRepos'),
+  ...require('./runRepoScript'),
 }

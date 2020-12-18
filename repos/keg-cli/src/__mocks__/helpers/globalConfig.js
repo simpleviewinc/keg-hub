@@ -56,5 +56,16 @@ module.exports = {
         test: path.join(cliRoot, 'src/__mocks__/tap'),
       }
     }
+  },
+  publish: {
+    test: {
+      name: 'test',
+      dependent: true,
+      order: {
+        0: '@keg-hub/re-theme',
+        1: '@keg-hub/keg-components',
+        2: '@keg-hub/keg-core'
+      }
+    }
   }
 }

@@ -9,4 +9,5 @@ module.exports = {
   ...require('./mapEnv'),
   ...require('./optionsHasArg'),
   ...require('./parseJson'),
+  ...require('./runYarnScript'),
 }
