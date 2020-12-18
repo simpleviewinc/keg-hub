@@ -24,7 +24,7 @@ const { getVersionUpdate, getValidSemver } = require('KegUtils/version')
 const validatePublishTask = async (repo, runTask, scriptName, errorCB) => {
   logFormal(repo, `${runTask ? 'Running' : 'Skipping'} yarn ${scriptName}...`)
   if (runTask) {
-    exists(get(repo, `package.scripts.${scriptName}`, undefined))
+    exists(get(repo, `package.scripts.${scriptName}`))
       ? await runRepoScript(repo, scriptName, errorCB)
       : Logger.warn(`could not find script '${scriptName}', skipping`)
   }
