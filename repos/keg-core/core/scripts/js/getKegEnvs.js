@@ -1,4 +1,4 @@
-const { get, isStr } = require('@keg-hub/jsutils')
+const { get, set, isStr } = require('@keg-hub/jsutils')
 const getAppConfig = require('@keg-hub/tap-resolver/src/resolvers/getAppConfig')
 const fs = require('fs')
 const path = require('path')
@@ -40,18 +40,13 @@ const buildEnvs = replaceContext => {
     ...tapEnvs
   }
 
-  const getFallback = value => 
-    isStr(value) && (value.startsWith('tap.') || value.startsWith('core.'))
-      ? undefined
-      : value
-
   return Object.entries(envs).reduce(
     (replacements, [key, value]) => {
-      const replacement = get(replaceContext, value, getFallback(value))
-      return {
-        ...replacements,
-        [key]: JSON.stringify(replacement)
-      }
+      const fallback = isStr(value) && (value.startsWith('tap.') || value.startsWith('core.'))
+        ? undefined
+        : value 
+      const replacement = get(replaceContext, value, fallback)
+      return set(replacements, key, JSON.stringify(replacement))
     },
     {}
   )

@@ -1,29 +1,15 @@
-import React, { useCallback, useMemo } from 'react'
-import { Button } from '@keg-hub/keg-components'
-import { Linking } from 'react-native'
+import React, { useMemo } from 'react'
+import { View, Link } from '@keg-hub/keg-components'
 
 /**
  * @param {string} homepage 
  * @param {string} version 
- * @return {Function} - callback for opening the release notes page for the 
- * tap version
+ * @return {string} the uri to the tap's release notes for the specified version
  */
-const useOpenHomepageCallback = (homepage, version) => useCallback(
-  () => {
-    if (!homepage) return
-
-    const versionEndpoint = version ? `/v${version}` : ''
-    const uri = `${homepage}/releases/${versionEndpoint}`
-
-    Linking
-      .canOpenURL(uri)
-      .then(supported => supported 
-        ? Linking.openURL(uri)
-        : console.warn('Don\'t know how to open uri', uri)
-      )
-  },
-  [ homepage ]
-)
+const getReleaseNotesURI = (homepage, version) => {
+  const versionEndpoint = version ? `v${version}` : ''
+  return `${homepage}/releases/${versionEndpoint}`
+}
 
 /**
  * Simple button that displays the current version of the tap and, if clicked,
@@ -41,35 +27,41 @@ export const VersionDisplay = props => {
     styles
   } = props
 
-  const openHomepage = useOpenHomepageCallback(homepage, version)
+  const releaseURI = getReleaseNotesURI(homepage, version)
 
-  const buttonStyles = useMemo(() => ({ 
+  const mergedStyles = useMemo(() => ({ 
     ...versionStyles, 
     ...styles 
   }), [ styles ])
 
   return (
-    <Button
-      onPress={openHomepage}
-      styles={buttonStyles}
-      content={'v' + version}
-    />
+    <View style={mergedStyles.main}>
+      <Link
+        href={releaseURI}
+        style={mergedStyles.content}
+        target={'_blank'}
+      >
+        { 'v' + version }
+      </Link>
+    </View>
   )
 }
 
 const versionStyles = {
   main: {
     position: 'fixed',
-    zIndex: 999999,
+    zIndex: 999998,
     padding: 8,
     borderRadius: 8,
     bottom: 0,
     right: 0,
     margin: 10,
+    backgroundColor: '#808080',
     boxShadow: '0px 0px 6px',
   },
   content: {
     color: 'white',
     fontWeight: 'bold',
+    textDecoration: 'none',
   },
 }
