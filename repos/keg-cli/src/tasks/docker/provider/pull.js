@@ -31,8 +31,6 @@ const providerPull = async args => {
     provider=get(globalConfig, 'docker.providerUrl'),
   } = params
 
-  const location = getRepoPath(params.tap || context)
-
   // Get the pull context
   const pullContext = await buildCmdContext(args)
 
@@ -44,7 +42,9 @@ const providerPull = async args => {
 
   const tagName = await getTagName(params, imageName)
 
-  // If it's an injected app, use the tap name, otherwise use the cmdContext for internal apps
+  // Check if the imageName already has a tag
+  // If it does, check if a tagName exists
+  // If it does, replace the tag on the imageName with the tagName value
   const imageNameWTag = imageName.includes(':')
     ? tagName
       ? `${imageName.split(':')[0]}:${tagName}`
@@ -53,6 +53,8 @@ const providerPull = async args => {
 
   const url = await buildProviderUrl({}, args)
 
+  // Check if the image already has the provider information added
+  // If it's missing add it
   const imageUrl = imageNameWTag.includes('/')
     ? imageNameWTag
     : `${url}/${imageNameWTag}`

@@ -11,19 +11,15 @@ const { getContainerConst } = require('KegUtils/docker/getContainerConst')
  * @returns {string} - Found from image
  */
 const getFromImage = (params, contextEnvs, context) => {
-  const pullImg = get(params, 'pull')
-  context =  context ||
-    get(params, `__injected.tap`) ||
-    get(params, 'cmdContext') ||
-    get(params, 'context')
+  const { pull, from, __injected={}, cmdContext, context:paramContext } = params
+  context =  context || __injected.tap || cmdContext || paramContext
 
-  const fromImg = isStr(pullImg)
-    ? pullImg
-    : get(params, 'from') || get(contextEnvs, 'KEG_BASE_IMAGE')
-
-  return fromImg || !context
-    ? fromImg
-    : getContainerConst(context, `env.keg_base_image`, getContainerConst(context, `env.image`, context))
+  return isStr(pull)
+    ? pull
+    : isStr(from)
+      ? from
+      : contextEnvs && get(contextEnvs, 'KEG_BASE_IMAGE') ||
+        context && getContainerConst(context, `env.image`, context)
 
 }
 
