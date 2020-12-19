@@ -46,11 +46,11 @@ const buildEnvs = replaceContext => {
         ? undefined
         : value 
       const replacement = get(replaceContext, value, fallback)
-      return set(replacements, key, JSON.stringify(replacement))
+      replacements[key] = JSON.stringify(replacement)
+      return replacements
     },
     {}
   )
-
 }
 
 /**
