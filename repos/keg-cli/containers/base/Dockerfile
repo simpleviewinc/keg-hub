@@ -56,8 +56,8 @@ COPY --from=keg-builder /keg-hub /keg-hub
 COPY ./repos/keg-cli/containers/base /keg-hub/repos/keg-cli/containers/base
 
 # Copy over the keg-exec script nad update the permissions so we can execute it
-RUN cp $KEG_ROOT_DIR/repos/keg-cli/containers/base/cli.config.json $KEG_GLOBAL_CONFIG; \
-    cp $KEG_ROOT_DIR/repos/keg-cli/containers/base/keg-exec.sh /keg-temp/keg-exec/keg; \
+RUN cp /keg-hub/repos/keg-cli/containers/base/cli.config.json /root/.kegConfig/cli.config.json; \
+    cp /keg-hub/repos/keg-cli/containers/base/keg-exec.sh /keg-temp/keg-exec/keg; \
     chmod +x /keg-temp/keg-exec/keg
 
 WORKDIR /keg-hub
