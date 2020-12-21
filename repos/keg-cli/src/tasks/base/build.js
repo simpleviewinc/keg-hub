@@ -36,6 +36,12 @@ module.exports = {
       local: {
         default: false,
       },
+      squash: {
+        alias: [ 'sq' ],
+        description: 'Squash the docker image layers into its parent image',
+        example: `keg base build --no-squash`,
+        default: true,
+      }
     })
   }
 }

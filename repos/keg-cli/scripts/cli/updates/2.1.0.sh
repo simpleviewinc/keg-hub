@@ -29,9 +29,9 @@ keg_cli_2_1_0_update(){
   keg cli env unset --key GIT_RESOLVER_URL --confirm false --comment false
   keg cli env unset --key GIT_PROXY_URL --confirm false --comment false
 
-  keg cli env set --key GIT_HUB_URL --value https://github.com/simpleviewinc/keg-hub.git
-  keg cli env set --key GIT_HUB_BRANCH --value develop
-  keg cli env set --key KEG_BASE_IMAGE --value docker.pkg.github.com/simpleviewinc/keg-packages/keg-base:develop
+  keg cli env set --key GIT_HUB_URL --value https://github.com/simpleviewinc/keg-hub.git --confirm false
+  keg cli env set --key GIT_HUB_BRANCH --value develop --confirm false
+  keg cli env set --key KEG_BASE_IMAGE --value docker.pkg.github.com/simpleviewinc/keg-packages/keg-base:develop --confirm false
 
   # Update the globalConfig
   keg config set --key cli.settings.docker.imagePullPolicy --value Always --confirm false
@@ -39,6 +39,9 @@ keg_cli_2_1_0_update(){
 
   # Restart the keg-proxy
   keg proxy start
+
+  # Pull down the keg-base:develop image
+  keg base pull
 
   echo ""
   keg_message "2.1.0 Update Complete!"

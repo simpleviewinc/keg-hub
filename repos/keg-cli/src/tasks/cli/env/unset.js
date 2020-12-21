@@ -13,10 +13,11 @@ const { confirmExec } = require('KegUtils/helpers/confirmExec')
  */
 const unsetEnv = async args => {
 
-  const { params: { key, confirm, comment } } = args
+  const { params: { force, key, confirm, comment }} = args
 
   await confirmExec({
-    execute: () => removeDefaultEnv(key, false, comment),
+    force,
+    execute: () => removeDefaultEnv({ key, comment, force }),
     confirm: `Are you sure you want to remove Global ENV ${key}?`,
     preConfirm: !confirm,
     success: `The Global ENV key ${key} was removed!`,
@@ -48,6 +49,11 @@ module.exports = {
         example: 'keg cli env unset --comment false',
         default: true,
       },
+      force: {
+        description: "Force overwriting existing values, without asking for confirmation.",
+        example: 'keg cli env set key=MY_VALUE value=my_value --force',
+        default: false
+      }
     },
   }
 }

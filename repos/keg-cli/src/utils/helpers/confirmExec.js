@@ -14,9 +14,9 @@ const { Logger } = require('KegLog')
  *
  * @returns {void}
  */
-const confirmExec = async ({ execute, confirm, preConfirm, success, cancel, args=[] }) => {
+const confirmExec = async ({ execute, force, confirm, preConfirm, success, cancel, args=[] }) => {
 
-  const confirmed = preConfirm === true
+  const confirmed = force || preConfirm === true
      ? true
      : await ask.confirm(confirm)
 

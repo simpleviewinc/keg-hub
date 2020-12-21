@@ -143,43 +143,45 @@ const push = async url => {
     : Logger.success(`  Finished pushing Docker image to provider!`)
 }
 
+
 /**
  * Pulls a docker image from a provider to the local machine
  * @function
  * @param {string} url - Url to pull the image from
- * @param {boolean} [exitOnError=true] - Should the process exit when an error is thrown
  *
- * @returns {Promise}
+ * @returns {void}
  */
-const pull = (url, exitOnError=true) => {
-  let wasDownloaded = false
-  return new Promise((res, rej) => {
-    // Logger.spacedMsg(`Pulling docker image from url`, url)
-    pipeCmd(`docker pull ${ url }`, {
-      loading: {
-        title: `Pulling Image => ${url}`,
-        active: true,
-        offMatch: `Downloaded newer image`,
-        type: 'spinner',
-      },
-      cwd: process.cwd(),
-      onStdOut: data => {
-        data.includes(`Downloaded newer image`) && (wasDownloaded = true)
-        Logger.label(...(data.split(':')))
-      },
-      onStdErr: (err, exitCode) => {
-        err && Logger.error(err)
-        exitOnError
-          ? rej(process.exit(exitCode))
-          : res(wasDownloaded)
-      },
-      onExit: (exitCode) => {
-      // TODO: make call to get check if the image was pulled
-        res(wasDownloaded)
-      }
-    })
+const pull = async url => {
+  Logger.spacedMsg(`Pulling docker image from url`, url)
+
+  const { error, data } = await spawnProc(`docker pull ${ url }`)
+
+  if(error) return apiError(error)
+
+  const [ imageName, tagName ] = url.split('/').pop().split(':')
+  const repository = url.split(':').shift()
+
+  const images = await dockerCli({
+    format: 'json',
+    opts: ['image', 'ls']
   })
+
+  const foundImg = images &&
+    images.length &&
+    images.find(image => {
+      return image.repository === repository ||
+        (image.rootId === imageName &&
+        (image.tag === tagName || image.tags.includes(tagName)))
+    })
+
+  foundImg && Logger.success(`Finished pulling Docker image from provider!`)
+
+  return foundImg ||
+    apiError(new Error(`Image was pulled successfully, but it could not be found!`))
+
 }
+
+
 
 /**
  * Runs a raw docker cli command by spawning a child process

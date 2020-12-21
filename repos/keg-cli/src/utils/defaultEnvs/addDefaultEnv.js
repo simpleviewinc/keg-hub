@@ -4,6 +4,7 @@ const { Logger } = require('KegLog')
 const { parseContent } = require('KegFileSys/env')
 const { readFile } = require('KegFileSys/fileSys')
 const { saveDefaultsEnv } = require('./saveDefaultsEnv')
+const { removeDefaultEnv } = require('./removeDefaultEnv')
 const { generalError } = require('../error/generalError')
 const { DEFAULT_ENV, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
 const { ask } = require('@keg-hub/ask-it')
@@ -12,11 +13,12 @@ const { ask } = require('@keg-hub/ask-it')
  * Adds an ENV to the Global Defaults.env file
  * @param {string} key - Name of the key to add
  * @param {string} value - What the set the key too
+ * @param {boolean} force - Force set the env value
  * @param {boolean} log - Should log any updates
  *
  * @returns {void}
  */
-const addDefaultEnv = async (key, value, log) => {
+const addDefaultEnv = async ({ key, value, force, log }) => {
 
   !isStr(key) && generalError(`An ENV key is required as the first argument!`)
   
@@ -27,7 +29,8 @@ const addDefaultEnv = async (key, value, log) => {
   const globalEnvsPath = path.join(GLOBAL_CONFIG_FOLDER, '/', DEFAULT_ENV)
 
   // Load the contents of the current env file
-  const [ err, globalEnvString ] = await readFile(globalEnvsPath)
+  let [ envErr, globalEnvString ] = await readFile(globalEnvsPath)
+  envErr && generalError(envErr)
 
   // Load the contents of the Global ENV file
   const globalEnvs = parseContent({
@@ -35,13 +38,29 @@ const addDefaultEnv = async (key, value, log) => {
     fill: false
   })
 
-  const doUpdate = globalEnvs[addKey]
+  const alreadyExists = globalEnvs[addKey]
+
+  const doUpdate = !force && alreadyExists
     ? await ask.confirm(`The Key ${addKey} already exists with value ${ globalEnvs[addKey] }. Do you want to overwrite it?`)
     : true
 
-  return !doUpdate
-    ? log && Logger.info(`Set Global ENV key was canceled!`)
-    : await saveDefaultsEnv(`${ globalEnvString }\n${ addKey }=${ value }`)
+  if(!doUpdate)
+    return log && Logger.info(`Set Global ENV key was canceled!`)
+
+  // If the ENV already exists, remove it, then reload the ENV file
+  if(alreadyExists){
+    // Remove the old ENV if it already exists
+    await removeDefaultEnv({ key, force: true })
+
+    // Reload the envs if the keg was removed so it has the updated content without the env
+    const [ reloadErr, globalEnvStringReload ] = await readFile(globalEnvsPath)
+    reloadErr && generalError(reloadErr)
+
+    // Reset the env string with the reloaded content
+    globalEnvStringReload && (globalEnvString = globalEnvStringReload)
+  }
+
+  return saveDefaultsEnv(`${ globalEnvString }\n${ addKey }=${ value }`)
 
 }
 

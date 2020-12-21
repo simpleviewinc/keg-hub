@@ -11,13 +11,14 @@ const { DEFAULT_ENV, GLOBAL_CONFIG_FOLDER } = require('KegConst/constants')
  * Removes an ENV from the Global Defaults.env file
  * @param {string} key - Name of the key to remove
  * @param {boolean} log - Should log any updates
+ * @param {boolean} force - Force unset the env value
  * @param {boolean} comment - Should turn env into comment instead of removing
  *
  * @returns {void}
  */
-const removeDefaultEnv = async (key, log, comment) => {
+const removeDefaultEnv = async ({ key, force, comment, log }) => {
 
-  !isStr(key) && generalError(`An ENV key is required as the first argument!`)
+  !isStr(key) && generalError(`An ENV key is required as an argument!`)
   
   // All envs are in upper case, so ensure the Key is also upper case
   const removeKey = key.toUpperCase()

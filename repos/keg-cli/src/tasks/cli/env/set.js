@@ -31,17 +31,15 @@ const getEnv = (params, options) => {
  */
 const setEnv = async args => {
   const { params, options } = args
-  const { confirm } = params
+  const { force, confirm } = params
   const { key, value } = getEnv(params, options)
 
   const addKey = key.toUpperCase()
 
   await confirmExec({
-    execute: () => addDefaultEnv(addKey, value),
-    confirm: {
-      message: `Are you sure you want to add Global ENV ${addKey}?`,
-      default: true,
-    },
+    force,
+    execute: () => addDefaultEnv({ key: addKey, value, force: force || !confirm }),
+    confirm: `Are you sure you want to add Global ENV ${addKey}?`,
     preConfirm: !confirm,
     success: `The Global ENV key ${addKey} was Added!`,
     cancel: `Set Global ENV key was canceled!`,
@@ -78,6 +76,11 @@ module.exports = {
         description: "Confirm overwriting existing values.",
         example: 'keg cli env set key=MY_VALUE value=my_value --confirm false',
         default: true
+      },
+      force: {
+        description: "Force overwriting existing values, without asking for confirmation.",
+        example: 'keg cli env set key=MY_VALUE value=my_value --force',
+        default: false
       }
     },
   }
