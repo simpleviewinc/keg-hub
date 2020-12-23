@@ -1,48 +1,7 @@
-import React, { useCallback, useRef } from 'react'
-import { ScrollView as RNScrollView } from 'react-native'
-import { getPlatform } from 'KegGetPlatform'
-import { updateClassNames } from '../../utils/helpers/updateClassNames'
-import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
-import { handleRefUpdate } from '../../utils/helpers/handleRefUpdate'
+import React from 'react'
 import PropTypes from 'prop-types'
-
-const isWeb = getPlatform() === 'web'
-
-/**
- * Custom hook to update the ScrollView with passed in classNames
- * <br/>Uses getScrollableNode and getInnerViewNode to get access to the Dom Nodes
- * @param {Array[string]} defClass - Default class to add to the component
- * @param {string|Array[string]} className - Class or an array of classes to add to the element
- * @param {Object|function} ref - Ref object passed to the consuming component
- *
- * @returns {function} - Ref function to be added to the component
- */
-const useScrollClassNames = (defClass, className, innerClassName, ref) => {
-  className = ensureClassArray(className)
-  const classRef = useRef(className)
-
-  return useCallback(
-    scrollResponder => {
-      if (isWeb && scrollResponder) {
-        updateClassNames(
-          scrollResponder.getScrollableNode(),
-          classRef,
-          defClass,
-          className
-        )
-        updateClassNames(
-          scrollResponder.getInnerViewNode(),
-          classRef,
-          `${defClass}-container`,
-          innerClassName
-        )
-      }
-
-      handleRefUpdate(ref, scrollResponder)
-    },
-    [ defClass, className.join(' '), ref ]
-  )
-}
+import { useScrollClassName } from 'KegScrollClassName'
+import { ScrollView as RNScrollView } from 'react-native'
 
 /**
  * ScrollView
@@ -55,7 +14,7 @@ const useScrollClassNames = (defClass, className, innerClassName, ref) => {
  */
 export const ScrollView = React.forwardRef(
   ({ className, innerClassName, ...props }, ref) => {
-    const classRef = useScrollClassNames(
+    const classRef = useScrollClassName(
       'keg-scrollview',
       className,
       innerClassName,

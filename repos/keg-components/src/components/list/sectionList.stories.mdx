@@ -1,0 +1,31 @@
+<!--- SectionList.stories.mdx -->
+
+import { Story, Meta, Preview, Props } from '@storybook/addon-docs/blocks'
+
+import { SectionList } from './sectionList'
+import {SectionList as SectionListNative} from './sectionList.native.js'
+import {Basic, WithStates} from './sectionList.examples.js'
+
+<Meta title="Components/Lists/SectionList" component={SectionList}/>
+
+# SectionList
+
+Helper component for rendering sectioned lists, with a few extras
+Utilizes react-native [SectionList](https://reactnative.dev/docs/sectionlist) under the hood
+
+## Examples
+
+### Basic
+<Preview>
+  <Story name="Basic">
+    <Basic />
+  </Story>
+</Preview>
+
+
+## Props
+Supports all props on [SectionList](https://reactnative.dev/docs/sectionlist#props) 
+along with:
+
+<Props of={SectionListNative} />
+
