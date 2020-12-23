@@ -43,6 +43,11 @@
         "kegSrc"
       ]
     },
+    "envs": {
+      "process.env.TAP_HOMEPAGE": "tap.package.homepage",
+      "process.env.TAP_VERSION": "tap.package.version",
+      "process.env.KEG_VERSION": "core.package.version"
+    },
     "paths": {
       "buildConfig": "core/configs/build.config.js",
       "exportFolder": "builds"
@@ -140,12 +145,6 @@
           }
         }
       }
-    },
-    "versions": {
-      "development": "1.0.0",
-      "production": "1.0.0",
-      "qa": "1.0.0",
-      "staging": "1.0.0"
     }
   }
 }

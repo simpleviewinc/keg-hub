@@ -1,10 +1,12 @@
 /* eslint-disable */
-
 const path = require('path')
 const tapPath = require('app-root-path').path
-const kegPath = path.join(__dirname, '../../')
+const corePath = path.join(__dirname, '../../')
 const getExpoConfig = require('@expo/webpack-config')
-const babelConfig = require(path.join(kegPath, './babel.config'))()
+const webpack = require('webpack')
+const { getKegEnvs } = require('../scripts/js/getKegEnvs')
+
+const babelConfig = require(path.join(corePath, './babel.config'))()
 const { NODE_ENV } = process.env
 
 /**
@@ -31,13 +33,16 @@ const resolveCoreAlias = {
 const buildResolveCoreAlias = (curAlias = {}) => {
   return Object.entries(resolveCoreAlias).reduce(
     (allAlias, [name, aliasPath]) => {
-      allAlias[name] = path.join(kegPath, 'node_modules', aliasPath)
+      allAlias[name] = path.join(corePath, 'node_modules', aliasPath)
 
       return allAlias
     },
     curAlias
   )
 }
+
+// envs defined in app configs for tap and core (tap-preferred)
+const kegEnvs = getKegEnvs(tapPath, corePath)
 
 module.exports = rootDir => {
   return async (env, argv) => {
@@ -77,13 +82,22 @@ module.exports = rootDir => {
       ...(config.resolve.modules || []),
       'node_modules',
       path.resolve(tapPath, 'node_modules'),
-      path.resolve(kegPath, 'node_modules'),
+      path.resolve(corePath, 'node_modules'),
     ]
 
     /**
      * Define aliases to the core versions of node_modules
      */
     config.resolve.alias = buildResolveCoreAlias(config.resolve.alias)
+    
+    /**
+     * Define custom plugins
+     */
+
+    config.plugins = [
+      ...config.plugins,
+      new webpack.DefinePlugin(kegEnvs)
+    ]
 
     return config
   }
