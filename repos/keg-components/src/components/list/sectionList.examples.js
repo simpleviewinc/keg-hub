@@ -1,7 +1,7 @@
 import React from 'react'
 import { SectionList } from './sectionList'
 import { SectionList as SectionListNative } from './sectionList.native.js'
-import { View, H5, H3, P, Grid, Row, Divider } from '../'
+import { View, H5, H3, P, Divider } from '../'
 
 const goatData = [
   {
@@ -39,27 +39,30 @@ export const Basic = () => {
           <H3>Story of the Goat</H3>
         </View>
       )}
-      renderSectionHeader={<Divider />}
-      renderItem={({ item }) => (
-        <View>
-          <H5>{ item.title }</H5>
-          <Grid>
-            { item.data.map(text => (
-              <Row key={text}>
-                <P>{ text }</P>
-              </Row>
-            )) }
-          </Grid>
+      renderSectionHeader={({ section }) => (
+        <View style={{ marginTop: 20 }}>
+          <H5>{ section.title }</H5>
+          <Divider />
         </View>
       )}
+      renderItem={({ item }) => {
+        return (
+          <View style={{ marginBottom: 5 }}>
+            <P>{ item }</P>
+          </View>
+        )
+      }}
     />
   )
 }
 
 SectionListNative.defaultProps = {
+  sectionChangeOffset: 10,
+  scrollCooldown: 2000,
+  sections: [],
   styles: {},
-  type: 'default',
   themePath: 'list.section.default',
+  type: 'default',
 }
 
 export { SectionListNative }
