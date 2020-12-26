@@ -14,7 +14,7 @@ jobs:
         shell: bash
         run: |
           echo "::debug::{Running keg-tests check...}"
-          git fetch origin develop --depth=1
+          git fetch origin --force --depth=1
           KEG_DIR="${PWD##*/}"
           CHANGE_FILES=($(git diff --name-only origin/develop ...))
           echo "::debug::{Found changed files $CHANGE_FILES}"
