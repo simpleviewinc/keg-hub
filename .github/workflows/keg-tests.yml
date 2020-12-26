@@ -8,10 +8,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: "Run Tests"
         shell: bash
         run: |
           echo "::debug::{Running keg-tests check...}"
+          git fetch origin develop --depth=1
           KEG_DIR="${PWD##*/}"
           GIT_BRANCH=$(git status | grep "On branch" | cut -c 11-)
           CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $(git log -1 --pretty=%h)))
