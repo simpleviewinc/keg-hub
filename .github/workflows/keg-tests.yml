@@ -1,0 +1,38 @@
+name: keg-tests
+on: push
+
+jobs:
+  tests:
+    name: 'Run Tests'
+    runs-on: ubuntu-latest
+    needs: check_source
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: "Run Tests"
+        shell: bash
+        run: |
+          KEG_DIR="${PWD##*/}"
+          REPOS_DIR="$KEG_DIR/repos"
+          TAPS_DIR="$KEG_DIR/taps"
+          REPOS=($(ls repos))
+          CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $(git log -1 --pretty=%h)))
+          for REPO in "${REPOS[@]}"; do
+            REPO_PATH="repos/${REPO##*/}"
+            for FILE in "${CHANGE_FILES[@]}"; do
+              if [[ "$FILE" =~ "$REPO_PATH" ]]; then
+                cd $REPO_PATH
+                yarn install
+                yarn test
+              fi
+            done
+          done
+        
+
+
+
