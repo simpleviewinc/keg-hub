@@ -73,7 +73,7 @@ jobs:
           REPOS=($(cat ./changed-repos.txt))
 
           # Loop over the repos and run the tests on them
-          for REPO in "${REPOS[@]}"; do
+          for REPO_PATH in "${REPOS[@]}"; do
             echo "::debug::{Found changes in repo $REPO_PATH}"
             cd $REPO_PATH
             yarn install
