@@ -21,11 +21,6 @@ jobs:
 
           # Write the changed files to a local file
           git diff --name-only origin/develop >> ./changed-files.txt
-
-          CHANGED_FILES=$(cat ./changed-files.txt)
-          echo "::debug::{Changed files...}"
-          echo "::debug::{$CHANGED_FILES}"
-
       - name: "Get Changed Repos"
         id: get-changed-repos
         shell: bash
@@ -44,14 +39,19 @@ jobs:
 
           # Loop over the repos and run the tests on them
           for REPO in "${REPOS[@]}"; do
+
+            # Don't run tests for keg-cli ( currently requires a docker setup )
+            if [[ "$REPO" == "keg-cli" ]]; then
+              continue
+            fi
+
+            # Get the full repos path
             REPO_PATH="repos/${REPO##*/}"
 
             # Loop over the files and look for any that match the current repo
             for FILE in "${CHANGED_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
-
                 echo "::debug::{Add repo $$REPO_PATH to changed file...}"
-                
                 # If there a matching path, add the repo to the change-repos file
                 echo "$REPO_PATH" >> ./changed-repos.txt
                 # Break out of the files loop, and revert back to the repos loop
@@ -59,10 +59,6 @@ jobs:
               fi
             done
           done
-          CHANGED_REPOS=$(cat ./changed-repos.txt)
-          echo "::debug::{Changed repos...}"
-          echo "::debug::{$CHANGED_REPOS}"
-
       - name: "Run Repo Tests"
         id: run-repo-tests
         shell: bash
