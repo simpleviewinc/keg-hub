@@ -6,31 +6,17 @@ jobs:
     name: 'Run Tests'
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node
-        uses: actions/setup-node@v2
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          node-version: '12'
-          registry-url: 'https://npm.pkg.github.com'
       - name: "Run Tests"
         shell: bash
         run: |
-          echo "::debug::{Running repos check...}"
+          echo "::debug::{Running keg-tests check...}"
           KEG_DIR="${PWD##*/}"
-          echo "::debug::{Keg-Hub directory is $KEG_DIR}"
-
           GIT_BRANCH=$(git status | grep "On branch" | cut -c 11-)
-          echo "::debug::{Current git branch is $GIT_BRANCH}"
+          CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $(git log -1 --pretty=%h)))
+          echo "::debug::{Found changed files $CHANGE_FILES}"
 
-          GIT_HASH=$(git log -1 --pretty=%h)
-          echo "::debug::{Current git commit hash is $GIT_HASH}"
-          
-          CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $GIT_HASH))
-
-          for FILE in "${CHANGE_FILES[@]}"; do
-            echo "::debug::{Found changed file $FILE}"
-          done
 
 
 
