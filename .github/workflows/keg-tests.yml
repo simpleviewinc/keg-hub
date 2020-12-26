@@ -15,19 +15,33 @@ jobs:
         run: |
           echo "::debug::{Running keg-tests check...}"
           git fetch origin --force --depth=1
-
-          echo "::debug::{Finished fatching origin...}"
-          
           KEG_DIR="${PWD##*/}"
-          
-          echo "::debug::{Checking dif with origin/develop}"
+          REPOS=($(ls repos))
           CHANGE_FILES=($(git diff --name-only origin/develop))
+          
+          echo "::debug::{Found changed files...}"
 
-          echo "::debug::{Found changed files $CHANGE_FILES}"
-          for FILE in "${CHANGE_FILES[@]}"; do
-              echo "::debug::{Found changed file $FILE}"
+          for REPO in "${REPOS[@]}"; do
+
+            REPO_PATH="repos/${REPO##*/}"
+            RUN_TESTS="false"
+
+            for FILE in "${CHANGE_FILES[@]}"; do
+              if [[ "$FILE" =~ "$REPO_PATH" ]]; then
+                RUN_TESTS="true"
+              fi
+            done
+
+            if [[ "$RUN_TESTS" == "true" ]]; then
+              echo "::debug::{Found changed file for repo $REPO_PATH}"
+              cd $REPO_PATH
+              yarn install
+              yarn test
+              echo "::debug::{Finished running tests for repo $REPO_PATH}"
+            fi
+
           done
-
+          echo "::debug::{Finished running tests for keg-hub}"
 
 
 
