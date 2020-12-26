@@ -14,24 +14,36 @@ jobs:
         shell: bash
         run: |
           echo "::debug::{Running keg-tests check...}"
-          git fetch origin --force --depth=1
-          KEG_DIR="${PWD##*/}"
-          REPOS=($(ls repos))
-          CHANGE_FILES=($(git diff --name-only origin/develop))
-          
-          echo "::debug::{Found changed files...}"
 
+          # Pull down origin, so we have access to all branches
+          git fetch origin --force --depth=1
+
+          # Get a list of all repos in keg-hub/repos directory
+          REPOS=($(ls repos))
+          
+          # Check the differences between the current branch and develop branch
+          CHANGE_FILES=($(git diff --name-only origin/develop))
+
+          # Loop over the repos and match the repo path, with changed file paths
           for REPO in "${REPOS[@]}"; do
 
+            # Don't run tests for keg-cli ( currently requires a docker setup )
+            if [[ "$REPO" == "keg-cli" ]]; then
+              continue
+            fi
+
+            # Get the repo path, and default run tests to false
             REPO_PATH="repos/${REPO##*/}"
             RUN_TESTS="false"
 
+            # Loop over the files and look for any that match the current repo
             for FILE in "${CHANGE_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
                 RUN_TESTS="true"
               fi
             done
 
+            # If we found a match, then run the tests for that repo
             if [[ "$RUN_TESTS" == "true" ]]; then
               echo "::debug::{Found changed file for repo $REPO_PATH}"
               cd $REPO_PATH
