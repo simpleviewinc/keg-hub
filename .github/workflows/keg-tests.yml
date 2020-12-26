@@ -6,16 +6,17 @@ jobs:
     name: 'Run Tests'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           node-version: '12'
           registry-url: 'https://npm.pkg.github.com'
       - name: "Run Tests"
         shell: bash
         run: |
+          echo "::debug::{Running repos check...}"
           KEG_DIR="${PWD##*/}"
           REPOS_DIR="$KEG_DIR/repos"
           TAPS_DIR="$KEG_DIR/taps"
@@ -23,15 +24,20 @@ jobs:
           CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $(git log -1 --pretty=%h)))
           for REPO in "${REPOS[@]}"; do
             REPO_PATH="repos/${REPO##*/}"
+            echo "::debug::{Checking repo $REPO_PATH}"
             for FILE in "${CHANGE_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
+                echo "::debug::{Found changed file $FILE in repo $REPO_PATH}"
+                echo "::debug::{Running tests for repo...}"
                 cd $REPO_PATH
                 yarn install
                 yarn test
+                echo "::debug::{Finished running tests for repo $REPO_PATH}"
               fi
             done
           done
-        
+          echo "::debug::{Finished running tests for keg-hub}"
+
 
 
 
