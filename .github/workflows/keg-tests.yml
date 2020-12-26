@@ -36,7 +36,7 @@ jobs:
           REPOS=($(ls repos))
 
           # Load the changed files from the last step
-          CHANGED_FILES=$(cat ./changed-files.txt)
+          CHANGED_FILES=($(cat ./changed-files.txt))
           echo "::debug::{Changed files...}"
           echo "::debug::{$CHANGED_FILES}"
 
