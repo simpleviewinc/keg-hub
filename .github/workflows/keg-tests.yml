@@ -16,9 +16,11 @@ jobs:
           echo "::debug::{Running keg-tests check...}"
           git fetch origin develop --depth=1
           KEG_DIR="${PWD##*/}"
-          GIT_BRANCH=$(git status | grep "On branch" | cut -c 11-)
-          CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $(git log -1 --pretty=%h)))
+          CHANGE_FILES=($(git diff-tree --no-commit-id --name-only -r $(git log -1 --pretty=%h) $(git log -n 1 develop --pretty=%h)))
           echo "::debug::{Found changed files $CHANGE_FILES}"
+          for FILE in "${CHANGE_FILES[@]}"; do
+              echo "::debug::{Found changed file $FILE}"
+          done
 
 
 
