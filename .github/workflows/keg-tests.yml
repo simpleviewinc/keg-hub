@@ -15,8 +15,14 @@ jobs:
         run: |
           echo "::debug::{Running keg-tests check...}"
           git fetch origin --force --depth=1
+
+          echo "::debug::{Finished fatching origin...}"
+          
           KEG_DIR="${PWD##*/}"
-          CHANGE_FILES=($(git diff --name-only origin/develop ...))
+          
+          echo "::debug::{Checking dif with origin/develop}"
+          CHANGE_FILES=($(git diff --name-only origin/develop))
+
           echo "::debug::{Found changed files $CHANGE_FILES}"
           for FILE in "${CHANGE_FILES[@]}"; do
               echo "::debug::{Found changed file $FILE}"
