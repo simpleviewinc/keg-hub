@@ -14,28 +14,21 @@ jobs:
         id: get-changed-files
         shell: bash
         run: |
-          echo "::debug::{Getting changed files...}"
-
           # Pull down origin, so we have access to all branches
           git fetch origin --force --depth=1
 
           # Write the changed files to a local file
-          git diff --name-only origin/develop >> ./changed-files.txt
+          git diff --name-only origin/develop >> /keg-changed-files.txt
       - name: "Get Changed Repos"
         id: get-changed-repos
         shell: bash
         run: |
-          echo "::debug::{Getting changed repos...}"
-          
           # Get all keg-hub repos
           REPOS=($(ls repos))
 
-          # Load the changed files from the last step
-          CHANGED_FILES=($(cat ./changed-files.txt))
-          echo "::debug::{Changed files...}"
-          echo "::debug::{$CHANGED_FILES}"
-
-          touch ./changed-repos.txt
+          # Get the changed files, and create the change-repos file
+          CHANGED_FILES=($(cat /keg-changed-files.txt))
+          touch /keg-changed-repos.txt
 
           # Loop over the repos and run the tests on them
           for REPO in "${REPOS[@]}"; do
@@ -51,29 +44,23 @@ jobs:
             # Loop over the files and look for any that match the current repo
             for FILE in "${CHANGED_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
-                echo "::debug::{Add repo $$REPO_PATH to changed file...}"
-                # If there a matching path, add the repo to the change-repos file
-                echo "$REPO_PATH" >> ./changed-repos.txt
-                # Break out of the files loop, and revert back to the repos loop
+                # If there a matching path, write the repo path to the local change-repos.txt
+                echo "$REPO_PATH" >> /keg-changed-repos.txt
                 break
               fi
             done
+
           done
       - name: "Run Repo Tests"
         id: run-repo-tests
         shell: bash
         run: |
-          echo "::debug::{Running tests on repos...}"
-
           # Load the changed repos from the last step
-          REPOS=($(cat ./changed-repos.txt))
+          REPOS=($(cat /keg-changed-repos.txt))
 
           # Loop over the repos and run the tests on them
           for REPO_PATH in "${REPOS[@]}"; do
-            echo "::debug::{Found changes in repo $REPO_PATH}"
             cd $REPO_PATH
             yarn install
             yarn test
-            echo "::debug::{Finished running tests for repo $REPO_PATH}"
           done
-          echo "::debug::{Finished running tests for keg-hub}"
