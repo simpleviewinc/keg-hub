@@ -18,7 +18,7 @@ jobs:
           git fetch origin --force --depth=1
 
           # Write the changed files to a local file
-          git diff --name-only origin/develop >> /keg-changed-files.txt
+          git diff --name-only origin/develop >> ../keg-changed-files.txt
       - name: "Get Changed Repos"
         id: get-changed-repos
         shell: bash
@@ -27,8 +27,8 @@ jobs:
           REPOS=($(ls repos))
 
           # Get the changed files, and create the change-repos file
-          CHANGED_FILES=($(cat /keg-changed-files.txt))
-          touch /keg-changed-repos.txt
+          CHANGED_FILES=($(cat ../keg-changed-files.txt))
+          touch ../keg-changed-repos.txt
 
           # Loop over the repos and run the tests on them
           for REPO in "${REPOS[@]}"; do
@@ -45,7 +45,7 @@ jobs:
             for FILE in "${CHANGED_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
                 # If there a matching path, write the repo path to the local change-repos.txt
-                echo "$REPO_PATH" >> /keg-changed-repos.txt
+                echo "$REPO_PATH" >> ../keg-changed-repos.txt
                 break
               fi
             done
@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: |
           # Load the changed repos from the last step
-          REPOS=($(cat /keg-changed-repos.txt))
+          REPOS=($(cat ../keg-changed-repos.txt))
 
           # Loop over the repos and run the tests on them
           for REPO_PATH in "${REPOS[@]}"; do
