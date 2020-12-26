@@ -30,13 +30,17 @@ jobs:
         id: get-changed-repos
         shell: bash
         run: |
-          echo "::debug::{Running tests on repos...}"
+          echo "::debug::{Getting changed repos repos...}"
           
           # Get all keg-hub repos
           REPOS=($(ls repos))
 
           # Load the changed files from the last step
-          CHANGED_FILES=($(cat ./changed-files.txt))
+          CHANGED_FILES=$(cat ./changed-files.txt)
+          echo "::debug::{Changed files...}"
+          echo "::debug::{$CHANGED_FILES}"
+
+          touch ./changed-repos.txt
 
           # Loop over the repos and run the tests on them
           for REPO in "${REPOS[@]}"; do
@@ -45,6 +49,9 @@ jobs:
             # Loop over the files and look for any that match the current repo
             for FILE in "${CHANGE_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
+
+                echo "::debug::{Add repo $$REPO_PATH to changed file...}"
+                
                 # If there a matching path, add the repo to the change-repos file
                 echo "$REPO_PATH" >> ./changed-repos.txt
                 # Break out of the files loop, and revert back to the repos loop
