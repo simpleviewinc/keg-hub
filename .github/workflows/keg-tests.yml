@@ -30,7 +30,7 @@ jobs:
         id: get-changed-repos
         shell: bash
         run: |
-          echo "::debug::{Getting changed repos repos...}"
+          echo "::debug::{Getting changed repos...}"
           
           # Get all keg-hub repos
           REPOS=($(ls repos))
@@ -47,7 +47,7 @@ jobs:
             REPO_PATH="repos/${REPO##*/}"
 
             # Loop over the files and look for any that match the current repo
-            for FILE in "${CHANGE_FILES[@]}"; do
+            for FILE in "${CHANGED_FILES[@]}"; do
               if [[ "$FILE" =~ "$REPO_PATH" ]]; then
 
                 echo "::debug::{Add repo $$REPO_PATH to changed file...}"
