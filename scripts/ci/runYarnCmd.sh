@@ -7,7 +7,7 @@ echo "::debug::Found Repos $REPOS"
 
 # Loop over the repos and run the passed in command on them
 keg_run_yarn_cmd(){
-  for REPO_PATH in "$REPOS"; do
+  for REPO_PATH in "${REPOS[@]}"; do
     echo "::debug::Runing cmd for repo $REPOS"
   
     cd $REPO_PATH

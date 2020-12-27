@@ -1,5 +1,9 @@
 name: keg-build
-on: pull_request
+on:
+  push:
+    branches:
+      - master
+      - develop
 
 jobs:
   tests:

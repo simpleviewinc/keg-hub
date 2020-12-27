@@ -1,0 +1,32 @@
+
+name: keg-format
+on: pull_request
+
+jobs:
+  tests:
+    name: 'Format Repo Code'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: "Get Changed Files"
+        id: get-changed-files
+        run: bash scripts/ci/getChangedFiles.sh
+      - name: "Get Changed Repos"
+        id: get-changed-repos
+        run: bash scripts/ci/getChangedRepos.sh
+      - name: "Generate PR Changes"
+        id: generate-pr-changes
+        run: bash scripts/ci/generatePRChanges.sh
+      - name: "Add Comment To PR"
+        uses: harupy/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          filename: ../pr-comment.md
+
