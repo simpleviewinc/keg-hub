@@ -16,7 +16,7 @@ keg_run_cmd(){
 
 # Run yarn install before runnign yarn command
 # Ensure we have all repo dependencies
-keg_run_yarn_install(){
+keg_run_install(){
   REPOS=$(cat ../keg-changed-repos.txt)
 
   for REPO_PATH in "$REPOS"; do
@@ -26,8 +26,8 @@ keg_run_yarn_install(){
 }
 
 keg_run_yarn_cmd(){
-  keg_run_yarn_install
-  keg_run_repo_cmd "$@"
+  keg_run_install
+  keg_run_cmd "$@"
 }
 
 keg_run_yarn_cmd "$@"
