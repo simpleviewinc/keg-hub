@@ -34,7 +34,11 @@ jobs:
       - name: "Run Repo Tests"
         id: run-repo-tests
         shell: bash
-        run: bash scripts/ci/runYarnCmd.sh "test" "build"
+        run: bash scripts/ci/runYarnCmd.sh "test"
+      - name: "Run Repo Build"
+        id: run-repo-tests
+        shell: bash
+        run: bash scripts/ci/runYarnCmd.sh "build"
       - name: "Commit Repo Changes"
         id: commit-changes
         shell: bash
