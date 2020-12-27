@@ -5,6 +5,9 @@ jobs:
   tests:
     name: 'Build Repos'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -12,12 +15,10 @@ jobs:
           fetch-depth: 0
       - name: "Get Changed Files"
         id: get-changed-files
-        shell: bash
-        run: bash scripts/ci/getChangedFiles.sh
+        run: scripts/ci/getChangedFiles.sh
       - name: "Get Changed Repos"
         id: get-changed-repos
-        shell: bash
-        run: bash scripts/ci/getChangedRepos.sh
+        run: scripts/ci/getChangedRepos.sh
       - name: Get Yarn Cache Directory
         id: get-yarn-cache-dir
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -30,16 +31,13 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('repos/**/yarn.lock') }}
       - name: Install Yarn Dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: bash scripts/ci/runYarnCmd.sh "install"
+        run: scripts/ci/runYarnCmd.sh "install"
       - name: "Run Repo Tests"
         id: run-repo-tests
-        shell: bash
-        run: bash scripts/ci/runYarnCmd.sh "test"
+        run: scripts/ci/runYarnCmd.sh "test"
       - name: "Run Repo Build"
-        id: run-repo-tests
-        shell: bash
-        run: bash scripts/ci/runYarnCmd.sh "build"
+        id: run-repo-build
+        run: scripts/ci/runYarnCmd.sh "build"
       - name: "Commit Repo Changes"
         id: commit-changes
-        shell: bash
-        run: bash scripts/ci/commitChanges.sh "Repo-Build"
+        run: scripts/ci/commitChanges.sh "Repo-Build"
