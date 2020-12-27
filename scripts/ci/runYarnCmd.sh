@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# Load the repos to run the command on
+REPOS=$(cat ../keg-changed-repos.txt)
+
 # Loop over the repos and run the passed in command on them
 keg_run_cmd(){
-  REPOS=$(cat ../keg-changed-repos.txt)
 
   for REPO_PATH in "$REPOS"; do
     cd $REPO_PATH
@@ -17,8 +19,6 @@ keg_run_cmd(){
 # Run yarn install before runnign yarn command
 # Ensure we have all repo dependencies
 keg_run_install(){
-  REPOS=$(cat ../keg-changed-repos.txt)
-
   for REPO_PATH in "$REPOS"; do
     cd $REPO_PATH
     yarn install
