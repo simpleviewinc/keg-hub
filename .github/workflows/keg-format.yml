@@ -1,5 +1,6 @@
+
 name: keg-tests
-on: pull_request
+on: push
 
 jobs:
   tests:
@@ -18,7 +19,11 @@ jobs:
         id: get-changed-repos
         shell: bash
         run: bash scripts/ci/getChangedRepos.sh
-      - name: "Run Repo Tests"
-        id: run-repo-tests
+      - name: "Run Repo Format"
+        id: run-repo-format
         shell: bash
-        run: bash scripts/ci/runYarnCmd.sh "test"
+        run: bash scripts/ci/runYarnCmd.sh "gh-auto-commit" "format"
+      - name: "Commit Repo Changes"
+        id: commit-changes
+        shell: bash
+        run: bash scripts/ci/commitChanges.sh
