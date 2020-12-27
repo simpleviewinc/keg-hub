@@ -1,6 +1,6 @@
 
 name: keg-format
-on: pull_request
+on: push
 
 jobs:
   tests:
