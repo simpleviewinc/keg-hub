@@ -1,11 +1,14 @@
 
 name: keg-format
-on: pull_request
+on: push
 
 jobs:
   tests:
     name: 'Format Repo Code'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -13,11 +16,9 @@ jobs:
           fetch-depth: 0
       - name: "Get Changed Files"
         id: get-changed-files
-        shell: bash
         run: bash scripts/ci/getChangedFiles.sh
       - name: "Get Changed Repos"
         id: get-changed-repos
-        shell: bash
         run: bash scripts/ci/getChangedRepos.sh
       - name: Get Yarn Cache Directory
         id: get-yarn-cache-dir
@@ -34,9 +35,7 @@ jobs:
         run: bash scripts/ci/runYarnCmd.sh "install"
       - name: "Run Repo Format"
         id: run-repo-format
-        shell: bash
         run: bash scripts/ci/runYarnCmd.sh "format"
       - name: "Commit Repo Changes"
         id: commit-changes
-        shell: bash
         run: bash scripts/ci/commitChanges.sh "Repo-Format"
