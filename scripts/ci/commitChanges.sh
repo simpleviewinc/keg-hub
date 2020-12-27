@@ -15,7 +15,7 @@ keg_commit_changes(){
   git config --local user.name "$(git log --format='%an' HEAD^!)"
   git add  -A
   git commit -m "Github Actions - $MESSAGE" --allow-empty
-  git push -u origin HEAD
+  git push -u origin ${GITHUB_REF##*/}
 }
 
 keg_commit_changes "$@"
