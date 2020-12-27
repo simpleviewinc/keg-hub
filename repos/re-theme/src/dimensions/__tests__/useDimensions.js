@@ -6,7 +6,7 @@ jest.clearAllMocks()
 
 const useState = jest.fn(data => {
   const setData = jest.fn()
-  return [ data, setData ]
+  return [data, setData]
 })
 
 const useEffect = jest.fn(func => {
@@ -18,7 +18,7 @@ jest.setMock('../dimensions.js', { Dimensions: TestDimensions })
 
 const { useDimensions } = require('../useDimensions')
 
-const dimKeys = [ 'width', 'height', 'scale', 'fontScale' ]
+const dimKeys = ['width', 'height', 'scale', 'fontScale']
 
 describe('useDimensions', () => {
   it('should return the dimensions object when called', () => {
