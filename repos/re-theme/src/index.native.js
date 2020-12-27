@@ -53,5 +53,4 @@ export {
   // Context Exports
   ReThemeContext,
   ReThemeProvider,
-
 }

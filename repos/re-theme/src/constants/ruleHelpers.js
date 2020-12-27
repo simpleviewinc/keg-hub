@@ -1,5 +1,6 @@
-export const ruleHelpers = {
+/* eslint-disable id-length */
 
+export const ruleHelpers = {
   // Margin helpers
   m: `margin`,
   mT: `marginTop`,
@@ -64,7 +65,7 @@ export const ruleHelpers = {
   alC: `alignContent`,
   alS: `alignSelf`,
   alI: `alignItems`,
-  
+
   // Dimension helpers
   w: 'width',
   h: `height`,
@@ -72,7 +73,7 @@ export const ruleHelpers = {
   maxH: `maxHeight`,
   minW: `minWidth`,
   maxW: `maxWidth`,
-  
+
   // Text / Font helpers
   ftF: `fontFamily`,
   ftSz: `fontSize`,

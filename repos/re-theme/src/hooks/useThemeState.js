@@ -10,15 +10,16 @@ import { usePointerState } from './usePointerState'
  * @param {*} onValue - return when compareState is true
  * @param {boolean} noMerge - Should the offValue and onValue be merged
  * @param {boolean} compareState - Current state to check
- * 
+ *
  * @return {*} offValue, onValue or merged values based on the compareState
  */
 const useCompareState = (offValue, onValue, noMerge, compareState) => {
   return useMemo(() => {
     return compareState
-      ? noMerge ? onValue : deepMerge(offValue, onValue)
+      ? noMerge
+          ? onValue
+          : deepMerge(offValue, onValue)
       : offValue
-
   }, [ offValue, onValue, noMerge, compareState ])
 }
 
@@ -40,12 +41,15 @@ export const useThemeState = pointerState => {
    *
    * @returns {Array} - Ref and styles to be applied to the element
    */
-  return (offValue, onValue, options={}) => {
+  return (offValue, onValue, options = {}) => {
     const defaultRef = useRef(null)
-    const currentState = usePointerState({
-      ...options,
-      ref: options.ref || defaultRef,
-    }, pointerState)
+    const currentState = usePointerState(
+      {
+        ...options,
+        ref: options.ref || defaultRef,
+      },
+      pointerState
+    )
 
     const pointerRef = currentState.ref
     const compareState = currentState[pointerState]
@@ -56,6 +60,6 @@ export const useThemeState = pointerState => {
       compareState
     )
 
-    return [pointerRef, themeStyles]
+    return [ pointerRef, themeStyles ]
   }
 }

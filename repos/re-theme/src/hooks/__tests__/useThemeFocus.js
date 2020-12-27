@@ -7,7 +7,6 @@ const mockHookFactory = jest.fn((...args) => useThemeState(...args))
 jest.setMock('../useThemeState', { useThemeState: mockHookFactory })
 
 describe('useThemeFocus', () => {
-
   it('should call useThemeState', () => {
     mockHookFactory.mockClear()
     const { useThemeFocus } = require('../useThemeFocus')
@@ -25,5 +24,4 @@ describe('useThemeFocus', () => {
     const { useThemeFocus } = require('../useThemeFocus')
     expect(typeof useThemeFocus).toBe('function')
   })
-
 })

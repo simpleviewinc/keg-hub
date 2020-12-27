@@ -14,6 +14,9 @@ module.exports = {
       jsx: true,
     },
   },
+  ignorePatterns: [
+    "**/__tests__/*.js"
+  ],
   env: {
     es6: true,
     browser: true,

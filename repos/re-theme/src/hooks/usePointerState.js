@@ -1,9 +1,9 @@
-import { useRef, useState, useMemo, useCallback, useEffect } from "react"
+import { useRef, useState, useMemo, useCallback, useEffect } from 'react'
 import { checkCall, isFunc, noOpObj } from '@keg-hub/jsutils'
 import { hasDomAccess } from '../helpers/hasDomAccess'
 
 /**
- * Tracks if the hover pointer state can be enabled 
+ * Tracks if the hover pointer state can be enabled
  * @type boolean
  */
 let isHoverEnabled = false
@@ -26,7 +26,7 @@ const setDomListeners = () => {
 
   const enableHover = () => {
     !isHoverEnabled &&
-      (Date.now() - lastTouchTimestamp) > HOVER_THRESHOLD_MS &&
+      Date.now() - lastTouchTimestamp > HOVER_THRESHOLD_MS &&
       (isHoverEnabled = true)
   }
 
@@ -35,9 +35,9 @@ const setDomListeners = () => {
     isHoverEnabled && (isHoverEnabled = false)
   }
 
-  document.addEventListener("touchstart", disableHover, true)
-  document.addEventListener("touchmove", disableHover, true)
-  document.addEventListener("mousemove", enableHover, true)
+  document.addEventListener('touchstart', disableHover, true)
+  document.addEventListener('touchmove', disableHover, true)
+  document.addEventListener('mousemove', enableHover, true)
 }
 
 hasDomAccess() && setDomListeners()
@@ -49,26 +49,37 @@ hasDomAccess() && setDomListeners()
  *
  * @return {Object} - Current state of the pointerState being tracked, and event listeners to be attached to the element
  */
-const useEventCallBacks = ({ pointerState, onEvent, offEvent, onName, offName }) => {
-  const [status, setStatus] = useState(false)
+const useEventCallBacks = ({
+  pointerState,
+  onEvent,
+  offEvent,
+  onName,
+  offName,
+}) => {
+  const [ status, setStatus ] = useState(false)
 
-  const handleOff = useCallback(event => {
-    checkCall(offEvent, event)
-    setStatus(false)
-  }, [status, setStatus, offEvent])
+  const handleOff = useCallback(
+    event => {
+      checkCall(offEvent, event)
+      setStatus(false)
+    },
+    [ status, setStatus, offEvent ]
+  )
 
-  const handleOn = useCallback(event => {
-    // For hover events we need to check if hover is enabled
-    if(pointerState === 'hover' && !isHoverEnabled) return
+  const handleOn = useCallback(
+    event => {
+      // For hover events we need to check if hover is enabled
+      if (pointerState === 'hover' && !isHoverEnabled) return
 
-    checkCall(onEvent, event)
-    setStatus(true)
+      checkCall(onEvent, event)
+      setStatus(true)
 
-    // For active events, we need to attach the mouseup listener to the document, so it always gets called on mouse up
-    pointerState === 'active' && 
-      document.addEventListener(offName, handleOff, { once: true })
-
-  }, [pointerState, status, setStatus, onEvent])
+      // For active events, we need to attach the mouseup listener to the document, so it always gets called on mouse up
+      pointerState === 'active' &&
+        document.addEventListener(offName, handleOff, { once: true })
+    },
+    [ pointerState, status, setStatus, onEvent ]
+  )
 
   return {
     [pointerState]: status,
@@ -85,58 +96,50 @@ const useEventCallBacks = ({ pointerState, onEvent, offEvent, onName, offName })
  *
  * @return {Object} - Contains mouse states, and event listeners functions
  */
-const useElementEvents = (options=noOpObj, pointerState) => {
+const useElementEvents = (options = noOpObj, pointerState) => {
+  const { hover = false, onPointerIn, onPointerOut } =
+    pointerState === 'hover'
+      ? useEventCallBacks({
+          pointerState,
+          onName: 'onPointerIn',
+          offName: 'onPointerOut',
+          onEvent: options.onPointerIn,
+          offEvent: options.onPointerOut,
+        })
+      : noOpObj
 
-  const {
-    hover=false,
-    onPointerIn,
-    onPointerOut
-  } = pointerState === 'hover'
-    ? useEventCallBacks({
-        pointerState,
-        onName: 'onPointerIn',
-        offName: 'onPointerOut',
-        onEvent: options.onPointerIn,
-        offEvent: options.onPointerOut,
-      })
-    : noOpObj
+  const { focus = false, onFocus, onBlur } =
+    pointerState === 'focus'
+      ? useEventCallBacks({
+          pointerState,
+          onName: 'onFocus',
+          offName: 'onBlur',
+          onEvent: options.onFocus,
+          offEvent: options.onBlur,
+        })
+      : noOpObj
 
-  const {
-    focus=false,
-    onFocus,
-    onBlur
-  } = pointerState === 'focus'
-    ? useEventCallBacks({
-        pointerState,
-        onName: 'onFocus',
-        offName: 'onBlur',
-        onEvent: options.onFocus,
-        offEvent: options.onBlur,
-      })
-    : noOpObj
-
-  const {
-    active=false,
-    onPointerDown,
-  } = pointerState === 'active'
-    ? useEventCallBacks({
-        pointerState,
-        onName: 'onPointerDown',
-        offName: 'mouseup',
-        onEvent: options.onPointerDown,
-        offEvent: options.onMouseUp,
-      })
-    : noOpObj
+  const { active = false, onPointerDown } =
+    pointerState === 'active'
+      ? useEventCallBacks({
+          pointerState,
+          onName: 'onPointerDown',
+          offName: 'mouseup',
+          onEvent: options.onPointerDown,
+          offEvent: options.onMouseUp,
+        })
+      : noOpObj
 
   return useMemo(() => {
     // Get the events to be returned based on the pointerState
     // Use the Dom event names, NOT the react event names,
     // because these events are directly added to the element through the Dom API
-    const events = pointerState === 'hover'
-      ? { pointerover: onPointerIn, pointerout: onPointerOut }
-      : pointerState === 'focus'
-        ? { focus: onFocus, blur: onBlur }
-        : { pointerdown: onPointerDown }
+    const events =
+      pointerState === 'hover'
+        ? { pointerover: onPointerIn, pointerout: onPointerOut }
+        : pointerState === 'focus'
+          ? { focus: onFocus, blur: onBlur }
+          : { pointerdown: onPointerDown }
 
     return {
       active,
@@ -164,12 +167,13 @@ const useElementEvents = (options=noOpObj, pointerState) => {
  * @param {Dom Element} element - Element to attach mouse events to
  * @param {Object} events - Dom events to attach to the element
  * @param {string} method - Name of the method used to update events on the element
- * 
+ *
  * @return {void}
  */
 const loopElementEvents = (element, events, method) => {
-  Object.entries(events)
-    .map(([ eventName, action ]) => element[method](eventName, action))
+  Object.entries(events).map(([ eventName, action ]) =>
+    element[method](eventName, action)
+  )
 }
 
 /**
@@ -181,21 +185,22 @@ const loopElementEvents = (element, events, method) => {
  * @return {function} - callbackRef to apply to the element to be tracked
  */
 const createCBRef = (passedRef, events) => {
-
   const elementRef = useRef(null)
 
   /**
    * Creates a ref as a function, to be passed as a prop to the element being tracked
    * <br/>Also checks for a custom ref and updates it if needed
    */
-  const callbackRef = useCallback(element => {
-    elementRef.current = element
+  const callbackRef = useCallback(
+    element => {
+      elementRef.current = element
 
-    isFunc(passedRef)
-      ? passedRef(element)
-      : passedRef && (passedRef.current = element)
-
-  }, [elementRef.current, passedRef, passedRef.current])
+      isFunc(passedRef)
+        ? passedRef(element)
+        : passedRef && (passedRef.current = element)
+    },
+    [ elementRef.current, passedRef, passedRef.current ]
+  )
 
   /**
    * Hooks that Ensure the event listeners are added to the dom element
@@ -209,7 +214,7 @@ const createCBRef = (passedRef, events) => {
       elementRef.current &&
         loopElementEvents(elementRef.current, events, 'removeEventListener')
     }
-  }, [elementRef.current, events])
+  }, [ elementRef.current, events ])
 
   return callbackRef
 }
@@ -219,11 +224,14 @@ const createCBRef = (passedRef, events) => {
  * @type function
  * @param {Object} options - Contains callbacks and refs for the pointerState
  * @param {string} pointerState - pointer state to track. Must be one of hover, active, or focus
- * 
+ *
  * @return {Object} - States of the pointed relative to the passed in pointerState
  */
-export const usePointerState = (options=noOpObj, pointerState) => {
-  const { events, hover, active, focus } = useElementEvents(options, pointerState)
+export const usePointerState = (options = noOpObj, pointerState) => {
+  const { events, hover, active, focus } = useElementEvents(
+    options,
+    pointerState
+  )
 
   return {
     hover,

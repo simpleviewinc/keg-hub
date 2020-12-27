@@ -23,7 +23,7 @@ const updateStateValue = jest.fn(update => {
 // Mocked useSate function to test that it's called
 const useState = jest.fn(value => {
   stateValue = value
-  return [ stateValue, updateStateValue ]
+  return [stateValue, updateStateValue]
 })
 
 // Mocked useEffect function to test that it's called

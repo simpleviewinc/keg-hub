@@ -13,7 +13,7 @@ describe('getTheme', () => {
     afterEach(() => jest.clearAllMocks())
 
     it('should return an object', () => {
-      const styles = getTheme([ 'components', 'button', 'default' ], {
+      const styles = getTheme(['components', 'button', 'default'], {
         width: 200,
         height: 40,
       })
@@ -26,7 +26,7 @@ describe('getTheme', () => {
     })
 
     it('should return a joined styles object', () => {
-      const styles = getTheme([ 'components', 'button', 'default' ], {
+      const styles = getTheme(['components', 'button', 'default'], {
         width: 200,
         height: 40,
       })
@@ -41,7 +41,7 @@ describe('getTheme', () => {
 
     it('should join the passed in items, with last overwriting first', () => {
       const styles = getTheme(
-        [ 'components', 'button', 'default' ],
+        ['components', 'button', 'default'],
         { width: 30, height: 40, $web: { padding: 20 } },
         { width: 200, height: 0 }
       )
@@ -55,7 +55,7 @@ describe('getTheme', () => {
 
     it('should pull paths from the theme when a string or array is passed in', () => {
       const styles = getTheme(
-        [ 'components', 'button', 'default', '$web' ],
+        ['components', 'button', 'default', '$web'],
         'components.button.default.$native',
         { fontSize: 40 }
       )
@@ -74,7 +74,7 @@ describe('getTheme', () => {
     it('should call getCurrentTheme to get the latest theme', () => {
       expect(manageMock.getCurrentTheme).not.toHaveBeenCalled()
 
-      getTheme([ 'components', 'button', 'default' ], {})
+      getTheme(['components', 'button', 'default'], {})
 
       expect(manageMock.getCurrentTheme).toHaveBeenCalled()
     })
