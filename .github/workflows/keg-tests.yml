@@ -3,7 +3,7 @@ on: pull_request
 
 jobs:
   tests:
-    name: 'Run Tests'
+    name: 'Run Repo Tests'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

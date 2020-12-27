@@ -1,10 +1,10 @@
 
-name: keg-tests
+name: keg-format
 on: push
 
 jobs:
   tests:
-    name: 'Run Tests'
+    name: 'Format Repo Code'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,7 +22,7 @@ jobs:
       - name: "Run Repo Format"
         id: run-repo-format
         shell: bash
-        run: bash scripts/ci/runYarnCmd.sh "gh-auto-commit" "format"
+        run: bash scripts/ci/runYarnCmd.sh "format"
       - name: "Commit Repo Changes"
         id: commit-changes
         shell: bash

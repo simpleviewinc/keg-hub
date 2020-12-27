@@ -1,9 +1,9 @@
-name: keg-tests
+name: keg-build
 on: pull_request
 
 jobs:
   tests:
-    name: 'Run Tests'
+    name: 'Build Repos'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
