@@ -1,6 +1,6 @@
 
 name: keg-format
-on: push
+on: pull_request
 
 jobs:
   tests:
@@ -39,4 +39,4 @@ jobs:
       - name: "Commit Repo Changes"
         id: commit-changes
         shell: bash
-        run: bash scripts/ci/commitChanges.sh
+        run: bash scripts/ci/commitChanges.sh "Repo-Format"

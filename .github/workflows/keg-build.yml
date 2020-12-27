@@ -1,5 +1,5 @@
 name: keg-build
-on: pull_request
+on: push
 
 jobs:
   tests:
@@ -25,4 +25,4 @@ jobs:
       - name: "Commit Repo Changes"
         id: commit-changes
         shell: bash
-        run: bash scripts/ci/commitChanges.sh
+        run: bash scripts/ci/commitChanges.sh "Repo-Build"
