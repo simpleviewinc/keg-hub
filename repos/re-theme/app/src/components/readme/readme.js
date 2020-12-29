@@ -10,10 +10,10 @@ export const Readme = withTheme(props => {
   const { theme, setHeight } = props
   const readmeRef = useRef()
 
-  const sectionStyle = theme.join(
-    get(theme, 'app.section'),
-    get(theme, 'margin.bottom'),
-    get(theme, 'padding.vert'),
+  const sectionStyle = theme.get(
+    'app.section',
+    'margin.bottom',
+    'padding.vert',
     props.style
   )
   

@@ -156,7 +156,6 @@ const configureBuiltTheme = ({ mergedTheme,  extraTheme }, RTMeta) => {
 
   // Add the get and join helpers
   builtTheme.get = getTheme
-  builtTheme.join = joinTheme
 
   builtTheme.RTMeta = { ...builtTheme.RTMeta, ...RTMeta }
 

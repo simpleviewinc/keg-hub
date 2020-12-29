@@ -41,14 +41,6 @@ describe('Theme', () => {
       expect(typeof theme.RTMeta).toBe('object')
     })
 
-    it('should add the join function to the theme object', () => {
-      expect(typeof buttonTheme.join).toBe('undefined')
-
-      const theme = Theme.buildTheme(buttonTheme, 200, 1000, {})
-
-      expect(typeof theme.join).toBe('function')
-    })
-
     it('should add the get function to the theme object', () => {
       expect(typeof buttonTheme.get).toBe('undefined')
 

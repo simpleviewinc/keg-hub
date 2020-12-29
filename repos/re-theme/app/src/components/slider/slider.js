@@ -27,10 +27,10 @@ export const Slider = props => {
     height !== curHeight && setHeight(curHeight)
   }, [ height ])
 
-  const sliderStyle = theme.join(
-    get(theme, 'transition.height'),
-    get(theme, 'layout.full.width'),
-    get(props, 'style'),
+  const sliderStyle = theme.get(
+    'transition.height',
+    'layout.full.width',
+    props.style,
     { maxHeight: getHeight(height, props.toggled) },
   )
 
