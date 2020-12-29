@@ -19,6 +19,7 @@ const buildPath = `./build`
 // List of alternate exports
 // This allows importing only when you need
 const inputs = {
+  reStyle: './src/reStyle/index.js',
   styleInjector: './src/styleInjector/index.{{platform}}',
   colors: './src/helpers/colors.js',
 }
