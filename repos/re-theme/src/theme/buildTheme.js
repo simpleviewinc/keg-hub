@@ -8,7 +8,6 @@ import { isObj, deepMerge, checkCall } from '@keg-hub/jsutils'
 import { restructureTheme } from './restructureTheme'
 import { updateCurrentTheme, getCurrentTheme } from './manageTheme'
 import { getTheme } from '../helpers/getTheme'
-import { joinTheme } from '../helpers/joinTheme'
 
 /**
  * Holds the cached merged theme with sizes
