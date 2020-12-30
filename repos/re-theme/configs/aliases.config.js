@@ -1,5 +1,5 @@
 const pathAlias = {
-  ReDimensions: 'src/dimensions/dimensions.${platform}'
+  ReDimensions: 'src/dimensions/dimensions${platform}'
 }
 
 const getAliases = (ext) => Object

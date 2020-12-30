@@ -101,7 +101,7 @@ const shared = (platform, ext) => ({
 export default Array.from([ 'web', 'native' ])
   .reduce((apps, platform) => {
     // Get the extension for the inputs and outputs based on platform
-    const ext = platform !== 'web' ? `${platform}.js` : 'js'
+    const ext = platform !== 'web' ? `.${platform}.js` : '.js'
 
     const sharedConfig = shared(platform, ext)
     

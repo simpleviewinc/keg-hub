@@ -1,0 +1,37 @@
+<!--- Re-Theme.stories.mdx -->
+
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Welcome" />
+
+# Welcome
+
+Re-Theme is a cross-platform React and React-Native style and theme library.
+It can be used in both web and native (mobile/desktop) applications, without needing to worry about separate logic or compatibility.
+
+It can be used as a base starting point to build an applications styles and theme. This allows for a consistent and reliable way to write CSS and styles once, then reuse them across multiple platforms
+
+## Install
+Re-Theme is [hosted on npm](https://www.npmjs.com/package/@keg-hub/re-theme) and can be installed using any package manager that uses the npm api
+
+With **yarn**
+```bash
+yarn add @keg-hub/re-theme
+```
+With **npm**
+```bash
+npm install @keg-hub/re-theme
+```
+
+## Import / Use
+
+This library has multiple exports based on functionality. This allows importing just what you need to help keep bundle sizes down.
+
+**Example**
+
+```js
+// All of ReTheme Core
+import * as ReTheme from '@keg-hub/re-theme'
+// Just the Style Injector
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+```
