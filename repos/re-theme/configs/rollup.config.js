@@ -20,7 +20,7 @@ const buildPath = `./build`
 // This allows importing only when you need
 const inputs = {
   reStyle: './src/reStyle/index.js',
-  styleInjector: './src/styleInjector/index.{{platform}}',
+  styleInjector: './src/styleInjector/index{{platform}}',
   colors: './src/helpers/colors.js',
 }
 
@@ -32,7 +32,7 @@ const buildConfig = (type, ext, platform, config) => {
       ...config.plugins,
     ],
     input: {
-      index: `./src/index.${ext}`,
+      index: `./src/index${ext}`,
       ...Object.keys(inputs)
         .reduce((converted, key) => {
           converted[key] = inputs[key].replace('{{platform}}', ext)
