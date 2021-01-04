@@ -1,6 +1,9 @@
 
 name: keg-format
-on: push
+on:
+  push:
+    branches:
+      - develop
 
 jobs:
   tests:

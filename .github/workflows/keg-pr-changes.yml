@@ -1,5 +1,5 @@
 
-name: keg-format
+name: keg-pr-changes
 on: pull_request
 
 jobs:
