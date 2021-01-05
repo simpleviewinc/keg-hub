@@ -1,3 +1,4 @@
+
 name: keg-build
 on:
   push:
@@ -16,20 +17,27 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: "Get Changed Files"
         id: get-changed-files
         run: bash scripts/ci/getChangedFiles.sh
+
       - name: "Get Changed Repos"
         id: get-changed-repos
         run: bash scripts/ci/getChangedRepos.sh
-      - name: Install Yarn Dependencies
+
+      - name: "Install Yarn Dependencies"
+        id: install-yarn-dependencies
         run: bash scripts/ci/runYarnCmd.sh "install"
+
       - name: "Run Repo Tests"
         id: run-repo-tests
         run: bash scripts/ci/runYarnCmd.sh "test"
+
       - name: "Run Repo Build"
         id: run-repo-build
         run: bash scripts/ci/runYarnCmd.sh "build"
+
       - name: "Commit Repo Changes"
         id: commit-changes
         run: bash scripts/ci/commitChanges.sh "Repo-Build"
