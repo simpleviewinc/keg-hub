@@ -3,7 +3,7 @@ name: keg-build
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   tests:
