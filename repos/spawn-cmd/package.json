@@ -31,7 +31,7 @@
     "app-root-path": "3.0.0",
     "cross-spawn": "7.0.3",
     "shell-exec": "1.0.2",
-    "tree-kill": "1.2.1"
+    "tree-kill": "1.2.2"
   },
   "devDependencies": {
     "jest": "24.9.0",
