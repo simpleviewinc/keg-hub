@@ -10,6 +10,27 @@ keg_generate_file_changes(){
   local NL=$'\n'
   local PR_COMMENT="### Changed Files${NL}${NL}<br/>${NL}${NL}"
 
+  local HUB_FILES=()
+
+  # Loop the files, and get any that are not located in the repos folder
+  for FILE in "${CHANGED_FILES[@]}"; do
+    if [[ "$FILE" =~ "repos/" ]]; then
+      continue
+    else
+      HUB_FILES=(${HUB_FILES[@]} "$FILE")
+    fi
+  done
+
+  # Check if there are any keg-hub root files, and add the under keg-hub section
+  if [[ ${#HUB_FILES[@]} -ne 0 ]]; then
+    PR_COMMENT="$PR_COMMENT**Keg-Hub**"
+
+    for HUB_FILE in "${HUB_FILES[@]}"; do
+      PR_COMMENT="$PR_COMMENT${NL}* \`$HUB_FILE\`"
+    done
+    PR_COMMENT="$PR_COMMENT${NL}${NL}"
+  fi
+
   for REPO_PATH in "${REPOS[@]}"; do
     # Creat a new array, to hold all the files for the repo
     local REPO_FILES=()

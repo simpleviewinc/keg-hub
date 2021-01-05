@@ -7,7 +7,7 @@ keg_commit_changes(){
   if [[ -z "$1" ]]; then
     MESSAGE="( Auto-Commit )"
   else
-    MESSAGE="$1 ( Automatic-Commit )"
+    MESSAGE="$1 ( Auto-Commit )"
   fi
 
   # Get the last users email / name for the commit message
