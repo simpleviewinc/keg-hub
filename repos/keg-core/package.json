@@ -59,7 +59,7 @@
     "@keg-hub/tap-resolver": "7.0.0",
     "@testing-library/react-hooks": "3.2.1",
     "app-root-path": "3.0.0",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "babel-eslint": "10.1.0",
     "babel-loader": "8.1.0",
     "babel-plugin-module-resolver": "4.0.0",
