@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   tests:
-    name: 'Format Repo Code'
+    name: 'Generate changed files list'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -28,5 +28,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          filename: ../pr-comment.md
+          filename: template.md
 

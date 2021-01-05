@@ -40,7 +40,7 @@ keg_generate_file_changes(){
 keg_generate_pr_changes(){
   local PR_COMMENT="$(keg_generate_file_changes)"
   if [[ "$PR_COMMENT" ]]; then
-    echo "$PR_COMMENT" > ../pr-comment.md
+    echo "$PR_COMMENT" > .github/workflows/template.md
   fi
 }
 
