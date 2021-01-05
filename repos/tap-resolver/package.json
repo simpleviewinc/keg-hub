@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "scripts": {
+    "build": "exit 0",
     "clean": "yarn clean:nm",
     "clean:cache": "yarn cache clean",
     "clean:full": "yarn clean; yarn clean:cache",

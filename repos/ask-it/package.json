@@ -32,9 +32,10 @@
     "clean:cache": "yarn cache clean",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "validate": "node ./scripts/validate.js",
+    "format": "exit 0",
     "test": "NODE_ENV=test jest",
-    "test:reports": "yarn test --coverage && yarn view:reports"
+    "test:reports": "yarn test --coverage && yarn view:reports",
+    "validate": "node ./scripts/validate.js"
   },
   "preferGlobal": true,
   "dependencies": {

@@ -23,6 +23,7 @@
     "clean:cache": "yarn cache clean",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
+    "format": "exit 0",
     "test": "NODE_ENV=test jest --no-cache",
     "test:report": "yarn test --coverage"
   },
