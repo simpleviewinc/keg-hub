@@ -39,9 +39,10 @@
     "dev": "rollup -c ./configs/rollup.config.js -w",
     "docs": "rimraf ./docs && ./node_modules/.bin/jsdoc -c ./configs/jsdoc.json",
     "docs:move": "node ./configs/moveDocs.js",
-    "test": "NODE_ENV=test jest --detectOpenHandles --no-cache --verbose --config=./configs/jest.config.js",
+    "format": "exit 0",
     "git:update": "git add .; git commit -m \"Version update.\"; git push origin master",
     "package": "yarn build; yarn git:update; yarn deploy",
+    "test": "NODE_ENV=test jest --detectOpenHandles --no-cache --verbose --config=./configs/jest.config.js",
     "web": "http-server ./docs -p 8888 --cors"
   },
   "dependencies": {},
