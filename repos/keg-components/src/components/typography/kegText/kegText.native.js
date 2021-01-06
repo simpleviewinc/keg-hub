@@ -2,7 +2,6 @@ import React from 'react'
 import { useClassName } from 'KegClassName'
 import { Text as RNText } from 'react-native'
 import { useTextAccessibility } from '../../../hooks/useTextAccessibility'
-import { useTextStyles } from '../../../hooks/useTextStyles'
 import PropTypes from 'prop-types'
 
 /**

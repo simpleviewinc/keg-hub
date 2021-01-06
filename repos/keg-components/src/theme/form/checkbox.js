@@ -1,4 +1,4 @@
-import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
+import { deepMerge, get, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
 export const checkbox = (config) => {
