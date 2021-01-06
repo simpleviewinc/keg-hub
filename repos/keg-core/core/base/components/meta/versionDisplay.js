@@ -32,7 +32,7 @@ export const VersionDisplay = props => {
   const mergedStyles = useMemo(() => ({ 
     ...versionStyles, 
     ...styles 
-  }), [ styles ])
+  }), [styles])
 
   return (
     <View style={mergedStyles.main}>
