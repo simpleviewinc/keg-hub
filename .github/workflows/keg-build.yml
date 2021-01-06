@@ -18,6 +18,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: "Setup node Version"
+        uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+
       - name: "Get Changed Files"
         id: get-changed-files
         run: bash scripts/ci/getChangedFiles.sh
