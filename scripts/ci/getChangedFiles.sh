@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit when any command fails
+set -e
+
 keg_get_changed_files(){
   # Pull down origin, so we have access to all branches
   git fetch origin --force --depth=1

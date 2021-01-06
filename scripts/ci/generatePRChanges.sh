@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit when any command fails
+set -e
+
 # Get all changed files for the PR
 CHANGED_FILES=($(cat ../keg-changed-files.txt))
 

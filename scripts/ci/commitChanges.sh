@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit when any command fails
+set -e
+
 # Auto commit changes to repo after yarn command is run
 keg_commit_changes(){
 
