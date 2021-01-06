@@ -46,7 +46,7 @@ export const useExternalSet = (arr, setArr, selector=identity) => {
   // checks if arr contains the element, using the comparisonFn if defined
   const contains = useCallback(
     (arr, element) => isMember(arr, element, selector),
-    [ selector ],
+    [selector],
   )
 
   return useMemo(
@@ -96,7 +96,7 @@ export const useExternalSet = (arr, setArr, selector=identity) => {
       /**
        * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/entries
        */
-      entries: () => arr.map(element => [element, element]),
+      entries: () => arr.map(element => [ element, element ]),
 
       /**
        * Helper to iterate over each element
