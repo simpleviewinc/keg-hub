@@ -18,7 +18,7 @@ keg_get_changed_repos(){
   for REPO in "${REPOS[@]}"; do
 
     # Don't run tests for keg-cli ( currently requires a docker setup )
-    if [[ "$REPO" == "keg-cli" ]]; then
+    if [[ "$REPO" == "keg-cli" || "$REPO" == "keg-regulator" ]]; then
       continue
     fi
 
