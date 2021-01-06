@@ -1,7 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { StoryWrap } from 'StoryWrap'
-import { View, P } from '../../'
 import { createElement } from './createElement'
 
 const storyStyles = { textAlign: 'center' }
