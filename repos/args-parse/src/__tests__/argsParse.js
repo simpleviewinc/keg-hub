@@ -9,7 +9,7 @@ describe('argsParse', () => {
   afterAll(() => jest.resetAllMocks())
 
   it('should return an object with the arguments parsed', async () => {
-    expect(true).toBe(false)
+
     const parsed = await argsParse({
       args: [ 'foo=test', 'doo=f' ],
       task: testTask1,

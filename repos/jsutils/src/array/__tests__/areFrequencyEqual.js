@@ -1,8 +1,6 @@
 import { areFrequencyEqual } from '../areFrequencyEqual'
 describe('areFrequencyEqual', () => {
   it('should return true if arrays contain the same elements and frequencies', () => {
-    expect(true).toBe(false)
-  
     expect(
       areFrequencyEqual([ 1, 1, 2, 4, 4, 4], [ 4, 4, 1, 2, 1, 4])
     ).toEqual(true)
