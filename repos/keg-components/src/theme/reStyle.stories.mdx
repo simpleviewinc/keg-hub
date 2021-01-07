@@ -1,0 +1,78 @@
+<!--- Theme.stories.mdx -->
+
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { GreenText, HoverButton } from './reStyle.examples'
+
+
+<Meta title="ReStyle" />
+
+# ReStyle
+<p>
+  ReStyle extends the functionality of ReTheme to allow for defining styles using a `styled components` like pattern. This makes it quick and easy to extend the look and feel of a component and even gives access to the global theme and props when needed.
+</p>
+
+<br/>
+
+### Style Object
+Example of overriding the styles with a `Style Object` (Css in JS)
+
+<Preview>
+  <Story name='Text'>
+    <GreenText />
+  </Story>
+</Preview>
+
+```js
+import React from 'react'
+import { Text as KegText } from '@keg-hub/keg-components/text'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
+
+const Text = reStyle(KegText)({
+  color: 'green',
+  textAlign: 'center',
+})
+
+export const GreenText = () => (<Text>Green Text</Text>)
+
+```
+
+<br/>
+
+### Style Function
+Example of overriding the styles with a `Style Function`. Recives **two arguments**
+  * `Argument 1` - Global ReTheme theme object
+  * `Argument 2` - Props passed to the component
+
+<Preview>
+  <Story name='Hover'>
+    <HoverButton />
+  </Story>
+</Preview>
+
+```js
+import React from 'react'
+import { Button as KegButton } from '@keg-hub/keg-components/text'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
+
+const ReStyleHover = reStyle(
+  KegButton,
+  'styles'
+)((theme, props) => ({
+  default: {
+    main: {
+      backgroundColor: theme.colors.palette.blue03,
+    },
+  },
+  hover: {
+    main: {
+      backgroundColor: props.hoverColor,
+    },
+  },
+}))
+
+export const HoverButton = () => {
+  return (
+    <ReStyleHover content={'Hover Me'} hoverColor={`#02b4a3`} />
+  )
+}
+```
