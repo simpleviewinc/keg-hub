@@ -18,10 +18,11 @@ const useState = jest.fn(value => {
 })
 
 // Mocked useEffect function to test that it's called
-// let effectCB = null
-// const useLayoutEffect = jest.fn(cb => {
-//   effectCB = cb
-// })
+let effectCB = null
+const useLayoutEffect = jest.fn(cb => {
+  effectCB = cb
+  return effectCB
+})
 
 let refObj = { current: undefined }
 const useRef = jest.fn(initialVal => {
