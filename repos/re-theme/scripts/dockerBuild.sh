@@ -7,7 +7,7 @@
 
 # Set the default context to be retheme. Can be overridden when this script is called
 KEG_CONTEXT=retheme
-RETHEME_PATH=/keg/app
+RETHEME_PATH=/keg/tap
 
 keg_ensure_cli_loaded(){
   if [[ -z "$KEG_CLI_PATH" ]]; then

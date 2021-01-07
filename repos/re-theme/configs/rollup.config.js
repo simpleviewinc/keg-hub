@@ -1,4 +1,3 @@
-import buildHook from './buildHook'
 import babel from '@rollup/plugin-babel'
 import alias from '@rollup/plugin-alias'
 import cleanup from 'rollup-plugin-cleanup'
@@ -9,7 +8,7 @@ import { terser } from "rollup-plugin-terser"
 const { getAliases } = require("./aliases.config")
 
 // Need to require our babel.config.js because it uses module.exports
-const babelConfig = require('../babel.config.js')
+const babelConfig = require('./babel.config.js')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -28,7 +27,6 @@ const buildConfig = (type, ext, platform, config) => {
   return {
     ...config,
     plugins: [
-      buildHook(platform, type),
       ...config.plugins,
     ],
     input: {
