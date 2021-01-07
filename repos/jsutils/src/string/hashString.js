@@ -1,7 +1,7 @@
 /** @module string */
 
 import { isStr } from './isStr'
-
+import { isNonNegative } from '../number/isNonNegative'
 /**
  * Creates a hash from a passed in string consistently
  * <br/> Not intended to be secure
@@ -14,7 +14,7 @@ import { isStr } from './isStr'
  *
  * @returns {string} - Hashed version of the string
  */
-export const hashString = (str, maxLength=0) => {
+export const hashString = (str, maxLength) => {
   if (!isStr(str) || str.length == 0) return 0
 
   str = str.split('').reverse().join('')
@@ -27,5 +27,5 @@ export const hashString = (str, maxLength=0) => {
     hash = `${ Math.abs(hash & hash) }`
   }
 
-  return maxLength ? hash.slice(0, maxLength) : hash
+  return isNonNegative(maxLength) ? hash.slice(0, maxLength) : hash
 }

@@ -24,6 +24,9 @@ describe('hashString', () => {
   it('should return hash matching the length or the passed in max length value', () => {
     const hash = hashString(`{ test: "data" }`, 2)
     expect(hash.length).toBe(2)
+
+    const hash2 = hashString(`{ test: "data" }`, 0)
+    expect(hash2.length).toBe(0)
   })
 
 })
