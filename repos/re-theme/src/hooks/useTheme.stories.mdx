@@ -1,0 +1,39 @@
+<!--- useTheme.stories.mdx -->
+import { Preview, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks'
+import { UseTheme } from './hook.examples'
+
+<Meta
+  title="Hooks/useTheme"
+  component={UseTheme}
+/>
+
+
+<h1 style={{ paddingBottom: 10 }} >
+  useTheme Hook
+</h1>
+<p style={{ margin: 0, marginBottom: 20 }} >
+  Import the <b>useTheme</b> <a href="https://reactjs.org/docs/hooks-intro.html" >hook</a> to get access to the app theme. Uses the <a href="https://reactjs.org/docs/context.html" >React Context API</a> under the hood. Works identically to the <b>withTheme HOC</b> but as a hook variant.
+</p>
+
+
+<Preview>
+  <Story name='useTheme'>
+    <UseTheme children={'useTheme Button'} />
+  </Story>
+</Preview>
+
+### Example 
+```js
+import React from 'react'
+import { useTheme } from '@keg-hub/re-theme'
+
+export const ThemeButton = props => {
+  const theme = useTheme()
+  return (
+    <button style={ theme.button.default } >
+      { props.children }
+    </button>
+  )
+}
+```
