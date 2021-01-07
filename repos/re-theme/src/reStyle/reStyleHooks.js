@@ -39,7 +39,7 @@ export const getComponentName = Component => {
 export const usePropClassName = (className, compName) => {
   return useMemo(() => {
     const classArr = className ? eitherArr(className, [className]) : []
-    classArr.push(compName)
+    compName && classArr.push(compName)
 
     return classArr
   }, [ className, compName ])
