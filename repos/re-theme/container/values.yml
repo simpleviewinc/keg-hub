@@ -26,7 +26,7 @@ env:
   DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
-  KEG_PROXY_PORT: 5000
+  KEG_PROXY_PORT: 60710
   KEG_EXEC_CMD: sb
 
   # --- GENERAL CONTEXT ENVs --- #
@@ -36,3 +36,4 @@ env:
   IMAGE: retheme
   CONTAINER_NAME: retheme
   VERSION: "0.0.1"
+  CHOKIDAR_USEPOLLING: 1
