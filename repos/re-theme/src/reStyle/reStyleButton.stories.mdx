@@ -1,0 +1,36 @@
+<!--- reStyle.stories.mdx -->
+
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { ReStyleButton, Button } from './reStyleButton.examples'
+
+<Meta title="Patterns/ReStyle/Button" component={Button}/>
+
+
+## Examples
+
+### Button
+<Preview>
+  <Story name='Button'>
+    <ReStyleButton />
+  </Story>
+</Preview>
+
+
+### Example 
+```js
+import React from 'react'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
+
+const Button = reStyle('button')({
+  backgroundColor: 'blue',
+  color: 'white',
+})
+
+export const ReStyleButton = () => {
+  return (
+    <Button>
+      ReStyled Button
+    </Button>
+  )
+}
+```

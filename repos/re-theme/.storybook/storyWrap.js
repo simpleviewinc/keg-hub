@@ -19,18 +19,20 @@ export const Split = props => (
   <View style={{ ...splitStyle, ...props.style }} />
 )
 
-export const StoryWrap = props => (
-  <ReThemeProvider
-    theme={storyTheme}
-    merge={false}
-  >
-    <style>{`
-      * {
-        font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
-      }
-    `}</style>
-    <div style={wrapStyle} >
-      { props.children }
-    </div>
-  </ReThemeProvider>
-)
+export const StoryWrap = props => {
+  return (
+    <ReThemeProvider
+      theme={storyTheme}
+      merge={false}
+    >
+      <style>{`
+        * {
+          font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+      `}</style>
+      <div style={wrapStyle} >
+        { props.children }
+      </div>
+    </ReThemeProvider>
+  )
+}
