@@ -1,8 +1,13 @@
 /** @module dimensions */
 
-import { debounce, isArr, isFunc, checkCall } from '@keg-hub/jsutils'
+import {
+  debounce,
+  hasDomAccess,
+  isArr,
+  isFunc,
+  checkCall,
+} from '@keg-hub/jsutils'
 import { Constants } from '../constants'
-import { hasDomAccess } from '../helpers/hasDomAccess'
 
 const DEBOUNCE_RATE = 100
 
