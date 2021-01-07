@@ -15,9 +15,9 @@ export const Example = withTheme(props => {
   const { theme, isToggled, headerText } = props
   const [ toggled, setToggled ] = useState(isToggled || false)
 
-  const sectionStyle = theme.join(
-    get(theme, 'app.section'),
-    get(theme, 'margin.bottom'),
+  const sectionStyle = theme.get(
+    'app.section',
+    'margin.bottom',
     props.style
   )
 
