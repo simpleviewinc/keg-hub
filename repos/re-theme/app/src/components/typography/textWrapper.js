@@ -7,7 +7,7 @@ const textWrapper = (El, themeKey) => {
     const textStyles = (theme.text && (theme.text[themeKey] || theme.text[El])) || theme[El]
 
     return (
-      <El {...attrs} style={theme.join(textStyles, style)}>
+      <El {...attrs} style={theme.get(textStyles, style)}>
         { children }
       </El>
     )
