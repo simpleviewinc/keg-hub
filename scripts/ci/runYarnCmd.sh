@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# exit when any command fails
+# Exit when any command fails
 set -e
 
 # Load the repos to run the command on
