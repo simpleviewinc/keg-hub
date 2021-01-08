@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react'
 import { ScrollView as RNScrollView } from 'react-native'
 import { getPlatform } from 'KegGetPlatform'
-import { eitherArr } from '@keg-hub/jsutils'
 import { updateClassNames } from '../../utils/helpers/updateClassNames'
+import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
 import { handleRefUpdate } from '../../utils/helpers/handleRefUpdate'
 import PropTypes from 'prop-types'
 
@@ -18,7 +18,7 @@ const isWeb = getPlatform() === 'web'
  * @returns {function} - Ref function to be added to the component
  */
 const useScrollClassNames = (defClass, className, innerClassName, ref) => {
-  className = eitherArr(className, [className])
+  className = ensureClassArray(className)
   const classRef = useRef(className)
 
   return useCallback(

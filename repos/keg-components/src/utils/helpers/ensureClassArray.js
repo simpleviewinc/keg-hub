@@ -14,7 +14,7 @@ export const ensureClassArray = (classList, ensured = []) => {
       ? item.className
           ? ensureClassArray(item.className, classNames)
           : // Loop over the item keys and call ensureClassArray if the item key values are objects
-          // Otherwise we can be added random strings to the classNames array
+          // Otherwise we could add random strings to the classNames array
           Object.keys(item).map(
             key => isObj(item[key]) && ensureClassArray(item[key], classNames)
           )

@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleInjector } from '../styleInjector/styleInjector'
+import { exists, noOpObj } from '@keg-hub/jsutils'
+import { StyleInjector } from 'StyleInjector'
 import {
   getComponentName,
   useObjWithIdentity,
   usePropClassName,
-  useStyleProp,
   useReStyles,
 } from './reStyleHooks'
 
@@ -28,7 +28,9 @@ export const reStyle = (Component, styleProp = 'style') => {
     const StyledFun = React.forwardRef((props, ref) => {
       const reStyles = useReStyles(styleData, props)
       const classArr = usePropClassName(props.className, compName)
-      const styleFromProps = useStyleProp(styleProp, props)
+      const styleFromProps = exists(props[styleProp])
+        ? props[styleProp]
+        : noOpObj
       const styles = useObjWithIdentity(joinStyles, reStyles, styleFromProps)
 
       return (

@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
-import { get, isArr, eitherArr, noOpObj } from '@keg-hub/jsutils'
+import { get, isArr, noOpObj } from '@keg-hub/jsutils'
 import { colors } from '../../theme/colors'
 import { useClassList } from 'KegClassList'
+import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
 
 /**
  * Uses the surfaces defined in the colors to build surface specific classes for
@@ -12,7 +13,7 @@ import { useClassList } from 'KegClassList'
  */
 const useThemeType = (themeLoc, defClass) => {
   return useMemo(() => {
-    const defClassArr = eitherArr(defClass, [defClass])
+    const defClassArr = ensureClassArray(defClass)
 
     if (!themeLoc) return defClassArr
 

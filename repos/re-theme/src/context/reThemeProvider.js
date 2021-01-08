@@ -104,8 +104,5 @@ ReThemeProvider.propTypes = {
   /**
    Child components to wrap the with ReTheme provider
   */
-  children: PropTypes.oneOfType([
-    PropTypes.elementType,
-    PropTypes.arrayOf(PropTypes.elementType),
-  ]),
+  children: PropTypes.node,
 }

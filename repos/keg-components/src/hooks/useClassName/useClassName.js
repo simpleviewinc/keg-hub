@@ -1,7 +1,8 @@
 import { useCallback, useRef } from 'react'
 import { getPlatform } from 'KegGetPlatform'
-import { eitherArr } from '@keg-hub/jsutils'
 import { updateClassNames } from '../../utils/helpers/updateClassNames'
+import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
+
 import { handleRefUpdate } from '../../utils/helpers/handleRefUpdate'
 
 const isWeb = getPlatform() === 'web'
@@ -22,7 +23,7 @@ const isWeb = getPlatform() === 'web'
  * @returns {function} - Ref function to be added to the component
  */
 export const useClassName = (defClass, className, ref) => {
-  const classArr = eitherArr(className, [className])
+  const classArr = ensureClassArray(className)
   const classRef = useRef(classArr)
 
   return useCallback(

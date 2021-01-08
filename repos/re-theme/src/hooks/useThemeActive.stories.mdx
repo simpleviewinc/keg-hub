@@ -1,0 +1,41 @@
+<!--- useThemeActive.stories.mdx -->
+import { ArgsTable, Canvas, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks'
+import { UseThemeActive } from './hook.examples'
+
+<Meta
+  title="Hooks/useThemeActive"
+  component={UseThemeActive}
+/>
+
+<h1 style={{ paddingBottom: 10 }} >
+  useThemeActive Hook
+</h1>
+<p style={{ margin: 0, marginBottom: 20 }} >
+  Use this hook to toggle between two styles based on the <b>active</b> state of the component. This hook should be combined with either the <b>withTheme HOC</b> or <b>useTheme hook</b> to get access to the theme.
+</p>
+
+<Canvas>
+  <Story name='useThemeActive'>
+    <UseThemeActive children={'useThemeActive Button'} />
+  </Story>
+</Canvas>
+
+### Example 
+```js
+import React from 'react'
+import { useThemeActive, useTheme } from '@keg-hub/re-theme'
+
+export const ActiveThemeButton = props => {
+  const { button } = useTheme()
+  const [ ref, theme ] = useThemeActive(button.default, button.active)
+
+  return (
+    <button ref={ ref } style={ theme } >
+      { props.children }
+    </button>
+  )
+}
+```
+
+<ArgsTable of={UseThemeActive} />

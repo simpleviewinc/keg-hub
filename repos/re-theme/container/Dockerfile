@@ -10,16 +10,11 @@ WORKDIR /
 # Add npm-run-all globally
 RUN yarn global add npm-run-all
 
-# These args are expected to be set as --build-arg
-# Which Allow them to be used durring the build
-ARG PUBLIC_GIT_KEY
-ARG GIT_APP_URL=INITIAL
-
 # Should we use the local copy of the tap repo when building
 ARG KEG_COPY_LOCAL
 
 # Path of the app within the docker container
-ARG DOC_APP_PATH=/keg/app
+ARG DOC_APP_PATH=/keg/tap
 
 # Copy over the app to a temp directory
 COPY . /keg-temp/
@@ -42,8 +37,6 @@ COPY *.lock $DOC_APP_PATH/
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN cd $DOC_APP_PATH; \
     yarn install --ignore-engines; \
-    cd $DOC_APP_PATH/app; \
-    yarn install --ignore-engines; \
     yarn cache clean; \
     rm -f .npmrc
 
@@ -57,7 +50,7 @@ WORKDIR /
 
 
 # Path of the app within the docker container
-ARG DOC_APP_PATH=${DOC_APP_PATH:-/keg/app}
+ARG DOC_APP_PATH=${DOC_APP_PATH:-/keg/tap}
 ARG KEG_PROXY_PORT=${KEG_PROXY_PORT:-5000}
 
 # Get the ip of docker-machine from the ARG, so we can set it as an ENV

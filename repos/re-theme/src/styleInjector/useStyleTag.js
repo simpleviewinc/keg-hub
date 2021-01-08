@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
 import { addStylesToDom, getSelector, filterRules } from './injectHelpers'
-import { eitherArr, hyphenator, isArr, isObj } from '@keg-hub/jsutils'
+import { eitherArr, hyphenator, isArr, isObj, flatArr } from '@keg-hub/jsutils'
 import { useTheme } from '../hooks/useTheme'
 import {
   prefixStyles,
-  flattenArray,
   flattenStyle,
   createReactDOMStyle,
   createCompileableStyle,
@@ -53,7 +52,7 @@ export const createBlock = (style, config) => {
  * @returns {string} - Style rules Object converted into a style rules string
  */
 export const convertToCss = (style, config) => {
-  const stlArr = flattenArray(eitherArr(style, [style]))
+  const stlArr = flatArr(eitherArr(style, [style]))
 
   return stlArr.reduce(
     (rules, stl) => {

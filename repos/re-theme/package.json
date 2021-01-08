@@ -23,11 +23,9 @@
   ],
   "scripts": {
     "docker:build": "bash ./scripts/dockerBuild.sh",
-    "app": "cd app; yarn start",
-    "app:install": "cd app && yarn install",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
-    "build:app": "cd app; yarn build",
     "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm",
+    "clean:docs": "rimraf docs",
     "clean:full": "yarn clean:nm; clean:build",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
@@ -38,25 +36,41 @@
     "format": "yarn format:prettier && yarn format:eslint",
     "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslintrc.config.js {{changed}} --fix",
     "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
+    "storybook": "yarn sb",
+    "sb": "nodemon --watch ./configs --watch ./package.json --exec 'RE_PLATFORM=web start-storybook -p 60710'",
+    "sb:build": "yarn clean:docs; RE_PLATFORM=web build-storybook -c .storybook -o docs",
+    "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
+    "sb:server": "npx http-server docs",
     "start": "yarn copy:indexes; yarn dev",
     "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
     "test:reports": "yarn test --coverage && yarn view:reports",
-    "view:reports": "open reports/coverage/lcov-report/index.html"
+    "view:reports": "open reports/coverage/lcov-report/index.html",
+    "storybook": "nodemon --watch ./configs --exec 'RE_PLATFORM=web start-storybook -p 60710'",
+    "sb": "nodemon --watch ./configs --watch ./package.json --exec 'RE_PLATFORM=web start-storybook -p 60710'",
+    "sb:build": "yarn clean:docs; RE_PLATFORM=web build-storybook -c .storybook -o docs",
+    "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
+    "sb:server": "npx http-server docs"
   },
   "devDependencies": {
     "@babel/core": "7.12.3",
+    "@babel/parser": "7.12.11",
     "@babel/plugin-proposal-class-properties": "7.12.1",
     "@babel/preset-env": "7.12.1",
     "@babel/preset-react": "7.12.1",
+    "@keg-hub/jsutils": "8.0.0",
     "@rollup/plugin-alias": "3.1.1",
     "@rollup/plugin-babel": "5.2.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "7.1.1",
     "@rollup/plugin-replace": "2.3.3",
-    "@keg-hub/jsutils": "8.0.0",
+    "@storybook/addon-actions": "6.1.11",
+    "@storybook/addon-essentials": "6.1.11",
+    "@storybook/addon-links": "6.1.11",
+    "@storybook/react": "^6.1.11",
     "app-root-path": "3.0.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
+    "babel-loader": "^8.2.2",
     "eslint": "7.4.0",
     "eslint-plugin-jest": "23.18.0",
     "eslint-plugin-react": "7.20.0",
@@ -86,5 +100,6 @@
     "hooks": {
       "pre-commit": "lint-staged --config ./configs/lint-staged.config.js"
     }
-  }
+  },
+  "dependencies": {}
 }

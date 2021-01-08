@@ -13,7 +13,6 @@ const {
   getComponentName,
   usePropClassName,
   useObjWithIdentity,
-  useStyleProp,
   useReStyles,
 } = require('../reStyleHooks')
 
@@ -120,39 +119,6 @@ describe('reStyleHooks', () => {
       expect(identity.mutate).toBe(undefined)
       expect(identity.testObj.test1).toBe(1)
       expect(identity.objTest.test2).toBe(2)
-    })
-  })
-
-  describe('useStyleProp', () => {
-    afterEach(() => {
-      clearMockedHooks(mockedHooks)
-    })
-
-    it('should memoize the passed in styleProp and props[styleProp]', () => {
-      const styleProp = 'style'
-      const props = { style: { margin: 10 }, test: 1 }
-      useStyleProp(styleProp, props)
-
-      expect(useMemo).toHaveBeenCalled()
-
-      const memoDeps = useMemo.mock.calls[0][1]
-      expect(memoDeps[0]).toBe(styleProp)
-      expect(memoDeps[1]).toBe(props[styleProp])
-    })
-
-    it('should return the memoized styles from the props', () => {
-      const styleProp = 'style'
-      const props = { style: { margin: 10 }, test: 1 }
-
-      expect(useStyleProp(styleProp, props)).toBe(props.style)
-    })
-
-    it('should return an empty object when the styleProp does not exist on the props', () => {
-      const styleProp = 'no-exists'
-      const props = { style: { margin: 10 }, test: 1 }
-      const styles = useStyleProp(styleProp, props)
-
-      expect(Object.keys(styles).length).toBe(0)
     })
   })
 
