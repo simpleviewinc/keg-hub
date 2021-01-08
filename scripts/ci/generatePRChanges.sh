@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# exit when any command fails
+# Exit when any command fails
 set -e
 
 # Get all changed files for the PR

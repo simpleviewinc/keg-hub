@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# exit when any command fails
+# Exit when any command fails
 set -e
 
 keg_get_changed_repos(){
