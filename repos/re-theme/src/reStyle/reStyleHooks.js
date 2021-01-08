@@ -1,7 +1,7 @@
 import { useTheme } from '../hooks/useTheme'
 import { useMemo, useState, useEffect } from 'react'
 import {
-  eitherArr,
+  ensureArr,
   uuid,
   clearObj,
   isObj,
@@ -38,7 +38,7 @@ export const getComponentName = Component => {
  */
 export const usePropClassName = (className, compName) => {
   return useMemo(() => {
-    const classArr = className ? eitherArr(className, [className]) : []
+    const classArr = className ? ensureArr(className) : []
     compName && classArr.push(compName)
 
     return classArr
@@ -60,20 +60,6 @@ export const useObjWithIdentity = (identity, ...mergeObjs) => {
 
     return identity
   }, [ identity, ...mergeObjs ])
-}
-
-/**
- * Hook to get the styles from the props using the styleProp
- * @function
- * @param {string} styleProp - `style` || Custom style prop key to use
- * @param {Object} props - Props of the component being wrapped
- *
- * @returns {Object} - Styles from the props
- */
-export const useStyleProp = (styleProp, props) => {
-  return useMemo(() => {
-    return props[styleProp] || noOpObj
-  }, [ styleProp, props[styleProp] ])
 }
 
 /**
