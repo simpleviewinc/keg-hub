@@ -58,7 +58,7 @@ const getSwitchColors = (
 const useCheckedState = (isChecked, themeStyles) => {
   const theme = useTheme()
   return useMemo(() => {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: {
           ...get(themeStyles, 'content.area.off'),
