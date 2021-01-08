@@ -1,6 +1,6 @@
 import React from 'react'
 import { exists, noOpObj } from '@keg-hub/jsutils'
-import { StyleInjector } from '../styleInjector/styleInjector'
+import { StyleInjector } from 'StyleInjector'
 import {
   getComponentName,
   useObjWithIdentity,
