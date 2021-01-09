@@ -31,6 +31,10 @@ jobs:
         id: install-yarn-dependencies
         run: bash scripts/ci/runYarnCmd.sh "install"
 
+      - name: "Run Repo Format"
+        id: run-repo-format
+        run: bash scripts/ci/runYarnCmd.sh "format"
+
       - name: "Run Repo Build"
         id: run-repo-build
         run: bash scripts/ci/buildChangedRepos.sh
