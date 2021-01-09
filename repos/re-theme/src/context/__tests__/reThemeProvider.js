@@ -31,7 +31,7 @@ let effectCB = null
 const useEffect = jest.fn(cb => {
   effectCB = cb
 })
-let memoCB = null
+
 const useMemo = jest.fn(cb => {
   return cb()
 })
