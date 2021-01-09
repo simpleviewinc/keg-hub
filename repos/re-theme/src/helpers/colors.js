@@ -1,6 +1,7 @@
 import { isObj, isArr, isStr, isNum } from '@keg-hub/jsutils'
 
-const convertToPercent = (num, percent) => parseInt((num * (100 + percent)) / 100)
+const convertToPercent = (num, percent) =>
+  parseInt((num * (100 + percent)) / 100)
 
 const checkColorMax = num => (num < 255 ? num : 255)
 
@@ -35,7 +36,7 @@ export const hexToRgba = (hex, opacity, asObj) => {
 
   hex = hex.indexOf('#') === 0 ? hex.replace('#', '') : hex
   hex = hex.length === 3 ? `${hex}${hex}` : hex
-  
+
   opacity = opacity > 1 ? (opacity / 100).toFixed(4) : opacity
 
   const rgbaObj = {
@@ -117,7 +118,7 @@ export const transition = (props = [], speed = 250, timingFunc = 'ease') => {
               trans.push(`${prop} ${speed} ${timingFunc}`)
               return trans
             }, [])
-            .join(', ')
+            .join(', '),
         }
       : null
 }

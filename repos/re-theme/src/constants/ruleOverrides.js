@@ -17,5 +17,5 @@ export const ruleOverrides = {
     'placeholderTextColor',
     'pointerEvents',
     'scrollbarWidth',
-  ]
+  ],
 }

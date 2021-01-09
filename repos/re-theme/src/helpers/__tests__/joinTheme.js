@@ -36,7 +36,6 @@ describe('joinTheme', () => {
     const { joinTheme, getTheme } = setupTest(true)
 
     const testObj = {}
-    const testArr = [ testObj ]
     joinTheme(testObj, testObj, testObj)
 
     expect(getTheme).toHaveBeenCalled()

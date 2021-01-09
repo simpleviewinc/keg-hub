@@ -7,15 +7,14 @@ const mockHookFactory = jest.fn((...args) => useThemeState(...args))
 jest.setMock('../useThemeState', { useThemeState: mockHookFactory })
 
 describe('useThemeActive', () => {
-
   it('should call useThemeState', () => {
     mockHookFactory.mockClear()
-    const { useThemeActive } = require('../useThemeActive')
+    require('../useThemeActive')
     expect(mockHookFactory).toHaveBeenCalled()
   })
 
   it('should pass the correct arguments', () => {
-    const { useThemeActive } = require('../useThemeActive')
+    require('../useThemeActive')
     const arg = mockHookFactory.mock.calls[0][0]
     expect(arg).toBe('active')
   })
@@ -25,5 +24,4 @@ describe('useThemeActive', () => {
     const { useThemeActive } = require('../useThemeActive')
     expect(typeof useThemeActive).toBe('function')
   })
-
 })

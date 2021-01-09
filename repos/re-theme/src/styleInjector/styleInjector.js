@@ -9,14 +9,18 @@ import { useStyleTag } from './useStyleTag'
  * @param {Object} props.Component - Component being wrapped by the HOC
  * @param {string} props.KegDefClass - Default className of the wrapped Component
  * @param {Object} props.style - Styles to be added to the Dom
- * 
+ *
  * @returns {string} - className Css selector of the added style rules
  */
 const BuildWithStyles = React.forwardRef((props, ref) => {
   const { Component, children, config, className, style, ...buildProps } = props
-  const { className:KegDefClass } = config
-  
-  const { classList, filteredStyle } = useStyleTag(style, className || KegDefClass, config)
+  const { className: KegDefClass } = config
+
+  const { classList, filteredStyle } = useStyleTag(
+    style,
+    className || KegDefClass,
+    config
+  )
 
   return (
     <Component
@@ -25,7 +29,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
       ref={ref}
       className={classList}
     >
-      {children}
+      { children }
     </Component>
   )
 })
@@ -36,22 +40,25 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
  * <br/>Component must accept a className prop to work properly
  * @param {Object} Component - React Component to wrap
  * @param {Object} config - Settings for the Hoc
- * 
+ *
  * @returns {Function} - Anonymous function that wraps the passed in Component
  */
-export const StyleInjector = (Component, config={}) => {
-  return React.forwardRef(({ style, ...props}, ref) => {
-    return !style
-      ? (<Component {...props} style={style} ref={ref} />)
-      : (
-          <BuildWithStyles
-            {...props}
-            style={style}
-            config={config}
-            Component={Component}
-            ref={ref}
-          />
-        )
+export const StyleInjector = (Component, config = {}) => {
+  return React.forwardRef(({ style, ...props }, ref) => {
+    return !style ? (
+      <Component
+        {...props}
+        style={style}
+        ref={ref}
+      />
+    ) : (
+      <BuildWithStyles
+        {...props}
+        style={style}
+        config={config}
+        Component={Component}
+        ref={ref}
+      />
+    )
   })
 }
-

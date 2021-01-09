@@ -1,3 +1,3 @@
 global.testMocks = global.testMocks || {}
 
-const jsdom = require('jsdom').jsdom
+require('jsdom').jsdom

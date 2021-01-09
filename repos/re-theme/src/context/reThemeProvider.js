@@ -77,21 +77,12 @@ export const ReThemeProvider = props => {
       dimensions.height,
       merge && getDefaultTheme(),
       platforms
-    ) 
-  }, [
-    theme,
-    dimensions.width,
-    dimensions.height,
-    merge,
-    platforms,
-  ])
+    )
+  }, [ theme, dimensions.width, dimensions.height, merge, platforms ])
 
   return (
-    <ReThemeContext.Provider
-      value={builtTheme}
-    >
+    <ReThemeContext.Provider value={builtTheme}>
       { children }
     </ReThemeContext.Provider>
   )
-
 }

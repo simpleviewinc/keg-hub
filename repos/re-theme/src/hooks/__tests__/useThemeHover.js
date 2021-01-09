@@ -7,15 +7,14 @@ const mockHookFactory = jest.fn((...args) => useThemeState(...args))
 jest.setMock('../useThemeState', { useThemeState: mockHookFactory })
 
 describe('useThemeHover', () => {
-
   it('should call useThemeState', () => {
     mockHookFactory.mockClear()
-    const { useThemeHover } = require('../useThemeHover')
+    require('../useThemeHover')
     expect(mockHookFactory).toHaveBeenCalled()
   })
 
   it('should pass the correct arguments', () => {
-    const { useThemeHover } = require('../useThemeHover')
+    require('../useThemeHover')
     const arg = mockHookFactory.mock.calls[0][0]
     expect(arg).toBe('hover')
   })
@@ -25,5 +24,4 @@ describe('useThemeHover', () => {
     const { useThemeHover } = require('../useThemeHover')
     expect(typeof useThemeHover).toBe('function')
   })
-
 })
