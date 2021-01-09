@@ -5,7 +5,6 @@ const {
   createReactDOMStyle,
   createCompileableStyle,
   flattenStyle,
-  flattenArray,
   prefixStyles,
 } = require('../reactNativeWeb')
 
@@ -14,7 +13,6 @@ describe('reactNativeWeb', () => {
     expect(typeof createReactDOMStyle).toBe('function')
     expect(typeof createCompileableStyle).toBe('function')
     expect(typeof flattenStyle).toBe('function')
-    expect(typeof flattenArray).toBe('function')
     expect(typeof prefixStyles).toBe('function')
   })
 })

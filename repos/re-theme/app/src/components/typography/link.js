@@ -6,7 +6,7 @@ const Link = withTheme(props => {
   const { children, style, theme, ...attrs } = props
 
   return (
-    <a {...attrs} style={theme.join(theme.link, style)}>
+    <a {...attrs} style={theme.get(theme.link, style)}>
       { children }
     </a>
   )

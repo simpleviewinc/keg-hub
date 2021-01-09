@@ -1,5 +1,6 @@
 import React from 'react'
 import { useStyleTag } from './useStyleTag'
+import { isArr } from '@keg-hub/jsutils'
 
 /**
  * Helper component that actually calls the useStyleTag hook
@@ -15,6 +16,11 @@ import { useStyleTag } from './useStyleTag'
 const BuildWithStyles = React.forwardRef((props, ref) => {
   const { Component, children, config, className, style, ...buildProps } = props
   const { className: KegDefClass } = config
+  const { classList, filteredStyle } = useStyleTag(
+    style,
+    className || KegDefClass,
+    config
+  )
 
   const { classList, filteredStyle } = useStyleTag(
     style,
@@ -27,7 +33,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
       {...buildProps}
       style={filteredStyle}
       ref={ref}
-      className={classList}
+      className={isArr(classList) ? classList.join(' ') : classList}
     >
       { children }
     </Component>

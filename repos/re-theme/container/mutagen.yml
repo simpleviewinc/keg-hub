@@ -1,7 +1,7 @@
 sync:
   retheme:
-    alpha: "/keg/app"
-    beta: "docker://tap/keg/app"
+    alpha: "/keg/tap"
+    beta: "docker://tap/keg/tap"
     mode: "one-way-replica"
     ignore:
       vcs: true
@@ -25,22 +25,22 @@ sync:
 actions:
   jsutils:
     install:
-      location: /keg/app/node_modules/@keg-hub/jsutils
+      location: /keg/tap/node_modules/@keg-hub/jsutils
       privileged: true
       cmds:
         - yarn install
     build:
-      location: /keg/app/node_modules/@keg-hub/jsutils
+      location: /keg/tap/node_modules/@keg-hub/jsutils
       privileged: true
       cmds:
         - yarn build
     start:
-      location: /keg/app/node_modules/@keg-hub/jsutils
+      location: /keg/tap/node_modules/@keg-hub/jsutils
       privileged: true
       cmds:
         - yarn dev
     att:
-      location: /keg/app/node_modules/@keg-hub/jsutils
+      location: /keg/tap/node_modules/@keg-hub/jsutils
       privileged: true
       cmds:
         - bash

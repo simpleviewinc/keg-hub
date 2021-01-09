@@ -1,15 +1,9 @@
 import { useMemo } from 'react'
-import {
-  addStylesToDom,
-  getSelector,
-  hyphenator,
-  filterRules,
-} from './injectHelpers'
-import { isArr, eitherArr, isObj } from '@keg-hub/jsutils'
+import { addStylesToDom, getSelector, filterRules } from './injectHelpers'
+import { eitherArr, hyphenator, isArr, isObj, flatArr } from '@keg-hub/jsutils'
 import { useTheme } from '../hooks/useTheme'
 import {
   prefixStyles,
-  flattenArray,
   flattenStyle,
   createReactDOMStyle,
   createCompileableStyle,
@@ -34,7 +28,6 @@ const checkImportant = (property, value, important) =>
  */
 export const createBlock = (style, config) => {
   const important = ruleOverrides.important.concat(config?.important)
-
   const prefixed = prefixStyles(createReactDOMStyle(style))
   const cssString = Object.keys(prefixed)
     .map(property => {
@@ -58,7 +51,7 @@ export const createBlock = (style, config) => {
  * @returns {string} - Style rules Object converted into a style rules string
  */
 export const convertToCss = (style, config) => {
-  const stlArr = flattenArray(eitherArr(style, [style]))
+  const stlArr = flatArr(eitherArr(style, [style]))
 
   return stlArr.reduce(
     (rules, stl) => {

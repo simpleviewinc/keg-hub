@@ -1,6 +1,5 @@
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react'
-import { checkCall, isFunc, noOpObj } from '@keg-hub/jsutils'
-import { hasDomAccess } from '../helpers/hasDomAccess'
+import { checkCall, hasDomAccess, isFunc, noOpObj } from '@keg-hub/jsutils'
 
 /**
  * Tracks if the hover pointer state can be enabled

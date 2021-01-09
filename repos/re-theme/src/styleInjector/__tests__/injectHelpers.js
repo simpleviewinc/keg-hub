@@ -13,70 +13,9 @@ jest.setMock('../../theme/themeEvent', {
   addThemeEvent: mockAddThemeEvent,
 })
 
-const {
-  filterRules,
-  hyphenator,
-  hashString,
-  getSelector,
-  addStylesToDom,
-} = require('../injectHelpers')
+const { filterRules, getSelector, addStylesToDom } = require('../injectHelpers')
 
 describe('injectHelpers', () => {
-  describe('hyphenator', () => {
-    afterEach(() => {
-      jest.clearAllMocks()
-    })
-
-    it('should hyphenate the passed in string', () => {
-      expect(hyphenator(`marginTop`)).toBe(`margin-top`)
-      expect(hyphenator(`backgroundColor`)).toBe(`background-color`)
-      expect(hyphenator(`borderTopLeftRadius`)).toBe(`border-top-left-radius`)
-      expect(hyphenator(`someTestString`)).toBe(`some-test-string`)
-    })
-
-    it('should not fail on pre-hyphenated strings', () => {
-      expect(hyphenator(`some-test-string`)).toBe(`some-test-string`)
-    })
-
-    it('should add a - to the front then string starts with ms-', () => {
-      expect(hyphenator(`msTestString`)).toBe(`-ms-test-string`)
-    })
-  })
-
-  describe('hashString', () => {
-    afterEach(() => {
-      jest.clearAllMocks()
-    })
-
-    it('should create a hash of the passed in string', () => {
-      const hash = hashString(`{ test: "data" }`)
-      expect(hash).toBe(`1441025846`)
-    })
-
-    it('should create the same hash when the passed in string is the same', () => {
-      expect(hashString(`{ test: "data" }`)).toBe(
-        hashString(`{ test: "data" }`)
-      )
-    })
-
-    it('should create the different hashes when the passed in string is the differnt', () => {
-      expect(hashString(`{ test: "data" }`)).not.toBe(
-        hashString(`{ test: "data1" }`)
-      )
-      expect(hashString(`{ test: "data" }`)).not.toBe(
-        hashString(`{ test: "1data" }`)
-      )
-      expect(hashString(`{ test: "data" }`)).not.toBe(
-        hashString(`{ test1: "data" }`)
-      )
-    })
-
-    it('should return hash matching the length or the passed in max length value', () => {
-      const hash = hashString(`{ test: "data" }`, 2)
-      expect(hash.length).toBe(2)
-    })
-  })
-
   describe(`filterRules`, () => {
     afterEach(() => {
       jest.clearAllMocks()

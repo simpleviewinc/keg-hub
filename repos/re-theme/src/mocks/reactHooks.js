@@ -74,6 +74,13 @@ const reactHookMocks = {
     )
     return mockFunc
   },
+  createElement: () => {
+    return jest.fn((comp, props, children) => {
+      comp.props = props
+      comp.children = children
+      return comp
+    })
+  },
 }
 
 export const mockReactHooks = (...reactMocks) => {

@@ -1,0 +1,10 @@
+name: "Keg CodeQL config"
+
+paths:
+  - repos
+paths-ignore:
+  - '**/node_modules'
+  - '**/build'
+  - '**/docs'
+  - '**/__tests__'
+  - '**/*.test.js'

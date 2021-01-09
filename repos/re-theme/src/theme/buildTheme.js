@@ -8,7 +8,6 @@ import { isObj, deepMerge, checkCall } from '@keg-hub/jsutils'
 import { restructureTheme } from './restructureTheme'
 import { updateCurrentTheme, getCurrentTheme } from './manageTheme'
 import { getTheme } from '../helpers/getTheme'
-import { joinTheme } from '../helpers/joinTheme'
 
 /**
  * Holds the cached merged theme with sizes
@@ -154,7 +153,6 @@ const configureBuiltTheme = ({ mergedTheme, extraTheme }, RTMeta) => {
 
   // Add the get and join helpers
   builtTheme.get = getTheme
-  builtTheme.join = joinTheme
 
   builtTheme.RTMeta = { ...builtTheme.RTMeta, ...RTMeta }
 

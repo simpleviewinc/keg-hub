@@ -30,7 +30,7 @@ export const LinkWrapper = props => {
   )
 
   const [ ref, themeStyle ] = useThemeHover(
-    theme.join(linkStyle, style),
+    theme.get(linkStyle, style),
     get(theme, `link.hover`)
   )
 

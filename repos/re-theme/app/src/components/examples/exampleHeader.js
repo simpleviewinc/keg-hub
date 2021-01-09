@@ -8,12 +8,12 @@ export const ExampleHeader = props => {
   
   const theme = useTheme()
 
-  const style = theme.join(theme, [
+  const style = theme.get(
     'flex.display',
     'flex.wrap',
     'padding.vert',
     'margin.bottom'
-  ])
+  )
   
   return (
     <Header

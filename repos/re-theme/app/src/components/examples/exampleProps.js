@@ -56,7 +56,7 @@ export const ExampleProps = ({ allowed, title }) => {
     <>
       <H5>{ title }</H5>
       <div style={ get(theme, 'app.example.grid.container') } >
-        { buildHeader(theme.join(propStyle, headerStyle)) }
+        { buildHeader(theme.get(propStyle, headerStyle)) }
         { allowed.map(prop => buildProp(prop, propStyle))}
       </div>
     </>
