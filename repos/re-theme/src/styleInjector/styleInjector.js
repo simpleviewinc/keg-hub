@@ -22,12 +22,6 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
     config
   )
 
-  const { classList, filteredStyle } = useStyleTag(
-    style,
-    className || KegDefClass,
-    config
-  )
-
   return (
     <Component
       {...buildProps}
@@ -35,7 +29,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
       ref={ref}
       className={isArr(classList) ? classList.join(' ') : classList}
     >
-      { children }
+      {children}
     </Component>
   )
 })
@@ -52,11 +46,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
 export const StyleInjector = (Component, config = {}) => {
   return React.forwardRef(({ style, ...props }, ref) => {
     return !style ? (
-      <Component
-        {...props}
-        style={style}
-        ref={ref}
-      />
+      <Component {...props} style={style} ref={ref} />
     ) : (
       <BuildWithStyles
         {...props}
