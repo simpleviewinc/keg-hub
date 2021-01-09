@@ -10,10 +10,10 @@ var React = require('react');
 var React__default = _interopDefault(React);
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
-var reTheme = require('@keg-hub/re-theme');
 require('@keg-hub/re-theme/styleInjector');
+var reTheme = require('@keg-hub/re-theme');
 require('./touchable.js');
-var touchable$1 = require('./touchable-465d470b.js');
+var touchable$1 = require('./touchable-d386e5c0.js');
 
 var withTouch = function withTouch(Component) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

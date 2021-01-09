@@ -12,14 +12,14 @@ var React__default = _interopDefault(React);
 var reactNative = require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var view_native = require('./view.native-20f555a1.js');
-require('@keg-hub/re-theme');
 require('@keg-hub/re-theme/styleInjector');
+require('@keg-hub/re-theme');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-465d470b.js');
+var touchable$1 = require('./touchable-d386e5c0.js');
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
   var className = _ref.className,

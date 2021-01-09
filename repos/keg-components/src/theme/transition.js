@@ -1,10 +1,10 @@
 import { isArr, isNum, trainCase, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 let __transition
-export const clearTransitionStyles = () => __transition = undefined
+export const clearTransitionStyles = () => (__transition = undefined)
 
-export const transition = (config=noOpObj) => {
-  if(__transition) return __transition
+export const transition = (config = noOpObj) => {
+  if (__transition) return __transition
 
   __transition = (prop = 'all', amount = '1s', type = 'ease') => {
     prop = isArr(prop) ? prop : [prop]
@@ -30,6 +30,8 @@ export const transition = (config=noOpObj) => {
     transition: 'max-height 1s ease',
   }
 
-  return checkCall(config.transition, __transition) || Object.assign(__transition, config.transition)
-
+  return (
+    checkCall(config.transition, __transition) ||
+    Object.assign(__transition, config.transition)
+  )
 }

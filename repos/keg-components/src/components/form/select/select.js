@@ -17,7 +17,7 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  */
 const KegSelect = StyleInjector(InternalSelect, {
   displayName: 'Select',
-  className: 'keg-select'
+  className: 'keg-select',
 })
 
 /**
@@ -87,7 +87,6 @@ export const Select = React.forwardRef((props, ref) => {
     </View>
   )
 })
-
 
 Select.propTypes = {
   ...InternalSelect.propTypes,

@@ -1,8 +1,15 @@
-import { get, set, deepClone, deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
+import {
+  get,
+  set,
+  deepClone,
+  deepMerge,
+  noOpObj,
+  checkCall,
+} from '@keg-hub/jsutils'
 import { buildSurfaceStyles } from '../../utils/styles/buildColorStyles'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const loading = (config=noOpObj) => {
+export const loading = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
   const colorPalette = get(colors, 'palette')
 
@@ -24,7 +31,7 @@ export const loading = (config=noOpObj) => {
         fontSize: '100px',
         color: colorPalette.gray02,
       },
-    }
+    },
   }
 
   return {
@@ -36,9 +43,10 @@ export const loading = (config=noOpObj) => {
         get(surfaces, `${colorType}.colors.main`)
       )
 
-      return checkCall(config.loading, surfaceStyles) || deepMerge(surfaceStyles, config.loading)
-    })
+      return (
+        checkCall(config.loading, surfaceStyles) ||
+        deepMerge(surfaceStyles, config.loading)
+      )
+    }),
   }
-
 }
-

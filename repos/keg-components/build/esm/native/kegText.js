@@ -3,7 +3,6 @@ import React__default from 'react';
 import { Text } from 'react-native';
 import { u as useClassName } from './useClassName.native-32e8827d.js';
 import { useTextAccessibility } from './useTextAccessibility.js';
-import '@keg-hub/re-theme';
 
 var ellipsisProps = {
   ellipsizeMode: 'tail',

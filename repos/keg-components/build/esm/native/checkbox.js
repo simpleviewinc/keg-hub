@@ -10,11 +10,11 @@ import 'react-native';
 import './useClassName.native-32e8827d.js';
 import './view.native-54e7e7ef.js';
 import './useTextAccessibility.js';
-import { withTheme } from '@keg-hub/re-theme';
-import './useTextStyles.js';
 import './kegText.js';
 import '@keg-hub/re-theme/styleInjector';
-import './kegText-897ccc29.js';
+import { withTheme } from '@keg-hub/re-theme';
+import './useTextStyles.js';
+import './kegText-ef69c4aa.js';
 import { Text } from './text.js';
 import './useThemePath.js';
 import './useThemeWithHeight.js';
@@ -30,7 +30,7 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { C as CheckboxWrapper } from './checkbox.wrapper-22c62985.js';
+import { C as CheckboxWrapper } from './checkbox.wrapper-2b4c20ad.js';
 
 var Element = withTheme(function (props) {
   var theme = props.theme,

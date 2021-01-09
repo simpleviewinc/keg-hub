@@ -1,7 +1,7 @@
 import { getThemeDefaults } from '../themeDefaults'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const divider = (config=noOpObj) => {
+export const divider = (config = noOpObj) => {
   const { colors, margin } = getThemeDefaults()
 
   const defStyles = {
@@ -17,6 +17,9 @@ export const divider = (config=noOpObj) => {
     },
   }
 
-  return { divider: checkCall(config.divider, defStyles) || deepMerge(defStyles, config.divider) }
-
+  return {
+    divider:
+      checkCall(config.divider, defStyles) ||
+      deepMerge(defStyles, config.divider),
+  }
 }

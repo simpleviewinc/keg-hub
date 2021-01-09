@@ -69,7 +69,6 @@ export const Image = forwardRef((props, ref) => {
     isFunc(imgRef)
       ? imgRef(internalRef.current)
       : imgRef && (imgRef.current = internalRef.current)
-
   }, [ src, source, internalRef.current ])
 
   return (

@@ -12,12 +12,12 @@ require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-afee43f7.js');
+require('./useClassName-6b6da47b.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./useTextAccessibility.js');
+var kegText_native = require('./kegText.native-dfad83ae.js');
 require('@keg-hub/re-theme');
 var useTextStyles = require('./useTextStyles.js');
-var kegText_native = require('./kegText.native-cdb9059e.js');
 
 var useTextComponent = function useTextComponent(element) {
   return React.useMemo(function () {

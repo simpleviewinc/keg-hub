@@ -15,7 +15,7 @@ import { Input as KegInput } from '../internal/input.web'
  */
 const Input = StyleInjector(KegInput, {
   displayName: 'FilePickerInput',
-  className: 'keg-file-picker-input'
+  className: 'keg-file-picker-input',
 })
 
 /**

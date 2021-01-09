@@ -2,7 +2,7 @@ import { buildTheme } from '../../../utils/styles'
 import { getThemeDefaults } from '../../themeDefaults'
 import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const textInit = (config=noOpObj, contained) => {
+export const textInit = (config = noOpObj, contained) => {
   const { colors, states } = getThemeDefaults()
 
   const textStyle = (state, colorType) => {
@@ -25,8 +25,10 @@ export const textInit = (config=noOpObj, contained) => {
     }
 
     const custom = get(config, 'button.text')
-    return checkCall(custom, defStyles, state, colorType) || deepMerge(defStyles, custom)
-
+    return (
+      checkCall(custom, defStyles, state, colorType) ||
+      deepMerge(defStyles, custom)
+    )
   }
 
   return buildTheme(textStyle, { inheritFrom: [contained] })

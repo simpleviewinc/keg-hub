@@ -4,8 +4,12 @@ const path = require('path')
 
 describe('buildTempConfigFileName', () => {
   it('should throw if source is invalid', () => {
-    expect(() => buildTempConfigName(Symbol())).toThrow(/Incorrect App config file name/)
-    expect(() => buildTempConfigName(configNames[0] + 'xyz')).toThrow(/Incorrect App config file name/)
+    expect(() => buildTempConfigName(Symbol())).toThrow(
+      /Incorrect App config file name/
+    )
+    expect(() => buildTempConfigName(configNames[0] + 'xyz')).toThrow(
+      /Incorrect App config file name/
+    )
   })
 
   it('should return the source file name, but with the json extension', () => {

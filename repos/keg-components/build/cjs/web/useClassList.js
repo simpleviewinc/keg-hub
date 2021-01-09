@@ -13,7 +13,7 @@ var useClassList = function useClassList(className) {
   var classList = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : jsutils.noPropArr;
   var classListArr = jsutils.eitherArr(classList, [classList]);
   return React.useMemo(function () {
-    return ensureClassArray.ensureClassArray(classListArr).concat([className]);
+    return ensureClassArray.ensureClassArray(classListArr).concat(ensureClassArray.ensureClassArray(className));
   }, [className, classListArr.join(' ')]);
 };
 

@@ -3,7 +3,7 @@ import { helpers } from '../helpers'
 import { getThemeDefaults } from '../themeDefaults'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const modal = (config=noOpObj) => {
+export const modal = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
   const __helpers = helpers(config)
   const __flex = flex(config)
@@ -35,9 +35,11 @@ export const modal = (config=noOpObj) => {
           maxWidth: '80%',
         },
       },
-    }
+    },
   }
 
-  return { modal: checkCall(config.modal, defStyles) || deepMerge(defStyles, config.modal) }
-
+  return {
+    modal:
+      checkCall(config.modal, defStyles) || deepMerge(defStyles, config.modal),
+  }
 }

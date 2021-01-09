@@ -10,12 +10,12 @@ require('@keg-hub/re-theme/colors');
 var colors$3 = require('./colors-3022218c.js');
 var React = require('react');
 var React__default = _interopDefault(React);
-require('./ensureClassArray.js');
-var useClassList = require('./useClassList-2f47489f.js');
+var ensureClassArray = require('./ensureClassArray.js');
+var useClassList = require('./useClassList-9eaefcd6.js');
 
 var useThemeType = function useThemeType(themeLoc, defClass) {
   return React.useMemo(function () {
-    var defClassArr = jsutils.eitherArr(defClass, [defClass]);
+    var defClassArr = ensureClassArray.ensureClassArray(defClass);
     if (!themeLoc) return defClassArr;
     var themeSplit = themeLoc.split('.');
     var surface = themeSplit.pop();

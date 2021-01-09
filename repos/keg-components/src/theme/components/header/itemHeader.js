@@ -2,7 +2,7 @@ import { flex } from '../../flex'
 import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
 
-export const itemHeader = (config=noOpObj) => {
+export const itemHeader = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
   const colorPalette = get(colors, 'palette')
   const colorSurface = get(colors, 'surface')
@@ -109,6 +109,9 @@ export const itemHeader = (config=noOpObj) => {
     },
   }
 
-  return { itemHeader: checkCall(config.itemHeader, defStyles) || deepMerge(defStyles, config.itemHeader) }
-
+  return {
+    itemHeader:
+      checkCall(config.itemHeader, defStyles) ||
+      deepMerge(defStyles, config.itemHeader),
+  }
 }

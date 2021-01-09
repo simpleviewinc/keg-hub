@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import { View, Link } from '@keg-hub/keg-components'
 
 /**
- * @param {string} homepage 
- * @param {string} version 
+ * @param {string} homepage
+ * @param {string} version
  * @return {string} the uri to the tap's release notes for the specified version
  */
 const getReleaseNotesURI = (homepage, version) => {
@@ -18,21 +18,24 @@ const getReleaseNotesURI = (homepage, version) => {
  * @param {String} props.version - version to display (defaults to using the package.json version)
  * @param {String} props.homepage - homepage to link to
  * @param {Object} props.styles - custom styles for keg-components Button
- * 
+ *
  */
 export const VersionDisplay = props => {
-  const { 
-    version = process.env.TAP_VERSION || '<Missing Version>', 
+  const {
+    version = process.env.TAP_VERSION || '<Missing Version>',
     homepage = process.env.TAP_HOMEPAGE,
-    styles
+    styles,
   } = props
 
   const releaseURI = getReleaseNotesURI(homepage, version)
 
-  const mergedStyles = useMemo(() => ({ 
-    ...versionStyles, 
-    ...styles 
-  }), [styles])
+  const mergedStyles = useMemo(
+    () => ({
+      ...versionStyles,
+      ...styles,
+    }),
+    [styles]
+  )
 
   return (
     <View style={mergedStyles.main}>

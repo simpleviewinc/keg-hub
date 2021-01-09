@@ -89,15 +89,12 @@ module.exports = rootDir => {
      * Define aliases to the core versions of node_modules
      */
     config.resolve.alias = buildResolveCoreAlias(config.resolve.alias)
-    
+
     /**
      * Define custom plugins
      */
 
-    config.plugins = [
-      ...config.plugins,
-      new webpack.DefinePlugin(kegEnvs)
-    ]
+    config.plugins = [...config.plugins, new webpack.DefinePlugin(kegEnvs)]
 
     return config
   }

@@ -1,14 +1,14 @@
 import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { eitherArr, get, noOpObj, isArr } from '@keg-hub/jsutils';
+import { get, noOpObj, isArr } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
 import { c as colors } from './colors-13c6a916.js';
 import { useMemo } from 'react';
-import './ensureClassArray.js';
-import { u as useClassList } from './useClassList-4be992cd.js';
+import { ensureClassArray } from './ensureClassArray.js';
+import { u as useClassList } from './useClassList-eea8a571.js';
 
 var useThemeType = function useThemeType(themeLoc, defClass) {
   return useMemo(function () {
-    var defClassArr = eitherArr(defClass, [defClass]);
+    var defClassArr = ensureClassArray(defClass);
     if (!themeLoc) return defClassArr;
     var themeSplit = themeLoc.split('.');
     var surface = themeSplit.pop();

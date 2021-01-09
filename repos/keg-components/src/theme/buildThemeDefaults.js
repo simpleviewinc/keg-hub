@@ -11,7 +11,7 @@ import { setThemeDefaults, getThemeDefaults } from './themeDefaults'
 /**
  * Class all methods required to clear out the current default theme styles
  * @function
- * 
+ *
  * @return {void}
  */
 const clearThemeStyles = () => {
@@ -33,7 +33,7 @@ const clearThemeStyles = () => {
  *
  * @return {Object} - Merged theme defaults
  */
-export const buildThemeDefaults = (config=noOpObj) => {
+export const buildThemeDefaults = (config = noOpObj) => {
   // Clear out the old styles before setting the new defaults
   clearThemeStyles()
   const themeDefaults = deepMerge(defaults, config.defaults)

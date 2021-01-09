@@ -1,7 +1,7 @@
 import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../../themeDefaults'
 
-export const containedInit = (config=noOpObj) => {
+export const containedInit = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
   const { surface, palette } = colors
 

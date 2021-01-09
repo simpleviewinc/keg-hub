@@ -519,7 +519,7 @@ var drawer = function drawer() {
   var defStyles = {
     main: {
       overflow: 'hidden',
-      width: "100%"
+      width: '100%'
     }
   };
   return {
@@ -1317,8 +1317,7 @@ var input = function input() {
 };
 
 var option = function option(config) {
-  var defStyles = {};
-  return checkCall(config.option, defStyles) || deepMerge(defStyles, config.option);
+  return checkCall(config.option, defStyles) || deepMerge({}, config.option);
 };
 
 var radio = function radio() {

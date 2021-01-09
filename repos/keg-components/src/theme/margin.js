@@ -2,9 +2,9 @@ import { spaceHelper } from './helpers'
 import { get, noOpObj } from '@keg-hub/jsutils'
 
 let __margin
-export const clearMargin = () => __margin = undefined
+export const clearMargin = () => (__margin = undefined)
 
-export const margin = (defaults, config=noOpObj) => {
+export const margin = (defaults, config = noOpObj) => {
   const size = get(defaults, 'layout.margin')
 
   __margin = (amount, sides = []) => spaceHelper(amount, sides, 'margin')

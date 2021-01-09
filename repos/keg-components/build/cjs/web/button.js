@@ -18,18 +18,18 @@ var getActiveOpacity = require('./getActiveOpacity.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-afee43f7.js');
+require('./useClassName-6b6da47b.js');
 require('@keg-hub/re-theme/styleInjector');
 require('./useTextAccessibility.js');
+require('./kegText.native-dfad83ae.js');
 var reTheme = require('@keg-hub/re-theme');
 require('./useTextStyles.js');
-require('./kegText.native-cdb9059e.js');
-require('./kegText-90bd3366.js');
+require('./kegText-b42d09ba.js');
 var text = require('./text.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useClassList-2f47489f.js');
-var useThemeTypeAsClass = require('./useThemeTypeAsClass-58120adc.js');
+require('./useClassList-9eaefcd6.js');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-103ed294.js');
 var touchable = require('./touchable.js');
 
 var getChildren = function getChildren(Children, _ref) {

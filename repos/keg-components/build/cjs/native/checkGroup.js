@@ -18,11 +18,11 @@ require('react-native');
 require('./useClassName.native-3d1a229b.js');
 var view_native = require('./view.native-20f555a1.js');
 require('./useTextAccessibility.js');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-12bc89e1.js');
+var reTheme = require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+require('./kegText-3f09043e.js');
 var text = require('./text.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
 require('./useThemePath.js');
@@ -31,7 +31,7 @@ var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./useThemeTypeAsClass.native-90f04031.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-var checkbox = require('./checkbox-a254ad3e.js');
+var checkbox = require('./checkbox-7ebebe37.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -42,7 +42,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-require('./checkbox.wrapper-1ab61e55.js');
+require('./checkbox.wrapper-d0165ea9.js');
 
 var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,

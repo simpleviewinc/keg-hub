@@ -51,21 +51,24 @@ storiesOf('Components/Layout/Column', module).add('Column - Auto Size', () => (
   </StoryWrap>
 ))
 
-storiesOf('Components/Layout/Column', module).add('Column - Manual Size', () => (
-  <StoryWrap>
-    <Grid>
-      <Column size={3}>
-        <P style={textStyles}>Keg Column ( Size: 3 )</P>
-      </Column>
-      <Column size={6}>
-        <P style={textStyles}>Keg Column ( Size: 6 )</P>
-      </Column>
-      <Column size={3}>
-        <P style={textStyles}>Keg Column ( Size: 3 )</P>
-      </Column>
-    </Grid>
-  </StoryWrap>
-))
+storiesOf('Components/Layout/Column', module).add(
+  'Column - Manual Size',
+  () => (
+    <StoryWrap>
+      <Grid>
+        <Column size={3}>
+          <P style={textStyles}>Keg Column ( Size: 3 )</P>
+        </Column>
+        <Column size={6}>
+          <P style={textStyles}>Keg Column ( Size: 6 )</P>
+        </Column>
+        <Column size={3}>
+          <P style={textStyles}>Keg Column ( Size: 3 )</P>
+        </Column>
+      </Grid>
+    </StoryWrap>
+  )
+)
 
 storiesOf('Components/Layout/Grid', module).add('Rows and Columns', () => (
   <StoryWrap>

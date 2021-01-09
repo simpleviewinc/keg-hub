@@ -37,11 +37,11 @@ export { u as useClassName } from './useClassName.native-32e8827d.js';
 import { V as View } from './view.native-54e7e7ef.js';
 export { V as View } from './view.native-54e7e7ef.js';
 export { useTextAccessibility } from './useTextAccessibility.js';
-import { useStyle, useTheme, withTheme } from '@keg-hub/re-theme';
-import './useTextStyles.js';
 import './kegText.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { K as KegText } from './kegText-897ccc29.js';
+import { useStyle, useTheme, withTheme } from '@keg-hub/re-theme';
+import './useTextStyles.js';
+import { K as KegText } from './kegText-ef69c4aa.js';
 import { Text as Text$1 } from './text.js';
 export { Text } from './text.js';
 export { u as useAnimate, a as useSpin } from './useSpin-240deec7.js';
@@ -66,14 +66,14 @@ export { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.
 import { I as Icon } from './icon-2cf7eaa6.js';
 export { I as Icon } from './icon-2cf7eaa6.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-27dab64e.js';
-export { T as Touchable } from './touchable-27dab64e.js';
+import { T as Touchable } from './touchable-e78a3026.js';
+export { T as Touchable } from './touchable-e78a3026.js';
 export { withTouch } from './withTouch.js';
 export { TouchableIcon } from './touchableIcon.js';
 import 'react-native-svg';
 import './svgIcon-8c133388.js';
-import { C as Checkbox } from './checkbox-bafef9e6.js';
-export { C as Checkbox } from './checkbox-bafef9e6.js';
+import { C as Checkbox } from './checkbox-9799460c.js';
+export { C as Checkbox } from './checkbox-9799460c.js';
 import { S as Select$1, C as ChevronDown } from './select-31dcb40f.js';
 export { TextBox } from './textBox.js';
 export { Button } from './button.js';
@@ -84,7 +84,7 @@ import './cardSection.js';
 import './indicator.wrapper-e28eda76.js';
 export { Loading } from './loading.js';
 import './image-209e0d5e.js';
-export { I as Image } from './cardMedia-c3216d1b.js';
+export { I as Image } from './cardMedia-328b6ade.js';
 export { Card } from './card.js';
 export { Divider } from './divider.js';
 export { Caption } from './caption.js';
@@ -98,14 +98,14 @@ export { Label } from './label.js';
 import { P } from './p.js';
 export { P } from './p.js';
 export { Subtitle } from './subtitle.js';
-import './checkbox.wrapper-22c62985.js';
-import { I as Input$1 } from './input-66c5fcfe.js';
+import './checkbox.wrapper-2b4c20ad.js';
+import { I as Input$1 } from './input-681ccccb.js';
 import { S as Switch$1 } from './switch-09146b4a.js';
 import './container.js';
 export { Row } from './row.js';
 export { Grid } from './grid.js';
 export { Column } from './column.js';
-import { L as LinkWrapper } from './link.wrapper-46d83094.js';
+import { L as LinkWrapper } from './link.wrapper-3b9d4577.js';
 export { Section } from './section.js';
 export { Modal } from './modal.js';
 export { ItemHeader } from './itemHeader.js';
@@ -389,7 +389,7 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   var theme = useTheme();
   return useMemo(function () {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.area.off')), isChecked && get(themeStyles, 'content.area.on')),
         indicator: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.indicator.off')), isChecked && get(themeStyles, 'content.indicator.on'))

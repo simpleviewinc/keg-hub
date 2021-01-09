@@ -11,20 +11,20 @@ import { getChecked } from './getChecked.js';
 import './handleRefUpdate.js';
 import './updateClassNames.js';
 import 'react-native';
-import './useClassName-477fb4c5.js';
-import './view.native-3802ec98.js';
+import './useClassName-a3859346.js';
+import './view.native-117494a9.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-45334891.js';
+import { V as View } from './view-216fa8c1.js';
 import './useTextAccessibility.js';
+import './kegText.native-231e3dc9.js';
 import { useTheme } from '@keg-hub/re-theme';
 import './useTextStyles.js';
-import './kegText.native-67183179.js';
-import './kegText-a280e501.js';
+import './kegText-fd522d17.js';
 import { Text } from './text.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import './useClassList-4be992cd.js';
-import { u as useThemeTypeAsClass } from './useThemeTypeAsClass-2304ec6a.js';
+import './useClassList-eea8a571.js';
+import { u as useThemeTypeAsClass } from './useThemeTypeAsClass-cd54e95a.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -35,7 +35,7 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { S as Switch$1 } from './switch-18f76995.js';
+import { S as Switch$1 } from './switch-babdd77a.js';
 
 var KegSwitch = StyleInjector(Switch$1, {
   displayName: 'Switch',
@@ -59,7 +59,7 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   var theme = useTheme();
   return useMemo(function () {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.area.off')), isChecked && get(themeStyles, 'content.area.on')),
         indicator: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.indicator.off')), isChecked && get(themeStyles, 'content.indicator.on'))

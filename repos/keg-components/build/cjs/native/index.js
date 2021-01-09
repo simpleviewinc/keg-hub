@@ -36,11 +36,11 @@ var reactNative = require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var view_native = require('./view.native-20f555a1.js');
 var useTextAccessibility = require('./useTextAccessibility.js');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-var kegText$1 = require('./kegText-12bc89e1.js');
+var reTheme = require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+var kegText$1 = require('./kegText-3f09043e.js');
 var text = require('./text.js');
 var useSpin = require('./useSpin-dc091c44.js');
 var useChildren = require('./useChildren.js');
@@ -56,12 +56,12 @@ var useClassList_native = require('./useClassList.native-9e7810c9.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
 var icon = require('./icon-3cb30f41.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-465d470b.js');
+var touchable$1 = require('./touchable-d386e5c0.js');
 var withTouch = require('./withTouch.js');
 var touchableIcon = require('./touchableIcon.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-var checkbox = require('./checkbox-a254ad3e.js');
+var checkbox = require('./checkbox-7ebebe37.js');
 var select = require('./select-76ea5ad7.js');
 var textBox = require('./textBox.js');
 var button = require('./button.js');
@@ -72,7 +72,7 @@ require('./cardSection.js');
 require('./indicator.wrapper-628cb0c5.js');
 var loading = require('./loading.js');
 require('./image-84615d15.js');
-var cardMedia = require('./cardMedia-a0f9c051.js');
+var cardMedia = require('./cardMedia-3f6cd331.js');
 var card = require('./card.js');
 var divider = require('./divider.js');
 var caption = require('./caption.js');
@@ -85,14 +85,14 @@ var h6 = require('./h6.js');
 var label = require('./label.js');
 var p = require('./p.js');
 var subtitle = require('./subtitle.js');
-require('./checkbox.wrapper-1ab61e55.js');
-var input = require('./input-3a5010a6.js');
+require('./checkbox.wrapper-d0165ea9.js');
+var input = require('./input-5d42e55a.js');
 var _switch = require('./switch-6a36d9a4.js');
 require('./container.js');
 var row = require('./row.js');
 var grid = require('./grid.js');
 var column = require('./column.js');
-var link_wrapper = require('./link.wrapper-97be0b1c.js');
+var link_wrapper = require('./link.wrapper-fbe6fd2d.js');
 var section = require('./section.js');
 var modal = require('./modal.js');
 var itemHeader = require('./itemHeader.js');
@@ -376,7 +376,7 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   var theme = reTheme.useTheme();
   return React.useMemo(function () {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.area.off')), isChecked && jsutils.get(themeStyles, 'content.area.on')),
         indicator: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.indicator.off')), isChecked && jsutils.get(themeStyles, 'content.indicator.on'))

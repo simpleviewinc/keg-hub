@@ -18,20 +18,20 @@ var getChecked = require('./getChecked.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-afee43f7.js');
-require('./view.native-b2081485.js');
+require('./useClassName-6b6da47b.js');
+require('./view.native-e2bb0f89.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-bc6e3186.js');
+var view = require('./view-ea13da55.js');
 require('./useTextAccessibility.js');
+require('./kegText.native-dfad83ae.js');
 var reTheme = require('@keg-hub/re-theme');
 require('./useTextStyles.js');
-require('./kegText.native-cdb9059e.js');
-require('./kegText-90bd3366.js');
+require('./kegText-b42d09ba.js');
 var text = require('./text.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useClassList-2f47489f.js');
-var useThemeTypeAsClass = require('./useThemeTypeAsClass-58120adc.js');
+require('./useClassList-9eaefcd6.js');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-103ed294.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -42,7 +42,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-var _switch = require('./switch-4e6dfd1d.js');
+var _switch = require('./switch-31eb460e.js');
 
 var KegSwitch = styleInjector.StyleInjector(_switch.Switch, {
   displayName: 'Switch',
@@ -66,7 +66,7 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   var theme = reTheme.useTheme();
   return React.useMemo(function () {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.area.off')), isChecked && jsutils.get(themeStyles, 'content.area.on')),
         indicator: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.indicator.off')), isChecked && jsutils.get(themeStyles, 'content.indicator.on'))

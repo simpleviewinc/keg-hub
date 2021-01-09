@@ -1,7 +1,7 @@
 import { getThemeDefaults } from '../themeDefaults'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const section = (config=noOpObj) => {
+export const section = (config = noOpObj) => {
   const { colors, margin, padding } = getThemeDefaults()
 
   const defStyles = {
@@ -26,9 +26,12 @@ export const section = (config=noOpObj) => {
         marginBottom: 0,
         minHeight: 200,
       },
-    }
+    },
   }
 
-  return { section: checkCall(config.section, defStyles) || deepMerge(defStyles, config.section) }
-
+  return {
+    section:
+      checkCall(config.section, defStyles) ||
+      deepMerge(defStyles, config.section),
+  }
 }

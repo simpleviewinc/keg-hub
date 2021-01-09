@@ -15,11 +15,11 @@ require('react-native');
 require('./useClassName.native-3d1a229b.js');
 var view_native = require('./view.native-20f555a1.js');
 require('./useTextAccessibility.js');
-require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-12bc89e1.js');
+require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+require('./kegText-3f09043e.js');
 var text = require('./text.js');
 
 var SectionWrap = function SectionWrap(_ref) {

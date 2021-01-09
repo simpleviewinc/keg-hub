@@ -1,14 +1,14 @@
 import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { eitherArr } from '@keg-hub/jsutils';
+import '@keg-hub/jsutils';
 import React__default, { useCallback, useRef } from 'react';
-import './ensureClassArray.js';
+import { ensureClassArray } from './ensureClassArray.js';
 import { handleRefUpdate } from './handleRefUpdate.js';
 import { updateClassNames } from './updateClassNames.js';
 import { ScrollView as ScrollView$2 } from 'react-native';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 
 var useScrollClassNames = function useScrollClassNames(defClass, className, innerClassName, ref) {
-  className = eitherArr(className, [className]);
+  className = ensureClassArray(className);
   var classRef = useRef(className);
   return useCallback(function (scrollResponder) {
     if ( scrollResponder) {

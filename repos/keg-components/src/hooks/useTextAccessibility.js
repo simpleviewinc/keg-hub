@@ -16,7 +16,7 @@ const headings = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ]
  */
 export const useTextAccessibility = (element, accessibilityRole) => {
   return useMemo(() => {
-    const type = accessibilityRole 
+    const type = accessibilityRole
       ? accessibilityRole
       : headings.includes(element)
         ? 'header'

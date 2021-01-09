@@ -15,7 +15,7 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  */
 const KegInput = StyleInjector(InternalInput, {
   displayName: 'Input',
-  className: 'keg-input'
+  className: 'keg-input',
 })
 
 /**
@@ -60,7 +60,7 @@ export const Input = React.forwardRef((props, ref) => {
   } = props
 
   const inputStyles = useThemePath(themePath)
-  
+
   return (
     <KegInput
       accessibilityRole='textbox'
@@ -75,7 +75,6 @@ export const Input = React.forwardRef((props, ref) => {
     />
   )
 })
-
 
 Input.propTypes = {
   ...KegInput.propTypes,
@@ -94,4 +93,3 @@ Input.propTypes = {
   type: PropTypes.string,
   value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 }
-

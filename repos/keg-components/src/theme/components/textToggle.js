@@ -1,6 +1,6 @@
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const textToggle = (config=noOpObj) =>  {
+export const textToggle = (config = noOpObj) => {
   const defStyles = {
     main: {
       fl: 1,
@@ -30,9 +30,12 @@ export const textToggle = (config=noOpObj) =>  {
       text: {
         txDL: 'underline',
       },
-    }
+    },
   }
 
-  return { textToggle: checkCall(config.textToggle, defStyles) || deepMerge(defStyles, config.textToggle) }
-
+  return {
+    textToggle:
+      checkCall(config.textToggle, defStyles) ||
+      deepMerge(defStyles, config.textToggle),
+  }
 }

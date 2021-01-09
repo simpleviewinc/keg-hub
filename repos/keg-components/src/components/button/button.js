@@ -14,10 +14,10 @@ import { useThemeTypeAsClass } from 'KegTypeAsClass'
  * @param {Object} props
  * @param {Object} props.styles - Custom styles passed into the component as a prop
  * @param {boolean} props.selectable - whether the text content is selectable or not
- * 
+ *
  * @returns {React Component|Object|Array}
  */
-const getChildren = (Children, {styles, selectable}) => {
+const getChildren = (Children, { styles, selectable }) => {
   return renderFromType(Children, { style: styles?.content, selectable }, Text)
 }
 
@@ -53,12 +53,12 @@ export const Button = React.forwardRef((props, ref) => {
     onClick,
     onPress,
     styles,
-    showFeedback=false,
+    showFeedback = false,
     type = 'default',
     themePath,
     activeOpacity,
-    disabled=false,
-    selectable=false,
+    disabled = false,
+    selectable = false,
     ...elProps
   } = props
 
@@ -92,7 +92,10 @@ export const Button = React.forwardRef((props, ref) => {
       touchRef={themeRef}
       showFeedback={isNum(activeOpacity) || showFeedback}
       style={checkDisabled(themeStyles.main, btnStyles, disabled)}
-      children={getChildren(children || content, {styles: themeStyles, selectable})}
+      children={getChildren(children || content, {
+        styles: themeStyles,
+        selectable,
+      })}
       {...getPressHandler(false, onClick, onPress)}
       {...getActiveOpacity(false, props, btnStyles)}
     />
@@ -121,5 +124,5 @@ Button.propTypes = {
   themePath: PropTypes.string,
   selectable: PropTypes.bool,
   activeOpacity: PropTypes.number,
-  showFeedback: PropTypes.bool
+  showFeedback: PropTypes.bool,
 }

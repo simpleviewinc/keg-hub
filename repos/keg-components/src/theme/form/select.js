@@ -2,10 +2,10 @@ import { getThemeDefaults } from '../themeDefaults'
 import { initSharedForm } from './sharedForm'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const select = (config=noOpObj) => {
+export const select = (config = noOpObj) => {
   const sharedForm = initSharedForm(config)
   const { colors } = getThemeDefaults()
-  
+
   const defStyles = {
     default: {
       main: {
@@ -43,6 +43,7 @@ export const select = (config=noOpObj) => {
     },
   }
 
-  return checkCall(config.select, defStyles) || deepMerge(defStyles, config.select)
-
+  return (
+    checkCall(config.select, defStyles) || deepMerge(defStyles, config.select)
+  )
 }

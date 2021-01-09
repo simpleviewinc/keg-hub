@@ -3,10 +3,10 @@ import { get, noPropObj } from '@keg-hub/jsutils';
 import React__default from 'react';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
-import { useTheme } from '@keg-hub/re-theme';
 import '@keg-hub/re-theme/styleInjector';
+import { useTheme } from '@keg-hub/re-theme';
 import './touchable.js';
-import { T as Touchable } from './touchable-27dab64e.js';
+import { T as Touchable } from './touchable-e78a3026.js';
 
 var withTouch = function withTouch(Component) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

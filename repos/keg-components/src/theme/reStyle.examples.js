@@ -10,7 +10,7 @@ const Text = reStyle(KegText)({
   textAlign: 'center',
 })
 
-export const GreenText = () => (<Text>Green Text</Text>)
+export const GreenText = () => <Text>Green Text</Text>
 
 const ReStyleHover = reStyle(
   KegButton,
@@ -29,7 +29,5 @@ const ReStyleHover = reStyle(
 }))
 
 export const HoverButton = () => {
-  return (
-    <ReStyleHover content={'Hover Me'} hoverColor={`#02b4a3`} />
-  )
+  return <ReStyleHover content={'Hover Me'} hoverColor={`#02b4a3`} />
 }
