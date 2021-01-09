@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 jest.resetModules()
 jest.resetAllMocks()
 
@@ -7,7 +9,6 @@ const mockHookFactory = jest.fn((...args) => useThemeState(...args))
 jest.setMock('../useThemeState', { useThemeState: mockHookFactory })
 
 describe('useThemeActive', () => {
-
   it('should call useThemeState', () => {
     mockHookFactory.mockClear()
     const { useThemeActive } = require('../useThemeActive')
@@ -25,5 +26,4 @@ describe('useThemeActive', () => {
     const { useThemeActive } = require('../useThemeActive')
     expect(typeof useThemeActive).toBe('function')
   })
-
 })

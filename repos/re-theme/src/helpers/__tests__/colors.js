@@ -5,7 +5,6 @@ console.warn = jest.fn()
 const { hexToRgba, opacity, shadeHex, toRgb, transition } = require('../colors')
 
 describe('colors', () => {
-
   afterAll(() => {
     console.warn = oldWarn
   })
@@ -27,7 +26,7 @@ describe('colors', () => {
 
     it('should return it should work with opacity greater then 1', () => {
       const rgbaObj = hexToRgba('#ffffff', 50, true)
-      expect(rgbaObj.a).toBe("0.5000")
+      expect(rgbaObj.a).toBe('0.5000')
     })
 
     it('should work with 3 char long hex', () => {
@@ -43,10 +42,9 @@ describe('colors', () => {
 
     it('should call console.warn when no hex is a passed in', () => {
       console.warn.mockClear()
-      const rgbaObj = hexToRgba(null, 50, true)
+      hexToRgba(null, 50, true)
       expect(console.warn).toHaveBeenCalled()
     })
-
   })
 
   describe('opacity', () => {
@@ -75,7 +73,6 @@ describe('colors', () => {
       expect(opacity._5).toBe('rgba(0,0,0, 0.05)')
       expect(opacity._0).toBe('rgba(0,0,0, 0.00)')
     })
-
   })
 
   describe('shadeHex', () => {
@@ -90,18 +87,17 @@ describe('colors', () => {
       expect(shadeHex(`#777777`, -20)).toBe('#5f5f5f')
       expect(shadeHex(`#ffffff`, -50)).toBe(`#7f7f7f`)
     })
-
   })
 
   describe('toRgb', () => {
     afterEach(() => jest.clearAllMocks())
 
     it('should convert passed in values to rgba string', () => {
-      expect(toRgb(17,34,12,1)).toBe(`rgba(17, 34, 12, 1)`)
+      expect(toRgb(17, 34, 12, 1)).toBe(`rgba(17, 34, 12, 1)`)
     })
 
     it('should accept the first argument as an object', () => {
-      expect(toRgb({ r: 17, g: 34, b: 12, a: 1})).toBe(`rgba(17, 34, 12, 1)`)
+      expect(toRgb({ r: 17, g: 34, b: 12, a: 1 })).toBe(`rgba(17, 34, 12, 1)`)
     })
 
     it('should set the alpha channel to 1 when not passed', () => {
@@ -109,9 +105,10 @@ describe('colors', () => {
     })
 
     it('should set the alpha channel to the passed in value when not passed', () => {
-      expect(toRgb({ r: 17, g: 34, b: 12, a: .34 })).toBe(`rgba(17, 34, 12, 0.34)`)
+      expect(toRgb({ r: 17, g: 34, b: 12, a: 0.34 })).toBe(
+        `rgba(17, 34, 12, 0.34)`
+      )
     })
-
   })
 
   describe('transition', () => {
@@ -122,8 +119,9 @@ describe('colors', () => {
     })
 
     it('should accept an array of props as the first argument', () => {
-      expect(transition(['color', 'background-color']).transition)
-        .toBe('color 250ms ease, background-color 250ms ease')
+      expect(transition([ 'color', 'background-color' ]).transition).toBe(
+        'color 250ms ease, background-color 250ms ease'
+      )
     })
 
     it('should allow overwriting the default timing', () => {
@@ -143,9 +141,9 @@ describe('colors', () => {
     })
 
     it('should allow overwriting the default transition type', () => {
-      expect(transition('color', undefined, `linear`).transition).toBe('color 250ms linear')
+      expect(transition('color', undefined, `linear`).transition).toBe(
+        'color 250ms linear'
+      )
     })
-
   })
-
 })

@@ -17,12 +17,13 @@
     "access": "public"
   },
   "scripts": {
-    "build": "echo \"N/A\"",
+    "build": "exit 0",
     "clean": "yarn clean:nm",
     "clean:cache": "yarn cache clean",
     "clean:full": "yarn clean; yarn clean:cache",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
+    "format": "exit 0",
     "test": "NODE_ENV=test jest --no-cache --verbose",
     "test:reports": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },

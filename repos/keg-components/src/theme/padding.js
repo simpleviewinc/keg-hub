@@ -1,5 +1,5 @@
 import { spaceHelper } from './helpers'
-import { deepMerge, get, noOpObj } from '@keg-hub/jsutils'
+import { get, noOpObj } from '@keg-hub/jsutils'
 
 let __padding
 export const clearPadding = () => __padding = undefined

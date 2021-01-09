@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 jest.resetModules()
 jest.resetAllMocks()
@@ -7,12 +7,13 @@ const mockUseContext = jest.fn()
 jest.setMock('react', { ...React, useContext: mockUseContext })
 
 const mockReThemeContext = {}
-jest.setMock('../../context/reThemeContext', { ReThemeContext: mockReThemeContext })
+jest.setMock('../../context/reThemeContext', {
+  ReThemeContext: mockReThemeContext,
+})
 
 const { useTheme } = require('../useTheme')
 
 describe('useTheme', () => {
-
   it('should call useContext', () => {
     mockUseContext.mockClear()
     useTheme()
@@ -24,5 +25,4 @@ describe('useTheme', () => {
     useTheme()
     expect(mockUseContext.mock.calls[0][0]).toBe(mockReThemeContext)
   })
-
 })

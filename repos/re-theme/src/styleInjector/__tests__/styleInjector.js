@@ -42,7 +42,6 @@ describe('styleInjector', () => {
     expect(WrappedComp[`$$typeof`].toString()).toBe(`Symbol(react.forward_ref)`)
     expect(typeof WrappedComp.render).toBe('function')
     const mockComp = WrappedComp.render(mockProps)
-
     expect(mockComp).not.toBe(MockComponent)
   })
 
@@ -50,7 +49,6 @@ describe('styleInjector', () => {
     const WrappedComp = StyleInjector(MockComponent, mockConfig)
     const mockComp = WrappedComp.render(mockProps)
     mockComp.type.render(mockComp.props)
-
     expect(mockUseStyleTag).toHaveBeenCalled()
   })
 

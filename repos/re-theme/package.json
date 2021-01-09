@@ -44,12 +44,7 @@
     "start": "yarn copy:indexes; yarn dev",
     "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
     "test:reports": "yarn test --coverage && yarn view:reports",
-    "view:reports": "open reports/coverage/lcov-report/index.html",
-    "storybook": "nodemon --watch ./configs --exec 'RE_PLATFORM=web start-storybook -p 60710'",
-    "sb": "nodemon --watch ./configs --watch ./package.json --exec 'RE_PLATFORM=web start-storybook -p 60710'",
-    "sb:build": "yarn clean:docs; RE_PLATFORM=web build-storybook -c .storybook -o docs",
-    "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
-    "sb:server": "npx http-server docs"
+    "view:reports": "open reports/coverage/lcov-report/index.html"
   },
   "devDependencies": {
     "@babel/core": "7.12.3",

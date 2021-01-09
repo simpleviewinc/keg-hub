@@ -113,7 +113,6 @@ export const addStylesToDom = (selector, css) => {
   // Cache the selector with the size
   // So next time we can look up if the size changed
   selectorCache.add(selector)
-
   const KegSheet = getKegSheet()
   // The insertRule method is a lot faster then append method
   // But it does not allow you to see the styles in the inspector

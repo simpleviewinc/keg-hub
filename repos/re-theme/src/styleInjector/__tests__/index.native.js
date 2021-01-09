@@ -7,9 +7,7 @@ const MockComponent = props => {
 const { StyleInjector, useStyleTag } = require('../index.native')
 
 describe('styleInjector', () => {
-
   describe('StyleInjector', () => {
-
     afterEach(() => {
       jest.clearAllMocks()
     })
@@ -26,11 +24,9 @@ describe('styleInjector', () => {
       const mockComp = WrappedComp({ className: 'test-class' })
       expect(mockComp.props.className).toBe('test-class')
     })
-
   })
 
   describe('useStyleTag', () => {
-
     afterEach(() => {
       jest.clearAllMocks()
     })
@@ -38,7 +34,5 @@ describe('styleInjector', () => {
     it('should return the passed in className', () => {
       expect(useStyleTag('', 'test-class')).toBe('test-class')
     })
-
   })
-
 })

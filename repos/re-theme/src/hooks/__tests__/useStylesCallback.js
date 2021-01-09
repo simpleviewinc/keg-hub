@@ -1,18 +1,26 @@
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 
 jest.resetModules()
 jest.resetAllMocks()
 
 const useCallbackResponse = jest.fn()
-const mockUseCallback = jest.fn((cb, deps) => (typeof cb === 'function' ? cb(...deps) : useCallbackResponse))
+const mockUseCallback = jest.fn((cb, deps) =>
+  typeof cb === 'function' ? cb(...deps) : useCallbackResponse
+)
 
 const useMemoResponse = {}
 let useMemoFuncResponse
 const mockUseMemo = jest.fn(() => useMemoFuncResponse || useMemoResponse)
-jest.setMock('react', { useCallback: mockUseCallback, useMemo: mockUseMemo })
+jest.setMock('react', {
+  ...React,
+  useCallback: mockUseCallback,
+  useMemo: mockUseMemo,
+})
 
 const mockReThemeContext = {}
-jest.setMock('../../context/reThemeContext', { ReThemeContext: mockReThemeContext })
+jest.setMock('../../context/reThemeContext', {
+  ReThemeContext: mockReThemeContext,
+})
 
 const mockTheme = {}
 const mockUseTheme = jest.fn(() => mockTheme)
@@ -20,7 +28,9 @@ jest.setMock('../useTheme', { useTheme: mockUseTheme })
 
 const stylesCallbackResponse = { test: 'styles callback response' }
 let callbackResponseFunc
-const stylesCb = jest.fn(() => { return callbackResponseFunc || stylesCallbackResponse })
+const stylesCb = jest.fn(() => {
+  return callbackResponseFunc || stylesCallbackResponse
+})
 
 const cbDependencies = [ 'test', 'array' ]
 const customStyles = { test: 'object' }
@@ -28,7 +38,6 @@ const customStyles = { test: 'object' }
 const { useStylesCallback } = require('../useStylesCallback')
 
 describe('useStylesCallback', () => {
-
   afterEach(() => {
     useCallbackResponse.mockClear()
     mockUseCallback.mockClear()
@@ -103,12 +112,13 @@ describe('useStylesCallback', () => {
   })
 
   it('should call the stylesCB inside the useMemo hook', () => {
-    useMemoFuncResponse = jest.fn((cb, deps) => typeof cb === 'function' ? cb(...deps) : true)
+    useMemoFuncResponse = jest.fn((cb, deps) =>
+      typeof cb === 'function' ? cb(...deps) : true
+    )
     callbackResponseFunc = jest.fn(() => `useCallback called from useMemo`)
     useStylesCallback(stylesCb, cbDependencies, {})
-    const useMemoFunc = mockUseMemo.mock.calls[0][0]    
+    const useMemoFunc = mockUseMemo.mock.calls[0][0]
     const useMemoResp = useMemoFunc()
     expect(useMemoResp).toBe(`useCallback called from useMemo`)
   })
-
 })
