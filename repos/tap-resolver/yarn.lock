@@ -1871,10 +1871,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@keg-hub/jsutils@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-7.0.0.tgz#e01edd7aa9a936f3267e1c506b53ea841de2f85f"
-  integrity sha512-/2a+sXmmXeqgaqit9OnqocmEbUee+niQ/9bkvvgqcuA8c1d8rpGMIuprMgj7RqxLCCQhwRJmHh8UePnhdMKNlg==
+"@keg-hub/jsutils@8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.1.0.tgz#c5330ae7d38e603d580fa8596a8ebb31be0e4909"
+  integrity sha512-3ViC3u714kqg76ePFnSkZkSX8pnHzb31ltTADIO5f7tLm2Y9OcbtYWFrtDcH5RbP+Wmhyj43E2XYNTO4HHzdvA==
 
 "@nicolo-ribaudo/chokidar-2@^2.1.8":
   version "2.1.8"
