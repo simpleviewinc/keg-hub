@@ -54,7 +54,7 @@
     "@babel/runtime": "7.12.1",
     "@expo/webpack-config": "0.12.16",
     "@keg-hub/jsutils": "8.1.0",
-    "@keg-hub/keg-components": "8.1.0",
+    "@keg-hub/keg-components": "8.1.1",
     "@keg-hub/re-theme": "8.1.1",
     "@keg-hub/tap-resolver": "7.0.0",
     "@testing-library/react-hooks": "3.2.1",
