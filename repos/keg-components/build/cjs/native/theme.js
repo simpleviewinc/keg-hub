@@ -1320,6 +1320,7 @@ var input = function input() {
 };
 
 var option = function option(config) {
+  var defStyles = {};
   return jsutils.checkCall(config.option, defStyles) || jsutils.deepMerge({}, config.option);
 };
 
