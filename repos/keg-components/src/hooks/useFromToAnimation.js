@@ -21,7 +21,7 @@ export const useFromToAnimation = params => {
     params || {}
   // determines when the animation should run
   const animDependencies = [ from, to, duration, loop, easing, onFinish ]
-  
+
   // define the animated value here so we can return it. It needs to recompute
   // whenever the animation would run again, which is why it shares hookDependencies
   // with the useEffect below
@@ -29,7 +29,7 @@ export const useFromToAnimation = params => {
 
   const config = { toValue: to, duration, easing }
   !isWeb && (config.useNativeDriver = true)
-  
+
   const animatedTiming = Animated.timing(fromVal, config)
 
   useEffect(() => {

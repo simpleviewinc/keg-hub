@@ -136,10 +136,10 @@ describe('buildTags', () => {
   it('should get the image name from the passed in param', async () => {
 
     const compResp = await buildTags(args.components, buildParams('components', { image: 'test' }))
-    expect(compResp.trim()).toBe('-t test:development -t test:latest')
+    expect(compResp.includes('-t test:latest')).toBe(true)
 
     const coreResp = await buildTags(args.core, buildParams('core', { image: 'duper' }))
-    expect(coreResp.trim()).toBe('-t duper:development -t duper:latest')
+    expect(coreResp.includes('-t duper:latest')).toBe(true)
 
   })
 
@@ -147,11 +147,11 @@ describe('buildTags', () => {
 
     const compImg = DOCKER.CONTAINERS.COMPONENTS.ENV.IMAGE
     const compResp = await buildTags(args.components, args.components.params)
-    expect(compResp.trim()).toBe(`-t ${compImg}:development -t ${compImg}:latest`)
+    expect(compResp.includes(`-t ${compImg}:latest`)).toBe(true)
 
     const coreImg = DOCKER.CONTAINERS.CORE.ENV.IMAGE
     const coreResp = await buildTags(args.core, args.core.params)
-    expect(coreResp.trim()).toBe(`-t ${coreImg}:development -t ${coreImg}:latest`)
+    expect(coreResp.includes(`-t ${coreImg}:latest`)).toBe(true)
 
   })
 
@@ -161,13 +161,14 @@ describe('buildTags', () => {
     expect(baseResp.trim()).toBe('-t keg-base:develop')
 
     const coreResp = await buildTags(args.core, buildParams('core', { tags: [ 'test', '1.0.0' ] }))
-    expect(coreResp.trim()).toBe('-t keg-core:test -t keg-core:1.0.0 -t keg-core:latest')
+    expect(coreResp.includes('-t keg-core:test -t keg-core:1.0.0')).toBe(true)
 
   })
 
   it('should add the latest tag, when not tag params are set', async () => {
 
     const baseResp = await buildTags(args.base, args.base.params)
+
     expect(baseResp.trim()).toBe('-t keg-base:development')
 
     const coreResp = await buildTags(args.core, args.core.params)
@@ -218,8 +219,8 @@ describe('buildTags', () => {
     expect(baseResp.trim()).toBe('-t keg-base:git-test-branch')
 
     const coreResp = await buildTags(args.core, buildParams('core', { tagGit: true }))
-    expect(coreResp.trim()).toBe('-t keg-core:git-test-branch -t keg-core:latest')
 
+    expect(coreResp.trim()).toBe('-t keg-core:git-test-branch -t keg-core:latest')
     expect(getRepoGitTagMock).toHaveBeenCalled()
 
   })

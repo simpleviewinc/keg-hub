@@ -1,7 +1,7 @@
 import { get } from '@keg-hub/jsutils'
 import { getThemeDefaults } from '../themeDefaults'
 
-export const initSharedForm = (config) => {
+export const initSharedForm = config => {
   const { form, padding, colors } = getThemeDefaults()
 
   return {

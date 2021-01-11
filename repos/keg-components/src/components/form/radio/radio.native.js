@@ -10,7 +10,7 @@ export const Radio = withTheme(props => {
   return (
     <Text
       {...args}
-      style={[get(theme, [ 'form', 'radio' ]), style]}
+      style={[ get(theme, [ 'form', 'radio' ]), style ]}
     >
       { text }
     </Text>

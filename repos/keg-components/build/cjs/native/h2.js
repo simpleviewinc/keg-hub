@@ -8,11 +8,11 @@ require('react');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
 require('./useTextAccessibility.js');
-require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 require('@keg-hub/re-theme/styleInjector');
-var kegText$1 = require('./kegText-12bc89e1.js');
+require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+var kegText$1 = require('./kegText-3f09043e.js');
 
 var H2 = kegText$1.KegText('h2');
 

@@ -3,8 +3,7 @@ import { helpers } from '../../helpers'
 import { getThemeDefaults } from '../../themeDefaults'
 import { deepMerge, get, checkCall, noOpObj } from '@keg-hub/jsutils'
 
-export const containedInit = (config=noOpObj) => {
-
+export const containedInit = (config = noOpObj) => {
   const { colors, margin, padding } = getThemeDefaults()
   const opacity05 = get(colors, 'opacity._5')
   const colorPalette = get(colors, 'palette')
@@ -142,6 +141,4 @@ export const containedInit = (config=noOpObj) => {
 
   const custom = get(config, 'button.contained')
   return checkCall(custom, defStyles) || deepMerge(defStyles, custom)
-
 }
-

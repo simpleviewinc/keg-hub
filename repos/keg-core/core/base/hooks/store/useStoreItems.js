@@ -16,27 +16,25 @@ import { isStr, get, camelCasePath } from '@keg-hub/jsutils'
 export const useStoreItems = (categories = [], comparisonFn = shallowEqual) => {
   const isSingleCategory = isStr(categories)
   return useSelector(
-    store => isSingleCategory
-      ? get(store.items, categories)
-      : selectCategories(store.items, categories),
+    store =>
+      isSingleCategory
+        ? get(store.items, categories)
+        : selectCategories(store.items, categories),
     comparisonFn
   )
 }
 
 /**
  * Selects all the categories in items
- * @param {Object} items 
- * @param {Array<string>} categories 
+ * @param {Object} items
+ * @param {Array<string>} categories
  * @return {Object} the category values
  */
-const selectCategories = (items, categories=[]) => {
-  return categories.reduce(
-    (data, category) => {
-      if (!category) return data
-      const key = camelCasePath(category)
-      data[key] = get(items, category)
-      return data
-    },
-    {}
-  )
+const selectCategories = (items, categories = []) => {
+  return categories.reduce((data, category) => {
+    if (!category) return data
+    const key = camelCasePath(category)
+    data[key] = get(items, category)
+    return data
+  }, {})
 }

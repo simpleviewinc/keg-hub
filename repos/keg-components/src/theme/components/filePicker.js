@@ -1,6 +1,6 @@
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const filePicker = (config=noOpObj) => {
+export const filePicker = (config = noOpObj) => {
   const defStyles = {
     default: {
       $all: {
@@ -40,5 +40,9 @@ export const filePicker = (config=noOpObj) => {
     active: {},
   }
 
-  return { filePicker: checkCall(config.filePicker, defStyles) || deepMerge(defStyles, config.filePicker) }
+  return {
+    filePicker:
+      checkCall(config.filePicker, defStyles) ||
+      deepMerge(defStyles, config.filePicker),
+  }
 }

@@ -17,11 +17,11 @@ require('react-native');
 require('./useClassName.native-3d1a229b.js');
 require('./view.native-20f555a1.js');
 require('./useTextAccessibility.js');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-12bc89e1.js');
+var reTheme = require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+require('./kegText-3f09043e.js');
 var text = require('./text.js');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
@@ -37,7 +37,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-var checkbox_wrapper = require('./checkbox.wrapper-1ab61e55.js');
+var checkbox_wrapper = require('./checkbox.wrapper-d0165ea9.js');
 
 var Element = reTheme.withTheme(function (props) {
   var theme = props.theme,

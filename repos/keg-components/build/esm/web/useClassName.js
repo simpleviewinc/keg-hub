@@ -1,12 +1,12 @@
 import './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { eitherArr } from '@keg-hub/jsutils';
+import '@keg-hub/jsutils';
 import { useRef, useCallback } from 'react';
-import './ensureClassArray.js';
+import { ensureClassArray } from './ensureClassArray.js';
 import { handleRefUpdate } from './handleRefUpdate.js';
 import { updateClassNames } from './updateClassNames.js';
 
 var useClassName = function useClassName(defClass, className, ref) {
-  var classArr = eitherArr(className, [className]);
+  var classArr = ensureClassArray(className);
   var classRef = useRef(classArr);
   return useCallback(function (element) {
      element && updateClassNames(element, classRef, defClass, classArr);

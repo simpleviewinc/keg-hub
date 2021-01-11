@@ -4,7 +4,7 @@ const { reduceObj } = require("@keg-hub/jsutils")
 /**
  * Map alias to use the jest-regex patterns
  */
-const alias = reduceObj(getAliases('js') || {}, (name, value, mappedAlias) => {
+const alias = reduceObj(getAliases('.js') || {}, (name, value, mappedAlias) => {
   mappedAlias[`^${name}(.*)$`] = `<rootDir>/${value}`
   return mappedAlias
 })

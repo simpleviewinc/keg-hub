@@ -5,7 +5,7 @@ import './ensureClassArray.js';
 import './handleRefUpdate.js';
 import './updateClassNames.js';
 import 'react-native';
-import './useClassName-477fb4c5.js';
+import './useClassName-a3859346.js';
 import '@keg-hub/re-theme/styleInjector';
 import { useTheme } from '@keg-hub/re-theme';
 import { Touchable } from './touchable.js';

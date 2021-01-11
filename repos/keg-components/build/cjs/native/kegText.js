@@ -10,7 +10,6 @@ var React__default = _interopDefault(React);
 var reactNative = require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useTextAccessibility = require('./useTextAccessibility.js');
-require('@keg-hub/re-theme');
 
 var ellipsisProps = {
   ellipsizeMode: 'tail',

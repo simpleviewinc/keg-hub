@@ -12,7 +12,7 @@ require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 var reactNative = require('react-native');
-var useClassName = require('./useClassName-afee43f7.js');
+var useClassName = require('./useClassName-6b6da47b.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 
 var Touchable = React__default.forwardRef(function (props, ref) {

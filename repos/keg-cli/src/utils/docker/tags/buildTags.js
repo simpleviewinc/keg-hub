@@ -78,6 +78,7 @@ const buildTags = async (args, params, dockerCmd='') => {
     !tags.includes('latest') &&
     tags.push('latest')
 
+
   // Add the tags to the docker command
   return addTagsToCommand(dockerCmd, imageName, tags)
 

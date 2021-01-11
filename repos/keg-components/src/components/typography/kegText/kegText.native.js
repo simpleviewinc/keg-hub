@@ -2,7 +2,6 @@ import React from 'react'
 import { useClassName } from 'KegClassName'
 import { Text as RNText } from 'react-native'
 import { useTextAccessibility } from '../../../hooks/useTextAccessibility'
-import { useTextStyles } from '../../../hooks/useTextStyles'
 import PropTypes from 'prop-types'
 
 /**
@@ -27,13 +26,7 @@ const ellipsisProps = {
  */
 export const KegText = element => {
   return React.forwardRef((props, ref) => {
-    const {
-      accessibilityRole,
-      children,
-      className,
-      ellipsis,
-      ...attrs
-    } = props
+    const { accessibilityRole, children, className, ellipsis, ...attrs } = props
 
     const classRef = useClassName(`keg-${element}`, className, ref)
     const a11y = useTextAccessibility(element, accessibilityRole)
@@ -55,6 +48,3 @@ KegText.propTypes = {
   ...RNText.propTypes,
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
 }
-
-
-

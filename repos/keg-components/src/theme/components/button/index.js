@@ -2,7 +2,7 @@ import { containedInit } from './contained'
 import { textInit } from './text'
 import { outlineInit } from './outline'
 
-export const button = (config) => {
+export const button = config => {
   const contained = containedInit(config)
 
   return {
@@ -10,6 +10,6 @@ export const button = (config) => {
       contained,
       text: textInit(config, contained),
       outline: outlineInit(config, contained),
-    }
+    },
   }
 }

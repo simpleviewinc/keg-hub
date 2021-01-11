@@ -1,10 +1,10 @@
 import { spaceHelper } from './helpers'
-import { deepMerge, get, noOpObj } from '@keg-hub/jsutils'
+import { get, noOpObj } from '@keg-hub/jsutils'
 
 let __padding
-export const clearPadding = () => __padding = undefined
+export const clearPadding = () => (__padding = undefined)
 
-export const padding = (defaults, config=noOpObj) => {
+export const padding = (defaults, config = noOpObj) => {
   const size = get(defaults, 'layout.padding')
 
   __padding = (amount, sides = []) => spaceHelper(amount, sides, 'padding')
@@ -19,6 +19,4 @@ export const padding = (defaults, config=noOpObj) => {
   __padding.bottom = { paddingBottom: size }
 
   return Object.assign(__padding, config.padding)
-
 }
-

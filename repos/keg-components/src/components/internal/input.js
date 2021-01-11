@@ -26,7 +26,6 @@ export const Input = forwardRef(({ className, ...props }, ref) => {
   )
 })
 
-
 Input.propTypes = {
   ...TextInput.propTypes,
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),

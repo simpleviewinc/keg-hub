@@ -2,7 +2,7 @@ import { transition } from '../transition'
 import { getThemeDefaults } from '../themeDefaults'
 import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const image = (config=noOpObj) => {
+export const image = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
   const colorPalette = get(colors, 'palette')
   const __transition = transition(config)
@@ -52,9 +52,11 @@ export const image = (config=noOpObj) => {
         },
       },
       hover: {},
-    }
+    },
   }
 
-  return { image: checkCall(config.image, defStyles) || deepMerge(defStyles, config.image) }
-
+  return {
+    image:
+      checkCall(config.image, defStyles) || deepMerge(defStyles, config.image),
+  }
 }

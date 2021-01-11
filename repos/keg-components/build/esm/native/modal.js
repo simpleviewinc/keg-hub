@@ -5,14 +5,14 @@ import React__default, { useState, useEffect, useCallback } from 'react';
 import { Dimensions, Animated } from 'react-native';
 import { u as useClassName } from './useClassName.native-32e8827d.js';
 import { V as View } from './view.native-54e7e7ef.js';
-import '@keg-hub/re-theme';
 import '@keg-hub/re-theme/styleInjector';
+import '@keg-hub/re-theme';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import { useFromToAnimation } from './useFromToAnimation.js';
 import { u as useClassList } from './useClassList.native-70068878.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-27dab64e.js';
+import { T as Touchable } from './touchable-e78a3026.js';
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
   var className = _ref.className,

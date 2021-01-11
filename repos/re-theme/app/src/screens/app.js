@@ -19,15 +19,13 @@ export const AppScreen = withTheme(props => {
   
   const { theme } = props
 
-  const appStyle = theme.join(
-    get(theme, 'layout.full.height'),
-    get(theme, 'layout.full.width'),
+  const appStyle = theme.get(
+    'layout.full.height'
+    'layout.full.width',
     { marginTop: 20 }
   )
 
-  const gridStyle = theme.join(
-    get(theme, 'margin.bottom')
-  )
+  const gridStyle = theme.get('margin.bottom')
 
   return (
     <div style={ appStyle } >

@@ -1,7 +1,6 @@
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const form = (config=noOpObj) => {
-
+export const form = (config = noOpObj) => {
   const defStyles = {
     default: {
       display: 'flex',
@@ -11,5 +10,4 @@ export const form = (config=noOpObj) => {
   }
 
   return checkCall(config.form, defStyles) || deepMerge(defStyles, config.form)
-
 }

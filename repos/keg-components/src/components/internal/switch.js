@@ -14,9 +14,10 @@ import PropTypes from 'prop-types'
 export const Switch = React.forwardRef(({ className, ...props }, ref) => {
   const classRef = useClassName('keg-switch', className, ref)
 
-  return (
-    <RNSwitch {...props} reg={classRef} />
-  )
+  return <RNSwitch
+    {...props}
+    reg={classRef}
+  />
 })
 
 Switch.propTypes = {

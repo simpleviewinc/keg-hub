@@ -1,0 +1,1 @@
+{"version":3,"file":"getPlatform-ec53cd5e.js","sources":["../../../src/utils/helpers/getPlatform.js"],"sourcesContent":["const platform = process.env.RE_PLATFORM || process.env.PLATFORM || 'web'\nexport const getPlatform = () => platform\n"],"names":["platform","getPlatform"],"mappings":";;AAAA,IAAMA,QAAQ,GAAG,MAAA,CAAjB;IACaC,WAAW,GAAG,SAAdA,WAAc;AAAA,SAAMD,QAAN;AAAA;;;;"}

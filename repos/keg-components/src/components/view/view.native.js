@@ -28,8 +28,5 @@ export const View = React.forwardRef(
 
 View.propTypes = {
   ...RNView.propTypes,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ])
+  className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
 }

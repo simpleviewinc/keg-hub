@@ -17,6 +17,6 @@ import { ensureClassArray } from '../../utils/helpers/ensureClassArray'
 export const useClassList = (className, classList = noPropArr) => {
   const classListArr = eitherArr(classList, [classList])
   return useMemo(() => {
-    return ensureClassArray(classListArr).concat([className])
+    return ensureClassArray(classListArr).concat(ensureClassArray(className))
   }, [ className, classListArr.join(' ') ])
 }

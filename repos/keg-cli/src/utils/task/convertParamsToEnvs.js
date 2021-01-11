@@ -27,6 +27,7 @@ const getCopyLocal = (local, copyLocalEnv) => {
  * @returns {object}
  */
 const convertParamsToEnvs = ({ env, command, install, local, from }, copyLocalEnv) => {
+
   const extraENVs = {}
 
   env && ( extraENVs.NODE_ENV = env )

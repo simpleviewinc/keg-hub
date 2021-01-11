@@ -1,10 +1,17 @@
 import { getThemeDefaults } from './themeDefaults'
-import { isNum, isStr, capitalize, isArr, deepMerge, noOpObj } from '@keg-hub/jsutils'
+import {
+  isNum,
+  isStr,
+  capitalize,
+  isArr,
+  deepMerge,
+  noOpObj,
+} from '@keg-hub/jsutils'
 
 let __helpers
-export const clearHelpersStyles = () => __helpers = undefined
+export const clearHelpersStyles = () => (__helpers = undefined)
 
-export const spaceHelper = (amount, sides=noPropArr, type) => {
+export const spaceHelper = (amount, sides = noPropArr, type) => {
   const defaults = getThemeDefaults()
   sides = (sides.length && sides) || defaults.layout.sides
   if (sides === 'all' || (isArr(sides) && sides[0] === 'all'))
@@ -33,7 +40,7 @@ export const unitsHelper = value => {
 const align = dir => (isStr(dir) && { textAlign: dir }) || {}
 const background = color => ({ backgroundColor: colors[color] || color || '' })
 const bold = () => ({ fontWeight: getThemeDefaults()?.font?.bold })
-const color = color =>{
+const color = color => {
   const { colors } = getThemeDefaults()
   return colors[color] ? { color: colors[color] } : { color: color }
 }
@@ -49,19 +56,22 @@ const abs = {
   bottom: 0,
 }
 
-export const helpers = (config=noOpObj) => {
-  if(__helpers) return __helpers
+export const helpers = (config = noOpObj) => {
+  if (__helpers) return __helpers
 
-  __helpers = deepMerge({
-    abs,
-    align,
-    background,
-    bold,
-    color,
-    initial,
-    size,
-    weight,
-  }, config.helpers)
+  __helpers = deepMerge(
+    {
+      abs,
+      align,
+      background,
+      bold,
+      color,
+      initial,
+      size,
+      weight,
+    },
+    config.helpers
+  )
 
   return __helpers
 }

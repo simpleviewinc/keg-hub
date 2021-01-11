@@ -7,14 +7,14 @@ import './renderFromType.js';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
 import './view.native-54e7e7ef.js';
-import '@keg-hub/re-theme';
 import '@keg-hub/re-theme/styleInjector';
+import '@keg-hub/re-theme';
 import './useThemePath.js';
 import './useThemeWithHeight.js';
 import './useClassList.native-70068878.js';
 import { I as Icon } from './icon-2cf7eaa6.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-27dab64e.js';
+import { T as Touchable } from './touchable-e78a3026.js';
 import { withTouch } from './withTouch.js';
 
 var TouchableIcon = withTouch(Icon);

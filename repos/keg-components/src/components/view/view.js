@@ -11,7 +11,7 @@ import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
  */
 export const View = StyleInjector(KegView, {
   displayName: 'View',
-  className: 'keg-view'
+  className: 'keg-view',
 })
 
 View.propTypes = KegView.propTypes

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import React from 'react'
 
 jest.resetModules()
@@ -30,12 +32,22 @@ const useRef = jest.fn(initialVal => {
 })
 
 const useCallbackResponse = jest.fn()
-const useCallback = jest.fn((cb, deps) => (typeof cb === 'function' ? cb(...deps) : useCallbackResponse))
+const useCallback = jest.fn((cb, deps) =>
+  typeof cb === 'function' ? cb(...deps) : useCallbackResponse
+)
 const useMemoResponse = {}
-const useMemo = jest.fn((cb, deps) => (typeof cb === 'function' ? cb(...deps) : useMemoResponse))
+const useMemo = jest.fn((cb, deps) =>
+  typeof cb === 'function' ? cb(...deps) : useMemoResponse
+)
 
-jest.setMock('react', { ...React, useState, useMemo, useCallback, useRef, useLayoutEffect })
-
+jest.setMock('react', {
+  ...React,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  useLayoutEffect,
+})
 
 const mockOptions = {}
 const mockOn = { value: 'ON' }
@@ -43,9 +55,7 @@ const mockOff = { value: 'OFF' }
 
 const { nativeThemeHook } = require('../nativeThemeHook')
 
-
 describe('nativeThemeHook', () => {
-
   afterEach(() => {
     useState.mockClear()
     useMemo.mockClear()
@@ -59,7 +69,7 @@ describe('nativeThemeHook', () => {
   })
 
   it('should return a ref as first item in the response array', () => {
-    const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
+    const [ref] = nativeThemeHook(mockOff, mockOn, mockOptions)
     expect(ref).toBe(refObj)
   })
 
@@ -69,28 +79,30 @@ describe('nativeThemeHook', () => {
   })
 
   it('should return the setValue as third item in the response array', () => {
+    /* eslint-disable-line no-unused-vars */
     const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
     expect(setValue).toBe(updateStateValue)
   })
 
   it('should call useLayoutEffect', () => {
     expect(useLayoutEffect).not.toHaveBeenCalled()
-    const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
+    nativeThemeHook(mockOff, mockOn, mockOptions)
     expect(useLayoutEffect).toHaveBeenCalled()
   })
 
   it('should use the passed in ref if it exists instead of creating', () => {
     const customRef = { current: undefined }
-    const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, { ref: customRef })
+    const [ref] = nativeThemeHook(mockOff, mockOn, {
+      ref: customRef,
+    })
     expect(refObj.current).toBe(undefined)
     expect(ref).toBe(customRef)
   })
 
   it('should call the useLayoutEffect, which should call setValue if the values are not equal', () => {
     stateOverride = { custom: 'state-override' }
-    const [ ref, value, setValue ] = nativeThemeHook(mockOff, mockOn, mockOptions)
+    nativeThemeHook(mockOff, mockOn, mockOptions)
     effectCB()
     expect(updateStateValue).toHaveBeenCalledWith(stateOverride)
   })
-
 })

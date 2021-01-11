@@ -60,9 +60,8 @@ const buildSizedThemes = (theme, sizedTheme, size) => {
   return reduceObj(
     theme,
     (name, value, sizedTheme) => {
-
       // Check if the name is a shortcut
-      if(ruleHelpers[name]){
+      if (ruleHelpers[name]) {
         unset(theme, name)
         theme[ruleHelpers[name]] = value
       }
@@ -112,14 +111,13 @@ const mergePlatformOS = (theme, platforms) => {
   const toMerge = []
   // Loop the platforms and check if they are allowed and the platform exist on theme
   // If is a valid platform add to the toMerge array
-  const mergeTheme = Object.keys(theme)
-    .reduce((cleanTheme, key) => {
-      key[0] === '$' && !sizeMap.hash[key]
-        ? platforms.indexOf(key) !== -1 && toMerge.push(theme[key])
-        : (cleanTheme[key] = theme[key])
+  const mergeTheme = Object.keys(theme).reduce((cleanTheme, key) => {
+    key[0] === '$' && !sizeMap.hash[key]
+      ? platforms.indexOf(key) !== -1 && toMerge.push(theme[key])
+      : (cleanTheme[key] = theme[key])
 
-      return cleanTheme
-    }, {})
+    return cleanTheme
+  }, {})
 
   // If any of the platform theme object exist, then merge them together
   // Otherwise just return the passed in theme object
@@ -129,7 +127,7 @@ const mergePlatformOS = (theme, platforms) => {
 const updatePlatformTheme = (platforms, Platform, themeData) => {
   // If the themeData is not an object, then just return it
   // Because we've hit the rules for this tree in the theme
-  if(!isObj(themeData)) return themeData
+  if (!isObj(themeData)) return themeData
 
   // Extract the class && className
   const { $class, $className, ...cleanTheme } = themeData
@@ -144,7 +142,6 @@ const updatePlatformTheme = (platforms, Platform, themeData) => {
   className && (mergedPlatform.$class = className)
 
   return mergedPlatform
-  
 }
 
 /**
@@ -168,7 +165,6 @@ const getPlatformTheme = (theme, platforms, Platform = {}) => {
   return reduceObj(
     theme,
     (key, value, platformTheme) => {
-    
       // Update the current get correct value for the platform key
       platformTheme[key] = updatePlatformTheme(platforms, Platform, value)
 

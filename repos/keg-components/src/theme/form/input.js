@@ -1,7 +1,7 @@
 import { initSharedForm } from './sharedForm'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const input = (config=noOpObj) => {
+export const input = (config = noOpObj) => {
   const sharedForm = initSharedForm(config)
   const defStyles = {
     default: {
@@ -11,6 +11,7 @@ export const input = (config=noOpObj) => {
     },
   }
 
-  return checkCall(config.input, defStyles) || deepMerge(defStyles, config.input)
-
+  return (
+    checkCall(config.input, defStyles) || deepMerge(defStyles, config.input)
+  )
 }

@@ -1,7 +1,7 @@
 import { getThemeDefaults } from './themeDefaults'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const typography = (config=noOpObj) => {
+export const typography = (config = noOpObj) => {
   const { font, colors, margin } = getThemeDefaults()
   const fontDefs = font || { components: {} }
   const compFontDefs = fontDefs.components
@@ -80,7 +80,8 @@ export const typography = (config=noOpObj) => {
     },
   }
 
-  return checkCall(config.typography, defStyles) || deepMerge(defStyles, config.typography)
-
+  return (
+    checkCall(config.typography, defStyles) ||
+    deepMerge(defStyles, config.typography)
+  )
 }
-

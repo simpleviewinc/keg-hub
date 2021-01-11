@@ -9,17 +9,17 @@ import { getActiveOpacity } from './getActiveOpacity.js';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
 import './useTextAccessibility.js';
-import { useThemeHover, useThemeActive } from '@keg-hub/re-theme';
-import './useTextStyles.js';
 import './kegText.js';
 import '@keg-hub/re-theme/styleInjector';
-import './kegText-897ccc29.js';
+import { useThemeHover, useThemeActive } from '@keg-hub/re-theme';
+import './useTextStyles.js';
+import './kegText-ef69c4aa.js';
 import { Text } from './text.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-27dab64e.js';
+import { T as Touchable } from './touchable-e78a3026.js';
 
 var getChildren = function getChildren(Children, _ref) {
   var styles = _ref.styles,

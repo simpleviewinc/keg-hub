@@ -7,7 +7,6 @@ import { initAppAction, navigateTo } from 'SVActions'
 import { AppHeader, Select, Option } from 'SVComponents'
 import { Router } from 'SVComponents'
 import { checkCall, get } from '@keg-hub/jsutils'
-import { theme } from 'SVTheme'
 import { getHistory } from 'SVNavigation'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
 

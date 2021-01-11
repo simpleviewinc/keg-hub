@@ -1,7 +1,7 @@
 import { getThemeDefaults } from '../themeDefaults'
 import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const link = (config=noOpObj) => {
+export const link = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const defStyles = {
@@ -20,7 +20,8 @@ export const link = (config=noOpObj) => {
     },
   }
 
-  return { link: checkCall(config.link, defStyles) || deepMerge(defStyles, config.link) }
-
+  return {
+    link:
+      checkCall(config.link, defStyles) || deepMerge(defStyles, config.link),
+  }
 }
-

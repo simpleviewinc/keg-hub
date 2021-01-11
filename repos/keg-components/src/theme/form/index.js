@@ -7,7 +7,7 @@ import { radio } from './radio'
 import { select } from './select'
 import { switchStyles } from './switch'
 
-export const form = (config) => {
+export const form = config => {
   return {
     checkbox: checkbox(config),
     checkGroup: checkGroup(config),

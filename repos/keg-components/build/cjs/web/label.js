@@ -9,13 +9,13 @@ require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-afee43f7.js');
+require('./useClassName-6b6da47b.js');
 require('@keg-hub/re-theme/styleInjector');
 require('./useTextAccessibility.js');
+require('./kegText.native-dfad83ae.js');
 require('@keg-hub/re-theme');
 require('./useTextStyles.js');
-require('./kegText.native-cdb9059e.js');
-var kegText = require('./kegText-90bd3366.js');
+var kegText = require('./kegText-b42d09ba.js');
 
 var Label = kegText.KegText('label');
 

@@ -8,11 +8,11 @@ import 'react-native';
 import './useClassName.native-32e8827d.js';
 import { V as View } from './view.native-54e7e7ef.js';
 import './useTextAccessibility.js';
-import '@keg-hub/re-theme';
-import './useTextStyles.js';
 import './kegText.js';
 import '@keg-hub/re-theme/styleInjector';
-import './kegText-897ccc29.js';
+import '@keg-hub/re-theme';
+import './useTextStyles.js';
+import './kegText-ef69c4aa.js';
 import { Text } from './text.js';
 
 var SectionWrap = function SectionWrap(_ref) {

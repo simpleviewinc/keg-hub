@@ -11,11 +11,11 @@ var React__default = _interopDefault(React);
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
 require('./useTextAccessibility.js');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-12bc89e1.js');
+var reTheme = require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+require('./kegText-3f09043e.js');
 var text = require('./text.js');
 
 var Radio = reTheme.withTheme(function (props) {

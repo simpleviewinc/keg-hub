@@ -2,6 +2,7 @@
 'use strict'
 
 import React, { useEffect, useState, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import { ReThemeContext } from './reThemeContext'
 import { Dimensions } from 'ReDimensions'
 import { getSize } from '../dimensions/sizeMap'
@@ -77,21 +78,31 @@ export const ReThemeProvider = props => {
       dimensions.height,
       merge && getDefaultTheme(),
       platforms
-    ) 
-  }, [
-    theme,
-    dimensions.width,
-    dimensions.height,
-    merge,
-    platforms,
-  ])
+    )
+  }, [ theme, dimensions.width, dimensions.height, merge, platforms ])
 
   return (
-    <ReThemeContext.Provider
-      value={builtTheme}
-    >
+    <ReThemeContext.Provider value={builtTheme}>
       { children }
     </ReThemeContext.Provider>
   )
+}
 
+ReThemeProvider.propTypes = {
+  /**
+  Global defined Application theme
+  */
+  theme: PropTypes.object.isRequired,
+  /**
+  Should merge passed in theme prop with the current theme
+  */
+  merge: PropTypes.bool,
+  /**
+  Custom theme platform to use for the current context
+  */
+  platforms: PropTypes.array,
+  /**
+   Child components to wrap the with ReTheme provider
+  */
+  children: PropTypes.node,
 }

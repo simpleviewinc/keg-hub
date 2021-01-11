@@ -34,7 +34,7 @@ const composeUp = async args => {
     cmdContext,
     contextEnvs,
     globalConfig,
-    // Default no-recreate to true, if recreate is falsy
+    // Default no-recreate to true, if recreate is not set or false
     params: {
       ...params,
       ...(!recreate && { nocreate: true })

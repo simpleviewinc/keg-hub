@@ -14,9 +14,10 @@ import { useClassName } from 'KegClassName'
 export const Select = React.forwardRef(({ className, ...props }, ref) => {
   const classRef = useClassName('keg-select', className, ref)
 
-  return (
-    <Picker {...props} ref={classRef} />
-  )
+  return <Picker
+    {...props}
+    ref={classRef}
+  />
 })
 
 Select.propTypes = {

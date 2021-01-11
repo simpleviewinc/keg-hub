@@ -34,15 +34,15 @@ var handleRefUpdate = require('./handleRefUpdate.js');
 var updateClassNames = require('./updateClassNames.js');
 var validateFunctions = require('./validateFunctions.js');
 require('react-native');
-var useClassName = require('./useClassName-afee43f7.js');
-require('./view.native-b2081485.js');
+var useClassName = require('./useClassName-6b6da47b.js');
+require('./view.native-e2bb0f89.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-bc6e3186.js');
+var view = require('./view-ea13da55.js');
 var useTextAccessibility = require('./useTextAccessibility.js');
+require('./kegText.native-dfad83ae.js');
 var reTheme = require('@keg-hub/re-theme');
 require('./useTextStyles.js');
-require('./kegText.native-cdb9059e.js');
-var kegText = require('./kegText-90bd3366.js');
+var kegText = require('./kegText-b42d09ba.js');
 var text = require('./text.js');
 var useSpin = require('./useSpin-01b61060.js');
 var useChildren = require('./useChildren.js');
@@ -54,26 +54,26 @@ var useSelectHandlers = require('./useSelectHandlers.js');
 var useThemePath = require('./useThemePath.js');
 var useThemeWithHeight = require('./useThemeWithHeight.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
-var useClassList = require('./useClassList-2f47489f.js');
-var useThemeTypeAsClass = require('./useThemeTypeAsClass-58120adc.js');
-var icon = require('./icon-97ecbfef.js');
+var useClassList = require('./useClassList-9eaefcd6.js');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-103ed294.js');
+var icon = require('./icon-f09d5183.js');
 var touchable = require('./touchable.js');
 var withTouch = require('./withTouch.js');
 var touchableIcon = require('./touchableIcon.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-require('./checkbox.wrapper-c42d7023.js');
-var select = require('./select-86f7c69f.js');
+require('./checkbox.wrapper-cfffd2dd.js');
+var select = require('./select-9376e50c.js');
 var textBox = require('./textBox.js');
 var button = require('./button.js');
 require('./cardCallout.js');
 require('./cardContent.js');
 require('./cardContainer.js');
 require('./cardSection.js');
-require('./indicator.wrapper-0d4f60a8.js');
+require('./indicator.wrapper-21af96ee.js');
 var loading = require('./loading.js');
-require('./image-94aae7b4.js');
-var cardMedia = require('./cardMedia-e55d4efe.js');
+require('./image-2d56671d.js');
+var cardMedia = require('./cardMedia-7145f480.js');
 var card = require('./card.js');
 var divider = require('./divider.js');
 var caption = require('./caption.js');
@@ -86,16 +86,16 @@ var h6 = require('./h6.js');
 var label = require('./label.js');
 var p = require('./p.js');
 var subtitle = require('./subtitle.js');
-var input_web = require('./input.web-72fd5fb0.js');
-var checkbox = require('./checkbox-bf5cda27.js');
-require('./input-14ba8d9e.js');
-var input$1 = require('./input-572a765b.js');
-var _switch = require('./switch-4e6dfd1d.js');
+var input_web = require('./input.web-859d0b21.js');
+var checkbox = require('./checkbox-c0b7d958.js');
+require('./input-224b7e15.js');
+var input$1 = require('./input-aa35f24a.js');
+var _switch = require('./switch-31eb460e.js');
 require('./container.js');
 var row = require('./row.js');
 var grid = require('./grid.js');
 var column = require('./column.js');
-var link_wrapper = require('./link.wrapper-97be0b1c.js');
+var link_wrapper = require('./link.wrapper-fbe6fd2d.js');
 var section = require('./section.js');
 var modal = require('./modal.js');
 var itemHeader = require('./itemHeader.js');
@@ -373,7 +373,7 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   var theme = reTheme.useTheme();
   return React.useMemo(function () {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.area.off')), isChecked && jsutils.get(themeStyles, 'content.area.on')),
         indicator: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.indicator.off')), isChecked && jsutils.get(themeStyles, 'content.indicator.on'))

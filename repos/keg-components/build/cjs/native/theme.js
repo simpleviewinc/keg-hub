@@ -522,7 +522,7 @@ var drawer = function drawer() {
   var defStyles = {
     main: {
       overflow: 'hidden',
-      width: "100%"
+      width: '100%'
     }
   };
   return {
@@ -1320,8 +1320,7 @@ var input = function input() {
 };
 
 var option = function option(config) {
-  var defStyles = {};
-  return jsutils.checkCall(config.option, defStyles) || jsutils.deepMerge(defStyles, config.option);
+  return jsutils.checkCall(config.option, defStyles) || jsutils.deepMerge({}, config.option);
 };
 
 var radio = function radio() {

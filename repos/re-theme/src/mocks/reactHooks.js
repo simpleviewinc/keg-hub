@@ -1,5 +1,5 @@
 import React from 'react'
-import { checkCall, isFunc } from '@keg-hub/jsutils'
+import { checkCall } from '@keg-hub/jsutils'
 
 /**
  * This should eventually go into a jest helper repo, so they can be reused
@@ -31,7 +31,9 @@ const reactHookMocks = {
     // Mocked useLayoutEffect function to test that it's called
     let effectCB = null
 
-    const mockFunc = jest.fn(cb => { effectCB = cb })
+    const mockFunc = jest.fn(cb => {
+      effectCB = cb
+    })
     mockFunc.__effectCB = effectCB
     return mockFunc
   },
@@ -39,7 +41,9 @@ const reactHookMocks = {
     // Mocked useEffect function to test that it's called
     let effectCB = null
 
-    const mockFunc = jest.fn(cb => { effectCB = cb })
+    const mockFunc = jest.fn(cb => {
+      effectCB = cb
+    })
     mockFunc.__effectCB = effectCB
     return mockFunc
   },
@@ -65,9 +69,18 @@ const reactHookMocks = {
   useMemo: () => {
     // Mocked memo object to store the memoized data
     const useMemoResponse = {}
-    const mockFunc = jest.fn((cb, ...deps) => (checkCall(cb, ...deps) || useMemoResponse))
+    const mockFunc = jest.fn(
+      (cb, ...deps) => checkCall(cb, ...deps) || useMemoResponse
+    )
     return mockFunc
-  }
+  },
+  createElement: () => {
+    return jest.fn((comp, props, children) => {
+      comp.props = props
+      comp.children = children
+      return comp
+    })
+  },
 }
 
 export const mockReactHooks = (...reactMocks) => {
@@ -83,7 +96,7 @@ export const mockReactHooks = (...reactMocks) => {
   return reactMockedHooks
 }
 
-export const clearMockedHooks = (mockedHooks) => {
+export const clearMockedHooks = mockedHooks => {
   Object.keys(mockedHooks).map(key => {
     mockedHooks[key].mockClear()
   })

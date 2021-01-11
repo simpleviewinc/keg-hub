@@ -12,10 +12,8 @@ import { useTheme } from '@keg-hub/re-theme'
  */
 const useIconStyle = style => {
   return useMemo(() => {
-    return isArr(style)
-      ? deepMerge(...style)
-      : style
-  }, [ style ])
+    return isArr(style) ? deepMerge(...style) : style
+  }, [style])
 }
 
 /**

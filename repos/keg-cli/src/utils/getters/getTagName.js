@@ -2,6 +2,7 @@ const { git } = require('KegGitCli')
 const { get, isStr, isBool } = require('@keg-hub/jsutils')
 const { getTagFromBranchEnv } = require('./getTagFromBranchEnv')
 const { getSetting } = require('KegUtils/globalConfig/getSetting')
+
 /**
  * Checks if the image name already contains a tagName, and returns it if found
  * @param {string} imageName - Name of the image to tag, that may contain the tag name already
@@ -24,6 +25,7 @@ const getTagName = async ({ branch, version, tag, tagVariable }, imageName, loca
 
   // If the version or tag is defined explicitly, then use it
   const explicitTag = tag || version
+
   if(explicitTag) return explicitTag
 
   // If the image already has a tag, then use it

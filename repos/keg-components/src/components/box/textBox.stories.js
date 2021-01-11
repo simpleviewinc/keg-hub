@@ -12,8 +12,10 @@ const TextBoxStory = ({ type, useClipboard }) => {
 
   useEffect(() => {
     !inputRef.current &&
-      console.error(`Input ref did not get set. Something is wrong with the input component!`)
-    
+      console.error(
+        `Input ref did not get set. Something is wrong with the input component!`
+      )
+
     inputRef.current.focus()
     if (text !== placeHolderText) inputRef.current.value = text
   }, [text])

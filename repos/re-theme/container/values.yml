@@ -1,26 +1,3 @@
-actions:
-  run:
-    location: /keg/app
-    cmds:
-      - /bin/bash /keg/app/container/run.sh
-  install:
-    location: /keg/app
-    cmds:
-      - yarn install
-  build:
-    location: /keg/app
-    cmds:
-      - yarn build
-  start:
-    location: /keg/app
-    detach: true
-    cmds:
-      - yarn dev
-  app:
-    location: /keg/app
-    detach: true
-    cmds:
-      - yarn app
 env:
 
   # --- KEG-CLI ENV CONTEXT --- #
@@ -44,13 +21,13 @@ env:
   # --- DOCKER ENV CONTEXT --- #
 
   # Default location of the app in the docker container
-  DOC_APP_PATH: /keg/app
-  DOC_RETHEME_PATH: /keg/app
-  DOC_JSUTILS_PATH: /keg/app/node_modules/@keg-hub/jsutils
+  DOC_APP_PATH: /keg/tap
+  DOC_RETHEME_PATH: /keg/tap
+  DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
-  KEG_PROXY_PORT: 5000
-  KEG_EXEC_CMD: app
+  KEG_PROXY_PORT: 60710
+  KEG_EXEC_CMD: sb
 
   # --- GENERAL CONTEXT ENVs --- #
 
@@ -59,3 +36,4 @@ env:
   IMAGE: retheme
   CONTAINER_NAME: retheme
   VERSION: "0.0.1"
+  CHOKIDAR_USEPOLLING: 1

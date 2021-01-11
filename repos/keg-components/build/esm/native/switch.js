@@ -10,11 +10,11 @@ import 'react-native';
 import './useClassName.native-32e8827d.js';
 import { V as View } from './view.native-54e7e7ef.js';
 import './useTextAccessibility.js';
-import { useTheme } from '@keg-hub/re-theme';
-import './useTextStyles.js';
 import './kegText.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import './kegText-897ccc29.js';
+import { useTheme } from '@keg-hub/re-theme';
+import './useTextStyles.js';
+import './kegText-ef69c4aa.js';
 import { Text } from './text.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
@@ -53,7 +53,7 @@ var getSwitchColors = function getSwitchColors(thumbColor, trackColor, _ref) {
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   var theme = useTheme();
   return useMemo(function () {
-    return theme.join(themeStyles, {
+    return theme.get(themeStyles, {
       content: {
         area: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.area.off')), isChecked && get(themeStyles, 'content.area.on')),
         indicator: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.indicator.off')), isChecked && get(themeStyles, 'content.indicator.on'))

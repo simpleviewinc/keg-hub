@@ -16,17 +16,17 @@ var getActiveOpacity = require('./getActiveOpacity.js');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
 require('./useTextAccessibility.js');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
 require('./kegText.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-12bc89e1.js');
+var reTheme = require('@keg-hub/re-theme');
+require('./useTextStyles.js');
+require('./kegText-3f09043e.js');
 var text = require('./text.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-465d470b.js');
+var touchable$1 = require('./touchable-d386e5c0.js');
 
 var getChildren = function getChildren(Children, _ref) {
   var styles = _ref.styles,

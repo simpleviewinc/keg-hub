@@ -11,10 +11,10 @@ import { useTextStyles } from '../../../hooks/useTextStyles'
  */
 const useTextComponent = element => {
   return useMemo(() => {
-    return StyleInjector(
-      NativeText(element),
-      { displayName: capitalize(element), className: `keg-${element}` }
-    )
+    return StyleInjector(NativeText(element), {
+      displayName: capitalize(element),
+      className: `keg-${element}`,
+    })
   }, [element])
 }
 
@@ -29,9 +29,11 @@ export const KegText = element => {
     const textStyles = useTextStyles(element)
     const Text = useTextComponent(element)
 
-    return (
-      <Text {...props} style={[ textStyles, props.style ]} ref={ref} />
-    )
+    return <Text
+      {...props}
+      style={[ textStyles, props.style ]}
+      ref={ref}
+    />
   })
 }
 

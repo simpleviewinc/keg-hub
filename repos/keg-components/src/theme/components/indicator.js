@@ -1,7 +1,7 @@
 import { getThemeDefaults } from '../themeDefaults'
 import { deepMerge, get, noOpObj, checkCall } from '@keg-hub/jsutils'
 
-export const indicator = (config=noOpObj) => {
+export const indicator = (config = noOpObj) => {
   const { colors } = getThemeDefaults()
 
   const container = {
@@ -46,7 +46,9 @@ export const indicator = (config=noOpObj) => {
     },
   }
 
-  return { indicator: checkCall(config.indicator, defStyles) || deepMerge(defStyles, config.indicator) }
-
+  return {
+    indicator:
+      checkCall(config.indicator, defStyles) ||
+      deepMerge(defStyles, config.indicator),
+  }
 }
-
