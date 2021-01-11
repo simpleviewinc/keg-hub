@@ -60,7 +60,7 @@
     "@babel/plugin-transform-object-assign": "7.12.1",
     "@babel/preset-env": "7.12.1",
     "@babel/preset-react": "7.12.1",
-    "@keg-hub/jsutils": "8.0.0",
+    "@keg-hub/jsutils": "8.1.0",
     "@keg-hub/re-theme": "8.0.0",
     "@rollup/plugin-alias": "3.1.1",
     "@rollup/plugin-json": "4.1.0",
@@ -130,7 +130,7 @@
     }
   },
   "peerDependencies": {
-    "@keg-hub/jsutils": "8.0.0",
+    "@keg-hub/jsutils": "8.1.0",
     "@keg-hub/re-theme": "8.0.0",
     "expo": "^38.0.0",
     "expo-font": "^8.0.0",
