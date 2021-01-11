@@ -23,6 +23,7 @@ services:
         - KEG_DOCKER_IP
         - KEG_IMAGE_FROM
         - KEG_EXEC_CMD
+        - KEG_NODE_VERSION
         - KEG_NM_INSTALL
         - NODE_ENV
         - PUBLIC_GIT_KEY

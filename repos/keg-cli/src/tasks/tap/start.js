@@ -1,5 +1,6 @@
 const { DOCKER } = require('KegConst/docker')
-const { serviceOptions, startService } = require('KegUtils/services')
+const { startService } = require('KegUtils/services')
+const { mergeTaskOptions } = require('KegUtils/task/options/mergeTaskOptions')
 
 /**
  * Start a tap with docker-compose
@@ -30,16 +31,11 @@ module.exports = {
     locationContext: DOCKER.LOCATION_CONTEXT.CONTAINERS,
     description: `Runs a tap in a docker container`,
     example: 'keg tap start <options>',
-    options: serviceOptions('tap', 'start', {
+    options: mergeTaskOptions('tap', 'start', 'startService', {
       tap: { 
         description: 'Name of the tap to run. Must be a tap linked in the global config',
         example: 'keg tap start --tap events-force',
         required: true,
-      },
-      core: {
-        description: 'Use the local keg-core package.json when install node_modules during the build',
-        example: `keg tap start --core true`,
-        default: false,
       },
     }),
   }

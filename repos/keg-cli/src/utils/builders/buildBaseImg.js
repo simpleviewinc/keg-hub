@@ -30,10 +30,10 @@ const checkForLatestTag = (image, args) => {
  * @returns {void}
  */
 const buildBaseImg = async args => {
-  const tapName = get(args, 'params.tap')
+  const buildContext = get(args, `params.__injected.tap`, get(args, 'params.context'))
 
   // If it's a tap, check if we should build the base image
-  const shouldBuildBase = tapName && getContainerConst(tapName, `env.keg_from_base`, true)
+  const shouldBuildBase = buildContext && getContainerConst(buildContext, `env.keg_from_base`, true)
   if(!shouldBuildBase) return args
 
   const baseName = getContainerConst('base', `env.image`, 'keg-base')
@@ -52,6 +52,7 @@ const buildBaseImg = async args => {
     tap: undefined,
     context: 'base',
     image: 'keg-base',
+    tagVariable: 'env',
   }})
 
 }

@@ -21,6 +21,7 @@ services:
         - GIT_APP_URL
         - KEG_IMAGE_FROM
         - KEG_EXEC_CMD
+        - KEG_NODE_VERSION
         - KEG_NM_INSTALL
         - NODE_ENV
         - PUBLIC_GIT_KEY
