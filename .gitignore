@@ -161,6 +161,7 @@ test-report.xml
 reports
 
 # Any local ENV files in the docker container folder
+repos/keg-cli
 repos/**/containers/**/.env
 repos/**/container/.env
 !repos/keg-cli/containers/proxy/.env
@@ -180,7 +181,6 @@ repos/**/tests/reports/archive/*
 repos/**/test/reports/*.json
 repos/**/test/reports/*.html
 repos/**/tests/node_modules
-
 
 # Taps and tap-release-client
 taps/**/*
