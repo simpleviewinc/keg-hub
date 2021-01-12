@@ -1317,6 +1317,7 @@ var input = function input() {
 };
 
 var option = function option(config) {
+  var defStyles = {};
   return checkCall(config.option, defStyles) || deepMerge({}, config.option);
 };
 
