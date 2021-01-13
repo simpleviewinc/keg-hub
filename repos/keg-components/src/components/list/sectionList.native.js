@@ -344,7 +344,7 @@ export const SectionList = React.forwardRef((props, ref) => {
 
   return (
     <View
-      className='keg-sectionlist-wrapper'
+      className='keg-sectionlist-container'
       style={listStyles?.main}
     >
       { renderListHeader &&
@@ -357,7 +357,10 @@ export const SectionList = React.forwardRef((props, ref) => {
           },
           Text
         ) }
-      <SafeAreaView ref={safeClassRef}>
+      <SafeAreaView
+        ref={safeClassRef}
+        style={listStyles?.content.list}
+      >
         <RNSectionList
           {...args}
           ref={classRef}

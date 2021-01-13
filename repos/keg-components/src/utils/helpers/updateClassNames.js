@@ -30,5 +30,6 @@ export const updateClassNames = (element, classesRef, defClass, className) => {
   classesRef.current = classArr
 
   // Add the classes to the element
-  element.classList.add(...classArr)
+  classArr.map(cls => element.classList.add(...cls.split(' ')))
+
 }

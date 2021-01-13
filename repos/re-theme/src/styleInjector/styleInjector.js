@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStyleTag } from './useStyleTag'
-import { isArr } from '@keg-hub/jsutils'
+import { isArr, isStr } from '@keg-hub/jsutils'
 
 /**
  * Helper component that actually calls the useStyleTag hook
@@ -27,7 +27,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
       {...buildProps}
       style={filteredStyle}
       ref={ref}
-      className={isArr(classList) ? classList.join(' ') : classList}
+      className={isStr(Component) ? classList.join(' ') : classList}
     >
       { children }
     </Component>
