@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStyleTag } from './useStyleTag'
-import { isArr, isStr } from '@keg-hub/jsutils'
+import { isStr } from '@keg-hub/jsutils'
 
 /**
  * Helper component that actually calls the useStyleTag hook
