@@ -1,6 +1,12 @@
 import { useMemo, useCallback } from 'react'
 import { useTheme } from './useTheme'
-import { checkCall, noPropObj, noPropArr } from '@keg-hub/jsutils'
+import {
+  checkCall,
+  isObj,
+  isEmptyColl,
+  noPropObj,
+  noPropArr,
+} from '@keg-hub/jsutils'
 
 /**
  * Create a custom hook for building the styles that are memoized
@@ -20,17 +26,26 @@ import { checkCall, noPropObj, noPropArr } from '@keg-hub/jsutils'
  *
  * @returns { Object } - Current theme
  */
-export const useStylesCallback = (stylesCb, cbDependencies=noPropArr, customStyles=noPropObj) => {
+export const useStylesCallback = (
+  stylesCb,
+  cbDependencies = noPropArr,
+  customStyles
+) => {
   // Memorize the passed in callback
   const cb = useCallback(stylesCb, cbDependencies)
 
   // Get the theme object to pass to the styles callback
   const theme = useTheme()
 
+  // Ensure the custom styles is real styles object
+  const styles =
+    !customStyles || !isObj(customStyles) || isEmptyColl(customStyles)
+      ? false
+      : customStyles
+
   // Use the useMemo hook to memoize the call to the stylesCb
-  return useMemo(() => checkCall(cb, theme, customStyles, ...cbDependencies) || noPropObj, [
-    theme,
-    cb,
-    customStyles,
-  ])
+  return useMemo(
+    () => checkCall(cb, theme, styles, ...cbDependencies) || noPropObj,
+    [ theme, cb, styles ]
+  )
 }
