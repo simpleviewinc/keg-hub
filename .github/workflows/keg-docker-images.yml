@@ -1,0 +1,49 @@
+
+name: keg-docker-image
+on: push
+
+jobs:
+  tests:
+    name: 'Build Docker Keg Images'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: "Setup node Version"
+        uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+
+      - name: "Get Changed Files"
+        id: get-changed-files
+        run: bash scripts/ci/getChangedFiles.sh
+
+      - name: "Get Changed Repos"
+        id: get-changed-repos
+        run: bash scripts/ci/getChangedRepos.sh
+
+      - name: "Install Keg-CLI"
+        id: install-keg-cli
+        run: bash scripts/ci/installCli.sh
+
+      - name: "Run Repo Format"
+        id: run-repo-format
+        run: bash scripts/ci/runYarnCmd.sh "format"
+
+      - name: "Run Repo Build"
+        id: run-repo-build
+        run: bash scripts/ci/buildChangedRepos.sh
+
+      - name: "Run Repo Tests"
+        id: run-repo-tests
+        run: bash scripts/ci/runYarnCmd.sh "test"
+
+      - name: "Commit Repo Changes"
+        id: commit-changes
+        run: bash scripts/ci/commitChanges.sh "Repo-Build"
