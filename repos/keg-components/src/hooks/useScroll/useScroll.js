@@ -9,7 +9,7 @@ import { noOp, throttle } from '@keg-hub/jsutils'
  * @example
  * const [{ scrollX, scrollY }] = useScroll()
  * @param {function} [onScroll] - Function called when the scroll event fires
- * @param {number} [amount=30] - Throttle amount for the scrollHandler callback
+ * @param {number} [amount=50] - Throttle amount for the scrollHandler callback
  *
  * @returns {Object} The current scrollX and scrollY positions
  */

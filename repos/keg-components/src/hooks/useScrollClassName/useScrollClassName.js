@@ -11,6 +11,7 @@ const isWeb = getPlatform() === 'web'
  * <br/>Uses getScrollableNode and getInnerViewNode to get access to the Dom Nodes
  * @param {Array[string]} defClass - Default class to add to the component
  * @param {string|Array[string]} className - Class or an array of classes to add to the element
+ * @param {string|Array[string]} innerClassName - Custom class name of the inner scroll component
  * @param {Object|function} ref - Ref object passed to the consuming component
  *
  * @returns {function} - Ref function to be added to the component

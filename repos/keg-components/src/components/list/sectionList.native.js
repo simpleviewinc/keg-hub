@@ -40,11 +40,11 @@ const useIndexedSections = (sections, indexBy) => {
 
 /**
  * Helper hook to allow tracking scrolling between section
- * @param {boolean} doScrolling - Is automatic scrolling turned on
  * @param {function} onScrollSectionChange - Consumer Callback for when a section is scrolled
  * @param {number} scrollOffset - Offset the final scroll position by some amount (px)
  * @param {Object} sectionRefs - React ref of all Section divider components.
- * @param {Object} listRef - React ref of the SectionList component
+ * @param {Object} activeSection - Most recent Section in the view calling this hook 
+ * @param {function} setActiveSection - Update which section is active
  * @param {Object} isScrollingRef - React ref to track if we are scrolling
  *
  * @returns {function} - Method to call when a section is scrolled
@@ -109,6 +109,7 @@ const useSectionChangeOnScroll = (
  * @param {Object} listRef - React ref of the SectionList component
  * @param {Object} isScrollingRef - React ref to track if we are scrolling
  * @param {number} scrollCooldown - Amount of time to wait before allowing scrolling (ms)
+ * @param {function} setActiveSection - Update which section is active
  *
  * @returns {function} - Method to call when the current section is changed
  */
@@ -180,6 +181,7 @@ const useSectionChange = (
  * @param {Object} props.sectionRefs - Ref Object to hold refs to the section header Dom Node
  * @param {Array} props.sections - Groups of items to be displayed in the SectionList component
  * @param {Object} props.styles - Merged custom and theme styles
+ * @param {Object} props.onSectionChange - Callback called when a section is changed
  */
 const SectionHeader = props => {
   const {
@@ -272,7 +274,7 @@ const useRenderItem = (renderItem, onSectionChange) => {
  * SectionList
  * @summary Default view component that wraps the React Native View component. All props are optional
  *
- * @param {Object} props - see View PropTypes
+ * @param {Object} props - see SectionList PropTypes
  * @property {String} props.className - Value to set the className to (web platform only)
  * @property {String} props.innerClassName - Value to set the innerClassName to (web platform only)
  *
@@ -377,15 +379,37 @@ SectionList.propTypes = {
   ...RNSectionList.propTypes,
   activeSection: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
+  /**
+   * Property on each section used to index each section header
+   */
   indexSectionHeaderBy: PropTypes.string,
   innerClassName: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   noSectionHeaderScroll: PropTypes.bool,
+  /**
+   * Called when a section becomes active ( visible ) from scrolling
+   */
   onScrollSectionChange: PropTypes.func,
+  /**
+   * Called when a section changes either through scrolling or programmatically
+   * Is NOT called when onScrollSectionChange prop exists, and section is changed from scrolling
+   */
   onSectionChange: PropTypes.func,
   scrollCooldown: PropTypes.number,
+  /**
+   * Render prop to render the list header
+   */
   renderListHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  /**
+   * Render prop to render the header of each section
+   */
   renderSectionHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  /**
+   * Render prop to render each item in each section
+   */
   renderItem: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  /**
+   * Offset the scroll position by some amount (px) when section header scrolling is enabled
+   */
   sectionChangeOffset: PropTypes.number,
   sections: PropTypes.array,
   styles: PropTypes.object,
