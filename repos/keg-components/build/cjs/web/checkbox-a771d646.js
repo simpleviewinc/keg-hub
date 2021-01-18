@@ -8,7 +8,7 @@ var React = require('react');
 var React__default = _interopDefault(React);
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var view = require('./view-ea13da55.js');
-var checkbox_wrapper = require('./checkbox.wrapper-cfffd2dd.js');
+var checkbox_wrapper = require('./checkbox.wrapper-8af9724d.js');
 var input_web = require('./input.web-859d0b21.js');
 
 var checkBoxStyles = {
@@ -85,4 +85,4 @@ var Checkbox = React.forwardRef(function (props, ref) {
 Checkbox.propTypes = _rollupPluginBabelHelpers._objectSpread2({}, checkbox_wrapper.CheckboxWrapper.propTypes);
 
 exports.Checkbox = Checkbox;
-//# sourceMappingURL=checkbox-c0b7d958.js.map
+//# sourceMappingURL=checkbox-a771d646.js.map

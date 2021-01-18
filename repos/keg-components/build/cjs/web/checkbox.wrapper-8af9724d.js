@@ -1,42 +1,47 @@
-import { e as _extends, d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { toBool, checkCall, get, isStr } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import React__default, { createElement, forwardRef, useState, useCallback, useImperativeHandle, useMemo } from 'react';
-import { renderFromType } from './renderFromType.js';
-import { getOnChangeHandler } from './getOnChangeHandler.js';
-import { getChecked } from './getChecked.js';
-import 'react-native';
-import { V as View } from './view-216fa8c1.js';
-import { Text } from './text.js';
-import { useThemePath } from './useThemePath.js';
-import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList-eea8a571.js';
-import { u as useThemeTypeAsClass } from './useThemeTypeAsClass-cd54e95a.js';
-import { S as SvgIcon } from './svgIcon-8c133388.js';
-import './caption.js';
-import './h1.js';
-import './h2.js';
-import './h3.js';
-import './h4.js';
-import './h5.js';
-import './h6.js';
-import './label.js';
-import './p.js';
-import './subtitle.js';
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var jsutils = require('@keg-hub/jsutils');
+require('@keg-hub/re-theme/colors');
+var React = require('react');
+var React__default = _interopDefault(React);
+var renderFromType = require('./renderFromType.js');
+var getOnChangeHandler = require('./getOnChangeHandler.js');
+var getChecked = require('./getChecked.js');
+require('react-native');
+var view = require('./view-ea13da55.js');
+var text = require('./text.js');
+var useThemePath = require('./useThemePath.js');
+require('./useThemeWithHeight.js');
+var useClassList = require('./useClassList-9eaefcd6.js');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-103ed294.js');
+var svgIcon = require('./svgIcon-21afc6ae.js');
+require('./caption.js');
+require('./h1.js');
+require('./h2.js');
+require('./h3.js');
+require('./h4.js');
+require('./h5.js');
+require('./h6.js');
+require('./label.js');
+require('./p.js');
+require('./subtitle.js');
 
 var Check = function Check(props) {
-  return createElement(SvgIcon, _extends({}, props, {
+  return React.createElement(svgIcon.SvgIcon, _rollupPluginBabelHelpers._extends({}, props, {
     viewBox: "0 0 512 512",
     delta: "M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
   }));
 };
 
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
-  return useMemo(function () {
-    return _objectSpread2(_objectSpread2({}, themeStyles), {}, {
-      content: _objectSpread2(_objectSpread2({}, themeStyles.content), {}, {
-        area: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.area.off')), isChecked && get(themeStyles, 'content.area.on')),
-        indicator: _objectSpread2(_objectSpread2({}, get(themeStyles, 'content.indicator.off')), isChecked && get(themeStyles, 'content.indicator.on'))
+  return React.useMemo(function () {
+    return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, themeStyles), {}, {
+      content: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, themeStyles.content), {}, {
+        area: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.area.off')), isChecked && jsutils.get(themeStyles, 'content.area.on')),
+        indicator: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, jsutils.get(themeStyles, 'content.indicator.off')), isChecked && jsutils.get(themeStyles, 'content.indicator.on'))
       })
     });
   }, [isChecked, themeStyles]);
@@ -46,9 +51,9 @@ var useCheckboxPressHandler = function useCheckboxPressHandler(isChecked, setChe
       disableCheck = _ref$disableCheck === void 0 ? false : _ref$disableCheck,
       _ref$disableUncheck = _ref.disableUncheck,
       disableUncheck = _ref$disableUncheck === void 0 ? true : _ref$disableUncheck;
-  return useCallback(function (event) {
+  return React.useCallback(function (event) {
     if (isChecked) !disableUncheck && setChecked(false);else !disableCheck && setChecked(true);
-    checkCall(onChange, event, !isChecked);
+    jsutils.checkCall(onChange, event, !isChecked);
   }, [isChecked, setChecked, onChange, disableCheck, disableUncheck]);
 };
 var SideComponent = function SideComponent(_ref2) {
@@ -60,10 +65,10 @@ var SideComponent = function SideComponent(_ref2) {
   var sideProps = onPress ? {
     onPress: onPress
   } : undefined;
-  return isStr(Component) ? React__default.createElement(Text, _extends({
+  return jsutils.isStr(Component) ? React__default.createElement(text.Text, _rollupPluginBabelHelpers._extends({
     className: className,
     style: style
-  }, sideProps), Component) : renderFromType(Component, _objectSpread2({
+  }, sideProps), Component) : renderFromType.renderFromType(Component, _rollupPluginBabelHelpers._objectSpread2({
     className: className,
     style: style,
     styles: styles
@@ -72,12 +77,12 @@ var SideComponent = function SideComponent(_ref2) {
 var ChildrenComponent = function ChildrenComponent(_ref3) {
   var children = _ref3.children,
       className = _ref3.className;
-  return React__default.createElement(React__default.Fragment, null, renderFromType(children, {
+  return React__default.createElement(React__default.Fragment, null, renderFromType.renderFromType(children, {
     className: className
   }, null));
 };
 var useCheckboxHandle = function useCheckboxHandle(ref, isChecked, _setChecked, pressHandler) {
-  return useImperativeHandle(ref, function () {
+  return React.useImperativeHandle(ref, function () {
     return {
       isChecked: isChecked,
       setChecked: function setChecked(checked) {
@@ -87,7 +92,7 @@ var useCheckboxHandle = function useCheckboxHandle(ref, isChecked, _setChecked, 
     };
   }, [ref, isChecked, _setChecked, pressHandler]);
 };
-var CheckboxWrapper = forwardRef(function (props, ref) {
+var CheckboxWrapper = React.forwardRef(function (props, ref) {
   var className = props.className,
       initChecked = props.initChecked,
       checked = props.checked,
@@ -115,10 +120,10 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
       type = props.type,
       themePath = props.themePath,
       value = props.value,
-      elProps = _objectWithoutProperties(props, ["className", "initChecked", "checked", "children", "elType", "Element", "CheckIcon", "disabled", "disableCheck", "disableUncheck", "allowAdjacentPress", "isWeb", "LeftComponent", "leftClassName", "close", "onChange", "onValueChange", "RightComponent", "rightClassName", "styles", "CheckboxComponent", "type", "themePath", "value"]);
-  var initCheckedValue = toBool(checked || initChecked || value);
-  var _useState = useState(initCheckedValue),
-      _useState2 = _slicedToArray(_useState, 2),
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "initChecked", "checked", "children", "elType", "Element", "CheckIcon", "disabled", "disableCheck", "disableUncheck", "allowAdjacentPress", "isWeb", "LeftComponent", "leftClassName", "close", "onChange", "onValueChange", "RightComponent", "rightClassName", "styles", "CheckboxComponent", "type", "themePath", "value"]);
+  var initCheckedValue = jsutils.toBool(checked || initChecked || value);
+  var _useState = React.useState(initCheckedValue),
+      _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
       isChecked = _useState2[0],
       setChecked = _useState2[1];
   var pressHandler = useCheckboxPressHandler(isChecked, setChecked, onChange || onValueChange,
@@ -129,41 +134,42 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
   useCheckboxHandle(ref, isChecked, setChecked, onChange || onValueChange);
   var canUseHandler = !disabled && (isChecked && !disableUncheck || !isChecked && !disableCheck);
   var elThemePath = themePath || "form.".concat(elType, ".").concat(close && 'close' || 'default');
-  var themeStyles = useThemePath(elThemePath, styles);
-  var disabledStyles = useThemePath("form.".concat(elType, ".disabled"), themeStyles);
+  var themeStyles = useThemePath.useThemePath(elThemePath, styles);
+  var disabledStyles = useThemePath.useThemePath("form.".concat(elType, ".disabled"), themeStyles);
   var activeStyles = useCheckedState(isChecked, canUseHandler ? themeStyles : disabledStyles);
-  var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-checkbox', className);
-  var pressHandlerProp = canUseHandler ? getOnChangeHandler(isWeb, pressHandler) : undefined;
-  var ChildrenView = children && React__default.createElement(View, {
+  var typeClassName = useThemeTypeAsClass.useThemeTypeAsClass(elThemePath || type, 'keg-checkbox', className);
+  var pressHandlerProp = getOnChangeHandler.getOnChangeHandler(isWeb, canUseHandler ? pressHandler : jsutils.noOp);
+  var ChildrenView = children && React__default.createElement(view.View, {
     className: typeClassName,
     style: activeStyles.main
   }, React__default.createElement(ChildrenComponent, {
     className: "keg-checkbox-container",
     children: children
   }));
-  return ChildrenView || React__default.createElement(View, {
+  return ChildrenView || React__default.createElement(view.View, {
     className: typeClassName,
     style: activeStyles.main
   }, LeftComponent && React__default.createElement(SideComponent, {
-    className: useClassList('keg-checkbox-left', leftClassName),
+    className: useClassList.useClassList('keg-checkbox-left', leftClassName),
     Component: LeftComponent,
     style: activeStyles.content.left,
     onPress: allowAdjacentPress && canUseHandler && pressHandler
-  }), CheckboxComponent ? renderFromType(CheckboxComponent, _objectSpread2(_objectSpread2({}, props), {}, {
+  }), CheckboxComponent ? renderFromType.renderFromType(CheckboxComponent, _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, props), {}, {
     styles: activeStyles.content
-  })) : React__default.createElement(Element, _extends({
+  })) : React__default.createElement(Element, _rollupPluginBabelHelpers._extends({
     className: "keg-checkbox-container",
     elProps: elProps,
     disabled: disabled,
     styles: activeStyles.content,
     CheckIcon: CheckIcon
-  }, getChecked(isWeb, isChecked), pressHandlerProp)), RightComponent && React__default.createElement(SideComponent, {
-    className: useClassList('keg-checkbox-right', rightClassName),
+  }, getChecked.getChecked(isWeb, isChecked), pressHandlerProp)), RightComponent && React__default.createElement(SideComponent, {
+    className: useClassList.useClassList('keg-checkbox-right', rightClassName),
     Component: RightComponent,
     style: activeStyles.content.right,
     onPress: allowAdjacentPress && canUseHandler && pressHandler
   }));
 });
 
-export { CheckboxWrapper as C, Check as a };
-//# sourceMappingURL=checkbox.wrapper-9afaa76e.js.map
+exports.Check = Check;
+exports.CheckboxWrapper = CheckboxWrapper;
+//# sourceMappingURL=checkbox.wrapper-8af9724d.js.map

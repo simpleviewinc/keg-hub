@@ -130,7 +130,7 @@ var CheckboxWrapper = React.forwardRef(function (props, ref) {
   var disabledStyles = useThemePath.useThemePath("form.".concat(elType, ".disabled"), themeStyles);
   var activeStyles = useCheckedState(isChecked, canUseHandler ? themeStyles : disabledStyles);
   var typeClassName = useThemeTypeAsClass_native.useThemeTypeAsClass();
-  var pressHandlerProp = canUseHandler ? getOnChangeHandler.getOnChangeHandler(isWeb, pressHandler) : undefined;
+  var pressHandlerProp = getOnChangeHandler.getOnChangeHandler(isWeb, canUseHandler ? pressHandler : jsutils.noOp);
   var ChildrenView = children && React__default.createElement(view_native.View, {
     className: typeClassName,
     style: activeStyles.main
@@ -163,4 +163,4 @@ var CheckboxWrapper = React.forwardRef(function (props, ref) {
 });
 
 exports.CheckboxWrapper = CheckboxWrapper;
-//# sourceMappingURL=checkbox.wrapper-d0165ea9.js.map
+//# sourceMappingURL=checkbox.wrapper-fa6fa161.js.map

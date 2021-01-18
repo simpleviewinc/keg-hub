@@ -30,7 +30,7 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { C as CheckboxWrapper } from './checkbox.wrapper-2b4c20ad.js';
+import { C as CheckboxWrapper } from './checkbox.wrapper-4a9046c8.js';
 
 var Element = withTheme(function (props) {
   var theme = props.theme,

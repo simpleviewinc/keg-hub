@@ -10,7 +10,7 @@ var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var view_native = require('./view.native-20f555a1.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var svgIcon = require('./svgIcon-21afc6ae.js');
-var checkbox_wrapper = require('./checkbox.wrapper-d0165ea9.js');
+var checkbox_wrapper = require('./checkbox.wrapper-fa6fa161.js');
 
 var Check = function Check(props) {
   return React.createElement(svgIcon.SvgIcon, _rollupPluginBabelHelpers._extends({}, props, {
@@ -102,4 +102,4 @@ var Checkbox = React.forwardRef(function (props, ref) {
 Checkbox.propTypes = _rollupPluginBabelHelpers._objectSpread2({}, checkbox_wrapper.CheckboxWrapper.propTypes);
 
 exports.Checkbox = Checkbox;
-//# sourceMappingURL=checkbox-7ebebe37.js.map
+//# sourceMappingURL=checkbox-020b3a77.js.map

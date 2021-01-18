@@ -5,7 +5,7 @@ import { u as useClassName } from './useClassName.native-32e8827d.js';
 import { V as View } from './view.native-54e7e7ef.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import { S as SvgIcon } from './svgIcon-8c133388.js';
-import { C as CheckboxWrapper } from './checkbox.wrapper-2b4c20ad.js';
+import { C as CheckboxWrapper } from './checkbox.wrapper-4a9046c8.js';
 
 var Check = function Check(props) {
   return createElement(SvgIcon, _extends({}, props, {
@@ -97,4 +97,4 @@ var Checkbox = forwardRef(function (props, ref) {
 Checkbox.propTypes = _objectSpread2({}, CheckboxWrapper.propTypes);
 
 export { Checkbox as C };
-//# sourceMappingURL=checkbox-9799460c.js.map
+//# sourceMappingURL=checkbox-6e84332e.js.map
