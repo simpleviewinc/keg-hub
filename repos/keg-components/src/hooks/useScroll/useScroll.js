@@ -29,7 +29,11 @@ export const useScroll = (onScroll = noOp, amount = 50) => {
       onScroll(event, scrollUpdate)
       setScroll(scrollUpdate)
     }, amount),
-    [onScroll]
+    [
+      amount,
+      onScroll,
+      setScroll,
+    ]
   )
 
   useLayoutEffect(() => {
