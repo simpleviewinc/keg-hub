@@ -31,7 +31,7 @@ var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./useThemeTypeAsClass.native-90f04031.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-var checkbox = require('./checkbox-7ebebe37.js');
+var checkbox = require('./checkbox-020b3a77.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -42,7 +42,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-require('./checkbox.wrapper-d0165ea9.js');
+require('./checkbox.wrapper-fa6fa161.js');
 
 var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,

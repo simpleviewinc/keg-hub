@@ -37,7 +37,7 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-var checkbox_wrapper = require('./checkbox.wrapper-d0165ea9.js');
+var checkbox_wrapper = require('./checkbox.wrapper-fa6fa161.js');
 
 var Element = reTheme.withTheme(function (props) {
   var theme = props.theme,

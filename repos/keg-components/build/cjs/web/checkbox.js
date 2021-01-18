@@ -34,7 +34,7 @@ require('./useClassList-9eaefcd6.js');
 require('./useThemeTypeAsClass-103ed294.js');
 require('react-native-svg');
 require('./svgIcon-21afc6ae.js');
-var checkbox_wrapper = require('./checkbox.wrapper-cfffd2dd.js');
+var checkbox_wrapper = require('./checkbox.wrapper-8af9724d.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
