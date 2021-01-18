@@ -176,12 +176,12 @@ const useSectionChange = (
 /**
  * Displays a section header for each section, adding a view to helper with tracking
  * @param {Object} props
- * @param {Object} props.index - Position of the section being rendered
- * @param {Object} props.renderSectionHeader - Callback passed from the consumer
+ * @param {number} props.index - Position of the section being rendered
+ * @param {Object|function|node} props.renderSectionHeader - Callback passed from the consumer
  * @param {Object} props.sectionRefs - Ref Object to hold refs to the section header Dom Node
- * @param {Array} props.sections - Groups of items to be displayed in the SectionList component
+ * @param {Object} props.section - Current section being rendered
  * @param {Object} props.styles - Merged custom and theme styles
- * @param {Object} props.onSectionChange - Callback called when a section is changed
+ * @param {function} props.onSectionChange - Callback called when a section is changed
  */
 const SectionHeader = props => {
   const {
