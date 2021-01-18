@@ -375,6 +375,7 @@ export const SectionList = React.forwardRef((props, ref) => {
 
 SectionList.propTypes = {
   ...RNSectionList.propTypes,
+  activeSection: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   indexSectionHeaderBy: PropTypes.string,
   innerClassName: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
@@ -382,8 +383,11 @@ SectionList.propTypes = {
   onScrollSectionChange: PropTypes.func,
   onSectionChange: PropTypes.func,
   scrollCooldown: PropTypes.number,
-  renderListHeader: PropTypes.func,
+  renderListHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  renderSectionHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  renderItem: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
   sectionChangeOffset: PropTypes.number,
+  sections: PropTypes.array,
   styles: PropTypes.object,
   themePath: PropTypes.string,
   type: PropTypes.string,
