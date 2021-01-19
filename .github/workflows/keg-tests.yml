@@ -1,5 +1,5 @@
 name: keg-tests
-on: pull_request
+on: push
 
 jobs:
   tests:
@@ -27,9 +27,18 @@ jobs:
         id: get-changed-repos
         run: bash scripts/ci/getChangedRepos.sh
 
-      - name: "Install Yarn Dependencies"
-        id: install-yarn-dependencies
-        run: bash scripts/ci/runYarnCmd.sh "install"
+      - name: "Get yarn cache directory"
+        id: get-yarn-cache-dir
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: "Cache yarn install"
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.get-changed-repos.outputs }}
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: "Run Repo Format"
         id: run-repo-format

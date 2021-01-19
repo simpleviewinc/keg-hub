@@ -17,11 +17,6 @@ keg_get_changed_repos(){
   # Loop over the repos and run the tests on them
   for REPO in "${REPOS[@]}"; do
 
-    # Don't run tests for keg-cli ( currently requires a docker setup )
-    if [[ "$REPO" == "keg-cli" || "$REPO" == "keg-regulator" ]]; then
-      continue
-    fi
-
     # Get the full repos path
     REPO_PATH="repos/${REPO##*/}"
 
@@ -30,6 +25,8 @@ keg_get_changed_repos(){
       if [[ "$FILE" =~ "$REPO_PATH" ]]; then
         # If there a matching path, write the repo path to the local change-repos.txt
         echo "$REPO_PATH" >> ../keg-changed-repos.txt
+        # Add each changed repo as an output
+        echo "::set-output name=$REPO_PATH::true"
         break
       fi
     done
