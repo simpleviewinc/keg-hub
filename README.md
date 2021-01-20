@@ -1,3 +1,8 @@
+![keg-build](https://github.com/simpleviewinc/keg-hub/workflows/keg-build/badge.svg)
+![keg-tests](https://github.com/simpleviewinc/keg-hub/workflows/keg-tests/badge.svg)
+
+<br/>
+
 # Keg-Hub
 
 ## Overview
