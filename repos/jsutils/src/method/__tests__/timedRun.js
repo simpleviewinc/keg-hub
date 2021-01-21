@@ -1,7 +1,12 @@
 import { timedRun } from '../timedRun'
 import { wait } from '../../promise/wait'
 
+const oldConsole = console.error
 describe('timedRun', () => {
+
+  beforeAll(() => (console.error = jest.fn()))
+  afterAll(() => (console.error = oldConsole))
+
   it('should handle nullish input', async done => {
     const [ result, duration ] = await timedRun(null)
     expect(result).toBeUndefined()
