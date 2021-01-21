@@ -1,6 +1,6 @@
 import { useState, useLayoutEffect, useCallback, useRef } from 'react'
 import { noOp, throttle } from '@keg-hub/jsutils'
-
+import { getScrollValues } from 'KegGetScrollValues'
 /**
  * Custom hook to track the browser windows scroll position
  * <br/> The onScroll prop should be a function on consistent identity for the throttle to work
@@ -24,17 +24,12 @@ export const useScroll = (onScroll = noOp, onScrollEnd = noOp, amount = 50) => {
 
   const eventHandler = useCallback(
     throttle((event, isEnd=false) => {
-      const scrollUpdate = {
-        scrollX: window.pageXOffset,
-        scrollY: window.pageYOffset,
-      }
+      const scrollUpdate = getScrollValues()
 
       isEnd
         ? onScrollEnd?.(event, scrollUpdate)
         : onScroll?.(event, scrollUpdate)
 
-      // may need to clear out timeoutRef.currrent when onScroll is called
-      timeoutRef.current = null
       setScroll(scrollUpdate)
     }, amount),
     [

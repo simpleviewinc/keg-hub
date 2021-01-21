@@ -81,6 +81,7 @@ module.exports = {
       {
         args: 'none',
         ignoreRestSiblings: true,
+        varsIgnorePattern: '_'
       },
     ],
     /* Jest */

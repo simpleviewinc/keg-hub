@@ -33,5 +33,6 @@
   "KegScrollClassName": "src/hooks/useScrollClassName/useScrollClassName${platform}.js",
   "KegUseScroll": "src/hooks/useScroll/useScroll${platform}.js",
   "KegGetElementLayout": "src/utils/components/getElementLayout${platform}.js",
-  "KegScrollList": "src/utils/components/scrollList${platform}.js"
+  "KegScrollList": "src/utils/components/scrollList${platform}.js",
+  "KegGetScrollValues": "src/utils/components/getScrollValues/getScrollValues${platform}.js"
 }

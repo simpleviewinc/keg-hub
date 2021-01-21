@@ -41,7 +41,7 @@ const useIndexedSections = (sections, indexBy) => {
 /**
  * Helper hook to allow tracking scrolling between section
  * @param {function} onScrollSectionChange - Consumer Callback for when a section is scrolled
- * @param {number} scrollOffset - Offset the final scroll position by some amount (px)
+ * @param {number} sectionChangeOffset - Offset the final scroll position by some amount (px)
  * @param {Object} sectionRefs - React ref of all Section divider components.
  * @param {Object} activeSection - Most recent Section in the view calling this hook 
  * @param {function} setActiveSection - Update which section is active
@@ -51,7 +51,7 @@ const useIndexedSections = (sections, indexBy) => {
  */
 const useSectionChangeOnScroll = (
   onScrollSectionChange,
-  scrollOffset,
+  sectionChangeOffset,
   activeSection,
   setActiveSection,
   sectionRefs,
@@ -59,46 +59,72 @@ const useSectionChangeOnScroll = (
 ) => {
   useScroll(
     null,
-    useCallback(
-      (event, { scrollX, scrollY }) => {
-        if (!onScrollSectionChange || isScrollingRef.current) return
-
-        // Subtract the custom offset to the scroll position
-        // Because offset should be relative to the element, not the scroll pos
-        const scrollLoc = scrollY - scrollOffset
-
-        // Loop the sections can check their position against the scroll position
-        // Find closest section that's more then the current scroll position
-        const currentSection = Object.entries(sectionRefs.current).reduce(
-          (foundSection, [ index, sectionData ]) => {
-            const checkTop = sectionData?.layout?.top
-            const foundTop = foundSection?.layout?.top
-
-            if (!foundSection) foundSection = sectionData
-            else if (scrollLoc >= checkTop && foundTop < checkTop)
-              foundSection = sectionData
-            else if (foundTop > scrollLoc && foundTop > checkTop)
-              foundSection = sectionData
-
-            return foundSection
-          },
-          false
-        )
-
-        if (!currentSection || currentSection.index === activeSection) return
-
-        checkCall(onScrollSectionChange, currentSection.index)
-        setActiveSection(currentSection.index)
-      },
-      [
-        activeSection,
-        setActiveSection,
-        onScrollSectionChange,
-        sectionRefs.current,
-        isScrollingRef.current,
-      ]
-    )
+    useCallback((__, scrollUpdate) => calculateActiveSection({
+      onScrollSectionChange,
+      sectionChangeOffset,
+      activeSection,
+      setActiveSection,
+      sectionRefs,
+      isScrollingRef,
+      scrollUpdate
+    }))
   )
+}
+
+/**
+ * Calculates and sets the active section based on current scroll value
+ * @param {Object} props 
+ * @param {function} props.onScrollSectionChange - Consumer Callback for when a section is scrolled
+ * @param {number} props.sectionChangeOffset - Offset the final scroll position by some amount (px)
+ * @param {Object} props.sectionRefs - React ref of all Section divider components.
+ * @param {Object} props.activeSection - Most recent Section in the view calling this hook 
+ * @param {function} props.setActiveSection - Update which section is active
+ * @param {Object} props.isScrollingRef - React ref to track if we are scrolling
+ * @param {Object} props.scrollUpdate - contains current scrollX and scrollY values {scrollX, scrollY}
+ * 
+ * @returns {Void}
+ */
+const calculateActiveSection = (props) => {
+  const {
+    onScrollSectionChange,
+    sectionChangeOffset,
+    activeSection,
+    setActiveSection,
+    sectionRefs,
+    isScrollingRef,
+    scrollUpdate
+  } = props
+
+  if (!onScrollSectionChange || isScrollingRef.current || !scrollUpdate) return
+
+  const { scrollY } = scrollUpdate
+  // Subtract the custom offset to the scroll position
+  // Because offset should be relative to the element, not the scroll pos
+  const scrollLoc = scrollY - sectionChangeOffset
+
+  // Loop the sections can check their position against the scroll position
+  // Find closest section that's more then the current scroll position
+  const currentSection = Object.entries(sectionRefs.current).reduce(
+    (foundSection, [ __, sectionData ]) => {
+      const checkTop = sectionData?.layout?.top
+      const foundTop = foundSection?.layout?.top
+
+      if (
+        !foundSection ||
+        (scrollLoc >= checkTop && foundTop < checkTop) ||
+        (foundTop > scrollLoc && foundTop > checkTop)
+      )
+        foundSection = sectionData
+
+      return foundSection
+    },
+    false
+  )
+
+  if (!currentSection || currentSection.index === activeSection) return
+
+  checkCall(onScrollSectionChange, currentSection.index)
+  setActiveSection(currentSection.index)
 }
 
 /**
@@ -317,6 +343,36 @@ export const SectionList = React.forwardRef((props, ref) => {
   const [ activeSection, setActiveSection ] = useState(
     initialSection || get(indexedSections, '0.__kegIndex')
   )
+
+  const [sectionsContent, setSectionsContent] = useState(sections)
+
+  useEffect(() => {
+    if (sections === sectionsContent) return
+    // if the section contents changes without scrolling, 
+    // we want to make sure we update the activeSection accordingly
+    const scrollUpdate = {
+      scrollY: window.pageYOffset
+    }
+    calculateActiveSection({
+      onScrollSectionChange,
+      sectionChangeOffset,
+      activeSection,
+      setActiveSection,
+      sectionRefs,
+      isScrollingRef,
+      scrollUpdate
+    })
+
+    setSectionsContent(sections)
+  }, [
+    sections,
+    onScrollSectionChange,
+    sectionChangeOffset,
+    activeSection,
+    setActiveSection,
+    sectionRefs,
+    isScrollingRef
+  ])
 
   const onSectionChangeAction = useSectionChange(
     noSectionHeaderScroll !== true,
