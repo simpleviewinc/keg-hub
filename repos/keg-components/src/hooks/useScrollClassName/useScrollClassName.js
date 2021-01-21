@@ -50,7 +50,7 @@ export const useScrollClassName = (
           )
       }
 
-      handleRefUpdate(ref, scrollResponder)
+      handleRefUpdate(ref, nativeObject)
     },
     [ defClass, className.join(' '), ref ]
   )

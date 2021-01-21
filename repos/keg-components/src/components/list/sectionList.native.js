@@ -58,6 +58,7 @@ const useSectionChangeOnScroll = (
   isScrollingRef
 ) => {
   useScroll(
+    null,
     useCallback(
       (event, { scrollX, scrollY }) => {
         if (!onScrollSectionChange || isScrollingRef.current) return

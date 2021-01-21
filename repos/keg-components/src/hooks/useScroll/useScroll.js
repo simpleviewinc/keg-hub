@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useCallback } from 'react'
+import { useState, useLayoutEffect, useCallback, useRef } from 'react'
 import { noOp, throttle } from '@keg-hub/jsutils'
 
 /**
@@ -9,38 +9,60 @@ import { noOp, throttle } from '@keg-hub/jsutils'
  * @example
  * const [{ scrollX, scrollY }] = useScroll()
  * @param {function} [onScroll] - Function called when the scroll event fires
+ * @param {function} [onScrollEnd] - Function called at the end of the scroll event
  * @param {number} [amount=50] - Throttle amount for the scrollHandler callback
  *
  * @returns {Object} The current scrollX and scrollY positions
  */
-export const useScroll = (onScroll = noOp, amount = 50) => {
+export const useScroll = (onScroll = noOp, onScrollEnd = noOp, amount = 50) => {
   const [ scroll, setScroll ] = useState({
     scrollX: 0,
     scrollY: 0,
   })
 
+  const timeoutRef = useRef(null)
+
   const eventHandler = useCallback(
-    throttle(event => {
+    throttle((event, isEnd=false) => {
       const scrollUpdate = {
         scrollX: window.pageXOffset,
         scrollY: window.pageYOffset,
       }
 
-      onScroll(event, scrollUpdate)
+      isEnd
+        ? onScrollEnd?.(event, scrollUpdate)
+        : onScroll?.(event, scrollUpdate)
+
+      // may need to clear out timeoutRef.currrent when onScroll is called
+      timeoutRef.current = null
       setScroll(scrollUpdate)
     }, amount),
     [
       amount,
       onScroll,
+      onScrollEnd,
       setScroll,
     ]
   )
 
-  useLayoutEffect(() => {
-    window.addEventListener('scroll', eventHandler)
+  const handlerTimeout = useCallback((event) => {
+    if(timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current)       
+    }
+    timeoutRef.current = setTimeout(() => {
+      eventHandler(event, true)
+    }, 3 * amount)
 
-    return () => window.removeEventListener('scroll', eventHandler)
-  }, [eventHandler])
+    eventHandler(event)
+  }, [amount, timeoutRef && timeoutRef.current, eventHandler])
+
+  
+
+  useLayoutEffect(() => {
+    window.addEventListener('scroll', handlerTimeout)
+
+    return () => window.removeEventListener('scroll', handlerTimeout)
+  }, [handlerTimeout])
 
   return scroll
 }
