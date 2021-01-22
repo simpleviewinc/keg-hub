@@ -29,5 +29,3 @@ else
   yarn $KEG_EXEC_CMD
 
 fi
-
-
