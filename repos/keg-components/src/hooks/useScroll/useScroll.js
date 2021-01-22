@@ -23,7 +23,7 @@ export const useScroll = (onScroll = noOp, onScrollEnd = noOp, amount = 50) => {
   const timeoutRef = useRef(null)
 
   const eventHandler = useCallback(
-    throttle((event, isEnd=false) => {
+    throttle((event, isEnd = false) => {
       const scrollUpdate = getScrollValues()
 
       isEnd
@@ -32,26 +32,22 @@ export const useScroll = (onScroll = noOp, onScrollEnd = noOp, amount = 50) => {
 
       setScroll(scrollUpdate)
     }, amount),
-    [
-      amount,
-      onScroll,
-      onScrollEnd,
-      setScroll,
-    ]
+    [ amount, onScroll, onScrollEnd, setScroll ]
   )
 
-  const handlerTimeout = useCallback((event) => {
-    if(timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current)       
-    }
-    timeoutRef.current = setTimeout(() => {
-      eventHandler(event, true)
-    }, 3 * amount)
+  const handlerTimeout = useCallback(
+    event => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
+        eventHandler(event, true)
+      }, 3 * amount)
 
-    eventHandler(event)
-  }, [amount, timeoutRef && timeoutRef.current, eventHandler])
-
-  
+      eventHandler(event)
+    },
+    [ amount, timeoutRef && timeoutRef.current, eventHandler ]
+  )
 
   useLayoutEffect(() => {
     window.addEventListener('scroll', handlerTimeout)

@@ -43,7 +43,7 @@ const useIndexedSections = (sections, indexBy) => {
  * @param {function} onScrollSectionChange - Consumer Callback for when a section is scrolled
  * @param {number} sectionChangeOffset - Offset the final scroll position by some amount (px)
  * @param {Object} sectionRefs - React ref of all Section divider components.
- * @param {Object} activeSection - Most recent Section in the view calling this hook 
+ * @param {Object} activeSection - Most recent Section in the view calling this hook
  * @param {function} setActiveSection - Update which section is active
  * @param {Object} isScrollingRef - React ref to track if we are scrolling
  *
@@ -59,32 +59,34 @@ const useSectionChangeOnScroll = (
 ) => {
   useScroll(
     null,
-    useCallback((__, scrollUpdate) => calculateActiveSection({
-      onScrollSectionChange,
-      sectionChangeOffset,
-      activeSection,
-      setActiveSection,
-      sectionRefs,
-      isScrollingRef,
-      scrollUpdate
-    }))
+    useCallback((__, scrollUpdate) =>
+      calculateActiveSection({
+        onScrollSectionChange,
+        sectionChangeOffset,
+        activeSection,
+        setActiveSection,
+        sectionRefs,
+        isScrollingRef,
+        scrollUpdate,
+      })
+    )
   )
 }
 
 /**
  * Calculates and sets the active section based on current scroll value
- * @param {Object} props 
+ * @param {Object} props
  * @param {function} props.onScrollSectionChange - Consumer Callback for when a section is scrolled
  * @param {number} props.sectionChangeOffset - Offset the final scroll position by some amount (px)
  * @param {Object} props.sectionRefs - React ref of all Section divider components.
- * @param {Object} props.activeSection - Most recent Section in the view calling this hook 
+ * @param {Object} props.activeSection - Most recent Section in the view calling this hook
  * @param {function} props.setActiveSection - Update which section is active
  * @param {Object} props.isScrollingRef - React ref to track if we are scrolling
  * @param {Object} props.scrollUpdate - contains current scrollX and scrollY values {scrollX, scrollY}
- * 
+ *
  * @returns {Void}
  */
-const calculateActiveSection = (props) => {
+const calculateActiveSection = props => {
   const {
     onScrollSectionChange,
     sectionChangeOffset,
@@ -92,7 +94,7 @@ const calculateActiveSection = (props) => {
     setActiveSection,
     sectionRefs,
     isScrollingRef,
-    scrollUpdate
+    scrollUpdate,
   } = props
 
   if (!onScrollSectionChange || isScrollingRef.current || !scrollUpdate) return
@@ -344,14 +346,14 @@ export const SectionList = React.forwardRef((props, ref) => {
     initialSection || get(indexedSections, '0.__kegIndex')
   )
 
-  const [sectionsContent, setSectionsContent] = useState(sections)
+  const [ sectionsContent, setSectionsContent ] = useState(sections)
 
   useEffect(() => {
     if (sections === sectionsContent) return
-    // if the section contents changes without scrolling, 
+    // if the section contents changes without scrolling,
     // we want to make sure we update the activeSection accordingly
     const scrollUpdate = {
-      scrollY: window.pageYOffset
+      scrollY: window.pageYOffset,
     }
     calculateActiveSection({
       onScrollSectionChange,
@@ -360,7 +362,7 @@ export const SectionList = React.forwardRef((props, ref) => {
       setActiveSection,
       sectionRefs,
       isScrollingRef,
-      scrollUpdate
+      scrollUpdate,
     })
 
     setSectionsContent(sections)
@@ -371,7 +373,7 @@ export const SectionList = React.forwardRef((props, ref) => {
     activeSection,
     setActiveSection,
     sectionRefs,
-    isScrollingRef
+    isScrollingRef,
   ])
 
   const onSectionChangeAction = useSectionChange(
@@ -455,15 +457,15 @@ SectionList.propTypes = {
   /**
    * Render prop to render the list header
    */
-  renderListHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  renderListHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func ]),
   /**
    * Render prop to render the header of each section
    */
-  renderSectionHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  renderSectionHeader: PropTypes.oneOfType([ PropTypes.node, PropTypes.func ]),
   /**
    * Render prop to render each item in each section
    */
-  renderItem: PropTypes.oneOfType([ PropTypes.node, PropTypes.func]),
+  renderItem: PropTypes.oneOfType([ PropTypes.node, PropTypes.func ]),
   /**
    * Offset the scroll position by some amount (px) when section header scrolling is enabled
    */

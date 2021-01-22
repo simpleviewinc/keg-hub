@@ -9,8 +9,8 @@ require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-6b6da47b.js');
-var view_native = require('./view.native-e2bb0f89.js');
+require('./useClassName-a237c005.js');
+var view_native = require('./view.native-ab314649.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 
 var View = styleInjector.StyleInjector(view_native.View, {

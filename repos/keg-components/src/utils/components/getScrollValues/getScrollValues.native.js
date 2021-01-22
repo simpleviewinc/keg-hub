@@ -1,5 +1,3 @@
-
-
 /**
  * Placeholder helper for non-web environments
  *

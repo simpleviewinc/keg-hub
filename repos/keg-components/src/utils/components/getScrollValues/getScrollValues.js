@@ -1,6 +1,5 @@
-
 /**
- * 
+ *
  * @returns {Object} - scroll location values
  */
 export const getScrollValues = () => {

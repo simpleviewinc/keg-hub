@@ -12,7 +12,7 @@ require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-6b6da47b.js');
+require('./useClassName-a237c005.js');
 require('@keg-hub/re-theme/styleInjector');
 var reTheme = require('@keg-hub/re-theme');
 var touchable = require('./touchable.js');

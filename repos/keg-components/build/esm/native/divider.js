@@ -7,18 +7,19 @@ import { V as View } from './view.native-54e7e7ef.js';
 import { useTheme } from '@keg-hub/re-theme';
 import { u as useClassList } from './useClassList.native-70068878.js';
 
-var Divider = function Divider(_ref) {
+var Divider = React__default.forwardRef(function (_ref, ref) {
   var className = _ref.className,
       style = _ref.style,
       props = _objectWithoutProperties(_ref, ["className", "style"]);
   var theme = useTheme();
   return React__default.createElement(View, _extends({
+    ref: ref,
     accessibilityRole: "separator",
     className: useClassList()
   }, props, {
     style: [get(theme, ['divider']), style]
   }));
-};
+});
 
 export { Divider };
 //# sourceMappingURL=divider.js.map

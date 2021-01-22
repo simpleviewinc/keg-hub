@@ -1,0 +1,1 @@
+{"version":3,"file":"getScrollValues.js","sources":["../../../src/utils/components/getScrollValues/getScrollValues.native.js"],"sourcesContent":["/**\n * Placeholder helper for non-web environments\n *\n * @returns {Object} - scroll location values\n */\nexport const getScrollValues = () => {}\n"],"names":["getScrollValues"],"mappings":";;;;IAKaA,eAAe,GAAG,SAAlBA,eAAkB,GAAM;;;;"}

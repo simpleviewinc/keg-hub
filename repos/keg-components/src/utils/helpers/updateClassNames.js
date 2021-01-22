@@ -22,11 +22,11 @@ export const updateClassNames = (element, classesRef, defClass, className) => {
 
   // Loop over the previous classes, and see if any have been removed
   classesRef.current.map(
-    cls => cls &&
+    cls =>
+      cls &&
       classArr.indexOf(cls) === -1 &&
       element.classList.remove(...cls.split(' '))
   )
-
 
   // Update our ref with the new classes
   // Which will allows us to check them for updates on next render
