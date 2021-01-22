@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import { Text } from '../../typography'
 import { useThemePath } from '../../../hooks'
 import { useThemeTypeAsClass } from 'KegTypeAsClass'
-import { get, isStr, toBool, checkCall } from '@keg-hub/jsutils'
+import { get, isStr, toBool, checkCall, noOp } from '@keg-hub/jsutils'
 import { getOnChangeHandler, getChecked, renderFromType } from '../../../utils'
 import { useClassList } from 'KegClassList'
 
@@ -232,9 +232,10 @@ export const CheckboxWrapper = forwardRef((props, ref) => {
   )
 
   // returns the right props to use
-  const pressHandlerProp = canUseHandler
-    ? getOnChangeHandler(isWeb, pressHandler)
-    : undefined
+  const pressHandlerProp = getOnChangeHandler(
+    isWeb,
+    canUseHandler ? pressHandler : noOp
+  )
 
   const ChildrenView = children && (
     <View

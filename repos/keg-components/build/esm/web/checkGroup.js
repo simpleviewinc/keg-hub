@@ -28,7 +28,7 @@ import { u as useClassList } from './useClassList-eea8a571.js';
 import './useThemeTypeAsClass-cd54e95a.js';
 import 'react-native-svg';
 import './svgIcon-8c133388.js';
-import './checkbox.wrapper-9afaa76e.js';
+import './checkbox.wrapper-ac3410f9.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -40,7 +40,7 @@ import './label.js';
 import './p.js';
 import './subtitle.js';
 import './input.web-ca8fec4c.js';
-import { C as Checkbox } from './checkbox-d1e07fde.js';
+import { C as Checkbox } from './checkbox-f2bcbc79.js';
 
 var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,

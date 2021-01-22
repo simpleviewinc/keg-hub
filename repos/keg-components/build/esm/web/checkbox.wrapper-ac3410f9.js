@@ -1,17 +1,18 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { toBool, checkCall, get, isStr } from '@keg-hub/jsutils';
+import { e as _extends, d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { toBool, checkCall, get, isStr, noOp } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
-import React__default, { forwardRef, useState, useCallback, useImperativeHandle, useMemo } from 'react';
+import React__default, { createElement, forwardRef, useState, useCallback, useImperativeHandle, useMemo } from 'react';
 import { renderFromType } from './renderFromType.js';
 import { getOnChangeHandler } from './getOnChangeHandler.js';
 import { getChecked } from './getChecked.js';
 import 'react-native';
-import { V as View } from './view.native-54e7e7ef.js';
+import { V as View } from './view-216fa8c1.js';
 import { Text } from './text.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList.native-70068878.js';
-import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
+import { u as useClassList } from './useClassList-eea8a571.js';
+import { u as useThemeTypeAsClass } from './useThemeTypeAsClass-cd54e95a.js';
+import { S as SvgIcon } from './svgIcon-8c133388.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -22,6 +23,13 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
+
+var Check = function Check(props) {
+  return createElement(SvgIcon, _extends({}, props, {
+    viewBox: "0 0 512 512",
+    delta: "M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+  }));
+};
 
 var useCheckedState = function useCheckedState(isChecked, themeStyles) {
   return useMemo(function () {
@@ -124,8 +132,8 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
   var themeStyles = useThemePath(elThemePath, styles);
   var disabledStyles = useThemePath("form.".concat(elType, ".disabled"), themeStyles);
   var activeStyles = useCheckedState(isChecked, canUseHandler ? themeStyles : disabledStyles);
-  var typeClassName = useThemeTypeAsClass();
-  var pressHandlerProp = canUseHandler ? getOnChangeHandler(isWeb, pressHandler) : undefined;
+  var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-checkbox', className);
+  var pressHandlerProp = getOnChangeHandler(isWeb, canUseHandler ? pressHandler : noOp);
   var ChildrenView = children && React__default.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
@@ -137,7 +145,7 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
     className: typeClassName,
     style: activeStyles.main
   }, LeftComponent && React__default.createElement(SideComponent, {
-    className: useClassList(),
+    className: useClassList('keg-checkbox-left', leftClassName),
     Component: LeftComponent,
     style: activeStyles.content.left,
     onPress: allowAdjacentPress && canUseHandler && pressHandler
@@ -150,12 +158,12 @@ var CheckboxWrapper = forwardRef(function (props, ref) {
     styles: activeStyles.content,
     CheckIcon: CheckIcon
   }, getChecked(isWeb, isChecked), pressHandlerProp)), RightComponent && React__default.createElement(SideComponent, {
-    className: useClassList(),
+    className: useClassList('keg-checkbox-right', rightClassName),
     Component: RightComponent,
     style: activeStyles.content.right,
     onPress: allowAdjacentPress && canUseHandler && pressHandler
   }));
 });
 
-export { CheckboxWrapper as C };
-//# sourceMappingURL=checkbox.wrapper-2b4c20ad.js.map
+export { CheckboxWrapper as C, Check as a };
+//# sourceMappingURL=checkbox.wrapper-ac3410f9.js.map

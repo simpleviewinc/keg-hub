@@ -3,7 +3,7 @@ import { noPropObj } from '@keg-hub/jsutils';
 import React__default, { useMemo, forwardRef } from 'react';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import { V as View } from './view-216fa8c1.js';
-import { C as CheckboxWrapper, a as Check } from './checkbox.wrapper-9afaa76e.js';
+import { C as CheckboxWrapper, a as Check } from './checkbox.wrapper-ac3410f9.js';
 import { I as Input$1 } from './input.web-ca8fec4c.js';
 
 var checkBoxStyles = {
@@ -80,4 +80,4 @@ var Checkbox = forwardRef(function (props, ref) {
 Checkbox.propTypes = _objectSpread2({}, CheckboxWrapper.propTypes);
 
 export { Checkbox as C };
-//# sourceMappingURL=checkbox-d1e07fde.js.map
+//# sourceMappingURL=checkbox-f2bcbc79.js.map
