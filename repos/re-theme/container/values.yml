@@ -7,22 +7,22 @@ env:
   # Example command to link the app => `keg tap link kee`
   KEG_DOCKER_FILE: "{{ cli.taps.links.retheme }}/container/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.taps.links.retheme }}/container/values.yml"
+  KEG_MUTAGEN_FILE: "{{ cli.taps.links.retheme }}/container/values.yml"
   KEG_COMPOSE_DEFAULT: "{{ cli.taps.links.retheme }}/container/docker-compose.yml"
 
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
   KEG_CONTEXT_PATH: "{{ cli.taps.links.retheme }}"
 
+  # Image to use when building retheme
+  KEG_BASE_IMAGE: ghcr.io/simpleviewinc/tap:master
 
-  # --- GIT ENV CONTEXT --- #
-
-  GIT_RETHEME_URL: "{{ cli.git.orgUrl }}/re-theme.git"
-
+  # Image to use when running retheme
+  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/retheme:master
 
   # --- DOCKER ENV CONTEXT --- #
 
   # Default location of the app in the docker container
   DOC_APP_PATH: /keg/tap
-  DOC_RETHEME_PATH: /keg/tap
   DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
@@ -35,5 +35,5 @@ env:
   # IMAGE and CONTAINER_NAME should be the same
   IMAGE: retheme
   CONTAINER_NAME: retheme
-  VERSION: "0.0.1"
+  VERSION: 1.0.0
   CHOKIDAR_USEPOLLING: 1
