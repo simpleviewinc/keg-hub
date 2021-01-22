@@ -7,6 +7,7 @@ import { icon } from './icon'
 import { image } from './image'
 import { indicator } from './indicator'
 import { link } from './link'
+import { list } from './list'
 import { loading } from './loading'
 import { section } from './section'
 import { textBox } from './textBox'
@@ -25,6 +26,7 @@ export const components = config => {
     ...image(config),
     ...indicator(config),
     ...link(config),
+    ...list(config),
     ...loading(config),
     ...section(config),
     ...textBox(config),

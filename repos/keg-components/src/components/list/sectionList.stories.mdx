@@ -1,0 +1,70 @@
+<!--- SectionList.stories.mdx -->
+
+import { Story, Meta, Preview, Props } from '@storybook/addon-docs/blocks'
+
+import { SectionList } from './sectionList'
+import {SectionList as SectionListNative} from './sectionList.native.js'
+import {Basic, WithStates} from './sectionList.examples.js'
+
+<Meta title="Components/Lists/SectionList" component={SectionList}/>
+
+# SectionList
+
+Helper component for rendering sectioned lists, with a few extras.
+Utilizes react-native [SectionList](https://reactnative.dev/docs/sectionlist) under the hood
+
+## Examples
+
+### Basic
+<Preview>
+  <Story name="Basic">
+    <Basic />
+  </Story>
+</Preview>
+
+```js
+import React from 'react'
+import { Divider, H5, H3, P, SectionList, View } from '@keg-hub/keg-components'
+
+const sectionData = [
+  {
+    title: 'Section 1 Title',
+    data: [ 'First item in section 1' ],
+  },
+  // ...more sections
+]
+
+export const CustomList = () => {
+  return (
+    <SectionList
+      sections={sectionData}
+      renderListHeader={() => (
+        <View>
+          <H3>Main List Header</H3>
+        </View>
+      )}
+      renderSectionHeader={({ section }) => (
+        <View>
+          <H5>{ section.title }</H5>
+          <Divider />
+        </View>
+      )}
+      renderItem={({ item }) => {
+        return (
+          <View>
+            <P>{ item }</P>
+          </View>
+        )
+      }}
+    />
+  )
+}
+```
+
+
+## Props
+Supports all props on [SectionList](https://reactnative.dev/docs/sectionlist#props) 
+along with:
+
+<Props of={SectionListNative} />
+
