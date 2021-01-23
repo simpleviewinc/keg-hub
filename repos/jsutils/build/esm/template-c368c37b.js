@@ -1,12 +1,10 @@
-'use strict';
-
-var isArr = require('./isArr-39234014.js');
-var isFunc = require('./isFunc-f93803cb.js');
-var isStr = require('./isStr-8a57710e.js');
-var toStr$1 = require('./toStr-8e499966.js');
-var isNonNegative = require('./isNonNegative-9959647c.js');
-var isColl = require('./isColl-5757310a.js');
-var get = require('./get-bfcf4646.js');
+import { i as isArr } from './isArr-a4420764.js';
+import { i as isFunc } from './isFunc-40ceeef8.js';
+import { i as isStr } from './isStr-481ce69b.js';
+import { t as toStr$1 } from './toStr-0e5fe94c.js';
+import { i as isNonNegative } from './isNonNegative-76ec0014.js';
+import { i as isColl } from './isColl-15a1452b.js';
+import { g as get } from './get-8e62f069.js';
 
 const buildPath = (...args) => {
   const built = args.reduce((path, arg) => {
@@ -17,8 +15,8 @@ const buildPath = (...args) => {
 };
 
 const mapString = (str, charMapper) => {
-  if (!isStr.isStr(str)) return str;
-  if (!isFunc.isFunc(charMapper)) return str;
+  if (!isStr(str)) return str;
+  if (!isFunc(charMapper)) return str;
   let result = "";
   for (const char of str) {
     result += charMapper(char);
@@ -31,7 +29,7 @@ const isLowerCase = str => str === str.toLowerCase();
 const isUpperCase = str => str === str.toUpperCase();
 
 const delimitString = (str, delimiter, delimiters = ['-', '_', ' ']) => {
-  if (!isStr.isStr(str)) return str;
+  if (!isStr(str)) return str;
   const isDelimiter = c => delimiters.some(del => del === c);
   let prevChar = '_';
   return mapString(str, char => {
@@ -54,7 +52,7 @@ const snakeCase = str => {
 };
 
 const capitalize = (str, lowercaseTail = true) => {
-  if (!isStr.isStr(str) || !str[0]) return str;
+  if (!isStr(str) || !str[0]) return str;
   const tail = lowercaseTail ? str.slice(1).toLowerCase() : str.slice(1);
   return `${str[0].toUpperCase()}${tail}`;
 };
@@ -83,12 +81,12 @@ const camelCasePath = path => {
 };
 
 const containsStr = (str, substring, fromIndex) => {
-  str = !isStr.isStr(str) && toStr$1.toStr(str) || str;
-  substring = !isStr.isStr(substring) && toStr$1.toStr(substring) || substring;
+  str = !isStr(str) && toStr$1(str) || str;
+  substring = !isStr(substring) && toStr$1(substring) || substring;
   return str.indexOf(substring, fromIndex) !== -1;
 };
 
-const eitherStr = (str1, str2) => isStr.isStr(str1) && str1 || str2;
+const eitherStr = (str1, str2) => isStr(str1) && str1 || str2;
 
 const uppercasePattern = /[A-Z]/g;
 const msPattern = /^ms-/;
@@ -101,7 +99,7 @@ const hyphenator = rule => {
 };
 
 const hashString = (str, maxLength) => {
-  if (!isStr.isStr(str) || str.length == 0) return 0;
+  if (!isStr(str) || str.length == 0) return 0;
   str = str.split('').reverse().join('');
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -109,17 +107,17 @@ const hashString = (str, maxLength) => {
     hash = (hash << 5) - hash + char;
     hash = `${Math.abs(hash & hash)}`;
   }
-  return isNonNegative.isNonNegative(maxLength) ? hash.slice(0, maxLength) : hash;
+  return isNonNegative(maxLength) ? hash.slice(0, maxLength) : hash;
 };
 
 const isEmail = str => {
-  if (!str || !isStr.isStr(str)) return false;
+  if (!str || !isStr(str)) return false;
   const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   return Boolean(regex.test(str));
 };
 
 const isPhone = str => {
-  if (!str || !isStr.isStr(str)) return false;
+  if (!str || !isStr(str)) return false;
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
   return Boolean(regex.test(str)) && str.replace(/\D/g, '').length < 11;
 };
@@ -130,7 +128,7 @@ const isUrl = str => {
 };
 
 const isUuid = str => {
-  if (!str || !isStr.isStr(str)) return false;
+  if (!str || !isStr(str)) return false;
   const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
   return Boolean(regex.test(str));
 };
@@ -155,61 +153,35 @@ const singular = str => {
 };
 
 const styleCase = str => {
-  if (!isStr.isStr(str)) return str;
+  if (!isStr(str)) return str;
   const cased = camelCase(str);
   return `${cased[0].toLowerCase()}${cased.slice(1)}`;
 };
 
-const trainCase = str => isStr.isStr(str) && str.split(/(?=[A-Z])|[\s_-]/gm).join('-').toLowerCase() || str;
+const trainCase = str => isStr(str) && str.split(/(?=[A-Z])|[\s_-]/gm).join('-').toLowerCase() || str;
 
 const wordCaps = str => {
-  if (!isStr.isStr(str)) return str;
+  if (!isStr(str)) return str;
   let cleaned = cleanStr(str);
   return cleaned.split(' ').map(word => word && capitalize(word) || '').join(' ');
 };
 
 const spaceJoin = (original, toAdd) => {
-  toAdd = isArr.isArr(toAdd) ? toAdd : [toAdd];
+  toAdd = isArr(toAdd) ? toAdd : [toAdd];
   return toAdd.reduce((joined, item) => {
-    return isStr.isStr(item) ? `${joined ? joined + ' ' : ''}${item}`.trim() : joined;
-  }, isStr.isStr(original) ? original : '');
+    return isStr(item) ? `${joined ? joined + ' ' : ''}${item}`.trim() : joined;
+  }, isStr(original) ? original : '');
 };
 
 const template = (tempStr, data, fallback = '') => {
-  data = isColl.isColl(data) && data || {};
-  const regex = template.regex || /\${([^{]+[^}])}/g;
-  return isStr.isStr(tempStr) ? tempStr.replace(regex, (match, exact) => {
+  data = isColl(data) && data || {};
+  const regex = template.regex || /\${(.*?)\}/g;
+  return isStr(tempStr) ? tempStr.replace(regex, (match, exact) => {
     const path = (exact || match.substr(2, match.length - 3)).trim();
-    const replaceWith = get.get(data, path, fallback);
-    return isFunc.isFunc(replaceWith) ? replaceWith(data, path, fallback) : replaceWith;
+    const replaceWith = get(data, path, fallback);
+    return isFunc(replaceWith) ? replaceWith(data, path, fallback) : replaceWith;
   }) : console.error(`template requires a string as the first argument`) || tempStr;
 };
 
-exports.buildPath = buildPath;
-exports.camelCase = camelCase;
-exports.camelCasePath = camelCasePath;
-exports.capitalize = capitalize;
-exports.cleanStr = cleanStr;
-exports.containsStr = containsStr;
-exports.delimitString = delimitString;
-exports.eitherStr = eitherStr;
-exports.hashString = hashString;
-exports.hyphenator = hyphenator;
-exports.isEmail = isEmail;
-exports.isLowerCase = isLowerCase;
-exports.isPhone = isPhone;
-exports.isUpperCase = isUpperCase;
-exports.isUrl = isUrl;
-exports.isUuid = isUuid;
-exports.mapString = mapString;
-exports.parseJSON = parseJSON;
-exports.plural = plural;
-exports.removeDot = removeDot;
-exports.singular = singular;
-exports.snakeCase = snakeCase;
-exports.spaceJoin = spaceJoin;
-exports.styleCase = styleCase;
-exports.template = template;
-exports.trainCase = trainCase;
-exports.wordCaps = wordCaps;
-//# sourceMappingURL=template-a93b81d1.js.map
+export { template as A, cleanStr as a, buildPath as b, camelCase as c, delimitString as d, capitalize as e, camelCasePath as f, containsStr as g, eitherStr as h, hyphenator as i, hashString as j, isEmail as k, isPhone as l, mapString as m, isUrl as n, isUuid as o, parseJSON as p, plural as q, removeDot as r, snakeCase as s, singular as t, styleCase as u, trainCase as v, wordCaps as w, isUpperCase as x, isLowerCase as y, spaceJoin as z };
+//# sourceMappingURL=template-c368c37b.js.map
