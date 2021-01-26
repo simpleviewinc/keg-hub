@@ -2591,15 +2591,15 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.1.0.tgz#c5330ae7d38e603d580fa8596a8ebb31be0e4909"
   integrity sha512-3ViC3u714kqg76ePFnSkZkSX8pnHzb31ltTADIO5f7tLm2Y9OcbtYWFrtDcH5RbP+Wmhyj43E2XYNTO4HHzdvA==
 
-"@keg-hub/keg-components@8.1.2":
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/@keg-hub/keg-components/-/keg-components-8.1.2.tgz#83deddcd58fdfbce27431258ccb36b4a82573c40"
-  integrity sha512-ZXls6AsuOQS9DKA8IhIpZq1/3B49CbciPiJLaMOl/5sdYMslW1eOkunNvWgUReTC50GDG/2BysHbtnggZppAMg==
+"@keg-hub/keg-components@8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/keg-components/-/keg-components-8.2.0.tgz#d1cc57940aafeab21122e12922f553bbb0b0f083"
+  integrity sha512-XB1AzG4GYE9RJR4AwkKYsIkQr8QX7rH3mVnkvp1HhOQRg1E8zvDHcYSshCA2y2bWsKdp31ztdM1rxjXpSFEsZA==
 
-"@keg-hub/re-theme@8.1.2":
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-8.1.2.tgz#a1eb4a58e7768ccb5fd629ee003ef2f2debeba86"
-  integrity sha512-BQvazwRdChZk/fpyCvmHZykeEpedOXhohp5pLa5NscT3zvQiiZSv6+ZX2KyfAWQ1gBSyJVgWdC+KACrK8eY3GA==
+"@keg-hub/re-theme@8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-8.2.0.tgz#959f0cfca7f471e0c183e80bc97773b2752595eb"
+  integrity sha512-kGZ+qSJ78D5XVrpAIk5cmAIBVAen5Mh8NoPmTffdWeKh7yfuHdwdda2ToU41GzHeab/oqpXXH/Ai8qLMkEHOVA==
 
 "@keg-hub/tap-resolver@7.0.0":
   version "7.0.0"

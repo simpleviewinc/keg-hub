@@ -13,6 +13,15 @@ describe('template', () => {
 
   })
 
+  it('should replace correct value on edge case: 2 closing brackets with content in between the last bracket ', () => {
+
+    const template = '${ who } don`t replace me}} in ${ where }'
+    const data = { who: 'goats', where: 'boats' }
+
+    expect(Str.template(template, data)).toEqual("goats don`t replace me}} in boats")
+
+  })
+
   it('should use the fallback when the value does not exist', () => {
 
     const template = '${ who } in ${ where }'

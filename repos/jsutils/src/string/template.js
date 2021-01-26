@@ -18,7 +18,7 @@ import { isStr } from './isStr'
  */
 export const template = (tempStr, data, fallback='') => {
   data = isColl(data) && data || {}
-  const regex = template.regex || /\${([^{]+[^}])}/g
+  const regex = template.regex || /\${(.*?)\}/g
 
   return isStr(tempStr)
     ? tempStr.replace(regex, (match, exact) => {

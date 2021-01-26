@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 require('./isArr-39234014.js');
 require('./isFunc-f93803cb.js');
-var template = require('./template-a93b81d1.js');
+var template = require('./template-28cf926a.js');
 var isStr = require('./isStr-8a57710e.js');
 var toStr$1 = require('./toStr-8e499966.js');
 require('./isNum-c7164b50.js');

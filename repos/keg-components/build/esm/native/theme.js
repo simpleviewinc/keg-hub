@@ -714,6 +714,41 @@ var link = function link() {
   };
 };
 
+var sectionDefault = {
+  main: {
+    overscrollBehavior: 'contain'
+  },
+  content: {
+    divider: {
+      mT: 10,
+      mB: 10
+    },
+    list: {},
+    hidden: {
+      opacity: 0,
+      maxH: 0,
+      overflow: 'hidden'
+    }
+  }
+};
+var sectionInit = function sectionInit() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
+  var defStyles = {
+    default: sectionDefault
+  };
+  var custom = get(config, 'list.section');
+  return checkCall(custom, defStyles) || deepMerge(defStyles, custom);
+};
+
+var list = function list(config) {
+  var section = sectionInit(config);
+  return {
+    list: {
+      section: section
+    }
+  };
+};
+
 var loading = function loading() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
   var _getThemeDefaults = getThemeDefaults(),
@@ -1056,7 +1091,7 @@ var textToggle = function textToggle() {
 };
 
 var components = function components(config) {
-  return _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), loading(config)), section(config)), textBox(config)), modal(config)), header(config)), textToggle(config));
+  return _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), list(config)), loading(config)), section(config)), textBox(config)), modal(config)), header(config)), textToggle(config));
 };
 
 var display = function display() {

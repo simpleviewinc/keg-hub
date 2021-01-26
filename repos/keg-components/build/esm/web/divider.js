@@ -5,25 +5,26 @@ import './ensureClassArray.js';
 import './handleRefUpdate.js';
 import './updateClassNames.js';
 import 'react-native';
-import './useClassName-a3859346.js';
-import './view.native-117494a9.js';
+import './useClassName-6851fdf6.js';
+import './view.native-5aeb3e53.js';
 import '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-216fa8c1.js';
+import { V as View } from './view-a64440c5.js';
 import { useTheme } from '@keg-hub/re-theme';
 import { u as useClassList } from './useClassList-eea8a571.js';
 
-var Divider = function Divider(_ref) {
+var Divider = React__default.forwardRef(function (_ref, ref) {
   var className = _ref.className,
       style = _ref.style,
       props = _objectWithoutProperties(_ref, ["className", "style"]);
   var theme = useTheme();
   return React__default.createElement(View, _extends({
+    ref: ref,
     accessibilityRole: "separator",
     className: useClassList('keg-divider', className)
   }, props, {
     style: [get(theme, ['divider']), style]
   }));
-};
+});
 
 export { Divider };
 //# sourceMappingURL=divider.js.map

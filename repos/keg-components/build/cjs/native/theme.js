@@ -718,6 +718,41 @@ var link = function link() {
   };
 };
 
+var sectionDefault = {
+  main: {
+    overscrollBehavior: 'contain'
+  },
+  content: {
+    divider: {
+      mT: 10,
+      mB: 10
+    },
+    list: {},
+    hidden: {
+      opacity: 0,
+      maxH: 0,
+      overflow: 'hidden'
+    }
+  }
+};
+var sectionInit = function sectionInit() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
+  var defStyles = {
+    default: sectionDefault
+  };
+  var custom = jsutils.get(config, 'list.section');
+  return jsutils.checkCall(custom, defStyles) || jsutils.deepMerge(defStyles, custom);
+};
+
+var list = function list(config) {
+  var section = sectionInit(config);
+  return {
+    list: {
+      section: section
+    }
+  };
+};
+
 var loading = function loading() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   var _getThemeDefaults = themeDefaults.getThemeDefaults(),
@@ -1060,7 +1095,7 @@ var textToggle = function textToggle() {
 };
 
 var components = function components(config) {
-  return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), loading(config)), section(config)), textBox(config)), modal(config)), header(config)), textToggle(config));
+  return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), list(config)), loading(config)), section(config)), textBox(config)), modal(config)), header(config)), textToggle(config));
 };
 
 var display = function display() {
