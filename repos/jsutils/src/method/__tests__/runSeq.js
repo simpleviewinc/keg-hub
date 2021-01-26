@@ -6,14 +6,14 @@ describe('runSeq', () => {
   beforeAll(() => (console.error = jest.fn()))
   afterAll(() => (console.error = oldConsole))
 
-  it('should validate input', async done => {
+  it('should validate input', async () => {
     const result = await runSeq(null)
     expect(console.error).toHaveBeenCalled()
     expect(result).toEqual([])
-    done()
+    // done()
   })
 
-  it('should run each function in sequence', async done => {
+  it('should run each function in sequence', async () => {
     const fns = [
       (index, results) => wait(30).then(_ => ({ index, results })),
       (index, results) => wait(30).then(_ => ({ index, results })),
@@ -35,20 +35,20 @@ describe('runSeq', () => {
       }
     ]
 
-    const results = await runSeq(fns, true)
+    const results = await runSeq(fns, { cloneResults: true })
 
     ;[ 0, 1, 2 ].map(index =>
       expect(results[index])
         .toMatchObject(expectedResults[index])
     )
-
-
-    done()
   })
 
-  it('should return undefined at the index of any non-function', async done => {
-    const results = await runSeq([ 'not a function', 123 ])
+  it('should return the returnOriginal item at the index of any non-function', async () => {
+    const input = [ 'not a function', 123 ]
+    let results = await runSeq(input, { returnOriginal: false })
     results.map(result => expect(result).toBeUndefined())
-    done() 
+
+    results = await runSeq(input, { returnOriginal: true })
+    results.map((result, idx) => expect(result).toEqual(input[idx]))
   })
 })
