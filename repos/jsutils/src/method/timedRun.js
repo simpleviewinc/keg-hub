@@ -1,7 +1,7 @@
 /** @module functions */
 
-const { validate } = require('../validation/validate')
-const { isFunc } = require('./isFunc')
+import { validate } from '../validation/validate'
+import { isFunc } from './isFunc'
 
 /**
  * Executes and times the function `fn`.

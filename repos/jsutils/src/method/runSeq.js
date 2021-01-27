@@ -1,9 +1,9 @@
 /** @module functions */
 
-const { validate } = require('../validation/validate')
-const { isArr } = require('../array/isArr')
-const { isFunc } = require('./isFunc')
-const { deepClone } = require('../collection/deepClone')
+import { validate } from '../validation/validate'
+import { isArr } from '../array/isArr'
+import { isFunc } from './isFunc'
+import { deepClone } from '../collection/deepClone'
 
 /**
 * Calls each promise-returning function in array `asyncFns`,
