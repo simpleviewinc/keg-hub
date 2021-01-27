@@ -9,14 +9,16 @@ require('./isStr-8a57710e.js');
 require('./isNum-c7164b50.js');
 var isColl = require('./isColl-5757310a.js');
 var get = require('./get-bfcf4646.js');
-require('./cloneFunc-30c0acdd.js');
-var shallowEqual = require('./shallowEqual-946ec12f.js');
-var deepClone = require('./deepClone-2b548986.js');
+var deepClone = require('./deepClone-9108ba8c.js');
+var shallowEqual = require('./shallowEqual-c5a80668.js');
+var set = require('./set-178b6947.js');
 
 
 
 exports.isColl = isColl.isColl;
 exports.get = get.get;
+exports.cloneObjWithPrototypeAndProperties = deepClone.cloneObjWithPrototypeAndProperties;
+exports.deepClone = deepClone.deepClone;
 exports.cleanColl = shallowEqual.cleanColl;
 exports.deepEqual = shallowEqual.deepEqual;
 exports.isEmptyColl = shallowEqual.isEmptyColl;
@@ -25,7 +27,5 @@ exports.reduceColl = shallowEqual.reduceColl;
 exports.repeat = shallowEqual.repeat;
 exports.shallowEqual = shallowEqual.shallowEqual;
 exports.unset = shallowEqual.unset;
-exports.cloneObjWithPrototypeAndProperties = deepClone.cloneObjWithPrototypeAndProperties;
-exports.deepClone = deepClone.deepClone;
-exports.set = deepClone.set;
+exports.set = set.set;
 //# sourceMappingURL=collection.js.map

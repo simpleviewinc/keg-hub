@@ -1,11 +1,13 @@
 'use strict';
 
 var validate = require('./validate-500f268a.js');
+var isArr = require('./isArr-39234014.js');
 var isObj = require('./isObj-6b3aa807.js');
 var isFunc = require('./isFunc-f93803cb.js');
 var hasOwn = require('./hasOwn-7999ca65.js');
 var isStr = require('./isStr-8a57710e.js');
 var isNum = require('./isNum-c7164b50.js');
+var deepClone = require('./deepClone-9108ba8c.js');
 var isEmpty = require('./isEmpty-73a79cab.js');
 
 const checkCall = (method, ...params) => isFunc.isFunc(method) && method(...params) || undefined;
@@ -84,6 +86,37 @@ const memorize = (func, getCacheKey, limit = 1) => {
   return memorized;
 };
 
+const runSeq = async (asyncFns = [], options = {}) => {
+  const [valid] = validate.validate({
+    asyncFns
+  }, {
+    asyncFns: isArr.isArr
+  });
+  if (!valid) return [];
+  const {
+    cloneResults = false,
+    returnOriginal = true
+  } = options;
+  const results = [];
+  for (const fn of asyncFns) {
+    const result = isFunc.isFunc(fn) ? await fn(results.length, cloneResults ? deepClone.deepClone(results) : results) : returnOriginal ? fn : undefined;
+    results.push(result);
+  }
+  return results;
+};
+
+const timedRun = async (fn, ...args) => {
+  const [valid] = validate.validate({
+    fn
+  }, {
+    fn: isFunc.isFunc
+  });
+  if (!valid) return [undefined, -1];
+  const startTime = new Date();
+  const result = await fn(...args);
+  return [result, new Date() - startTime];
+};
+
 const throttle = (func, wait = 100) => {
   let waiting = false;
   return function (...args) {
@@ -127,7 +160,9 @@ exports.hasDomAccess = hasDomAccess;
 exports.limbo = limbo;
 exports.memorize = memorize;
 exports.parseErrorMessage = parseErrorMessage;
+exports.runSeq = runSeq;
 exports.throttle = throttle;
 exports.throttleLast = throttleLast;
+exports.timedRun = timedRun;
 exports.uuid = uuid;
-//# sourceMappingURL=parseErrorMessage-c24ed52c.js.map
+//# sourceMappingURL=parseErrorMessage-3e09cf44.js.map

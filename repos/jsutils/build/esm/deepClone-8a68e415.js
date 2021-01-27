@@ -1,9 +1,21 @@
 import { i as isArr } from './isArr-a4420764.js';
 import { i as isFunc } from './isFunc-40ceeef8.js';
-import { u as updateColl } from './get-8e62f069.js';
-import { c as cloneFunc } from './cloneFunc-8a9b7642.js';
+import { g as get } from './get-8e62f069.js';
 
-const set = (obj, path, val) => updateColl(obj, path, 'set', val);
+const cloneFunc = func => {
+  const funcClone = function (...args) {
+    return func instanceof funcClone ? (() => {
+      return new func(...args);
+    })() : get(func.prototype, 'constructor.name') ? new func(...args) : func.apply(func, args);
+  };
+  for (let key in func) func.hasOwnProperty(key) && (funcClone[key] = func[key]);
+  Object.defineProperty(funcClone, 'name', {
+    value: func.name,
+    configurable: true
+  });
+  funcClone.toString = () => func.toString();
+  return funcClone;
+};
 
 const deepClone = (obj, hash = new WeakMap()) => {
   if (Object(obj) !== obj) return obj;
@@ -32,5 +44,5 @@ const cloneObjWithPrototypeAndProperties = objectWithPrototype => {
   return clone;
 };
 
-export { cloneObjWithPrototypeAndProperties as c, deepClone as d, set as s };
-//# sourceMappingURL=deepClone-853aa91f.js.map
+export { cloneFunc as a, cloneObjWithPrototypeAndProperties as c, deepClone as d };
+//# sourceMappingURL=deepClone-8a68e415.js.map

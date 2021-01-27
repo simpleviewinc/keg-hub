@@ -1,28 +1,30 @@
-import { i as isArr } from './isArr-a4420764.js';
-import { i as isObj } from './isObj-2a71d1af.js';
-import { i as isFunc } from './isFunc-40ceeef8.js';
-import { i as isStr } from './isStr-481ce69b.js';
-import { i as isNum } from './isNum-cc6ad9ca.js';
-import { i as isColl } from './isColl-15a1452b.js';
-import { u as updateColl, g as get } from './get-8e62f069.js';
-import { d as deepClone } from './deepClone-853aa91f.js';
+'use strict';
+
+var isArr = require('./isArr-39234014.js');
+var isObj = require('./isObj-6b3aa807.js');
+var isFunc = require('./isFunc-f93803cb.js');
+var isStr = require('./isStr-8a57710e.js');
+var isNum = require('./isNum-c7164b50.js');
+var isColl = require('./isColl-5757310a.js');
+var get = require('./get-bfcf4646.js');
+var deepClone = require('./deepClone-9108ba8c.js');
 
 const cleanColl = (coll, recursive = true) => {
-  return isColl(coll) ? Object.keys(coll).reduce((cleaned, key) => {
+  return isColl.isColl(coll) ? Object.keys(coll).reduce((cleaned, key) => {
     const value = coll[key];
     if (value === null || value === undefined) return cleaned;
-    cleaned[key] = recursive && isColl(value) ? cleanColl(value) : value;
+    cleaned[key] = recursive && isColl.isColl(value) ? cleanColl(value) : value;
     return cleaned;
-  }, isObj(coll) && {} || []) : console.error(`cleanColl requires a collection as the first argument`) || coll;
+  }, isObj.isObj(coll) && {} || []) : console.error(`cleanColl requires a collection as the first argument`) || coll;
 };
 
-const isEmptyColl = obj => isArr(obj) ? obj.length === 0 : isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
+const isEmptyColl = obj => isArr.isArr(obj) ? obj.length === 0 : isColl.isColl(obj) && Object.getOwnPropertyNames(obj).length === 0;
 
-const mapColl = (coll, cb) => isFunc(cb) && isColl(coll) ? Object.keys(coll).map(key => cb(key, coll[key], coll)) : isArr(coll) ? [] : {};
+const mapColl = (coll, cb) => isFunc.isFunc(cb) && isColl.isColl(coll) ? Object.keys(coll).map(key => cb(key, coll[key], coll)) : isArr.isArr(coll) ? [] : {};
 
-const reduceColl = (coll, cb, reduce) => isFunc(cb) && isColl(coll) ? Object.keys(coll).reduce((data, key) => cb(key, coll[key], coll, data), reduce) : isArr(coll) ? [] : {};
+const reduceColl = (coll, cb, reduce) => isFunc.isFunc(cb) && isColl.isColl(coll) ? Object.keys(coll).reduce((data, key) => cb(key, coll[key], coll, data), reduce) : isArr.isArr(coll) ? [] : {};
 
-const unset = (obj, path) => updateColl(obj, path, 'unset');
+const unset = (obj, path) => get.updateColl(obj, path, 'unset');
 
 const isArray = Array.isArray;
 const keyList = Object.keys;
@@ -63,29 +65,36 @@ const deepEqual = (a, b) => {
 
 const repeat = (element, times, cloneDeep = false) => {
   if (!times || times <= 0) return [];
-  if (!isNum(times)) {
+  if (!isNum.isNum(times)) {
     console.error("Times argument must be a number");
     return [];
   }
   const arr = [];
   for (let i = 0; i < times; i++) {
-    const value = isFunc(element) ? element() : cloneDeep ? deepClone(element) : element;
+    const value = isFunc.isFunc(element) ? element() : cloneDeep ? deepClone.deepClone(element) : element;
     arr.push(value);
   }
   return arr;
 };
 
 const shallowEqual = (col1, col2, path) => {
-  if (path && (isArr(path) || isStr(path))) {
-    col1 = get(col1, path);
-    col2 = get(col2, path);
+  if (path && (isArr.isArr(path) || isStr.isStr(path))) {
+    col1 = get.get(col1, path);
+    col2 = get.get(col2, path);
   }
   if (col1 === col2) return true;
-  if (!col1 || !isColl(col1) || !col2 || !isColl(col2)) return false;
+  if (!col1 || !isColl.isColl(col1) || !col2 || !isColl.isColl(col2)) return false;
   if (Object.keys(col1).length !== Object.keys(col2).length) return false;
   for (const key in col1) if (col1[key] !== col2[key]) return false;
   return true;
 };
 
-export { repeat as a, cleanColl as c, deepEqual as d, isEmptyColl as i, mapColl as m, reduceColl as r, shallowEqual as s, unset as u };
-//# sourceMappingURL=shallowEqual-5ac48ff3.js.map
+exports.cleanColl = cleanColl;
+exports.deepEqual = deepEqual;
+exports.isEmptyColl = isEmptyColl;
+exports.mapColl = mapColl;
+exports.reduceColl = reduceColl;
+exports.repeat = repeat;
+exports.shallowEqual = shallowEqual;
+exports.unset = unset;
+//# sourceMappingURL=shallowEqual-c5a80668.js.map

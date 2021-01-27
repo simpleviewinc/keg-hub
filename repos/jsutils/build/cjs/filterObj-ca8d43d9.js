@@ -9,8 +9,8 @@ var isNum = require('./isNum-c7164b50.js');
 var sanitize = require('./sanitize-0a18302d.js');
 var isColl = require('./isColl-5757310a.js');
 var toBool = require('./toBool-deb350e4.js');
-var cloneFunc = require('./cloneFunc-30c0acdd.js');
-var deepClone = require('./deepClone-2b548986.js');
+var deepClone = require('./deepClone-9108ba8c.js');
+var set = require('./set-178b6947.js');
 var strToType = require('./strToType-7146b905.js');
 var log = require('./log-37bbfac6.js');
 var reduceObj = require('./reduceObj-33ce053a.js');
@@ -42,7 +42,7 @@ const deepMerge = (...sources) => {
     ? [...(isArr.isArr(merged) && merged || []), ...srcCopy]
     : isObj.isObj(srcCopy)
     ? Object.entries(srcCopy).reduce((joined, [key, value]) => ({ ...joined,
-      [key]: isFunc.isFunc(value) ? cloneFunc.cloneFunc(value)
+      [key]: isFunc.isFunc(value) ? deepClone.cloneFunc(value)
       : isColl.isColl(value) && key in joined
       ? deepMerge(joined[key], value)
       : deepClone.deepClone(value)
@@ -88,9 +88,9 @@ const mapEntries = (obj, cb) => {
     const result = cb(key, value);
     if (!isEntry(result)) {
       console.error(`Callback function must return entry. Found: ${result}. Using current entry instead.`);
-      return deepClone.set(obj, key, value);
+      return set.set(obj, key, value);
     }
-    return deepClone.set(obj, result[0], result[1]);
+    return set.set(obj, result[0], result[1]);
   }, initialValue);
 };
 
@@ -214,4 +214,4 @@ exports.sanitizeCopy = sanitizeCopy;
 exports.someEntry = someEntry;
 exports.toObj = toObj;
 exports.trimStringFields = trimStringFields;
-//# sourceMappingURL=filterObj-aec2acd0.js.map
+//# sourceMappingURL=filterObj-ca8d43d9.js.map

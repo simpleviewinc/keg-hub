@@ -1,9 +1,11 @@
 import { v as validate } from './validate-0eec5ac6.js';
+import { i as isArr } from './isArr-a4420764.js';
 import { i as isObj } from './isObj-2a71d1af.js';
 import { i as isFunc } from './isFunc-40ceeef8.js';
 import { h as hasOwn } from './hasOwn-deb5bbb8.js';
 import { i as isStr } from './isStr-481ce69b.js';
 import { i as isNum } from './isNum-cc6ad9ca.js';
+import { d as deepClone } from './deepClone-8a68e415.js';
 import { i as isEmpty } from './isEmpty-324adee6.js';
 
 const checkCall = (method, ...params) => isFunc(method) && method(...params) || undefined;
@@ -82,6 +84,37 @@ const memorize = (func, getCacheKey, limit = 1) => {
   return memorized;
 };
 
+const runSeq = async (asyncFns = [], options = {}) => {
+  const [valid] = validate({
+    asyncFns
+  }, {
+    asyncFns: isArr
+  });
+  if (!valid) return [];
+  const {
+    cloneResults = false,
+    returnOriginal = true
+  } = options;
+  const results = [];
+  for (const fn of asyncFns) {
+    const result = isFunc(fn) ? await fn(results.length, cloneResults ? deepClone(results) : results) : returnOriginal ? fn : undefined;
+    results.push(result);
+  }
+  return results;
+};
+
+const timedRun = async (fn, ...args) => {
+  const [valid] = validate({
+    fn
+  }, {
+    fn: isFunc
+  });
+  if (!valid) return [undefined, -1];
+  const startTime = new Date();
+  const result = await fn(...args);
+  return [result, new Date() - startTime];
+};
+
 const throttle = (func, wait = 100) => {
   let waiting = false;
   return function (...args) {
@@ -116,5 +149,5 @@ const parseErrorMessage = exception => {
   return isStr(exception) && !isEmpty(exception) ? exception : isObj(exception) ? exception.message : null;
 };
 
-export { complement as a, doIt as b, checkCall as c, debounce as d, eitherFunc as e, throttleLast as f, hasDomAccess as h, limbo as l, memorize as m, parseErrorMessage as p, throttle as t, uuid as u };
-//# sourceMappingURL=parseErrorMessage-54936a66.js.map
+export { complement as a, doIt as b, checkCall as c, debounce as d, eitherFunc as e, throttle as f, throttleLast as g, hasDomAccess as h, limbo as l, memorize as m, parseErrorMessage as p, runSeq as r, timedRun as t, uuid as u };
+//# sourceMappingURL=parseErrorMessage-9d3f4c9d.js.map

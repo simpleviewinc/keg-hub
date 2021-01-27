@@ -43,9 +43,9 @@ const promisifyAll = object => {
   return object;
 };
 
-const wait = time => new Promise((res, rej) => setTimeout(() => res(true), time));
+const wait = time => new Promise(res => setTimeout(() => res(true), time));
 
 exports.promisify = promisify;
 exports.promisifyAll = promisifyAll;
 exports.wait = wait;
-//# sourceMappingURL=wait-506787f5.js.map
+//# sourceMappingURL=wait-8ca88995.js.map

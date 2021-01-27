@@ -9,13 +9,13 @@ var isFunc = require('./isFunc-f93803cb.js');
 require('./deepFreeze-d73ccc57.js');
 var match = require('./match-11af2741.js');
 var hasOwn = require('./hasOwn-7999ca65.js');
-var parseErrorMessage = require('./parseErrorMessage-c24ed52c.js');
+var parseErrorMessage = require('./parseErrorMessage-3e09cf44.js');
 require('./isStr-8a57710e.js');
 require('./isNum-c7164b50.js');
 require('./isColl-5757310a.js');
 require('./get-bfcf4646.js');
 require('./isBool-aa6af74e.js');
-var cloneFunc = require('./cloneFunc-30c0acdd.js');
+var deepClone = require('./deepClone-9108ba8c.js');
 require('./typeOf-51fe5771.js');
 require('./isEmpty-73a79cab.js');
 
@@ -41,8 +41,10 @@ exports.hasDomAccess = parseErrorMessage.hasDomAccess;
 exports.limbo = parseErrorMessage.limbo;
 exports.memorize = parseErrorMessage.memorize;
 exports.parseErrorMessage = parseErrorMessage.parseErrorMessage;
+exports.runSeq = parseErrorMessage.runSeq;
 exports.throttle = parseErrorMessage.throttle;
 exports.throttleLast = parseErrorMessage.throttleLast;
+exports.timedRun = parseErrorMessage.timedRun;
 exports.uuid = parseErrorMessage.uuid;
-exports.cloneFunc = cloneFunc.cloneFunc;
+exports.cloneFunc = deepClone.cloneFunc;
 //# sourceMappingURL=method.js.map
