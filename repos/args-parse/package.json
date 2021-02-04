@@ -34,7 +34,7 @@
   ],
   "dependencies": {
     "@keg-hub/ask-it": "0.0.1",
-    "@keg-hub/jsutils": "8.1.0",
+    "@keg-hub/jsutils": "8.2.0",
     "app-root-path": "3.0.0"
   },
   "devDependencies": {
