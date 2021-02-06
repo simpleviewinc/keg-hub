@@ -1,88 +1,39 @@
-# Allows overwriting where the base image is pulled from
-# Must come before the FROM directive
+# Path of the tap within the docker container
+ARG DOC_APP_PATH
+
+# Setup the taps image FROM in the global state
+# Must come before the FROM directive to is can be accessed
 ARG KEG_NODE_VERSION
-ARG GIT_STAGE_IMAGE_FROM=node:$KEG_NODE_VERSION
-ARG KEG_IMAGE_FROM=keg-base:latest
-FROM $KEG_IMAGE_FROM as builder
+ARG NODE_IMAGE_FROM=node:$KEG_NODE_VERSION
 
-WORKDIR /
+# Add a FROM for the tap-base image to we can copy content from it
+ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:master
+FROM $KEG_BASE_IMAGE as tap-base
 
-# Add npm-run-all globally
-RUN yarn global add npm-run-all
+# Get the git keg-hub url and branch to pull down
+ARG GIT_HUB_URL=https://github.com/simpleviewinc/keg-hub.git
+ARG GIT_HUB_BRANCH=develop
 
-# Should we use the local copy of the tap repo when building
-ARG KEG_COPY_LOCAL
+ENV DOC_APP_PATH=$DOC_APP_PATH
 
-# Path of the app within the docker container
-ARG DOC_APP_PATH=/keg/tap
-
-# Copy over the app to a temp directory
-COPY . /keg-temp/
-
-# Update the build steps git config to include the key
-# Pull down the tap locally if a git tap url exists
-# Otherwise copy over the local version from keg-temp
-RUN git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
-    if [ -z "$KEG_COPY_LOCAL" ] && [ "$GIT_APP_URL" != "INITIAL" ]; then \
-      git clone $GIT_APP_URL $DOC_APP_PATH; \
-    else \
-      cp -R /keg-temp/ $DOC_APP_PATH; \
-    fi; \
-    rm -rf /keg-temp
-
-# Copy over the package.json, and yarn.lock files
-COPY package.json $DOC_APP_PATH/package.json
-COPY *.lock $DOC_APP_PATH/
-
-# Install the dependecies with yarn setup, then remove the .npmrc
-RUN cd $DOC_APP_PATH; \
-    yarn install --ignore-engines; \
-    yarn cache clean; \
-    rm -f .npmrc
-
-
-# ------- New Build Stage ------- #
-
-# Use a multi stage build for security
-# This is so PUBLIC_GIT_KEY is not accessable in the final image
-FROM $GIT_STAGE_IMAGE_FROM as gitBuilder
-WORKDIR /
-
-
-# Path of the app within the docker container
-ARG DOC_APP_PATH=${DOC_APP_PATH:-/keg/tap}
-ARG KEG_PROXY_PORT=${KEG_PROXY_PORT:-5000}
-
-# Get the ip of docker-machine from the ARG, so we can set it as an ENV
-ARG KEG_DOCKER_IP
-
-# Used by react native builder to set the ip address, other wise 
-# Will use the ip address of the docker container.
-ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
-
-# Install git for the new stage
-RUN apk add --no-cache git bash sudo; \
-    echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
-    sudo sysctl -p; \
-    git config --global url.https://$PUBLIC_GIT_KEY@github.com/.insteadOf https://github.com/; \
-    rm -rf /var/cache/apk/*; \
-    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
-
-# Copy over the globally installed modules from above
-COPY --from=builder /usr/local/share/.config/yarn /usr/local/share/.config/yarn
-# Add yarn's global bin to PATH
-ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
-
-# Copy over the cloned app
-COPY --from=builder $DOC_APP_PATH $DOC_APP_PATH
-
-EXPOSE $KEG_PROXY_PORT
 # Set the current directory to tap repo
 WORKDIR $DOC_APP_PATH
 
-SHELL [ "/bin/bash", "-c" ]
+# Pull down the keg-hub repo from github
+# Because retheme is inside keg-hub, clone keg-hub
+# Then copy over retheme to the correct directory
+# Install all deps, and copy jsutils from keg-core to get the up-to-date verison
+# Finally remove the keg-hub repos
+RUN git clone --single-branch --branch $GIT_HUB_BRANCH $GIT_HUB_URL /keg-hub-clone; \
+    cp -R /keg-hub-clone/repos/re-theme/. $DOC_APP_PATH/; \
+    rm -rf /keg-hub-clone; \
+    cd $DOC_APP_PATH; \
+    yarn install --pure-lockfile; \
+    yarn cache clean; \
+    cp -R /keg-hub/repos/keg-core/node_modules/@keg-hub/jsutils/build/. $DOC_APP_PATH/node_modules/@keg-hub/jsutils/build/; \
+    rm -rf /keg-hub
 
-SHELL [ "/bin/bash" ]
+EXPOSE $KEG_PROXY_PORT
 
 # Run the start script
 CMD [ "/bin/bash", "container/run.sh" ]
