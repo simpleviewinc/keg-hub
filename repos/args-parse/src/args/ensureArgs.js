@@ -44,7 +44,7 @@ const ensureArg = async (task, args, key, meta) => {
  */
 const ensureArgs = async (task, mappedParams={}) => {
   return reduceObj(task.options, async (key, meta, toResolve) => {
-    params = await toResolve
+    const params = await toResolve
 
     return ensureArg(task, params, key, meta)
   }, Promise.resolve(mappedParams))
