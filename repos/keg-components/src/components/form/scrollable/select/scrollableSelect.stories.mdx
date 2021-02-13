@@ -1,0 +1,39 @@
+<!--- scrollableSelect.stories.mdx -->
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { ScrollableSelect } from './scrollableSelect.web'
+
+<Meta title="Components/Form/Scrollable/ScrollableSelect" component={ScrollableSelect} />
+
+# CheckGroup
+
+A group of checkbox items with a header. It can also display an optional checkbox in the header
+that selects or deselects all the grouped checkboxes when pressed.
+
+## Examples
+
+### Basic (no select-all box)
+
+<Preview>
+  <Story name='Basic'>
+    <ScrollableSelect
+      visible={true}
+      items={[
+        { text: 'Red', },
+        { text: 'Blue', },
+        { text: 'Green', },
+        { text: 'Black', },
+        { text: 'Sand', },
+        { text: 'Gray', },
+        { text: 'Orange', },
+        { text: 'Yellow', },
+        { text: 'Purple', },
+        { text: 'Brown', },
+        { text: 'Tan', },
+        { text: 'Violet', },
+        { text: 'Silver', },
+      ]}
+      onSelect={({text}) => console.log('selected ', text)}
+    />
+  </Story>
+</Preview>
+

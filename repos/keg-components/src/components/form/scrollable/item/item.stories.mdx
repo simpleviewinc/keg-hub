@@ -1,0 +1,24 @@
+<!--- item.stories.mdx -->
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { SelectItem } from './item'
+
+<Meta title="Components/Form/Scrollable/Item" component={SelectItem} />
+
+# CheckGroup
+
+A group of checkbox items with a header. It can also display an optional checkbox in the header
+that selects or deselects all the grouped checkboxes when pressed.
+
+## Examples
+
+### Basic (no select-all box)
+
+<Preview>
+  <Story name='Basic'>
+    <SelectItem
+      text='test'
+      onSelect={console.log}
+    />
+  </Story>
+</Preview>
+

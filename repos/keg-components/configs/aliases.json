@@ -16,6 +16,7 @@
   "KegSlider": "src/components/form/slider/slider.js",
   "KegSwitch": "src/components/form/switch/switch.js",
   "KegText": "src/components/typography/kegText/kegText.js",
+  "KegTypography": "src/components/typography/index.js",
   "KegLinearGradient": "src/components/linearGradient/linearGradient${platform}.js",
   "KegView": "src/components/view/view${platform}.js",
   "KegSvgIcon": "src/components/svgIcon/svgIcon.js",

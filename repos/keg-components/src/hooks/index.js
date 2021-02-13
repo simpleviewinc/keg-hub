@@ -1,4 +1,5 @@
 export * from './useAnimate'
+export * from './useAutocompleteItems'
 export * from './useChildren'
 export * from './useChildrenWithRefs'
 export * from './useInputHandlers'
