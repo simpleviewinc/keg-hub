@@ -2,29 +2,31 @@ import React, { forwardRef } from 'react'
 import { TextInput } from 'react-native'
 import { useClassName } from 'KegClassName'
 import PropTypes from 'prop-types'
-import { withTouch } from '../../hocs'
 
 /**
  * Input
- * @summary Wraps the React Native Input component with the Touchable component
+ * @summary Wraps the React Native Input component
  * <br/>Also extracts the className from props. All props are optional
  *
  * @param {Object} props - see KegInput PropTypes
+ * @param {boolean} props.useTouch - if true (the default), wraps TextInput in touchable.
  * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
-export const Input = forwardRef(({ className, ...props }, ref) => {
-  const classRef = useClassName('keg-input', className, ref)
-  const TextInputTouch = withTouch(TextInput, { showFeedback: false })
+export const Input = forwardRef(
+  ({ className, onPress, onFocus, ...props }, ref) => {
+    const classRef = useClassName('keg-input', className, ref)
 
-  return (
-    <TextInputTouch
-      accessibilityRole='textbox'
-      {...props}
-      ref={classRef}
-    />
-  )
-})
+    return (
+      <TextInput
+        onFocus={onFocus || onPress}
+        accessibilityRole='textbox'
+        {...props}
+        ref={classRef}
+      />
+    )
+  }
+)
 
 Input.propTypes = {
   ...TextInput.propTypes,

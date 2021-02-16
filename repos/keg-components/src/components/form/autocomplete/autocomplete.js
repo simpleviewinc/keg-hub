@@ -1,44 +1,39 @@
 import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { get } from '@keg-hub/jsutils'
+import { noOpObj, noPropArr } from '@keg-hub/jsutils'
+import { getTextFromChangeEvent } from 'KegUtils'
 import { useAutocompleteItems } from 'KegHooks'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
-import { ScrollableSelect } from '../scrollable/select/scrollableSelect.web'
-import { TextInput } from 'react-native'
+import { ScrollableSelect } from '../scrollable/select/scrollableSelect'
+import { Input } from 'KegInput'
 import { View } from 'KegView'
-import { getPlatform } from 'KegGetPlatform'
-
-const AutocompleteInput = reStyle(TextInput)((theme, props) => ({
-  ...props.styles,
-  ...props.style,
-}))
 
 /**
- * Returns the text value from the event object in an onChange callback for input.
- * The text is a different path/property depending on the platform.
- * @param {Object} event
+ * An absolutely-positioned scrollabale select
  */
-const getTextFromChangeEvent = event => {
-  const isWeb = getPlatform() === 'web'
-  return isWeb
-    ? get(event, 'target.value') // web
-    : get(event, 'nativeEvent.text') // native
-}
+const FloatingScrollableSelect = reStyle(
+  ScrollableSelect,
+  'styles'
+)(() => ({
+  main: { position: 'absolute', zIndex: 9999 },
+}))
 
 /**
  * Provides text input with autocomplete functionality. As user types, shows a menu of autocomplete options that contain user input as a substring.
  * Parent component must pass the total list of options (in autocompleteValues prop) for this to work.
  * @param {Object} props
- * @param {Function} props.onSelect - (optional) callback of form (text) => {...}, called when user selects a value from the autocomplete menu
- * @param {Function} props.onChange - (optional) callback of form (text) => {...}, called when user types or selects a value. updates character by character
- * @param {String} props.placeholder - (optional) placeholder text filled when no text has been inputted
- * @param {String} props.text - (optional) initial value of the text in the input
- * @param {Object} props.style - (optional) style object for the root view of this component
- * @param {Object} props.inputStyle - (optional) style object for the text input
- * @param {Object} props.menuStyle - (optional) style object for the select menu
- * @param {Object} props.inputRef - (optional) a ref that will be assigned to the TextInput. Use this for obtaining access to TextInput functions like Clear
- * @param {Array} props.values - array of possible strings to use for autocomplete
- * @param {Number} props.menuHeight - (optional) height of menu that shows autocomplete values, before scrolling is necessary
+ * @param {Array<string> | Array<Object>} props.values - array of possible items to use for autocomplete.
+ *  - If it is Array<string>, any duplicates will be ignored.
+ *  - If it is Array<object>, each object should be of form { text: string, key: string? },
+ *    where key is an optional unique id that can distinguish duplicates
+ * @param {Function?} props.onSelect - (optional) callback of form (text) => {...}, called when user selects a value from the autocomplete menu
+ * @param {Function?} props.onChange - (optional) callback of form (text) => {...}, called when user types or selects a value. updates character by character
+ * @param {String?} props.placeholder - (optional) placeholder text filled when no text has been inputted
+ * @param {String?} props.text - (optional) initial value of the text in the input
+ * @param {Object?} props.styles - (optional) style object for the root view of this component
+ * @param {Object?} props.inputRef - (optional) a ref that will be assigned to the TextInput. Use this for obtaining access to TextInput methods like .clear()
+ * @param {Number?} props.menuHeight - (optional) height of menu that shows autocomplete values
+ * @param {*?} props.* - remaining props are passed straight through to the Input component
  */
 export const Autocomplete = props => {
   const {
@@ -46,12 +41,11 @@ export const Autocomplete = props => {
     onSelect,
     placeholder = '',
     text = null,
-    style = {},
-    inputStyle = {},
-    menuStyle = {},
+    styles = noOpObj,
     inputRef = null,
-    values = [],
-    menuHeight = 75,
+    values = noPropArr,
+    menuHeight,
+    ...inputProps
   } = props
 
   const [ inputText, updateText ] = useState(text || '')
@@ -60,11 +54,14 @@ export const Autocomplete = props => {
     values
   )
 
-  const onSelectItem = useCallback(({ text = '' }) => {
-    updateText(text)
-    setSelectedItem(text)
-    onSelect?.(text)
-  }, [])
+  const onSelectItem = useCallback(
+    item => {
+      updateText(item?.text)
+      setSelectedItem(item)
+      item && onSelect?.(item)
+    },
+    [ setSelectedItem, updateText ]
+  )
 
   const handleInputChange = useCallback(
     event => {
@@ -75,22 +72,30 @@ export const Autocomplete = props => {
     [ onChange, updateText ]
   )
 
+  // on enter, select the top element
+  const onEnterPress = useCallback(() => onSelectItem(autocompleteItems[0]), [
+    autocompleteItems,
+    onSelectItem,
+  ])
+
   return (
-    <View style={style}>
-      <AutocompleteInput
-        type={'text'}
+    <View style={styles?.main}>
+      <Input
         placeholder={placeholder}
         onChange={handleInputChange}
         value={inputText}
         ref={inputRef}
-        style={inputStyle}
+        style={styles?.content?.input}
+        onSubmitEditing={onEnterPress}
+        useTouch={false}
+        {...inputProps}
       />
 
-      { /* nest select in view so that it appears below the input, but still has absolute positioning */ }
+      { /* nest select in view so that it appears below the input and still absolute-positioned */ }
       <View>
-        <ScrollableSelect
+        <FloatingScrollableSelect
           height={menuHeight}
-          style={menuStyle}
+          styles={styles?.content?.menu}
           visible={autocompleteItems.length > 0}
           items={autocompleteItems}
           onSelect={onSelectItem}
@@ -102,14 +107,20 @@ export const Autocomplete = props => {
 }
 
 Autocomplete.propTypes = {
+  values: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        key: PropTypes.string,
+      }),
+    ])
+  ),
   onSelect: PropTypes.func,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
   text: PropTypes.string,
-  style: PropTypes.object,
-  inputStyle: PropTypes.object,
-  menuStyle: PropTypes.object,
+  styles: PropTypes.object,
   inputRef: PropTypes.object,
-  values: PropTypes.arrayOf(PropTypes.string),
   menuHeight: PropTypes.number,
 }

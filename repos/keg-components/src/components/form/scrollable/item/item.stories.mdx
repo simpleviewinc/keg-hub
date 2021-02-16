@@ -4,19 +4,16 @@ import { SelectItem } from './item'
 
 <Meta title="Components/Form/Scrollable/Item" component={SelectItem} />
 
-# CheckGroup
-
-A group of checkbox items with a header. It can also display an optional checkbox in the header
-that selects or deselects all the grouped checkboxes when pressed.
+# Scrollable -- SelectItem
 
 ## Examples
 
-### Basic (no select-all box)
+### Basic 
 
 <Preview>
   <Story name='Basic'>
     <SelectItem
-      text='test'
+      item={{ text: 'Example', key: 'Some id'}}
       onSelect={console.log}
     />
   </Story>

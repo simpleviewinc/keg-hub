@@ -79,9 +79,9 @@ export const getItemsMatchingText = (text, possibleValues) => {
 /**
  * Custom hook for acquiring menu items that are filtered based on matches to `text`.
  * @param {String} text - user input
- * @param {Array} menuItems - all menu items
+ * @param {Array<string> | Array<object>} menuItems - all menu items
  * @return {Array} - [
- *  autocompleteItems: subset of menuItems that have an overlap with text
+ *  autocompleteItems: subset of menuItems that have an overlap with text. These will be formatted to object form.
  *  setSelectedItem: callback to set the currently selected item in the autocomplete component
  *  selectedItem: the currently selected item
  * ]
@@ -91,7 +91,7 @@ export const useAutocompleteItems = (text, menuItems) => {
 
   const items = useMemo(
     () =>
-      isEmpty(text) || selectedItem === text
+      isEmpty(text) || selectedItem?.text === text
         ? []
         : getItemsMatchingText(text, menuItems),
     [ text, menuItems, selectedItem ]

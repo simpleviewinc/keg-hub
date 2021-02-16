@@ -8,12 +8,9 @@ import { getPlatform } from 'KegGetPlatform'
  * @param { number } height - adjustable height of view
  * @param { object } style - additional styles
  */
-export const SelectView = reStyle(View)((theme, props) => {
+export const SelectView = reStyle(View)((_, props) => {
   return {
     height: props.height,
-    position: 'absolute',
-    backgroundColor: theme.colors.palette.white01,
-    ...props.style,
     ...(getPlatform() === 'web'
       ? {
           display: props.visible ? 'block' : 'none',
@@ -24,7 +21,6 @@ export const SelectView = reStyle(View)((theme, props) => {
       : {
           left: 0,
           top: 0,
-        }
-    )
+        }),
   }
 })

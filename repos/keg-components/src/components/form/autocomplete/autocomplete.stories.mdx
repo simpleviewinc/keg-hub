@@ -1,16 +1,15 @@
-<!--- CheckGroup.stories.mdx -->
-
+<!--- autocomplete.stories.mdx -->
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
-import { 
-  Autocomplete
-} from './autocomplete'
+import { Autocomplete } from './autocomplete'
+import { Basic } from './autocomplete.example'
 
 <Meta title="Components/Form/Autocomplete" component={Autocomplete} />
 
-# CheckGroup
+# Autocompleting Select
 
-A group of checkbox items with a header. It can also display an optional checkbox in the header
-that selects or deselects all the grouped checkboxes when pressed.
+Autocomplete is a text input that accepts a list of possible values.
+When there is overlap between the user input and one or more of those values,
+the matching items will appear in a scrollable list below the text input.
 
 ## Examples
 
@@ -18,24 +17,6 @@ that selects or deselects all the grouped checkboxes when pressed.
 
 <Preview>
   <Story name='Basic'>
-    <Autocomplete 
-      menuHeight={160}
-      placeholder='Types of goats'
-      values={[
-        'American Pygmy',
-        'Alpine',
-        'Angora',
-        'Boer',
-        'Don',
-        'Danish Landrace',
-        'Nigerian Dwarf',
-        'Oberhasli',
-        'Orobica',
-        'Saanen',
-        'Toggenburg',
-        'Russian White',
-        'Valais Blackneck',
-      ]}
-    />
+    <Basic />
   </Story>
 </Preview>

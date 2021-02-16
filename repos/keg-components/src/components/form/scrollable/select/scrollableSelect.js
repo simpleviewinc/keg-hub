@@ -2,36 +2,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { SelectItem } from '../item/item'
 import { SelectView } from './selectView'
-import { noOpObj } from '@keg-hub/jsutils'
 
 /**
- * A scrollable menu list of items.
+ * A scrollable menu list of items, with prop-adjustable height and visibility
  * @param {Object} props
  * @param {Array} props.items - array of objects of the form { text, key } - key is optional if each item has unique text
- * @param {Object} props.style - style object for the view
+ * @param {Object} props.styles - style object for the view
  * @param {Boolean} props.visible - boolean, indicating the menu is visible or hidden
- * @param {Object} props.theme - theme object
  * @param {Function} props.onSelect - the callback of form (item) => {...}. Fires when a menu item is selected
  * @param {Number} props.height - the maximum height of the menu before scrolling is required to see remaining items.
  */
 export const ScrollableSelect = ({
   items,
-  style = noOpObj,
+  styles,
   visible = true,
   onSelect,
   height,
 }) => {
   return (
     <SelectView
-      style={style}
+      style={styles?.main}
       visible={visible}
       height={height ?? 150}
     >
-      { items.map(({ text, key }) => (
+      { items.map(item => (
         <SelectItem
-          key={key || text}
-          text={text}
+          key={item.key || item.text}
+          item={item}
           onSelect={onSelect}
+          style={styles?.content}
         />
       )) }
     </SelectView>
@@ -39,9 +38,9 @@ export const ScrollableSelect = ({
 }
 
 ScrollableSelect.propTypes = {
+  styles: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   visible: PropTypes.bool,
-  theme: PropTypes.object,
   onSelect: PropTypes.func,
   height: PropTypes.number,
 }

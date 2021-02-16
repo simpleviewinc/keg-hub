@@ -4,6 +4,9 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { noOp } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 
+/**
+ * A Button styled for the autocomplete
+ */
 const SelectButton = reStyle(
   Button,
   'styles'
@@ -36,15 +39,20 @@ const SelectButton = reStyle(
   }
 })
 
-export const SelectItem = ({ text = '', onSelect = noOp }) => {
-  const handle = useCallback(() => onSelect({ text }), [ text, onSelect ])
+/**
+ * Individual item row in ScrollableSelect
+ * @param {Object} props.item - object of form { text, key }
+ * @param {Function?} props.onSelect - callback called when this item is selected. Will be passed the item.
+ */
+export const SelectItem = ({ item, onSelect = noOp }) => {
+  const handle = useCallback(() => onSelect(item), [ item, onSelect ])
   return <SelectButton
-    content={text}
+    content={item.text}
     onPress={handle}
   />
 }
 
 SelectItem.propTypes = {
-  text: PropTypes.string,
+  item: PropTypes.object.isRequired,
   onSelect: PropTypes.func,
 }
