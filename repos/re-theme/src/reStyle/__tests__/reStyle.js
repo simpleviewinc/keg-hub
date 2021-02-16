@@ -8,6 +8,7 @@ const mockedHooks = mockReactHooks(
   'useState',
   'useMemo',
   'useEffect',
+  'useRef',
   'createElement'
 )
 

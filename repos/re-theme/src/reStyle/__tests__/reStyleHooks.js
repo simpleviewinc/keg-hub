@@ -6,12 +6,13 @@ jest.resetAllMocks()
 
 const useThemeMock = jest.fn(() => theme)
 jest.setMock('../../hooks/useTheme', { useTheme: useThemeMock })
-const mockedHooks = mockReactHooks('useState', 'useMemo', 'useEffect')
-const { useState, useMemo, useEffect } = mockedHooks
+const mockedHooks = mockReactHooks('useState', 'useMemo', 'useEffect', 'useRef')
+const { useState, useMemo, useEffect, useRef } = mockedHooks
 
 const {
   getComponentName,
   usePropClassName,
+  useShallowMemoMerge,
   useObjWithIdentity,
   useReStyles,
 } = require('../reStyleHooks')
@@ -19,6 +20,25 @@ const {
 describe('reStyleHooks', () => {
   afterEach(() => {
     clearMockedHooks(mockedHooks)
+  })
+
+  describe('useShallowMemoMerge', () => {
+    afterEach(() => {
+      clearMockedHooks(mockedHooks)
+    })
+
+    it('should merge the objects, with memoization', () => {
+      const objA = { a: 1, b: 3 }
+      const objB = { a: 2 }
+
+      const result = useShallowMemoMerge(objA, objB)
+
+      expect(result.a).toEqual(2)
+      expect(result.b).toEqual(3)
+
+      expect(useMemo).toHaveBeenCalled()
+    })
+
   })
 
   describe('getComponentName', () => {

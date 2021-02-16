@@ -3,7 +3,7 @@ import { exists } from '@keg-hub/jsutils'
 import { StyleInjector } from 'StyleInjector'
 import {
   getComponentName,
-  useShallowMemo,
+  useShallowMemoMerge,
   usePropClassName,
   useReStyles,
 } from './reStyleHooks'
@@ -31,7 +31,7 @@ export const reStyle = (Component, styleProp = 'style') => {
         ? props[styleProp]
         : null
 
-      const styles = useShallowMemo(reStyles, styleFromProps)
+      const styles = useShallowMemoMerge(reStyles, styleFromProps)
 
       return (
         <InjectedComp
