@@ -46,12 +46,11 @@ export const usePropClassName = (className, compName) => {
 }
 
 /**
- * Hook that ensures a consistent Object identity to avoid re-renders
+ * Hook that memoizes the merged objects using a shallow-equal comparison
  * @function
- * @param {Object} identity - Object to be reused
- * @param {Array} mergeObjs - Other objects to be merged with the identity object
+ * @param {...Object} mergeObjs - objects to be merged, provided there is a shallow difference from the last call
  *
- * @returns {Object} - identity object merged with the passed in mergeObjs
+ * @returns {Object} - merged object 
  */
 export const useShallowMemo = (...mergeObjs) => {
   const [ identity, setIdentity ] = useState(null)
