@@ -1,90 +1,99 @@
-import { isEmpty, pipeline, isStr, uniqArr } from '@keg-hub/jsutils'
+import { isEmpty, pipeline, isStr, isObj } from '@keg-hub/jsutils'
 import { useState, useMemo } from 'react'
 
 /**
- * Returns true if aString includes bString as a substring after applying the functions identified by transformFuncs
- * @param {String} aString
- * @param {String} bString
- * @param {Array} transformFuncs functions which transform aString and bString before the substring check
- * @example stringIncludes("I can say my abcs all day", "ÁBC", [ignoreCase, ignoreAccents]) // returns true
+ * @param {string} str
+ * @returns {string} str in lower case
  */
-const stringIncludes = (aString, bString, transformFuncs = []) => {
-  if (!isStr(aString) || !isStr(bString)) {
-    console.error(`args in stringIncludes must be a string. Found: `, {
-      aString,
-      bString,
-    })
-    return false
-  }
-  const resultA = pipeline(aString, ...transformFuncs)
-  const resultB = pipeline(bString, ...transformFuncs)
-  return resultA.includes(resultB)
-}
-
-/** Returns String s in lower case */
 const ignoreCase = str => str.toLowerCase()
 
-/** Returns String s normalized without accents, so Á is converted to A*/
+/**
+ * @param {string} str
+ * @returns {string} str normalized without accents, so Á is converted to A
+ */
 const ignoreAccents = str =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+/**
+ * Formats the menu item to be an object, or null if invalid type
+ * @param {Object | String} item
+ * @return {Object?} returns null if invalid, otherwise an object in form { key, text }
+ */
+const formatItem = item => {
+  if (isObj(item) && isStr(item.text))
+    return item.key ? item : { text: item.text, key: item.text }
+  else if (isStr(item)) return { text: item, key: item }
+  else return null
+}
+
+/**
+ *
+ * @param {string} text - user input text
+ * @param {Object} item - one of the possible autocomplete values, of form { text, key }
+ * @return {boolean} true if the text matches the item's text, ignoring casing and accents
+ */
+const textMatches = (text, item) => {
+  const itemComparisonStr = pipeline(item.text, ignoreCase, ignoreAccents)
+  const textComparisonStr = pipeline(text, ignoreCase, ignoreAccents)
+  return itemComparisonStr.includes(textComparisonStr)
+}
 
 /**
  * Returns a new array containing a subset of possibleValues, each of which is:
  *  - unique; and
  *  - either a substring of `text` or the same string.
- *
- * The filter ignores cases and accents.
- * @param {String} text
- * @param {Array} possibleValues - string array
- * @returns - the new array of strings
+ * The filtering ignores casing and accents.
+ * @param {String} text - text to check (e.g. user input so far)
+ * @param {Array<string | Object>} possibleValues - string or object { text, key? } array
+ * @returns {Array<Object>} the new array of items, without duplicates
  */
-export const getFilteredStrings = (text, possibleValues) => {
-  const isMatch = item =>
-    item && stringIncludes(item, text, [ ignoreCase, ignoreAccents ])
+export const getItemsMatchingText = (text, possibleValues) => {
+  if (!isStr(text)) return []
 
-  const items = possibleValues.filter(isMatch)
+  // in one pass: format values, keep the matching ones, and ignore duplicates (by key) and invalid items
+  const result = possibleValues.reduce(
+    (state, nextItem) => {
+      // ensure item is of form { key, text }
+      const formattedItem = formatItem(nextItem)
 
-  // remove duplicates
-  return uniqArr(items)
+      // invalid item, so just ignore
+      if (!formattedItem) return state
+
+      // add the item if it matches the text and we haven't seen its key before
+      if (
+        textMatches(text, formattedItem) &&
+        !state.keys.has(formattedItem.key)
+      ) {
+        state.keys.add(formattedItem.key)
+        state.arr.push(formattedItem)
+      }
+
+      return state
+    },
+    { arr: [], keys: new Set() }
+  )
+
+  return result.arr
 }
 
 /**
- *
- * @param {String} text
- * @param {Array<String>} menuItems
- */
-const getAutocompleteItems = (text, menuItems) =>
-  getFilteredStrings(text, menuItems)
-    .map(text => ({ text, key: text }))
-
-/**
- * Custom hook for acquiring menu items that are filtered based on text.
- * @param {String} text
+ * Custom hook for acquiring menu items that are filtered based on matches to `text`.
+ * @param {String} text - user input
  * @param {Array} menuItems - all menu items
- * @return {Array} - [ autocompleteItems, setSelectedItem, selectedItem ]
+ * @return {Array} - [
+ *  autocompleteItems: subset of menuItems that have an overlap with text
+ *  setSelectedItem: callback to set the currently selected item in the autocomplete component
+ *  selectedItem: the currently selected item
+ * ]
  */
 export const useAutocompleteItems = (text, menuItems) => {
-  // const [ autocompleteItems, setAutocompleteMenuItems ] = useState([])
-  // const [ selectedItem, setSelectedItem ] = useState(null)
-
-  // when text changes, update the autocomplete fields
-  // useEffect(() => {
-  //   // hide the auto complete menu when text is empty or if user selected an item. Otherwise, update menu
-  //   isEmpty(text) || selectedItem === text
-  //     ? setAutocompleteMenuItems([])
-  //     : setAutocompleteMenuItems(getAutocompleteItems(text, menuItems))
-  // }, [ text, menuItems, selectedItem ])
-
-  // console.log({ autocompleteItems, menuItems: menuItems.map(v => ({ text: v, key: v})) })
-
-  // return [ autocompleteItems, setSelectedItem, selectedItem ]
-
   const [ selectedItem, setSelectedItem ] = useState(null)
 
   const items = useMemo(
-    () => isEmpty(text) || selectedItem === text
-      ? [] 
-      : getAutocompleteItems(text, menuItems), 
+    () =>
+      isEmpty(text) || selectedItem === text
+        ? []
+        : getItemsMatchingText(text, menuItems),
     [ text, menuItems, selectedItem ]
   )
 

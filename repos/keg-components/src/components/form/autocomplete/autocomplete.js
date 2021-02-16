@@ -54,14 +54,11 @@ export const Autocomplete = props => {
     menuHeight = 75,
   } = props
 
-
   const [ inputText, updateText ] = useState(text || '')
-  const [ 
-    autocompleteItems, 
-    setSelectedItem 
-  ] = useAutocompleteItems(inputText, values)
-  // const setSelectedItem = () => {}
-  // const [ autocompleteItems ] = useState(values.map(v => ({ text: v, key: v})))
+  const [ autocompleteItems, setSelectedItem ] = useAutocompleteItems(
+    inputText,
+    values
+  )
 
   const onSelectItem = useCallback(({ text = '' }) => {
     updateText(text)
@@ -69,13 +66,14 @@ export const Autocomplete = props => {
     onSelect?.(text)
   }, [])
 
-  const handleInputChange = useCallback(event => {
-    const text = getTextFromChangeEvent(event)
-    updateText(text)
-    onChange?.(text)
-  }, [ onChange, updateText ])
-
-  console.log({ autocompleteItems})
+  const handleInputChange = useCallback(
+    event => {
+      const text = getTextFromChangeEvent(event)
+      updateText(text)
+      onChange?.(text)
+    },
+    [ onChange, updateText ]
+  )
 
   return (
     <View style={style}>
@@ -85,14 +83,15 @@ export const Autocomplete = props => {
         onChange={handleInputChange}
         value={inputText}
         ref={inputRef}
+        style={inputStyle}
       />
 
       { /* nest select in view so that it appears below the input, but still has absolute positioning */ }
       <View>
         <ScrollableSelect
-          height={autocompleteItems.length > 0 ? menuHeight : 0}
+          height={menuHeight}
           style={menuStyle}
-          // visible={autocompleteItems.length > 0}
+          visible={autocompleteItems.length > 0}
           items={autocompleteItems}
           onSelect={onSelectItem}
           animationDuration={100}
