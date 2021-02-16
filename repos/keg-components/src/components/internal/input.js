@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
  * <br/>Also extracts the className from props. All props are optional
  *
  * @param {Object} props - see KegInput PropTypes
- * @param {boolean} props.useTouch - if true (the default), wraps TextInput in touchable.
  * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
