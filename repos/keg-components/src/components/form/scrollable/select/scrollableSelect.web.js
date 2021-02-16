@@ -19,13 +19,13 @@ export const ScrollableSelect = ({
   style = noOpObj,
   visible = true,
   onSelect,
-  height = 150,
+  height,
 }) => {
   return (
     <SelectView
       style={style}
       visible={visible}
-      height={height}
+      height={height ?? 150}
     >
       { items.map(({ text, key }) => (
         <SelectItem

@@ -1,9 +1,9 @@
 import React from 'react'
-import { exists, noOpObj } from '@keg-hub/jsutils'
+import { exists } from '@keg-hub/jsutils'
 import { StyleInjector } from 'StyleInjector'
 import {
   getComponentName,
-  useObjWithIdentity,
+  useShallowMemo,
   usePropClassName,
   useReStyles,
 } from './reStyleHooks'
@@ -17,7 +17,6 @@ import {
  * @returns {React.Component} HOC that will inject the custom styles
  */
 export const reStyle = (Component, styleProp = 'style') => {
-  const joinStyles = {}
   const compName = getComponentName(Component)
   const InjectedComp = StyleInjector(Component, {
     displayName: compName,
@@ -30,8 +29,9 @@ export const reStyle = (Component, styleProp = 'style') => {
       const classArr = usePropClassName(props.className, compName)
       const styleFromProps = exists(props[styleProp])
         ? props[styleProp]
-        : noOpObj
-      const styles = useObjWithIdentity(joinStyles, reStyles, styleFromProps)
+        : null
+
+      const styles = useShallowMemo(reStyles, styleFromProps)
 
       return (
         <InjectedComp

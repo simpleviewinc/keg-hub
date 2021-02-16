@@ -53,13 +53,21 @@ export const usePropClassName = (className, compName) => {
  *
  * @returns {Object} - identity object merged with the passed in mergeObjs
  */
-export const useObjWithIdentity = (identity, ...mergeObjs) => {
+export const useShallowMemo = (...mergeObjs) => {
+  const [ identity, setIdentity ] = useState(null)
   return useMemo(() => {
-    clearObj(identity)
-    Object.assign(identity, deepMerge(...mergeObjs))
+    const merged = deepMerge(...mergeObjs)
 
-    return identity
-  }, [ identity, ...mergeObjs ])
+    const foundIdentity = shallowEqual(identity, merged)
+      ? identity
+      : merged
+
+    foundIdentity !== identity && setIdentity(foundIdentity)
+
+    return foundIdentity
+  }, [ ...mergeObjs ])
+
+
 }
 
 /**

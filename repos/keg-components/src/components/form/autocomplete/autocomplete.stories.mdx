@@ -2,17 +2,10 @@
 
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
 import { 
-  Basic, 
-  DisabledHeader, 
-  SelectAll, 
-  SelectAllNoArray, 
-  WithSwitch,
-  HeaderRefControl,
-  ChildRefControl
-} from '../checkGroup/checkGroup.examples'
-import { CheckGroup } from '../checkGroup/checkGroup.js'
+  Autocomplete
+} from './autocomplete'
 
-<Meta title="Components/Form/Autocomplete" component={CheckGroup} />
+<Meta title="Components/Form/Autocomplete" component={Autocomplete} />
 
 # CheckGroup
 
@@ -21,62 +14,18 @@ that selects or deselects all the grouped checkboxes when pressed.
 
 ## Examples
 
-### Basic (no select-all box)
+### Basic
 
 <Preview>
   <Story name='Basic'>
-    <Basic />
+    <Autocomplete 
+      placeholder='Test'
+      values={[
+        'goats',
+        'more goats',
+        'even more goats',
+        'unlimited goats'
+      ]}
+    />
   </Story>
 </Preview>
-
-### Select-all
-
-<Preview>
-  <Story name='With Select-All'>
-    <SelectAll />
-  </Story>
-</Preview>
-
-### Select-all, but children are defined discretely without `.map`
-
-<Preview>
-  <Story name='Discrete Select-All'>
-    <SelectAllNoArray />
-  </Story>
-</Preview>
-
-### With other toggleable components, like Switch
-
-<Preview>
-  <Story name='With Switch'>
-    <WithSwitch />
-  </Story>
-</Preview>
-
-### Controlling a child component with a ref
-
-<Preview>
-  <Story name='Child Ref Control'>
-    <ChildRefControl />
-  </Story>
-</Preview>
-
-### Controlling the header-checkbox with a ref
-
-<Preview>
-  <Story name='Header Ref Control'>
-    <HeaderRefControl />
-  </Story>
-</Preview>
-
-### Disabled header
-
-<Preview>
-  <Story name='Disabled Header'>
-    <DisabledHeader />
-  </Story>
-</Preview>
-
-### Props
-
-<Props of={CheckGroup} />

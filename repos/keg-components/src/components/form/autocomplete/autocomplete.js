@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 're-theme'
+import { get } from '@keg-hub/jsutils'
 import { useAutocompleteItems } from 'KegHooks'
-import { ScrollableSelect } from 'KegScrollableSelect'
-import { Input } from 'KegInput'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { ScrollableSelect } from '../scrollable/select/scrollableSelect.web'
+import { TextInput } from 'react-native'
 import { View } from 'KegView'
-import { checkCall } from 'jsutils'
 import { getPlatform } from 'KegGetPlatform'
+
+const AutocompleteInput = reStyle(TextInput)((theme, props) => ({
+  ...props.styles,
+  ...props.style,
+}))
 
 /**
  * Returns the text value from the event object in an onChange callback for input.
@@ -49,33 +54,35 @@ export const Autocomplete = props => {
     menuHeight = 75,
   } = props
 
-  const theme = useTheme()
 
   const [ inputText, updateText ] = useState(text || '')
-  const [ autocompleteItems, setSelectedItem ] = useAutocompleteItems(
-    inputText,
-    values
-  )
+  const [ 
+    autocompleteItems, 
+    setSelectedItem 
+  ] = useAutocompleteItems(inputText, values)
+  // const setSelectedItem = () => {}
+  // const [ autocompleteItems ] = useState(values.map(v => ({ text: v, key: v})))
 
-  const onSelectItem = ({ text = '' }) =>
-    [ updateText, setSelectedItem, onSelect ].map(fn => fn && fn(text))
-  const showMenu = autocompleteItems.length > 0
+  const onSelectItem = useCallback(({ text = '' }) => {
+    updateText(text)
+    setSelectedItem(text)
+    onSelect?.(text)
+  }, [])
+
+  const handleInputChange = useCallback(event => {
+    const text = getTextFromChangeEvent(event)
+    updateText(text)
+    onChange?.(text)
+  }, [ onChange, updateText ])
+
+  console.log({ autocompleteItems})
 
   return (
     <View style={style}>
-      <Input
+      <AutocompleteInput
         type={'text'}
-        style={theme.join(
-          theme.form.autocomplete.input,
-          theme.typography.font,
-          inputStyle
-        )}
         placeholder={placeholder}
-        onChange={event => {
-          const text = getTextFromChangeEvent(event)
-          updateText(text)
-          checkCall(onChange, text)
-        }}
+        onChange={handleInputChange}
         value={inputText}
         ref={inputRef}
       />
@@ -83,9 +90,9 @@ export const Autocomplete = props => {
       { /* nest select in view so that it appears below the input, but still has absolute positioning */ }
       <View>
         <ScrollableSelect
-          height={menuHeight}
+          height={autocompleteItems.length > 0 ? menuHeight : 0}
           style={menuStyle}
-          visible={showMenu}
+          // visible={autocompleteItems.length > 0}
           items={autocompleteItems}
           onSelect={onSelectItem}
           animationDuration={100}

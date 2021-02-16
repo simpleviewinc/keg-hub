@@ -1,5 +1,5 @@
 import { isEmpty, pipeline, isStr, uniqArr } from '@keg-hub/jsutils'
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 
 /**
  * Returns true if aString includes bString as a substring after applying the functions identified by transformFuncs
@@ -54,7 +54,8 @@ export const getFilteredStrings = (text, possibleValues) => {
  * @param {Array<String>} menuItems
  */
 const getAutocompleteItems = (text, menuItems) =>
-  getFilteredStrings(text, menuItems).map(text => ({ text }))
+  getFilteredStrings(text, menuItems)
+    .map(text => ({ text, key: text }))
 
 /**
  * Custom hook for acquiring menu items that are filtered based on text.
@@ -63,16 +64,29 @@ const getAutocompleteItems = (text, menuItems) =>
  * @return {Array} - [ autocompleteItems, setSelectedItem, selectedItem ]
  */
 export const useAutocompleteItems = (text, menuItems) => {
-  const [ autocompleteItems, setAutocompleteMenuItems ] = useState([])
-  const [ selectedItem, setSelectedItem ] = useState(null)
+  // const [ autocompleteItems, setAutocompleteMenuItems ] = useState([])
+  // const [ selectedItem, setSelectedItem ] = useState(null)
 
   // when text changes, update the autocomplete fields
-  useEffect(() => {
-    // hide the auto complete menu when text is empty or if user selected an item. Otherwise, update menu
-    isEmpty(text) || selectedItem === text
-      ? setAutocompleteMenuItems([])
-      : setAutocompleteMenuItems(getAutocompleteItems(text, menuItems))
-  }, [ text, menuItems, selectedItem ])
+  // useEffect(() => {
+  //   // hide the auto complete menu when text is empty or if user selected an item. Otherwise, update menu
+  //   isEmpty(text) || selectedItem === text
+  //     ? setAutocompleteMenuItems([])
+  //     : setAutocompleteMenuItems(getAutocompleteItems(text, menuItems))
+  // }, [ text, menuItems, selectedItem ])
 
-  return [ autocompleteItems, setSelectedItem, selectedItem ]
+  // console.log({ autocompleteItems, menuItems: menuItems.map(v => ({ text: v, key: v})) })
+
+  // return [ autocompleteItems, setSelectedItem, selectedItem ]
+
+  const [ selectedItem, setSelectedItem ] = useState(null)
+
+  const items = useMemo(
+    () => isEmpty(text) || selectedItem === text
+      ? [] 
+      : getAutocompleteItems(text, menuItems), 
+    [ text, menuItems, selectedItem ]
+  )
+
+  return [ items, setSelectedItem, selectedItem ]
 }

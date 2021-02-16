@@ -12,6 +12,7 @@
   "KegLink": "src/components/link/link.js",
   "KegOption": "src/components/form/option/option${platform}.js",
   "KegRadio": "src/components/form/radio/radio${platform}.js",
+  "KegScrollableSelect": "src/components/form/scrollable/select/scrollableSelect${platform}.js",
   "KegSelect": "src/components/form/select/select.js",
   "KegSlider": "src/components/form/slider/slider.js",
   "KegSwitch": "src/components/form/switch/switch.js",

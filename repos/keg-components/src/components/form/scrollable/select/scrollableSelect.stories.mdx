@@ -1,6 +1,6 @@
 <!--- scrollableSelect.stories.mdx -->
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
-import { ScrollableSelect } from './scrollableSelect.web'
+import { BasicExample, AdjustableHeight } from './scrollableSelect.example'
 
 <Meta title="Components/Form/Scrollable/ScrollableSelect" component={ScrollableSelect} />
 
@@ -11,29 +11,21 @@ that selects or deselects all the grouped checkboxes when pressed.
 
 ## Examples
 
-### Basic (no select-all box)
+### Basic
 
 <Preview>
   <Story name='Basic'>
-    <ScrollableSelect
-      visible={true}
-      items={[
-        { text: 'Red', },
-        { text: 'Blue', },
-        { text: 'Green', },
-        { text: 'Black', },
-        { text: 'Sand', },
-        { text: 'Gray', },
-        { text: 'Orange', },
-        { text: 'Yellow', },
-        { text: 'Purple', },
-        { text: 'Brown', },
-        { text: 'Tan', },
-        { text: 'Violet', },
-        { text: 'Silver', },
-      ]}
-      onSelect={({text}) => console.log('selected ', text)}
-    />
+    <BasicExample />
   </Story>
 </Preview>
+
+### Adjustable Height
+
+<Preview>
+  <Story name='AdjustableHeight'>
+    <AdjustableHeight />
+  </Story>
+</Preview>
+
+
 

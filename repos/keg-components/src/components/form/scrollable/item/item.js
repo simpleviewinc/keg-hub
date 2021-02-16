@@ -15,6 +15,7 @@ const SelectButton = reStyle(
   const content = {
     color: palette.black01,
     fontWeight: 'normal',
+    alignSelf: 'start',
   }
 
   const main = {
