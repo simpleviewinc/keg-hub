@@ -7,7 +7,7 @@ jest.resetAllMocks()
 const useThemeMock = jest.fn(() => theme)
 jest.setMock('../../hooks/useTheme', { useTheme: useThemeMock })
 const mockedHooks = mockReactHooks('useState', 'useMemo', 'useEffect', 'useRef')
-const { useState, useMemo, useEffect, useRef } = mockedHooks
+const { useState, useMemo, useEffect } = mockedHooks
 
 const {
   getComponentName,
