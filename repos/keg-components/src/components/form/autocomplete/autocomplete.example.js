@@ -1,6 +1,7 @@
 import { action } from '@storybook/addon-actions'
 import { Autocomplete } from './autocomplete'
 import { View } from 'KegView'
+import { P } from 'KegTypography'
 import React from 'react'
 
 const types = [
@@ -26,7 +27,7 @@ const types = [
 export const Basic = () => {
   return (
     <View>
-      <p>Start typing to see options</p>
+      <P>Start typing to see options</P>
       <Autocomplete
         styles={{
           content: {
@@ -38,7 +39,7 @@ export const Basic = () => {
         placeholder='Types of goats'
         values={types}
       />
-      <p>Click on an item to select it</p>
+      <P>Click on an item to select it</P>
     </View>
   )
 }

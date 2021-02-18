@@ -13,7 +13,6 @@ const {
   getComponentName,
   usePropClassName,
   useShallowMemoMerge,
-  useObjWithIdentity,
   useReStyles,
 } = require('../reStyleHooks')
 
@@ -96,49 +95,6 @@ describe('reStyleHooks', () => {
       const classList = usePropClassName('test-class-name', undefined)
       expect(classList.includes('test-class-name')).toBe(true)
       expect(classList.includes('TestCompName')).not.toBe(true)
-    })
-  })
-
-  describe('useObjWithIdentity', () => {
-    afterEach(() => {
-      clearMockedHooks(mockedHooks)
-    })
-
-    it('should memoize the passed in arguments', () => {
-      const identity = {}
-      const obj1 = {}
-      const obj2 = {}
-      useObjWithIdentity(identity, obj1, obj2)
-
-      expect(useMemo).toHaveBeenCalled()
-
-      const memoDeps = useMemo.mock.calls[0][1]
-      expect(memoDeps[0]).toBe(identity)
-      expect(memoDeps[1]).toBe(obj1)
-      expect(memoDeps[2]).toBe(obj2)
-    })
-
-    it('should mutate the passed in identity and return it', () => {
-      const identity = {}
-      const obj1 = { testObj: { test1: 1 } }
-      const obj2 = { objTest: { test2: 2 } }
-      const mutated = useObjWithIdentity(identity, obj1, obj2)
-
-      expect(identity).toBe(mutated)
-      expect(identity.testObj.test1).toBe(1)
-      expect(identity.objTest.test2).toBe(2)
-    })
-
-    it('should clean the identity before mutating it', () => {
-      const identity = { mutate: 'I should be removed' }
-      const obj1 = { testObj: { test1: 1 } }
-      const obj2 = { objTest: { test2: 2 } }
-      const mutated = useObjWithIdentity(identity, obj1, obj2)
-
-      expect(identity).toBe(mutated)
-      expect(identity.mutate).toBe(undefined)
-      expect(identity.testObj.test1).toBe(1)
-      expect(identity.objTest.test2).toBe(2)
     })
   })
 

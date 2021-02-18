@@ -3,7 +3,6 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import {
   ensureArr,
   uuid,
-  clearObj,
   isObj,
   deepMerge,
   noOpObj,
@@ -26,23 +25,6 @@ export const getComponentName = Component => {
       .slice(4)
       .join('')}`
   )
-}
-
-/**
- * Hook that ensures a consistent Object identity to avoid re-renders
- * @function
- * @param {Object} identity - Object to be reused
- * @param {Array} mergeObjs - Other objects to be merged with the identity object
- *
- * @returns {Object} - identity object merged with the passed in mergeObjs
- */
-export const useObjWithIdentity = (identity, ...mergeObjs) => {
-  return useMemo(() => {
-    clearObj(identity)
-    Object.assign(identity, deepMerge(...mergeObjs))
-
-    return identity
-  }, [ identity, ...mergeObjs ])
 }
 
 /**

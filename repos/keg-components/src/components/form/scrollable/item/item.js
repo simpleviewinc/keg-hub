@@ -43,12 +43,14 @@ const SelectButton = reStyle(
  * Individual item row in ScrollableSelect
  * @param {Object} props.item - object of form { text, key }
  * @param {Function?} props.onSelect - callback called when this item is selected. Will be passed the item.
+ * @param {Object?} props.styles - { main}
  */
-export const SelectItem = ({ item, onSelect = noOp }) => {
+export const SelectItem = ({ item, onSelect = noOp, styles }) => {
   const handle = useCallback(() => onSelect(item), [ item, onSelect ])
   return <SelectButton
     content={item.text}
     onPress={handle}
+    styles={styles}
   />
 }
 

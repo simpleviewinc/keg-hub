@@ -1,6 +1,7 @@
 import { ScrollableSelect } from './scrollableSelect'
 import { View } from 'KegView'
 import { TextInput as Input } from 'react-native'
+import { P } from 'KegTypography'
 import React from 'react'
 
 const colors = [
@@ -31,11 +32,9 @@ export const BasicExample = ({ height = 150 }) => (
 export const AdjustableHeight = () => {
   const [ height, setHeight ] = React.useState(30)
 
-  console.log({ height })
-
   return (
     <View>
-      <p>Height:</p>
+      <P>Height:</P>
       <Input
         type='number'
         onChangeText={value => setHeight(parseInt(value) ?? 150)}
