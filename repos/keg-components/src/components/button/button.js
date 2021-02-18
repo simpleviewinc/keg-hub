@@ -67,8 +67,6 @@ export const Button = React.forwardRef((props, ref) => {
     styles
   )
 
-  console.log({ styles, btnStyles })
-
   const [ hoverRef, hoverStyles ] = useThemeHover(
     get(btnStyles, 'default', {}),
     get(btnStyles, 'hover'),
