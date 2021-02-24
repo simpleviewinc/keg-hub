@@ -183,5 +183,13 @@ const template = (tempStr, data, fallback = '') => {
   }) : console.error(`template requires a string as the first argument`) || tempStr;
 };
 
-export { template as A, cleanStr as a, buildPath as b, camelCase as c, delimitString as d, capitalize as e, camelCasePath as f, containsStr as g, eitherStr as h, hyphenator as i, hashString as j, isEmail as k, isPhone as l, mapString as m, isUrl as n, isUuid as o, parseJSON as p, plural as q, removeDot as r, snakeCase as s, singular as t, styleCase as u, trainCase as v, wordCaps as w, isUpperCase as x, isLowerCase as y, spaceJoin as z };
-//# sourceMappingURL=template-c368c37b.js.map
+const validFilename = fileName => {
+  if (!fileName) return false;
+  const regex = /[<>:"/\\|?*\u0000-\u001F]/g;
+  const windowsRegex = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
+  const periodRegex = /^\.\.?$/;
+  return regex.test(fileName) || windowsRegex.test(fileName) || periodRegex.test(fileName) ? false : true;
+};
+
+export { template as A, validFilename as B, cleanStr as a, buildPath as b, camelCase as c, delimitString as d, capitalize as e, camelCasePath as f, containsStr as g, eitherStr as h, hyphenator as i, hashString as j, isEmail as k, isPhone as l, mapString as m, isUrl as n, isUuid as o, parseJSON as p, plural as q, removeDot as r, snakeCase as s, singular as t, styleCase as u, trainCase as v, wordCaps as w, isUpperCase as x, isLowerCase as y, spaceJoin as z };
+//# sourceMappingURL=validFilename-a20ef33e.js.map

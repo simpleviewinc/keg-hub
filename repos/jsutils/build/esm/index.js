@@ -8,7 +8,7 @@ export { c as compareTo, a as identity, i as isOrderable, m as match, n as noOp,
 export { e as exists } from './exists-bf542cb8.js';
 export { a as applyToFunc, h as hasOwn, p as pipeline } from './hasOwn-deb5bbb8.js';
 export { c as checkCall, a as complement, d as debounce, b as doIt, e as eitherFunc, h as hasDomAccess, l as limbo, m as memorize, p as parseErrorMessage, r as runSeq, f as throttle, g as throttleLast, t as timedRun, u as uuid } from './parseErrorMessage-9d3f4c9d.js';
-export { b as buildPath, c as camelCase, f as camelCasePath, e as capitalize, a as cleanStr, g as containsStr, d as delimitString, h as eitherStr, j as hashString, i as hyphenator, k as isEmail, y as isLowerCase, l as isPhone, x as isUpperCase, n as isUrl, o as isUuid, m as mapString, p as parseJSON, q as plural, r as removeDot, t as singular, s as snakeCase, z as spaceJoin, u as styleCase, A as template, v as trainCase, w as wordCaps } from './template-c368c37b.js';
+export { b as buildPath, c as camelCase, f as camelCasePath, e as capitalize, a as cleanStr, g as containsStr, d as delimitString, h as eitherStr, j as hashString, i as hyphenator, k as isEmail, y as isLowerCase, l as isPhone, x as isUpperCase, n as isUrl, o as isUuid, m as mapString, p as parseJSON, q as plural, r as removeDot, t as singular, s as snakeCase, z as spaceJoin, u as styleCase, A as template, v as trainCase, B as validFilename, w as wordCaps } from './validFilename-a20ef33e.js';
 export { i as isStr } from './isStr-481ce69b.js';
 export { t as toStr } from './toStr-0e5fe94c.js';
 export { e as equalsNaN, i as isNum } from './isNum-cc6ad9ca.js';

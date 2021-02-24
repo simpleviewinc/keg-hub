@@ -185,6 +185,14 @@ const template = (tempStr, data, fallback = '') => {
   }) : console.error(`template requires a string as the first argument`) || tempStr;
 };
 
+const validFilename = fileName => {
+  if (!fileName) return false;
+  const regex = /[<>:"/\\|?*\u0000-\u001F]/g;
+  const windowsRegex = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
+  const periodRegex = /^\.\.?$/;
+  return regex.test(fileName) || windowsRegex.test(fileName) || periodRegex.test(fileName) ? false : true;
+};
+
 exports.buildPath = buildPath;
 exports.camelCase = camelCase;
 exports.camelCasePath = camelCasePath;
@@ -211,5 +219,6 @@ exports.spaceJoin = spaceJoin;
 exports.styleCase = styleCase;
 exports.template = template;
 exports.trainCase = trainCase;
+exports.validFilename = validFilename;
 exports.wordCaps = wordCaps;
-//# sourceMappingURL=template-28cf926a.js.map
+//# sourceMappingURL=validFilename-b689d2bf.js.map
