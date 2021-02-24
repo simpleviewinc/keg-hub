@@ -1,5 +1,7 @@
 export * from './useAnimate'
 export * from './useAutocompleteItems'
+export * from './useAutocompleteKeyChange'
+export * from './useKeyPress'
 export * from './useChildren'
 export * from './useChildrenWithRefs'
 export * from './useInputHandlers'

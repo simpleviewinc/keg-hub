@@ -17,12 +17,13 @@ const ignoreAccents = str =>
 /**
  * Formats the menu item to be an object, or null if invalid type
  * @param {Object | String} item
+ * @param {Number} index
  * @return {Object?} returns null if invalid, otherwise an object in form { key, text }
  */
-const formatItem = item => {
+const formatItem = (item, index) => {
   if (isObj(item) && isStr(item.text))
-    return item.key ? item : { text: item.text, key: item.text }
-  else if (isStr(item)) return { text: item, key: item }
+    return { text: item.text, key: item.key || item.text, index }
+  else if (isStr(item)) return { text: item, key: item, index }
   else return null
 }
 
@@ -54,7 +55,7 @@ export const getItemsMatchingText = (text, possibleValues) => {
   const result = possibleValues.reduce(
     (state, nextItem) => {
       // ensure item is of form { key, text }
-      const formattedItem = formatItem(nextItem)
+      const formattedItem = formatItem(nextItem, state.counter)
 
       // invalid item, so just ignore
       if (!formattedItem) return state
@@ -68,9 +69,16 @@ export const getItemsMatchingText = (text, possibleValues) => {
         state.arr.push(formattedItem)
       }
 
+      // used for indices of items
+      state.counter++
+
       return state
     },
-    { arr: [], keys: new Set() }
+    {
+      arr: [],
+      keys: new Set(),
+      counter: 0,
+    }
   )
 
   return result.arr

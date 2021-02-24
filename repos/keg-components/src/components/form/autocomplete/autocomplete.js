@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { getTextFromChangeEvent } from 'KegUtils'
-import { useAutocompleteItems } from 'KegHooks'
+import { useAutocompleteItems, useAutocompleteKeyChange } from 'KegHooks'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { ScrollableSelect } from '../scrollable/select/scrollableSelect'
 import { Input } from 'KegInput'
@@ -49,10 +49,11 @@ export const Autocomplete = props => {
   } = props
 
   const [ inputText, updateText ] = useState(text || '')
-  const [ autocompleteItems, setSelectedItem ] = useAutocompleteItems(
-    inputText,
-    values
-  )
+  const [
+    autocompleteItems,
+    setSelectedItem,
+    selectedItem,
+  ] = useAutocompleteItems(inputText, values)
 
   const onSelectItem = useCallback(
     item => {
@@ -61,6 +62,15 @@ export const Autocomplete = props => {
       item && onSelect?.(item)
     },
     [ setSelectedItem, updateText ]
+  )
+
+  // TODO: we need to do one more thing when the key is pressed:
+  // need to unfocus the input? OR something. It seemse like the TextInput is capturing
+  // all the key presses
+  useAutocompleteKeyChange(
+    autocompleteItems,
+    selectedItem?.index,
+    setSelectedItem
   )
 
   const handleInputChange = useCallback(
@@ -73,10 +83,10 @@ export const Autocomplete = props => {
   )
 
   // on enter, select the top element
-  const onEnterPress = useCallback(() => onSelectItem(autocompleteItems[0]), [
-    autocompleteItems,
-    onSelectItem,
-  ])
+  const onEnterPress = useCallback(
+    () => onSelectItem(autocompleteItems[selectedItem.index]),
+    [ autocompleteItems, onSelectItem ]
+  )
 
   return (
     <View style={styles?.main}>
