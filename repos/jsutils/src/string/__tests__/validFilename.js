@@ -18,7 +18,8 @@ describe('validFilename', () => {
       '<foo|bar>',
       '??hi.test',
       'test|2.0.js',
-      '**myfile.png**'
+      '**myfile.png**',
+      '\u0000'
     ]
     filenames.map(filename => 
       expect(Str.validFilename(filename)).toEqual(false)
