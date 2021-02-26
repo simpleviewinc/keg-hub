@@ -2,13 +2,17 @@
 
 'use strict'
 
-const { logData, setLogs } = require('../log')
-const { promisify, wait } = require('../promise')
+const {
+  logData,
+  setLogs,
+  promisify,
+} = require('../../build/cjs')
+
 const { exec } = require('child_process')
 const cmdExec = promisify(exec)
 const fs = require('fs')
 
-const { SHOW_LOGS, NODE_ENV } = process.env
+const { SHOW_LOGS } = process.env
 const cmdOpts = {
   groupID: process.getgid(),
   userID: process.getuid(),

@@ -3,11 +3,13 @@
 'use strict'
 
 const path = require('path')
-const { isArr } = require('../array')
-const { isFunc } = require('../method')
-const { isObj } = require('../object')
-const { isStr } = require('../string')
-const { logData } = require('../log')
+const { 
+  isArr,
+  isFunc,
+  isObj,
+  isStr,
+  logData
+} = require('../../build/cjs')
 
 const getRelativePath = pathToModule => {
   const { filename } = module.parent
