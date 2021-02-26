@@ -1,16 +1,30 @@
-const { tryRequire } = require('../tryRequire')
+const { tryRequire, tryRequireSync } = require('../tryRequire')
 const path = require('path')
 
-describe('tryRequire', () => {
+describe('tryRequireSync', () => {
   it('should return null for paths that export no module', () => {
-    const result = tryRequire('./non/existent/path')
+    const result = tryRequireSync('./non/existent/path')
     expect(result).toEqual(null)
   })
 
   it('should require modules that do exist', () => {
-    const module = tryRequire(path.resolve(__dirname, '../tryRequire.js'))
+    const module = tryRequireSync(path.resolve(__dirname, '../tryRequire.js'))
     expect(module).toEqual(
-      expect.objectContaining({ tryRequire })
+      expect.objectContaining({ tryRequireSync })
+    )
+  })
+})
+
+describe('tryRequire', () => {
+  it('should return null for paths that export no module', async () => {
+    const result = await tryRequire('./non/existent/path')
+    expect(result).toEqual(null)
+  })
+
+  it('should require modules that do exist', async () => {
+    const module = await tryRequire(path.resolve(__dirname, '../tryRequire.js'))
+    expect(module).toEqual(
+      expect.objectContaining({ tryRequireSync })
     )
   })
 })
