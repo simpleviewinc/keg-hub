@@ -5,21 +5,12 @@
 const {
   logData,
   setLogs,
-  promisify,
 } = require('../../build/cjs')
 
-const { exec } = require('child_process')
-const cmdExec = promisify(exec)
 const fs = require('fs')
 
 const { SHOW_LOGS } = process.env
-const cmdOpts = {
-  groupID: process.getgid(),
-  userID: process.getuid(),
-  maxBuffer: Infinity
-}
 SHOW_LOGS && setLogs(true)
-const ERROR_PREFIX = 'ERROR'
 
 /**
 * Logs a message to the console
@@ -102,23 +93,6 @@ const validateArgs = (args, errors) => (
 )
 
 /**
-* Makes calls to the cmd line shell
-* @function
-* @param {string} line - command to be run in the shell
-* @return response from the shell
-*/
-const cmd = async function(line){
-  SHOW_LOGS && logData(`CMD => ${line}`, 'log')
-  const response = await cmdExec(line, cmdOpts)
-  const { stdout, stderr } = response
-  if (stderr && stderr.indexOf(ERROR_PREFIX) === 0)
-
-    throw new Error(stderr)
-
-  return stdout
-}
-
-/**
 * Copies file from one location to another
 * @function
 * @param {string} file - file to be copied
@@ -158,7 +132,6 @@ const writeFile = (filePath, data) => (
 )
 
 module.exports = {
-  cmd,
   copyFile,
   ensureFolderPath,
   errorHelper,
