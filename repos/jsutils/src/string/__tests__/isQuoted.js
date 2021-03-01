@@ -1,6 +1,12 @@
 import { isQuoted } from '../'
 
 describe('isQuoted', () => {
+  it('should return false for non-strings', () => {
+    expect(
+      isQuoted(34)
+    ).toBe(false)
+  })
+
   it('should return true for quoted text', () => {
     expect(
       isQuoted('"foo bar"')
