@@ -24,6 +24,7 @@ const parseArgs = args => {
 
 /**
  * Joins regex together in one expression
+ * @function
  * @param {...RegExp} expressions array of regex instances. 
  * You can technically use strings as well, but be careful that it's not the last element of a spread call, or that will be interpreted as the "options" string.
  * @param {string} options - options string (the second argument of RegExp constructor)
