@@ -10,7 +10,9 @@ var isNum = require('./isNum-c7164b50.js');
 var deepClone = require('./deepClone-9108ba8c.js');
 var isEmpty = require('./isEmpty-73a79cab.js');
 
-const checkCall = (method, ...params) => isFunc.isFunc(method) && method(...params) || undefined;
+const checkCall = (method, ...params) => {
+  return isFunc.isFunc(method) ? method(...params) : undefined;
+};
 
 const complement = predicate => {
   const [valid] = validate.validate({
@@ -165,4 +167,4 @@ exports.throttle = throttle;
 exports.throttleLast = throttleLast;
 exports.timedRun = timedRun;
 exports.uuid = uuid;
-//# sourceMappingURL=parseErrorMessage-3e09cf44.js.map
+//# sourceMappingURL=parseErrorMessage-c2c587c2.js.map
