@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Pressable } from 'react-native'
 import { useClassName } from 'KegClassName'
 import { checkCall, noOpObj } from '@keg-hub/jsutils'
+
 /**
  * Touchable
  * @summary Custom Touch component. All props are optional
@@ -77,7 +78,6 @@ Touchable.propTypes = {
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   onClick: PropTypes.func,
   onPress: PropTypes.func,
-  ref: PropTypes.object,
   styles: PropTypes.object,
   showFeedback: PropTypes.bool,
   activeOpacity: PropTypes.number,

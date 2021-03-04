@@ -85,7 +85,6 @@ Icon.propTypes = {
   ]),
   color: PropTypes.string,
   name: PropTypes.string,
-  ref: PropTypes.object,
   style: PropTypes.object,
   size: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
   type: PropTypes.string,

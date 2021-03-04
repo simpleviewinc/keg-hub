@@ -60,12 +60,12 @@ export const SelectItem = React.forwardRef((props, ref) => {
     styles 
   } = props
 
-  const handle = useCallback(() => onSelect(item), [ item, onSelect ])
+  const handlePress = useCallback(() => onSelect(item), [ item, onSelect ])
 
   return <SelectButton
     ref={ref}
     content={item.text}
-    onPress={handle}
+    onPress={handlePress}
     styles={styles}
     highlighted={highlighted}
   />

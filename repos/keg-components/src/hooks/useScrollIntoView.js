@@ -15,7 +15,6 @@ export const useScrollIntoView = (ref, shouldScroll, scrollOptions=true) => {
     if (!ref.current)
       return console.warn(
         'Component does not appear to be accepting a ref. Unable to scroll it into view.',
-        Component
       )
 
     // scroll the element into view according to the scroll options
