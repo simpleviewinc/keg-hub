@@ -21,6 +21,7 @@ const inputs = {
   number: 'src/number',
   object: 'src/object',
   promise: 'src/promise',
+  regex: 'src/regex',
   string: 'src/string',
   url: 'src/url',
 }
