@@ -34,13 +34,13 @@ export const ScrollableSelect = ({
       height={height ?? 150}
     >
       { items.map(item => {
-          const active = item.key === selectedItem?.key
+          const highlighted = selectedItem && (item.key === selectedItem.key)
           return <InViewSelectItem
             key={item.key || item.text}
             item={item}
             onSelect={onSelect}
-            highlighted={active}
-            scrollIntoView={active}
+            highlighted={highlighted}
+            scrollIntoView={highlighted}
             style={styles?.content}
           />
        })
