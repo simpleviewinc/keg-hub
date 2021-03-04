@@ -26,8 +26,8 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
     <Component
       {...buildProps}
       style={filteredStyle}
-      ref={ref}
       className={isStr(Component) ? classList.join(' ') : classList}
+      ref={ref}
     >
       { children }
     </Component>
@@ -44,7 +44,8 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
  * @returns {Function} - Anonymous function that wraps the passed in Component
  */
 export const StyleInjector = (Component, config = {}) => {
-  return React.forwardRef(({ style, ...props }, ref) => {
+  return React.forwardRef((allProps, ref) => {
+    const { style, ...props } = allProps
     return !style ? (
       <Component
         {...props}

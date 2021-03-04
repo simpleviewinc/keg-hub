@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 const SelectButton = reStyle(
   Button,
   'styles'
-)(theme => {
+)((theme, props) => {
   const {
     colors: { palette },
   } = theme
@@ -26,15 +26,22 @@ const SelectButton = reStyle(
     backgroundColor: palette.white01,
   }
 
+  const highlighted = {
+    ...main,
+    backgroundColor: palette.gray01
+  }
+
   return {
-    default: { content, main },
+    default: { 
+      content, 
+      main: props.highlighted 
+        ? highlighted
+        : main
+    },
     active: { content, main },
     hover: {
       content,
-      main: {
-        ...main,
-        backgroundColor: palette.gray01,
-      },
+      main: highlighted
     },
   }
 })
@@ -45,16 +52,28 @@ const SelectButton = reStyle(
  * @param {Function?} props.onSelect - callback called when this item is selected. Will be passed the item.
  * @param {Object?} props.styles - { main}
  */
-export const SelectItem = ({ item, onSelect = noOp, styles }) => {
+export const SelectItem = React.forwardRef((props, ref) => {
+  const { 
+    item, 
+    onSelect = noOp, 
+    highlighted = false,
+    styles 
+  } = props
+
   const handle = useCallback(() => onSelect(item), [ item, onSelect ])
+
   return <SelectButton
+    ref={ref}
     content={item.text}
     onPress={handle}
     styles={styles}
+    highlighted={highlighted}
   />
-}
+})
 
 SelectItem.propTypes = {
   item: PropTypes.object.isRequired,
   onSelect: PropTypes.func,
+  highlighted: PropTypes.bool,
+  styles: PropTypes.object,
 }

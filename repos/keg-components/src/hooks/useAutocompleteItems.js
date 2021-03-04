@@ -28,6 +28,12 @@ const formatItem = (item, index) => {
 }
 
 /**
+ * @param {string} str 
+ * @return {string} string trimmed
+ */
+const trimStr = str => str?.trim()
+
+/**
  *
  * @param {string} text - user input text
  * @param {Object} item - one of the possible autocomplete values, of form { text, key }
@@ -35,7 +41,7 @@ const formatItem = (item, index) => {
  */
 const textMatches = (text, item) => {
   const itemComparisonStr = pipeline(item.text, ignoreCase, ignoreAccents)
-  const textComparisonStr = pipeline(text, ignoreCase, ignoreAccents)
+  const textComparisonStr = pipeline(text, trimStr, ignoreCase, ignoreAccents)
   return itemComparisonStr.includes(textComparisonStr)
 }
 
@@ -67,10 +73,9 @@ export const getItemsMatchingText = (text, possibleValues) => {
       ) {
         state.keys.add(formattedItem.key)
         state.arr.push(formattedItem)
-      }
 
-      // used for indices of items
-      state.counter++
+        state.counter++ // used for item indices
+      }
 
       return state
     },

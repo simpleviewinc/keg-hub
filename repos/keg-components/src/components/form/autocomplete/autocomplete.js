@@ -2,11 +2,11 @@ import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { getTextFromChangeEvent } from 'KegUtils'
-import { useAutocompleteItems, useAutocompleteKeyChange } from 'KegHooks'
+import { useAutocompleteItems } from 'KegHooks'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { ScrollableSelect } from '../scrollable/select/scrollableSelect'
-import { Input } from 'KegInput'
 import { View } from 'KegView'
+import { AutocompleteInput } from './autocompleteInput'
 
 /**
  * An absolutely-positioned scrollabale select
@@ -64,15 +64,6 @@ export const Autocomplete = props => {
     [ setSelectedItem, updateText ]
   )
 
-  // TODO: we need to do one more thing when the key is pressed:
-  // need to unfocus the input? OR something. It seemse like the TextInput is capturing
-  // all the key presses
-  useAutocompleteKeyChange(
-    autocompleteItems,
-    selectedItem?.index,
-    setSelectedItem
-  )
-
   const handleInputChange = useCallback(
     event => {
       const text = getTextFromChangeEvent(event)
@@ -82,22 +73,18 @@ export const Autocomplete = props => {
     [ onChange, updateText ]
   )
 
-  // on enter, select the top element
-  const onEnterPress = useCallback(
-    () => onSelectItem(autocompleteItems[selectedItem.index]),
-    [ autocompleteItems, onSelectItem ]
-  )
-
   return (
     <View style={styles?.main}>
-      <Input
+      <AutocompleteInput
+        highlightedIndex={selectedItem?.index}
+        highlightItem={setSelectedItem}
+        selectItem={onSelectItem}
+        items={autocompleteItems}
         placeholder={placeholder}
         onChange={handleInputChange}
         value={inputText}
         ref={inputRef}
         style={styles?.content?.input}
-        onSubmitEditing={onEnterPress}
-        useTouch={false}
         {...inputProps}
       />
 
@@ -109,6 +96,7 @@ export const Autocomplete = props => {
           visible={autocompleteItems.length > 0}
           items={autocompleteItems}
           onSelect={onSelectItem}
+          selectedItem={selectedItem}
           animationDuration={100}
         />
       </View>

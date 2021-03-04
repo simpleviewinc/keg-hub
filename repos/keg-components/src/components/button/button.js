@@ -119,7 +119,6 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   onPress: PropTypes.func,
-  ref: PropTypes.object,
   styles: PropTypes.object,
   themePath: PropTypes.string,
   selectable: PropTypes.bool,

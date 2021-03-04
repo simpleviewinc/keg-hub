@@ -2,6 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { SelectItem } from '../item/item'
 import { SelectView } from './selectView'
+import { withScrollIntoView } from 'KegHocs'
+
+/**
+ * Wrapper around SelectItem that ensures it stays in the view
+ * of the ScrollableSelect list (by automatically scrolling it)
+ */
+const InViewSelectItem = withScrollIntoView(SelectItem, false)
 
 /**
  * A scrollable menu list of items, with prop-adjustable height and visibility
@@ -17,6 +24,7 @@ export const ScrollableSelect = ({
   styles,
   visible = true,
   onSelect,
+  selectedItem,
   height,
 }) => {
   return (
@@ -25,14 +33,18 @@ export const ScrollableSelect = ({
       visible={visible}
       height={height ?? 150}
     >
-      { items.map(item => (
-        <SelectItem
-          key={item.key || item.text}
-          item={item}
-          onSelect={onSelect}
-          style={styles?.content}
-        />
-      )) }
+      { items.map(item => {
+          const active = item.key === selectedItem?.key
+          return <InViewSelectItem
+            key={item.key || item.text}
+            item={item}
+            onSelect={onSelect}
+            highlighted={active}
+            scrollIntoView={active}
+            style={styles?.content}
+          />
+       })
+      }
     </SelectView>
   )
 }
