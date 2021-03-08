@@ -344,10 +344,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@keg-hub/jsutils@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.2.0.tgz#c9f20bbc5ef439c78ed6ccd113e57d2b84b01a98"
-  integrity sha512-KXooZivpaA3+cmbYI6PntkSUp5GE6/qhdwKMWa2hSRGJ34HSrNII9hSMSgOFZiqGJZKAIr39VVR9WsI+n3nmZA==
+"@keg-hub/jsutils@8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.3.0.tgz#559d61c4d20bcca33358685547ba8975cf0f8f47"
+  integrity sha512-kmWMkbL2w7Eg89JXqdTC2OedwpD4eL/5KRbSOUbIRCum3xQl/2S1D/FraeJKwlW14NCpOWjfRHPnfxWgwPcAqw==
 
 "@types/babel__core@^7.1.0":
   version "7.1.9"
