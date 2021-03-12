@@ -27,7 +27,10 @@ const types = [
 export const Basic = () => {
   return (
     <View>
-      <P>Start typing to see options</P>
+      <P style={{ marginBottom: 35 }}>
+        Start typing to see options, then click on an item to select it.
+        You can alternatively use the arrow keys and press enter to select.
+      </P>
       <Autocomplete
         styles={{
           content: {
@@ -39,7 +42,6 @@ export const Basic = () => {
         placeholder='Types of goats'
         values={types}
       />
-      <P>Click on an item to select it</P>
     </View>
   )
 }

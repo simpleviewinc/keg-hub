@@ -7,6 +7,7 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { ScrollableSelect } from '../scrollable/select/scrollableSelect'
 import { View } from 'KegView'
 import { AutocompleteInput } from './autocompleteInput'
+import { withOutsideDetect } from 'KegHocs'
 
 /**
  * An absolutely-positioned scrollabale select
@@ -17,6 +18,11 @@ const FloatingScrollableSelect = reStyle(
 )(() => ({
   main: { position: 'absolute', zIndex: 9999 },
 }))
+
+/**
+ * View wrapped with out-of-bounds click detection.
+ */
+const AutocompleteView = withOutsideDetect(View)
 
 /**
  * Provides text input with autocomplete functionality. As user types, shows a menu of autocomplete options that contain user input as a substring.
@@ -57,7 +63,7 @@ export const Autocomplete = props => {
 
   const onSelectItem = useCallback(
     item => {
-      updateText(item?.text)
+      updateText(item?.text || '')
       setSelectedItem(item)
       item && onSelect?.(item)
     },
@@ -73,8 +79,13 @@ export const Autocomplete = props => {
     [ onChange, updateText ]
   )
 
+  const onOutsideClick = useCallback(() => {
+    // if the FloatingScrollableSelect is visible, hide it by resetting input
+    autocompleteItems.length && updateText(selectedItem?.text)
+  }, [onSelectItem, autocompleteItems ])
+
   return (
-    <View style={styles?.main}>
+    <AutocompleteView style={styles?.main} onOutsideClick={onOutsideClick}>
       <AutocompleteInput
         highlightedIndex={selectedItem?.index}
         highlightItem={setSelectedItem}
@@ -100,7 +111,7 @@ export const Autocomplete = props => {
           animationDuration={100}
         />
       </View>
-    </View>
+    </AutocompleteView>
   )
 }
 

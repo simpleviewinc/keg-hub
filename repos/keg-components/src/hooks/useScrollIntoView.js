@@ -1,4 +1,7 @@
 import { useEffect } from 'react'
+import { getPlatform } from 'KegGetPlatform'
+
+const platform = getPlatform()
 
 /**
  * Ensures the DOM element stored in `ref` remains visible
@@ -12,15 +15,10 @@ import { useEffect } from 'react'
  */
 export const useScrollIntoView = (ref, shouldScroll, scrollOptions=true) => {
   useEffect(() => {
-    if (!ref.current)
-      return console.warn(
-        'Component does not appear to be accepting a ref. Unable to scroll it into view.',
-      )
+    if (platform !== 'web') return
 
-    // scroll the element into view according to the scroll options
-    shouldScroll && 
-      ref.current?.scrollIntoView(scrollOptions)
-
+    // scroll the element into view according to the scroll options, so long as ref stores the element
+    shouldScroll && ref.current?.scrollIntoView(scrollOptions)
   }, [ ref, shouldScroll, scrollOptions ])
 
   return [ ref ]

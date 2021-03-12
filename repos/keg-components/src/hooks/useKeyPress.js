@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { getPlatform } from 'KegGetPlatform'
+import { noOp } from '@keg-hub/jsutils'
 
 const platform = getPlatform()
 
@@ -37,8 +38,9 @@ export const useKeyPress = targetKey => {
   )
 
   useEffect(() => {
-    if (platform !== 'web') return
-    return manageListeners(upHandler, downHandler)
+    return (platform === 'web')
+      ? manageListeners(upHandler, downHandler)
+      : noOp
   }, [ downHandler, upHandler ])
 
   return keyPressed
