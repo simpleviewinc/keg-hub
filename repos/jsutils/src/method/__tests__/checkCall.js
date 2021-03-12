@@ -16,4 +16,10 @@ describe('checkCall', () => {
     expect(Method.checkCall(null, 1,2,3)).toEqual(undefined)
   })
 
+  it('should return falsy values without any coercion if that is the output of the function', () => {
+    expect(Method.checkCall(() => 0)).toEqual(0)
+    expect(Method.checkCall(() => false)).toEqual(false)
+    expect(Method.checkCall(() => null)).toEqual(null)
+  })
+
 })

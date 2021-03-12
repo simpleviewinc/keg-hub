@@ -2586,10 +2586,10 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-7.0.0.tgz#e01edd7aa9a936f3267e1c506b53ea841de2f85f"
   integrity sha512-/2a+sXmmXeqgaqit9OnqocmEbUee+niQ/9bkvvgqcuA8c1d8rpGMIuprMgj7RqxLCCQhwRJmHh8UePnhdMKNlg==
 
-"@keg-hub/jsutils@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.2.0.tgz#c9f20bbc5ef439c78ed6ccd113e57d2b84b01a98"
-  integrity sha512-KXooZivpaA3+cmbYI6PntkSUp5GE6/qhdwKMWa2hSRGJ34HSrNII9hSMSgOFZiqGJZKAIr39VVR9WsI+n3nmZA==
+"@keg-hub/jsutils@8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.3.0.tgz#559d61c4d20bcca33358685547ba8975cf0f8f47"
+  integrity sha512-kmWMkbL2w7Eg89JXqdTC2OedwpD4eL/5KRbSOUbIRCum3xQl/2S1D/FraeJKwlW14NCpOWjfRHPnfxWgwPcAqw==
 
 "@keg-hub/keg-components@8.2.1":
   version "8.2.1"

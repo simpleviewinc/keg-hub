@@ -8,7 +8,9 @@ import { i as isNum } from './isNum-cc6ad9ca.js';
 import { d as deepClone } from './deepClone-8a68e415.js';
 import { i as isEmpty } from './isEmpty-324adee6.js';
 
-const checkCall = (method, ...params) => isFunc(method) && method(...params) || undefined;
+const checkCall = (method, ...params) => {
+  return isFunc(method) ? method(...params) : undefined;
+};
 
 const complement = predicate => {
   const [valid] = validate({
@@ -150,4 +152,4 @@ const parseErrorMessage = exception => {
 };
 
 export { complement as a, doIt as b, checkCall as c, debounce as d, eitherFunc as e, throttle as f, throttleLast as g, hasDomAccess as h, limbo as l, memorize as m, parseErrorMessage as p, runSeq as r, timedRun as t, uuid as u };
-//# sourceMappingURL=parseErrorMessage-9d3f4c9d.js.map
+//# sourceMappingURL=parseErrorMessage-0a52f8cc.js.map

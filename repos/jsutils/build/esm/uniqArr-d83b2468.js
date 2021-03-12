@@ -2,9 +2,10 @@ import { v as validate } from './validate-0eec5ac6.js';
 import { i as isArr } from './isArr-a4420764.js';
 import { i as isObj } from './isObj-2a71d1af.js';
 import { i as isFunc } from './isFunc-40ceeef8.js';
-import { b as noOpObj, a as identity, c as compareTo } from './match-312736a1.js';
+import { a as noOpObj } from './match-61fbd7dc.js';
 import { e as exists } from './exists-bf542cb8.js';
 import { i as isNonNegative } from './isNonNegative-76ec0014.js';
+import { a as identity, c as compareTo } from './identity-aa1ca9c0.js';
 
 const buildElementCountMap = arr => {
   const counts = new Map();
@@ -154,4 +155,4 @@ const uniqArr = (arr, selector) => {
 };
 
 export { areCountMapsEqual as a, buildElementCountMap as b, areFrequencyEqual as c, areSetEqual as d, cloneArr as e, eitherArr as f, ensureArr as g, flatArr as h, flatMap as i, findExtrema as j, findMax as k, findMin as l, randomizeArr as m, uniqArr as n, omitRange as o, randomArr as r, uniqArrByReference as u };
-//# sourceMappingURL=uniqArr-1e5387ed.js.map
+//# sourceMappingURL=uniqArr-d83b2468.js.map

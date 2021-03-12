@@ -12,4 +12,8 @@ import { isFunc } from './isFunc'
  * @param {Object} params - params to pass to the method on call
  * @return {*} - whatever the passed in method returns
  */
-export const checkCall = (method, ...params) =>  isFunc(method) && method(...params) || undefined
+export const checkCall = (method, ...params) => {
+  return isFunc(method)
+    ? method(...params)
+    : undefined
+}

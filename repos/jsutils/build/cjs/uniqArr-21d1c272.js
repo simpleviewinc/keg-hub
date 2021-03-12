@@ -4,9 +4,10 @@ var validate = require('./validate-500f268a.js');
 var isArr = require('./isArr-39234014.js');
 var isObj = require('./isObj-6b3aa807.js');
 var isFunc = require('./isFunc-f93803cb.js');
-var match = require('./match-11af2741.js');
+var match = require('./match-937d87ee.js');
 var exists = require('./exists-c79204b1.js');
 var isNonNegative = require('./isNonNegative-9959647c.js');
+var identity = require('./identity-c14fb27a.js');
 
 const buildElementCountMap = arr => {
   const counts = new Map();
@@ -105,9 +106,9 @@ const findExtrema = (arr, comparator) => {
   return arr.length ? arr.reduce((extremaSoFar, next) => comparator(extremaSoFar, next) > 0 ? extremaSoFar : next) : null;
 };
 
-const findMax = (arr = [], propSelector = match.identity) => findExtrema(arr, (x, y) => match.compareTo(propSelector(x), propSelector(y)));
+const findMax = (arr = [], propSelector = identity.identity) => findExtrema(arr, (x, y) => identity.compareTo(propSelector(x), propSelector(y)));
 
-const findMin = (arr = [], propSelector = match.identity) => findExtrema(arr, (x, y) => match.compareTo(propSelector(y), propSelector(x)));
+const findMin = (arr = [], propSelector = identity.identity) => findExtrema(arr, (x, y) => identity.compareTo(propSelector(y), propSelector(x)));
 
 const omitRange = (arr, startIndex, count) => {
   const [inputIsValid] = validate.validate({
@@ -172,4 +173,4 @@ exports.randomArr = randomArr;
 exports.randomizeArr = randomizeArr;
 exports.uniqArr = uniqArr;
 exports.uniqArrByReference = uniqArrByReference;
-//# sourceMappingURL=uniqArr-f93aa5ea.js.map
+//# sourceMappingURL=uniqArr-21d1c272.js.map

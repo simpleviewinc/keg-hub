@@ -185,6 +185,43 @@ const template = (tempStr, data, fallback = '') => {
   }) : console.error(`template requires a string as the first argument`) || tempStr;
 };
 
+const validFilename = fileName => {
+  if (!fileName) return false;
+  const regex = /[<>:"/\\|?*\u0000-\u001F]/g;
+  const windowsRegex = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
+  const periodRegex = /^\.\.?$/;
+  return regex.test(fileName) || windowsRegex.test(fileName) || periodRegex.test(fileName) ? false : true;
+};
+
+const quoteSymbols = ['\"', '\''];
+const isQuoted = (str, quotes = quoteSymbols) => {
+  return isStr.isStr(str) && quotes.some(quote => str.startsWith(quote) && str.endsWith(quote));
+};
+
+const reverseStr = str => {
+  if (!isStr.isStr(str)) return undefined;
+  let reversed = '';
+  for (let char of str) {
+    reversed = char + reversed;
+  }
+  return reversed;
+};
+
+const getNearestDelimiterIndex = (text, index, delimiters) => {
+  const indices = delimiters.map(str => text.indexOf(str, index)).sort();
+  return indices.find(idx => idx >= 0);
+};
+const getWordStartingAt = (text, index, delimiters = [' ']) => {
+  const endingSpaceIdx = getNearestDelimiterIndex(text, index, delimiters);
+  return text.substring(index, endingSpaceIdx === -1 ? text.length : endingSpaceIdx);
+};
+
+const getWordEndingAt = (text, index, delimiters = [' ']) => {
+  const reversed = reverseStr(text);
+  const reversedIndex = text.length - index;
+  return reverseStr(getWordStartingAt(reversed, reversedIndex, delimiters));
+};
+
 exports.buildPath = buildPath;
 exports.camelCase = camelCase;
 exports.camelCasePath = camelCasePath;
@@ -193,11 +230,15 @@ exports.cleanStr = cleanStr;
 exports.containsStr = containsStr;
 exports.delimitString = delimitString;
 exports.eitherStr = eitherStr;
+exports.getNearestDelimiterIndex = getNearestDelimiterIndex;
+exports.getWordEndingAt = getWordEndingAt;
+exports.getWordStartingAt = getWordStartingAt;
 exports.hashString = hashString;
 exports.hyphenator = hyphenator;
 exports.isEmail = isEmail;
 exports.isLowerCase = isLowerCase;
 exports.isPhone = isPhone;
+exports.isQuoted = isQuoted;
 exports.isUpperCase = isUpperCase;
 exports.isUrl = isUrl;
 exports.isUuid = isUuid;
@@ -205,11 +246,13 @@ exports.mapString = mapString;
 exports.parseJSON = parseJSON;
 exports.plural = plural;
 exports.removeDot = removeDot;
+exports.reverseStr = reverseStr;
 exports.singular = singular;
 exports.snakeCase = snakeCase;
 exports.spaceJoin = spaceJoin;
 exports.styleCase = styleCase;
 exports.template = template;
 exports.trainCase = trainCase;
+exports.validFilename = validFilename;
 exports.wordCaps = wordCaps;
-//# sourceMappingURL=template-28cf926a.js.map
+//# sourceMappingURL=getWordEndingAt-7a822dfa.js.map

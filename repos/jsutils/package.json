@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/jsutils",
-  "version": "8.2.0",
+  "version": "8.3.0",
   "description": "Keg common javascript utils",
   "main": "build/umd/index.js",
   "module": "build/esm/index.js",
@@ -15,7 +15,8 @@
   },
   "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
   "files": [
-    "build"
+    "build",
+    "src/node"
   ],
   "publishConfig": {
     "access": "public"
