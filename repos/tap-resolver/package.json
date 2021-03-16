@@ -31,21 +31,13 @@
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
-  "dependencies": {
-    "@babel/cli": "7.12.1",
+  "dependencies": {},
+  "devDependencies": {
     "@babel/core": "7.13.10",
     "@babel/preset-env": "7.13.10",
     "@babel/preset-react": "7.12.13",
-    "@babel/runtime": "7.13.10",
     "@keg-hub/jsutils": "8.3.0",
     "app-root-path": "3.0.0",
-    "babel-loader": "8.2.2",
-    "babel-plugin-module-resolver": "4.1.0",
-    "babel-plugin-react-native-web": "0.14.13",
-    "babel-preset-expo": "8.3.0",
-    "core-js": "3.6.4"
-  },
-  "devDependencies": {
     "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
     "eslint": "7.22.0",
