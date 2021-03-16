@@ -162,10 +162,13 @@ const shared = {
   plugins: platform => ([
    BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
     replace({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-      "process.env.RE_PLATFORM": JSON.stringify(platform),
-      "process.env.PLATFORM": JSON.stringify(platform),
-      "import 'prop-types';": "",
+      preventAssignment: true,
+      values: {
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+        "process.env.RE_PLATFORM": JSON.stringify(platform),
+        "process.env.PLATFORM": JSON.stringify(platform),
+        "import 'prop-types';": "",
+      }
     }),
     resolve(),
     json(),
@@ -174,7 +177,8 @@ const shared = {
     }),
     babel({
       exclude: 'node_modules/**',
-      runtimeHelpers: true,
+      babelHelpers: 'bundled',
+      exclude: 'node_modules/**',
       ...babelConfig
     }),
     sourcemaps(),
