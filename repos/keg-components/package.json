@@ -132,7 +132,7 @@
     "@keg-hub/jsutils": "8.3.0",
     "@keg-hub/re-theme": "8.2.1",
     "expo": "40.0.1",
-    "expo-font": "^9.0.0",
+    "expo-font": "9.0.0",
     "react": "16.13.1",
     "react-native-linear-gradient": "2.5.6"
   },
