@@ -1,4 +1,4 @@
-import React, useMemo from 'react'
+import React, { useMemo } from 'react'
 import { eitherArr, noPropArr } from '@keg-hub/jsutils'
 
 /**
