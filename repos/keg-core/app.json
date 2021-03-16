@@ -113,9 +113,7 @@
           "^react-native-svg": "react-native-svg-web",
           "react-router-native": "react-router-dom"
         },
-        "native": {
-          "@keg-hub/re-theme": "@keg-hub/re-theme/build/cjs/native"
-        }
+        "native": {}
       },
       "babel": {
         "web": {
