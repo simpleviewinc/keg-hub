@@ -1,4 +1,4 @@
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
@@ -28,10 +28,12 @@ const inputs = {
 
 const buildPlugins = (type, extra) => {
   return [
-    ...(extra.plugins || []),
     DEV_MODE && buildHook(type),
     replace({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      preventAssignment: true,
+      values: {
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      }
     }),
     resolve(),
     commonjs({
@@ -39,11 +41,12 @@ const buildPlugins = (type, extra) => {
     }),
     babel({
       exclude: 'node_modules/**',
-      runtimeHelpers: true,
+      babelHelpers: 'bundled',
       ...babelConfig
     }),
     sourcemaps(),
     cleanup(),
+    ...(extra.plugins || []),
   ]
 }
 
