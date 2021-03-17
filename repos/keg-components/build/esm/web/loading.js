@@ -1,27 +1,27 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import { g as getPlatform } from './getPlatform-95568099.js';
-import React__default from 'react';
-import { isValidComponent } from './isValidComponent.js';
-import './ensureClassArray.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
+import React from 'react';
+import { V as View } from './view-2274aefb.js';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
 import { ActivityIndicator } from 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
-import '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import './useTextAccessibility.js';
-import './kegText.native-7cc07481.js';
-import '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-653699c8.js';
+import { I as IndicatorWrapper } from './indicator.wrapper-ddd47db5.js';
+import { g as getPlatform } from './getPlatform-95568099.js';
+import { u as useClassList } from './useClassList-1d418045.js';
 import { Text } from './text.js';
+import '@keg-hub/jsutils';
+import { isValidComponent } from './isValidComponent.js';
+import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList-eea8a571.js';
-import { I as IndicatorWrapper } from './indicator.wrapper-bc4d150e.js';
+import './view.native-a7f08b5b.js';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import '@keg-hub/re-theme/styleInjector';
+import './kegText-5c4aeb4b.js';
+import './kegText.native-be460636.js';
+import './useTextAccessibility.js';
+import './useTextStyles.js';
+import '@keg-hub/re-theme';
 
 var isWeb = getPlatform() === 'web';
 var Element = function Element(_ref) {
@@ -29,11 +29,11 @@ var Element = function Element(_ref) {
       _ref$style = _ref.style,
       style = _ref$style === void 0 ? {} : _ref$style,
       size = _ref.size,
-      color = _ref.color,
-      attrs = _objectWithoutProperties(_ref, ["className", "style", "size", "color"]);
-  return React__default.createElement(View, {
+      color = _ref.color;
+      _objectWithoutProperties(_ref, ["className", "style", "size", "color"]);
+  return React.createElement(View, {
     className: useClassList('keg-indicator', className)
-  }, React__default.createElement(ActivityIndicator, {
+  }, React.createElement(ActivityIndicator, {
     size: size,
     color: style.color || color
   }));
@@ -44,7 +44,7 @@ var Indicator = function Indicator(_ref2) {
       color = _ref2.color,
       styles = _ref2.styles,
       props = _objectWithoutProperties(_ref2, ["alt", "size", "color", "styles"]);
-  return React__default.createElement(IndicatorWrapper, _extends({}, props, {
+  return React.createElement(IndicatorWrapper, _extends({}, props, {
     alt: alt || 'Loading',
     size: ['large', 'small'].includes(size) ? size : 'large',
     color: color,
@@ -61,14 +61,14 @@ var Progress = function Progress(props) {
       type = props.type,
       size = props.size;
   var LoadingIndicator = loadIndicator || Indicator;
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     style: styles.progress,
     className: "keg-progress"
-  }, isValidComponent(LoadingIndicator) ? React__default.createElement(LoadingIndicator, {
+  }, isValidComponent(LoadingIndicator) ? React.createElement(LoadingIndicator, {
     size: size,
     styles: styles.indicator,
     type: type
-  }) : text && React__default.createElement(Text, {
+  }) : text && React.createElement(Text, {
     className: "keg-progress-text",
     style: styles.text
   }, text));
@@ -85,10 +85,10 @@ var Loading = function Loading(props) {
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type;
   var builtStyles = useThemePath(themePath || "loading.".concat(type), styles);
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     style: builtStyles.main,
     className: useClassList('keg-loading', className)
-  }, children || React__default.createElement(Progress, {
+  }, children || React.createElement(Progress, {
     styles: builtStyles,
     text: text,
     loadIndicator: indicator,

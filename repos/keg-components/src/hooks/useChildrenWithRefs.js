@@ -73,8 +73,8 @@ export const useChildrenWithRefs = (children, enable = true) => {
     // if enabled, clone the children, otherwise just return them
     return enable
       ? React.Children.count(children) > 1
-          ? children.map(cloneChild)
-          : cloneChild(children)
+        ? children.map(cloneChild)
+        : cloneChild(children)
       : children
   }, [ enable, children ])
 

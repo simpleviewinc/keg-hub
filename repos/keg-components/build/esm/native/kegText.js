@@ -1,7 +1,7 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import React__default from 'react';
-import { Text } from 'react-native';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React from 'react';
 import { u as useClassName } from './useClassName.native-32e8827d.js';
+import { Text } from 'react-native';
 import { useTextAccessibility } from './useTextAccessibility.js';
 
 var ellipsisProps = {
@@ -9,7 +9,7 @@ var ellipsisProps = {
   numberOfLines: 1
 };
 var KegText = function KegText(element) {
-  return React__default.forwardRef(function (props, ref) {
+  return React.forwardRef(function (props, ref) {
     var accessibilityRole = props.accessibilityRole,
         children = props.children,
         className = props.className,
@@ -17,7 +17,7 @@ var KegText = function KegText(element) {
         attrs = _objectWithoutProperties(props, ["accessibilityRole", "children", "className", "ellipsis"]);
     var classRef = useClassName("keg-".concat(element), className, ref);
     var a11y = useTextAccessibility(element, accessibilityRole);
-    return React__default.createElement(Text, _extends({}, attrs, a11y, ellipsis && ellipsisProps, {
+    return React.createElement(Text, _extends({}, attrs, a11y, ellipsis && ellipsisProps, {
       ref: classRef
     }), children);
   });

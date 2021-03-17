@@ -2,27 +2,27 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var icon = require('./icon-5bf6ad84.js');
+var withTouch = require('./withTouch.js');
+var touchable = require('./touchable.js');
 require('react');
-require('./isValidComponent.js');
-require('./renderFromType.js');
+require('@keg-hub/re-theme');
+require('@keg-hub/jsutils');
+require('./view-276572bd.js');
+require('./view.native-99366b4b.js');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./view-a5f2a568.js');
-require('@keg-hub/re-theme');
+require('./renderFromType.js');
+require('./isValidComponent.js');
+require('@keg-hub/re-theme/colors');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useClassList-9eaefcd6.js');
-var icon = require('./icon-2d468b3c.js');
-var touchable = require('./touchable.js');
-var withTouch = require('./withTouch.js');
+require('./useClassList-89a8dbd4.js');
 
 var TouchableIcon = withTouch.withTouch(icon.Icon);
 TouchableIcon.propTypes = _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, touchable.Touchable.propTypes), icon.Icon.propTypes);

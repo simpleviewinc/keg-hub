@@ -1,24 +1,24 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React from 'react';
 import '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import React__default from 'react';
-import './ensureClassArray.js';
 import { getValueFromChildren } from './getInputValue.js';
 import { getReadOnly } from './getReadOnly.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import './validateFunctions.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import '@keg-hub/re-theme';
+import '@keg-hub/re-theme/colors';
 import { useInputHandlers } from './useInputHandlers.js';
 import { usePressHandlers } from './usePressHandlers.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import './touchable.js';
+import 'react-native';
+import { I as Input$1 } from './input-1ff0e077.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import './validateFunctions.js';
+import '@keg-hub/re-theme';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
 import './withTouch.js';
-import { I as Input$1 } from './input-204664bb.js';
+import './touchable.js';
 
 var KegInput = StyleInjector(Input$1, {
   displayName: 'Input',
@@ -32,15 +32,15 @@ var getValue = function getValue(_ref) {
     value: setValue
   } : {};
 };
-var Input = React__default.forwardRef(function (props, ref) {
-  var className = props.className,
-      children = props.children,
-      _props$disabled = props.disabled,
+var Input = React.forwardRef(function (props, ref) {
+  props.className;
+      props.children;
+      var _props$disabled = props.disabled,
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$editable = props.editable,
-      editable = _props$editable === void 0 ? true : _props$editable,
-      Element = props.Element,
-      onChange = props.onChange,
+      editable = _props$editable === void 0 ? true : _props$editable;
+      props.Element;
+      var onChange = props.onChange,
       onValueChange = props.onValueChange,
       onChangeText = props.onChangeText,
       onClick = props.onClick,
@@ -51,11 +51,11 @@ var Input = React__default.forwardRef(function (props, ref) {
       type = _props$type === void 0 ? 'default' : _props$type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
-      style = props.style,
-      value = props.value,
-      elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+      style = props.style;
+      props.value;
+      var elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
   var inputStyles = useThemePath(themePath);
-  return React__default.createElement(KegInput, _extends({
+  return React.createElement(KegInput, _extends({
     accessibilityRole: "textbox",
     onPress: onPress
   }, getReadOnly(false, readOnly, disabled, editable), getValue(props), useInputHandlers({

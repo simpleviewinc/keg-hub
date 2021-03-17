@@ -2,27 +2,28 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-var isValidComponent = require('./isValidComponent.js');
-var renderFromType = require('./renderFromType.js');
-require('react-native');
-require('./useClassName.native-3d1a229b.js');
-var view_native = require('./view.native-20f555a1.js');
 var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
+var view_native = require('./view.native-b34604af.js');
+var renderFromType = require('./renderFromType.js');
+require('@keg-hub/re-theme/colors');
+var isValidComponent = require('./isValidComponent.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
+require('react-native');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
+require('./useClassName.native-3d1a229b.js');
 
-var Icon = React__default.forwardRef(function (props, ref) {
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+
+var Icon = React__default['default'].forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
-  var className = props.className,
-      color = props.color,
+  props.className;
+      var color = props.color,
       Component = props.Component,
       _props$Element = props.Element,
       Element = _props$Element === void 0 ? Component : _props$Element,
@@ -42,7 +43,7 @@ var Icon = React__default.forwardRef(function (props, ref) {
     color: color || iconStyles.color || jsutils.get(iconStyles, 'icon.color') || jsutils.get(theme, 'typography.default.color'),
     size: parseInt(size || jsutils.get(iconStyles, 'icon.fontSize') || jsutils.get(theme, 'typography.default.fontSize', 15) * 2, 10)
   };
-  return React__default.createElement(view_native.View, {
+  return React__default['default'].createElement(view_native.View, {
     className: useClassList_native.useClassList(),
     style: iconStyles.container
   }, renderFromType.renderFromType(Element, _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, attrs), iconProps)));

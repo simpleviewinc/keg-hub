@@ -1,6 +1,6 @@
-import { get, noPropObj, isEmptyColl, deepMerge, reduceObj } from '@keg-hub/jsutils';
 import { useMemo } from 'react';
 import { useTheme } from '@keg-hub/re-theme';
+import { get, noPropObj, isEmptyColl, deepMerge, reduceObj } from '@keg-hub/jsutils';
 
 var validateStyles = function validateStyles(styles) {
   return !Boolean(!styles || styles === noPropObj || isEmptyColl(styles));

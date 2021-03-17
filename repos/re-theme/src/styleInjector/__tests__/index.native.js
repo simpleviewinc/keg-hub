@@ -1,9 +1,7 @@
 import { mockReactHooks, clearMockedHooks } from '../../mocks/reactHooks'
 import React from 'react'
 
-const mockedHooks = mockReactHooks(
-  'useMemo',
-)
+const mockedHooks = mockReactHooks('useMemo')
 
 const MockComponent = props => {
   return React.createElement('div', props, 'I am a div')

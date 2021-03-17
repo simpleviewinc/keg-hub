@@ -2,18 +2,15 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var jsutils = require('@keg-hub/jsutils');
 var React = require('react');
-var React__default = _interopDefault(React);
+var jsutils = require('@keg-hub/jsutils');
 
 var useAnimate = function useAnimate(_ref) {
   var ref = _ref.ref,
       animation = _ref.animation,
-      config = _ref.config,
-      startCb = _ref.startCb,
-      startDelay = _ref.startDelay;
+      config = _ref.config;
+      _ref.startCb;
+      var startDelay = _ref.startDelay;
   var aniRef = React.useRef(ref);
   var animate = function animate() {
     var element = aniRef.current;

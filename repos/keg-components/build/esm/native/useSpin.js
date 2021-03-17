@@ -1,3 +1,3 @@
+export { a as useSpin } from './useSpin-f4f44791.js';
 import 'react';
-export { a as useSpin } from './useSpin-240deec7.js';
 //# sourceMappingURL=useSpin.js.map

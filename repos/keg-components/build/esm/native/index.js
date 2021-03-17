@@ -1,95 +1,10 @@
-import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray, a as _defineProperty, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { noOp, mapObj, get, isStr, isNum, toBool, checkCall } from '@keg-hub/jsutils';
-export { theme } from './theme.js';
-import '@keg-hub/re-theme/colors';
-export { d as buildColorStyles, b as buildSurfaceStyles } from './buildColorStyles-5c9df6b7.js';
-import './themeDefaults-ae219f8e.js';
-export { getStyles } from './getStyles.js';
-import { g as getPlatform } from './getPlatform-e625f46a.js';
-export { g as getPlatform } from './getPlatform-e625f46a.js';
-export { platformFlatten } from './platformFlatten.js';
-export { inheritFrom } from './inheritFrom.js';
-export { buildTheme } from './buildTheme.js';
-import React__default, { useImperativeHandle, useMemo, useCallback, forwardRef, useState } from 'react';
-export { isValidComponent } from './isValidComponent.js';
-import { renderFromType } from './renderFromType.js';
-export { renderFromType } from './renderFromType.js';
-import { S as SectionList$1 } from './sectionList.native-4f03d4b5.js';
-export { g as getElementLayout, s as scrollList, u as useScroll } from './sectionList.native-4f03d4b5.js';
-export { getOnLoad } from './getOnLoad.js';
-import { getOnChangeHandler } from './getOnChangeHandler.js';
-export { getOnChangeHandler } from './getOnChangeHandler.js';
-export { getPressHandler } from './getPressHandler.js';
-export { ensureClassArray } from './ensureClassArray.js';
-export { getActiveOpacity } from './getActiveOpacity.js';
-import { getChecked } from './getChecked.js';
-export { getChecked } from './getChecked.js';
-export { getImgSrc } from './getImgSrc.js';
-import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
-export { getInputValueKey, getValueFromChildren } from './getInputValue.js';
-import { getReadOnly } from './getReadOnly.js';
-export { getReadOnly } from './getReadOnly.js';
-export { getTarget } from './getTarget.js';
-export { handleRefUpdate } from './handleRefUpdate.js';
-export { updateClassNames } from './updateClassNames.js';
-export { validateFunctions } from './validateFunctions.js';
-import { Picker } from 'react-native';
-import { u as useClassName } from './useClassName.native-32e8827d.js';
-export { u as useClassName } from './useClassName.native-32e8827d.js';
-import { V as View } from './view.native-54e7e7ef.js';
-export { V as View } from './view.native-54e7e7ef.js';
-export { useTextAccessibility } from './useTextAccessibility.js';
-import './kegText.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { useStyle, useTheme, withTheme } from '@keg-hub/re-theme';
-import './useTextStyles.js';
-import { K as KegText } from './kegText-ef69c4aa.js';
-import { Text as Text$1 } from './text.js';
-export { Text } from './text.js';
-export { u as useAnimate, a as useSpin } from './useSpin-240deec7.js';
-export { useChildren } from './useChildren.js';
-import { useChildrenWithRefs } from './useChildrenWithRefs.js';
-export { useChildrenWithRefs } from './useChildrenWithRefs.js';
-import { useInputHandlers } from './useInputHandlers.js';
-export { useInputHandlers } from './useInputHandlers.js';
-export { useMediaProps } from './useMediaProps.js';
-import { usePressHandlers } from './usePressHandlers.js';
-export { usePressHandlers } from './usePressHandlers.js';
-import { useSelectHandlers } from './useSelectHandlers.js';
-export { useSelectHandlers } from './useSelectHandlers.js';
-import { useThemePath } from './useThemePath.js';
-export { useThemePath } from './useThemePath.js';
-export { useThemeWithHeight } from './useThemeWithHeight.js';
-export { useFromToAnimation } from './useFromToAnimation.js';
-import { u as useClassList } from './useClassList.native-70068878.js';
-export { u as useClassList } from './useClassList.native-70068878.js';
-import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
-export { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
-export { u as useScrollClassName } from './useScrollClassName.native-de017e3f.js';
-import { I as Icon } from './icon-2cf7eaa6.js';
-export { I as Icon } from './icon-2cf7eaa6.js';
-import './touchable.js';
-import { T as Touchable } from './touchable-e78a3026.js';
-export { T as Touchable } from './touchable-e78a3026.js';
-export { withTouch } from './withTouch.js';
-export { TouchableIcon } from './touchableIcon.js';
-import 'react-native-svg';
-import './svgIcon-8c133388.js';
-import { C as Checkbox } from './checkbox-6e84332e.js';
-export { C as Checkbox } from './checkbox-6e84332e.js';
-import { S as Select$1, C as ChevronDown } from './select-31dcb40f.js';
 export { TextBox } from './textBox.js';
 export { Button } from './button.js';
-import './cardCallout.js';
-import './cardContent.js';
-import './cardContainer.js';
-import './cardSection.js';
-import './indicator.wrapper-e28eda76.js';
-export { Loading } from './loading.js';
-import './image-209e0d5e.js';
-export { I as Image } from './cardMedia-328b6ade.js';
 export { Card } from './card.js';
 export { Divider } from './divider.js';
+import React, { useImperativeHandle, useMemo, useCallback, forwardRef, useState } from 'react';
+import { V as View } from './view.native-b0b1ddd4.js';
+export { V as View } from './view.native-b0b1ddd4.js';
 export { Caption } from './caption.js';
 export { H1 } from './h1.js';
 export { H2 } from './h2.js';
@@ -101,29 +16,114 @@ export { Label } from './label.js';
 import { P } from './p.js';
 export { P } from './p.js';
 export { Subtitle } from './subtitle.js';
-import './checkbox.wrapper-4a9046c8.js';
-import { I as Input$1 } from './input-681ccccb.js';
-import { S as Switch$1 } from './switch-09146b4a.js';
-import './container.js';
-export { Row } from './row.js';
+import { Text as Text$1 } from './text.js';
+export { Text } from './text.js';
+import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray, a as _defineProperty, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { C as Checkbox } from './checkbox-e42c7bd0.js';
+export { C as Checkbox } from './checkbox-e42c7bd0.js';
+import { useStyle, useTheme, withTheme } from '@keg-hub/re-theme';
+import { u as useClassList } from './useClassList.native-70068878.js';
+export { u as useClassList } from './useClassList.native-70068878.js';
+import { useChildrenWithRefs } from './useChildrenWithRefs.js';
+export { useChildrenWithRefs } from './useChildrenWithRefs.js';
+import { noOp, mapObj, get, isStr, isNum, toBool, checkCall } from '@keg-hub/jsutils';
+import '@keg-hub/re-theme/colors';
+import { useThemePath } from './useThemePath.js';
+export { useThemePath } from './useThemePath.js';
+export { useThemeWithHeight } from './useThemeWithHeight.js';
+import { Picker } from 'react-native';
+import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
+export { getInputValueKey, getValueFromChildren } from './getInputValue.js';
+import { getReadOnly } from './getReadOnly.js';
+export { getReadOnly } from './getReadOnly.js';
+import { useInputHandlers } from './useInputHandlers.js';
+export { useInputHandlers } from './useInputHandlers.js';
+import { usePressHandlers } from './usePressHandlers.js';
+export { usePressHandlers } from './usePressHandlers.js';
+import { I as Input$1 } from './input-4bb30982.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import { S as Select$1, C as ChevronDown } from './select-a8c93a32.js';
+import { useSelectHandlers } from './useSelectHandlers.js';
+export { useSelectHandlers } from './useSelectHandlers.js';
+import { u as useClassName } from './useClassName.native-32e8827d.js';
+export { u as useClassName } from './useClassName.native-32e8827d.js';
+import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
+export { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
+import 'react-native-svg';
+import { I as Icon } from './icon-1b76b631.js';
+export { I as Icon } from './icon-1b76b631.js';
+import { renderFromType } from './renderFromType.js';
+export { renderFromType } from './renderFromType.js';
+import { getOnChangeHandler } from './getOnChangeHandler.js';
+export { getOnChangeHandler } from './getOnChangeHandler.js';
+import { getChecked } from './getChecked.js';
+export { getChecked } from './getChecked.js';
+import { S as Switch$1 } from './switch-f0b4618b.js';
+export { TouchableIcon } from './touchableIcon.js';
+export { I as Image } from './cardMedia-b5fb5c3a.js';
 export { Grid } from './grid.js';
+export { Row } from './row.js';
 export { Column } from './column.js';
-import { L as LinkWrapper } from './link.wrapper-3b9d4577.js';
+import { L as LinkWrapper } from './link.wrapper-3ac32a3b.js';
+import { K as KegText } from './kegText-f9567f63.js';
+import { T as Touchable } from './touchable-9cc6e181.js';
+export { T as Touchable } from './touchable-9cc6e181.js';
+import { g as getPlatform } from './getPlatform-e625f46a.js';
+export { g as getPlatform } from './getPlatform-e625f46a.js';
+export { Loading } from './loading.js';
 export { Section } from './section.js';
 export { Modal } from './modal.js';
 export { ItemHeader } from './itemHeader.js';
 export { AppHeader } from './appHeader.js';
 import { ScrollView as ScrollView$1 } from './scrollView.js';
+import { S as SectionList$1 } from './sectionList.native-258748d2.js';
+export { g as getElementLayout, s as scrollList, u as useScroll } from './sectionList.native-258748d2.js';
 export { Drawer } from './drawer.js';
-import 'react-native-linear-gradient';
 export { TextToggle } from './textToggle.js';
 export { SvgIcon } from './svgIcon.js';
+export { withTouch } from './withTouch.js';
+export { theme } from './theme.js';
+export { u as useAnimate, a as useSpin } from './useSpin-f4f44791.js';
+export { useChildren } from './useChildren.js';
+export { useMediaProps } from './useMediaProps.js';
+export { useTextAccessibility } from './useTextAccessibility.js';
+export { useFromToAnimation } from './useFromToAnimation.js';
+export { u as useScrollClassName } from './useScrollClassName.native-de017e3f.js';
+export { getOnLoad } from './getOnLoad.js';
+export { getPressHandler } from './getPressHandler.js';
+export { ensureClassArray } from './ensureClassArray.js';
+export { getActiveOpacity } from './getActiveOpacity.js';
+export { getImgSrc } from './getImgSrc.js';
+export { getTarget } from './getTarget.js';
+export { handleRefUpdate } from './handleRefUpdate.js';
+export { updateClassNames } from './updateClassNames.js';
+export { d as buildColorStyles, b as buildSurfaceStyles } from './buildColorStyles-efcf5c87.js';
+export { getStyles } from './getStyles.js';
+export { inheritFrom } from './inheritFrom.js';
+export { platformFlatten } from './platformFlatten.js';
+export { buildTheme } from './buildTheme.js';
+export { validateFunctions } from './validateFunctions.js';
+export { isValidComponent } from './isValidComponent.js';
+import './svgIcon-51ab090d.js';
+import './cardContent.js';
+import './cardCallout.js';
+import './cardContainer.js';
+import './cardSection.js';
+import './checkbox.wrapper-1850b63a.js';
+import './image-d610d905.js';
+import './container.js';
+import './kegText.js';
+import './useTextStyles.js';
+import './touchable.js';
+import './indicator.wrapper-83c062e4.js';
+import 'react-native-linear-gradient';
+import './themeDefaults-ae219f8e.js';
 
 var FilePicker = function FilePicker(props) {
-  return React__default.createElement(View, null, React__default.createElement(P, null, "FilePicker Not yet implemented for native."));
+  return React.createElement(View, null, React.createElement(P, null, "FilePicker Not yet implemented for native."));
 };
 
-var SimpleHeader = React__default.forwardRef(function (props, ref) {
+var SimpleHeader = React.forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
@@ -135,12 +135,12 @@ var SimpleHeader = React__default.forwardRef(function (props, ref) {
     };
   });
   var textStyle = useStyle('form.checkGroup.simpleHeader.main', style);
-  return React__default.createElement(Text$1, _extends({
+  return React.createElement(Text$1, _extends({
     className: className,
     style: textStyle
   }, rest), title);
 });
-var CheckboxHeader = React__default.forwardRef(function (props, ref) {
+var CheckboxHeader = React.forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
@@ -157,7 +157,7 @@ var CheckboxHeader = React__default.forwardRef(function (props, ref) {
   var onChangeHandler = useCallback(function (_, val) {
     return onPress === null || onPress === void 0 ? void 0 : onPress(val);
   }, [onPress]);
-  return React__default.createElement(Checkbox, {
+  return React.createElement(Checkbox, {
     RightComponent: title,
     rightClassName: className,
     styles: headerStyles,
@@ -167,9 +167,9 @@ var CheckboxHeader = React__default.forwardRef(function (props, ref) {
     close: true
   });
 });
-var CheckGroup = React__default.forwardRef(function (props, ref) {
-  var className = props.className,
-      headerClassName = props.headerClassName,
+var CheckGroup = React.forwardRef(function (props, ref) {
+  props.className;
+      var headerClassName = props.headerClassName,
       title = props.title,
       children = props.children,
       styles = props.styles,
@@ -193,39 +193,39 @@ var CheckGroup = React__default.forwardRef(function (props, ref) {
     });
   }, [childRefs]);
   var Header = function Header() {
-    return showHeaderCheckbox ? React__default.createElement(CheckboxHeader, {
+    return showHeaderCheckbox ? React.createElement(CheckboxHeader, {
       className: headerClassName,
       style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
       title: title,
       onPress: showHeaderCheckbox && headerCheckHandler,
       checked: showHeaderCheckbox ? initChecked : undefined,
       ref: ref
-    }) : React__default.createElement(SimpleHeader, {
+    }) : React.createElement(SimpleHeader, {
       className: headerClassName,
       style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
       title: title,
       ref: ref
     });
   };
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     className: useClassList(),
     style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.main
-  }, showHeader && React__default.createElement(Header, null), childrenWithProps);
+  }, showHeader && React.createElement(Header, null), childrenWithProps);
 });
 CheckGroup.Item = Checkbox;
 
-var Form = React__default.forwardRef(function (props, ref) {
+var Form = React.forwardRef(function (props, ref) {
   var theme = useTheme();
-  var children = props.children,
-      className = props.className,
-      elType = props.elType,
-      style = props.style,
+  var children = props.children;
+      props.className;
+      props.elType;
+      var style = props.style,
       type = props.type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.form.".concat(type || 'default') : _props$themePath,
       elProps = _objectWithoutProperties(props, ["children", "className", "elType", "style", "type", "themePath"]);
   var formTheme = useThemePath(themePath);
-  return React__default.createElement(View, _extends({
+  return React.createElement(View, _extends({
     accessibilityRole: "form",
     className: useClassList()
   }, elProps, {
@@ -238,7 +238,7 @@ var KegInput = StyleInjector(Input$1, {
   displayName: 'Input',
   className: 'keg-input'
 });
-var getValue = function getValue(_ref) {
+var getValue$1 = function getValue(_ref) {
   var children = _ref.children,
       value = _ref.value;
   var setValue = getValueFromChildren(value, children);
@@ -246,15 +246,15 @@ var getValue = function getValue(_ref) {
     value: setValue
   } : {};
 };
-var Input = React__default.forwardRef(function (props, ref) {
-  var className = props.className,
-      children = props.children,
-      _props$disabled = props.disabled,
+var Input = React.forwardRef(function (props, ref) {
+  props.className;
+      props.children;
+      var _props$disabled = props.disabled,
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$editable = props.editable,
-      editable = _props$editable === void 0 ? true : _props$editable,
-      Element = props.Element,
-      onChange = props.onChange,
+      editable = _props$editable === void 0 ? true : _props$editable;
+      props.Element;
+      var onChange = props.onChange,
       onValueChange = props.onValueChange,
       onChangeText = props.onChangeText,
       onClick = props.onClick,
@@ -265,14 +265,14 @@ var Input = React__default.forwardRef(function (props, ref) {
       type = _props$type === void 0 ? 'default' : _props$type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
-      style = props.style,
-      value = props.value,
-      elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+      style = props.style;
+      props.value;
+      var elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
   var inputStyles = useThemePath(themePath);
-  return React__default.createElement(KegInput, _extends({
+  return React.createElement(KegInput, _extends({
     accessibilityRole: "textbox",
     onPress: onPress
-  }, getReadOnly(false, readOnly, disabled, editable), getValue(props), useInputHandlers({
+  }, getReadOnly(false, readOnly, disabled, editable), getValue$1(props), useInputHandlers({
     onChange: onChange,
     onValueChange: onValueChange,
     onChangeText: onChangeText
@@ -297,21 +297,21 @@ var Option = function Option(props) {
       children = props.children,
       text = props.text,
       value = props.value;
-  return React__default.createElement(SelectOption, {
+  return React.createElement(SelectOption, {
     label: getVal(label, value, text),
     value: getVal(value, text, children, label)
   });
 };
 
 var Radio = withTheme(function (props) {
-  var theme = props.theme,
-      children = props.children,
-      style = props.style,
-      onClick = props.onClick,
-      onPress = props.onPress,
-      text = props.text,
+  var theme = props.theme;
+      props.children;
+      var style = props.style;
+      props.onClick;
+      props.onPress;
+      var text = props.text,
       args = _objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress", "text"]);
-  return React__default.createElement(Text$1, _extends({}, args, {
+  return React.createElement(Text$1, _extends({}, args, {
     style: [get(theme, ['form', 'radio']), style]
   }), text);
 });
@@ -320,7 +320,7 @@ var KegSelect = StyleInjector(Select$1, {
   displayName: 'Select',
   className: 'keg-select'
 });
-var getValue$1 = function getValue(props) {
+var getValue = function getValue(props) {
   var children = props.children,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
@@ -330,36 +330,36 @@ var getValue$1 = function getValue(props) {
   var valKey = getInputValueKey(false, onChange, onValueChange, readOnly);
   return _defineProperty({}, valKey, setValue);
 };
-var Select = React__default.forwardRef(function (props, ref) {
+var Select = React.forwardRef(function (props, ref) {
   var _selectStyles$icon, _selectStyles$icon$di;
-  var className = props.className,
-      children = props.children,
-      disabled = props.disabled,
-      readOnly = props.readOnly,
-      onChange = props.onChange,
+  props.className;
+      var children = props.children,
+      disabled = props.disabled;
+      props.readOnly;
+      var onChange = props.onChange,
       onValueChange = props.onValueChange,
       style = props.style,
       styles = props.styles,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
       _props$themePath = props.themePath,
-      themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath,
-      value = props.value,
-      elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
+      themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath;
+      props.value;
+      var elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
   var selectStyles = useThemePath(themePath, styles);
   var selectClasses = useThemeTypeAsClass();
   var classRef = useClassName('keg-select', selectClasses, ref);
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     style: [selectStyles.main, style]
-  }, React__default.createElement(KegSelect, _extends({
+  }, React.createElement(KegSelect, _extends({
     ref: classRef
   }, elProps, {
     enabled: !disabled,
     style: [selectStyles.select]
-  }, getValue$1(props), useSelectHandlers({
+  }, getValue(props), useSelectHandlers({
     onChange: onChange,
     onValueChange: onValueChange
-  })), children), React__default.createElement(Icon, {
+  })), children), React.createElement(Icon, {
     styles: selectStyles.icon,
     Component: ChevronDown,
     color: disabled && ((_selectStyles$icon = selectStyles.icon) === null || _selectStyles$icon === void 0 ? void 0 : (_selectStyles$icon$di = _selectStyles$icon.disabled) === null || _selectStyles$icon$di === void 0 ? void 0 : _selectStyles$icon$di.color)
@@ -409,7 +409,7 @@ var setCheckedValue = function setCheckedValue(isChecked, setChecked, onChange) 
 var SideComponent = function SideComponent(_ref2) {
   var Component = _ref2.Component,
       style = _ref2.style;
-  return isStr(Component) ? React__default.createElement(Text$1, {
+  return isStr(Component) ? React.createElement(Text$1, {
     style: style
   }, Component) : renderFromType(Component, {
     style: styles.content
@@ -417,7 +417,7 @@ var SideComponent = function SideComponent(_ref2) {
 };
 var ChildrenComponent = function ChildrenComponent(_ref3) {
   var children = _ref3.children;
-  return React__default.createElement(React__default.Fragment, null, renderFromType(children, {}, null));
+  return React.createElement(React.Fragment, null, renderFromType(children, {}, null));
 };
 var useSwitchHandle = function useSwitchHandle(ref, isChecked, setChecked) {
   return useImperativeHandle(ref, function () {
@@ -428,21 +428,21 @@ var useSwitchHandle = function useSwitchHandle(ref, isChecked, setChecked) {
   }, [ref, isChecked, setChecked]);
 };
 var Switch = forwardRef(function (props, ref) {
-  var className = props.className,
-      checked = props.checked,
-      children = props.children,
-      elType = props.elType,
-      disabled = props.disabled,
+  props.className;
+      var checked = props.checked,
+      children = props.children;
+      props.elType;
+      var disabled = props.disabled,
       LeftComponent = props.LeftComponent,
       close = props.close,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
       RightComponent = props.RightComponent,
       styles = props.styles,
-      SwitchComponent = props.SwitchComponent,
-      setCheckedSetter = props.setCheckedSetter,
-      type = props.type,
-      themePath = props.themePath,
+      SwitchComponent = props.SwitchComponent;
+      props.setCheckedSetter;
+      props.type;
+      var themePath = props.themePath,
       thumbColor = props.thumbColor,
       trackColor = props.trackColor,
       value = props.value,
@@ -456,26 +456,26 @@ var Switch = forwardRef(function (props, ref) {
   var themeStyles = useThemePath(elThemePath, styles);
   var activeStyles = useCheckedState(isChecked, themeStyles);
   var typeClassName = useThemeTypeAsClass();
-  return children && React__default.createElement(View, {
+  return children && React.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
-  }, React__default.createElement(ChildrenComponent, {
+  }, React.createElement(ChildrenComponent, {
     className: "keg-switch-container",
     children: children
-  })) || React__default.createElement(View, {
+  })) || React.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
-  }, LeftComponent && React__default.createElement(SideComponent, {
+  }, LeftComponent && React.createElement(SideComponent, {
     className: "keg-switch-left",
     Component: LeftComponent,
     style: activeStyles.content.left
   }), SwitchComponent ? renderFromType(SwitchComponent, _objectSpread2(_objectSpread2({}, props), {}, {
     styles: activeStyles.content
-  })) : React__default.createElement(KegSwitch, _extends({
+  })) : React.createElement(KegSwitch, _extends({
     elProps: elProps,
     disabled: disabled,
     styles: activeStyles.content
-  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent, {
+  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React.createElement(SideComponent, {
     className: "keg-switch-right",
     Component: RightComponent,
     style: activeStyles.content.right
@@ -484,20 +484,20 @@ var Switch = forwardRef(function (props, ref) {
 
 var isWeb = getPlatform() === 'web';
 var Text = KegText('link');
-var Element = React__default.forwardRef(function (props, ref) {
-  var children = props.children,
-      className = props.className,
-      elProps = props.elProps,
-      href = props.href,
-      onPress = props.onPress,
-      style = props.style,
+var Element = React.forwardRef(function (props, ref) {
+  var children = props.children;
+      props.className;
+      var elProps = props.elProps,
+      href = props.href;
+      props.onPress;
+      var style = props.style,
       target = props.target,
       attrs = _objectWithoutProperties(props, ["children", "className", "elProps", "href", "onPress", "style", "target"]);
-  return React__default.createElement(Touchable, _extends({
+  return React.createElement(Touchable, _extends({
     className: useClassList()
   }, elProps, attrs, {
     touchRef: ref
-  }), React__default.createElement(Text, {
+  }), React.createElement(Text, {
     accessibilityRole: "link",
     className: "keg-link-text",
     style: style,
@@ -506,7 +506,7 @@ var Element = React__default.forwardRef(function (props, ref) {
   }, children));
 });
 var Link = function Link(props) {
-  return React__default.createElement(LinkWrapper, _extends({}, props, {
+  return React.createElement(LinkWrapper, _extends({}, props, {
     Element: Element,
     isWeb: isWeb
   }));

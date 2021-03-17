@@ -2,27 +2,28 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var React = require('react');
+var reactNative = require('react-native');
+var touchable = require('./touchable.js');
 var jsutils = require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
-var React = require('react');
-var React__default = _interopDefault(React);
-require('./ensureClassArray.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-var reactNative = require('react-native');
-var useClassName = require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
-require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-a5f2a568.js');
-require('@keg-hub/re-theme');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
-var useClassList = require('./useClassList-9eaefcd6.js');
-var touchable = require('./touchable.js');
+var useClassName = require('./useClassName-51ea3221.js');
+var useClassList = require('./useClassList-89a8dbd4.js');
+var view = require('./view-276572bd.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('@keg-hub/re-theme');
+require('./view.native-99366b4b.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
   var className = _ref.className,
@@ -41,7 +42,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
       _useFromToAnimation2 = _rollupPluginBabelHelpers._slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
   var classRef = useClassName.useClassName('keg-modal-content', className);
-  return React__default.createElement(reactNative.Animated.View, {
+  return React__default['default'].createElement(reactNative.Animated.View, {
     ref: classRef,
     style: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, defaultStyle), {}, {
       transform: [{
@@ -92,15 +93,15 @@ var Modal = function Modal(props) {
     } else if (jsutils.isFunc(onAnimateIn)) onAnimateIn();
   }, [onAnimateOut, onAnimateIn, visible]);
   return (
-    React__default.createElement(view.View, {
+    React__default['default'].createElement(view.View, {
       className: useClassList.useClassList('keg-modal', className),
       style: renderModal ? modalStyles.main : hideModalStyle
-    }, React__default.createElement(touchable.Touchable, {
+    }, React__default['default'].createElement(touchable.Touchable, {
       className: 'keg-modal-backdrop',
       style: modalStyles.backdrop,
       onPress: onBackdropTouch,
       activeOpacity: activeOpacity
-    }), React__default.createElement(AnimatedComponent, {
+    }), React__default['default'].createElement(AnimatedComponent, {
       onAnimationFinish: cb,
       visible: visible,
       defaultStyle: modalStyles.content

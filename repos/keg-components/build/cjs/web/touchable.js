@@ -2,20 +2,21 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
+var reactNative = require('react-native');
+var useClassName = require('./useClassName-51ea3221.js');
+var jsutils = require('@keg-hub/jsutils');
+var styleInjector = require('@keg-hub/re-theme/styleInjector');
+require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-var reactNative = require('react-native');
-var useClassName = require('./useClassName-a237c005.js');
-var styleInjector = require('@keg-hub/re-theme/styleInjector');
 
-var Touchable = React__default.forwardRef(function (props, ref) {
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+
+var Touchable$1 = React__default['default'].forwardRef(function (props, ref) {
   var className = props.className,
       _props$showFeedback = props.showFeedback,
       showFeedback = _props$showFeedback === void 0 ? true : _props$showFeedback,
@@ -43,7 +44,7 @@ var Touchable = React__default.forwardRef(function (props, ref) {
     jsutils.checkCall(onPressOut, event);
     setTouchStyles(style);
   }, [onPressOut, style, setTouchStyles]);
-  return React__default.createElement(reactNative.Pressable, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(reactNative.Pressable, _rollupPluginBabelHelpers._extends({
     accessible: true
   }, attrs, {
     style: touchStyles,
@@ -54,12 +55,12 @@ var Touchable = React__default.forwardRef(function (props, ref) {
   }));
 });
 
-var Touchable$1 = styleInjector.StyleInjector(Touchable, {
+var Touchable = styleInjector.StyleInjector(Touchable$1, {
   displayName: 'Touchable',
   className: 'keg-touchable',
   important: ['transitionDuration', 'WebkitTransitionDuration']
 });
-Touchable$1.propTypes = Touchable.propTypes;
+Touchable.propTypes = Touchable$1.propTypes;
 
-exports.Touchable = Touchable$1;
+exports.Touchable = Touchable;
 //# sourceMappingURL=touchable.js.map

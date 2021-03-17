@@ -1,34 +1,34 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import './colors-13c6a916.js';
-import './getPlatform-95568099.js';
-import React__default from 'react';
-import './isValidComponent.js';
-import './renderFromType.js';
-import './getPressHandler.js';
-import './ensureClassArray.js';
-import './getActiveOpacity.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
-import '@keg-hub/re-theme/styleInjector';
-import './view-a64440c5.js';
-import './useTextAccessibility.js';
-import './kegText.native-7cc07481.js';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React from 'react';
+import { ItemHeader } from './itemHeader.js';
+import { u as useClassList } from './useClassList-1d418045.js';
 import '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-653699c8.js';
+import '@keg-hub/jsutils';
+import './view-2274aefb.js';
+import './view.native-a7f08b5b.js';
+import 'react-native';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import '@keg-hub/re-theme/styleInjector';
+import './button.js';
+import './touchable.js';
 import './text.js';
+import './kegText-5c4aeb4b.js';
+import './kegText.native-be460636.js';
+import './useTextAccessibility.js';
+import './useTextStyles.js';
+import './renderFromType.js';
+import './isValidComponent.js';
+import './getPressHandler.js';
+import './getActiveOpacity.js';
+import '@keg-hub/re-theme/colors';
 import './useThemePath.js';
 import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList-eea8a571.js';
-import './useThemeTypeAsClass-cd54e95a.js';
-import './icon-0e3838cf.js';
-import './touchable.js';
-import './button.js';
+import './useThemeTypeAsClass-fec5ff6f.js';
+import './colors-6402d3b3.js';
+import './icon-f1144e8a.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -39,12 +39,12 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { ItemHeader } from './itemHeader.js';
+import './getPlatform-95568099.js';
 
 var AppHeader = function AppHeader(props) {
   var className = props.className,
       otherProps = _objectWithoutProperties(props, ["className"]);
-  return React__default.createElement(ItemHeader, _extends({
+  return React.createElement(ItemHeader, _extends({
     accessibilityRole: "banner",
     className: useClassList('keg-app-header', className),
     appHeader: true

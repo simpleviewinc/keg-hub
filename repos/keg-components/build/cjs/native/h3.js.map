@@ -1,1 +1,1 @@
-{"version":3,"file":"h3.js","sources":["../../../src/components/typography/h3.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const H3 = KegText('h3')\n"],"names":["H3","KegText"],"mappings":";;;;;;;;;;;;;;;;IACaA,EAAE,GAAGC,iBAAO,CAAC,IAAD;;;;"}
+{"version":3,"file":"h3.js","sources":["../../../src/components/typography/h3.js"],"sourcesContent":["import { KegText } from 'KegText'\nexport const H3 = KegText('h3')\n"],"names":["H3","KegText"],"mappings":";;;;;;;;;;;;;;;;IACaA,EAAE,GAAGC,eAAO,CAAC,IAAD;;;;"}

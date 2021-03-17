@@ -1,30 +1,22 @@
-import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useImperativeHandle, useMemo, useCallback } from 'react';
+import { V as View } from './view.native-b0b1ddd4.js';
+import { Text } from './text.js';
+import { C as Checkbox } from './checkbox-e42c7bd0.js';
+import { useStyle } from '@keg-hub/re-theme';
+import { u as useClassList } from './useClassList.native-70068878.js';
+import { useChildrenWithRefs } from './useChildrenWithRefs.js';
 import { noOp, mapObj } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import React__default, { useImperativeHandle, useMemo, useCallback } from 'react';
-import './isValidComponent.js';
-import './renderFromType.js';
-import './getOnChangeHandler.js';
-import './getChecked.js';
-import './handleRefUpdate.js';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
-import { V as View } from './view.native-54e7e7ef.js';
-import './useTextAccessibility.js';
+import './kegText-f9567f63.js';
 import './kegText.js';
+import './useTextAccessibility.js';
 import '@keg-hub/re-theme/styleInjector';
-import { useStyle } from '@keg-hub/re-theme';
 import './useTextStyles.js';
-import './kegText-ef69c4aa.js';
-import { Text } from './text.js';
-import { useChildrenWithRefs } from './useChildrenWithRefs.js';
-import './useThemePath.js';
-import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList.native-70068878.js';
-import './useThemeTypeAsClass.native-a05b9a50.js';
+import './svgIcon-51ab090d.js';
 import 'react-native-svg';
-import './svgIcon-8c133388.js';
-import { C as Checkbox } from './checkbox-6e84332e.js';
+import './checkbox.wrapper-1850b63a.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -35,9 +27,17 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import './checkbox.wrapper-4a9046c8.js';
+import './renderFromType.js';
+import './isValidComponent.js';
+import './getOnChangeHandler.js';
+import './getChecked.js';
+import '@keg-hub/re-theme/colors';
+import './useThemePath.js';
+import './useThemeWithHeight.js';
+import './useThemeTypeAsClass.native-a05b9a50.js';
+import './handleRefUpdate.js';
 
-var SimpleHeader = React__default.forwardRef(function (props, ref) {
+var SimpleHeader = React.forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
@@ -49,12 +49,12 @@ var SimpleHeader = React__default.forwardRef(function (props, ref) {
     };
   });
   var textStyle = useStyle('form.checkGroup.simpleHeader.main', style);
-  return React__default.createElement(Text, _extends({
+  return React.createElement(Text, _extends({
     className: className,
     style: textStyle
   }, rest), title);
 });
-var CheckboxHeader = React__default.forwardRef(function (props, ref) {
+var CheckboxHeader = React.forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
@@ -71,7 +71,7 @@ var CheckboxHeader = React__default.forwardRef(function (props, ref) {
   var onChangeHandler = useCallback(function (_, val) {
     return onPress === null || onPress === void 0 ? void 0 : onPress(val);
   }, [onPress]);
-  return React__default.createElement(Checkbox, {
+  return React.createElement(Checkbox, {
     RightComponent: title,
     rightClassName: className,
     styles: headerStyles,
@@ -81,9 +81,9 @@ var CheckboxHeader = React__default.forwardRef(function (props, ref) {
     close: true
   });
 });
-var CheckGroup = React__default.forwardRef(function (props, ref) {
-  var className = props.className,
-      headerClassName = props.headerClassName,
+var CheckGroup = React.forwardRef(function (props, ref) {
+  props.className;
+      var headerClassName = props.headerClassName,
       title = props.title,
       children = props.children,
       styles = props.styles,
@@ -107,24 +107,24 @@ var CheckGroup = React__default.forwardRef(function (props, ref) {
     });
   }, [childRefs]);
   var Header = function Header() {
-    return showHeaderCheckbox ? React__default.createElement(CheckboxHeader, {
+    return showHeaderCheckbox ? React.createElement(CheckboxHeader, {
       className: headerClassName,
       style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
       title: title,
       onPress: showHeaderCheckbox && headerCheckHandler,
       checked: showHeaderCheckbox ? initChecked : undefined,
       ref: ref
-    }) : React__default.createElement(SimpleHeader, {
+    }) : React.createElement(SimpleHeader, {
       className: headerClassName,
       style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
       title: title,
       ref: ref
     });
   };
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     className: useClassList(),
     style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.main
-  }, showHeader && React__default.createElement(Header, null), childrenWithProps);
+  }, showHeader && React.createElement(Header, null), childrenWithProps);
 });
 CheckGroup.Item = Checkbox;
 

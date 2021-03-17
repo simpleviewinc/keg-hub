@@ -2,23 +2,19 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('./isArr-39234014.js');
-require('./isObj-6b3aa807.js');
-require('./isFunc-f93803cb.js');
-require('./isStr-8a57710e.js');
-require('./isNum-c7164b50.js');
+var shallowEqual = require('./shallowEqual-e64662c9.js');
+var get = require('./get-a3872853.js');
 var isColl = require('./isColl-5757310a.js');
-var get = require('./get-bfcf4646.js');
-var deepClone = require('./deepClone-9108ba8c.js');
-var shallowEqual = require('./shallowEqual-c5a80668.js');
-var set = require('./set-178b6947.js');
+var set = require('./set-e19acd5e.js');
+var deepClone = require('./deepClone-4dc3bb5a.js');
+require('./isObj-6b3aa807.js');
+require('./isArr-39234014.js');
+require('./isFunc-f93803cb.js');
+require('./isNum-c7164b50.js');
+require('./isStr-8a57710e.js');
 
 
 
-exports.isColl = isColl.isColl;
-exports.get = get.get;
-exports.cloneObjWithPrototypeAndProperties = deepClone.cloneObjWithPrototypeAndProperties;
-exports.deepClone = deepClone.deepClone;
 exports.cleanColl = shallowEqual.cleanColl;
 exports.deepEqual = shallowEqual.deepEqual;
 exports.isEmptyColl = shallowEqual.isEmptyColl;
@@ -27,5 +23,9 @@ exports.reduceColl = shallowEqual.reduceColl;
 exports.repeat = shallowEqual.repeat;
 exports.shallowEqual = shallowEqual.shallowEqual;
 exports.unset = shallowEqual.unset;
+exports.get = get.get;
+exports.isColl = isColl.isColl;
 exports.set = set.set;
+exports.cloneObjWithPrototypeAndProperties = deepClone.cloneObjWithPrototypeAndProperties;
+exports.deepClone = deepClone.deepClone;
 //# sourceMappingURL=collection.js.map

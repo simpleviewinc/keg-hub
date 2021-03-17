@@ -1,16 +1,16 @@
-import { e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useMemo } from 'react';
 import { capitalize } from '@keg-hub/jsutils';
-import React__default, { useMemo } from 'react';
+import { K as KegText$1 } from './kegText.native-be460636.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import { useTextStyles } from './useTextStyles.js';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
-import './updateClassNames.js';
 import 'react-native';
-import './useClassName-6851fdf6.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import './useTextAccessibility.js';
-import { K as KegText$1 } from './kegText.native-7cc07481.js';
 import '@keg-hub/re-theme';
-import { useTextStyles } from './useTextStyles.js';
 
 var useTextComponent = function useTextComponent(element) {
   return useMemo(function () {
@@ -21,10 +21,10 @@ var useTextComponent = function useTextComponent(element) {
   }, [element]);
 };
 var KegText = function KegText(element) {
-  return React__default.forwardRef(function (props, ref) {
+  return React.forwardRef(function (props, ref) {
     var textStyles = useTextStyles(element);
     var Text = useTextComponent(element);
-    return React__default.createElement(Text, _extends({}, props, {
+    return React.createElement(Text, _extends({}, props, {
       style: [textStyles, props.style],
       ref: ref
     }));

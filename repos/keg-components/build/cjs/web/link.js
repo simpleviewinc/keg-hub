@@ -2,47 +2,48 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-var getPlatform = require('./getPlatform-ec53cd5e.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./getPressHandler.js');
-require('./ensureClassArray.js');
-require('./getTarget.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('@keg-hub/re-theme/styleInjector');
-require('./useTextAccessibility.js');
-require('./kegText.native-b0c7697d.js');
-require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-var kegText = require('./kegText-e909e94a.js');
-var useClassList = require('./useClassList-9eaefcd6.js');
+var link_wrapper = require('./link.wrapper-17089db4.js');
+var kegText = require('./kegText-f2cfdfd4.js');
 var touchable = require('./touchable.js');
-var link_wrapper = require('./link.wrapper-fbe6fd2d.js');
+var getPlatform = require('./getPlatform-ec53cd5e.js');
+var useClassList = require('./useClassList-89a8dbd4.js');
+require('@keg-hub/re-theme');
+require('@keg-hub/jsutils');
+require('./getPressHandler.js');
+require('./getTarget.js');
+require('@keg-hub/re-theme/colors');
+require('./kegText.native-1994a0b7.js');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('react-native');
+require('./useTextAccessibility.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./useTextStyles.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var isWeb = getPlatform.getPlatform() === 'web';
 var Text = kegText.KegText('link');
-var Element = React__default.forwardRef(function (props, ref) {
+var Element = React__default['default'].forwardRef(function (props, ref) {
   var children = props.children,
       className = props.className,
       elProps = props.elProps,
-      href = props.href,
-      onPress = props.onPress,
-      style = props.style,
+      href = props.href;
+      props.onPress;
+      var style = props.style,
       target = props.target,
       attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["children", "className", "elProps", "href", "onPress", "style", "target"]);
-  return React__default.createElement(touchable.Touchable, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(touchable.Touchable, _rollupPluginBabelHelpers._extends({
     className: useClassList.useClassList('keg-link', className)
   }, elProps, attrs, {
     touchRef: ref
-  }), React__default.createElement(Text, {
+  }), React__default['default'].createElement(Text, {
     accessibilityRole: "link",
     className: "keg-link-text",
     style: style,
@@ -51,7 +52,7 @@ var Element = React__default.forwardRef(function (props, ref) {
   }, children));
 });
 var Link = function Link(props) {
-  return React__default.createElement(link_wrapper.LinkWrapper, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(link_wrapper.LinkWrapper, _rollupPluginBabelHelpers._extends({}, props, {
     Element: Element,
     isWeb: isWeb
   }));

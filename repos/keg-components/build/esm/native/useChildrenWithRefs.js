@@ -1,6 +1,6 @@
-import '@keg-hub/jsutils';
-import React__default, { useRef, useCallback, useMemo } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { handleRefUpdate } from './handleRefUpdate.js';
+import '@keg-hub/jsutils';
 
 var buildPropsForChild = function buildPropsForChild(childRefs, child, index) {
   var key = (child === null || child === void 0 ? void 0 : child.key) || index || child;
@@ -17,7 +17,7 @@ var useCloneChildCallback = function useCloneChildCallback(childRefs) {
   return useCallback(function (child) {
     var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
     var props = buildPropsForChild(childRefs, child, index);
-    return React__default.isValidElement(child) ? React__default.cloneElement(child, props) : child;
+    return React.isValidElement(child) ? React.cloneElement(child, props) : child;
   }, [childRefs]);
 };
 var useChildrenWithRefs = function useChildrenWithRefs(children) {
@@ -25,7 +25,7 @@ var useChildrenWithRefs = function useChildrenWithRefs(children) {
   var childRefs = useRef({});
   var cloneChild = useCloneChildCallback(childRefs);
   var updatedChildren = useMemo(function () {
-    return enable ? React__default.Children.count(children) > 1 ? children.map(cloneChild) : cloneChild(children) : children;
+    return enable ? React.Children.count(children) > 1 ? children.map(cloneChild) : cloneChild(children) : children;
   }, [enable, children]);
   return [updatedChildren, childRefs];
 };

@@ -1,6 +1,6 @@
-import { noOp } from '@keg-hub/jsutils';
 import { useMemo, useEffect } from 'react';
 import { Animated } from 'react-native';
+import { noOp } from '@keg-hub/jsutils';
 
 var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},

@@ -12,18 +12,18 @@ import {
 const getMediaType = (mediaTypes, styles) => {
   return mediaTypes
     ? reduceObj(
-        mediaTypes,
-        (key, value, mediaData) => {
-          return !mediaData.type && value
-            ? {
-                type: key,
-                media: value,
-                styles: !isObj(styles) ? styles : styles.media,
-              }
-            : mediaData
-        },
-        {}
-      )
+      mediaTypes,
+      (key, value, mediaData) => {
+        return !mediaData.type && value
+          ? {
+              type: key,
+              media: value,
+              styles: !isObj(styles) ? styles : styles.media,
+            }
+          : mediaData
+      },
+      {}
+    )
     : noOpObj
 }
 

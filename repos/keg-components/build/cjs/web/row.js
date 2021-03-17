@@ -2,26 +2,27 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-require('./getPlatform-ec53cd5e.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./getPressHandler.js');
+var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
+var container = require('./container.js');
+var useClassList = require('./useClassList-89a8dbd4.js');
+require('./view-276572bd.js');
+require('./view.native-99366b4b.js');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./view-a5f2a568.js');
-var reTheme = require('@keg-hub/re-theme');
-var useClassList = require('./useClassList-9eaefcd6.js');
-var container = require('./container.js');
+require('./getPlatform-ec53cd5e.js');
+require('./getPressHandler.js');
+require('@keg-hub/re-theme/colors');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Row = function Row(_ref) {
   var className = _ref.className,
@@ -29,7 +30,7 @@ var Row = function Row(_ref) {
       style = _ref.style,
       props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, ["className", "children", "style"]);
   var theme = reTheme.useTheme();
-  return React__default.createElement(container.Container, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(container.Container, _rollupPluginBabelHelpers._extends({}, props, {
     className: useClassList.useClassList('keg-row', className),
     style: [jsutils.get(theme, 'layout.grid.row'), style],
     flexDir: "row"

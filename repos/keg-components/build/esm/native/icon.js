@@ -1,21 +1,21 @@
-import { d as _objectWithoutProperties, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { get } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import React__default from 'react';
-import { isValidComponent } from './isValidComponent.js';
-import { renderFromType } from './renderFromType.js';
-import 'react-native';
-import './useClassName.native-32e8827d.js';
-import { V as View } from './view.native-54e7e7ef.js';
+import { d as _objectWithoutProperties, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React from 'react';
 import { useTheme } from '@keg-hub/re-theme';
+import { get } from '@keg-hub/jsutils';
+import { V as View } from './view.native-b0b1ddd4.js';
+import { renderFromType } from './renderFromType.js';
+import '@keg-hub/re-theme/colors';
+import { isValidComponent } from './isValidComponent.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
+import 'react-native';
 import { u as useClassList } from './useClassList.native-70068878.js';
+import './useClassName.native-32e8827d.js';
 
-var Icon = React__default.forwardRef(function (props, ref) {
+var Icon = React.forwardRef(function (props, ref) {
   var theme = useTheme();
-  var className = props.className,
-      color = props.color,
+  props.className;
+      var color = props.color,
       Component = props.Component,
       _props$Element = props.Element,
       Element = _props$Element === void 0 ? Component : _props$Element,
@@ -35,7 +35,7 @@ var Icon = React__default.forwardRef(function (props, ref) {
     color: color || iconStyles.color || get(iconStyles, 'icon.color') || get(theme, 'typography.default.color'),
     size: parseInt(size || get(iconStyles, 'icon.fontSize') || get(theme, 'typography.default.fontSize', 15) * 2, 10)
   };
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     className: useClassList(),
     style: iconStyles.container
   }, renderFromType(Element, _objectSpread2(_objectSpread2({}, attrs), iconProps)));

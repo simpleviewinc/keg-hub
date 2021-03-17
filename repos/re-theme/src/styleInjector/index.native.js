@@ -8,10 +8,14 @@ export const StyleInjector = Component => props => <Component {...props} />
 
 /**
  * Stub for Native useStyleTag calls
- * Returns an object matching the useStyleTag hook 
+ * Returns an object matching the useStyleTag hook
  */
-export const useStyleTag = (style, className = '') => useMemo(() => ({
-  filteredStyle: style,
-  css: { all: '', rules: noPropArr },
-  classList: eitherArr(className, [className]),
-}), [style, className])
+export const useStyleTag = (style, className = '') =>
+  useMemo(
+    () => ({
+      filteredStyle: style,
+      css: { all: '', rules: noPropArr },
+      classList: eitherArr(className, [className]),
+    }),
+    [ style, className ]
+  )

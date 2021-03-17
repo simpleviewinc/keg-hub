@@ -2,12 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var jsutils = require('@keg-hub/jsutils');
 var React = require('react');
-var React__default = _interopDefault(React);
+var jsutils = require('@keg-hub/jsutils');
 var reactNative = require('react-native');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var SelectOption = reactNative.Picker.Item;
 var useable = function useable(item) {
@@ -21,7 +22,7 @@ var Option = function Option(props) {
       children = props.children,
       text = props.text,
       value = props.value;
-  return React__default.createElement(SelectOption, {
+  return React__default['default'].createElement(SelectOption, {
     label: getVal(label, value, text),
     value: getVal(value, text, children, label)
   });

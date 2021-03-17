@@ -1,8 +1,8 @@
-import { d as _objectWithoutProperties, c as _toConsumableArray, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, c as _toConsumableArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useMemo } from 'react';
 import { isArr, deepMerge, get, noPropObj } from '@keg-hub/jsutils';
-import React__default, { useMemo } from 'react';
-import { useTheme } from '@keg-hub/re-theme';
 import Svg, { Path } from 'react-native-svg';
+import { useTheme } from '@keg-hub/re-theme';
 
 var useIconStyle = function useIconStyle(style) {
   return useMemo(function () {
@@ -51,11 +51,11 @@ var SvgIcon = function SvgIcon(props) {
   var theme = useTheme();
   var sizeStyle = useSize(size, width, height, iconStyle, theme);
   var colorStyle = useColor(fill, stroke, color, border, iconStyle, theme);
-  return React__default.createElement(Svg, _extends({}, attrs, {
+  return React.createElement(Svg, _extends({}, attrs, {
     fill: svgFill,
     viewBox: viewBox,
     style: [iconStyle, sizeStyle]
-  }), React__default.createElement(Path, {
+  }), React.createElement(Path, {
     clipRule: clipRule,
     d: delta,
     fill: colorStyle.fill,

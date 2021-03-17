@@ -1,19 +1,19 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { V as View } from './view-2274aefb.js';
 import { get, noOpObj } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import React__default, { useRef, useState, useCallback, useLayoutEffect } from 'react';
+import React, { useRef, useState, useCallback, useLayoutEffect } from 'react';
 import { isValidComponent } from './isValidComponent.js';
-import './ensureClassArray.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import { Animated } from 'react-native';
-import { u as useClassName } from './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
-import '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import '@keg-hub/re-theme';
+import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
+import { Animated } from 'react-native';
+import { u as useClassName } from './useClassName-682bc33b.js';
+import './view.native-a7f08b5b.js';
+import '@keg-hub/re-theme/styleInjector';
+import '@keg-hub/re-theme';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
 
 var noAnimate = function noAnimate(toggled, current, collapsedHeight, contentMaxHeight) {
   return !toggled && current === collapsedHeight || toggled && current === contentMaxHeight;
@@ -60,16 +60,16 @@ var Drawer = function Drawer(props) {
   }, [toggled, type, config, collapsedHeight]);
   var drawerStyles = useThemePath("drawer", styles);
   var classRef = useClassName('keg-drawer', className);
-  return React__default.createElement(Animated.View, {
+  return React.createElement(Animated.View, {
     ref: classRef,
     style: [drawerStyles.main, get(styles, 'main'), {
       maxHeight: animation
     }]
-  }, React__default.createElement(View, {
+  }, React.createElement(View, {
     className: "keg-drawer-content",
     onLayout: setMaxHeight,
     style: get(styles, 'content')
-  }, isValidComponent(Element) ? React__default.createElement(Element, _extends({}, childProps, {
+  }, isValidComponent(Element) ? React.createElement(Element, _extends({}, childProps, {
     styles: styles
   })) : props.children));
 };

@@ -2,35 +2,36 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-require('./colors-3022218c.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./isValidComponent.js');
+var jsutils = require('@keg-hub/jsutils');
+var touchable = require('./touchable.js');
+var text = require('./text.js');
 var renderFromType = require('./renderFromType.js');
 var getPressHandler = require('./getPressHandler.js');
-require('./ensureClassArray.js');
 var getActiveOpacity = require('./getActiveOpacity.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('@keg-hub/re-theme/styleInjector');
-require('./useTextAccessibility.js');
-require('./kegText.native-b0c7697d.js');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-e909e94a.js');
-var text = require('./text.js');
+require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useClassList-9eaefcd6.js');
-var useThemeTypeAsClass = require('./useThemeTypeAsClass-103ed294.js');
-var touchable = require('./touchable.js');
+require('react-native');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-a9284938.js');
+var reTheme = require('@keg-hub/re-theme');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./kegText-f2cfdfd4.js');
+require('./kegText.native-1994a0b7.js');
+require('./useTextAccessibility.js');
+require('./useTextStyles.js');
+require('./isValidComponent.js');
+require('./colors-da502c66.js');
+require('./useClassList-89a8dbd4.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var getChildren = function getChildren(Children, _ref) {
   var styles = _ref.styles,
@@ -43,7 +44,7 @@ var getChildren = function getChildren(Children, _ref) {
 var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
   return disabled ? _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, mainStyles), jsutils.get(btnStyles, 'disabled.main')) : mainStyles;
 };
-var Button = React__default.forwardRef(function (props, ref) {
+var Button = React__default['default'].forwardRef(function (props, ref) {
   var className = props.className,
       children = props.children,
       content = props.content,
@@ -74,7 +75,7 @@ var Button = React__default.forwardRef(function (props, ref) {
       _useThemeActive2 = _rollupPluginBabelHelpers._slicedToArray(_useThemeActive, 2),
       themeRef = _useThemeActive2[0],
       themeStyles = _useThemeActive2[1];
-  return React__default.createElement(touchable.Touchable, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(touchable.Touchable, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "button",
     className: useThemeTypeAsClass.useThemeTypeAsClass(themePath || type, 'keg-button', className)
   }, elProps, {

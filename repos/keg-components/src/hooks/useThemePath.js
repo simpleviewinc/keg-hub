@@ -57,7 +57,7 @@ const mergeStyles = (pathStyles, userStyles) => {
     : pathKeys.indexOf(userKeys[0]) !== -1
       ? // If there is a match, then merge the objects at the top level
       // Example => pathStyles.default && userStyles.default both exist
-        deepMerge(pathStyles, userStyles)
+      deepMerge(pathStyles, userStyles)
       : // Otherwise the userStyles are expected to be one level deeper
       // So add the user styles to each key of the path styles
       // Example => pathStyles.default.main && userStyles.main both exist

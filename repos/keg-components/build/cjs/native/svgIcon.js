@@ -2,15 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
 var Svg = require('react-native-svg');
-var Svg__default = _interopDefault(Svg);
+var reTheme = require('@keg-hub/re-theme');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var Svg__default = /*#__PURE__*/_interopDefaultLegacy(Svg);
 
 var useIconStyle = function useIconStyle(style) {
   return React.useMemo(function () {
@@ -59,11 +60,11 @@ var SvgIcon = function SvgIcon(props) {
   var theme = reTheme.useTheme();
   var sizeStyle = useSize(size, width, height, iconStyle, theme);
   var colorStyle = useColor(fill, stroke, color, border, iconStyle, theme);
-  return React__default.createElement(Svg__default, _rollupPluginBabelHelpers._extends({}, attrs, {
+  return React__default['default'].createElement(Svg__default['default'], _rollupPluginBabelHelpers._extends({}, attrs, {
     fill: svgFill,
     viewBox: viewBox,
     style: [iconStyle, sizeStyle]
-  }), React__default.createElement(Svg.Path, {
+  }), React__default['default'].createElement(Svg.Path, {
     clipRule: clipRule,
     d: delta,
     fill: colorStyle.fill,

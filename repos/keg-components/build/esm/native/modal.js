@@ -1,22 +1,22 @@
-import { b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Dimensions, Animated } from 'react-native';
+import { T as Touchable } from './touchable-9cc6e181.js';
 import { isFunc, noOp } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
-import React__default, { useState, useEffect, useCallback } from 'react';
-import { Dimensions, Animated } from 'react-native';
-import { u as useClassName } from './useClassName.native-32e8827d.js';
-import { V as View } from './view.native-54e7e7ef.js';
-import '@keg-hub/re-theme/styleInjector';
-import '@keg-hub/re-theme';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import { useFromToAnimation } from './useFromToAnimation.js';
+import { u as useClassName } from './useClassName.native-32e8827d.js';
 import { u as useClassList } from './useClassList.native-70068878.js';
+import { V as View } from './view.native-b0b1ddd4.js';
 import './touchable.js';
-import { T as Touchable } from './touchable-e78a3026.js';
+import '@keg-hub/re-theme/styleInjector';
+import '@keg-hub/re-theme';
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
-  var className = _ref.className,
-      defaultStyle = _ref.defaultStyle,
+  _ref.className;
+      var defaultStyle = _ref.defaultStyle,
       visible = _ref.visible,
       children = _ref.children,
       onAnimationFinish = _ref.onAnimationFinish;
@@ -31,7 +31,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
       _useFromToAnimation2 = _slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
   var classRef = useClassName();
-  return React__default.createElement(Animated.View, {
+  return React.createElement(Animated.View, {
     ref: classRef,
     style: _objectSpread2(_objectSpread2({}, defaultStyle), {}, {
       transform: [{
@@ -50,9 +50,9 @@ var Modal = function Modal(props) {
       AnimatedComponent = _props$AnimatedCompon === void 0 ? SlideAnimatedView : _props$AnimatedCompon,
       _props$activeOpacity = props.activeOpacity,
       activeOpacity = _props$activeOpacity === void 0 ? 1 : _props$activeOpacity,
-      children = props.children,
-      className = props.className,
-      onAnimateIn = props.onAnimateIn,
+      children = props.children;
+      props.className;
+      var onAnimateIn = props.onAnimateIn,
       onAnimateOut = props.onAnimateOut,
       _props$onBackdropTouc = props.onBackdropTouch,
       onBackdropTouch = _props$onBackdropTouc === void 0 ? noOp : _props$onBackdropTouc,
@@ -82,15 +82,15 @@ var Modal = function Modal(props) {
     } else if (isFunc(onAnimateIn)) onAnimateIn();
   }, [onAnimateOut, onAnimateIn, visible]);
   return (
-    React__default.createElement(View, {
+    React.createElement(View, {
       className: useClassList(),
       style: renderModal ? modalStyles.main : hideModalStyle
-    }, React__default.createElement(Touchable, {
+    }, React.createElement(Touchable, {
       className: 'keg-modal-backdrop',
       style: modalStyles.backdrop,
       onPress: onBackdropTouch,
       activeOpacity: activeOpacity
-    }), React__default.createElement(AnimatedComponent, {
+    }), React.createElement(AnimatedComponent, {
       onAnimationFinish: cb,
       visible: visible,
       defaultStyle: modalStyles.content

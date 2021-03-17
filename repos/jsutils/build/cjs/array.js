@@ -2,24 +2,23 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('./validate-500f268a.js');
+var uniqArr = require('./uniqArr-1600c5cf.js');
 var isArr = require('./isArr-39234014.js');
-var uniqArr = require('./uniqArr-21d1c272.js');
+require('./validate-500f268a.js');
 require('./isObj-6b3aa807.js');
-require('./isFunc-f93803cb.js');
+require('./match-e3c15ed8.js');
 require('./deepFreeze-d73ccc57.js');
-require('./match-937d87ee.js');
+require('./isFunc-f93803cb.js');
+require('./typeOf-51fe5771.js');
 require('./exists-c79204b1.js');
+require('./identity-0ec4681d.js');
 require('./isStr-8a57710e.js');
 require('./isNum-c7164b50.js');
-require('./isNonNegative-9959647c.js');
 require('./isBool-aa6af74e.js');
-require('./identity-c14fb27a.js');
-require('./typeOf-51fe5771.js');
+require('./isNonNegative-9959647c.js');
 
 
 
-exports.isArr = isArr.isArr;
 exports.areCountMapsEqual = uniqArr.areCountMapsEqual;
 exports.areFrequencyEqual = uniqArr.areFrequencyEqual;
 exports.areSetEqual = uniqArr.areSetEqual;
@@ -37,4 +36,5 @@ exports.randomArr = uniqArr.randomArr;
 exports.randomizeArr = uniqArr.randomizeArr;
 exports.uniqArr = uniqArr.uniqArr;
 exports.uniqArrByReference = uniqArr.uniqArrByReference;
+exports.isArr = isArr.isArr;
 //# sourceMappingURL=array.js.map

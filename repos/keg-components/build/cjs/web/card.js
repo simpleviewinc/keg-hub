@@ -2,50 +2,51 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var React = require('react');
 require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
-require('./getPlatform-ec53cd5e.js');
-var React = require('react');
-var React__default = _interopDefault(React);
-require('./isValidComponent.js');
-require('./renderFromType.js');
-require('./getPressHandler.js');
-require('./ensureClassArray.js');
-require('./getImgSrc.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
-require('@keg-hub/re-theme/styleInjector');
-require('./view-a5f2a568.js');
-require('./useTextAccessibility.js');
-require('./kegText.native-b0c7697d.js');
-require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-e909e94a.js');
-require('./text.js');
 var useMediaProps = require('./useMediaProps.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useClassList-9eaefcd6.js');
-require('./cardCallout.js');
+require('react-native');
 var cardContent = require('./cardContent.js');
 var cardContainer = require('./cardContainer.js');
 var cardSection = require('./cardSection.js');
-require('./indicator.wrapper-cd0feb56.js');
+var cardMedia = require('./cardMedia-74c3dd87.js');
+require('./isValidComponent.js');
+require('@keg-hub/re-theme');
+require('./view-276572bd.js');
+require('./view.native-99366b4b.js');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./cardCallout.js');
+require('./text.js');
+require('./kegText-f2cfdfd4.js');
+require('./kegText.native-1994a0b7.js');
+require('./useTextAccessibility.js');
+require('./useTextStyles.js');
+require('./useClassList-89a8dbd4.js');
+require('./renderFromType.js');
 require('./loading.js');
-require('./image-14283c67.js');
-var cardMedia = require('./cardMedia-e88c767d.js');
+require('./indicator.wrapper-5ad2a9f5.js');
+require('./getPlatform-ec53cd5e.js');
+require('./image-e98c839c.js');
+require('./getPressHandler.js');
+require('./getImgSrc.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Card = function Card(_ref) {
   var styles = _ref.styles,
       props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, ["styles"]);
-  var contentTitle = props.contentTitle,
-      children = props.children,
+  props.contentTitle;
+      var children = props.children,
       className = props.className,
       Footer = props.Footer,
       footerLines = props.footerLines,
@@ -69,26 +70,26 @@ var Card = function Card(_ref) {
   });
   var hasMedia = Boolean(Media || mediaProps);
   var hasContent = Boolean(children || title || subtitle);
-  return React__default.createElement(cardContainer.CardContainer, {
+  return React__default['default'].createElement(cardContainer.CardContainer, {
     className: className,
     attributes: attributes,
     styles: cardStyles
-  }, Header && React__default.createElement(cardSection.CardSection, {
+  }, Header && React__default['default'].createElement(cardSection.CardSection, {
     Section: Header,
     type: "header",
     numberOfLines: headerLines,
     styles: cardStyles.header,
     showBorder: !hasMedia
-  }), hasMedia && React__default.createElement(cardMedia.CardMedia, {
+  }), hasMedia && React__default['default'].createElement(cardMedia.CardMedia, {
     mediaProps: mediaProps,
     styles: cardStyles.media,
     hasHeader: Boolean(Header)
-  }), hasContent && React__default.createElement(cardContent.CardContent, {
+  }), hasContent && React__default['default'].createElement(cardContent.CardContent, {
     title: title,
     subtitle: subtitle,
     styles: cardStyles.content,
     children: children
-  }), Footer && React__default.createElement(cardSection.CardSection, {
+  }), Footer && React__default['default'].createElement(cardSection.CardSection, {
     Section: Footer,
     type: "footer",
     numberOfLines: footerLines,

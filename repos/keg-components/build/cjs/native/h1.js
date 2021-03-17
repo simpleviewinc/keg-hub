@@ -2,19 +2,19 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
+var kegText = require('./kegText-965ef4d3.js');
+require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 require('react');
-require('react-native');
-require('./useClassName.native-3d1a229b.js');
-require('./useTextAccessibility.js');
+require('@keg-hub/jsutils');
 require('./kegText.js');
+require('./useClassName.native-3d1a229b.js');
+require('react-native');
+require('./useTextAccessibility.js');
 require('@keg-hub/re-theme/styleInjector');
-require('@keg-hub/re-theme');
 require('./useTextStyles.js');
-var kegText$1 = require('./kegText-3f09043e.js');
+require('@keg-hub/re-theme');
 
-var H1 = kegText$1.KegText('h1');
+var H1 = kegText.KegText('h1');
 
 exports.H1 = H1;
 //# sourceMappingURL=h1.js.map

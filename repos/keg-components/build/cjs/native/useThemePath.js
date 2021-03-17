@@ -2,12 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var jsutils = require('@keg-hub/jsutils');
 var React = require('react');
-var React__default = _interopDefault(React);
 var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
 
 var validateStyles = function validateStyles(styles) {
   return !Boolean(!styles || styles === jsutils.noPropObj || jsutils.isEmptyColl(styles));

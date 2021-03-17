@@ -121,11 +121,11 @@ export const getSize = width => {
   const name = sizeMap.entries.reduce((updateSize, [ key, value ]) => {
     checkWidth >= value
       ? // If it is check if there is an updateSize already sent
-        updateSize
-          ? // If an update size exists, then check if it's value is less then value
-            value > sizeMap.hash[updateSize] && (updateSize = key)
-          : // Otherwise just update the size
-            (updateSize = key)
+      updateSize
+        ? // If an update size exists, then check if it's value is less then value
+        value > sizeMap.hash[updateSize] && (updateSize = key)
+        : // Otherwise just update the size
+          (updateSize = key)
       : null
 
     return updateSize

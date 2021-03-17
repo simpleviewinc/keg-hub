@@ -1,16 +1,16 @@
-import { _ as _objectSpread2, d as _objectWithoutProperties } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { get, deepMerge, reduceObj, isObj } from '@keg-hub/jsutils';
+import { _ as _objectSpread2, d as _objectWithoutProperties } from './_rollupPluginBabelHelpers-b6f65682.js';
 import { g as getPlatform } from './getPlatform-95568099.js';
+import { get, deepMerge, reduceObj, isObj } from '@keg-hub/jsutils';
 
 var allPlatforms = "$all";
 var platform = "$" + getPlatform();
-var nonPlatform =  "$native";
+var nonPlatform = "$native";
 var platforms = [allPlatforms, platform, nonPlatform];
 var mergePlatforms = function mergePlatforms(toMerge) {
-  var $all = toMerge.$all,
-      $web = toMerge.$web,
-      $native = toMerge.$native,
-      otherKeys = _objectWithoutProperties(toMerge, ["$all", "$web", "$native"]);
+  toMerge.$all;
+      toMerge.$web;
+      toMerge.$native;
+      var otherKeys = _objectWithoutProperties(toMerge, ["$all", "$web", "$native"]);
   return platforms.reduce(function (merged, plat) {
     var platStyles = plat !== nonPlatform && get(toMerge, [plat]);
     return platStyles ? deepMerge(merged, platStyles) : merged;

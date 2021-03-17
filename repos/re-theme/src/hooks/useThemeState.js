@@ -17,8 +17,8 @@ const useCompareState = (offValue, onValue, noMerge, compareState) => {
   return useMemo(() => {
     return compareState
       ? noMerge
-          ? onValue
-          : deepMerge(offValue, onValue)
+        ? onValue
+        : deepMerge(offValue, onValue)
       : offValue
   }, [ offValue, onValue, noMerge, compareState ])
 }

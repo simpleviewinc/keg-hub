@@ -1,27 +1,27 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { noPropArr, isFunc } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import React__default, { useState, useCallback, useMemo } from 'react';
-import { isValidComponent } from './isValidComponent.js';
-import './ensureClassArray.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
-import '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import './useTextAccessibility.js';
-import './kegText.native-7cc07481.js';
-import { useStylesCallback } from '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-653699c8.js';
+import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Text } from './text.js';
-import './useThemePath.js';
-import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList-eea8a571.js';
 import { Touchable } from './touchable.js';
 import { Drawer } from './drawer.js';
+import { V as View } from './view-2274aefb.js';
+import { u as useClassList } from './useClassList-1d418045.js';
+import { noPropArr, isFunc } from '@keg-hub/jsutils';
+import { isValidComponent } from './isValidComponent.js';
+import '@keg-hub/re-theme/colors';
+import { useStylesCallback } from '@keg-hub/re-theme';
+import './kegText-5c4aeb4b.js';
+import './kegText.native-be460636.js';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import 'react-native';
+import './useTextAccessibility.js';
+import '@keg-hub/re-theme/styleInjector';
+import './useTextStyles.js';
+import './useThemePath.js';
+import './useThemeWithHeight.js';
+import './view.native-a7f08b5b.js';
 
 var LinearGradient = function LinearGradient(props) {
   var _props$start = props.start,
@@ -39,9 +39,9 @@ var LinearGradient = function LinearGradient(props) {
       _props$locations = props.locations,
       locations = _props$locations === void 0 ? noPropArr : _props$locations,
       _props$useAngle = props.useAngle,
-      useAngle = _props$useAngle === void 0 ? false : _props$useAngle,
-      angleCenter = props.angleCenter,
-      _props$angle = props.angle,
+      useAngle = _props$useAngle === void 0 ? false : _props$useAngle;
+      props.angleCenter;
+      var _props$angle = props.angle,
       angle = _props$angle === void 0 ? 0 : _props$angle,
       style = props.style,
       children = props.children,
@@ -61,7 +61,7 @@ var LinearGradient = function LinearGradient(props) {
     setHeight(nativeEvent.layout.height);
   }, [setWidth, setHeight]);
   var newAngle = useAngle && angle ? "".concat(angle, "deg") : calculateAngle(width, height, start, end);
-  return React__default.createElement(View, _extends({
+  return React.createElement(View, _extends({
     className: useClassList("keg-linear-gradient", className)
   }, otherProps, {
     style: [style, {
@@ -148,19 +148,19 @@ var TextToggle = function TextToggle(props) {
     if (textMaxHeight === height) return;
     setTextMaxHeight(height);
   }, [textMaxHeight, setTextMaxHeight]);
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     style: [mainStyle.main],
     className: useClassList('keg-text-toggle', className)
-  }, React__default.createElement(Drawer, {
+  }, React.createElement(Drawer, {
     collapsedHeight: collapsedHeight,
     toggled: expanded
-  }, React__default.createElement(Text, {
+  }, React.createElement(Text, {
     style: mainStyle.text,
     onLayout: onTextLayout
-  }, text)), showToggle && !expanded && React__default.createElement(LinearGradient, {
+  }, text)), showToggle && !expanded && React.createElement(LinearGradient, {
     colors: ['rgba(255,255,255,0)', fadeColor],
     style: mainStyle.linearGradient
-  }), showToggle && React__default.createElement(ToggleComponent, {
+  }), showToggle && React.createElement(ToggleComponent, {
     onPress: onToggleCb,
     isExpanded: expanded,
     styles: mainStyle.toggleComponent,
@@ -180,12 +180,12 @@ var ToggleComponent = function ToggleComponent(_ref) {
       expandedToggleText = _ref.expandedToggleText,
       collapsedToggleText = _ref.collapsedToggleText;
   var defaultText = isExpanded ? expandedToggleText : collapsedToggleText;
-  return React__default.createElement(Touchable, {
+  return React.createElement(Touchable, {
     style: styles === null || styles === void 0 ? void 0 : styles.main,
     onPress: onPress
-  }, isValidComponent(CustomComponent) ? React__default.createElement(CustomComponent, {
+  }, isValidComponent(CustomComponent) ? React.createElement(CustomComponent, {
     isExpanded: isExpanded
-  }) : React__default.createElement(Text, {
+  }) : React.createElement(Text, {
     style: styles === null || styles === void 0 ? void 0 : styles.text
   }, defaultText));
 };

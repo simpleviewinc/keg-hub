@@ -2,15 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var jsutils = require('@keg-hub/jsutils');
 var React = require('react');
-var React__default = _interopDefault(React);
+var jsutils = require('@keg-hub/jsutils');
 var isValidComponent = require('./isValidComponent.js');
 
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+
 var renderFromType = function renderFromType(Element, props, Wrapper) {
-  return isValidComponent.isValidComponent(Element) ? jsutils.isFunc(Element) ? React__default.createElement(Element, props) : Element : jsutils.isArr(Element) ? Element : Wrapper ? React__default.createElement(Wrapper, props, Element) : Element;
+  return isValidComponent.isValidComponent(Element) ? jsutils.isFunc(Element) ? React__default['default'].createElement(Element, props) : Element : jsutils.isArr(Element) ? Element : Wrapper ? React__default['default'].createElement(Wrapper, props, Element) : Element;
 };
 
 exports.renderFromType = renderFromType;

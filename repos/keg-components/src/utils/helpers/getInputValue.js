@@ -29,7 +29,7 @@ export const getValueFromChildren = (value, children) => {
     ? value
     : children
       ? isArr(children)
-          ? get(children, [ '0', 'props', 'children' ])
-          : get(children, [ 'props', 'children' ])
+        ? get(children, [ '0', 'props', 'children' ])
+        : get(children, [ 'props', 'children' ])
       : ''
 }

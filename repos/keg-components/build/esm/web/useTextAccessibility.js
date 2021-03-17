@@ -1,4 +1,4 @@
-import { _ as _objectSpread2, a as _defineProperty } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { _ as _objectSpread2, a as _defineProperty } from './_rollupPluginBabelHelpers-b6f65682.js';
 import { useMemo } from 'react';
 
 var headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];

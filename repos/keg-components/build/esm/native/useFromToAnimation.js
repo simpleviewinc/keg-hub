@@ -1,6 +1,6 @@
-import { noOp } from '@keg-hub/jsutils';
 import { useMemo, useEffect } from 'react';
 import { Animated } from 'react-native';
+import { noOp } from '@keg-hub/jsutils';
 
 var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},
@@ -22,7 +22,7 @@ var useFromToAnimation = function useFromToAnimation(params) {
     duration: duration,
     easing: easing
   };
-   (config.useNativeDriver = true);
+  (config.useNativeDriver = true);
   var animatedTiming = Animated.timing(fromVal, config);
   useEffect(function () {
     loop ? Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);
