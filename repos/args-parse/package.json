@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/args-parse",
-  "version": "6.2.2",
+  "version": "6.2.3",
   "description": "Parse command line arguments",
   "main": "src/index.js",
   "repository": {
