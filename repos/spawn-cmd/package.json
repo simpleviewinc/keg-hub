@@ -28,7 +28,7 @@
     "test:reports": "NODE_ENV=test jest --no-cache --verbose --coverage"
   },
   "dependencies": {
-    "@keg-hub/jsutils": "8.3.0",
+    "@keg-hub/jsutils": "8.4.0",
     "app-root-path": "3.0.0",
     "cross-spawn": "7.0.3",
     "shell-exec": "1.0.2",

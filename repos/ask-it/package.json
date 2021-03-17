@@ -39,7 +39,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@keg-hub/jsutils": "8.3.0",
+    "@keg-hub/jsutils": "8.4.0",
     "colors": "1.4.0",
     "inquirer": "7.0.6"
   },
