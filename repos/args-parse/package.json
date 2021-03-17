@@ -33,7 +33,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@keg-hub/ask-it": "0.0.1",
+    "@keg-hub/ask-it": "0.0.2",
     "@keg-hub/jsutils": "8.4.0",
     "app-root-path": "3.0.0"
   },
