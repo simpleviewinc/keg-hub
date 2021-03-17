@@ -1,4 +1,9 @@
+import { mockReactHooks, clearMockedHooks } from '../../mocks/reactHooks'
 import React from 'react'
+
+const mockedHooks = mockReactHooks(
+  'useMemo',
+)
 
 const MockComponent = props => {
   return React.createElement('div', props, 'I am a div')
@@ -9,6 +14,7 @@ const { StyleInjector, useStyleTag } = require('../index.native')
 describe('styleInjector', () => {
   describe('StyleInjector', () => {
     afterEach(() => {
+      clearMockedHooks(mockedHooks)
       jest.clearAllMocks()
     })
 
@@ -28,11 +34,13 @@ describe('styleInjector', () => {
 
   describe('useStyleTag', () => {
     afterEach(() => {
+      clearMockedHooks(mockedHooks)
       jest.clearAllMocks()
     })
 
     it('should return the passed in className', () => {
-      expect(useStyleTag('', 'test-class')).toBe('test-class')
+      const { classList } = useStyleTag('', 'test-class')
+      expect(classList.includes('test-class')).toBe(true)
     })
   })
 })

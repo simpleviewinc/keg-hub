@@ -10853,12 +10853,11 @@ expo-file-system@~9.3.0:
   dependencies:
     uuid "^3.4.0"
 
-expo-font@8.3.0:
-  version "8.3.0"
-  resolved "https://registry.npmjs.org/expo-font/-/expo-font-8.3.0.tgz#f41955d1f1bbb2fe706bf97fc94aa89f7e599a0a"
-  integrity sha512-WK3Oh3JwLjH/y94w1GPhE1Ix59WEJ9hTUKJBuvsM9SYqdN4N0DDb2VKhCH218HPdLURfyZnhMi2KrVycUWIUEQ==
+expo-font@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.npmjs.org/expo-font/-/expo-font-9.0.0.tgz#638db10cbb09a1d03de823704d166e745f5cbae3"
+  integrity sha512-hMuyPNyni1MXYzAdKRMlaEm7StCvuaxsNohhDF9noh0HXizmnsWc6a5AGcJJgRO/iJssk/iL2nzP4nYdB+rrGQ==
   dependencies:
-    fbjs "1.0.0"
     fontfaceobserver "^2.1.0"
 
 expo-font@~8.4.0:
@@ -18622,6 +18621,12 @@ react-docgen-typescript-plugin@^0.6.2:
   version "0.6.3"
   resolved "https://registry.npmjs.org/react-docgen-typescript-plugin/-/react-docgen-typescript-plugin-0.6.3.tgz#664b22601df083597ecb1e60bd21beca60125fdf"
   integrity sha512-av1S/fmWBNFGgNa4qtkidFjjOz23eEi6EdCtwSWo9WNhGzUMyMygbD/DosMWoeFlZpk9R3MXPkRE7PDH6j5GMQ==
+  dependencies:
+    debug "^4.1.1"
+    endent "^2.0.1"
+    micromatch "^4.0.2"
+    react-docgen-typescript "^1.20.5"
+    tslib "^2.0.0"
 
 react-docgen@^5.0.0:
   version "5.3.0"
