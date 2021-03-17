@@ -4218,10 +4218,10 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.4.0.tgz#e2dd2794ccc60f8c2e5ee1aa12ec6f8d9217c209"
   integrity sha512-dKduqKAHh2AqKymyHR0boje7x8kPkTK8vkFI46OUS+Ar9tZjjMgX8CoQuOoCzvpc/pbCaINgbSQCfrcOPidQQg==
 
-"@keg-hub/re-theme@9.0.0":
-  version "9.0.0"
-  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-9.0.0.tgz#bd77c8f41ea0a75136403474e86cb13ef971784b"
-  integrity sha512-uTc23gP9pOm7GYWRM9ytDbicrOadqfGI3V8E7uAS89yCPkQO1961yOFzhKAAqxMKr2QCLcnQxe5fGVGIbTnDaQ==
+"@keg-hub/re-theme@9.0.1":
+  version "9.0.1"
+  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-9.0.1.tgz#7ad2df1f5e062a5b5df92657e993f2989ff33a59"
+  integrity sha512-xZKKCugSQBsh74HR7mUWlqioMs7k+lSO4kDDu+NWId81XrNa2sqHEARceoU7Bix3eYk2rP2Rb3EVf4tguw0rug==
 
 "@mdx-js/loader@^1.6.19":
   version "1.6.22"
