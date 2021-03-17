@@ -4213,10 +4213,10 @@
     "@babel/runtime" "^7.7.2"
     core-js "^3.4.1"
 
-"@keg-hub/jsutils@8.3.0":
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.3.0.tgz#559d61c4d20bcca33358685547ba8975cf0f8f47"
-  integrity sha512-kmWMkbL2w7Eg89JXqdTC2OedwpD4eL/5KRbSOUbIRCum3xQl/2S1D/FraeJKwlW14NCpOWjfRHPnfxWgwPcAqw==
+"@keg-hub/jsutils@8.4.0":
+  version "8.4.0"
+  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.4.0.tgz#e2dd2794ccc60f8c2e5ee1aa12ec6f8d9217c209"
+  integrity sha512-dKduqKAHh2AqKymyHR0boje7x8kPkTK8vkFI46OUS+Ar9tZjjMgX8CoQuOoCzvpc/pbCaINgbSQCfrcOPidQQg==
 
 "@keg-hub/re-theme@8.2.1":
   version "8.2.1"

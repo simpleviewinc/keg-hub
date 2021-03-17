@@ -58,7 +58,7 @@
     "@expo/webpack-config": "0.12.61",
     "@keg-hub/jsutils": "8.4.0",
     "@keg-hub/keg-components": "8.2.1",
-    "@keg-hub/re-theme": "8.2.1",
+    "@keg-hub/re-theme": "9.0.0",
     "@keg-hub/tap-resolver": "7.0.0",
     "@testing-library/react-hooks": "3.2.1",
     "app-root-path": "3.0.0",

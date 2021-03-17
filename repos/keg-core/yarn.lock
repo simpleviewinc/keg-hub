@@ -2296,10 +2296,10 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-7.0.0.tgz#e01edd7aa9a936f3267e1c506b53ea841de2f85f"
   integrity sha512-/2a+sXmmXeqgaqit9OnqocmEbUee+niQ/9bkvvgqcuA8c1d8rpGMIuprMgj7RqxLCCQhwRJmHh8UePnhdMKNlg==
 
-"@keg-hub/jsutils@8.3.0":
-  version "8.3.0"
-  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.3.0.tgz#559d61c4d20bcca33358685547ba8975cf0f8f47"
-  integrity sha512-kmWMkbL2w7Eg89JXqdTC2OedwpD4eL/5KRbSOUbIRCum3xQl/2S1D/FraeJKwlW14NCpOWjfRHPnfxWgwPcAqw==
+"@keg-hub/jsutils@8.4.0":
+  version "8.4.0"
+  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.4.0.tgz#e2dd2794ccc60f8c2e5ee1aa12ec6f8d9217c209"
+  integrity sha512-dKduqKAHh2AqKymyHR0boje7x8kPkTK8vkFI46OUS+Ar9tZjjMgX8CoQuOoCzvpc/pbCaINgbSQCfrcOPidQQg==
 
 "@keg-hub/keg-components@8.2.1":
   version "8.2.1"
