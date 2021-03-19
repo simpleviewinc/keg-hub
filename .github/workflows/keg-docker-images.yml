@@ -1,9 +1,13 @@
 
 name: keg-docker-image
 on: push
+# on:
+#   push:
+#     branches:
+#       - develop
 
 jobs:
-  tests:
+  build:
     name: 'Build Docker Keg Images'
     runs-on: ubuntu-latest
     defaults:
@@ -18,32 +22,16 @@ jobs:
       - name: "Setup node Version"
         uses: actions/setup-node@v2
         with:
-          node-version: "12"
+          node-version: "14"
 
-      - name: "Get Changed Files"
-        id: get-changed-files
-        run: bash scripts/ci/getChangedFiles.sh
+      - name: "Setup Keg-CLI"
+        id: setup-keg-cli
+        run: bash scripts/ci/setupKegCLI.sh
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: "Get Changed Repos"
-        id: get-changed-repos
-        run: bash scripts/ci/getChangedRepos.sh
-
-      - name: "Install Keg-CLI"
-        id: install-keg-cli
-        run: bash scripts/ci/installCli.sh
-
-      - name: "Run Repo Format"
-        id: run-repo-format
-        run: bash scripts/ci/runYarnCmd.sh "format"
-
-      - name: "Run Repo Build"
-        id: run-repo-build
-        run: bash scripts/ci/buildChangedRepos.sh
-
-      - name: "Run Repo Tests"
-        id: run-repo-tests
-        run: bash scripts/ci/runYarnCmd.sh "test"
-
-      - name: "Commit Repo Changes"
-        id: commit-changes
-        run: bash scripts/ci/commitChanges.sh "Repo-Build"
+      - name: "Build keg-hub docker images"
+        id: build-docker-images
+        run: bash scripts/ci/buildImages.sh
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
