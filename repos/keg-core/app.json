@@ -57,7 +57,8 @@
         "temp": "./temp",
         "kegSrc": "./core/base",
         "tapAssets": "assets",
-        "folderRootFile": "index"
+        "folderRootFile": "index",
+        "fontIndex": "fonts"
       },
       "extensions": {
         "assets": [
@@ -65,7 +66,8 @@
           ".jpg",
           ".jpeg",
           ".gif",
-          ".ttf"
+          ".ttf",
+          ".otf"
         ],
         "resolve": [
           ".web.js",
@@ -113,7 +115,10 @@
           "^react-native-svg": "react-native-svg-web",
           "react-router-native": "react-router-dom"
         },
-        "native": {}
+        "native": {
+          "@keg-hub/re-theme/colors": "@keg-hub/re-theme/build/cjs/native/colors",
+          "@keg-hub/re-theme/styleInjector": "@keg-hub/re-theme/build/cjs/native/styleInjector"
+        }
       },
       "babel": {
         "web": {
