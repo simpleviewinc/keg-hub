@@ -24,12 +24,12 @@
   "scripts": {
     "docker:build": "bash ./scripts/dockerBuild.sh",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
-    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
+    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn gen:indexes",
     "clean:docs": "rimraf docs",
     "clean:full": "yarn clean:nm; clean:build",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.native.cjs.js build/cjs/index.native.js; cp ./index.esm.js build/esm/index.js; cp ./index.native.esm.js build/esm/index.native.js",
+    "gen:indexes": "node ./scripts/generateIndexFiles.js",
     "deploy": "gh-pages -d docs -o upstream",
     "dev": "nodemon --watch ./configs --exec 'NODE_ENV=production rollup -c ./configs/rollup.config.js -w'",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
@@ -42,7 +42,7 @@
     "sb:build": "yarn clean:docs; RE_PLATFORM=web build-storybook -c .storybook -o docs",
     "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
     "sb:server": "npx http-server docs",
-    "start": "yarn copy:indexes; yarn dev",
+    "start": "yarn gen:indexes; yarn dev",
     "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html"
