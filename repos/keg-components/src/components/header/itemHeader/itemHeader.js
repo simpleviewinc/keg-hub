@@ -26,6 +26,7 @@ export const ItemHeader = props => {
   const theme = useTheme()
 
   const {
+    accessibilityRole,
     appHeader,
     className,
     title,
@@ -52,6 +53,7 @@ export const ItemHeader = props => {
   // builds the left, center, and right section based on props
   return (
     <View
+      accessibilityRole={(isWeb && accessibilityRole) || 'header'}
       className={useClassList('keg-header', className)}
       {...elProps}
       style={[

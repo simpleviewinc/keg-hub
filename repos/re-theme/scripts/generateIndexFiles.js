@@ -46,6 +46,12 @@ const saveToFile = (exportPath, content, folder) => {
 const generateIndexFiles = async () => {
   Object.keys(platforms).map(platform => {
     Object.keys(buildExports).map(name => {
+
+      // For not only generate the index exports
+      // We may want to generate exports for all files
+      // at some point, so leaving this as is for now
+      if(name !== 'index') return
+
       Object.keys(exportTypes).map(type => {
         const exportName = `${name}${platforms[platform]}`
         const exportPath = `${platform}/${name}.js`

@@ -1,4 +1,5 @@
 const pathAlias = {
+  RePlatform: 'src/context/platform${platform}',
   ReDimensions: 'src/dimensions/dimensions${platform}',
   StyleInjector: 'src/styleInjector/index${platform}',
 }

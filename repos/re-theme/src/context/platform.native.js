@@ -1,16 +1,17 @@
-import { isObj } from '@keg-hub/jsutils'
+let RNPlatform
 
 /**
- * Default platform used for a web-app
- * @Object
+ * Loads the react-native platform inside a function call
+ * Ensures react-native has been initialized before calling
+ * @function
+ * 
+ * @return {Object} - Platform object to use when building the theme
  */
-const webDefPlatform = {
-  OS: 'web',
-  select: obj => isObj(obj) && obj.web,
-  Version: 'ReTheme',
+const loadReactNativePlatform = () => {
+  const { Platform } = require('react-native')
+  RNPlatform = Platform
+  return RNPlatform
 }
-
-let RNPlatform
 
 /**
  * Gets the set platform object, or the default platform
@@ -19,7 +20,7 @@ let RNPlatform
  * @return {Object} - Platform object to use when building the theme
  */
 const getRNPlatform = () => {
-  return RNPlatform || webDefPlatform
+  return RNPlatform || loadReactNativePlatform()
 }
 
 /**

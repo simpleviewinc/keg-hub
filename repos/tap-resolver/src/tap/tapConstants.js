@@ -28,11 +28,14 @@ module.exports = deepFreeze({
    * Default assets path, relative to the base path of the app config
    */
   assetsPath: 'assets',
+  assetsIndex: 'index',
+  fontIndex: 'fonts',
 
   /**
    * Files and asset extensions that can be resolved
    */
   extensions: {
+    fonts: [ '.ttf', '.otf' ],
     assets: [ '.png', '.jpg', '.jpeg', '.gif', '.ttf' ],
     resolve: [
       '.web.js',

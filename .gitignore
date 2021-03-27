@@ -27,7 +27,6 @@ reports/
 jsconfig.json
 
 .vscode
-core/base/assets/index.js
 kc-touch.js
 src/reports/cucumber/*
 !src/reports/cucumber/.gitkeep
@@ -168,8 +167,9 @@ repos/**/container/.env
 repos/**/container/run.sh
 !repos/**/build
 repos/**/run.sh
-repos/keg-core/core/base/assets
-repos/keg-core/core/base/assets/index.js
+repos/keg-core/core/base/assets/**/**
+!repos/keg-core/core/base/assets/clientLogo.jpg
+!repos/keg-core/core/base/assets/FiraSans-Regular.ttf
 repos/**/kc-touch.js
 repos/**/__generated__
 repos/**/retheme-hook.js

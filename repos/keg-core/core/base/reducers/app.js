@@ -5,14 +5,14 @@ const initialState = { ...appState }
 
 export function app(state = initialState, action) {
   switch (action.type) {
-  case ActionTypes.APP_INIT: {
-    return {
-      initialized: true,
+    case ActionTypes.APP_INIT: {
+      return {
+        ...state,
+        initialized: true,
+      }
     }
-  }
-
-  default: {
-    return state
-  }
+    default: {
+      return state
+    }
   }
 }
