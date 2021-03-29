@@ -2,13 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var ensureClassArray = require('./ensureClassArray.js');
+require('@keg-hub/jsutils');
 
 var updateClassNames = function updateClassNames(element, classesRef, defClass, className) {
   var _element$classList;
-  if ( !('classList' in element)) return;
+  if (!('classList' in element)) return;
   defClass && (_element$classList = element.classList).add.apply(_element$classList, _rollupPluginBabelHelpers._toConsumableArray(defClass.split(' ')));
   var classArr = ensureClassArray.ensureClassArray(className);
   classesRef.current.map(function (cls) {

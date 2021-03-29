@@ -2,34 +2,35 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./ensureClassArray.js');
+var input = require('./input-c0e98e11.js');
+require('@keg-hub/jsutils');
 require('./getInputValue.js');
 require('./getReadOnly.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('./validateFunctions.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('@keg-hub/re-theme/styleInjector');
-require('@keg-hub/re-theme');
+require('@keg-hub/re-theme/colors');
 require('./useInputHandlers.js');
+require('./validateFunctions.js');
 require('./usePressHandlers.js');
 require('./useThemePath.js');
+require('@keg-hub/re-theme');
 require('./useThemeWithHeight.js');
-require('./touchable.js');
+require('react-native');
+require('./input-5bf3abae.js');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
 require('./withTouch.js');
-require('./input-0341b978.js');
-var input$1 = require('./input-eac91d66.js');
+require('./touchable.js');
+require('@keg-hub/re-theme/styleInjector');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Radio = function Radio(props) {
-  return React__default.createElement(input$1.Input, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(input.Input, _rollupPluginBabelHelpers._extends({}, props, {
     type: "radio"
   }));
 };

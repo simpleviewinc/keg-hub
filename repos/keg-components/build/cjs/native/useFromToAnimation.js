@@ -2,12 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var jsutils = require('@keg-hub/jsutils');
 var React = require('react');
-var React__default = _interopDefault(React);
 var reactNative = require('react-native');
+var jsutils = require('@keg-hub/jsutils');
 
 var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},
@@ -29,7 +26,7 @@ var useFromToAnimation = function useFromToAnimation(params) {
     duration: duration,
     easing: easing
   };
-   (config.useNativeDriver = true);
+  (config.useNativeDriver = true);
   var animatedTiming = reactNative.Animated.timing(fromVal, config);
   React.useEffect(function () {
     loop ? reactNative.Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);

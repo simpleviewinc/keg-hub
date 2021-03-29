@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/ask-it",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Node CLI helper for asking questions",
   "main": "src/index.js",
   "repository": {
@@ -39,13 +39,13 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@keg-hub/jsutils": "8.3.0",
+    "@keg-hub/jsutils": "8.4.0",
     "colors": "1.4.0",
     "inquirer": "7.0.6"
   },
   "devDependencies": {
-    "jest": "24.9.0",
-    "jest-cli": "24.8.0",
+    "jest": "26.6.3",
+    "jest-cli": "26.6.3",
     "rimraf": "3.0.2"
   },
   "jest": {

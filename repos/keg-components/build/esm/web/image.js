@@ -1,31 +1,31 @@
-import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { V as View } from './view-2274aefb.js';
+import { Loading } from './loading.js';
 import { checkCall, isFunc } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import './getPlatform-95568099.js';
-import React__default, { forwardRef, useState, useRef, useCallback } from 'react';
-import './isValidComponent.js';
-import { getPressHandler } from './getPressHandler.js';
-import './ensureClassArray.js';
-import { getImgSrc } from './getImgSrc.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import './useTextAccessibility.js';
-import './kegText.native-7cc07481.js';
+import { I as Image$1 } from './image-fd980ec1.js';
 import { useStyle, useThemeHover } from '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-653699c8.js';
-import './text.js';
+import React, { forwardRef, useState, useRef, useCallback } from 'react';
+import { getPressHandler } from './getPressHandler.js';
+import { getImgSrc } from './getImgSrc.js';
+import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import { u as useClassList } from './useClassList-eea8a571.js';
-import './indicator.wrapper-bc4d150e.js';
-import { Loading } from './loading.js';
-import { I as Image$1 } from './image-f3ee5b28.js';
+import 'react-native';
+import { u as useClassList } from './useClassList-1d418045.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import './view.native-a7f08b5b.js';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import './indicator.wrapper-ddd47db5.js';
+import './getPlatform-95568099.js';
+import './text.js';
+import './kegText-5c4aeb4b.js';
+import './kegText.native-be460636.js';
+import './useTextAccessibility.js';
+import './useTextStyles.js';
+import './isValidComponent.js';
 
 var KegImage = StyleInjector(Image$1, {
   displayName: 'Image',
@@ -38,9 +38,9 @@ var Image = forwardRef(function (props, ref) {
       setLoading = _useState2[1];
   var internalRef = ref || useRef(null);
   var alt = props.alt,
-      className = props.className,
-      children = props.children,
-      onClick = props.onClick,
+      className = props.className;
+      props.children;
+      var onClick = props.onClick,
       onPress = props.onPress,
       src = props.src,
       source = props.source,
@@ -68,13 +68,13 @@ var Image = forwardRef(function (props, ref) {
     checkCall(props.onLoad, props);
     isFunc(imgRef) ? imgRef(internalRef.current) : imgRef && (imgRef.current = internalRef.current);
   }, [src, source, internalRef.current]);
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     className: useClassList("keg-image-container", className),
     style: builtStyles.container
-  }, loading && useLoading && React__default.createElement(Loading, {
+  }, loading && useLoading && React.createElement(Loading, {
     className: "keg-image-loading",
     styles: builtStyles.loadingComp
-  }), React__default.createElement(KegImage, _extends({}, attrs, {
+  }), React.createElement(KegImage, _extends({}, attrs, {
     style: loading ? loadingStyles : builtStyles.image
   }, getPressHandler(false, onClick, onPress), getImgSrc(false, src, source), {
     onLoadEnd: onLoad,

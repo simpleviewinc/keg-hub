@@ -2,18 +2,19 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-var getPlatform = require('./getPlatform-24228c6c.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
+var view_native = require('./view.native-b34604af.js');
+var jsutils = require('@keg-hub/jsutils');
 var getPressHandler = require('./getPressHandler.js');
+var getPlatform = require('./getPlatform-24228c6c.js');
+require('@keg-hub/re-theme/colors');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
-var view_native = require('./view.native-20f555a1.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var useHasWidth = function useHasWidth(styles) {
   return React.useMemo(function () {
@@ -37,7 +38,7 @@ var Container = function Container(_ref) {
     flexDirection: flexDir,
     flex: size ? size : hasWidth ? 0 : 1
   } : {};
-  return React__default.createElement(view_native.View, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(view_native.View, _rollupPluginBabelHelpers._extends({}, props, {
     style: [flexStyle].concat(_rollupPluginBabelHelpers._toConsumableArray(containerStyles))
   }, getPressHandler.getPressHandler(getPlatform.getPlatform(), onClick || onPress)), children);
 };

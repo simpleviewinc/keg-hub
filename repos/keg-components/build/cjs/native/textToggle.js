@@ -2,31 +2,33 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-var isValidComponent = require('./isValidComponent.js');
-require('react-native');
-require('./useClassName.native-3d1a229b.js');
-var view_native = require('./view.native-20f555a1.js');
-require('./useTextAccessibility.js');
-require('./kegText.js');
-require('@keg-hub/re-theme/styleInjector');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-3f09043e.js');
 var text = require('./text.js');
+var touchable = require('./touchable-3f00e0ff.js');
+var drawer = require('./drawer.js');
+var view_native = require('./view.native-b34604af.js');
+var useClassList_native = require('./useClassList.native-9e7810c9.js');
+var jsutils = require('@keg-hub/jsutils');
+var isValidComponent = require('./isValidComponent.js');
+require('@keg-hub/re-theme/colors');
+var reTheme = require('@keg-hub/re-theme');
+var LinearGradient = require('react-native-linear-gradient');
+require('./kegText-965ef4d3.js');
+require('./kegText.js');
+require('./useClassName.native-3d1a229b.js');
+require('react-native');
+require('./useTextAccessibility.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./useTextStyles.js');
+require('./touchable.js');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-var useClassList_native = require('./useClassList.native-9e7810c9.js');
-require('./touchable.js');
-var touchable$1 = require('./touchable-d386e5c0.js');
-var drawer = require('./drawer.js');
-var LinearGradient = _interopDefault(require('react-native-linear-gradient'));
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var LinearGradient__default = /*#__PURE__*/_interopDefaultLegacy(LinearGradient);
 
 var buildStyles = function buildStyles(theme, styleHelper) {
   var textToggleStyles = theme.get("textToggle", styleHelper === null || styleHelper === void 0 ? void 0 : styleHelper.styles);
@@ -49,9 +51,9 @@ var TextToggle = function TextToggle(props) {
   var text$1 = props.text,
       styles = props.styles,
       _props$isExpandedInit = props.isExpandedInit,
-      isExpandedInit = _props$isExpandedInit === void 0 ? false : _props$isExpandedInit,
-      className = props.className,
-      CustomToggle = props.CustomToggle,
+      isExpandedInit = _props$isExpandedInit === void 0 ? false : _props$isExpandedInit;
+      props.className;
+      var CustomToggle = props.CustomToggle,
       onToggle = props.onToggle,
       _props$togglePosition = props.togglePosition,
       togglePosition = _props$togglePosition === void 0 ? 'right' : _props$togglePosition,
@@ -89,19 +91,19 @@ var TextToggle = function TextToggle(props) {
     if (textMaxHeight === height) return;
     setTextMaxHeight(height);
   }, [textMaxHeight, setTextMaxHeight]);
-  return React__default.createElement(view_native.View, {
+  return React__default['default'].createElement(view_native.View, {
     style: [mainStyle.main],
     className: useClassList_native.useClassList()
-  }, React__default.createElement(drawer.Drawer, {
+  }, React__default['default'].createElement(drawer.Drawer, {
     collapsedHeight: collapsedHeight,
     toggled: expanded
-  }, React__default.createElement(text.Text, {
+  }, React__default['default'].createElement(text.Text, {
     style: mainStyle.text,
     onLayout: onTextLayout
-  }, text$1)), showToggle && !expanded && React__default.createElement(LinearGradient, {
+  }, text$1)), showToggle && !expanded && React__default['default'].createElement(LinearGradient__default['default'], {
     colors: ['rgba(255,255,255,0)', fadeColor],
     style: mainStyle.linearGradient
-  }), showToggle && React__default.createElement(ToggleComponent, {
+  }), showToggle && React__default['default'].createElement(ToggleComponent, {
     onPress: onToggleCb,
     isExpanded: expanded,
     styles: mainStyle.toggleComponent,
@@ -121,12 +123,12 @@ var ToggleComponent = function ToggleComponent(_ref) {
       expandedToggleText = _ref.expandedToggleText,
       collapsedToggleText = _ref.collapsedToggleText;
   var defaultText = isExpanded ? expandedToggleText : collapsedToggleText;
-  return React__default.createElement(touchable$1.Touchable, {
+  return React__default['default'].createElement(touchable.Touchable, {
     style: styles === null || styles === void 0 ? void 0 : styles.main,
     onPress: onPress
-  }, isValidComponent.isValidComponent(CustomComponent) ? React__default.createElement(CustomComponent, {
+  }, isValidComponent.isValidComponent(CustomComponent) ? React__default['default'].createElement(CustomComponent, {
     isExpanded: isExpanded
-  }) : React__default.createElement(text.Text, {
+  }) : React__default['default'].createElement(text.Text, {
     style: styles === null || styles === void 0 ? void 0 : styles.text
   }, defaultText));
 };

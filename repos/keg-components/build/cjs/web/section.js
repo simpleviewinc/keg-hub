@@ -2,22 +2,23 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./ensureClassArray.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
-require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-a5f2a568.js');
 var reTheme = require('@keg-hub/re-theme');
-var useClassList = require('./useClassList-9eaefcd6.js');
+var view = require('./view-276572bd.js');
+var useClassList = require('./useClassList-89a8dbd4.js');
+require('./view.native-99366b4b.js');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('@keg-hub/jsutils');
+require('./handleRefUpdate.js');
+require('@keg-hub/re-theme/styleInjector');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Section = reTheme.withTheme(function (props) {
   var className = props.className,
@@ -26,7 +27,7 @@ var Section = reTheme.withTheme(function (props) {
       style = props.style,
       type = props.type,
       args = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "theme", "children", "style", "type"]);
-  return React__default.createElement(view.View, _rollupPluginBabelHelpers._extends({}, args, {
+  return React__default['default'].createElement(view.View, _rollupPluginBabelHelpers._extends({}, args, {
     className: useClassList.useClassList('keg-section', className),
     accessibilityRole: "region",
     style: theme.get("section.default", type && "section.".concat(type), style)

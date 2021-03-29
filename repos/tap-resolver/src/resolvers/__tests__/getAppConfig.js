@@ -1,7 +1,7 @@
 describe('Get App Config', () => {
   beforeEach(() => {})
 
-  it('', () => {
+  it('should get the app config', () => {
     expect(true).toBe(true)
   })
 })

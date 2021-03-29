@@ -2,16 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
-require('react');
-require('./ensureClassArray.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-var view_native = require('./view.native-ab314649.js');
+var view_native = require('./view.native-99366b4b.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
+require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+require('react');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('@keg-hub/jsutils');
+require('./handleRefUpdate.js');
 
 var View = styleInjector.StyleInjector(view_native.View, {
   displayName: 'View',

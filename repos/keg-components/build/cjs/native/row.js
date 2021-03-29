@@ -2,29 +2,30 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-require('./getPlatform-24228c6c.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./getPressHandler.js');
+var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
+var container = require('./container.js');
+var useClassList_native = require('./useClassList.native-9e7810c9.js');
+require('./view.native-b34604af.js');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
-require('./view.native-20f555a1.js');
-var reTheme = require('@keg-hub/re-theme');
-var useClassList_native = require('./useClassList.native-9e7810c9.js');
-var container = require('./container.js');
+require('./getPressHandler.js');
+require('./getPlatform-24228c6c.js');
+require('@keg-hub/re-theme/colors');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Row = function Row(_ref) {
-  var className = _ref.className,
-      children = _ref.children,
+  _ref.className;
+      var children = _ref.children,
       style = _ref.style,
       props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, ["className", "children", "style"]);
   var theme = reTheme.useTheme();
-  return React__default.createElement(container.Container, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(container.Container, _rollupPluginBabelHelpers._extends({}, props, {
     className: useClassList_native.useClassList(),
     style: [jsutils.get(theme, 'layout.grid.row'), style],
     flexDir: "row"

@@ -1,2 +1,2 @@
-import r from"react";var StyleInjector=function(t){return function(n){return r.createElement(t,n)}},useStyleTag=function(r){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"";return t};export{StyleInjector,useStyleTag};
+import r,{useMemo as t}from"react";import{noPropArr as e,eitherArr as n}from"@keg-hub/jsutils";var StyleInjector=function(t){return function(e){return r.createElement(t,e)}},useStyleTag=function(r){var u=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"";return t((function(){return{filteredStyle:r,css:{all:"",rules:e},classList:n(u,[u])}}),[r,u])};export{StyleInjector,useStyleTag};
 //# sourceMappingURL=styleInjector.js.map

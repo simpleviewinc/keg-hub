@@ -2,37 +2,38 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var view = require('./view-276572bd.js');
+var loading = require('./loading.js');
 var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-require('./getPlatform-ec53cd5e.js');
-var React = require('react');
-var React__default = _interopDefault(React);
-require('./isValidComponent.js');
-var getPressHandler = require('./getPressHandler.js');
-require('./ensureClassArray.js');
-var getImgSrc = require('./getImgSrc.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
-var styleInjector = require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-a5f2a568.js');
-require('./useTextAccessibility.js');
-require('./kegText.native-b0c7697d.js');
+var image = require('./image-e98c839c.js');
 var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-e909e94a.js');
-require('./text.js');
+var React = require('react');
+var getPressHandler = require('./getPressHandler.js');
+var getImgSrc = require('./getImgSrc.js');
+require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-var useClassList = require('./useClassList-9eaefcd6.js');
-require('./indicator.wrapper-cd0feb56.js');
-var loading = require('./loading.js');
-var image = require('./image-14283c67.js');
+require('react-native');
+var useClassList = require('./useClassList-89a8dbd4.js');
+var styleInjector = require('@keg-hub/re-theme/styleInjector');
+require('./view.native-99366b4b.js');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('./indicator.wrapper-5ad2a9f5.js');
+require('./getPlatform-ec53cd5e.js');
+require('./text.js');
+require('./kegText-f2cfdfd4.js');
+require('./kegText.native-1994a0b7.js');
+require('./useTextAccessibility.js');
+require('./useTextStyles.js');
+require('./isValidComponent.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var KegImage = styleInjector.StyleInjector(image.Image, {
   displayName: 'Image',
@@ -45,9 +46,9 @@ var Image = React.forwardRef(function (props, ref) {
       setLoading = _useState2[1];
   var internalRef = ref || React.useRef(null);
   var alt = props.alt,
-      className = props.className,
-      children = props.children,
-      onClick = props.onClick,
+      className = props.className;
+      props.children;
+      var onClick = props.onClick,
       onPress = props.onPress,
       src = props.src,
       source = props.source,
@@ -75,13 +76,13 @@ var Image = React.forwardRef(function (props, ref) {
     jsutils.checkCall(props.onLoad, props);
     jsutils.isFunc(imgRef) ? imgRef(internalRef.current) : imgRef && (imgRef.current = internalRef.current);
   }, [src, source, internalRef.current]);
-  return React__default.createElement(view.View, {
+  return React__default['default'].createElement(view.View, {
     className: useClassList.useClassList("keg-image-container", className),
     style: builtStyles.container
-  }, loading$1 && useLoading && React__default.createElement(loading.Loading, {
+  }, loading$1 && useLoading && React__default['default'].createElement(loading.Loading, {
     className: "keg-image-loading",
     styles: builtStyles.loadingComp
-  }), React__default.createElement(KegImage, _rollupPluginBabelHelpers._extends({}, attrs, {
+  }), React__default['default'].createElement(KegImage, _rollupPluginBabelHelpers._extends({}, attrs, {
     style: loading$1 ? loadingStyles : builtStyles.image
   }, getPressHandler.getPressHandler(false, onClick, onPress), getImgSrc.getImgSrc(false, src, source), {
     onLoadEnd: onLoad,

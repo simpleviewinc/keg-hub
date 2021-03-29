@@ -1,34 +1,24 @@
-import { d as _objectWithoutProperties, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { V as View } from './view-2274aefb.js';
+import { C as CheckboxWrapper, a as Check } from './checkbox.wrapper-7adc3d63.js';
+import React, { useMemo, forwardRef } from 'react';
 import { noPropObj } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import './colors-13c6a916.js';
-import React__default, { useMemo, forwardRef } from 'react';
-import './isValidComponent.js';
-import './renderFromType.js';
-import './getOnChangeHandler.js';
-import './ensureClassArray.js';
-import './getChecked.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import './useTextAccessibility.js';
-import './kegText.native-7cc07481.js';
-import '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-653699c8.js';
-import './text.js';
-import './useThemePath.js';
-import './useThemeWithHeight.js';
-import './useClassList-eea8a571.js';
-import './useThemeTypeAsClass-cd54e95a.js';
+import { I as Input$1 } from './input.web-14b4a9e4.js';
+import './view.native-a7f08b5b.js';
+import 'react-native';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import './svgIcon-51ab090d.js';
 import 'react-native-svg';
-import './svgIcon-8c133388.js';
-import { C as CheckboxWrapper, a as Check } from './checkbox.wrapper-46c820e4.js';
+import '@keg-hub/re-theme';
 import './caption.js';
+import './kegText-5c4aeb4b.js';
+import './kegText.native-be460636.js';
+import './useTextAccessibility.js';
+import './useTextStyles.js';
 import './h1.js';
 import './h2.js';
 import './h3.js';
@@ -38,7 +28,17 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { I as Input$1 } from './input.web-91c0c245.js';
+import './text.js';
+import './renderFromType.js';
+import './isValidComponent.js';
+import './getOnChangeHandler.js';
+import './getChecked.js';
+import '@keg-hub/re-theme/colors';
+import './useThemePath.js';
+import './useThemeWithHeight.js';
+import './useClassList-1d418045.js';
+import './useThemeTypeAsClass-fec5ff6f.js';
+import './colors-6402d3b3.js';
 
 var checkBoxStyles = {
   icon: {
@@ -69,7 +69,7 @@ var Input = StyleInjector(Input$1, {
   displayName: 'Checkbox',
   className: 'keg-checkbox'
 });
-var Element = React__default.forwardRef(function (props, ref) {
+var Element = React.forwardRef(function (props, ref) {
   var className = props.className,
       elProps = props.elProps,
       _props$styles = props.styles,
@@ -84,16 +84,16 @@ var Element = React__default.forwardRef(function (props, ref) {
   var inputStyle = useMemo(function () {
     return _objectSpread2(_objectSpread2({}, styles.input), checkBoxStyles.input);
   }, [checkBoxStyles, styles]);
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     style: styles.main,
     className: className
-  }, React__default.createElement(View, {
+  }, React.createElement(View, {
     className: "keg-checkbox-area",
     style: styles.area
-  }), checked && React__default.createElement(CheckIcon, {
+  }), checked && React.createElement(CheckIcon, {
     className: "keg-checkbox-icon",
     style: checkStyle
-  }), React__default.createElement(Input, _extends({
+  }), React.createElement(Input, _extends({
     className: "keg-checkbox"
   }, elProps, attributes, {
     role: "checkbox",
@@ -104,7 +104,7 @@ var Element = React__default.forwardRef(function (props, ref) {
   })));
 });
 var Checkbox = forwardRef(function (props, ref) {
-  return React__default.createElement(CheckboxWrapper, _extends({}, props, {
+  return React.createElement(CheckboxWrapper, _extends({}, props, {
     elType: 'checkbox',
     Element: Element,
     isWeb: true,

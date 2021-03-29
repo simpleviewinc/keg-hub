@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 
 var getOnChangeHandler = function getOnChangeHandler(isWeb, onChange, onValueChange) {
   return _rollupPluginBabelHelpers._defineProperty({}, isWeb ? 'onChange' : 'onValueChange', onChange || onValueChange);

@@ -12,7 +12,7 @@ describe('KeyStore', () => {
   describe('getItem', () => {
     beforeEach(() => cleanUp())
 
-    it('should call getItem method of localStorage ', async () => {
+    it('should call getItem method of localStorage', async () => {
       await KeyStore.getItem('test')
 
       expect(window.localStorage.getItem).toHaveBeenCalled()
@@ -28,7 +28,7 @@ describe('KeyStore', () => {
   describe('setItem', () => {
     beforeEach(() => cleanUp())
 
-    it('should call setItem method of window.localStorage ', async () => {
+    it('should call setItem method of window.localStorage', async () => {
       await KeyStore.setItem('test', 'thing')
 
       expect(window.localStorage.setItem).toHaveBeenCalled()
@@ -47,7 +47,7 @@ describe('KeyStore', () => {
   describe('removeItem', () => {
     beforeEach(() => cleanUp())
 
-    it('should call removeItem method of window.localStorage ', async () => {
+    it('should call removeItem method of window.localStorage', async () => {
       await KeyStore.removeItem('test')
 
       expect(window.localStorage.removeItem).toHaveBeenCalled()

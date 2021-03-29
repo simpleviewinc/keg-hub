@@ -2,21 +2,22 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
+var view = require('./view-276572bd.js');
+var useClassList = require('./useClassList-89a8dbd4.js');
+var jsutils = require('@keg-hub/jsutils');
+require('./view.native-99366b4b.js');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
 require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-a5f2a568.js');
-var useClassList = require('./useClassList-9eaefcd6.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var LinearGradient = function LinearGradient(props) {
   var _props$start = props.start,
@@ -34,9 +35,9 @@ var LinearGradient = function LinearGradient(props) {
       _props$locations = props.locations,
       locations = _props$locations === void 0 ? jsutils.noPropArr : _props$locations,
       _props$useAngle = props.useAngle,
-      useAngle = _props$useAngle === void 0 ? false : _props$useAngle,
-      angleCenter = props.angleCenter,
-      _props$angle = props.angle,
+      useAngle = _props$useAngle === void 0 ? false : _props$useAngle;
+      props.angleCenter;
+      var _props$angle = props.angle,
       angle = _props$angle === void 0 ? 0 : _props$angle,
       style = props.style,
       children = props.children,
@@ -56,7 +57,7 @@ var LinearGradient = function LinearGradient(props) {
     setHeight(nativeEvent.layout.height);
   }, [setWidth, setHeight]);
   var newAngle = useAngle && angle ? "".concat(angle, "deg") : calculateAngle(width, height, start, end);
-  return React__default.createElement(view.View, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(view.View, _rollupPluginBabelHelpers._extends({
     className: useClassList.useClassList("keg-linear-gradient", className)
   }, otherProps, {
     style: [style, {

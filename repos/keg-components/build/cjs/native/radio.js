@@ -2,31 +2,32 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('react-native');
-require('./useClassName.native-3d1a229b.js');
-require('./useTextAccessibility.js');
-require('./kegText.js');
-require('@keg-hub/re-theme/styleInjector');
 var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-3f09043e.js');
+var jsutils = require('@keg-hub/jsutils');
 var text = require('./text.js');
+require('./kegText-965ef4d3.js');
+require('./kegText.js');
+require('./useClassName.native-3d1a229b.js');
+require('react-native');
+require('./useTextAccessibility.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./useTextStyles.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Radio = reTheme.withTheme(function (props) {
-  var theme = props.theme,
-      children = props.children,
-      style = props.style,
-      onClick = props.onClick,
-      onPress = props.onPress,
-      text$1 = props.text,
+  var theme = props.theme;
+      props.children;
+      var style = props.style;
+      props.onClick;
+      props.onPress;
+      var text$1 = props.text,
       args = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress", "text"]);
-  return React__default.createElement(text.Text, _rollupPluginBabelHelpers._extends({}, args, {
+  return React__default['default'].createElement(text.Text, _rollupPluginBabelHelpers._extends({}, args, {
     style: [jsutils.get(theme, ['form', 'radio']), style]
   }), text$1);
 });

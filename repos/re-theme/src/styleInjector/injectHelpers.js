@@ -102,7 +102,8 @@ export const getSelector = (className, cssString, filterPrefix) => {
 /**
  * Adds a css string to the KegStyleSheet
  * @param {string} selector - Css selector to add the style rules to
- * @param {string} css - Style rules to be added
+ * @param {Object} css - Style rules as an object
+ * @param {string} css.all - Style rules to be added as a string
  *
  * @returns {Void}
  */

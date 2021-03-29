@@ -2,21 +2,22 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-var reactNative = require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
+var reactNative = require('react-native');
 var useTextAccessibility = require('./useTextAccessibility.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var ellipsisProps = {
   ellipsizeMode: 'tail',
   numberOfLines: 1
 };
 var KegText = function KegText(element) {
-  return React__default.forwardRef(function (props, ref) {
+  return React__default['default'].forwardRef(function (props, ref) {
     var accessibilityRole = props.accessibilityRole,
         children = props.children,
         className = props.className,
@@ -24,7 +25,7 @@ var KegText = function KegText(element) {
         attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["accessibilityRole", "children", "className", "ellipsis"]);
     var classRef = useClassName_native.useClassName("keg-".concat(element), className, ref);
     var a11y = useTextAccessibility.useTextAccessibility(element, accessibilityRole);
-    return React__default.createElement(reactNative.Text, _rollupPluginBabelHelpers._extends({}, attrs, a11y, ellipsis && ellipsisProps, {
+    return React__default['default'].createElement(reactNative.Text, _rollupPluginBabelHelpers._extends({}, attrs, a11y, ellipsis && ellipsisProps, {
       ref: classRef
     }), children);
   });

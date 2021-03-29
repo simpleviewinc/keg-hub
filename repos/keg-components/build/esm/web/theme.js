@@ -1,14 +1,14 @@
-import { _ as _objectSpread2, a as _defineProperty } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { _ as _objectSpread2, a as _defineProperty } from './_rollupPluginBabelHelpers-b6f65682.js';
 import { isArr, isNum, trainCase, checkCall, noOpObj, get, deepMerge, isStr, capitalize, deepClone, set } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
-import { c as colors$2, a as clearColorsStyles } from './colors-13c6a916.js';
 import { g as getThemeDefaults, s as setThemeDefaults } from './themeDefaults-ae219f8e.js';
-import { buildSurfaceStyles } from './buildColorStyles.js';
-import './getPlatform-95568099.js';
-import './platformFlatten.js';
-import { inheritFrom } from './inheritFrom.js';
 import { buildTheme } from './buildTheme.js';
+import { buildSurfaceStyles } from './buildColorStyles.js';
 import 'react';
+import { inheritFrom } from './inheritFrom.js';
+import { c as colors$2, a as clearColorsStyles } from './colors-6402d3b3.js';
+import './platformFlatten.js';
+import './getPlatform-95568099.js';
 
 var __transition;
 var clearTransitionStyles = function clearTransitionStyles() {
@@ -50,7 +50,7 @@ var transition = function transition() {
   return checkCall(config.transition, __transition) || Object.assign(__transition, config.transition);
 };
 
-var containedInit = function containedInit() {
+var containedInit$2 = function containedInit() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
   var _getThemeDefaults = getThemeDefaults(),
       colors = _getThemeDefaults.colors,
@@ -156,7 +156,7 @@ var outlineInit = function outlineInit() {
 };
 
 var button = function button(config) {
-  var contained = containedInit(config);
+  var contained = containedInit$2(config);
   return {
     button: {
       contained: contained,
@@ -822,7 +822,7 @@ var section = function section() {
   };
 };
 
-var containedInit$2 = function containedInit() {
+var containedInit = function containedInit() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
   var _getThemeDefaults = getThemeDefaults(),
       colors = _getThemeDefaults.colors;
@@ -902,7 +902,7 @@ var outlinedInit = function outlinedInit() {
 };
 
 var textBox = function textBox(config) {
-  var contained = containedInit$2(config);
+  var contained = containedInit(config);
   return {
     textBox: {
       contained: contained,
@@ -911,7 +911,7 @@ var textBox = function textBox(config) {
   };
 };
 
-var modal = function modal() {
+var modal$1 = function modal() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
   var _getThemeDefaults = getThemeDefaults(),
       colors = _getThemeDefaults.colors;
@@ -1092,7 +1092,7 @@ var textToggle = function textToggle() {
 };
 
 var components = function components(config) {
-  return _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), list(config)), loading(config)), section(config)), textBox(config)), modal(config)), header(config)), textToggle(config));
+  return _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), list(config)), loading(config)), section(config)), textBox(config)), modal$1(config)), header(config)), textToggle(config));
 };
 
 var display = function display() {
@@ -1134,7 +1134,7 @@ var display = function display() {
   return checkCall(config.display, defStyles) || deepMerge(defStyles, config.display);
 };
 
-var form = function form() {
+var form$2 = function form() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
   var defStyles = {
     default: {
@@ -1507,11 +1507,11 @@ var switchStyles = function switchStyles() {
   return checkCall(config.switch, defStyles) || deepMerge(defStyles, config.switch);
 };
 
-var form$1 = function form$1(config) {
+var form$1 = function form(config) {
   return {
     checkbox: checkbox(config),
     checkGroup: checkGroup(config),
-    form: form(config),
+    form: form$2(config),
     input: input(config),
     option: option(config),
     radio: radio(config),
@@ -1520,7 +1520,7 @@ var form$1 = function form$1(config) {
   };
 };
 
-var layout = function layout() {
+var layout$1 = function layout() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noOpObj;
   var defStyles = {
     full: {
@@ -1814,7 +1814,7 @@ var colors$1 = {
 		]
 	}
 };
-var layout$1 = {
+var layout = {
 	sides: [
 		"left",
 		"right",
@@ -1833,7 +1833,7 @@ var font = {
 	components: {
 	}
 };
-var form$2 = {
+var form = {
 	border: {
 		radius: 5
 	},
@@ -1854,16 +1854,16 @@ var form$2 = {
 		height: 35
 	}
 };
-var modal$1 = {
+var modal = {
 	width: 600
 };
 var defaults = {
 	states: states,
 	colors: colors$1,
-	layout: layout$1,
+	layout: layout,
 	font: font,
-	form: form$2,
-	modal: modal$1
+	form: form,
+	modal: modal
 };
 
 var clearThemeStyles = function clearThemeStyles() {
@@ -1896,7 +1896,7 @@ var theme = function theme() {
     padding: defaults.padding,
     form: form$1(config),
     flex: flex(config),
-    layout: layout(config),
+    layout: layout$1(config),
     helpers: helpers(config),
     display: display(config),
     transform: transform(config),

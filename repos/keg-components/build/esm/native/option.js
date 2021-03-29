@@ -1,5 +1,5 @@
+import React from 'react';
 import { isStr, isNum } from '@keg-hub/jsutils';
-import React__default from 'react';
 import { Picker } from 'react-native';
 
 var SelectOption = Picker.Item;
@@ -14,7 +14,7 @@ var Option = function Option(props) {
       children = props.children,
       text = props.text,
       value = props.value;
-  return React__default.createElement(SelectOption, {
+  return React.createElement(SelectOption, {
     label: getVal(label, value, text),
     value: getVal(value, text, children, label)
   });

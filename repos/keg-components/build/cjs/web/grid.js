@@ -2,27 +2,28 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-require('./getPlatform-ec53cd5e.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./getPressHandler.js');
-require('./ensureClassArray.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
-require('@keg-hub/re-theme/styleInjector');
-require('./view-a5f2a568.js');
-var reTheme = require('@keg-hub/re-theme');
-var useClassList = require('./useClassList-9eaefcd6.js');
 var container = require('./container.js');
 var row = require('./row.js');
+var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
+var useClassList = require('./useClassList-89a8dbd4.js');
+require('./view-276572bd.js');
+require('./view.native-99366b4b.js');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./getPlatform-ec53cd5e.js');
+require('./getPressHandler.js');
+require('@keg-hub/re-theme/colors');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var buildCenterStyles = function buildCenterStyles(isCenter) {
   return isCenter === 'x' || isCenter === 'xaxis' || isCenter === 'x-axis' ? {
@@ -55,7 +56,7 @@ var Grid = function Grid(_ref) {
   var _getChildAttrs = getChildAttrs(children),
       isRow = _getChildAttrs.isRow,
       isCenter = _getChildAttrs.isCenter;
-  return React__default.createElement(container.Container, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(container.Container, _rollupPluginBabelHelpers._extends({}, props, {
     className: useClassList.useClassList('keg-grid', className),
     flexDir: isRow ? 'column' : 'row',
     size: 1,

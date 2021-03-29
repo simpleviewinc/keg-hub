@@ -42,7 +42,7 @@ const removeThemeEvent = (event, removeListener) => {
   // If an index is passed in, use that to remove the listener function
   isNum(removeListener)
     ? // Use splice to remove the listener at the correct index
-      listeners[event].splice(removeListener, 1)
+    listeners[event].splice(removeListener, 1)
     : // Otherwise ensure the listener and events exists, then filter out the listener
     isFunc(removeListener) &&
       isArr(listeners[event]) &&

@@ -1,7 +1,7 @@
 'use strict';
 
 var isNum = require('./isNum-c7164b50.js');
-var toNum = require('./toNum-9d04f919.js');
+var toNum = require('./toNum-eeb2e51e.js');
 
 const isNegative = x => isNum.isNum(x) && x < 0;
 

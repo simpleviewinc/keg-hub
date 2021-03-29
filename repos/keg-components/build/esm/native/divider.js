@@ -1,18 +1,18 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React from 'react';
+import { useTheme } from '@keg-hub/re-theme';
 import { get } from '@keg-hub/jsutils';
-import React__default from 'react';
+import { V as View } from './view.native-b0b1ddd4.js';
+import { u as useClassList } from './useClassList.native-70068878.js';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
-import { V as View } from './view.native-54e7e7ef.js';
-import { useTheme } from '@keg-hub/re-theme';
-import { u as useClassList } from './useClassList.native-70068878.js';
 
-var Divider = React__default.forwardRef(function (_ref, ref) {
-  var className = _ref.className,
-      style = _ref.style,
+var Divider = React.forwardRef(function (_ref, ref) {
+  _ref.className;
+      var style = _ref.style,
       props = _objectWithoutProperties(_ref, ["className", "style"]);
   var theme = useTheme();
-  return React__default.createElement(View, _extends({
+  return React.createElement(View, _extends({
     ref: ref,
     accessibilityRole: "separator",
     className: useClassList()

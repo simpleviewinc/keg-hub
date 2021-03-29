@@ -1,5 +1,5 @@
-import { f as _inherits, g as _createSuper, h as _createClass, i as _classCallCheck } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import React__default, { Component } from 'react';
+import { f as _inherits, g as _createSuper, h as _createClass, i as _classCallCheck } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { Component } from 'react';
 import { StyleSheet, View, Modal, TouchableHighlight, FlatList, Text } from 'react-native';
 
 var ModalPicker = function (_Component) {
@@ -25,26 +25,26 @@ var ModalPicker = function (_Component) {
     key: "render",
     value: function render() {
       var _this2 = this;
-      return React__default.createElement(View, {
+      return React.createElement(View, {
         style: {
           backgroundColor: 'transparent',
           flex: 1,
           position: 'absolute'
         }
-      }, React__default.createElement(Modal, {
+      }, React.createElement(Modal, {
         animationType: "fade",
         transparent: true,
         visible: this.state.modalVisible,
         onRequestClose: function onRequestClose() {
           _this2.setModalVisible(false);
         }
-      }, React__default.createElement(TouchableHighlight, {
+      }, React.createElement(TouchableHighlight, {
         style: styles.container,
         onPress: function onPress() {
           return _this2.setModalVisible(false);
         },
         underlayColor: '#333333cc'
-      }, React__default.createElement(View, null, React__default.createElement(FlatList, {
+      }, React.createElement(View, null, React.createElement(FlatList, {
         data: this.state.data,
         keyExtractor: function keyExtractor(_, index) {
           return index.toString();
@@ -52,13 +52,13 @@ var ModalPicker = function (_Component) {
         renderItem: function renderItem(_ref) {
           var item = _ref.item,
               index = _ref.index;
-          return React__default.createElement(TouchableHighlight, {
+          return React.createElement(TouchableHighlight, {
             underlayColor: 'transparent',
             onPress: function onPress() {
               _this2.setModalVisible(false);
               _this2.props.onValueChange(item[_this2.props.value], index);
             }
-          }, _this2.props.renderRow ? _this2.props.renderRow(item, index) : React__default.createElement(Text, {
+          }, _this2.props.renderRow ? _this2.props.renderRow(item, index) : React.createElement(Text, {
             style: styles.itemText
           }, item[_this2.props.label]));
         }

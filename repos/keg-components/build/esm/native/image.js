@@ -1,27 +1,27 @@
-import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { V as View } from './view.native-b0b1ddd4.js';
+import { Loading } from './loading.js';
 import { checkCall, isFunc } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import './getPlatform-e625f46a.js';
-import React__default, { forwardRef, useState, useRef, useCallback } from 'react';
-import './isValidComponent.js';
+import { I as Image$1 } from './image-d610d905.js';
+import { useStyle, useThemeHover } from '@keg-hub/re-theme';
+import React, { forwardRef, useState, useRef, useCallback } from 'react';
 import { getPressHandler } from './getPressHandler.js';
 import { getImgSrc } from './getImgSrc.js';
-import 'react-native';
-import './useClassName.native-32e8827d.js';
-import { V as View } from './view.native-54e7e7ef.js';
-import './useTextAccessibility.js';
-import './kegText.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { useStyle, useThemeHover } from '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-ef69c4aa.js';
-import './text.js';
+import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
+import 'react-native';
 import { u as useClassList } from './useClassList.native-70068878.js';
-import './indicator.wrapper-e28eda76.js';
-import { Loading } from './loading.js';
-import { I as Image$1 } from './image-209e0d5e.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import './useClassName.native-32e8827d.js';
+import './indicator.wrapper-83c062e4.js';
+import './getPlatform-e625f46a.js';
+import './text.js';
+import './kegText-f9567f63.js';
+import './kegText.js';
+import './useTextAccessibility.js';
+import './useTextStyles.js';
+import './isValidComponent.js';
 
 var KegImage = StyleInjector(Image$1, {
   displayName: 'Image',
@@ -33,10 +33,10 @@ var Image = forwardRef(function (props, ref) {
       loading = _useState2[0],
       setLoading = _useState2[1];
   var internalRef = ref || useRef(null);
-  var alt = props.alt,
-      className = props.className,
-      children = props.children,
-      onClick = props.onClick,
+  var alt = props.alt;
+      props.className;
+      props.children;
+      var onClick = props.onClick,
       onPress = props.onPress,
       src = props.src,
       source = props.source,
@@ -64,13 +64,13 @@ var Image = forwardRef(function (props, ref) {
     checkCall(props.onLoad, props);
     isFunc(imgRef) ? imgRef(internalRef.current) : imgRef && (imgRef.current = internalRef.current);
   }, [src, source, internalRef.current]);
-  return React__default.createElement(View, {
+  return React.createElement(View, {
     className: useClassList(),
     style: builtStyles.container
-  }, loading && useLoading && React__default.createElement(Loading, {
+  }, loading && useLoading && React.createElement(Loading, {
     className: "keg-image-loading",
     styles: builtStyles.loadingComp
-  }), React__default.createElement(KegImage, _extends({}, attrs, {
+  }), React.createElement(KegImage, _extends({}, attrs, {
     style: loading ? loadingStyles : builtStyles.image
   }, getPressHandler(false, onClick, onPress), getImgSrc(false, src, source), {
     onLoadEnd: onLoad,

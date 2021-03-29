@@ -1,15 +1,15 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useState, useCallback } from 'react';
+import { V as View } from './view-2274aefb.js';
+import { u as useClassList } from './useClassList-1d418045.js';
 import { noPropArr } from '@keg-hub/jsutils';
-import React__default, { useState, useCallback } from 'react';
+import './view.native-a7f08b5b.js';
+import 'react-native';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
-import './updateClassNames.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
 import '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import { u as useClassList } from './useClassList-eea8a571.js';
 
 var LinearGradient = function LinearGradient(props) {
   var _props$start = props.start,
@@ -27,9 +27,9 @@ var LinearGradient = function LinearGradient(props) {
       _props$locations = props.locations,
       locations = _props$locations === void 0 ? noPropArr : _props$locations,
       _props$useAngle = props.useAngle,
-      useAngle = _props$useAngle === void 0 ? false : _props$useAngle,
-      angleCenter = props.angleCenter,
-      _props$angle = props.angle,
+      useAngle = _props$useAngle === void 0 ? false : _props$useAngle;
+      props.angleCenter;
+      var _props$angle = props.angle,
       angle = _props$angle === void 0 ? 0 : _props$angle,
       style = props.style,
       children = props.children,
@@ -49,7 +49,7 @@ var LinearGradient = function LinearGradient(props) {
     setHeight(nativeEvent.layout.height);
   }, [setWidth, setHeight]);
   var newAngle = useAngle && angle ? "".concat(angle, "deg") : calculateAngle(width, height, start, end);
-  return React__default.createElement(View, _extends({
+  return React.createElement(View, _extends({
     className: useClassList("keg-linear-gradient", className)
   }, otherProps, {
     style: [style, {

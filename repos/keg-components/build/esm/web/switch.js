@@ -1,30 +1,5 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import { toBool, get, isStr, checkCall } from '@keg-hub/jsutils';
-import '@keg-hub/re-theme/colors';
-import './colors-13c6a916.js';
-import React__default, { forwardRef, useState, useImperativeHandle, useMemo } from 'react';
-import './isValidComponent.js';
-import { renderFromType } from './renderFromType.js';
-import { getOnChangeHandler } from './getOnChangeHandler.js';
-import './ensureClassArray.js';
-import { getChecked } from './getChecked.js';
-import './handleRefUpdate.js';
-import './updateClassNames.js';
-import 'react-native';
-import './useClassName-6851fdf6.js';
-import './view.native-5aeb3e53.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { V as View } from './view-a64440c5.js';
-import './useTextAccessibility.js';
-import './kegText.native-7cc07481.js';
-import { useTheme } from '@keg-hub/re-theme';
-import './useTextStyles.js';
-import './kegText-653699c8.js';
-import { Text } from './text.js';
-import { useThemePath } from './useThemePath.js';
-import './useThemeWithHeight.js';
-import './useClassList-eea8a571.js';
-import { u as useThemeTypeAsClass } from './useThemeTypeAsClass-cd54e95a.js';
+import { d as _objectWithoutProperties, b as _slicedToArray, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { V as View } from './view-2274aefb.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -35,7 +10,32 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
-import { S as Switch$1 } from './switch-de92a2c1.js';
+import { Text } from './text.js';
+import { useTheme } from '@keg-hub/re-theme';
+import React, { forwardRef, useState, useImperativeHandle, useMemo } from 'react';
+import { u as useThemeTypeAsClass } from './useThemeTypeAsClass-fec5ff6f.js';
+import { toBool, get, isStr, checkCall } from '@keg-hub/jsutils';
+import { renderFromType } from './renderFromType.js';
+import { getOnChangeHandler } from './getOnChangeHandler.js';
+import { getChecked } from './getChecked.js';
+import '@keg-hub/re-theme/colors';
+import { useThemePath } from './useThemePath.js';
+import './useThemeWithHeight.js';
+import 'react-native';
+import { S as Switch$1 } from './switch-86c64b60.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
+import './view.native-a7f08b5b.js';
+import './useClassName-682bc33b.js';
+import './updateClassNames.js';
+import './ensureClassArray.js';
+import './handleRefUpdate.js';
+import './kegText-5c4aeb4b.js';
+import './kegText.native-be460636.js';
+import './useTextAccessibility.js';
+import './useTextStyles.js';
+import './colors-6402d3b3.js';
+import './useClassList-1d418045.js';
+import './isValidComponent.js';
 
 var KegSwitch = StyleInjector(Switch$1, {
   displayName: 'Switch',
@@ -76,7 +76,7 @@ var setCheckedValue = function setCheckedValue(isChecked, setChecked, onChange) 
 var SideComponent = function SideComponent(_ref2) {
   var Component = _ref2.Component,
       style = _ref2.style;
-  return isStr(Component) ? React__default.createElement(Text, {
+  return isStr(Component) ? React.createElement(Text, {
     style: style
   }, Component) : renderFromType(Component, {
     style: styles.content
@@ -84,7 +84,7 @@ var SideComponent = function SideComponent(_ref2) {
 };
 var ChildrenComponent = function ChildrenComponent(_ref3) {
   var children = _ref3.children;
-  return React__default.createElement(React__default.Fragment, null, renderFromType(children, {}, null));
+  return React.createElement(React.Fragment, null, renderFromType(children, {}, null));
 };
 var useSwitchHandle = function useSwitchHandle(ref, isChecked, setChecked) {
   return useImperativeHandle(ref, function () {
@@ -97,18 +97,18 @@ var useSwitchHandle = function useSwitchHandle(ref, isChecked, setChecked) {
 var Switch = forwardRef(function (props, ref) {
   var className = props.className,
       checked = props.checked,
-      children = props.children,
-      elType = props.elType,
-      disabled = props.disabled,
+      children = props.children;
+      props.elType;
+      var disabled = props.disabled,
       LeftComponent = props.LeftComponent,
       close = props.close,
       onChange = props.onChange,
       onValueChange = props.onValueChange,
       RightComponent = props.RightComponent,
       styles = props.styles,
-      SwitchComponent = props.SwitchComponent,
-      setCheckedSetter = props.setCheckedSetter,
-      type = props.type,
+      SwitchComponent = props.SwitchComponent;
+      props.setCheckedSetter;
+      var type = props.type,
       themePath = props.themePath,
       thumbColor = props.thumbColor,
       trackColor = props.trackColor,
@@ -123,26 +123,26 @@ var Switch = forwardRef(function (props, ref) {
   var themeStyles = useThemePath(elThemePath, styles);
   var activeStyles = useCheckedState(isChecked, themeStyles);
   var typeClassName = useThemeTypeAsClass(elThemePath || type, 'keg-switch', className);
-  return children && React__default.createElement(View, {
+  return children && React.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
-  }, React__default.createElement(ChildrenComponent, {
+  }, React.createElement(ChildrenComponent, {
     className: "keg-switch-container",
     children: children
-  })) || React__default.createElement(View, {
+  })) || React.createElement(View, {
     className: typeClassName,
     style: activeStyles.main
-  }, LeftComponent && React__default.createElement(SideComponent, {
+  }, LeftComponent && React.createElement(SideComponent, {
     className: "keg-switch-left",
     Component: LeftComponent,
     style: activeStyles.content.left
   }), SwitchComponent ? renderFromType(SwitchComponent, _objectSpread2(_objectSpread2({}, props), {}, {
     styles: activeStyles.content
-  })) : React__default.createElement(KegSwitch, _extends({
+  })) : React.createElement(KegSwitch, _extends({
     elProps: elProps,
     disabled: disabled,
     styles: activeStyles.content
-  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React__default.createElement(SideComponent, {
+  }, getSwitchColors(thumbColor, trackColor, activeStyles.content), getChecked(false, isChecked), getOnChangeHandler(false, setCheckedValue(isChecked, setChecked, onChange || onValueChange)))), RightComponent && React.createElement(SideComponent, {
     className: "keg-switch-right",
     Component: RightComponent,
     style: activeStyles.content.right

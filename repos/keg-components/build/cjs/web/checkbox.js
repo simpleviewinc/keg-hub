@@ -2,40 +2,27 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-require('./colors-3022218c.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var view = require('./view-276572bd.js');
+var checkbox_wrapper = require('./checkbox.wrapper-b8cbc4f5.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./isValidComponent.js');
-require('./renderFromType.js');
-require('./getOnChangeHandler.js');
-require('./ensureClassArray.js');
-require('./getChecked.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-require('./view.native-ab314649.js');
+var jsutils = require('@keg-hub/jsutils');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-var view = require('./view-a5f2a568.js');
-require('./useTextAccessibility.js');
-require('./kegText.native-b0c7697d.js');
-require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-e909e94a.js');
-require('./text.js');
-require('./useThemePath.js');
-require('./useThemeWithHeight.js');
-require('./useClassList-9eaefcd6.js');
-require('./useThemeTypeAsClass-103ed294.js');
+var input_web = require('./input.web-adf7ad46.js');
+require('./view.native-99366b4b.js');
+require('react-native');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
+require('./svgIcon-ce94c39f.js');
 require('react-native-svg');
-require('./svgIcon-21afc6ae.js');
-var checkbox_wrapper = require('./checkbox.wrapper-d9c68f10.js');
+require('@keg-hub/re-theme');
 require('./caption.js');
+require('./kegText-f2cfdfd4.js');
+require('./kegText.native-1994a0b7.js');
+require('./useTextAccessibility.js');
+require('./useTextStyles.js');
 require('./h1.js');
 require('./h2.js');
 require('./h3.js');
@@ -45,7 +32,21 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
-var input_web = require('./input.web-0db0e193.js');
+require('./text.js');
+require('./renderFromType.js');
+require('./isValidComponent.js');
+require('./getOnChangeHandler.js');
+require('./getChecked.js');
+require('@keg-hub/re-theme/colors');
+require('./useThemePath.js');
+require('./useThemeWithHeight.js');
+require('./useClassList-89a8dbd4.js');
+require('./useThemeTypeAsClass-a9284938.js');
+require('./colors-da502c66.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var checkBoxStyles = {
   icon: {
@@ -76,7 +77,7 @@ var Input = styleInjector.StyleInjector(input_web.Input, {
   displayName: 'Checkbox',
   className: 'keg-checkbox'
 });
-var Element = React__default.forwardRef(function (props, ref) {
+var Element = React__default['default'].forwardRef(function (props, ref) {
   var className = props.className,
       elProps = props.elProps,
       _props$styles = props.styles,
@@ -91,16 +92,16 @@ var Element = React__default.forwardRef(function (props, ref) {
   var inputStyle = React.useMemo(function () {
     return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, styles.input), checkBoxStyles.input);
   }, [checkBoxStyles, styles]);
-  return React__default.createElement(view.View, {
+  return React__default['default'].createElement(view.View, {
     style: styles.main,
     className: className
-  }, React__default.createElement(view.View, {
+  }, React__default['default'].createElement(view.View, {
     className: "keg-checkbox-area",
     style: styles.area
-  }), checked && React__default.createElement(CheckIcon, {
+  }), checked && React__default['default'].createElement(CheckIcon, {
     className: "keg-checkbox-icon",
     style: checkStyle
-  }), React__default.createElement(Input, _rollupPluginBabelHelpers._extends({
+  }), React__default['default'].createElement(Input, _rollupPluginBabelHelpers._extends({
     className: "keg-checkbox"
   }, elProps, attributes, {
     role: "checkbox",
@@ -111,7 +112,7 @@ var Element = React__default.forwardRef(function (props, ref) {
   })));
 });
 var Checkbox = React.forwardRef(function (props, ref) {
-  return React__default.createElement(checkbox_wrapper.CheckboxWrapper, _rollupPluginBabelHelpers._extends({}, props, {
+  return React__default['default'].createElement(checkbox_wrapper.CheckboxWrapper, _rollupPluginBabelHelpers._extends({}, props, {
     elType: 'checkbox',
     Element: Element,
     isWeb: true,

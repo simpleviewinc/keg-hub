@@ -2,14 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
+var jsutils = require('@keg-hub/jsutils');
 var isValidComponent = require('./isValidComponent.js');
+require('@keg-hub/re-theme/colors');
 
 var getMediaType = function getMediaType(mediaTypes, styles) {
   return mediaTypes ? jsutils.reduceObj(mediaTypes, function (key, value, mediaData) {

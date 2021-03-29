@@ -2,36 +2,37 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./isValidComponent.js');
-require('./renderFromType.js');
-var reactNative = require('react-native');
-require('./useClassName.native-3d1a229b.js');
-var view_native = require('./view.native-20f555a1.js');
-require('./useTextAccessibility.js');
-require('./kegText.js');
-require('@keg-hub/re-theme/styleInjector');
-require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-3f09043e.js');
+var view_native = require('./view.native-b34604af.js');
 var text = require('./text.js');
-var useThemePath = require('./useThemePath.js');
-require('./useThemeWithHeight.js');
-require('./useClassList.native-9e7810c9.js');
-var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
-require('./icon-3cb30f41.js');
-require('./touchable.js');
-require('./touchable-d386e5c0.js');
-require('./withTouch.js');
+var jsutils = require('@keg-hub/jsutils');
+require('./icon-b13a8e3e.js');
 var touchableIcon = require('./touchableIcon.js');
 require('react-native-svg');
-var svgIcon = require('./svgIcon-21afc6ae.js');
+require('@keg-hub/re-theme');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var svgIcon = require('./svgIcon-ce94c39f.js');
+require('@keg-hub/re-theme/colors');
+var useThemePath = require('./useThemePath.js');
+require('./useThemeWithHeight.js');
+var reactNative = require('react-native');
+var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
+require('./useClassName.native-3d1a229b.js');
+require('./kegText-965ef4d3.js');
+require('./kegText.js');
+require('./useTextAccessibility.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./useTextStyles.js');
+require('./renderFromType.js');
+require('./isValidComponent.js');
+require('./useClassList.native-9e7810c9.js');
+require('./withTouch.js');
+require('./touchable-3f00e0ff.js');
+require('./touchable.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var Copy = function Copy(props) {
   return React.createElement(svgIcon.SvgIcon, _rollupPluginBabelHelpers._extends({}, props, {
@@ -41,8 +42,8 @@ var Copy = function Copy(props) {
 };
 
 var TextBox = function TextBox(props) {
-  var className = props.className,
-      _props$maxLines = props.maxLines,
+  props.className;
+      var _props$maxLines = props.maxLines,
       maxLines = _props$maxLines === void 0 ? 100 : _props$maxLines,
       styles = props.styles,
       text$1 = props.text,
@@ -53,17 +54,17 @@ var TextBox = function TextBox(props) {
       _props$useClipboard = props.useClipboard,
       useClipboard = _props$useClipboard === void 0 ? false : _props$useClipboard;
   var style = useThemePath.useThemePath(themePath, styles);
-  return React__default.createElement(view_native.View, {
+  return React__default['default'].createElement(view_native.View, {
     className: useThemeTypeAsClass_native.useThemeTypeAsClass(),
     style: style.main
-  }, React__default.createElement(view_native.View, {
+  }, React__default['default'].createElement(view_native.View, {
     className: "keg-textbox-container",
     style: jsutils.get(style, 'content.wrapper')
-  }, React__default.createElement(text.Text, {
+  }, React__default['default'].createElement(text.Text, {
     className: "keg-textbox-text",
     numberOfLines: maxLines,
     style: jsutils.get(style, 'content.text')
-  }, text$1 || '')), React__default.createElement(text.Text, null, useClipboard && text$1 && React__default.createElement(touchableIcon.TouchableIcon, {
+  }, text$1 || '')), React__default['default'].createElement(text.Text, null, useClipboard && text$1 && React__default['default'].createElement(touchableIcon.TouchableIcon, {
     Component: Copy,
     size: 15,
     className: "keg-textbox-clipboard",

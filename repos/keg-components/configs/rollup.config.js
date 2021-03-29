@@ -1,8 +1,8 @@
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import json from '@rollup/plugin-json'
-import resolve from 'rollup-plugin-node-resolve'
-import replace from 'rollup-plugin-replace'
-import commonjs from 'rollup-plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
+import commonjs from '@rollup/plugin-commonjs'
 import cleanup from 'rollup-plugin-cleanup'
 import sourcemaps from 'rollup-plugin-sourcemaps'
 import alias from '@rollup/plugin-alias'
@@ -162,10 +162,13 @@ const shared = {
   plugins: platform => ([
    BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
     replace({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-      "process.env.RE_PLATFORM": JSON.stringify(platform),
-      "process.env.PLATFORM": JSON.stringify(platform),
-      "import 'prop-types';": "",
+      preventAssignment: true,
+      values: {
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+        "process.env.RE_PLATFORM": JSON.stringify(platform),
+        "process.env.PLATFORM": JSON.stringify(platform),
+        "import 'prop-types';": "",
+      }
     }),
     resolve(),
     json(),
@@ -174,7 +177,8 @@ const shared = {
     }),
     babel({
       exclude: 'node_modules/**',
-      runtimeHelpers: true,
+      babelHelpers: 'bundled',
+      exclude: 'node_modules/**',
       ...babelConfig
     }),
     sourcemaps(),

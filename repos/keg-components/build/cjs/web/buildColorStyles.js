@@ -2,11 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var colors = require('./colors-da502c66.js');
 var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
-var colors$3 = require('./colors-3022218c.js');
 var themeDefaults = require('./themeDefaults-f48ffcaf.js');
+require('@keg-hub/re-theme/colors');
 
 var colorStyles = function colorStyles(colorSurface, type, states, cb) {
   return Object.keys(states).reduce(function (built, key) {
@@ -15,7 +15,7 @@ var colorStyles = function colorStyles(colorSurface, type, states, cb) {
 };
 var buildColorStyles = function buildColorStyles(states, cb) {
   var defaults = themeDefaults.getThemeDefaults();
-  var colorSurface = colors$3.getColorSurface();
+  var colorSurface = colors.getColorSurface();
   return Object.keys(jsutils.get(defaults, 'colors.types', {})).reduce(function (built, type) {
     var styles = colorStyles(colorSurface, type, states, cb);
     styles && (built[type] = styles);
@@ -23,7 +23,7 @@ var buildColorStyles = function buildColorStyles(states, cb) {
   }, {});
 };
 var buildSurfaceStyles = function buildSurfaceStyles(cb) {
-  var colorSurface = colors$3.getColorSurface();
+  var colorSurface = colors.getColorSurface();
   return Object.keys(colorSurface).reduce(function (surfaceStyles, surface) {
     surfaceStyles[surface] = jsutils.checkCall(cb, surface, colorSurface);
     return surfaceStyles;

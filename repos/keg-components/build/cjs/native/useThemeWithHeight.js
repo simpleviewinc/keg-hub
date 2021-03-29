@@ -2,15 +2,12 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-var React = require('react');
-var React__default = _interopDefault(React);
-var reactNative = require('react-native');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var reTheme = require('@keg-hub/re-theme');
+var React = require('react');
 var useThemePath = require('./useThemePath.js');
+var jsutils = require('@keg-hub/jsutils');
+var reactNative = require('react-native');
 
 var windowHeight = reactNative.Dimensions.get('window').height;
 var heightStyles = {

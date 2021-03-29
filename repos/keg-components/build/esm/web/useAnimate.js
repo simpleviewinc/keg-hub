@@ -1,12 +1,12 @@
-import { isFunc } from '@keg-hub/jsutils';
 import { useRef, useEffect } from 'react';
+import { isFunc } from '@keg-hub/jsutils';
 
 var useAnimate = function useAnimate(_ref) {
   var ref = _ref.ref,
       animation = _ref.animation,
-      config = _ref.config,
-      startCb = _ref.startCb,
-      startDelay = _ref.startDelay;
+      config = _ref.config;
+      _ref.startCb;
+      var startDelay = _ref.startDelay;
   var aniRef = useRef(ref);
   var animate = function animate() {
     var element = aniRef.current;

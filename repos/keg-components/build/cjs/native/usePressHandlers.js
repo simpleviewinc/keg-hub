@@ -2,13 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var React = require('react');
 require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
-var React = require('react');
-var React__default = _interopDefault(React);
 var validateFunctions = require('./validateFunctions.js');
 
 var makeHandlerObject = function makeHandlerObject(isWeb, handler, _ref) {

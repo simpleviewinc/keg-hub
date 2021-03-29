@@ -2,24 +2,25 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
+var touchable = require('./touchable-3f00e0ff.js');
+var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
+require('./touchable.js');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
 require('@keg-hub/re-theme/styleInjector');
-var reTheme = require('@keg-hub/re-theme');
-require('./touchable.js');
-var touchable$1 = require('./touchable-d386e5c0.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var withTouch = function withTouch(Component) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var _options$showFeedback = options.showFeedback,
       showFeedback = _options$showFeedback === void 0 ? true : _options$showFeedback;
-  var wrapped = React__default.forwardRef(function (props, ref) {
+  var wrapped = React__default['default'].forwardRef(function (props, ref) {
     var _props$touchThemePath = props.touchThemePath,
         touchThemePath = _props$touchThemePath === void 0 ? '' : _props$touchThemePath,
         _props$touchStyle = props.touchStyle,
@@ -27,11 +28,11 @@ var withTouch = function withTouch(Component) {
         onPress = props.onPress,
         otherProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["touchThemePath", "touchStyle", "onPress"]);
     var theme = reTheme.useTheme();
-    return React__default.createElement(touchable$1.Touchable, {
+    return React__default['default'].createElement(touchable.Touchable, {
       showFeedback: showFeedback,
       style: [jsutils.get(theme, touchThemePath), touchStyle],
       onPress: onPress
-    }, React__default.createElement(Component, _rollupPluginBabelHelpers._extends({
+    }, React__default['default'].createElement(Component, _rollupPluginBabelHelpers._extends({
       ref: ref
     }, otherProps)));
   });

@@ -2,30 +2,31 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./ensureClassArray.js');
+require('@keg-hub/jsutils');
 var getInputValue = require('./getInputValue.js');
 var getReadOnly = require('./getReadOnly.js');
-require('./handleRefUpdate.js');
-require('./updateClassNames.js');
-require('./validateFunctions.js');
-require('react-native');
-require('./useClassName-a237c005.js');
-var styleInjector = require('@keg-hub/re-theme/styleInjector');
-require('@keg-hub/re-theme');
+require('@keg-hub/re-theme/colors');
 var useInputHandlers = require('./useInputHandlers.js');
 var usePressHandlers = require('./usePressHandlers.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./touchable.js');
+require('react-native');
+var input = require('./input-5bf3abae.js');
+var styleInjector = require('@keg-hub/re-theme/styleInjector');
+require('./validateFunctions.js');
+require('@keg-hub/re-theme');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
+require('./ensureClassArray.js');
+require('./handleRefUpdate.js');
 require('./withTouch.js');
-var input = require('./input-0341b978.js');
+require('./touchable.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var KegInput = styleInjector.StyleInjector(input.Input, {
   displayName: 'Input',
@@ -39,15 +40,15 @@ var getValue = function getValue(_ref) {
     value: setValue
   } : {};
 };
-var Input = React__default.forwardRef(function (props, ref) {
-  var className = props.className,
-      children = props.children,
-      _props$disabled = props.disabled,
+var Input = React__default['default'].forwardRef(function (props, ref) {
+  props.className;
+      props.children;
+      var _props$disabled = props.disabled,
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$editable = props.editable,
-      editable = _props$editable === void 0 ? true : _props$editable,
-      Element = props.Element,
-      onChange = props.onChange,
+      editable = _props$editable === void 0 ? true : _props$editable;
+      props.Element;
+      var onChange = props.onChange,
       onValueChange = props.onValueChange,
       onChangeText = props.onChangeText,
       onClick = props.onClick,
@@ -58,11 +59,11 @@ var Input = React__default.forwardRef(function (props, ref) {
       type = _props$type === void 0 ? 'default' : _props$type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
-      style = props.style,
-      value = props.value,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+      style = props.style;
+      props.value;
+      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
   var inputStyles = useThemePath.useThemePath(themePath);
-  return React__default.createElement(KegInput, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(KegInput, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "textbox",
     onPress: onPress
   }, getReadOnly.getReadOnly(false, readOnly, disabled, editable), getValue(props), useInputHandlers.useInputHandlers({

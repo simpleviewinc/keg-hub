@@ -2,31 +2,32 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-var jsutils = require('@keg-hub/jsutils');
-require('@keg-hub/re-theme/colors');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
-require('./isValidComponent.js');
+var jsutils = require('@keg-hub/jsutils');
+var touchable = require('./touchable-3f00e0ff.js');
+var text = require('./text.js');
 var renderFromType = require('./renderFromType.js');
 var getPressHandler = require('./getPressHandler.js');
 var getActiveOpacity = require('./getActiveOpacity.js');
-require('react-native');
-require('./useClassName.native-3d1a229b.js');
-require('./useTextAccessibility.js');
-require('./kegText.js');
-require('@keg-hub/re-theme/styleInjector');
-var reTheme = require('@keg-hub/re-theme');
-require('./useTextStyles.js');
-require('./kegText-3f09043e.js');
-var text = require('./text.js');
+require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
+require('react-native');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
+var reTheme = require('@keg-hub/re-theme');
 require('./touchable.js');
-var touchable$1 = require('./touchable-d386e5c0.js');
+require('./useClassName.native-3d1a229b.js');
+require('@keg-hub/re-theme/styleInjector');
+require('./kegText-965ef4d3.js');
+require('./kegText.js');
+require('./useTextAccessibility.js');
+require('./useTextStyles.js');
+require('./isValidComponent.js');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var getChildren = function getChildren(Children, _ref) {
   var styles = _ref.styles,
@@ -39,9 +40,9 @@ var getChildren = function getChildren(Children, _ref) {
 var checkDisabled = function checkDisabled(mainStyles, btnStyles, disabled) {
   return disabled ? _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, mainStyles), jsutils.get(btnStyles, 'disabled.main')) : mainStyles;
 };
-var Button = React__default.forwardRef(function (props, ref) {
-  var className = props.className,
-      children = props.children,
+var Button = React__default['default'].forwardRef(function (props, ref) {
+  props.className;
+      var children = props.children,
       content = props.content,
       onClick = props.onClick,
       onPress = props.onPress,
@@ -70,7 +71,7 @@ var Button = React__default.forwardRef(function (props, ref) {
       _useThemeActive2 = _rollupPluginBabelHelpers._slicedToArray(_useThemeActive, 2),
       themeRef = _useThemeActive2[0],
       themeStyles = _useThemeActive2[1];
-  return React__default.createElement(touchable$1.Touchable, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(touchable.Touchable, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "button",
     className: useThemeTypeAsClass_native.useThemeTypeAsClass()
   }, elProps, {

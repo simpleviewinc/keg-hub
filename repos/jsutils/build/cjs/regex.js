@@ -2,14 +2,14 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('./validate-500f268a.js');
-require('./isArr-39234014.js');
-require('./isFunc-f93803cb.js');
-require('./deepFreeze-d73ccc57.js');
-require('./match-937d87ee.js');
+var joinRegex = require('./joinRegex-eadd6451.js');
 require('./isStr-8a57710e.js');
+require('./isArr-39234014.js');
+require('./validate-500f268a.js');
+require('./match-e3c15ed8.js');
+require('./deepFreeze-d73ccc57.js');
+require('./isFunc-f93803cb.js');
 require('./typeOf-51fe5771.js');
-var joinRegex = require('./joinRegex-5a38eb30.js');
 
 
 

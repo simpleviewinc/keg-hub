@@ -2,28 +2,29 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var React = require('react');
+var reactNative = require('react-native');
+var touchable = require('./touchable-3f00e0ff.js');
 var jsutils = require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
-var React = require('react');
-var React__default = _interopDefault(React);
-var reactNative = require('react-native');
-var useClassName_native = require('./useClassName.native-3d1a229b.js');
-var view_native = require('./view.native-20f555a1.js');
-require('@keg-hub/re-theme/styleInjector');
-require('@keg-hub/re-theme');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
+var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
+var view_native = require('./view.native-b34604af.js');
 require('./touchable.js');
-var touchable$1 = require('./touchable-d386e5c0.js');
+require('@keg-hub/re-theme/styleInjector');
+require('@keg-hub/re-theme');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
-  var className = _ref.className,
-      defaultStyle = _ref.defaultStyle,
+  _ref.className;
+      var defaultStyle = _ref.defaultStyle,
       visible = _ref.visible,
       children = _ref.children,
       onAnimationFinish = _ref.onAnimationFinish;
@@ -38,7 +39,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
       _useFromToAnimation2 = _rollupPluginBabelHelpers._slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
   var classRef = useClassName_native.useClassName();
-  return React__default.createElement(reactNative.Animated.View, {
+  return React__default['default'].createElement(reactNative.Animated.View, {
     ref: classRef,
     style: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, defaultStyle), {}, {
       transform: [{
@@ -57,9 +58,9 @@ var Modal = function Modal(props) {
       AnimatedComponent = _props$AnimatedCompon === void 0 ? SlideAnimatedView : _props$AnimatedCompon,
       _props$activeOpacity = props.activeOpacity,
       activeOpacity = _props$activeOpacity === void 0 ? 1 : _props$activeOpacity,
-      children = props.children,
-      className = props.className,
-      onAnimateIn = props.onAnimateIn,
+      children = props.children;
+      props.className;
+      var onAnimateIn = props.onAnimateIn,
       onAnimateOut = props.onAnimateOut,
       _props$onBackdropTouc = props.onBackdropTouch,
       onBackdropTouch = _props$onBackdropTouc === void 0 ? jsutils.noOp : _props$onBackdropTouc,
@@ -89,15 +90,15 @@ var Modal = function Modal(props) {
     } else if (jsutils.isFunc(onAnimateIn)) onAnimateIn();
   }, [onAnimateOut, onAnimateIn, visible]);
   return (
-    React__default.createElement(view_native.View, {
+    React__default['default'].createElement(view_native.View, {
       className: useClassList_native.useClassList(),
       style: renderModal ? modalStyles.main : hideModalStyle
-    }, React__default.createElement(touchable$1.Touchable, {
+    }, React__default['default'].createElement(touchable.Touchable, {
       className: 'keg-modal-backdrop',
       style: modalStyles.backdrop,
       onPress: onBackdropTouch,
       activeOpacity: activeOpacity
-    }), React__default.createElement(AnimatedComponent, {
+    }), React__default['default'].createElement(AnimatedComponent, {
       onAnimationFinish: cb,
       visible: visible,
       defaultStyle: modalStyles.content

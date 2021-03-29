@@ -1,7 +1,7 @@
-import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
+import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { platformFlatten } from './platformFlatten.js';
 import { deepMerge, isObj } from '@keg-hub/jsutils';
 import './getPlatform-95568099.js';
-import { platformFlatten } from './platformFlatten.js';
 
 var inheritFrom = function inheritFrom() {
   for (var _len = arguments.length, styles = new Array(_len), _key = 0; _key < _len; _key++) {

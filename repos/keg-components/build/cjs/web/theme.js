@@ -2,17 +2,17 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var jsutils = require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
-var colors$3 = require('./colors-3022218c.js');
 var themeDefaults = require('./themeDefaults-f48ffcaf.js');
-var buildColorStyles = require('./buildColorStyles.js');
-require('./getPlatform-ec53cd5e.js');
-require('./platformFlatten.js');
-var inheritFrom = require('./inheritFrom.js');
 var buildTheme = require('./buildTheme.js');
+var buildColorStyles = require('./buildColorStyles.js');
 require('react');
+var inheritFrom = require('./inheritFrom.js');
+var colors$2 = require('./colors-da502c66.js');
+require('./platformFlatten.js');
+require('./getPlatform-ec53cd5e.js');
 
 var __transition;
 var clearTransitionStyles = function clearTransitionStyles() {
@@ -54,7 +54,7 @@ var transition = function transition() {
   return jsutils.checkCall(config.transition, __transition) || Object.assign(__transition, config.transition);
 };
 
-var containedInit = function containedInit() {
+var containedInit$2 = function containedInit() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   var _getThemeDefaults = themeDefaults.getThemeDefaults(),
       colors = _getThemeDefaults.colors,
@@ -160,7 +160,7 @@ var outlineInit = function outlineInit() {
 };
 
 var button = function button(config) {
-  var contained = containedInit(config);
+  var contained = containedInit$2(config);
   return {
     button: {
       contained: contained,
@@ -826,7 +826,7 @@ var section = function section() {
   };
 };
 
-var containedInit$2 = function containedInit() {
+var containedInit = function containedInit() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   var _getThemeDefaults = themeDefaults.getThemeDefaults(),
       colors = _getThemeDefaults.colors;
@@ -906,7 +906,7 @@ var outlinedInit = function outlinedInit() {
 };
 
 var textBox = function textBox(config) {
-  var contained = containedInit$2(config);
+  var contained = containedInit(config);
   return {
     textBox: {
       contained: contained,
@@ -915,7 +915,7 @@ var textBox = function textBox(config) {
   };
 };
 
-var modal = function modal() {
+var modal$1 = function modal() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   var _getThemeDefaults = themeDefaults.getThemeDefaults(),
       colors = _getThemeDefaults.colors;
@@ -1096,7 +1096,7 @@ var textToggle = function textToggle() {
 };
 
 var components = function components(config) {
-  return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), list(config)), loading(config)), section(config)), textBox(config)), modal(config)), header(config)), textToggle(config));
+  return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, button(config)), card(config)), divider(config)), drawer(config)), filePicker(config)), icon(config)), image(config)), indicator(config)), link(config)), list(config)), loading(config)), section(config)), textBox(config)), modal$1(config)), header(config)), textToggle(config));
 };
 
 var display = function display() {
@@ -1138,7 +1138,7 @@ var display = function display() {
   return jsutils.checkCall(config.display, defStyles) || jsutils.deepMerge(defStyles, config.display);
 };
 
-var form = function form() {
+var form$2 = function form() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   var defStyles = {
     default: {
@@ -1511,11 +1511,11 @@ var switchStyles = function switchStyles() {
   return jsutils.checkCall(config.switch, defStyles) || jsutils.deepMerge(defStyles, config.switch);
 };
 
-var form$1 = function form$1(config) {
+var form$1 = function form(config) {
   return {
     checkbox: checkbox(config),
     checkGroup: checkGroup(config),
-    form: form(config),
+    form: form$2(config),
     input: input(config),
     option: option(config),
     radio: radio(config),
@@ -1524,7 +1524,7 @@ var form$1 = function form$1(config) {
   };
 };
 
-var layout = function layout() {
+var layout$1 = function layout() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   var defStyles = {
     full: {
@@ -1818,7 +1818,7 @@ var colors$1 = {
 		]
 	}
 };
-var layout$1 = {
+var layout = {
 	sides: [
 		"left",
 		"right",
@@ -1837,7 +1837,7 @@ var font = {
 	components: {
 	}
 };
-var form$2 = {
+var form = {
 	border: {
 		radius: 5
 	},
@@ -1858,23 +1858,23 @@ var form$2 = {
 		height: 35
 	}
 };
-var modal$1 = {
+var modal = {
 	width: 600
 };
 var defaults = {
 	states: states,
 	colors: colors$1,
-	layout: layout$1,
+	layout: layout,
 	font: font,
-	form: form$2,
-	modal: modal$1
+	form: form,
+	modal: modal
 };
 
 var clearThemeStyles = function clearThemeStyles() {
   clearMargin();
   clearPadding();
   clearFlexStyles();
-  colors$3.clearColorsStyles();
+  colors$2.clearColorsStyles();
   clearHelpersStyles();
   clearTransitionStyles();
   themeDefaults.setThemeDefaults();
@@ -1883,7 +1883,7 @@ var buildThemeDefaults = function buildThemeDefaults() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOpObj;
   clearThemeStyles();
   var themeDefaults$1 = jsutils.deepMerge(defaults, config.defaults);
-  themeDefaults$1.colors = colors$3.colors(themeDefaults$1, config);
+  themeDefaults$1.colors = colors$2.colors(themeDefaults$1, config);
   themeDefaults$1.margin = margin(themeDefaults$1, config);
   themeDefaults$1.padding = padding(themeDefaults$1, config);
   themeDefaults.setThemeDefaults(themeDefaults$1);
@@ -1900,7 +1900,7 @@ var theme = function theme() {
     padding: defaults.padding,
     form: form$1(config),
     flex: flex(config),
-    layout: layout(config),
+    layout: layout$1(config),
     helpers: helpers(config),
     display: display(config),
     transform: transform(config),

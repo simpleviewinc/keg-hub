@@ -69,7 +69,10 @@ const shared = (platform, ext) => ({
   },
   plugins: [
     replace({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      preventAssignment: true,
+      values: {
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      }
     }),
     alias({
       entries: getAliases(ext),

@@ -2,20 +2,20 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
-require('@keg-hub/jsutils');
+var kegText = require('./kegText-f2cfdfd4.js');
+require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 require('react');
+require('@keg-hub/jsutils');
+require('./kegText.native-1994a0b7.js');
+require('./useClassName-51ea3221.js');
+require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./updateClassNames.js');
 require('react-native');
-require('./useClassName-a237c005.js');
-require('@keg-hub/re-theme/styleInjector');
 require('./useTextAccessibility.js');
-require('./kegText.native-b0c7697d.js');
-require('@keg-hub/re-theme');
+require('@keg-hub/re-theme/styleInjector');
 require('./useTextStyles.js');
-var kegText = require('./kegText-e909e94a.js');
+require('@keg-hub/re-theme');
 
 var H6 = kegText.KegText('h6');
 

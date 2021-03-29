@@ -7,8 +7,8 @@ export const getImgSrc = (isWeb, src, source, uri) => {
   return {
     [key]: isWeb
       ? isObj(imgSrc)
-          ? imgSrc.uri
-          : imgSrc
+        ? imgSrc.uri
+        : imgSrc
       : isStr(imgSrc)
         ? { uri: imgSrc }
         : imgSrc,

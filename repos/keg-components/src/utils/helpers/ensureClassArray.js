@@ -12,12 +12,12 @@ export const ensureClassArray = (classList, ensured = []) => {
   return eitherArr(classList, [classList]).reduce((classNames, item) => {
     isObj(item)
       ? item.className
-          ? ensureClassArray(item.className, classNames)
-          : // Loop over the item keys and call ensureClassArray if the item key values are objects
-          // Otherwise we could add random strings to the classNames array
-          Object.keys(item).map(
-            key => isObj(item[key]) && ensureClassArray(item[key], classNames)
-          )
+        ? ensureClassArray(item.className, classNames)
+        : // Loop over the item keys and call ensureClassArray if the item key values are objects
+      // Otherwise we could add random strings to the classNames array
+        Object.keys(item).map(
+          key => isObj(item[key]) && ensureClassArray(item[key], classNames)
+        )
       : isArr(item)
         ? ensureClassArray(item, classNames)
         : isStr(item) &&

@@ -1,6 +1,6 @@
+import { useMemo } from 'react';
 import { get } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
-import { useMemo } from 'react';
 import { validateFunctions } from './validateFunctions.js';
 
 var makeHandlerObject = function makeHandlerObject(handler, _ref) {

@@ -1,5 +1,5 @@
-import { eitherArr, noPropArr } from '@keg-hub/jsutils';
 import { useMemo } from 'react';
+import { eitherArr, noPropArr } from '@keg-hub/jsutils';
 import { ensureClassArray } from './ensureClassArray.js';
 
 var useClassList = function useClassList(className) {

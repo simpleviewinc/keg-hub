@@ -1,10 +1,10 @@
-import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b1bf0c4a.js';
-import '@keg-hub/jsutils';
+import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b6f65682.js';
 import { ensureClassArray } from './ensureClassArray.js';
+import '@keg-hub/jsutils';
 
 var updateClassNames = function updateClassNames(element, classesRef, defClass, className) {
   var _element$classList;
-  if ( !('classList' in element)) return;
+  if (!('classList' in element)) return;
   defClass && (_element$classList = element.classList).add.apply(_element$classList, _toConsumableArray(defClass.split(' ')));
   var classArr = ensureClassArray(className);
   classesRef.current.map(function (cls) {

@@ -2,12 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-1d0a0e6a.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var React__default = _interopDefault(React);
 var reactNative = require('react-native');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 var ModalPicker = function (_Component) {
   _rollupPluginBabelHelpers._inherits(ModalPicker, _Component);
@@ -32,26 +33,26 @@ var ModalPicker = function (_Component) {
     key: "render",
     value: function render() {
       var _this2 = this;
-      return React__default.createElement(reactNative.View, {
+      return React__default['default'].createElement(reactNative.View, {
         style: {
           backgroundColor: 'transparent',
           flex: 1,
           position: 'absolute'
         }
-      }, React__default.createElement(reactNative.Modal, {
+      }, React__default['default'].createElement(reactNative.Modal, {
         animationType: "fade",
         transparent: true,
         visible: this.state.modalVisible,
         onRequestClose: function onRequestClose() {
           _this2.setModalVisible(false);
         }
-      }, React__default.createElement(reactNative.TouchableHighlight, {
+      }, React__default['default'].createElement(reactNative.TouchableHighlight, {
         style: styles.container,
         onPress: function onPress() {
           return _this2.setModalVisible(false);
         },
         underlayColor: '#333333cc'
-      }, React__default.createElement(reactNative.View, null, React__default.createElement(reactNative.FlatList, {
+      }, React__default['default'].createElement(reactNative.View, null, React__default['default'].createElement(reactNative.FlatList, {
         data: this.state.data,
         keyExtractor: function keyExtractor(_, index) {
           return index.toString();
@@ -59,13 +60,13 @@ var ModalPicker = function (_Component) {
         renderItem: function renderItem(_ref) {
           var item = _ref.item,
               index = _ref.index;
-          return React__default.createElement(reactNative.TouchableHighlight, {
+          return React__default['default'].createElement(reactNative.TouchableHighlight, {
             underlayColor: 'transparent',
             onPress: function onPress() {
               _this2.setModalVisible(false);
               _this2.props.onValueChange(item[_this2.props.value], index);
             }
-          }, _this2.props.renderRow ? _this2.props.renderRow(item, index) : React__default.createElement(reactNative.Text, {
+          }, _this2.props.renderRow ? _this2.props.renderRow(item, index) : React__default['default'].createElement(reactNative.Text, {
             style: styles.itemText
           }, item[_this2.props.label]));
         }
