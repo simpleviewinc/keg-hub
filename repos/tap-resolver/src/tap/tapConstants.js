@@ -29,14 +29,15 @@ module.exports = deepFreeze({
    */
   assetsPath: 'assets',
   assetsIndex: 'index',
-  fontIndex: 'fonts',
+  fontsPath: 'assets/fonts',
+  fontsIndex: 'index',
 
   /**
    * Files and asset extensions that can be resolved
    */
   extensions: {
     fonts: [ '.ttf', '.otf' ],
-    assets: [ '.png', '.jpg', '.jpeg', '.gif', '.ttf' ],
+    assets: [ '.png', '.jpg', '.jpeg', '.gif', '.ttf', '.otf' ],
     resolve: [
       '.web.js',
       '.native.js',

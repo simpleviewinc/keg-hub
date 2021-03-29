@@ -57,8 +57,8 @@
         "temp": "./temp",
         "kegSrc": "./core/base",
         "tapAssets": "assets",
-        "folderRootFile": "index",
-        "fontIndex": "fonts"
+        "tapFonts": "assets/fonts",
+        "folderRootFile": "index"
       },
       "extensions": {
         "assets": [

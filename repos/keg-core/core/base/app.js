@@ -4,13 +4,12 @@ import { Provider } from 'react-redux'
 import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { getStore } from 'SVStore'
 import { initAppAction, navigateTo } from 'SVActions'
-import { AppHeader, Select, Option, View } from 'SVComponents'
-import { Loading } from 'SVComponents'
-import { Router } from 'SVComponents'
+import { AppHeader, Select, Option, View, Loading, Router } from 'SVComponents'
 import { checkCall, get, isEmptyColl } from '@keg-hub/jsutils'
 import { useSelector } from 'react-redux'
 import { getHistory } from 'SVNavigation'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
+import { theme, themeConfig } from 'SVTheme'
 
 // These demo core are defined here, and not in app.json, so that they are not
 // merged with tap routes. Taps would define their routes in tap.json
@@ -29,7 +28,7 @@ const routes = Object.freeze({
 const useAppInit = isInit => {
   return useMemo(() => {
     !isInit &&
-      checkCall(initAppAction)
+      checkCall(initAppAction, theme, themeConfig)
     return isInit
   }, [isInit])
 }

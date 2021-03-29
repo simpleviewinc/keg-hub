@@ -168,8 +168,8 @@ repos/**/container/run.sh
 !repos/**/build
 repos/**/run.sh
 repos/keg-core/core/base/assets/**/**
-!repos/keg-core/core/base/assets/clientLogo.jpg
-!repos/keg-core/core/base/assets/FiraSans-Regular.ttf
+!repos/keg-core/core/base/assets/.gitkeep
+!repos/keg-core/core/base/assets/fonts/.gitkeep
 repos/**/kc-touch.js
 repos/**/__generated__
 repos/**/retheme-hook.js

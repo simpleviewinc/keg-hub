@@ -99,6 +99,7 @@ const buildAliases = (kegPath, appConfig = {}, paths = {}) => {
     addNameSpace(appConfig, {
       AppRoot: kegPath,
       Assets: paths.assets,
+      Fonts: paths.fonts,
       Base: paths.base,
       Tap: paths.tap,
       TapSrc: paths.tapSrc,
@@ -142,11 +143,16 @@ module.exports = options => {
   } = setupTap(options)
 
   // Build the assets for the tap
-  const ASSETS_PATH = buildAssets(APP_CONFIG, BASE_PATH, TAP_PATH)
+  const { ASSETS_PATH, FONTS_PATH } = buildAssets(
+    APP_CONFIG,
+    BASE_PATH,
+    TAP_PATH
+  )
 
   // Build the aliasPaths object from the built tap data
   const aliasPaths = {
     assets: ASSETS_PATH,
+    fonts: FONTS_PATH,
     base: BASE_PATH,
     tap: TAP_PATH,
     tapSrc: TAP_SRC,
@@ -159,6 +165,7 @@ module.exports = options => {
     APP_CONFIG_PATH,
     BASE_PATH,
     ASSETS_PATH,
+    FONTS_PATH,
     TAP_NAME,
     TAP_PATH,
     HAS_TAP,

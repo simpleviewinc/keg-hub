@@ -1,4 +1,4 @@
-export { theme } from '@keg-hub/keg-components'
+import { kegComponentsTheme } from './kegComponentsTheme'
 
 /**
  * Default theme config override
@@ -6,7 +6,7 @@ export { theme } from '@keg-hub/keg-components'
  * This file should only be loaded when a tap does not override the tapIndex.js file
  * @Object
  */
-export const themeConfig = {
+const themeConfig = {
   typography: {
     font: {
       family: {
@@ -16,4 +16,9 @@ export const themeConfig = {
       }
     }
   }
+}
+
+export {
+  themeConfig,
+  kegComponentsTheme as theme,
 }
