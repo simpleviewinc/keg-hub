@@ -43,8 +43,8 @@ const useAppInit = isInit => {
  * @returns {Object} - The styles for top level components from the theme
  */
 const useThemeStyles = isInit => {
+  const activeTheme = getDefaultTheme()
   return useMemo(() => {
-    const activeTheme = getDefaultTheme()
     const statusBarColor = get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])
     const safeBgColor = get(activeTheme, ['colors', 'surface', 'primary', 'colors', 'dark'])
     const rootBgColor = get(activeTheme, ['colors', 'palette', 'white01' ])
@@ -55,7 +55,7 @@ const useThemeStyles = isInit => {
       safeAreaStyle: { flex: 1, backgroundColor: safeBgColor },
       rootView: { flex: 1, backgroundColor: rootBgColor },
     }
-  }, [isInit])
+  }, [isInit, activeTheme])
 }
 
 /**
