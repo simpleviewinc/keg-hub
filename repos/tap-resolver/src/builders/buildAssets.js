@@ -40,7 +40,7 @@ const assetFileNames = (tapAssetPath, extensions = []) => {
         .readdirSync(tapAssetPath)
         // Filter out any that don't match the allowed asset extensions
         .filter(
-          file => allExtensions.indexOf(`.${path.basename(file).split('.').pop()}`) !== -1
+          file => allExtensions.indexOf(path.extname(file)) !== -1
         )
     )
   )
@@ -71,20 +71,20 @@ const getAssetsPath = (tapAssets, BASE_PATH, TAP_PATH) => {
 }
 
 /**
- * Checks if a file has the .js extention, and adds it if needed
- * @param {string} file - File name to check for the .js extention
+ * Checks if a file has the .js extension, and adds it if needed
+ * @param {string} file - File name to check for the .js extension
  *
- * @returns {string} - file with the .js exention added
+ * @returns {string} - file with the .js extension added
  */
-const ensureJsExt = file => (file.includes('.js') ? file : `${file}.js`)
+const ensureJsExt = file => (path.extname(file) === '.js' ? file : `${file}.js`)
 
 /**
- * Write the assets and font imports to a valid javscript file
+ * Write the assets and font imports to a valid javascript file
  * @param {string} tapAssetPath - Path to the taps asset folder
  * @param {string} assetIndex - Name of the assets index file
  * @param {string} fontsIndex - Name of the fonts index file
  * @param {string} builtAssets - auto-generated imports of asset files as string
- * @param {string} builtFonts - Assets with a font extention 
+ * @param {string} builtFonts - Assets with a font extension 
  *
  * @returns {void}
  */
@@ -96,8 +96,6 @@ const writeAssetFiles = args => {
     builtAssets,
     builtFonts
  } = args
-
-  
 
   // Write the assets index file to the assets/index location
   builtAssets.length &&
@@ -144,7 +142,7 @@ module.exports = (appConf, BASE_PATH, TAP_PATH) => {
   const pathsConfig = resolverConf.paths || noOpObj
   const extConfig = resolverConf.extensions || noOpObj
 
-  // Get the font exitentions by joining the default with the extention config
+  // Get the font extensions by joining the default with the extension config
   const fontExts = get(tapConstants, [ 'extensions', 'fonts' ], noPropArr)
     .concat(extConfig.fonts || noPropArr)
 
