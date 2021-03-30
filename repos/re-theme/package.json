@@ -43,7 +43,7 @@
     "sb:deploy": "storybook-to-ghpages -e docs --dry-run",
     "sb:server": "npx http-server docs",
     "start": "yarn gen:indexes; yarn dev",
-    "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js",
+    "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js --maxWorkers=50%",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },

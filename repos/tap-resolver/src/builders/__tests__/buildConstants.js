@@ -12,7 +12,10 @@ const buildAliases = jest.fn(() => {
   return jest.fn()
 })
 const buildAssets = jest.fn(() => {
-  return `${options.tapPath}/assets`
+  return {
+    ASSETS_PATH: `${options.tapPath}/assets`,
+    FONTS_PATH: `${options.tapPath}/assets/fonts`,
+  }
 })
 const validateApp = jest.fn(() => {
   return true
@@ -32,6 +35,7 @@ const defResolver = () => ''
 const aliases = {
   MyTestTapAppRoot: kegPath,
   MyTestTapAssets: 'src/mocks/taps/test/assets',
+  MyTestTapFonts: 'src/mocks/taps/test/assets/fonts',
   MyTestTapBase: 'src/mocks/base',
   MyTestTapTap: 'src/mocks/taps/test',
   MyTestTapTapSrc: 'src/mocks/taps/test',
