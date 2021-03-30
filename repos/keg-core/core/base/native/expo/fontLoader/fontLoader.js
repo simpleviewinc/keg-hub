@@ -2,11 +2,11 @@ import * as Font from 'expo-font'
 import { isObj } from '@keg-hub/jsutils'
 
 /**
- * Storage Class for native. Saves and retrieves data from local storage
+ * Async custom fonts loader using expos expo-font library
  * @function
  * @param {Object} fontData - Object matching the format of expo-fonts loadAsync method
  * More information here 
- * https://docs.expo.io/versions/latest/sdk/font/
+ * https://docs.expo.io/guides/using-custom-fonts/
  */
 export const fontLoader = async fontData => {
   let fontLoaded = true

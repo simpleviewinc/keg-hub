@@ -7,15 +7,7 @@ import { kegComponentsTheme } from './kegComponentsTheme'
  * @Object
  */
 const themeConfig = {
-  typography: {
-    font: {
-      family: {
-        $native: {
-          fontFamily: 'FiraSans-Regular',
-        },
-      }
-    }
-  }
+  // Add them config overrides here
 }
 
 export {
