@@ -1,6 +1,5 @@
 import React from 'react'
 import { useOutsideDetect } from 'KegHooks'
-import { handleRefUpdate } from '../utils/helpers/handleRefUpdate'
 
 import PropTypes from 'prop-types'
 
