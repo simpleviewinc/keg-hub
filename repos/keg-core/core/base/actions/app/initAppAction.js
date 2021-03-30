@@ -4,7 +4,7 @@ import { ActionTypes } from 'SVConstants'
 import { fontLoader } from 'SVNative'
 import { fonts } from 'SVAssets/fonts'
 import { setDefaultTheme } from '@keg-hub/re-theme'
-import { noOpObj, isFunc, exists, isEmptyColl, isObj, limbo } from '@keg-hub/jsutils'
+import { noOpObj, isFunc, isEmptyColl, isObj, limbo } from '@keg-hub/jsutils'
 
 /**
  * Sets the default theme calling ReThemes setDefaultTheme method
