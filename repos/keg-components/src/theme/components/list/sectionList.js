@@ -9,6 +9,7 @@ const sectionDefault = {
       mT: 10,
       mB: 10,
     },
+    container: {},
     list: {},
     hidden: {
       opacity: 0,

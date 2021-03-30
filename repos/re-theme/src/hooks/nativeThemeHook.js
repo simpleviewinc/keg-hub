@@ -1,5 +1,5 @@
 import { useRef, useState, useLayoutEffect } from 'react'
-import { get, shallowEqual } from '@keg-hub/jsutils'
+import { get, shallowEqual, noOpObj } from '@keg-hub/jsutils'
 
 /**
  * Checks it two passed in objects are equal pointers or equal as json strings
@@ -32,3 +32,19 @@ export const nativeThemeHook = (offValue, onValue, options) => {
   // Return an array matching the same format as on web
   return [ hookRef, offValue, setValue ]
 }
+
+/**
+ * Placeholder hook when on native device
+ * @type function
+ * @param {Object} options - Contains callbacks and refs for the pointerState
+ * @param {string} pointerState - pointer state to track. Must be one of hover, active, or focus
+ *
+ * @return {Object} - States of the pointed relative to the passed in pointerState
+ */
+export const usePointerState = (options=noOpObj) => ({
+  hover: false,
+  focus: false,
+  active: false,
+  events: noOpObj,
+  ref: options.ref,
+})
