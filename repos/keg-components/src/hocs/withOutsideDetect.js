@@ -17,8 +17,9 @@ export const withOutsideDetect = (Component) => {
       ...clientProps 
     } = props
 
-    const detectRef = React.useRef()
-    useOutsideDetect(ref || detectRef, onOutsideClick)
+    const fallbackRef = React.useRef()
+    const detectRef = ref || fallbackRef
+    useOutsideDetect(detectRef, onOutsideClick)
 
     return <Component 
       {...clientProps} 
