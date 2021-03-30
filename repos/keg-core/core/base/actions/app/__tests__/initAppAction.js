@@ -1,10 +1,10 @@
 import { Mocks, Redux } from 'SVMocks'
 import { ActionTypes } from 'SVConstants'
 
+jest.mock('SVAssets/fonts', () => ({ default: {}, fonts: {} }), { virtual: true })
+
 const rethemeMock = { setDefaultTheme: jest.fn() }
 const expoFontsMock = { loadAsync: jest.fn() }
-
-jest.setMock('SVAssets/fonts', { fonts: {} })
 jest.setMock('expo-font', expoFontsMock)
 const kegComponentsThemeMock = jest.fn()
 jest.setMock('../../../theme/kegComponentsTheme', { kegComponentsTheme: kegComponentsThemeMock })
