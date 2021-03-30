@@ -117,7 +117,10 @@
         },
         "native": {
           "@keg-hub/re-theme/colors": "@keg-hub/re-theme/build/cjs/native/colors",
-          "@keg-hub/re-theme/styleInjector": "@keg-hub/re-theme/build/cjs/native/styleInjector"
+          "@keg-hub/re-theme/styleInjector": "@keg-hub/re-theme/build/cjs/native/styleInjector",
+          "@keg-hub/re-theme": "./node_modules/@keg-hub/re-theme/build/cjs/native/index.js",
+          "react": "./node_modules/react",
+          "^react-native$": "./node_modules/react-native"
         }
       },
       "babel": {
