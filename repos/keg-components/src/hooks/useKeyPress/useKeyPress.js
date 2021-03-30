@@ -1,8 +1,4 @@
 import { useState, useCallback, useEffect } from 'react'
-import { getPlatform } from 'KegGetPlatform'
-import { noOp } from '@keg-hub/jsutils'
-
-const platform = getPlatform()
 
 /**
  * Helper for `useKeyPress` that sets and removes window listeners
@@ -37,11 +33,10 @@ export const useKeyPress = targetKey => {
     [ setKeyPressed, targetKey ]
   )
 
-  useEffect(() => {
-    return (platform === 'web')
-      ? manageListeners(upHandler, downHandler)
-      : noOp
-  }, [ downHandler, upHandler ])
+  useEffect(
+    () => manageListeners(upHandler, downHandler), 
+    [ downHandler, upHandler ]
+  )
 
   return keyPressed
 }
