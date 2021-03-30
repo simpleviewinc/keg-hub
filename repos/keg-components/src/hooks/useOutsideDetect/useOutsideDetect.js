@@ -1,7 +1,4 @@
 import { useEffect } from 'react'
-import { getPlatform } from 'KegGetPlatform'
-
-const platform = getPlatform()
 
 /**
  * 
@@ -21,9 +18,6 @@ const eventIsOutside = (evt, ref) => {
  */
 export const useOutsideDetect = (ref, onOutsideClick) => {
   useEffect(() => {
-    if (platform !== 'web') 
-      return console.warn('useOutsideDetect is not yet supported on native')
-
     // alert if clicked outside of element stored at ref
     const handleClickOutside = event => 
       eventIsOutside(event, ref) && onOutsideClick?.(event)
