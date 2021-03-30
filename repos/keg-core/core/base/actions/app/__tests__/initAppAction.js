@@ -4,6 +4,7 @@ import { ActionTypes } from 'SVConstants'
 const rethemeMock = { setDefaultTheme: jest.fn() }
 const expoFontsMock = { loadAsync: jest.fn() }
 
+jest.setMock('SVAssets/fonts', { fonts: {} })
 jest.setMock('expo-font', expoFontsMock)
 const kegComponentsThemeMock = jest.fn()
 jest.setMock('../../../theme/kegComponentsTheme', { kegComponentsTheme: kegComponentsThemeMock })
