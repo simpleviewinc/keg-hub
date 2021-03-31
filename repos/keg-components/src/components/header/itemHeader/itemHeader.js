@@ -7,11 +7,11 @@ import { Button } from '../../button'
 import { Icon } from 'KegIcon'
 import { H5 } from '../../typography'
 import { renderFromType } from '../../../utils'
-import { useThemePath } from '../../../hooks'
 import { useClassList } from 'KegClassList'
 import { noPropObj } from '@keg-hub/jsutils'
 import { isValidComponent } from '../../../utils/validate/isValidComponent'
 import { getPlatform } from 'KegGetPlatform'
+import { useAccessibilityRole, useThemePath } from 'KegHooks'
 
 const isWeb = getPlatform() === 'web'
 
@@ -49,13 +49,14 @@ export const ItemHeader = props => {
   } = props
 
   const headerStyles = useThemePath(themePath || `header.itemHeader`, styles)
+  const accessibilityRoleObj = useAccessibilityRole(accessibilityRole, 'header')
 
   // builds the left, center, and right section based on props
   return (
     <View
-      accessibilityRole={(isWeb && accessibilityRole) || 'header'}
       className={useClassList('keg-header', className)}
       {...elProps}
+      {...accessibilityRoleObj}
       style={[
         headerStyles.main,
         appHeader && get(headerStyles, [ 'appHeader', 'main' ]),

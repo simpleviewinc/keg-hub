@@ -1,21 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@keg-hub/re-theme'
-import { get } from '@keg-hub/jsutils'
+import { useStyle } from '@keg-hub/re-theme'
 import { View } from 'KegView'
 import { useClassList } from 'KegClassList'
+import { useAccessibilityRole } from 'KegHooks'
 
 export const Divider = React.forwardRef(
   ({ className, style, ...props }, ref) => {
-    const theme = useTheme()
+    const dividerStyle = useStyle('divider')
+    const accessibilityRoleObj = useAccessibilityRole('separator')
 
     return (
       <View
         ref={ref}
-        accessibilityRole='separator'
         className={useClassList('keg-divider', className)}
         {...props}
-        style={[ get(theme, ['divider']), style ]}
+        style={[ dividerStyle, style ]}
+        {...accessibilityRoleObj}
       />
     )
   }
