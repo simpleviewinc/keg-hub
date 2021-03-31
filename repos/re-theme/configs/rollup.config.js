@@ -6,6 +6,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
 const { getAliases } = require("./aliases.config")
+const { buildExports } = require('./buildExports')
 
 // Need to require our babel.config.js because it uses module.exports
 const babelConfig = require('./babel.config.js')
@@ -15,14 +16,6 @@ const isProd = process.env.NODE_ENV === 'production'
 // Default location of the build output
 const buildPath = `./build`
 
-// List of alternate exports
-// This allows importing only when you need
-const inputs = {
-  reStyle: './src/reStyle/index.js',
-  styleInjector: './src/styleInjector/index{{platform}}',
-  colors: './src/helpers/colors.js',
-}
-
 const buildConfig = (type, ext, platform, config) => {
   return {
     ...config,
@@ -31,9 +24,11 @@ const buildConfig = (type, ext, platform, config) => {
     ],
     input: {
       index: `./src/index${ext}`,
-      ...Object.keys(inputs)
+      ...Object.keys(buildExports)
         .reduce((converted, key) => {
-          converted[key] = inputs[key].replace('{{platform}}', ext)
+          converted[key] = key === 'index'
+            ? `./src/index${ext}`
+            : buildExports[key].replace('{{platform}}', ext)
 
           return converted
         }, {})

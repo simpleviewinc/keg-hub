@@ -10,9 +10,11 @@
         "temp": "./temp",
         "kegSrc": "",
         "tapSrc": "",
+        "tapFonts": "",
         "tapAssets": "",
+        "webResolver": "",
         "contentResolver": "",
-        "webResolver": ""
+        "folderRootFile": "index"
       },
       "extensions": [],
       "aliases": {

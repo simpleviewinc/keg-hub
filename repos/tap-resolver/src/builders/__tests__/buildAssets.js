@@ -1,4 +1,5 @@
 const path = require('path')
+const { deepMerge } = require('@keg-hub/jsutils')
 const { config, FS, basePath, tapPath } = require('../../mocks')
 
 // Helpers to allow calling the setup function in a test env
@@ -12,9 +13,15 @@ describe('Build Assets', () => {
   beforeEach(() => {
     isDirMock.mockClear()
     FS.writeFileSync.mockClear()
+    FS.readdirSync.mockClear()
 
     global.testMocks.fs = {
-      readdirSync: [ 'test.png', 'duper.jpg', 'no_ext', 'bad.ext' ],
+      readdirSync: [
+        { name: 'test.png', isDirectory: () => false },
+        { name: 'duper.jpg', isDirectory: () => false },
+        { name: 'no_ext', isDirectory: () => false },
+        { name: 'bad.ext', isDirectory: () => false },
+      ],
       lstat: { isDirectory: isDirMock },
     }
   })
@@ -23,18 +30,36 @@ describe('Build Assets', () => {
     isDirectory = true
     buildAssets(config, basePath, tapPath)
     const savePath = FS.writeFileSync.mock.calls[0][0]
+    const assetsRead = FS.readdirSync.mock.calls[0]
+    const fontsRead = FS.readdirSync.mock.calls[1]
 
-    expect(FS.readdirSync).toHaveBeenCalledWith(`${tapPath}/assets`)
+    expect(assetsRead).toEqual([ `${tapPath}/assets`, { withFileTypes: true }])
+    expect(fontsRead).toEqual([
+      `${tapPath}/assets/fonts`,
+      { withFileTypes: true },
+    ])
+
     expect(FS.writeFileSync).toHaveBeenCalled()
-    expect(savePath).toBe(path.join(tapPath, './assets/index.js'))
+    expect(savePath).toBe(path.join(basePath, './assets/index.js'))
   })
 
   it('Should write the base assets path when config assets path is NOT a directory', () => {
     isDirectory = false
-    buildAssets(config, basePath, tapPath)
-    const savePath = FS.writeFileSync.mock.calls[0][0]
 
-    expect(FS.readdirSync).toHaveBeenCalledWith(`${basePath}/assets`)
+    const noAssConfig = deepMerge(config, {
+      keg: { tapResolver: { paths: { tapAssets: undefined } } },
+    })
+
+    buildAssets(noAssConfig, basePath, tapPath)
+    const savePath = FS.writeFileSync.mock.calls[0][0]
+    const assetsRead = FS.readdirSync.mock.calls[0]
+    const fontsRead = FS.readdirSync.mock.calls[1]
+
+    expect(assetsRead).toEqual([ `${basePath}/assets`, { withFileTypes: true }])
+    expect(fontsRead).toEqual([
+      `${basePath}/assets/fonts`,
+      { withFileTypes: true },
+    ])
     expect(FS.writeFileSync).toHaveBeenCalled()
     expect(savePath).toBe(path.join(basePath, './assets/index.js'))
   })
@@ -66,9 +91,10 @@ describe('Build Assets', () => {
     expect(saveContent.indexOf('bad.ext')).toEqual(-1)
   })
 
-  it('Should return the relative path to the assets directory', () => {
-    const assetsPath = buildAssets(config, basePath, tapPath)
+  it('Should return the relative path for the assets and fonts directory', () => {
+    const { ASSETS_PATH, FONTS_PATH } = buildAssets(config, basePath, tapPath)
 
-    expect(assetsPath).toEqual('assets')
+    expect(ASSETS_PATH).toEqual('assets')
+    expect(FONTS_PATH).toEqual('assets/fonts')
   })
 })

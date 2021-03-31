@@ -420,13 +420,14 @@ export const SectionList = React.forwardRef((props, ref) => {
         ) }
       <SafeAreaView
         ref={safeClassRef}
-        style={listStyles?.content.list}
+        style={listStyles?.content.container}
       >
         <RNSectionList
           {...args}
           ref={classRef}
           renderItem={onRenderItem}
           sections={indexedSections}
+          style={listStyles?.content.list}
           renderSectionHeader={onSectionHeaderRender}
         />
       </SafeAreaView>

@@ -21,12 +21,15 @@ import {
 } from './theme'
 
 import {
+  useStyle,
+  usePointerState,
   useStylesCallback,
   useTheme,
   useThemeActive,
   useThemeFocus,
   useThemeHover,
 } from './hooks/index.native.js'
+
 
 export {
   // Dimensions exports
@@ -45,6 +48,8 @@ export {
   setDefaultTheme,
   withTheme,
   // Theme hooks
+  useStyle,
+  usePointerState,
   useStylesCallback,
   useTheme,
   useThemeActive,

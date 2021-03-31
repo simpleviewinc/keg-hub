@@ -5,6 +5,10 @@
     "tapResolver": {
       "aliases": {
         "nameSpace": "MyTestTap"
+      },
+      "paths": {
+        "tapAssets": "assets",
+        "tapFonts": "assets/fonts"
       }
     }
   }

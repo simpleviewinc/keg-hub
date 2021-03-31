@@ -13,7 +13,7 @@ export const select = (config = noOpObj) => {
         ...sharedForm.border,
         ...sharedForm.inputs,
         padding: 0,
-        overflow: 'none',
+        overflow: 'hidden',
       },
       select: {
         $web: {

@@ -1,3 +1,4 @@
+export * from './useAccessibilityRole'
 export * from './useAnimate'
 export * from './useChildren'
 export * from './useChildrenWithRefs'

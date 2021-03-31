@@ -4,7 +4,7 @@
 import { ruleHelpers } from '../constants/ruleHelpers'
 import { getSizeMap } from '../dimensions'
 import { Constants } from '../constants'
-import { getRNPlatform } from '../context/platform'
+import { getRNPlatform } from 'RePlatform'
 import {
   isObj,
   deepMerge,
