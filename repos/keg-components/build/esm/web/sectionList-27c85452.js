@@ -256,11 +256,12 @@ var SectionList$1 = React.forwardRef(function (props, ref) {
     onSectionChange: onSectionChangeAction
   }), Text), React.createElement(SafeAreaView, {
     ref: safeClassRef,
-    style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.content.list
+    style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.content.container
   }, React.createElement(SectionList$2, _extends({}, args, {
     ref: classRef,
     renderItem: onRenderItem,
     sections: indexedSections,
+    style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.content.list,
     renderSectionHeader: onSectionHeaderRender
   }))));
 });
@@ -272,4 +273,4 @@ var SectionList = StyleInjector(SectionList$1, {
 SectionList.propTypes = SectionList$1.propTypes;
 
 export { SectionList as S, getElementLayout as g, scrollList as s, useScroll as u };
-//# sourceMappingURL=sectionList-2ce45225.js.map
+//# sourceMappingURL=sectionList-27c85452.js.map

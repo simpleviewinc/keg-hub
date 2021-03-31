@@ -39,6 +39,8 @@ require('./h6.js');
 require('./label.js');
 require('./p.js');
 require('./subtitle.js');
+require('./useAccessibilityRole.js');
+require('./getPlatform-24228c6c.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 

@@ -9,7 +9,7 @@ import { isFunc } from '@keg-hub/jsutils';
 import { isValidComponent } from './isValidComponent.js';
 import '@keg-hub/re-theme/colors';
 import { useStylesCallback } from '@keg-hub/re-theme';
-import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 import './kegText-f9567f63.js';
 import './kegText.js';
 import './useClassName.native-32e8827d.js';

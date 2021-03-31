@@ -4,7 +4,7 @@ let RNPlatform
  * Loads the react-native platform inside a function call
  * Ensures react-native has been initialized before calling
  * @function
- * 
+ *
  * @return {Object} - Platform object to use when building the theme
  */
 const loadReactNativePlatform = () => {
@@ -26,7 +26,7 @@ const getRNPlatform = () => {
 /**
  * Sets the platform object used when building the theme
  * @function
- * @param {Object} Plat - Platform object to use 
+ * @param {Object} Plat - Platform object to use
  *
  * @return {void}
  */

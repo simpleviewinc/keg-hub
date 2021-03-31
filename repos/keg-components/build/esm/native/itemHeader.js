@@ -19,10 +19,11 @@ import './text.js';
 import { renderFromType } from './renderFromType.js';
 import '@keg-hub/re-theme/colors';
 import { isValidComponent } from './isValidComponent.js';
+import { u as useClassList } from './useClassList.native-70068878.js';
+import { useAccessibilityRole } from './useAccessibilityRole.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import 'react-native';
-import { u as useClassList } from './useClassList.native-70068878.js';
 import './useClassName.native-32e8827d.js';
 import './touchable-9cc6e181.js';
 import './touchable.js';
@@ -34,11 +35,13 @@ import './kegText-f9567f63.js';
 import './kegText.js';
 import './useTextAccessibility.js';
 import './useTextStyles.js';
+import './getPlatform-e625f46a.js';
 
 var ItemHeader = function ItemHeader(props) {
   var _headerStyles$shadow, _headerStyles$content;
   var theme = useTheme();
-  var appHeader = props.appHeader;
+  var accessibilityRole = props.accessibilityRole,
+      appHeader = props.appHeader;
       props.className;
       var title = props.title,
       styles = props.styles,
@@ -56,11 +59,12 @@ var ItemHeader = function ItemHeader(props) {
       ellipsis = props.ellipsis,
       themePath = props.themePath,
       children = props.children,
-      elProps = _objectWithoutProperties(props, ["appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
+      elProps = _objectWithoutProperties(props, ["accessibilityRole", "appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
   var headerStyles = useThemePath(themePath || "header.itemHeader", styles);
+  var accessibilityRoleObj = useAccessibilityRole(accessibilityRole, 'header');
   return React.createElement(View, _extends({
     className: useClassList()
-  }, elProps, {
+  }, elProps, accessibilityRoleObj, {
     style: [headerStyles.main, appHeader && get(headerStyles, ['appHeader', 'main']), shadow && get(headerStyles, ['shadow', 'main'])]
   }), shadow && React.createElement(View, {
     style: headerStyles === null || headerStyles === void 0 ? void 0 : (_headerStyles$shadow = headerStyles.shadow) === null || _headerStyles$shadow === void 0 ? void 0 : _headerStyles$shadow.cover

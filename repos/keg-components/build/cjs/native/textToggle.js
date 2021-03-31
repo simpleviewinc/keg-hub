@@ -13,7 +13,7 @@ var jsutils = require('@keg-hub/jsutils');
 var isValidComponent = require('./isValidComponent.js');
 require('@keg-hub/re-theme/colors');
 var reTheme = require('@keg-hub/re-theme');
-var LinearGradient = require('react-native-linear-gradient');
+var expoLinearGradient = require('expo-linear-gradient');
 require('./kegText-965ef4d3.js');
 require('./kegText.js');
 require('./useClassName.native-3d1a229b.js');
@@ -28,7 +28,6 @@ require('./useThemeWithHeight.js');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-var LinearGradient__default = /*#__PURE__*/_interopDefaultLegacy(LinearGradient);
 
 var buildStyles = function buildStyles(theme, styleHelper) {
   var textToggleStyles = theme.get("textToggle", styleHelper === null || styleHelper === void 0 ? void 0 : styleHelper.styles);
@@ -100,7 +99,7 @@ var TextToggle = function TextToggle(props) {
   }, React__default['default'].createElement(text.Text, {
     style: mainStyle.text,
     onLayout: onTextLayout
-  }, text$1)), showToggle && !expanded && React__default['default'].createElement(LinearGradient__default['default'], {
+  }, text$1)), showToggle && !expanded && React__default['default'].createElement(expoLinearGradient.LinearGradient, {
     colors: ['rgba(255,255,255,0)', fadeColor],
     style: mainStyle.linearGradient
   }), showToggle && React__default['default'].createElement(ToggleComponent, {

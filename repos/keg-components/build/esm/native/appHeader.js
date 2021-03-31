@@ -35,6 +35,8 @@ import './h6.js';
 import './label.js';
 import './p.js';
 import './subtitle.js';
+import './useAccessibilityRole.js';
+import './getPlatform-e625f46a.js';
 
 var AppHeader = function AppHeader(props) {
   props.className;

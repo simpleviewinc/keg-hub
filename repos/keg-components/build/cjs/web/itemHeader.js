@@ -24,10 +24,11 @@ var renderFromType = require('./renderFromType.js');
 var getPlatform = require('./getPlatform-ec53cd5e.js');
 require('@keg-hub/re-theme/colors');
 var isValidComponent = require('./isValidComponent.js');
+var useClassList = require('./useClassList-89a8dbd4.js');
+var useAccessibilityRole = require('./useAccessibilityRole.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('react-native');
-var useClassList = require('./useClassList-89a8dbd4.js');
 require('./view.native-99366b4b.js');
 require('./useClassName-51ea3221.js');
 require('./updateClassNames.js');
@@ -52,7 +53,8 @@ var isWeb = getPlatform.getPlatform() === 'web';
 var ItemHeader = function ItemHeader(props) {
   var _headerStyles$content;
   var theme = reTheme.useTheme();
-  var appHeader = props.appHeader,
+  var accessibilityRole = props.accessibilityRole,
+      appHeader = props.appHeader,
       className = props.className,
       title = props.title,
       styles = props.styles,
@@ -70,11 +72,12 @@ var ItemHeader = function ItemHeader(props) {
       ellipsis = props.ellipsis,
       themePath = props.themePath,
       children = props.children,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["accessibilityRole", "appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
   var headerStyles = useThemePath.useThemePath(themePath || "header.itemHeader", styles);
+  var accessibilityRoleObj = useAccessibilityRole.useAccessibilityRole(accessibilityRole, 'header');
   return React__default['default'].createElement(view.View, _rollupPluginBabelHelpers._extends({
     className: useClassList.useClassList('keg-header', className)
-  }, elProps, {
+  }, elProps, accessibilityRoleObj, {
     style: [headerStyles.main, appHeader && jsutils.get(headerStyles, ['appHeader', 'main']), shadow && jsutils.get(headerStyles, ['shadow', 'main'])]
   }), !isWeb  , children || React__default['default'].createElement(React__default['default'].Fragment, null, React__default['default'].createElement(Side, {
     styles: headerStyles.content,

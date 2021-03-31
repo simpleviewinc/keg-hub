@@ -40,6 +40,7 @@ import './label.js';
 import './p.js';
 import './subtitle.js';
 import './getPlatform-95568099.js';
+import './useAccessibilityRole.js';
 
 var AppHeader = function AppHeader(props) {
   var className = props.className,

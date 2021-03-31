@@ -10,7 +10,4 @@ const themeConfig = {
   // Add them config overrides here
 }
 
-export {
-  themeConfig,
-  kegComponentsTheme as theme,
-}
+export { themeConfig, kegComponentsTheme as theme }

@@ -728,6 +728,7 @@ var sectionDefault = {
       mT: 10,
       mB: 10
     },
+    container: {},
     list: {},
     hidden: {
       opacity: 0,
@@ -1377,7 +1378,7 @@ var select = function select() {
         position: 'relative'
       }, sharedForm.border), sharedForm.inputs), {}, {
         padding: 0,
-        overflow: 'none'
+        overflow: 'hidden'
       }),
       select: {
         $web: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, sharedForm.inputs), {}, {
@@ -1833,7 +1834,6 @@ var font = {
 	spacing: 0.15,
 	bold: "700",
 	units: "px",
-	family: "Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"",
 	components: {
 	}
 };

@@ -20,10 +20,11 @@ import { renderFromType } from './renderFromType.js';
 import { g as getPlatform } from './getPlatform-95568099.js';
 import '@keg-hub/re-theme/colors';
 import { isValidComponent } from './isValidComponent.js';
+import { u as useClassList } from './useClassList-1d418045.js';
+import { useAccessibilityRole } from './useAccessibilityRole.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import 'react-native';
-import { u as useClassList } from './useClassList-1d418045.js';
 import './view.native-a7f08b5b.js';
 import './useClassName-682bc33b.js';
 import './updateClassNames.js';
@@ -44,7 +45,8 @@ var isWeb = getPlatform() === 'web';
 var ItemHeader = function ItemHeader(props) {
   var _headerStyles$content;
   var theme = useTheme();
-  var appHeader = props.appHeader,
+  var accessibilityRole = props.accessibilityRole,
+      appHeader = props.appHeader,
       className = props.className,
       title = props.title,
       styles = props.styles,
@@ -62,11 +64,12 @@ var ItemHeader = function ItemHeader(props) {
       ellipsis = props.ellipsis,
       themePath = props.themePath,
       children = props.children,
-      elProps = _objectWithoutProperties(props, ["appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
+      elProps = _objectWithoutProperties(props, ["accessibilityRole", "appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
   var headerStyles = useThemePath(themePath || "header.itemHeader", styles);
+  var accessibilityRoleObj = useAccessibilityRole(accessibilityRole, 'header');
   return React.createElement(View, _extends({
     className: useClassList('keg-header', className)
-  }, elProps, {
+  }, elProps, accessibilityRoleObj, {
     style: [headerStyles.main, appHeader && get(headerStyles, ['appHeader', 'main']), shadow && get(headerStyles, ['shadow', 'main'])]
   }), !isWeb  , children || React.createElement(React.Fragment, null, React.createElement(Side, {
     styles: headerStyles.content,

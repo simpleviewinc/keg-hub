@@ -1,3 +1,1 @@
-'use strict'
-
-module.exports = require('./web')
+module.exports = require('./web/index.js')

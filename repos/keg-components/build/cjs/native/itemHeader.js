@@ -23,10 +23,11 @@ require('./text.js');
 var renderFromType = require('./renderFromType.js');
 require('@keg-hub/re-theme/colors');
 var isValidComponent = require('./isValidComponent.js');
+var useClassList_native = require('./useClassList.native-9e7810c9.js');
+var useAccessibilityRole = require('./useAccessibilityRole.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('react-native');
-var useClassList_native = require('./useClassList.native-9e7810c9.js');
 require('./useClassName.native-3d1a229b.js');
 require('./touchable-3f00e0ff.js');
 require('./touchable.js');
@@ -38,6 +39,7 @@ require('./kegText-965ef4d3.js');
 require('./kegText.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
+require('./getPlatform-24228c6c.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -46,7 +48,8 @@ var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 var ItemHeader = function ItemHeader(props) {
   var _headerStyles$shadow, _headerStyles$content;
   var theme = reTheme.useTheme();
-  var appHeader = props.appHeader;
+  var accessibilityRole = props.accessibilityRole,
+      appHeader = props.appHeader;
       props.className;
       var title = props.title,
       styles = props.styles,
@@ -64,11 +67,12 @@ var ItemHeader = function ItemHeader(props) {
       ellipsis = props.ellipsis,
       themePath = props.themePath,
       children = props.children,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["accessibilityRole", "appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
   var headerStyles = useThemePath.useThemePath(themePath || "header.itemHeader", styles);
+  var accessibilityRoleObj = useAccessibilityRole.useAccessibilityRole(accessibilityRole, 'header');
   return React__default['default'].createElement(view_native.View, _rollupPluginBabelHelpers._extends({
     className: useClassList_native.useClassList()
-  }, elProps, {
+  }, elProps, accessibilityRoleObj, {
     style: [headerStyles.main, appHeader && jsutils.get(headerStyles, ['appHeader', 'main']), shadow && jsutils.get(headerStyles, ['shadow', 'main'])]
   }), shadow && React__default['default'].createElement(view_native.View, {
     style: headerStyles === null || headerStyles === void 0 ? void 0 : (_headerStyles$shadow = headerStyles.shadow) === null || _headerStyles$shadow === void 0 ? void 0 : _headerStyles$shadow.cover

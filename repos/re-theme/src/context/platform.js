@@ -25,7 +25,7 @@ const getRNPlatform = () => {
 /**
  * Sets the platform object used when building the theme
  * @function
- * @param {Object} Plat - Platform object to use 
+ * @param {Object} Plat - Platform object to use
  *
  * @return {void}
  */

@@ -44,6 +44,7 @@ require('./label.js');
 require('./p.js');
 require('./subtitle.js');
 require('./getPlatform-ec53cd5e.js');
+require('./useAccessibilityRole.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 

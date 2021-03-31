@@ -1,15 +1,13 @@
 'use strict';
 
-var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var view = require('./view-276572bd.js');
+var view_native = require('./view.native-b34604af.js');
 var text = require('./text.js');
-var React = require('react');
-var jsutils = require('@keg-hub/jsutils');
-var getScrollValues = require('./getScrollValues-f3b1bfa7.js');
-var useClassName = require('./useClassName-51ea3221.js');
+var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useThemePath = require('./useThemePath.js');
-var useScrollClassName = require('./useScrollClassName-84521282.js');
+var useScrollClassName_native = require('./useScrollClassName.native-c0cd7ecb.js');
+var jsutils = require('@keg-hub/jsutils');
+var React = require('react');
 var reactNative = require('react-native');
 var renderFromType = require('./renderFromType.js');
 
@@ -17,64 +15,36 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
-var getElementLayout = function getElementLayout(el) {
-  var rect = el.getBoundingClientRect();
-  var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-  var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  return {
-    top: rect.top + scrollTop,
-    left: rect.left + scrollLeft
-  };
+var defLayout = {
+  top: 0,
+  left: 0
+};
+var getElementLayout = function getElementLayout() {
+  return defLayout;
 };
 
 var scrollList = function scrollList(_ref) {
-  var top = _ref.top,
-      left = _ref.left,
-      _ref$behavior = _ref.behavior,
-      behavior = _ref$behavior === void 0 ? 'smooth' : _ref$behavior;
-  window.scroll(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({
-    behavior: behavior
+  var _listRef$current;
+  var listRef = _ref.listRef,
+      _ref$animated = _ref.animated,
+      animated = _ref$animated === void 0 ? true : _ref$animated,
+      top = _ref.top,
+      left = _ref.left;
+  return listRef === null || listRef === void 0 ? void 0 : (_listRef$current = listRef.current) === null || _listRef$current === void 0 ? void 0 : _listRef$current.scrollTo(_rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({
+    animated: animated
   }, jsutils.exists(top) && {
-    top: top
+    y: top
   }), jsutils.exists(left) && {
-    left: left
+    x: left
   }));
 };
 
+var defPos = {
+  scrollX: 0,
+  scrollY: 0
+};
 var useScroll = function useScroll() {
-  var onScroll = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : jsutils.noOp;
-  var onScrollEnd = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : jsutils.noOp;
-  var amount = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 50;
-  var _useState = React.useState({
-    scrollX: 0,
-    scrollY: 0
-  }),
-      _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
-      scroll = _useState2[0],
-      setScroll = _useState2[1];
-  var timeoutRef = React.useRef(null);
-  var eventHandler = React.useCallback(jsutils.throttle(function (event) {
-    var isEnd = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    var scrollUpdate = getScrollValues.getScrollValues();
-    isEnd ? onScrollEnd === null || onScrollEnd === void 0 ? void 0 : onScrollEnd(event, scrollUpdate) : onScroll === null || onScroll === void 0 ? void 0 : onScroll(event, scrollUpdate);
-    setScroll(scrollUpdate);
-  }, amount), [amount, onScroll, onScrollEnd, setScroll]);
-  var handlerTimeout = React.useCallback(function (event) {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(function () {
-      eventHandler(event, true);
-    }, 3 * amount);
-    eventHandler(event);
-  }, [amount, timeoutRef && timeoutRef.current, eventHandler]);
-  React.useLayoutEffect(function () {
-    window.addEventListener('scroll', handlerTimeout);
-    return function () {
-      return window.removeEventListener('scroll', handlerTimeout);
-    };
-  }, [handlerTimeout]);
-  return scroll;
+  return defPos;
 };
 
 var useIndexedSections = function useIndexedSections(sections, indexBy) {
@@ -160,7 +130,7 @@ var SectionHeader = function SectionHeader(props) {
       return delete sectionRefs.current[index];
     };
   }, [sectionRef.current, index, onSectionChange]);
-  return React__default['default'].createElement(React__default['default'].Fragment, null, React__default['default'].createElement(view.View, {
+  return React__default['default'].createElement(React__default['default'].Fragment, null, React__default['default'].createElement(view_native.View, {
     className: "keg-section-".concat(index),
     ref: function ref(element) {
       return sectionRef.current = {
@@ -196,7 +166,7 @@ var useRenderItem = function useRenderItem(renderItem, onSectionChange) {
     });
   }, [renderItem, onSectionChange]);
 };
-var SectionList$1 = React__default['default'].forwardRef(function (props, ref) {
+var SectionList = React__default['default'].forwardRef(function (props, ref) {
   var initialSection = props.activeSection,
       className = props.className,
       innerClassName = props.innerClassName,
@@ -222,8 +192,8 @@ var SectionList$1 = React__default['default'].forwardRef(function (props, ref) {
   var sectionRefs = React.useRef({});
   var isScrollingRef = React.useRef(false);
   var listRef = ref || React.createRef();
-  var safeClassRef = useClassName.useClassName('keg-safearea-list', className);
-  var classRef = useScrollClassName.useScrollClassName("keg-sectionlist", className, innerClassName, listRef);
+  var safeClassRef = useClassName_native.useClassName();
+  var classRef = useScrollClassName_native.useScrollClassName("keg-sectionlist", className, innerClassName, listRef);
   var listStyles = useThemePath.useThemePath(themePath || "list.section.".concat(type), styles);
   var indexedSections = useIndexedSections(sections, indexSectionHeaderBy);
   var _useState = React.useState(initialSection || jsutils.get(indexedSections, '0.__kegIndex')),
@@ -254,7 +224,7 @@ var SectionList$1 = React__default['default'].forwardRef(function (props, ref) {
   var onRenderItem = useRenderItem(renderItem, onSectionChangeAction);
   var onSectionHeaderRender = useRenderSectionHeader(renderSectionHeader, onSectionChangeAction, sectionRefs, listStyles);
   useSectionChangeOnScroll(onScrollSectionChange, sectionChangeOffset, activeSection, setActiveSection, sectionRefs, isScrollingRef);
-  return React__default['default'].createElement(view.View, {
+  return React__default['default'].createElement(view_native.View, {
     className: "keg-sectionlist-container",
     style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.main
   }, renderListHeader && renderFromType.renderFromType(renderListHeader, _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, props), {}, {
@@ -262,23 +232,18 @@ var SectionList$1 = React__default['default'].forwardRef(function (props, ref) {
     onSectionChange: onSectionChangeAction
   }), text.Text), React__default['default'].createElement(reactNative.SafeAreaView, {
     ref: safeClassRef,
-    style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.content.list
+    style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.content.container
   }, React__default['default'].createElement(reactNative.SectionList, _rollupPluginBabelHelpers._extends({}, args, {
     ref: classRef,
     renderItem: onRenderItem,
     sections: indexedSections,
+    style: listStyles === null || listStyles === void 0 ? void 0 : listStyles.content.list,
     renderSectionHeader: onSectionHeaderRender
   }))));
 });
-
-var SectionList = styleInjector.StyleInjector(SectionList$1, {
-  displayName: 'SectionList',
-  className: "keg-sectionlist"
-});
-SectionList.propTypes = SectionList$1.propTypes;
 
 exports.SectionList = SectionList;
 exports.getElementLayout = getElementLayout;
 exports.scrollList = scrollList;
 exports.useScroll = useScroll;
-//# sourceMappingURL=sectionList-e144fd2d.js.map
+//# sourceMappingURL=sectionList.native-b996388b.js.map

@@ -76,13 +76,14 @@ export { Modal } from './modal.js';
 export { ItemHeader } from './itemHeader.js';
 export { AppHeader } from './appHeader.js';
 import { ScrollView as ScrollView$1 } from './scrollView.js';
-import { S as SectionList$1 } from './sectionList.native-258748d2.js';
-export { g as getElementLayout, s as scrollList, u as useScroll } from './sectionList.native-258748d2.js';
+import { S as SectionList$1 } from './sectionList.native-b172614c.js';
+export { g as getElementLayout, s as scrollList, u as useScroll } from './sectionList.native-b172614c.js';
 export { Drawer } from './drawer.js';
 export { TextToggle } from './textToggle.js';
 export { SvgIcon } from './svgIcon.js';
 export { withTouch } from './withTouch.js';
 export { theme } from './theme.js';
+export { useAccessibilityRole } from './useAccessibilityRole.js';
 export { u as useAnimate, a as useSpin } from './useSpin-f4f44791.js';
 export { useChildren } from './useChildren.js';
 export { useMediaProps } from './useMediaProps.js';
@@ -116,7 +117,7 @@ import './kegText.js';
 import './useTextStyles.js';
 import './touchable.js';
 import './indicator.wrapper-83c062e4.js';
-import 'react-native-linear-gradient';
+import 'expo-linear-gradient';
 import './themeDefaults-ae219f8e.js';
 
 var FilePicker = function FilePicker(props) {

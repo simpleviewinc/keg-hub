@@ -1,13 +1,17 @@
 import { Mocks, Redux } from 'SVMocks'
 import { ActionTypes } from 'SVConstants'
 
-jest.mock('SVAssets/fonts', () => ({ default: {}, fonts: {} }), { virtual: true })
+jest.mock('SVAssets/fonts', () => ({ default: {}, fonts: {} }), {
+  virtual: true,
+})
 
 const rethemeMock = { setDefaultTheme: jest.fn() }
 const expoFontsMock = { loadAsync: jest.fn() }
 jest.setMock('expo-font', expoFontsMock)
 const kegComponentsThemeMock = jest.fn()
-jest.setMock('../../../theme/kegComponentsTheme', { kegComponentsTheme: kegComponentsThemeMock })
+jest.setMock('../../../theme/kegComponentsTheme', {
+  kegComponentsTheme: kegComponentsThemeMock,
+})
 
 Mocks.setMocks({ store: Redux.STORE, '@keg-hub/re-theme': rethemeMock })
 
@@ -57,5 +61,4 @@ describe('initAppAction', () => {
     await initAppAction(themeFunc)
     expect(themeFunc).toHaveBeenCalled()
   })
-
 })

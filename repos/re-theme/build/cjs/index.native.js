@@ -1,3 +1,1 @@
-'use strict'
-
-module.exports = require('./native')
+module.exports = require('./native/index.js')

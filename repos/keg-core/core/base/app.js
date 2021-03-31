@@ -22,13 +22,12 @@ const routes = Object.freeze({
  * Hook to check if the app has been initialized
  * If it has not, call the initAppAction
  * @param {boolean} isInit - Has the app been initialized yet
- * 
+ *
  * @returns {boolean} - If the app has been initialized
  */
 const useAppInit = isInit => {
   return useMemo(() => {
-    !isInit &&
-      checkCall(initAppAction, theme, themeConfig)
+    !isInit && checkCall(initAppAction, theme, themeConfig)
     return isInit
   }, [isInit])
 }
@@ -38,15 +37,25 @@ const useAppInit = isInit => {
  * Do this to allow setting the styles of some top level
  * Which must happen before the Re-Theme is initialized
  * @param {boolean} isInit - Has the app been initialized yet
- * 
+ *
  * @returns {Object} - The styles for top level components from the theme
  */
 const useThemeStyles = isInit => {
   const activeTheme = getDefaultTheme()
   return useMemo(() => {
-    const statusBarColor = get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])
-    const safeBgColor = get(activeTheme, ['colors', 'surface', 'primary', 'colors', 'dark'])
-    const rootBgColor = get(activeTheme, ['colors', 'palette', 'white01' ])
+    const statusBarColor = get(activeTheme, [
+      'components',
+      'statusBar',
+      'barStyle',
+    ])
+    const safeBgColor = get(activeTheme, [
+      'colors',
+      'surface',
+      'primary',
+      'colors',
+      'dark',
+    ])
+    const rootBgColor = get(activeTheme, [ 'colors', 'palette', 'white01' ])
 
     return {
       activeTheme,
@@ -54,7 +63,7 @@ const useThemeStyles = isInit => {
       safeAreaStyle: { flex: 1, backgroundColor: safeBgColor },
       rootView: { flex: 1, backgroundColor: rootBgColor },
     }
-  }, [isInit, activeTheme])
+  }, [ isInit, activeTheme ])
 }
 
 /**
@@ -93,26 +102,26 @@ const AppContent = ({ routes }) => {
     statusBarColor,
   } = useThemeStyles(initialized)
 
-  return !initialized
-    ? (<Loading />)
-    : (
-        <ReThemeProvider
-          theme={activeTheme}
-          merge={false}
-        >
-          <SafeAreaView style={safeAreaStyle} >
-            <StatusBar barStyle={statusBarColor} />
-            <View style={rootView}>
-              <AppHeader
-                shadow
-                title={'Keg-Core'}
-                RightComponent={<RouteDropdown routes={routes} />}
-              />
-              <ContainerRoutes navigationConfigs={routes} />
-            </View>
-          </SafeAreaView>
-        </ReThemeProvider>
-      )
+  return !initialized ? (
+    <Loading />
+  ) : (
+    <ReThemeProvider
+      theme={activeTheme}
+      merge={false}
+    >
+      <SafeAreaView style={safeAreaStyle}>
+        <StatusBar barStyle={statusBarColor} />
+        <View style={rootView}>
+          <AppHeader
+            shadow
+            title={'Keg-Core'}
+            RightComponent={<RouteDropdown routes={routes} />}
+          />
+          <ContainerRoutes navigationConfigs={routes} />
+        </View>
+      </SafeAreaView>
+    </ReThemeProvider>
+  )
 }
 
 const App = props => {

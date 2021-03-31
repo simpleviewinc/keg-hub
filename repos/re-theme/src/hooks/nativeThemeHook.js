@@ -41,7 +41,7 @@ export const nativeThemeHook = (offValue, onValue, options) => {
  *
  * @return {Object} - States of the pointed relative to the passed in pointerState
  */
-export const usePointerState = (options=noOpObj) => ({
+export const usePointerState = (options = noOpObj) => ({
   hover: false,
   focus: false,
   active: false,

@@ -30,7 +30,6 @@ import {
   useThemeHover,
 } from './hooks/index.native.js'
 
-
 export {
   // Dimensions exports
   setRNDimensions,
