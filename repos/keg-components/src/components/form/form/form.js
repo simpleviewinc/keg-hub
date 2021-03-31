@@ -15,7 +15,6 @@ import { useClassList } from 'KegClassList'
  * @property {Function} props.onSubmit - function when form is submitted
  * @property {Object} props.children
  * @property {Object} ref - reference to native element
- *
  */
 export const Form = React.forwardRef((props, ref) => {
   const theme = useTheme()
@@ -52,7 +51,6 @@ Form.propTypes = {
     PropTypes.array,
   ]),
   onSubmit: PropTypes.func,
-  ref: PropTypes.object,
   style: PropTypes.object,
   type: PropTypes.string,
 }

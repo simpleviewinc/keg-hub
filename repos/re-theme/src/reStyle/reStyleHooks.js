@@ -1,9 +1,8 @@
 import { useTheme } from '../hooks/useTheme'
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import {
   ensureArr,
   uuid,
-  clearObj,
   isObj,
   deepMerge,
   noOpObj,
@@ -46,20 +45,30 @@ export const usePropClassName = (className, compName) => {
 }
 
 /**
- * Hook that ensures a consistent Object identity to avoid re-renders
+ * Hook that memoizes the merged objects using a shallow-equal comparison
  * @function
- * @param {Object} identity - Object to be reused
- * @param {Array} mergeObjs - Other objects to be merged with the identity object
+ * @param {...Object} mergeObjs - objects to be merged, provided there is a shallow difference from the last call
  *
- * @returns {Object} - identity object merged with the passed in mergeObjs
+ * @returns {Object} - merged object 
  */
-export const useObjWithIdentity = (identity, ...mergeObjs) => {
-  return useMemo(() => {
-    clearObj(identity)
-    Object.assign(identity, deepMerge(...mergeObjs))
+export const useShallowMemoMerge = (...mergeObjs) => {
+  const identity = useRef(null)
 
-    return identity
-  }, [ identity, ...mergeObjs ])
+  return useMemo(() => {
+    const merged = deepMerge(...mergeObjs)
+
+    const foundIdentity = shallowEqual(identity.current, merged)
+      ? identity.current
+      : merged
+
+    // if the merged object is shallowly different than the cached identity,
+    // update the identity
+    if (foundIdentity !== identity.current) {
+      identity.current = foundIdentity
+    }
+
+    return foundIdentity
+  }, [ ...mergeObjs ])
 }
 
 /**

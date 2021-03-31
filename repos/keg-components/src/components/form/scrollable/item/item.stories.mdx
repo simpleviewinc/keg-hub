@@ -1,0 +1,22 @@
+<!--- item.stories.mdx -->
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { SelectItem } from './item'
+
+<Meta title="Components/Form/Scrollable/Item" component={SelectItem} />
+
+# Scrollable -- SelectItem
+
+## Examples
+
+### Basic 
+
+<Preview>
+  <Story name='Basic'>
+    <SelectItem
+      item={{ text: 'Example', key: 'Some id'}}
+      onSelect={console.log}
+      styles={{ default: { content: { color: 'green' }}}}
+    />
+  </Story>
+</Preview>
+

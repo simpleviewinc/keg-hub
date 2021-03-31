@@ -1,0 +1,26 @@
+<!--- autocomplete.stories.mdx -->
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+import { Autocomplete } from './autocomplete'
+import { Basic } from './autocomplete.example'
+
+<Meta title="Components/Form/Autocomplete" component={Autocomplete} />
+
+# Autocompleting Select
+
+Autocomplete is a text input that accepts a list of possible values.
+When there is overlap between the user input and one or more of those values,
+the matching items will appear in a scrollable list below the text input.
+
+## Examples
+
+### Basic
+
+<Preview>
+  <Story name='Basic'>
+    <Basic />
+  </Story>
+</Preview>
+
+### Props
+
+<Props of={Autocomplete} />

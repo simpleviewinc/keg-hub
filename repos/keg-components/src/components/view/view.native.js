@@ -14,7 +14,6 @@ import PropTypes from 'prop-types'
 export const View = React.forwardRef(
   ({ children, className, ...props }, ref) => {
     const classRef = useClassName('keg-view', className, ref)
-
     return (
       <RNView
         {...props}
