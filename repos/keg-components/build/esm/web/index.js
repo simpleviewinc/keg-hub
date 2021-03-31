@@ -3,8 +3,8 @@ import { Button } from './button.js';
 export { Button } from './button.js';
 export { Card } from './card.js';
 export { Divider } from './divider.js';
-import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends, a as _defineProperty, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React, { useState, useCallback, useRef, useEffect, useImperativeHandle, useMemo, forwardRef } from 'react';
+import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends, a as _defineProperty, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
+import React, { useState, useCallback, useEffect, useRef, useImperativeHandle, useMemo, forwardRef } from 'react';
 import { get, noOp, mapObj, toBool, isStr, checkCall } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
@@ -37,8 +37,8 @@ import { u as useClassList } from './useClassList-1d418045.js';
 export { u as useClassList } from './useClassList-1d418045.js';
 import { useChildrenWithRefs } from './useChildrenWithRefs.js';
 export { useChildrenWithRefs } from './useChildrenWithRefs.js';
-import { I as Input$2 } from './input-638b06fd.js';
-export { I as Input } from './input-638b06fd.js';
+import { I as Input$2 } from './input-92fdaee4.js';
+export { I as Input } from './input-92fdaee4.js';
 import { S as Select$1, C as ChevronDown } from './select-2bbcc7c9.js';
 import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
 export { getInputValueKey, getValueFromChildren } from './getInputValue.js';
@@ -78,9 +78,12 @@ export { Drawer } from './drawer.js';
 export { TextToggle } from './textToggle.js';
 export { SvgIcon } from './svgIcon.js';
 export { withTouch } from './withTouch.js';
+export { u as useScrollIntoView, w as withScrollIntoView } from './withScrollIntoView-5f891320.js';
+export { u as useOutsideDetect, w as withOutsideDetect } from './withOutsideDetect-c4848693.js';
 export { theme } from './theme.js';
 export { useAccessibilityRole } from './useAccessibilityRole.js';
 export { u as useAnimate, a as useSpin } from './useSpin-389d72c8.js';
+export { getItemsMatchingText, useAutocompleteItems } from './useAutocompleteItems.js';
 export { useChildren } from './useChildren.js';
 export { useInputHandlers } from './useInputHandlers.js';
 export { useMediaProps } from './useMediaProps.js';
@@ -90,6 +93,7 @@ export { useFromToAnimation } from './useFromToAnimation.js';
 export { u as useScrollClassName } from './useScrollClassName-2b12cd9f.js';
 export { getOnLoad } from './getOnLoad.js';
 export { getPressHandler } from './getPressHandler.js';
+export { getTextFromChangeEvent } from './getTextFromChangeEvent.js';
 export { ensureClassArray } from './ensureClassArray.js';
 export { getActiveOpacity } from './getActiveOpacity.js';
 export { getImgSrc } from './getImgSrc.js';
@@ -112,7 +116,7 @@ import './cardSection.js';
 import './colors-6402d3b3.js';
 import './view.native-a7f08b5b.js';
 import './checkbox.wrapper-7adc3d63.js';
-import './input-1ff0e077.js';
+import './input-0746c9bb.js';
 import './image-fd980ec1.js';
 import './container.js';
 import './kegText.native-be460636.js';
@@ -120,6 +124,31 @@ import './useTextStyles.js';
 import './indicator.wrapper-ddd47db5.js';
 import './getScrollValues-1e13266a.js';
 import './themeDefaults-ae219f8e.js';
+
+var manageListeners = function manageListeners(upHandler, downHandler) {
+  window.addEventListener('keydown', downHandler);
+  window.addEventListener('keyup', upHandler);
+  return function () {
+    window.removeEventListener('keydown', downHandler);
+    window.removeEventListener('keyup', upHandler);
+  };
+};
+var useKeyPress = function useKeyPress(targetKey) {
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      keyPressed = _useState2[0],
+      setKeyPressed = _useState2[1];
+  var downHandler = useCallback(function (evt) {
+    return evt.key === targetKey && setKeyPressed(true);
+  }, [setKeyPressed, targetKey]);
+  var upHandler = useCallback(function (evt) {
+    return evt.key === targetKey && setKeyPressed(false);
+  }, [setKeyPressed, targetKey]);
+  useEffect(function () {
+    return manageListeners(upHandler, downHandler);
+  }, [downHandler, upHandler]);
+  return keyPressed;
+};
 
 var Input = StyleInjector(Input$1, {
   displayName: 'FilePickerInput',
@@ -509,5 +538,5 @@ var Link = function Link(props) {
   }));
 };
 
-export { Link as A, CheckGroup, FilePicker, Form, Link, Option, Radio, Select, Slider, Switch };
+export { Link as A, CheckGroup, FilePicker, Form, Link, Option, Radio, Select, Slider, Switch, useKeyPress };
 //# sourceMappingURL=index.js.map

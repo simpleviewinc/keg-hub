@@ -1,0 +1,1 @@
+{"version":3,"file":"useKeyPress.js","sources":["../../../src/hooks/useKeyPress/useKeyPress.native.js"],"sourcesContent":["/**\n * Native stub - key presses aren't applicable on native\n * @returns {boolean} false\n */\nexport const useKeyPress = () => false\n"],"names":["useKeyPress"],"mappings":"IAIaA,WAAW,GAAG,SAAdA,WAAc;AAAA,SAAM,KAAN;AAAA;;;;"}

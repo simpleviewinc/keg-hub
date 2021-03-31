@@ -27,9 +27,7 @@ export const reStyle = (Component, styleProp = 'style') => {
     const StyledFun = React.forwardRef((props, ref) => {
       const reStyles = useReStyles(styleData, props)
       const classArr = usePropClassName(props.className, compName)
-      const styleFromProps = exists(props[styleProp])
-        ? props[styleProp]
-        : null
+      const styleFromProps = exists(props[styleProp]) ? props[styleProp] : null
 
       const styles = useShallowMemoMerge(reStyles, styleFromProps)
 

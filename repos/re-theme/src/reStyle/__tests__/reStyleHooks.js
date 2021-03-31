@@ -37,7 +37,6 @@ describe('reStyleHooks', () => {
 
       expect(useMemo).toHaveBeenCalled()
     })
-
   })
 
   describe('getComponentName', () => {

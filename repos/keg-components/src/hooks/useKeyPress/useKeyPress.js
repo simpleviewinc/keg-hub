@@ -2,8 +2,8 @@ import { useState, useCallback, useEffect } from 'react'
 
 /**
  * Helper for `useKeyPress` that sets and removes window listeners
- * @param {Function} upHandler 
- * @param {Function} downHandler 
+ * @param {Function} upHandler
+ * @param {Function} downHandler
  */
 const manageListeners = (upHandler, downHandler) => {
   window.addEventListener('keydown', downHandler)
@@ -33,10 +33,10 @@ export const useKeyPress = targetKey => {
     [ setKeyPressed, targetKey ]
   )
 
-  useEffect(
-    () => manageListeners(upHandler, downHandler), 
-    [ downHandler, upHandler ]
-  )
+  useEffect(() => manageListeners(upHandler, downHandler), [
+    downHandler,
+    upHandler,
+  ])
 
   return keyPressed
 }

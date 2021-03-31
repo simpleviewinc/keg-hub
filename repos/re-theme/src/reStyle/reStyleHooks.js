@@ -49,7 +49,7 @@ export const usePropClassName = (className, compName) => {
  * @function
  * @param {...Object} mergeObjs - objects to be merged, provided there is a shallow difference from the last call
  *
- * @returns {Object} - merged object 
+ * @returns {Object} - merged object
  */
 export const useShallowMemoMerge = (...mergeObjs) => {
   const identity = useRef(null)
@@ -68,7 +68,7 @@ export const useShallowMemoMerge = (...mergeObjs) => {
     }
 
     return foundIdentity
-  }, [ ...mergeObjs ])
+  }, [...mergeObjs])
 }
 
 /**

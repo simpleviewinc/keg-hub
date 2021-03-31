@@ -26,23 +26,16 @@ import { u as useClassList } from './useClassList.native-70068878.js';
 export { u as useClassList } from './useClassList.native-70068878.js';
 import { useChildrenWithRefs } from './useChildrenWithRefs.js';
 export { useChildrenWithRefs } from './useChildrenWithRefs.js';
-import { noOp, mapObj, get, isStr, isNum, toBool, checkCall } from '@keg-hub/jsutils';
+import { noPropArr, noOp, mapObj, get, isStr, isNum, toBool, checkCall } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 export { useThemePath } from './useThemePath.js';
 export { useThemeWithHeight } from './useThemeWithHeight.js';
 import { Picker } from 'react-native';
+export { I as Input } from './input-db203f81.js';
+import { S as Select$1, C as ChevronDown } from './select-a8c93a32.js';
 import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
 export { getInputValueKey, getValueFromChildren } from './getInputValue.js';
-import { getReadOnly } from './getReadOnly.js';
-export { getReadOnly } from './getReadOnly.js';
-import { useInputHandlers } from './useInputHandlers.js';
-export { useInputHandlers } from './useInputHandlers.js';
-import { usePressHandlers } from './usePressHandlers.js';
-export { usePressHandlers } from './usePressHandlers.js';
-import { I as Input$1 } from './input-4bb30982.js';
-import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
-import { S as Select$1, C as ChevronDown } from './select-a8c93a32.js';
 import { useSelectHandlers } from './useSelectHandlers.js';
 export { useSelectHandlers } from './useSelectHandlers.js';
 import { u as useClassName } from './useClassName.native-32e8827d.js';
@@ -52,6 +45,7 @@ export { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.
 import 'react-native-svg';
 import { I as Icon } from './icon-1b76b631.js';
 export { I as Icon } from './icon-1b76b631.js';
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import { renderFromType } from './renderFromType.js';
 export { renderFromType } from './renderFromType.js';
 import { getOnChangeHandler } from './getOnChangeHandler.js';
@@ -82,19 +76,26 @@ export { Drawer } from './drawer.js';
 export { TextToggle } from './textToggle.js';
 export { SvgIcon } from './svgIcon.js';
 export { withTouch } from './withTouch.js';
+export { withScrollIntoView } from './withScrollIntoView.js';
+export { u as useOutsideDetect, w as withOutsideDetect } from './withOutsideDetect-8bf57fab.js';
 export { theme } from './theme.js';
 export { useAccessibilityRole } from './useAccessibilityRole.js';
 export { u as useAnimate, a as useSpin } from './useSpin-f4f44791.js';
+export { getItemsMatchingText, useAutocompleteItems } from './useAutocompleteItems.js';
 export { useChildren } from './useChildren.js';
+export { useInputHandlers } from './useInputHandlers.js';
 export { useMediaProps } from './useMediaProps.js';
+export { usePressHandlers } from './usePressHandlers.js';
 export { useTextAccessibility } from './useTextAccessibility.js';
 export { useFromToAnimation } from './useFromToAnimation.js';
 export { u as useScrollClassName } from './useScrollClassName.native-de017e3f.js';
 export { getOnLoad } from './getOnLoad.js';
 export { getPressHandler } from './getPressHandler.js';
+export { getTextFromChangeEvent } from './getTextFromChangeEvent.js';
 export { ensureClassArray } from './ensureClassArray.js';
 export { getActiveOpacity } from './getActiveOpacity.js';
 export { getImgSrc } from './getImgSrc.js';
+export { getReadOnly } from './getReadOnly.js';
 export { getTarget } from './getTarget.js';
 export { handleRefUpdate } from './handleRefUpdate.js';
 export { updateClassNames } from './updateClassNames.js';
@@ -111,6 +112,7 @@ import './cardCallout.js';
 import './cardContainer.js';
 import './cardSection.js';
 import './checkbox.wrapper-1850b63a.js';
+import './input-b54ba952.js';
 import './image-d610d905.js';
 import './container.js';
 import './kegText.js';
@@ -119,6 +121,15 @@ import './touchable.js';
 import './indicator.wrapper-83c062e4.js';
 import 'expo-linear-gradient';
 import './themeDefaults-ae219f8e.js';
+
+var useKeyPress = function useKeyPress() {
+  return false;
+};
+
+var useScrollIntoView = function useScrollIntoView() {
+  logData('useScrollIntoView is not implemented for native platforms yet.', 'warn');
+  return noPropArr;
+};
 
 var FilePicker = function FilePicker(props) {
   return React.createElement(View, null, React.createElement(P, null, "FilePicker Not yet implemented for native."));
@@ -233,57 +244,6 @@ var Form = React.forwardRef(function (props, ref) {
     style: [get(theme, 'form.form.default'), formTheme, style],
     ref: ref
   }), children);
-});
-
-var KegInput = StyleInjector(Input$1, {
-  displayName: 'Input',
-  className: 'keg-input'
-});
-var getValue$1 = function getValue(_ref) {
-  var children = _ref.children,
-      value = _ref.value;
-  var setValue = getValueFromChildren(value, children);
-  return value !== undefined ? {
-    value: setValue
-  } : {};
-};
-var Input = React.forwardRef(function (props, ref) {
-  props.className;
-      props.children;
-      var _props$disabled = props.disabled,
-      disabled = _props$disabled === void 0 ? false : _props$disabled,
-      _props$editable = props.editable,
-      editable = _props$editable === void 0 ? true : _props$editable;
-      props.Element;
-      var onChange = props.onChange,
-      onValueChange = props.onValueChange,
-      onChangeText = props.onChangeText,
-      onClick = props.onClick,
-      onPress = props.onPress,
-      _props$readOnly = props.readOnly,
-      readOnly = _props$readOnly === void 0 ? false : _props$readOnly,
-      _props$type = props.type,
-      type = _props$type === void 0 ? 'default' : _props$type,
-      _props$themePath = props.themePath,
-      themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
-      style = props.style;
-      props.value;
-      var elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
-  var inputStyles = useThemePath(themePath);
-  return React.createElement(KegInput, _extends({
-    accessibilityRole: "textbox",
-    onPress: onPress
-  }, getReadOnly(false, readOnly, disabled, editable), getValue$1(props), useInputHandlers({
-    onChange: onChange,
-    onValueChange: onValueChange,
-    onChangeText: onChangeText
-  }), usePressHandlers(false, {
-    onClick: onClick,
-    onPress: onPress
-  }), elProps, {
-    style: [inputStyles, style],
-    ref: ref
-  }));
 });
 
 var SelectOption = Picker.Item;
@@ -525,5 +485,5 @@ var SectionList = StyleInjector(SectionList$1, {
 });
 SectionList.propTypes = SectionList$1.propTypes;
 
-export { Link as A, CheckGroup, FilePicker, Form, Input, Link, Option, Radio, ScrollView, SectionList, Select, Slider, Switch };
+export { Link as A, CheckGroup, FilePicker, Form, Link, Option, Radio, ScrollView, SectionList, Select, Slider, Switch, useKeyPress, useScrollIntoView };
 //# sourceMappingURL=index.js.map

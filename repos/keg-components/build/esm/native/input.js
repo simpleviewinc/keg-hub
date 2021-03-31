@@ -9,14 +9,11 @@ import { usePressHandlers } from './usePressHandlers.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import 'react-native';
-import { I as Input$1 } from './input-4bb30982.js';
+import { I as Input$1 } from './input-b54ba952.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import './validateFunctions.js';
 import '@keg-hub/re-theme';
 import './useClassName.native-32e8827d.js';
-import './withTouch.js';
-import './touchable-9cc6e181.js';
-import './touchable.js';
 
 var KegInput = StyleInjector(Input$1, {
   displayName: 'Input',

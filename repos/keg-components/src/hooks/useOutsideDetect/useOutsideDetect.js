@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
 /**
- * 
+ *
  * @param {Event} evt - event object
- * @param {RefObject} ref - element to check 
+ * @param {RefObject} ref - element to check
  * @returns {boolean} - true if event occured outside of element stored at ref.current
  */
 const eventIsOutside = (evt, ref) => {
@@ -19,11 +19,11 @@ const eventIsOutside = (evt, ref) => {
 export const useOutsideDetect = (ref, onOutsideClick) => {
   useEffect(() => {
     // alert if clicked outside of element stored at ref
-    const handleClickOutside = event => 
+    const handleClickOutside = event =>
       eventIsOutside(event, ref) && onOutsideClick?.(event)
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside)
 
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [ref, onOutsideClick ])
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [ ref, onOutsideClick ])
 }

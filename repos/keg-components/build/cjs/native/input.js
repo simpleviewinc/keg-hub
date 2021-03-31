@@ -13,14 +13,11 @@ var usePressHandlers = require('./usePressHandlers.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('react-native');
-var input = require('./input-e2001ebd.js');
+var input = require('./input-9694bb7a.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./validateFunctions.js');
 require('@keg-hub/re-theme');
 require('./useClassName.native-3d1a229b.js');
-require('./withTouch.js');
-require('./touchable-3f00e0ff.js');
-require('./touchable.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 

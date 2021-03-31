@@ -82,10 +82,13 @@ export const Autocomplete = props => {
   const onOutsideClick = useCallback(() => {
     // if the FloatingScrollableSelect is visible, hide it by resetting input
     autocompleteItems.length && updateText(selectedItem?.text)
-  }, [onSelectItem, autocompleteItems ])
+  }, [ onSelectItem, autocompleteItems ])
 
   return (
-    <AutocompleteView style={styles?.main} onOutsideClick={onOutsideClick}>
+    <AutocompleteView
+      style={styles?.main}
+      onOutsideClick={onOutsideClick}
+    >
       <AutocompleteInput
         highlightedIndex={selectedItem?.index}
         highlightItem={setSelectedItem}

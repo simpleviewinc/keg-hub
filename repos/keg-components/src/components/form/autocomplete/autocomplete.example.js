@@ -28,8 +28,8 @@ export const Basic = () => {
   return (
     <View>
       <P style={{ marginBottom: 35 }}>
-        Start typing to see options, then click on an item to select it.
-        You can alternatively use the arrow keys and press enter to select.
+        Start typing to see options, then click on an item to select it. You can
+        alternatively use the arrow keys and press enter to select.
       </P>
       <Autocomplete
         styles={{

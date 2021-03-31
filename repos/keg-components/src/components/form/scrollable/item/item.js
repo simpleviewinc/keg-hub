@@ -28,20 +28,18 @@ const SelectButton = reStyle(
 
   const highlighted = {
     ...main,
-    backgroundColor: palette.gray01
+    backgroundColor: palette.gray01,
   }
 
   return {
-    default: { 
-      content, 
-      main: props.highlighted 
-        ? highlighted
-        : main
+    default: {
+      content,
+      main: props.highlighted ? highlighted : main,
     },
     active: { content, main },
     hover: {
       content,
-      main: highlighted
+      main: highlighted,
     },
   }
 })
@@ -53,22 +51,19 @@ const SelectButton = reStyle(
  * @param {Object?} props.styles - { main}
  */
 export const SelectItem = React.forwardRef((props, ref) => {
-  const { 
-    item, 
-    onSelect = noOp, 
-    highlighted = false,
-    styles 
-  } = props
+  const { item, onSelect = noOp, highlighted = false, styles } = props
 
   const handlePress = useCallback(() => onSelect(item), [ item, onSelect ])
 
-  return <SelectButton
-    ref={ref}
-    content={item.text}
-    onPress={handlePress}
-    styles={styles}
-    highlighted={highlighted}
-  />
+  return (
+    <SelectButton
+      ref={ref}
+      content={item.text}
+      onPress={handlePress}
+      styles={styles}
+      highlighted={highlighted}
+    />
+  )
 })
 
 SelectItem.propTypes = {

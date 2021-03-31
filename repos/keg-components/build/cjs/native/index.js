@@ -29,18 +29,15 @@ require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 var useThemeWithHeight = require('./useThemeWithHeight.js');
 var reactNative = require('react-native');
-var getInputValue = require('./getInputValue.js');
-var getReadOnly = require('./getReadOnly.js');
-var useInputHandlers = require('./useInputHandlers.js');
-var usePressHandlers = require('./usePressHandlers.js');
-var input = require('./input-e2001ebd.js');
-var styleInjector = require('@keg-hub/re-theme/styleInjector');
+var input = require('./input-c9ca8123.js');
 var select = require('./select-6c1c4d19.js');
+var getInputValue = require('./getInputValue.js');
 var useSelectHandlers = require('./useSelectHandlers.js');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
 require('react-native-svg');
 var icon = require('./icon-b13a8e3e.js');
+var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var renderFromType = require('./renderFromType.js');
 var getOnChangeHandler = require('./getOnChangeHandler.js');
 var getChecked = require('./getChecked.js');
@@ -65,19 +62,26 @@ var drawer = require('./drawer.js');
 var textToggle = require('./textToggle.js');
 var svgIcon = require('./svgIcon.js');
 var withTouch = require('./withTouch.js');
+var withScrollIntoView = require('./withScrollIntoView.js');
+var withOutsideDetect = require('./withOutsideDetect-58a390ac.js');
 var theme = require('./theme.js');
 var useAccessibilityRole = require('./useAccessibilityRole.js');
 var useSpin = require('./useSpin-a9050071.js');
+var useAutocompleteItems = require('./useAutocompleteItems.js');
 var useChildren = require('./useChildren.js');
+var useInputHandlers = require('./useInputHandlers.js');
 var useMediaProps = require('./useMediaProps.js');
+var usePressHandlers = require('./usePressHandlers.js');
 var useTextAccessibility = require('./useTextAccessibility.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
 var useScrollClassName_native = require('./useScrollClassName.native-c0cd7ecb.js');
 var getOnLoad = require('./getOnLoad.js');
 var getPressHandler = require('./getPressHandler.js');
+var getTextFromChangeEvent = require('./getTextFromChangeEvent.js');
 var ensureClassArray = require('./ensureClassArray.js');
 var getActiveOpacity = require('./getActiveOpacity.js');
 var getImgSrc = require('./getImgSrc.js');
+var getReadOnly = require('./getReadOnly.js');
 var getTarget = require('./getTarget.js');
 var handleRefUpdate = require('./handleRefUpdate.js');
 var updateClassNames = require('./updateClassNames.js');
@@ -94,6 +98,7 @@ require('./cardCallout.js');
 require('./cardContainer.js');
 require('./cardSection.js');
 require('./checkbox.wrapper-13494af9.js');
+require('./input-9694bb7a.js');
 require('./image-53cac4f2.js');
 require('./container.js');
 require('./kegText.js');
@@ -106,6 +111,15 @@ require('./themeDefaults-f48ffcaf.js');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+
+var useKeyPress = function useKeyPress() {
+  return false;
+};
+
+var useScrollIntoView = function useScrollIntoView() {
+  logData('useScrollIntoView is not implemented for native platforms yet.', 'warn');
+  return jsutils.noPropArr;
+};
 
 var FilePicker = function FilePicker(props) {
   return React__default['default'].createElement(view_native.View, null, React__default['default'].createElement(p.P, null, "FilePicker Not yet implemented for native."));
@@ -220,57 +234,6 @@ var Form = React__default['default'].forwardRef(function (props, ref) {
     style: [jsutils.get(theme, 'form.form.default'), formTheme, style],
     ref: ref
   }), children);
-});
-
-var KegInput = styleInjector.StyleInjector(input.Input, {
-  displayName: 'Input',
-  className: 'keg-input'
-});
-var getValue$1 = function getValue(_ref) {
-  var children = _ref.children,
-      value = _ref.value;
-  var setValue = getInputValue.getValueFromChildren(value, children);
-  return value !== undefined ? {
-    value: setValue
-  } : {};
-};
-var Input = React__default['default'].forwardRef(function (props, ref) {
-  props.className;
-      props.children;
-      var _props$disabled = props.disabled,
-      disabled = _props$disabled === void 0 ? false : _props$disabled,
-      _props$editable = props.editable,
-      editable = _props$editable === void 0 ? true : _props$editable;
-      props.Element;
-      var onChange = props.onChange,
-      onValueChange = props.onValueChange,
-      onChangeText = props.onChangeText,
-      onClick = props.onClick,
-      onPress = props.onPress,
-      _props$readOnly = props.readOnly,
-      readOnly = _props$readOnly === void 0 ? false : _props$readOnly,
-      _props$type = props.type,
-      type = _props$type === void 0 ? 'default' : _props$type,
-      _props$themePath = props.themePath,
-      themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
-      style = props.style;
-      props.value;
-      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
-  var inputStyles = useThemePath.useThemePath(themePath);
-  return React__default['default'].createElement(KegInput, _rollupPluginBabelHelpers._extends({
-    accessibilityRole: "textbox",
-    onPress: onPress
-  }, getReadOnly.getReadOnly(false, readOnly, disabled, editable), getValue$1(props), useInputHandlers.useInputHandlers({
-    onChange: onChange,
-    onValueChange: onValueChange,
-    onChangeText: onChangeText
-  }), usePressHandlers.usePressHandlers(false, {
-    onClick: onClick,
-    onPress: onPress
-  }), elProps, {
-    style: [inputStyles, style],
-    ref: ref
-  }));
 });
 
 var SelectOption = reactNative.Picker.Item;
@@ -533,11 +496,9 @@ exports.useClassList = useClassList_native.useClassList;
 exports.useChildrenWithRefs = useChildrenWithRefs.useChildrenWithRefs;
 exports.useThemePath = useThemePath.useThemePath;
 exports.useThemeWithHeight = useThemeWithHeight.useThemeWithHeight;
+exports.Input = input.Input;
 exports.getInputValueKey = getInputValue.getInputValueKey;
 exports.getValueFromChildren = getInputValue.getValueFromChildren;
-exports.getReadOnly = getReadOnly.getReadOnly;
-exports.useInputHandlers = useInputHandlers.useInputHandlers;
-exports.usePressHandlers = usePressHandlers.usePressHandlers;
 exports.useSelectHandlers = useSelectHandlers.useSelectHandlers;
 exports.useClassName = useClassName_native.useClassName;
 exports.useThemeTypeAsClass = useThemeTypeAsClass_native.useThemeTypeAsClass;
@@ -564,20 +525,29 @@ exports.Drawer = drawer.Drawer;
 exports.TextToggle = textToggle.TextToggle;
 exports.SvgIcon = svgIcon.SvgIcon;
 exports.withTouch = withTouch.withTouch;
+exports.withScrollIntoView = withScrollIntoView.withScrollIntoView;
+exports.useOutsideDetect = withOutsideDetect.useOutsideDetect;
+exports.withOutsideDetect = withOutsideDetect.withOutsideDetect;
 exports.theme = theme.theme;
 exports.useAccessibilityRole = useAccessibilityRole.useAccessibilityRole;
 exports.useAnimate = useSpin.useAnimate;
 exports.useSpin = useSpin.useSpin;
+exports.getItemsMatchingText = useAutocompleteItems.getItemsMatchingText;
+exports.useAutocompleteItems = useAutocompleteItems.useAutocompleteItems;
 exports.useChildren = useChildren.useChildren;
+exports.useInputHandlers = useInputHandlers.useInputHandlers;
 exports.useMediaProps = useMediaProps.useMediaProps;
+exports.usePressHandlers = usePressHandlers.usePressHandlers;
 exports.useTextAccessibility = useTextAccessibility.useTextAccessibility;
 exports.useFromToAnimation = useFromToAnimation.useFromToAnimation;
 exports.useScrollClassName = useScrollClassName_native.useScrollClassName;
 exports.getOnLoad = getOnLoad.getOnLoad;
 exports.getPressHandler = getPressHandler.getPressHandler;
+exports.getTextFromChangeEvent = getTextFromChangeEvent.getTextFromChangeEvent;
 exports.ensureClassArray = ensureClassArray.ensureClassArray;
 exports.getActiveOpacity = getActiveOpacity.getActiveOpacity;
 exports.getImgSrc = getImgSrc.getImgSrc;
+exports.getReadOnly = getReadOnly.getReadOnly;
 exports.getTarget = getTarget.getTarget;
 exports.handleRefUpdate = handleRefUpdate.handleRefUpdate;
 exports.updateClassNames = updateClassNames.updateClassNames;
@@ -593,7 +563,6 @@ exports.A = Link;
 exports.CheckGroup = CheckGroup;
 exports.FilePicker = FilePicker;
 exports.Form = Form;
-exports.Input = Input;
 exports.Link = Link;
 exports.Option = Option;
 exports.Radio = Radio;
@@ -602,4 +571,6 @@ exports.SectionList = SectionList;
 exports.Select = Select;
 exports.Slider = Slider;
 exports.Switch = Switch;
+exports.useKeyPress = useKeyPress;
+exports.useScrollIntoView = useScrollIntoView;
 //# sourceMappingURL=index.js.map

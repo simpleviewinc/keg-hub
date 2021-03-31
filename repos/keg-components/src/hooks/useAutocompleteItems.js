@@ -28,7 +28,7 @@ const formatItem = (item, index) => {
 }
 
 /**
- * @param {string} str 
+ * @param {string} str
  * @return {string} string trimmed
  */
 const trimStr = str => str?.trim()

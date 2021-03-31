@@ -10,20 +10,17 @@ import PropTypes from 'prop-types'
  * @param {Component} Component (must accept a `ref`)
  * @return {Component} the wrapped component
  */
-export const withOutsideDetect = (Component) => {
+export const withOutsideDetect = Component => {
   const wrapped = React.forwardRef((props, ref) => {
-    const { 
-      onOutsideClick, 
-      ...clientProps 
-    } = props
+    const { onOutsideClick, ...clientProps } = props
 
     const fallbackRef = React.useRef()
     const detectRef = ref || fallbackRef
     useOutsideDetect(detectRef, onOutsideClick)
 
-    return <Component 
-      {...clientProps} 
-      ref={detectRef} 
+    return <Component
+      {...clientProps}
+      ref={detectRef}
     />
   })
 

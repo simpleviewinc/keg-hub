@@ -32,7 +32,7 @@ var checkbox = require('./checkbox-41f9f98a.js');
 var reTheme = require('@keg-hub/re-theme');
 var useClassList = require('./useClassList-89a8dbd4.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
-var input = require('./input-c0e98e11.js');
+var input = require('./input-e99fee30.js');
 var select = require('./select-32dba2a4.js');
 var getInputValue = require('./getInputValue.js');
 var useSelectHandlers = require('./useSelectHandlers.js');
@@ -63,9 +63,12 @@ var drawer = require('./drawer.js');
 var textToggle = require('./textToggle.js');
 var svgIcon = require('./svgIcon.js');
 var withTouch = require('./withTouch.js');
+var withScrollIntoView = require('./withScrollIntoView-91d98602.js');
+var withOutsideDetect = require('./withOutsideDetect-7305c734.js');
 var theme = require('./theme.js');
 var useAccessibilityRole = require('./useAccessibilityRole.js');
 var useSpin = require('./useSpin-a05a1b73.js');
+var useAutocompleteItems = require('./useAutocompleteItems.js');
 var useChildren = require('./useChildren.js');
 var useInputHandlers = require('./useInputHandlers.js');
 var useMediaProps = require('./useMediaProps.js');
@@ -75,6 +78,7 @@ var useFromToAnimation = require('./useFromToAnimation.js');
 var useScrollClassName = require('./useScrollClassName-84521282.js');
 var getOnLoad = require('./getOnLoad.js');
 var getPressHandler = require('./getPressHandler.js');
+var getTextFromChangeEvent = require('./getTextFromChangeEvent.js');
 var ensureClassArray = require('./ensureClassArray.js');
 var getActiveOpacity = require('./getActiveOpacity.js');
 var getImgSrc = require('./getImgSrc.js');
@@ -97,7 +101,7 @@ require('./cardSection.js');
 require('./colors-da502c66.js');
 require('./view.native-99366b4b.js');
 require('./checkbox.wrapper-b8cbc4f5.js');
-require('./input-5bf3abae.js');
+require('./input-f586181b.js');
 require('./image-e98c839c.js');
 require('./container.js');
 require('./kegText.native-1994a0b7.js');
@@ -109,6 +113,31 @@ require('./themeDefaults-f48ffcaf.js');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+
+var manageListeners = function manageListeners(upHandler, downHandler) {
+  window.addEventListener('keydown', downHandler);
+  window.addEventListener('keyup', upHandler);
+  return function () {
+    window.removeEventListener('keydown', downHandler);
+    window.removeEventListener('keyup', upHandler);
+  };
+};
+var useKeyPress = function useKeyPress(targetKey) {
+  var _useState = React.useState(false),
+      _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
+      keyPressed = _useState2[0],
+      setKeyPressed = _useState2[1];
+  var downHandler = React.useCallback(function (evt) {
+    return evt.key === targetKey && setKeyPressed(true);
+  }, [setKeyPressed, targetKey]);
+  var upHandler = React.useCallback(function (evt) {
+    return evt.key === targetKey && setKeyPressed(false);
+  }, [setKeyPressed, targetKey]);
+  React.useEffect(function () {
+    return manageListeners(upHandler, downHandler);
+  }, [downHandler, upHandler]);
+  return keyPressed;
+};
 
 var Input = styleInjector.StyleInjector(input_web.Input, {
   displayName: 'FilePickerInput',
@@ -550,10 +579,16 @@ exports.Drawer = drawer.Drawer;
 exports.TextToggle = textToggle.TextToggle;
 exports.SvgIcon = svgIcon.SvgIcon;
 exports.withTouch = withTouch.withTouch;
+exports.useScrollIntoView = withScrollIntoView.useScrollIntoView;
+exports.withScrollIntoView = withScrollIntoView.withScrollIntoView;
+exports.useOutsideDetect = withOutsideDetect.useOutsideDetect;
+exports.withOutsideDetect = withOutsideDetect.withOutsideDetect;
 exports.theme = theme.theme;
 exports.useAccessibilityRole = useAccessibilityRole.useAccessibilityRole;
 exports.useAnimate = useSpin.useAnimate;
 exports.useSpin = useSpin.useSpin;
+exports.getItemsMatchingText = useAutocompleteItems.getItemsMatchingText;
+exports.useAutocompleteItems = useAutocompleteItems.useAutocompleteItems;
 exports.useChildren = useChildren.useChildren;
 exports.useInputHandlers = useInputHandlers.useInputHandlers;
 exports.useMediaProps = useMediaProps.useMediaProps;
@@ -563,6 +598,7 @@ exports.useFromToAnimation = useFromToAnimation.useFromToAnimation;
 exports.useScrollClassName = useScrollClassName.useScrollClassName;
 exports.getOnLoad = getOnLoad.getOnLoad;
 exports.getPressHandler = getPressHandler.getPressHandler;
+exports.getTextFromChangeEvent = getTextFromChangeEvent.getTextFromChangeEvent;
 exports.ensureClassArray = ensureClassArray.ensureClassArray;
 exports.getActiveOpacity = getActiveOpacity.getActiveOpacity;
 exports.getImgSrc = getImgSrc.getImgSrc;
@@ -588,4 +624,5 @@ exports.Radio = Radio;
 exports.Select = Select;
 exports.Slider = Slider;
 exports.Switch = Switch;
+exports.useKeyPress = useKeyPress;
 //# sourceMappingURL=index.js.map
