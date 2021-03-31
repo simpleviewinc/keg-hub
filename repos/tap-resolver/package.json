@@ -27,7 +27,7 @@
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
-    "test": "NODE_ENV=resolver-test jest",
+    "test": "NODE_ENV=resolver-test jest --maxWorkers=50%",
     "test:reports": "yarn test --coverage && yarn view:reports",
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },

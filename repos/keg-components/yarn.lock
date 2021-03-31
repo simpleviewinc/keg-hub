@@ -10882,6 +10882,11 @@ expo-keep-awake@~8.4.0:
   resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-8.4.0.tgz#346d0988e6364c46050fef4b7829f302ef3e603d"
   integrity sha512-gozpL5Azfaht/YIMFOHRHjHuJ9KT6hJH4y71Al+/YfQSwHS5sqhoKGPgSxaktqbxRrWVUH9q7wSl3EXRK9bYjA==
 
+expo-linear-gradient@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.npmjs.org/expo-linear-gradient/-/expo-linear-gradient-9.0.0.tgz#7abb571e72b34a0d09241b6a7338c2c0c7dc3b26"
+  integrity sha512-d01mSCgGth6Q32/UnXbsXvTBe0rtYdEiVEAJLFUeS7TjUmS6GvZzw4UyglcSG02HpU+/uDjwjIKFm5j6DrMH/w==
+
 expo-linear-gradient@~8.4.0:
   version "8.4.0"
   resolved "https://registry.npmjs.org/expo-linear-gradient/-/expo-linear-gradient-8.4.0.tgz#34e6f960b1971c57dacf7211c747ba490a76bf63"
@@ -18750,11 +18755,6 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-native-linear-gradient@2.5.6:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
-  integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
 react-native-safe-area-context@3.1.9:
   version "3.1.9"

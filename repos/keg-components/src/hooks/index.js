@@ -1,3 +1,4 @@
+export * from './useAccessibilityRole'
 export * from './useAnimate'
 export * from './useAutocompleteItems'
 export * from './useKeyPress'

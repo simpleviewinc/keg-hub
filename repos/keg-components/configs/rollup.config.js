@@ -152,9 +152,9 @@ const shared = {
     '@keg-hub/re-theme/styleParser',
     'prop-types',
     'expo-fonts',
+    'expo-linear-gradient',
     'react-native-svg-web',
     'react-native-svg',
-    'react-native-linear-gradient'
   ],
   watch: {
     clearScreen: false

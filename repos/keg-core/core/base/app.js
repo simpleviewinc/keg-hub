@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Provider } from 'react-redux'
 import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { getStore } from 'SVStore'
 import { initAppAction, navigateTo } from 'SVActions'
-import { AppHeader, Select, Option } from 'SVComponents'
-import { Router } from 'SVComponents'
+import { AppHeader, Select, Option, View, Loading, Router } from 'SVComponents'
 import { checkCall, get } from '@keg-hub/jsutils'
+import { useSelector } from 'react-redux'
 import { getHistory } from 'SVNavigation'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
-
-const checkAppInit = setInit => {
-  checkCall(setInit, true)
-  checkCall(initAppAction)
-}
+import { theme, themeConfig } from 'SVTheme'
 
 // These demo core are defined here, and not in app.json, so that they are not
 // merged with tap routes. Taps would define their routes in tap.json
@@ -21,6 +17,45 @@ const routes = Object.freeze({
   '/': 'HomeContainer',
   '/plugins': 'PluginsContainer',
 })
+
+/**
+ * Hook to check if the app has been initialized
+ * If it has not, call the initAppAction
+ * @param {boolean} isInit - Has the app been initialized yet
+ * 
+ * @returns {boolean} - If the app has been initialized
+ */
+const useAppInit = isInit => {
+  return useMemo(() => {
+    !isInit &&
+      checkCall(initAppAction, theme, themeConfig)
+    return isInit
+  }, [isInit])
+}
+
+/**
+ * Hook for getting the theme styles before the theme has been initialized
+ * Do this to allow setting the styles of some top level
+ * Which must happen before the Re-Theme is initialized
+ * @param {boolean} isInit - Has the app been initialized yet
+ * 
+ * @returns {Object} - The styles for top level components from the theme
+ */
+const useThemeStyles = isInit => {
+  const activeTheme = getDefaultTheme()
+  return useMemo(() => {
+    const statusBarColor = get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])
+    const safeBgColor = get(activeTheme, ['colors', 'surface', 'primary', 'colors', 'dark'])
+    const rootBgColor = get(activeTheme, ['colors', 'palette', 'white01' ])
+
+    return {
+      activeTheme,
+      statusBarColor,
+      safeAreaStyle: { flex: 1, backgroundColor: safeBgColor },
+      rootView: { flex: 1, backgroundColor: rootBgColor },
+    }
+  }, [isInit, activeTheme])
+}
 
 /**
  * Dropdown for switching between the demo containers
@@ -48,47 +83,45 @@ const RouteDropdown = ({ routes }) => {
   )
 }
 
-const App = props => {
-  const [activeTheme] = useState(getDefaultTheme())
-  const [ init, setInit ] = useState(false)
+const AppContent = ({ routes }) => {
+  const isInit = useSelector(store => get(store.app, 'initialized', false))
+  const initialized = useAppInit(isInit)
+  const {
+    rootView,
+    activeTheme,
+    safeAreaStyle,
+    statusBarColor,
+  } = useThemeStyles(initialized)
 
-  useEffect(() => {
-    !init && checkAppInit(setInit)
-  })
-
-  return (
-    <>
-      <SafeAreaView
-        style={{
-          backgroundColor: get(
-            activeTheme,
-            'colors.surface.primary.colors.dark'
-          ),
-        }}
-      />
-      <StatusBar
-        barStyle={get(activeTheme, [ 'components', 'statusBar', 'barStyle' ])}
-      />
-      <Router history={getHistory()}>
-        <SafeAreaView>
-          <Provider store={getStore()}>
-            <ReThemeProvider
-              theme={activeTheme}
-              merge={false}
-            >
+  return !initialized
+    ? (<Loading />)
+    : (
+        <ReThemeProvider
+          theme={activeTheme}
+          merge={false}
+        >
+          <SafeAreaView style={safeAreaStyle} >
+            <StatusBar barStyle={statusBarColor} />
+            <View style={rootView}>
               <AppHeader
                 shadow
                 title={'Keg-Core'}
-                leftIcon={'beer'}
                 RightComponent={<RouteDropdown routes={routes} />}
               />
-
               <ContainerRoutes navigationConfigs={routes} />
-            </ReThemeProvider>
-          </Provider>
-        </SafeAreaView>
-      </Router>
-    </>
+            </View>
+          </SafeAreaView>
+        </ReThemeProvider>
+      )
+}
+
+const App = props => {
+  return (
+    <Router history={getHistory()}>
+      <Provider store={getStore()}>
+        <AppContent routes={routes} />
+      </Provider>
+    </Router>
   )
 }
 

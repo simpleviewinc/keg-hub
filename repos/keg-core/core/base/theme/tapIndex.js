@@ -1,5 +1,16 @@
-import { noOpObj } from '@keg-hub/jsutils'
-import { kegComponentsTheme } from 'SVTheme/kegComponentsTheme'
-import { setDefaultTheme } from '@keg-hub/re-theme'
+import { kegComponentsTheme } from './kegComponentsTheme'
 
-export const theme = setDefaultTheme(kegComponentsTheme(noOpObj, noOpObj))
+/**
+ * Default theme config override
+ * Sets the default font-family to be FiraSana
+ * This file should only be loaded when a tap does not override the tapIndex.js file
+ * @Object
+ */
+const themeConfig = {
+  // Add them config overrides here
+}
+
+export {
+  themeConfig,
+  kegComponentsTheme as theme,
+}

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 /**
  * converted from https://github.com/react-native-web-community/react-native-web-linear-gradient
  * see this link for detailed info on each prop
- *     - https://github.com/react-native-linear-gradient/react-native-linear-gradient
+ *     - https://github.com/https://docs.expo.io/versions/latest/sdk/linear-gradient/
  *
  * @param {object} props
  * @param {Array=} props.locations - An optional array of numbers defining the location of each gradient color stop

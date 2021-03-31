@@ -41,7 +41,6 @@
     "spacing": 0.15,
     "bold": "700",
     "units": "px",
-    "family": "Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"",
     "components": {
     }
   },
