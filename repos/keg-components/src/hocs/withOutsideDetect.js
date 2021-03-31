@@ -32,5 +32,7 @@ export const withOutsideDetect = (Component) => {
     onOutsideClick: PropTypes.func,
   }
 
+  wrapped.displayName = Component.displayName || Component.name || 'Component'
+
   return wrapped
 }

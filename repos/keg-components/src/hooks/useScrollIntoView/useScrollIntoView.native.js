@@ -8,6 +8,9 @@ import { noPropArr } from '@keg-hub/jsutils'
  *    https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView#parameter
  */
 export const useScrollIntoView = () => {
-  console.warn('useScrollIntoView is not implemented for native platforms yet.')
+  logData(
+    'useScrollIntoView is not implemented for native platforms yet.',
+    'warn'
+  )
   return noPropArr
 }
