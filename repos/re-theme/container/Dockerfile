@@ -7,7 +7,7 @@ ARG KEG_NODE_VERSION
 ARG NODE_IMAGE_FROM=node:$KEG_NODE_VERSION
 
 # Add a FROM for the tap-base image to we can copy content from it
-ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:master
+ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:develop
 FROM $KEG_BASE_IMAGE as tap-base
 
 # Get the git keg-hub url and branch to pull down
