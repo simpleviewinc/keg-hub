@@ -3,11 +3,11 @@ actions:
     build:
       cmds:
         - yarn sb:build
-        - rm -rf /keg/retheme-build
-        - cp -R /keg/tap/docs /keg/retheme-build
+        - rm -rf {{ envs.DOC_BUILD_PATH }}
+        - cp -R {{ envs.DOC_APP_PATH }}/docs {{ envs.DOC_BUILD_PATH }}
     serve:
       cmds:
-        - npx serve /keg/retheme-build --cors -n -l {{ envs.KEG_PROXY_PORT }}
+        - npx serve {{ envs.DOC_BUILD_PATH }} --cors -n -l {{ envs.KEG_PROXY_PORT }}
 env:
 
   # --- KEG-CLI ENV CONTEXT --- #
@@ -33,6 +33,7 @@ env:
 
   # Default location of the app in the docker container
   DOC_APP_PATH: /keg/tap
+  DOC_BUILD_PATH: /keg/tap-build
   DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container

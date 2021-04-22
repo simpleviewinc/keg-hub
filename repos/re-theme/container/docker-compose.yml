@@ -3,6 +3,7 @@ services:
   retheme:
     environment:
       - DOC_APP_PATH
+      - DOC_BUILD_PATH
       - DOC_JSUTILS_PATH
       - KEG_PROXY_PORT
       - ENV
