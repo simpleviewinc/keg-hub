@@ -1,3 +1,13 @@
+actions:
+  tap:
+    build:
+      cmds:
+        - yarn sb:build
+        - rm -rf /keg/retheme-build
+        - cp -R /keg/tap/docs /keg/retheme-build
+    serve:
+      cmds:
+        - npx serve /keg/retheme-build --cors -n -l {{ envs.KEG_PROXY_PORT }}
 env:
 
   # --- KEG-CLI ENV CONTEXT --- #
