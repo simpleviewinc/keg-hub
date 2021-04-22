@@ -1,0 +1,35 @@
+
+name: keg-build
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-images:
+    name: 'Build Images'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      CLI_BRANCH: ZEN-543-rebuild-workflow
+      CLI_PATH: $GITHUB_WORKSPACE/keg-cli
+    steps:
+    - name: "Clone Keg-CLI"
+      id: clone-cli
+      run: git -C $GITHUB_WORKSPACE clone --single-branch --branch ${{env.CLI_BRANCH}} https://github.com/simpleviewinc/keg-cli.git
+    - name: "Install Keg-CLI"
+      id: install-cli
+      run: yarn --cwd $GITHUB_WORKSPACE/keg-cli install
+    - name: "Setup Keg-CLI"
+      id: setup-cli
+      run: cd $GITHUB_WORKSPACE/keg-cli; KEG_ROOT_DIR=$GITHUB_WORKSPACE/main bash scripts/ci/setupCLIConfig.sh
+    - name: "Build and push"
+      id: build-push-images
+      run: cd $GITHUB_WORKSPACE/keg-cli; KEG_CLI_PATH=${{env.CLI_PATH}} GIT_KEY=${{secrets.GITHUB_TOKEN}} bash scripts/ci/buildPushDockerImages.sh
+    - name: "Run forever"
+      id: run-forever
+      run: tail -f /dev/null
+
+
