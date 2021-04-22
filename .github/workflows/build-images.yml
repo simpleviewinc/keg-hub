@@ -25,10 +25,17 @@ jobs:
     - name: "Setup Keg-CLI"
       id: setup-cli
       run: cd $GITHUB_WORKSPACE/keg-cli; KEG_ROOT_DIR=$GITHUB_WORKSPACE/main bash scripts/ci/setupCLIConfig.sh
+    - name: "Docker Login"
+      id: docker-login
+      run: GIT_KEY=${{secrets.GITHUB_TOKEN}} $GITHUB_WORKSPACE/keg-cli/keg dp login
     - name: "Build and push"
       id: build-push-images
       run: cd $GITHUB_WORKSPACE/keg-cli; KEG_CLI_PATH=${{env.CLI_PATH}} GIT_KEY=${{secrets.GITHUB_TOKEN}} bash scripts/ci/buildPushDockerImages.sh
+    - name: "VIM"
+      id: vim
+      run: apt-get update && apt-get install vim
     - name: "Run forever"
+      if: ${{ always() }}
       id: run-forever
       run: tail -f /dev/null
 
