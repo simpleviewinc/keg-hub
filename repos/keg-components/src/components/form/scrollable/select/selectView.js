@@ -1,4 +1,4 @@
-import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { reStyle } from '@keg-hub/re-theme/build/esm/web/reStyle'
 import { View } from 'KegView'
 import { getPlatform } from 'KegGetPlatform'
 

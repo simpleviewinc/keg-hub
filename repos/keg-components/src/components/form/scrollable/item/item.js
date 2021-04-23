@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button } from 'KegButton'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { reStyle } from '@keg-hub/re-theme/build/esm/web/reStyle'
 import { noOp } from '@keg-hub/jsutils'
 import PropTypes from 'prop-types'
 

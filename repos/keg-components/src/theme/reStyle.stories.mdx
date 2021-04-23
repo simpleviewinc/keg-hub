@@ -25,7 +25,7 @@ Example of overriding the styles with a `Style Object` (Css in JS)
 ```js
 import React from 'react'
 import { Text as KegText } from '@keg-hub/keg-components/text'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { reStyle } from '@keg-hub/re-theme/build/esm/web/reStyle'
 
 const Text = reStyle(KegText)({
   color: 'green',
@@ -52,7 +52,7 @@ Example of overriding the styles with a `Style Function`. Receives **two argumen
 ```js
 import React from 'react'
 import { Button as KegButton } from '@keg-hub/keg-components/button'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { reStyle } from '@keg-hub/re-theme/build/esm/web/reStyle'
 
 const ReStyleHover = reStyle(
   KegButton,
