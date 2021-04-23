@@ -3,7 +3,7 @@
 import React from 'react'
 import { Text as KegText } from '../components/typography'
 import { Button as KegButton } from '../components/button'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { reStyle } from '@keg-hub/re-theme/build/esm/web/reStyle'
 
 const Text = reStyle(KegText)({
   color: 'green',
