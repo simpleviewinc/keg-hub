@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/simpleviewinc/keg-hub/issues"
   },
-  "homepage": "https://github.com/simpleviewinc/keg-hub#readme",
+  "homepage": "/",
   "license": "MIT",
   "scripts": {
     "and": "yarn android",
@@ -20,7 +20,8 @@
     "build": "echo \"Keg-Core build!\"",
     "build:android": "NODE_ENV=production PLATFORM=native expo build:android",
     "build:ios": "NODE_ENV=production PLATFORM=native expo build:ios",
-    "build:web": "yarn clean:web:build && NODE_ENV=production PLATFORM=web expo build:web --no-pwa",
+    "build:optimize": "NODE_ENV=production PLATFORM=web npx expo-optimize",
+    "build:web": "yarn clean:web:build; yarn build:optimize; NODE_ENV=production PLATFORM=web expo build:web --no-pwa",
     "clean": "yarn clean:cache && yarn clean:nm",
     "clean:babel": "rimraf ./node_modules/.cache/@babel",
     "clean:cache": "yarn clean:rn && yarn clean:babel; yarn cache clean",
