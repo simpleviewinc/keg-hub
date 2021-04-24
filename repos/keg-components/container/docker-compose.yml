@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  keg-components:
+    environment:
+      - DOC_APP_PATH
+      - DOC_BUILD_PATH
+      - DOC_JSUTILS_PATH
+      - DOC_RETHEME_PATH
+      - KEG_PROXY_PORT
+      - KEG_EXEC_CMD
+      - KEG_DOCKER_EXEC
+      - KEG_NM_INSTALL
+      - NODE_ENV
