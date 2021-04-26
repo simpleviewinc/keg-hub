@@ -3,6 +3,7 @@ name: keg-build
 on:
   push:
     branches:
+      - ZEN-543-rebuild-workflow
       - develop
 
 jobs:
