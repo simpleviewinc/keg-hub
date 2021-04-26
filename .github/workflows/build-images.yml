@@ -40,11 +40,3 @@ jobs:
     - name: "Build and push"
       id: build-push-images
       run: source $GITHUB_WORKSPACE/keg-cli/keg && keg src && keg cli && KEG_REPO=retheme KEG_CLI_PATH=${{env.CLI_PATH}} bash scripts/ci/buildPushDockerImages.sh
-    # - name: "VIM"
-    #   id: vim
-    #   run: apt-get update;  apt-get install vim &> /dev/null
-    - name: "Run forever"
-      id: run-forever
-      run: tail -f /dev/null
-
-
