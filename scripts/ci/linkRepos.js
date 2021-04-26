@@ -2,7 +2,7 @@ const { exec } = require('child_process');
   
 const link = (repoName, alias) => {
   return new Promise((res, rej) => {
-    const cmd = `REPO_NAME=${repoName} ALIAS_NAME=${alias} bash ./linkRepos.sh`
+    const cmd = `REPO_NAME=${repoName} ALIAS_NAME=${alias} bash ${__dirname}/linkRepo.sh`
     exec(cmd, err => {
       err ? rej(err) : res({repoName, alias})
     })
