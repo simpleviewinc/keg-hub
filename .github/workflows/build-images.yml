@@ -28,7 +28,7 @@ jobs:
       run: cd $GITHUB_WORKSPACE/keg-cli; KEG_HUB_BRANCH=${GITHUB_REF##*/} KEG_ROOT_DIR=$GITHUB_WORKSPACE/keg-hub bash scripts/ci/setupCLIConfig.sh
     - name: "Set Docker token"
       id: set-token
-      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=cli.settings.docker.token value=${{secrets.GIT_AUTH_TOKEN}} --confirm false
+      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=cli.settings.docker.token value=${{secrets.KEG_ADMIN_TOKEN}} --confirm false
     - name: "Set Git user name"
       id: set-username
       run: git config --global user.name keg-admin
