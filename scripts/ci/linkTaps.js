@@ -18,18 +18,14 @@ const tryLink = async (name, alias) => {
   }
 }
 
-// map of aliases to repo names
-const repos = {
-  core: 'keg-core',
-  components: 'keg-components',
+// map of aliases to tap repo names, needed for ci actions
+const taps = {
   retheme: 're-theme',
-  resolver: 'tap-resolver',
-  jsutils: 'jsutils',
 }
 
-const linkRepos = () => {
+const linkTaps = () => {
   Object
-    .entries(repos)
+    .entries(taps)
     .reduce(
       async (acc, [ alias, name ]) => {
         await acc
@@ -39,6 +35,6 @@ const linkRepos = () => {
     )
 }
 
-module.exports = { linkRepos }
+module.exports = { linkTaps }
 
-;(require.main == module) && linkRepos()
+;(require.main == module) && linkTaps()

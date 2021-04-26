@@ -24,7 +24,7 @@ jobs:
       run: yarn --cwd $GITHUB_WORKSPACE/keg-cli install
     - name: "Setup Keg-CLI"
       id: setup-cli
-      run: cd $GITHUB_WORKSPACE/keg-cli; KEG_ROOT_DIR=$GITHUB_WORKSPACE/main bash scripts/ci/setupCLIConfig.sh
+      run: cd $GITHUB_WORKSPACE/keg-cli; KEG_HUB_BRANCH=${GITHUB_REF##*/} KEG_ROOT_DIR=$GITHUB_WORKSPACE/keg-hub bash scripts/ci/setupCLIConfig.sh
     - name: "Set Docker token"
       id: set-token
       run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=cli.settings.docker.token value=${{env.GITHUB_TOKEN}} --confirm false
@@ -34,12 +34,15 @@ jobs:
     - name: "Docker Login"
       id: docker-login
       run: source $GITHUB_WORKSPACE/keg-cli/keg && keg dp login
+    - name: "Link Taps"
+      id: link-taps
+      run: cd $GITHUB_WORKSPACE/keg-hub && node scripts/ci/linkTaps.js
     - name: "Build and push"
       id: build-push-images
-      run: cd $GITHUB_WORKSPACE/keg-cli; KEG_CLI_PATH=${{env.CLI_PATH}} bash scripts/ci/buildPushDockerImages.sh
-    - name: "VIM"
-      id: vim
-      run: apt-get update && apt-get install vim &> /dev/null
+      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg src && keg cli && KEG_REPO=retheme KEG_CLI_PATH=${{env.CLI_PATH}} bash scripts/ci/buildPushDockerImages.sh
+    # - name: "VIM"
+    #   id: vim
+    #   run: apt-get update;  apt-get install vim &> /dev/null
     - name: "Run forever"
       id: run-forever
       run: tail -f /dev/null
