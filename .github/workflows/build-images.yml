@@ -17,7 +17,7 @@ jobs:
       CLI_BRANCH: ZEN-543-rebuild-workflow
       CLI_PATH: $GITHUB_WORKSPACE/keg-cli
       CLI_USER: keg-admin
-      GIT_TOKEN: ${{secrets.KEG_ADMIN_TOKEN}}
+      GIT_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
     - name: "Clone Keg-CLI"
       id: clone-cli
@@ -45,4 +45,4 @@ jobs:
       run: cd $GITHUB_WORKSPACE/keg-hub && node scripts/ci/linkTaps.js
     - name: "Build and Push"
       id: build-push-images
-      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg src && keg cli && KEG_REPO=retheme KEG_CLI_PATH=${{env.CLI_PATH}} bash scripts/ci/buildPushDockerImages.sh
+      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg src && keg cli && GIT_KEY=${{env.GIT_TOKEN}} KEG_REPO=retheme KEG_CLI_PATH=${{env.CLI_PATH}} bash scripts/ci/buildPushDockerImages.sh
