@@ -31,9 +31,9 @@ jobs:
     - name: "Set Docker User"
       id: set-docker-user
       run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=docker.user value=${{env.CLI_USER}} --confirm false
-    - name: "Set Docker Token"
-      id: set-token
-      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=cli.git.key value=${{ env.GIT_TOKEN }} --confirm false
+    # - name: "Set Docker Token"
+    #   id: set-token
+    #   run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=cli.git.key value=${{ env.GIT_TOKEN }} --confirm false
     - name: "Set Git Username"
       id: set-git-user
       run: git config --global user.name ${{env.CLI_USER}}
