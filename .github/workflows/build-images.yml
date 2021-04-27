@@ -17,7 +17,7 @@ jobs:
       CLI_BRANCH: ZEN-543-rebuild-workflow
       CLI_PATH: $GITHUB_WORKSPACE/keg-cli
       CLI_USER: keg-admin
-      GIT_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      GIT_TOKEN: ${{secrets.KEG_ADMIN_TOKEN}}
     steps:
     - name: "Clone Keg-CLI"
       id: clone-cli
