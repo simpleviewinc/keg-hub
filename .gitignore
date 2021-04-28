@@ -161,12 +161,7 @@ reports
 
 # Any local ENV files in the docker container folder
 repos/keg-cli
-repos/**/containers/**/.env
-repos/**/container/.env
-!repos/keg-cli/containers/proxy/.env
-repos/**/container/run.sh
 !repos/**/build
-repos/**/run.sh
 repos/keg-core/core/base/assets/**/**
 !repos/keg-core/core/base/assets/.gitkeep
 !repos/keg-core/core/base/assets/fonts/.gitkeep
