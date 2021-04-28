@@ -9,6 +9,7 @@ const wrapStyles = {
   textAlign: 'center',
   flexDirection: 'row',
   marginBottom: 20,
+  justifyContent: 'center',
 }
 
 export const Basic = props => {
