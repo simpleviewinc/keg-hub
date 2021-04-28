@@ -1,0 +1,66 @@
+<!--- Touchable.stories.mdx -->
+
+import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs/blocks'
+
+import { SvgIcon } from './svgIcon'
+import { SvgIcon as SvgIconNative } from './svgIcon.native'
+import {Basic, Loading} from './svgIcon.examples.js'
+
+<Meta title="Components/Display/SvgIcon" component={SvgIcon}/>
+
+# SVG Icon
+
+Icon component enabling cross-platform SVG Icon rendering. 
+Utilizes [react-native-svg](https://github.com/react-native-svg/react-native-svg) under the hood
+
+## Examples
+
+<br/>
+
+### Basic
+<Preview>
+  <Story name="Basic">
+    <Basic />
+  </Story>
+</Preview>
+
+### Animated
+<Preview>
+  <Story name="Loading">
+    <Loading />
+  </Story>
+</Preview>
+
+<br/>
+
+## Props
+
+### Size
+* The icon size is derived from a number of places. Presadence follows this order:
+  1. `height` and `width` props
+  2. `fontSize` property of the `style` object prop. Will set both `height` and `width`
+  3. `height` and `width` properties of the `style` object prop
+  4. `typography.default.fontSize` of the global theme object
+
+### Color
+* SVG's use `stroke` and `fill` props to set the color of the component.
+* Those props values are derived in a similar pattern to the `size` prop.
+  * The `stroke` value is derived in this order
+    1. `stroke` prop
+    2. `border` prop 
+    3. `border` property of the `style` object prop
+    4. `color` prop 
+    5. `color` property of the `style` object prop
+    6. `typography.default.color` of the global theme object
+  * The `fill` value is derived in this order
+    1. `fill` prop
+    2. `color` prop 
+    3. `color` property of the `style` object prop
+    4. `stroke` prop
+
+<br/>
+
+### Full Prop List
+
+<Props of={SvgIconNative} />
+
