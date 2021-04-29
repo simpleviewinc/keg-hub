@@ -34,8 +34,8 @@ env:
   # Defines the working directory within the Dockerfile and docker-compose.yml
   DOC_APP_PATH: /keg/tap
   DOC_BUILD_PATH: /keg/tap-build
-  DOC_RETHEME_PATH: /keg/keg-components/node_modules/@keg-hub/re-theme
-  DOC_JSUTILS_PATH: /keg/keg-components/node_modules/@keg-hub/jsutils
+  DOC_RETHEME_PATH: /keg/tap/node_modules/@keg-hub/re-theme
+  DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
   KEG_PROXY_PORT: 60710

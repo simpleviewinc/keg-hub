@@ -29,4 +29,4 @@ keg d ex context=components cmd=\"yarn build\"
 
 # Command to build keg-component, and copy it from the docker container
 # This is just to test building keg-components to ensure changes are reflected in that build
-keg d cp context=components source=docker remote=/keg/keg-components/build local=$LOCAL_BUILD_DIR
+keg d cp context=components source=docker remote=/keg/tap/build local=$LOCAL_BUILD_DIR

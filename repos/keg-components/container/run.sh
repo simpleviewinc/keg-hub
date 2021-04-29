@@ -3,7 +3,7 @@
 export SUPPRESS_SUPPORT=1
 # Ensure required envs are set
 [[ -z "$KEG_PROXY_PORT" ]] && KEG_PROXY_PORT=60710
-[[ -z "$DOC_APP_PATH" ]] && DOC_APP_PATH=/keg/keg-components
+[[ -z "$DOC_APP_PATH" ]] && DOC_APP_PATH=/keg/tap
 [[ -z "$DOC_BUILD_PATH" ]] && DOC_BUILD_PATH==/keg/components-build
 # If the no KEG_DOCKER_EXEC env is set, just sleep forever
 # This is to keep our container running forever

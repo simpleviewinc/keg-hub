@@ -1,18 +1,19 @@
 sync:
   keg-components:
     alpha: "/keg/tap"
-    beta: "docker://keg-components/keg/tap"
+    beta: "docker://tap/keg/tap"
     mode: "one-way-replica"
     ignore:
       vcs: true
       paths:
         - "node_modules"
-        - "/core/base/assets/*"
+        - "/node_modules"
         - "/.*"
         - "!/.storybook"
         - "!/.npmrc"
         - "*.lock"
         - "*.md"
+        - "!/README.md"
         - "/temp"
         - "/web-build"
         - "/reports"
