@@ -21,7 +21,6 @@ ENV DOC_APP_PATH=$DOC_APP_PATH
 
 # Copy over the keg-components code from the tap image into this image
 COPY --from=tap-base $DOC_APP_PATH/repos/keg-components $DOC_APP_PATH
-COPY container $DOC_APP_PATH/container
 
 # Set the max-listenrs, and install the dependecies with yarn install
 RUN chmod a+x $DOC_APP_PATH/container/run.sh; \
