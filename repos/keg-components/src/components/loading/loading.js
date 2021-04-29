@@ -29,6 +29,7 @@ const Progress = props => {
     >
       { isValidComponent(LoadingIndicator) ? (
         <LoadingIndicator
+          className={'keg-loading-indicator'}
           size={size}
           styles={styles.indicator}
           type={type}
