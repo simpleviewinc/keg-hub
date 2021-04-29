@@ -13,11 +13,12 @@ FROM $KEG_BASE_IMAGE as tap-base
 # Create a new image from the node image
 FROM $NODE_IMAGE_FROM as keg-components
 
-# Set the current directory to tap repo
-WORKDIR $DOC_APP_PATH
-
+# Ensure the app path is set within the FROM scope
 ARG DOC_APP_PATH
 ENV DOC_APP_PATH=$DOC_APP_PATH
+
+# Set the current directory to tap repo
+WORKDIR $DOC_APP_PATH
 
 # Copy over the keg-components code from the tap image into this image
 COPY --from=tap-base $DOC_APP_PATH/repos/keg-components $DOC_APP_PATH
@@ -44,4 +45,4 @@ ARG KEG_PROXY_PORT=60710
 EXPOSE $KEG_PROXY_PORT
 
 # Run the start script
-CMD [ "/bin/bash", "/keg/tap/container/run.sh" ]
+CMD [ "/bin/bash", "container/run.sh" ]

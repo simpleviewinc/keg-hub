@@ -13,11 +13,12 @@ FROM $KEG_BASE_IMAGE as tap-base
 # Create a new image from the node image
 FROM $NODE_IMAGE_FROM as re-theme
 
-# Set the current directory to tap repo
-WORKDIR $DOC_APP_PATH
-
+# Ensure the app path is set within the FROM scope
 ARG DOC_APP_PATH
 ENV DOC_APP_PATH=$DOC_APP_PATH
+
+# Set the current directory to tap repo
+WORKDIR $DOC_APP_PATH
 
 # Copy over the re-theme code from the tap image into this image
 COPY --from=tap-base $DOC_APP_PATH/repos/re-theme $DOC_APP_PATH
