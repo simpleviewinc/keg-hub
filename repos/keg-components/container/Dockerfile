@@ -21,9 +21,11 @@ ENV DOC_APP_PATH=$DOC_APP_PATH
 
 # Copy over the keg-components code from the tap image into this image
 COPY --from=tap-base $DOC_APP_PATH/repos/keg-components $DOC_APP_PATH
+COPY container $DOC_APP_PATH/container
 
 # Set the max-listenrs, and install the dependecies with yarn install
-RUN apk add git bash; \
+RUN chmod a+x $DOC_APP_PATH/container/run.sh; \
+    apk add git bash; \
     echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
     sysctl -p; \
     rm -rf /var/cache/apk/*; \
@@ -43,4 +45,4 @@ ARG KEG_PROXY_PORT=60710
 EXPOSE $KEG_PROXY_PORT
 
 # Run the start script
-CMD [ "/bin/bash", "container/run.sh" ]
+CMD [ "/bin/bash", "/keg/tap/container/run.sh" ]
