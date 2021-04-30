@@ -1,5 +1,11 @@
 const { exec } = require('child_process');
   
+  /**
+   * Actually calls the `keg x link` task
+   * @param {string} repoName 
+   * @param {string} alias 
+   * @returns {Promise}
+   */
 const link = (repoName, alias) => {
   return new Promise((res, rej) => {
     const cmd = `REPO_NAME=${repoName} ALIAS_NAME=${alias} bash ${__dirname}/linkRepo.sh`
@@ -9,6 +15,12 @@ const link = (repoName, alias) => {
   })
 }
 
+/**
+ * Attempts to link the tap
+ * @param {string} name 
+ * @param {string} alias 
+ * @returns {Promise} - link promise
+ */
 const tryLink = async (name, alias) => {
   try {
     return await link(name, alias)
@@ -18,11 +30,15 @@ const tryLink = async (name, alias) => {
   }
 }
 
-// map of aliases to tap repo names, needed for ci actions
+// map of aliases to tap repo names, needed for other ci actions
 const taps = {
   retheme: 're-theme',
+  components: 'keg-components'
 }
 
+/**
+ * Links all of the taps defined in `taps` object above
+ */
 const linkTaps = () => {
   Object
     .entries(taps)
