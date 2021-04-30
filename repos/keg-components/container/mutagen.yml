@@ -1,0 +1,67 @@
+sync:
+  keg-components:
+    alpha: "/keg/tap"
+    beta: "docker://tap/keg/tap"
+    mode: "one-way-replica"
+    ignore:
+      vcs: true
+      paths:
+        - "node_modules"
+        - "/node_modules"
+        - "/.*"
+        - "!/.storybook"
+        - "!/.npmrc"
+        - "*.lock"
+        - "*.md"
+        - "!/README.md"
+        - "/temp"
+        - "/web-build"
+        - "/reports"
+        - "/build"
+        - "/docs"
+actions:
+  jsutils:
+    install:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      detach: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      cmds:
+        - bash
+  retheme:
+    install:
+      location: /keg/tap/node_modules/@keg-hub/re-theme
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@keg-hub/re-theme
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/@keg-hub/re-theme
+      detach: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/tap/node_modules/@keg-hub/re-theme
+      cmds:
+        - bash
+  components:
+    install:
+      location: /keg/tap
+      cmds:
+        - yarn install
+    start:
+      location: /keg/tap
+      cmds:
+        - yarn web
