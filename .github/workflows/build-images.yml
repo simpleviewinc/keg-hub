@@ -14,7 +14,7 @@ jobs:
       run:
         shell: bash
     env:
-      CLI_BRANCH: ZEN-543-rebuild-workflow
+      CLI_BRANCH: ZEN-543-updates-for-workflow
       CLI_PATH: $GITHUB_WORKSPACE/keg-cli
       CLI_USER: keg-admin
       GIT_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -31,12 +31,15 @@ jobs:
     - name: "Set Docker User"
       id: set-docker-user
       run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=docker.user value=${{env.CLI_USER}} --confirm false
+    - name: "Set Git Key"
+      id: set-git-key
+      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg git key add --value ${{env.GIT_TOKEN}} --confirm false
     - name: "Set Git Username"
       id: set-git-user
       run: git config --global user.name ${{env.CLI_USER}}
     - name: "Docker Login"
       id: docker-login
-      run: source $GITHUB_WORKSPACE/keg-cli/keg && GIT_KEY=${{ env.GIT_TOKEN }} keg dp login
+      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg dp login
     - name: "Link Taps"
       id: link-taps
       run: cd $GITHUB_WORKSPACE/keg-hub && node scripts/ci/linkTaps.js
