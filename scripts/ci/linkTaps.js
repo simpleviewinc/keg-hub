@@ -31,6 +31,7 @@ const tryLink = async (name, alias) => {
 }
 
 // map of aliases to tap repo names, needed for other ci actions
+// TODO: update this with keg-core once we make it an injected tap
 const taps = {
   retheme: 're-theme',
   components: 'keg-components'
