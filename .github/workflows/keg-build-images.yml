@@ -22,7 +22,7 @@ jobs:
       HUB_BRANCH: ${GITHUB_REF##*/}
     steps:
       - id: print-envs
-        run: echo "${{env.CLI_BRANCH}"; echo "\n${{env.CLI_PATH}}"; echo "\n${{env.CLI_USER}}"; echo "\n${{env.KEG_GLOBAL_CONFIG}}"; echo "\n${{env.HUB_BRANCH}}";
+        run: echo "${{env.CLI_BRANCH}}"; echo "\n${{env.CLI_PATH}}"; echo "\n${{env.CLI_USER}}"; echo "\n${{env.KEG_GLOBAL_CONFIG}}"; echo "\n${{env.HUB_BRANCH}}";
       - name: "Clone Keg-CLI"
         id: clone-cli
         run: git -C $GITHUB_WORKSPACE clone --single-branch --branch ${{env.CLI_BRANCH}} https://github.com/simpleviewinc/keg-cli.git
