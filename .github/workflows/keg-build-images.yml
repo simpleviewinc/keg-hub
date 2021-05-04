@@ -14,12 +14,12 @@ jobs:
       run:
         shell: bash
     env:
-      KEG_CLI_PATH: $GITHUB_WORKSPACE/keg-cli
+      KEG_CLI_PATH: ${{ github.workspace }}/keg-cli
       KEG_CLI_USER: keg-admin
       KEG_CLI_BRANCH: ZEN-543-updates-for-workflow
       GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      KEG_GLOBAL_CONFIG: $GITHUB_WORKSPACE/keg-cli/.kegConfig/cli.config.json
-      KEG_HUB_PATH: $GITHUB_WORKSPACE/keg-hub
+      KEG_GLOBAL_CONFIG: ${{ github.workspace}}/keg-cli/.kegConfig/cli.config.json
+      KEG_HUB_PATH: ${{ github.workspace}}/keg-hub
     steps:
       - name: "Clone Keg-CLI"
         id: clone-cli
@@ -27,7 +27,7 @@ jobs:
 
       - name: "Setup Keg Environment"
         id: setup-environment
-        run: cd $KEG_CLI_PATH && KEG_HUB_BRANCH=${GITHUB_REF##*/} bash scripts/ci/setupKegEnvironment.sh
+        run: cd $GITHUB_WORKSPACE/keg-cli && KEG_HUB_BRANCH=${GITHUB_REF##*/} bash scripts/ci/setupKegEnvironment.sh
         env:
           KEG_ROOT_DIR: ${{ env.KEG_HUB_PATH }}
           KEG_CLI_BRANCH: ZEN-543-updates-for-workflow
