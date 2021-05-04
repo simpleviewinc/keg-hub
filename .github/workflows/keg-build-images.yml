@@ -21,30 +21,6 @@ jobs:
       KEG_GLOBAL_CONFIG: ${{ env.GITHUB_WORKSPACE }}/keg-cli/.kegConfig/cli.config.json
       KEG_HUB_PATH: ${{ env.GITHUB_WORKSPACE }}/keg-hub
     steps:
-      # - name: "Set config path"
-      #   id: set-config-path
-      #   run: export KEG_GLOBAL_CONFIG=${{env.KEG_GLOBAL_CONFIG}}
-      # - name: "Clone Keg-CLI"
-      #   id: clone-cli
-      #   run: git -C $GITHUB_WORKSPACE clone --single-branch --branch ${{env.CLI_BRANCH}} https://github.com/simpleviewinc/keg-cli.git
-      # - name: "Install Keg-CLI"
-      #   id: install-cli
-      #   run: yarn --cwd $GITHUB_WORKSPACE/keg-cli install
-      # - name: "Setup Keg-CLI"
-      #   id: setup-cli
-      #   run: cd $GITHUB_WORKSPACE/keg-cli; USER=${{env.CLI_USER}} KEG_HUB_BRANCH=${{env.HUB_BRANCH}} KEG_ROOT_DIR=$GITHUB_WORKSPACE/keg-hub bash scripts/ci/setupCLIConfig.sh
-      # - name: "Set Git Key"
-      #   id: set-git-key
-      #   run: source $GITHUB_WORKSPACE/keg-cli/keg && keg git key add --value ${{env.GIT_TOKEN}} --confirm false
-      # - name: "Set Git Username"
-      #   id: set-git-user
-      #   run: git config --global user.name ${{env.CLI_USER}}
-      # - name: "Docker Login"
-      #   id: docker-login
-      #   run: source $GITHUB_WORKSPACE/keg-cli/keg && keg dp login
-      # - name: "Link Taps"
-      #   id: link-taps
-      #   run: cd $GITHUB_WORKSPACE/keg-hub && node scripts/ci/linkTaps.js
       - name: "Clone Keg-CLI"
         id: clone-cli
         run: git -C $GITHUB_WORKSPACE clone --single-branch --branch ${{env.KEG_CLI_BRANCH}} https://github.com/simpleviewinc/keg-cli.git
