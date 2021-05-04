@@ -15,7 +15,7 @@ const link = (repoName, alias) => {
         rej(err)
       }
       else {
-        console.log(`${repoName} linked with alias ${alias}`)
+        console.log(`${repoName} linked to alias "${alias}"`)
         res({repoName, alias})
       }
     })
