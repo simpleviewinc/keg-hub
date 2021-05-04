@@ -4,11 +4,8 @@
 source $KEG_CLI_PATH/keg
 
 log_result () {
-  echo "$1 $2"
   if [[ $2 -eq 1 ]]; then
-    echo "Did not link repo $1 (no alias key in tap config)"
-  else 
-    echo "Linked repo $1 to the alias in its tap config"
+    echo "No alias key in tap config for \"$1\". Skipping..."
   fi
 }
 
