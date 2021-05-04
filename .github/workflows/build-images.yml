@@ -15,10 +15,10 @@ jobs:
         shell: bash
     env:
       CLI_BRANCH: ZEN-543-updates-for-workflow
-      CLI_PATH: ${{env.GITHUB_WORKSPACE}}/keg-cli
+      CLI_PATH: $GITHUB_WORKSPACE/keg-cli
       CLI_USER: keg-admin
       GIT_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      KEG_GLOBAL_CONFIG: ${{env.CLI_PATH}}/.kegConfig/cli.config.json
+      KEG_GLOBAL_CONFIG: $GITHUB_WORKSPACE/keg-cli/.kegConfig/cli.config.json
       HUB_BRANCH: ${GITHUB_REF##*/}
     steps:
     - name: "Clone Keg-CLI"
