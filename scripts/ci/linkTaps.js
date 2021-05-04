@@ -10,7 +10,14 @@ const link = (repoName, alias) => {
   return new Promise((res, rej) => {
     const cmd = `REPO_NAME=${repoName} ALIAS_NAME=${alias} bash ${__dirname}/linkRepo.sh`
     exec(cmd, err => {
-      err ? rej(err) : res({repoName, alias})
+      if (err) {
+        console.error(`Could not link ${repoName}`)
+        rej(err)
+      }
+      else {
+        console.log(`${repoName} linked with alias ${alias}`)
+        res({repoName, alias})
+      }
     })
   })
 }
