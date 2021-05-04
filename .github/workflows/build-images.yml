@@ -15,9 +15,11 @@ jobs:
         shell: bash
     env:
       CLI_BRANCH: ZEN-543-updates-for-workflow
-      CLI_PATH: $GITHUB_WORKSPACE/keg-cli
+      CLI_PATH: ${{env.GITHUB_WORKSPACE}}/keg-cli
       CLI_USER: keg-admin
       GIT_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      KEG_GLOBAL_CONFIG: ${{env.CLI_PATH}}/.kegConfig/cli.config.json
+      HUB_BRANCH: ${GITHUB_REF##*/}
     steps:
     - name: "Clone Keg-CLI"
       id: clone-cli
@@ -27,10 +29,7 @@ jobs:
       run: yarn --cwd $GITHUB_WORKSPACE/keg-cli install
     - name: "Setup Keg-CLI"
       id: setup-cli
-      run: cd $GITHUB_WORKSPACE/keg-cli; KEG_HUB_BRANCH=${GITHUB_REF##*/} KEG_ROOT_DIR=$GITHUB_WORKSPACE/keg-hub bash scripts/ci/setupCLIConfig.sh
-    - name: "Set Docker User"
-      id: set-docker-user
-      run: source $GITHUB_WORKSPACE/keg-cli/keg && keg config set key=docker.user value=${{env.CLI_USER}} --confirm false
+      run: cd $GITHUB_WORKSPACE/keg-cli; USER=${{env.CLI_USER}} KEG_HUB_BRANCH=${{env.HUB_BRANCH}} KEG_ROOT_DIR=$GITHUB_WORKSPACE/keg-hub bash scripts/ci/setupCLIConfig.sh
     - name: "Set Git Key"
       id: set-git-key
       run: source $GITHUB_WORKSPACE/keg-cli/keg && keg git key add --value ${{env.GIT_TOKEN}} --confirm false
