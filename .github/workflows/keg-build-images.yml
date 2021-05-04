@@ -35,7 +35,7 @@ jobs:
 
       - name: "Link Keg-Hub Taps"
         id: link-taps
-        run: cd $KEG_HUB_PATH && node scripts/ci/linkTaps.js
+        run: cd $KEG_HUB_PATH && bash scripts/ci/linkRepos.sh
 
       - name: "Build and Push"
         id: build-push-images
