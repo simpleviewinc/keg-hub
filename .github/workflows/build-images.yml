@@ -44,4 +44,4 @@ jobs:
       run: cd $GITHUB_WORKSPACE/keg-hub && node scripts/ci/linkTaps.js
     - name: "Build and Push"
       id: build-push-images
-      run: cd $GITHUB_WORKSPACE/keg-hub && GIT_KEY=${{env.GIT_TOKEN}} KEG_REPO=base KEG_CLI_PATH=${{env.CLI_PATH}} bash scripts/ci/buildPushDockerImages.sh
+      run: cd $GITHUB_WORKSPACE/keg-hub && GIT_KEY=${{env.GIT_TOKEN}} bash scripts/ci/buildPushDockerImages.sh
