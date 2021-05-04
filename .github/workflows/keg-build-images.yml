@@ -1,5 +1,5 @@
 
-name: keg-build
+name: keg-build-images
 on:
   push:
     branches:
