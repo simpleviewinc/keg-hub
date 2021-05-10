@@ -1,4 +1,6 @@
-import { isColl } from '../collection/isColl'
+/** @module collection */
+
+import { isColl } from './isColl'
 import { isObj } from '../object/isObj'
 import { isFunc } from '../method/isFunc'
 import { exists } from '../ext/exists'
