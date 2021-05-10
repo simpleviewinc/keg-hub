@@ -6,13 +6,16 @@ const OPTIONS = {
   LOG_PREFIX: null
 }
 
+// if no default or custom validator set for an arg, just assert it is valid
+const defaultValidator = () => true
+
 /** 
  *  Validates each key-value entry in argObj using the validator functions in validators with matching keys. 
  *  For any failures, validate will console.error the reason.
  *  @param { Object } argObj - object, where keys are the name of the argument to validate, and value is its value
  *  @param { Object } validators - object, where keys match the argument and values are predicate functions (return true/false and are passed the arg with the same key). 
  *     - Use the `$default` key to define a default validator, which will validate any argument that doesn't have a custom validator defined.
- *  @param { Object } options - contains `logs` and `throws` props. When a validation fails, it will throw an error if `throws` is true. Else it logs error if `logs` is true.
+ *  @param { Object } options - contains `logs`, `throws`, and `prefix` props. When a validation fails, it will throw an error if `throws` is true. Else it logs error if `logs` is true. `prefix` prepends a string to the error messages.
  *  @returns { Array } - an entry with two values [ success, results ]. 
  *     - success: { Boolean } that is true if all arguments passed their validators, false otherwise
  *     - results: { Object } that holds the validation results for each argument, keyed by the same keys as in argObj. For each
@@ -29,18 +32,21 @@ const OPTIONS = {
  *    console.log(isValid) // false
  *    console.log(results.elements.success) // false
  */
-export const validate = (argObj, validators={}, { logs=OPTIONS.SHOULD_LOG, throws=OPTIONS.SHOULD_THROW, prefix=OPTIONS.LOG_PREFIX }={}) => {
-  const validationCaseEntries = Object.entries(argObj)
+export const validate = (argObj, validators={}, options={}) => {
+  const { 
+    logs=OPTIONS.SHOULD_LOG, 
+    throws=OPTIONS.SHOULD_THROW, 
+    prefix=OPTIONS.LOG_PREFIX,
+  } = options
 
-  // if no default or custom validator set for an arg, just assert it is valid
-  const defaultValidator = () => true
+  const validationCaseEntries = Object.entries(argObj)
 
   // validate each argument
   const validationResults = validationCaseEntries.map(
     ([argName, argValue]) => validateArgument(
       argName,
       argValue,
-      validators[argName] || validators['$default'] || defaultValidator
+      validators[argName] || validators.$default || defaultValidator
     )
   )
 
