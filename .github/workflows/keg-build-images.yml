@@ -30,7 +30,7 @@ jobs:
         run: cd $GITHUB_WORKSPACE/keg-cli && KEG_HUB_BRANCH=${GITHUB_REF##*/} bash scripts/ci/setupKegEnvironment.sh
         env:
           KEG_ROOT_DIR: ${{ env.KEG_HUB_PATH }}
-          KEG_CLI_BRANCH: ZEN-543-updates-for-workflow
+          KEG_CLI_BRANCH: ${{ env.KEG_CLI_BRANCH }}
           KEG_CLI_USER: keg-admin
 
       - name: "Link Keg-Hub Taps"
