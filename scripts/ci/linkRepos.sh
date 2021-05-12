@@ -11,8 +11,7 @@ log_result () {
 
 link_repos() {
   local KEG_REPOS=$(ls "$KEG_HUB_PATH/repos")
-  for REPO in $KEG_REPOS
-  do
+  for REPO in $KEG_REPOS; do
     local REPO_PATH="$KEG_HUB_PATH/repos/$REPO"
     if [[ ! -d "$REPO_PATH" ]]; then
       continue
