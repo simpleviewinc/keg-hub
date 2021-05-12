@@ -19,7 +19,7 @@ jobs:
         shell: bash
     env:
       GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      KEG_CLI_BRANCH: ${{ github.events.input.cliBranch || "ZEN-543-updates-for-workflow" }}
+      KEG_CLI_BRANCH: ZEN-543-updates-for-workflow
       KEG_CLI_PATH: ${{ github.workspace }}/keg-cli
       KEG_CLI_USER: keg-admin
       KEG_GLOBAL_CONFIG: ${{ github.workspace }}/keg-cli/.kegConfig/cli.config.json
@@ -32,14 +32,14 @@ jobs:
 
       - name: "Clone Keg-CLI"
         id: clone-cli
-        run: git -C $GITHUB_WORKSPACE clone --single-branch --branch ${{env.KEG_CLI_BRANCH}} https://github.com/simpleviewinc/keg-cli.git
+        run: git -C $GITHUB_WORKSPACE clone --single-branch --branch ${{ github.event.inputs.cliBranch || env.KEG_CLI_BRANCH }} https://github.com/simpleviewinc/keg-cli.git
 
       - name: "Setup Keg Environment"
         id: setup-environment
         run: cd $GITHUB_WORKSPACE/keg-cli && KEG_HUB_BRANCH=${GITHUB_REF##*/} bash scripts/ci/setupKegEnvironment.sh
         env:
           KEG_ROOT_DIR: ${{ env.KEG_HUB_PATH }}
-          KEG_CLI_BRANCH: ${{ env.KEG_CLI_BRANCH }}
+          KEG_CLI_BRANCH: ${{ github.event.inputs.cliBranch || env.KEG_CLI_BRANCH }}
           KEG_CLI_USER: keg-admin
 
       - name: "Link Keg-Hub Taps"
