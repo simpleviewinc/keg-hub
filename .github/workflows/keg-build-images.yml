@@ -5,6 +5,10 @@ on:
     branches:
       - ZEN-543-rebuild-workflow
       - develop
+  workflow_dispatch:
+    inputs:
+      cliBranch:
+        description: "Name of keg-cli git branch to use in this workflow"
 
 jobs:
   build-images:
@@ -15,7 +19,7 @@ jobs:
         shell: bash
     env:
       GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      KEG_CLI_BRANCH: ZEN-543-updates-for-workflow
+      KEG_CLI_BRANCH: ${{ github.events.input.cliBranch || "ZEN-543-updates-for-workflow" }}
       KEG_CLI_PATH: ${{ github.workspace }}/keg-cli
       KEG_CLI_USER: keg-admin
       KEG_GLOBAL_CONFIG: ${{ github.workspace }}/keg-cli/.kegConfig/cli.config.json
