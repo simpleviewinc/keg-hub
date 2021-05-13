@@ -13,7 +13,7 @@ require('react-native');
 var cardContent = require('./cardContent.js');
 var cardContainer = require('./cardContainer.js');
 var cardSection = require('./cardSection.js');
-var cardMedia = require('./cardMedia-74c3dd87.js');
+var cardMedia = require('./cardMedia-908a98ad.js');
 require('./isValidComponent.js');
 require('@keg-hub/re-theme');
 require('./view-276572bd.js');

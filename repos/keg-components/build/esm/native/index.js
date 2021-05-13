@@ -19,8 +19,8 @@ export { Subtitle } from './subtitle.js';
 import { Text as Text$1 } from './text.js';
 export { Text } from './text.js';
 import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray, a as _defineProperty, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
-import { C as Checkbox } from './checkbox-e42c7bd0.js';
-export { C as Checkbox } from './checkbox-e42c7bd0.js';
+import { C as Checkbox } from './checkbox-a5fdae13.js';
+export { C as Checkbox } from './checkbox-a5fdae13.js';
 import { useStyle, useTheme, withTheme } from '@keg-hub/re-theme';
 import { u as useClassList } from './useClassList.native-70068878.js';
 export { u as useClassList } from './useClassList.native-70068878.js';
@@ -33,7 +33,7 @@ export { useThemePath } from './useThemePath.js';
 export { useThemeWithHeight } from './useThemeWithHeight.js';
 import { Picker } from 'react-native';
 export { I as Input } from './input-db203f81.js';
-import { S as Select$1, C as ChevronDown } from './select-a8c93a32.js';
+import { S as Select$1, C as ChevronDown } from './select-cb1b9fdc.js';
 import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
 export { getInputValueKey, getValueFromChildren } from './getInputValue.js';
 import { useSelectHandlers } from './useSelectHandlers.js';
@@ -42,7 +42,7 @@ import { u as useClassName } from './useClassName.native-32e8827d.js';
 export { u as useClassName } from './useClassName.native-32e8827d.js';
 import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
 export { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
-import 'react-native-svg';
+import './svgIcon.native-8765b7af.js';
 import { I as Icon } from './icon-1b76b631.js';
 export { I as Icon } from './icon-1b76b631.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
@@ -54,7 +54,7 @@ import { getChecked } from './getChecked.js';
 export { getChecked } from './getChecked.js';
 import { S as Switch$1 } from './switch-f0b4618b.js';
 export { TouchableIcon } from './touchableIcon.js';
-export { I as Image } from './cardMedia-b5fb5c3a.js';
+export { I as Image } from './cardMedia-dd0de55f.js';
 export { Grid } from './grid.js';
 export { Row } from './row.js';
 export { Column } from './column.js';
@@ -74,7 +74,8 @@ import { S as SectionList$1 } from './sectionList.native-b172614c.js';
 export { g as getElementLayout, s as scrollList, u as useScroll } from './sectionList.native-b172614c.js';
 export { Drawer } from './drawer.js';
 export { TextToggle } from './textToggle.js';
-export { SvgIcon } from './svgIcon.js';
+import PropTypes from 'prop-types';
+import { SvgIcon as SvgIcon$1 } from './svgIcon.js';
 export { withTouch } from './withTouch.js';
 export { withScrollIntoView } from './withScrollIntoView.js';
 export { u as useOutsideDetect, w as withOutsideDetect } from './withOutsideDetect-8bf57fab.js';
@@ -106,13 +107,13 @@ export { platformFlatten } from './platformFlatten.js';
 export { buildTheme } from './buildTheme.js';
 export { validateFunctions } from './validateFunctions.js';
 export { isValidComponent } from './isValidComponent.js';
-import './svgIcon-51ab090d.js';
 import './cardContent.js';
 import './cardCallout.js';
 import './cardContainer.js';
 import './cardSection.js';
 import './checkbox.wrapper-1850b63a.js';
 import './input-b54ba952.js';
+import 'react-native-svg';
 import './image-d610d905.js';
 import './container.js';
 import './kegText.js';
@@ -485,5 +486,13 @@ var SectionList = StyleInjector(SectionList$1, {
 });
 SectionList.propTypes = SectionList$1.propTypes;
 
-export { Link as A, CheckGroup, FilePicker, Form, Link, Option, Radio, ScrollView, SectionList, Select, Slider, Switch, useKeyPress, useScrollIntoView };
+var SvgIcon = StyleInjector(SvgIcon$1, {
+  displayName: 'SvgIcon',
+  className: 'keg-svg-icon'
+});
+SvgIcon.propTypes = _objectSpread2(_objectSpread2({}, SvgIcon$1.propTypes), {}, {
+  className: PropTypes.string
+});
+
+export { Link as A, CheckGroup, FilePicker, Form, Link, Option, Radio, ScrollView, SectionList, Select, Slider, SvgIcon, Switch, useKeyPress, useScrollIntoView };
 //# sourceMappingURL=index.js.map

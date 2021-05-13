@@ -2,12 +2,12 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var uniqArr = require('./uniqArr-1600c5cf.js');
+var uniqArr = require('./uniqArr-074787a2.js');
 var isArr = require('./isArr-39234014.js');
 var isBool = require('./isBool-aa6af74e.js');
 var toBool = require('./toBool-deb350e4.js');
 var softFalsy = require('./softFalsy-3d7ead1c.js');
-var shallowEqual = require('./shallowEqual-e64662c9.js');
+var shallowEqual = require('./shallowEqual-420e75a0.js');
 var get = require('./get-a3872853.js');
 var isColl = require('./isColl-5757310a.js');
 var set = require('./set-e19acd5e.js');
@@ -19,8 +19,8 @@ var typeOf = require('./typeOf-51fe5771.js');
 var exists = require('./exists-c79204b1.js');
 var log = require('./log-37bbfac6.js');
 var hasOwn = require('./hasOwn-7999ca65.js');
-var parseErrorMessage = require('./parseErrorMessage-b54e1944.js');
-var identity = require('./identity-0ec4681d.js');
+var parseErrorMessage = require('./parseErrorMessage-3126903c.js');
+var identity = require('./identity-599bde17.js');
 var isFunc = require('./isFunc-f93803cb.js');
 var match = require('./match-e3c15ed8.js');
 var isNonNegative = require('./isNonNegative-9959647c.js');
@@ -32,13 +32,13 @@ var deepFreeze = require('./deepFreeze-d73ccc57.js');
 var isObj = require('./isObj-6b3aa807.js');
 var reduceObj = require('./reduceObj-f41cbf8d.js');
 var wait = require('./wait-8ca88995.js');
-var joinRegex = require('./joinRegex-eadd6451.js');
+var joinRegex = require('./joinRegex-8c92aad3.js');
 var getWordEndingAt = require('./getWordEndingAt-e40a7cea.js');
 var isStr = require('./isStr-8a57710e.js');
 var sanitize = require('./sanitize-0a18302d.js');
 var toStr = require('./toStr-8e499966.js');
-var validate = require('./validate-500f268a.js');
-var getURLParam = require('./getURLParam-c1c8bb19.js');
+var validate = require('./validate-23297ec2.js');
+var getURLParam = require('./getURLParam-9181a551.js');
 
 
 
@@ -69,6 +69,7 @@ exports.cleanColl = shallowEqual.cleanColl;
 exports.deepEqual = shallowEqual.deepEqual;
 exports.isEmptyColl = shallowEqual.isEmptyColl;
 exports.mapColl = shallowEqual.mapColl;
+exports.mapFind = shallowEqual.mapFind;
 exports.reduceColl = shallowEqual.reduceColl;
 exports.repeat = shallowEqual.repeat;
 exports.shallowEqual = shallowEqual.shallowEqual;

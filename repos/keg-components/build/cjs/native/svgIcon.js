@@ -4,9 +4,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
 var React = require('react');
-var jsutils = require('@keg-hub/jsutils');
 var Svg = require('react-native-svg');
 var reTheme = require('@keg-hub/re-theme');
+var jsutils = require('@keg-hub/jsutils');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -37,9 +37,13 @@ var useColor = function useColor(fill, stroke, color, border, style, theme) {
     };
   }, [fill, stroke, color, border, style]);
 };
-var SvgIcon = function SvgIcon(props) {
-  var border = props.border,
-      color = props.color,
+var useClassName = function useClassName(className) {
+  return jsutils.noPropObj;
+};
+var SvgIcon = React__default['default'].forwardRef(function (props, ref) {
+  var border = props.border;
+      props.className;
+      var color = props.color,
       clipRule = props.clipRule,
       delta = props.delta,
       fill = props.fill,
@@ -55,15 +59,17 @@ var SvgIcon = function SvgIcon(props) {
       svgFill = props.svgFill,
       viewBox = props.viewBox,
       width = props.width,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["border", "color", "clipRule", "delta", "fill", "fillRule", "height", "size", "stroke", "strokeWidth", "strokeLinecap", "strokeLinejoin", "style", "svgFill", "viewBox", "width"]);
-  var iconStyle = useIconStyle(style);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["border", "className", "color", "clipRule", "delta", "fill", "fillRule", "height", "size", "stroke", "strokeWidth", "strokeLinecap", "strokeLinejoin", "style", "svgFill", "viewBox", "width"]);
   var theme = reTheme.useTheme();
+  var iconStyle = useIconStyle(style);
   var sizeStyle = useSize(size, width, height, iconStyle, theme);
+  var svgStyles = reTheme.useStyle(iconStyle, sizeStyle);
   var colorStyle = useColor(fill, stroke, color, border, iconStyle, theme);
-  return React__default['default'].createElement(Svg__default['default'], _rollupPluginBabelHelpers._extends({}, attrs, {
+  var classProps = useClassName();
+  return React__default['default'].createElement(Svg__default['default'], _rollupPluginBabelHelpers._extends({}, attrs, classProps, {
     fill: svgFill,
     viewBox: viewBox,
-    style: [iconStyle, sizeStyle]
+    style: svgStyles
   }), React__default['default'].createElement(Svg.Path, {
     clipRule: clipRule,
     d: delta,
@@ -74,7 +80,7 @@ var SvgIcon = function SvgIcon(props) {
     strokeLinecap: strokeLinecap,
     strokeLinejoin: strokeLinejoin
   }));
-};
+});
 
 exports.SvgIcon = SvgIcon;
 //# sourceMappingURL=svgIcon.js.map
