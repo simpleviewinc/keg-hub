@@ -1,0 +1,86 @@
+actions:
+  tap:
+    build:
+      cmds:
+        - yarn web:build
+        - rm -rf {{ envs.DOC_BUILD_PATH }}
+        - cp -R {{ envs.DOC_APP_PATH }}/web-build {{ envs.DOC_BUILD_PATH }}
+    serve:
+      detach: true
+      cmds:
+        - npx serve {{ envs.DOC_BUILD_PATH }} --cors -n -l {{ envs.KEG_PROXY_PORT }}
+env:
+  # --- LOCAL ENV CONTEXT --- #
+  COMPONENTS_PATH: "{{ cli.taps.components.path }}"
+  RETHEME_PATH: "{{ cli.taps.retheme.path }}"
+  RESOLVER_PATH: "{{ cli.paths.resolver }}"
+
+  # --- CORE ENV CONTEXT --- #
+
+  # Docker data
+  KEG_CONTEXT_PATH: "{{ cli.taps.core.path }}"
+  KEG_DOCKER_FILE: "{{ cli.taps.core.path }}/container/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.taps.core.path }}/container/values.yml"
+  KEG_MUTAGEN_FILE: "{{ cli.taps.core.path }}/container/mutagen.yml"
+
+  # The default docker-compose file path
+  KEG_COMPOSE_DEFAULT: "{{ cli.taps.core.path }}/container/docker-compose.yml"
+  # Can also define other an override compose files
+  # Other compose files can loaded by setting an ENVS as follows:
+    # KEG_COMPOSE_REPO="/path/to/override.yml"
+    # KEG_COMPOSE_CORE_<ENV>: "/path/to/override.yml"
+    # KEG_COMPOSE_<ENV>: "/path/to/override.yml"
+
+  KEG_EXEC_CMD: tap:start
+
+  # Image to use when build keg-core
+  KEG_BASE_IMAGE: ghcr.io/simpleviewinc/keg-base:develop
+
+  # Image to use when running keg-core
+  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-core:develop
+
+  # --- DOCKER ENV CONTEXT --- #
+
+  DOC_APP_PATH: /keg/keg-core
+
+  DOC_BUILD_PATH: /keg/core-build
+
+  # Port the application will use when running within the container
+  # Required to allow the keg-proxy to route traffic to it
+
+  # Defines the location in a docker container for a dependency
+  # This allows mutagen to know where to sync the local version of the dependency
+  DOC_COMPONENTS_PATH: /keg/keg-core/node_modules/@keg-hub/keg-components
+  DOC_JSUTILS_PATH: /keg/keg-core/node_modules/@keg-hub/jsutils
+  DOC_RETHEME_PATH: /keg/keg-core/node_modules/@keg-hub/re-theme
+  DOC_RESOLVER_PATH: /keg/keg-core/node_modules/@keg-hub/tap-resolver
+
+  # --- KEG-PROXY ENVs --- #
+
+  # KEG_PROXY_HOST: custom-host.local.kegdev.xyz
+    # To override the host header used by the proxy to route traffic to this container
+    # add KEG_PROXY_HOST env and set it's value to the what the host header should be
+    # the default is <container-context>-<git-branch-name>.<KEG_PROXY_HOST>
+  
+  # KEG_DOCKER_NETWORK: custom-docker-network
+    # To override the default docker network used by the proxy to route traffic to this container
+    # There should be no reason to need to overwrite this, but you can if you want
+    # add KEG_PROXY_HOST env and set it's value to the what network should be used
+    # the default is 'keg-hub-net'
+
+  # KEG_PROXY_PORT - 80
+    # If not set, then port 80 will be used by default
+    # Port the proxy will route traffic to within the container
+    # This should be the port the application expects to receive traffic on
+    # This port should not be ( You can still do these things, but it's better not to )
+    #   * Exposed publicly on the container
+    #   * Bound to the host machine
+  KEG_PROXY_PORT: 19006
+
+  # --- GENERAL CONTEXT ENVs --- #
+
+  # Image Build information
+  IMAGE: keg-core
+  VERSION: 1.0.0
+  CONTAINER_NAME: keg-core
+  CHOKIDAR_USEPOLLING: 1
