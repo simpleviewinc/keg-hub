@@ -17,5 +17,4 @@ export const SvgIcon = StyleInjector(KegSvgIcon, {
 
 SvgIcon.propTypes = {
   ...KegSvgIcon.propTypes,
-  className: PropTypes.string,
 }
