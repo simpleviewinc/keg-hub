@@ -106,7 +106,7 @@ const customWatchOptions = options => {
   return {
     ...options,
     ignored: [
-      ...(options.ignored ? eitherArr(options.ignored, [eitherArr]) : []),
+      ...(options.ignored ? eitherArr(options.ignored, [options.ignored]) : []),
       /node_modules([\\]+|\/)+(?!\@keg-hub\/re-theme\/build\/esm\/web)/,
     ]
   }
