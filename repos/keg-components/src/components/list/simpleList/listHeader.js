@@ -64,7 +64,7 @@ export const ListHeader = props => {
   } = props
 
   const theme = useTheme()
-  const mergeStyles = useStyle('list.header', styles)
+  const mergeStyles = useStyle('list.simple.header', styles)
   const [ rowRef, listStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
 
   const toggledStyle = toggled ? mergeStyles.active : noOpObj

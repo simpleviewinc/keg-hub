@@ -123,7 +123,7 @@ export const ListItem = React.memo(props => {
     uuid,
   } = props
 
-  const mergeStyles = useStyle('list.item', styles)
+  const mergeStyles = useStyle('list.simple.item', styles)
   const activeStyle = active ? mergeStyles.active : noOpObj
   const [ rowRef, itemStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
