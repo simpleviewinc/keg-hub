@@ -1,7 +1,7 @@
 import React from 'react'
 import { SectionList } from './sectionList'
 import { SectionList as SectionListNative } from './sectionList.native.js'
-import { View, H5, H3, P, Divider } from '../'
+import { View, H5, H3, P, Divider } from '../../'
 
 const goatData = [
   {

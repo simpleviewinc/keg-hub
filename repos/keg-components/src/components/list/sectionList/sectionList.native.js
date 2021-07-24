@@ -1,9 +1,9 @@
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
-import { Text } from '../typography/text'
+import { Text } from '../../typography/text'
 import { useScroll } from 'KegUseScroll'
 import { useClassName } from 'KegClassName'
-import { useThemePath } from '../../hooks/useThemePath'
+import { useThemePath } from '../../../hooks/useThemePath'
 import { useScrollClassName } from 'KegScrollClassName'
 import { checkCall, noPropObj, noPropArr, get, isFunc, isObj, isStr } from '@keg-hub/jsutils'
 import React, {
@@ -19,7 +19,7 @@ import {
   renderFromType,
   getElementLayout,
   scrollList,
-} from '../../utils/components'
+} from '../../../utils/components'
 
 /**
  * Helper hook to add __kegIndex to the sections
