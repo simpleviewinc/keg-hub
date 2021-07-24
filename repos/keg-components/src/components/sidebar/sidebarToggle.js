@@ -1,65 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { View } from 'KegView'
 import { Touchable } from '../touchable'
 import { Text } from '../typography/text'
 import { ChevronDown } from 'KegIcons/chevronDown'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useWindowClick } from 'KegUseWindowClick'
-import { useStyle, useThemeHover } from '@keg-hub/re-theme'
+import { useStyle, useThemeHover, useTheme } from '@keg-hub/re-theme'
 import { useToggledStyles } from '../../hooks/useToggledStyles'
-
-const ToggleMain = reStyle(View)((theme, props) => {
-  return {
-    position: 'absolute',
-  }
-})
-
-const Action = reStyle(Touchable)((theme, props) => {
-  return {
-    pH: 1,
-    pV: 15,
-    left: 150,
-    width: 20,
-    minH: 50,
-    top: `45vh`,
-    shadowRadius: 2,
-    shadowOpacity: 0.20,
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-    bRad: 3,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    backgroundColor: theme.colors.palette.black01,
-    shadowColor: theme.colors.palette.black03,
-    shadowOffset: { width: 2, height: 2 },
-    transitionDuration: '0.8s',
-    transitionProperty: 'width height background-color',
-  }
-})
-const Content = reStyle(View)((theme, props) => {
-  return {
-
-  }
-})
-
-const ToggleText = reStyle(Text)((theme, props) => {
-  return {
-
-  }
-})
-
-const ToggleIcon = reStyle(ChevronDown)((theme, props) => {
-  return {
-    fontSize: 18,
-    pos: 'relative',
-    left: -1,
-    color: theme.colors.palette.white01,
-    transitionDuration: '0.8s',
-    transitionProperty: 'width height transform stroke color',
-  }
-})
-
+import { ToggleMain, ToggleAction, ToggleContent, ToggleText, ToggleIcon } from './sidebar.restyle'
 
 /**
  * Helper to listen for click events
@@ -79,46 +27,55 @@ const onWindowClick = (toggled, setIsToggled, event) => {
   !sideBarEl && setIsToggled(false)
 }
 
+const iconRotate = {
+  on: { transform: 'rotate(90deg)' },
+  off: { transform: 'rotate(270deg)' }
+}
 
-const ToggleContent = props => {
+const useIconProps = (toggled, themeStyles) => {
+  const theme = useTheme()
+  const iconStyle = useStyle(themeStyles.icon, toggled ? iconRotate.on : iconRotate.off)
+  return useMemo(() => {
+    return {
+      style: iconStyle,
+      size: themeStyles?.icon?.fontSize || theme?.typography?.default?.fontSize,
+      stroke: themeStyles?.icon?.c || themeStyles?.icon?.color || theme.colors.palette.white01
+    }
+  }, [theme, themeStyles, iconStyle])
+}
+
+const ToggleContainer = props => {
   const { text, styles, toggled, onPress, setIsToggled, sidebarSize, Icon=ToggleIcon } = props
-  const iconStyles = { transform: toggled ? 'rotate(90deg)' : 'rotate(270deg)' }
 
   const [ ref, themeStyles ] = useThemeHover(styles, styles?.hover)
-
-  const iconSize = themeStyles?.icon?.fontSize || 20
-  const iconStroke = themeStyles?.icon?.c || themeStyles?.icon?.color
+  const iconProps = useIconProps(toggled, themeStyles)
 
   useWindowClick(onWindowClick, toggled, setIsToggled)
 
   return (
-    <Action
+    <ToggleAction
       touchRef={ref}
       className={`sidebar-toggle-action`}
       onPress={onPress}
       style={themeStyles?.action}
     >
-      <Content
+      <ToggleContent
         className={`sidebar-toggle-content`}
         style={themeStyles?.content}
       >
-      { !text ? (
-        <Icon
-          size={iconSize}
-          stroke={iconStroke}
-          style={[ themeStyles.icon, iconStyles ]}
-        />
-      ) : (
-        <ToggleText
-          className={`sidebar-toggle-text`}
-          style={themeStyles?.text}
-        >
-          { text }
-        </ToggleText>
-      )}
-
-      </Content>
-    </Action>
+        { !text
+          ? (<Icon {...iconProps}/>)
+          : (
+              <ToggleText
+                className={`sidebar-toggle-text`}
+                style={themeStyles?.text}
+              >
+                { text }
+              </ToggleText>
+            )
+        }
+      </ToggleContent>
+    </ToggleAction>
   )
 }
 
@@ -141,7 +98,7 @@ export const SidebarToggle = props => {
       style={toggleStyles?.main}
     >
     {children || (
-        <ToggleContent
+        <ToggleContainer
           text={text}
           toggled={toggled}
           setIsToggled={setIsToggled}
