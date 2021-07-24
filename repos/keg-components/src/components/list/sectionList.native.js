@@ -292,6 +292,13 @@ const useRenderSectionHeader = (
   )
 }
 
+/**
+ * Helper hook to memoize the renderItem function
+ * @param {function} renderItem - method to render a single item
+ * @param {function} onSectionChange - method called when a section is changed
+ *
+ * @returns {React.Component} - response from the renderItem function
+ */
 const useRenderItem = (renderItem, onSectionChange) => {
   return useCallback(
     ({ item }) => {
@@ -301,6 +308,12 @@ const useRenderItem = (renderItem, onSectionChange) => {
   )
 }
 
+/**
+ * Helper hook to memoize the keyExtractor function for the SectionList
+ * @param {function} keyExtractor - method to extract the key for the item
+ *
+ * @returns {function} - Memoized keyExtractor function
+ */
 const useKeyExtractor = (keyExtractor) => {
   return useCallback((item, index) => {
     return isFunc(keyExtractor)

@@ -5,7 +5,6 @@ import { Text } from '../typography/text'
 import { Link } from '../link'
 import { Label } from '../typography/label'
 import { Subtitle } from '../typography/subtitle'
-
 import { SectionList } from '../list/sectionList'
 
 const goatData = [{
@@ -99,3 +98,16 @@ export const Basic = props => {
  * Tells the story wrap decorator to not wrap the component in a container
  */
 Basic.noStoreWrap = true
+
+Sidebar.defaultProps = {
+  initial: 0,
+  type: 'timing',
+  to: 0,
+  onToggled: () => {},
+  className: '',
+  config: {},
+  styles: {},
+  sidebarPos: 'left',
+}
+
+export { Sidebar }

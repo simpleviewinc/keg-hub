@@ -152,7 +152,7 @@ const useSidebarAnimate = (props, isToggled) => {
 
 /**
  * Sidebar
- * @param {Object} props
+ * @param {Object} props - see Sidebar PropTypes below
  * @param {Object} props.config - Defines the animation of the sidebar
  * @param {Array|Object|React.Component} props.children - Children to render inside the sidebar
  * @param {string} props.className - Root className of the sidebar
@@ -209,15 +209,42 @@ export const Sidebar = props => {
 Sidebar.Toggle = SidebarToggle
 
 Sidebar.propTypes = {
+  /**
+   * Configuration for the animation of the sidebar open and close
+   */
   config: PropTypes.object,
   children: PropTypes.node,
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
+  /**
+   * Initial position of the sidebar on the X axis
+   */
   initial: PropTypes.number.isRequired,
+  /**
+   * Function to call when the sidebar is toggled
+   */
   onToggled: PropTypes.func,
+  /**
+   * Location of the sidebar on the page ( Left or Right )
+   */
   sidebarPos: PropTypes.string,
+  /**
+   * Width of the sidebar in pixels
+   */
   sidebarWidth: PropTypes.number,
+  /**
+   * Styles to apply to the sidebar and its children
+   */
   styles: PropTypes.object,
+  /**
+   * Final position of the sidebar on the X axis when toggled
+   */
   to: PropTypes.number,
+  /**
+   * Component to override the default toggle component
+   */
   ToggleComponent: PropTypes.oneOfType([ PropTypes.func, PropTypes.node ]),
+  /**
+   * Type of animation to use ( e.g. 'spring' )
+   */
   type: PropTypes.string,
 }
