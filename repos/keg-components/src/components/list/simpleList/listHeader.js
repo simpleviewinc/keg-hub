@@ -1,18 +1,13 @@
 import React, { useMemo } from 'react'
-import { wordCaps, isStr } from '@keg-hub/jsutils'
-import {
-  H6,
-  Icon,
-  Row,
-  Touchable,
-  View,
-} from 'SVComponents'
-import { noOpObj } from 'SVUtils/helpers/noop'
-import { useToggleAnimate } from 'SVHooks'
-import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
-import { get } from '@keg-hub/jsutils'
+import { Icon } from 'KegIcon'
+import { View } from 'KegView'
+import { Row } from '../../layout'
 import { Animated } from 'react-native'
-
+import { H6 } from '../../typography/h6'
+import { Touchable } from '../../touchable'
+import { get, noOpObj, wordCaps, isStr } from '@keg-hub/jsutils'
+import { useToggleAnimate } from '../../../hooks/useToggleAnimate'
+import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 
 const buildIconProps = (icon, theme) => {
   return {

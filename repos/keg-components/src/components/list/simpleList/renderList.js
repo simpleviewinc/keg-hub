@@ -7,7 +7,7 @@ import {
   isFunc
 } from '@keg-hub/jsutils'
 import { DrawerList } from './simpleList.restyle'
-import { ListItem } from './listHeader'
+import { ListItem } from './listItem'
 import { ListHeader } from './listHeader'
 
 
@@ -29,7 +29,7 @@ const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
     })
 }
 
-const RenderList = props => {
+export const RenderList = props => {
   const {
     drawer=true,
     first,

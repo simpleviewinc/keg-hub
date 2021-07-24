@@ -1,10 +1,10 @@
 import React from 'react'
-import { capitalize, noOpObj, exists } from '@keg-hub/jsutils'
-import { useStyle } from '@keg-hub/re-theme'
 import { Icon } from 'KegIcon'
 import { View } from 'KegView'
 import { Touchable } from '../../touchable'
 import { Text } from '../../typography/text'
+import { useStyle } from '@keg-hub/re-theme'
+import { capitalize, noOpObj, exists } from '@keg-hub/jsutils'
 
 /**
  * ListItemAction - Default component to render an Action of a ListItem

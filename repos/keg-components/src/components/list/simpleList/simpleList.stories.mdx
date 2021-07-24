@@ -1,0 +1,51 @@
+<!--- SimpleList.stories.mdx -->
+
+import { Story, Meta, Preview, Props } from '@storybook/addon-docs'
+
+import { SimpleList } from './simpleList'
+import {SimpleList as SimpleListNative} from './simpleList.native.js'
+import {Basic, WithStates} from './simpleList.examples.js'
+
+<Meta title="Components/Lists/SimpleList" component={SimpleList}/>
+
+# SimpleList
+
+Helper component for rendering sectioned lists, with a few extras.
+Utilizes react-native [SimpleList](https://reactnative.dev/docs/sectionlist) under the hood
+
+## Examples
+
+### Basic
+<Preview>
+  <Story name="Basic">
+    <Basic />
+  </Story>
+</Preview>
+
+```js
+import React from 'react'
+import { Divider, H5, H3, P, SimpleList, View } from '@keg-hub/keg-components'
+
+const sectionData = [
+  {
+    title: 'Section 1 Title',
+    data: [ 'First item in section 1' ],
+  },
+  // ...more sections
+]
+
+export const CustomList = () => {
+  return (
+    <SimpleList
+    />
+  )
+}
+```
+
+
+## Props
+Supports all props on [SimpleList](https://reactnative.dev/docs/sectionlist#props) 
+along with:
+
+<Props of={SimpleListNative} />
+
