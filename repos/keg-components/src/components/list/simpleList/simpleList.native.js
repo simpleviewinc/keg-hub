@@ -6,16 +6,18 @@ import {
   noPropArr,
   deepMerge,
   noOpObj,
-  isFunc
+  isFunc,
+  exists,
+  toStr,
 } from '@keg-hub/jsutils'
 import {
-  GridList,
+  SimpleGridList,
   SimpleItemList,
   SimpleItem,
   SimpleHeader
 } from './simpleList.restyle'
 
-const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
+const RenderGroupItems = ({ items, renderItem, group, onItemPress, styles }) => {
   return Object.entries(items)
     .map(([ key, item ]) => {
       const itemProps = {
@@ -33,68 +35,119 @@ const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
     })
 }
 
+const RenderGroupHeader = ({ renderHeader, header, ...props }) => {
+  return isFunc(renderHeader)
+    ? renderHeader(props)
+    : header && (<SimpleHeader {...props}/>)
+}
+
+const useToggledValue = (toggled, headerToggle, onHeaderPress, meta) => {
+  // If toggled exists, then it should be managed externally via onHeaderPress
+  // Otherwise manage toggled internally
+  const toggleExists = exists(toggled)
+  const [headerToggled, setToggled] = useState(toggled)
+  
+  const onTogglePress = useCallback(event => {
+    checkCall(onHeaderPress, event, meta)
+    !toggleExists &&
+      headerToggle &&
+      setToggled(!headerToggled)
+  }, [
+    meta,
+    toggled,
+    toggleExists,
+    headerToggle,
+    onHeaderPress,
+    headerToggled,
+  ])
+
+  const toggleState = useMemo(() => {
+    return toggleExists && (toggled !== headerToggled)
+      ? toggled
+      : headerToggled
+  }, [
+    toggled,
+    headerToggled,
+    toggleExists,
+  ])
+
+  return {
+    onTogglePress,
+    toggled: toggleState,
+  }
+}
+
 const RenderList = props => {
   const {
-    drawer=true,
     first,
     header=true,
     headerToggle=true,
     groupKey,
     HeaderIcon,
-    iconProps,
+    headerProps=noOpObj,
+    iconProps=noOpObj,
     last,
     meta=noOpObj,
     onHeaderPress,
     onItemPress,
+    renderHeader,
     renderItem,
     styles,
     drawerProps=noOpObj
   } = props
 
+  const drawer = exists(props.drawer)
+    ? props.drawer
+    : !header 
+      ? false
+      : meta.items && meta.items.length
+
   const group = meta.group || groupKey
-  const toggled = meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || false
-  const [ headerToggled, setToggled ] = useState(toggled)
-
-  const onTogglePress = useCallback(event => {
-    checkCall(onHeaderPress, event, meta)
-    headerToggle && setToggled(!headerToggled)
-  }, [ toggled, onHeaderPress, meta, headerToggled, headerToggle ])
-
-  const RenderedItems = (
-    <RenderListItems
-      first={first}
-      last={last}
-      items={ meta.items || noPropArr }
-      group={ group }
-      renderItem={renderItem}
-      onItemPress={ onItemPress }
-      styles={ styles?.item }
-    />
+  const {toggled, onTogglePress} = useToggledValue(
+    meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || null,
+    headerToggle,
+    onHeaderPress,
+    meta
   )
+
+  const RenderedItems = meta.items && meta.items.length
+    ? (
+        <RenderGroupItems
+          first={first}
+          last={last}
+          items={ meta.items}
+          group={ group }
+          renderItem={renderItem}
+          onItemPress={onItemPress}
+          styles={ styles?.item }
+        />
+      )
+    : noPropArr
 
   return (
     <>
-      { header && (
-        <SimpleHeader
-          first={first}
-          last={last}
-          Icon={HeaderIcon}
-          iconProps={iconProps}
-          toggled={ toggled }
-          onPress={ onTogglePress }
-          title={ group }
-          styles={styles?.header }
-        />
-      )}
+      <RenderGroupHeader
+        group={group}
+        header={header}
+        onPress={onTogglePress}
+        styles={styles?.header}
+        title={meta.title || group}
+        Icon={meta.Icon || HeaderIcon}
+        {...headerProps}
+        last={last}
+        first={first}
+        toggled={toggled}
+        iconProps={iconProps}
+      />
       { header && drawer
         ? (
             <SimpleItemList
+              className='keg-sub-items-drawer'
               {...drawerProps}
               last={last}
               first={first}
-              toggled={ toggled }
-              styles={ styles }
-              className='keg-sub-items-drawer'
+              styles={styles}
+              toggled={toggled}
               drawerStyles={drawerProps?.styles}
             >
               { RenderedItems }
@@ -112,12 +165,18 @@ export const SimpleList = (props) => {
   const itemEntries = Object.entries(items)
   const itemsLength = itemEntries.length - 1
 
-  return itemEntries.length
-    ? itemEntries.map(([ key, meta ], index) => {
+  return itemsLength > -1
+    ? itemEntries.map(([ key, meta=noOpObj ], index) => {
+        const { key:metaKey, group, title, uuid } = meta
+
+        const groupKey = [metaKey, group, title, uuid].reduce((built, item) => (
+          exists(item && toStr(item).trim()) ? `${built}-${item}`.trim() : built
+        ), ``)
+
         return (
-          <GridList
+          <SimpleGridList
             className={["keg-simple-list", className ]}
-            key={`${meta.group}-${key}`}
+            key={groupKey}
             style={ styles?.main }
           >
             <RenderList
@@ -125,11 +184,11 @@ export const SimpleList = (props) => {
               first={index === 0}
               last={itemsLength === index}
               index={index}
-              groupKey={key}
+              groupKey={groupKey}
               meta={meta}
               styles={styles}
             />
-          </GridList>
+          </SimpleGridList>
         )
       })
     : null 
@@ -146,14 +205,48 @@ SimpleList.propTypes = {
    * CSS rules for how the item lists should be display
    */
   styles: PropTypes.object,
+  /**
+   * Switch to set if each groups items should be rendered in a Drawer component
+   */
   drawer: PropTypes.bool,
+  /**
+   * Switch to set if each group should render a Header component 
+   */
   header: PropTypes.bool,
+  /**
+   * Switch to set clicking the header will toggle the items drawer. Ignored if props.drawer === false 
+   */
   headerToggle: PropTypes.bool,
+  /**
+   * Custom Icon component for each groups header
+   */
   HeaderIcon: PropTypes.node,
+  /**
+   * Custom props to pass on to the Header component
+   */
+  headerProps: PropTypes.object,
+  /**
+   * Custom props to pass on to the Icon component
+   */
   iconProps: PropTypes.object,
-  meta: PropTypes.object,
+  /**
+   * Called when the Groups header is clicked
+   */
   onHeaderPress: PropTypes.func,
+  /**
+   * Called when an Item is pressed
+   */
   onItemPress: PropTypes.func,
+  /**
+   * Header render prop, Overrides the default render method for each item
+   */
+  renderHeader: PropTypes.func,
+  /**
+   * Item render prop, Overrides the default render method for each item
+   */
   renderItem: PropTypes.func,
+  /**
+   * Custom props to pass on to the Drawer component. Ignored when drawer is false
+   */
   drawerProps: PropTypes.object,
 }

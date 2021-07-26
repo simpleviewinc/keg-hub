@@ -1,6 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { checkCall, isObj } from '@keg-hub/jsutils'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
 
 /**
  * Default animation config
@@ -38,6 +40,7 @@ const buildConfig = (config, values) => {
     ...defConfig,
     ...(isObj(config) ? config : {}),
     toValue: values.to,
+    useNativeDriver: !isWeb
   }
 }
 

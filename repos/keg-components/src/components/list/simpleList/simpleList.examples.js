@@ -1,5 +1,6 @@
 import React from 'react'
 import { SimpleList } from './simpleList'
+import { ChevronDown } from 'KegIcons/chevronDown'
 import { SimpleList as SimpleListNative } from './simpleList.native.js'
 
 const goatData = [
@@ -19,21 +20,69 @@ const goatData = [
       'Goats have horizontal, slit-shaped pupils the are usually pale in color.',
     ],
   },
-  {
-    title: 'Goat Grub',
-    data: [
-      'Goats are reputed to be willing to eat almost anything, including tin cans and cardboard boxes.',
-      "Goats will chew on anything remotely resembling plant matter to decide if it's to good to eat.",
-      'The unusual smells of leftover food in discarded cans or boxes may further stimulate their hunger.',
-    ],
-  },
 ]
+
+const listItems = {
+  grub: {
+    type: 'grub',
+    group: 'Goat Grub',
+    Icon: ChevronDown,
+    toggled: false,
+    items: [
+      {
+        title: `Test 1`,
+        uuid: 1,
+        // actions: [
+        //   {
+        //     name: 'Action',
+        //     key: `action-test1`,
+        //     iconProps: {
+        //       size: 12,
+        //       Component: Copy,
+        //     },
+        //   }
+        // ]
+      },
+      {
+        title: `Test 2`,
+        uuid: 2,
+      },
+      {
+        title: `Test 3`,
+        uuid: 3,
+      }
+    ]
+  }
+}
+
+const noHeaderStyles = {
+  header: {
+    default: {
+      main: { borderTopWidth: 0 },
+      title: { fontSize: 14 }
+    },
+    active: {
+      main: { borderBottomWidth: 0 }
+    }
+  }
+}
 
 export const Basic = () => {
   return (
-    <div />
+    <SimpleList items={listItems} />
   )
 }
+
+export const NoChildren = () => {
+  const { items } = listItems.grub
+  return (
+    <SimpleList
+      items={items}
+      styles={noHeaderStyles}
+    />
+  )
+}
+
 
 SimpleListNative.defaultProps = {
 }

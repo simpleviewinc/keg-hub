@@ -4,7 +4,7 @@ import { Story, Meta, Preview, Props } from '@storybook/addon-docs'
 
 import { SimpleList } from './simpleList'
 import {SimpleList as SimpleListNative} from './simpleList.native.js'
-import {Basic, WithStates} from './simpleList.examples.js'
+import {Basic, NoChildren} from './simpleList.examples.js'
 
 <Meta title="Components/Lists/SimpleList" component={SimpleList}/>
 
@@ -19,6 +19,13 @@ Utilizes react-native [SimpleList](https://reactnative.dev/docs/sectionlist) und
 <Preview>
   <Story name="Basic">
     <Basic />
+  </Story>
+</Preview>
+
+### No Header
+<Preview>
+  <Story name="NoChildren">
+    <NoChildren />
   </Story>
 </Preview>
 

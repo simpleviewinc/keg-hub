@@ -1,12 +1,9 @@
-import { View } from 'KegView'
-import { Touchable } from '../../touchable'
-import { Text } from '../../typography/text'
-import { Grid } from '../../layout/grid'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { Drawer } from '../../drawer'
-import { deepMerge } from '@keg-hub/jsutils'
 import { ListItem } from './listItem'
+import { Grid } from '../../layout/grid'
 import { ListHeader } from './listHeader'
+import { deepMerge } from '@keg-hub/jsutils'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 const shared = theme => {
   return {
@@ -38,7 +35,7 @@ const shared = theme => {
   }
 }
 
-export const GridList = reStyle(Grid)(theme => ({
+export const SimpleGridList = reStyle(Grid)(theme => ({
   ...theme.flex.column
 }))
 
@@ -57,8 +54,8 @@ export const SimpleItem = reStyle(ListItem, 'styles')(theme => {
       main: sharedStyle.default.main,
       row: {
         ...sharedStyle.default.row,
-        padding: theme.padding.size,
-        pL: theme.padding.size * 2,
+        padding: theme.padding.size / 2,
+        paddingLeft: theme.padding.size,
       },
       avatar: {},
       icon: {},
@@ -80,16 +77,17 @@ export const SimpleItem = reStyle(ListItem, 'styles')(theme => {
 export const SimpleHeader = reStyle(ListHeader, 'styles')(theme => deepMerge(shared(theme), {
   default: {
     main: {
+      borderTopWidth: 1,
       backgroundColor: theme.colors.palette.white01,
       borderTopColor: theme.colors.palette.gray02,
-      borderTopWidth: 1,
+      padding: theme.padding.size / 2,
     },
     title: {
-      color:  theme.colors.palette.gray02,
+      color:  theme.colors.palette.gray03,
     },
     toggle: {
       main: {
-        color:  theme.colors.palette.gray02,
+        color:  theme.colors.palette.gray03,
       }
     },
     first: {
@@ -100,7 +98,7 @@ export const SimpleHeader = reStyle(ListHeader, 'styles')(theme => deepMerge(sha
   },
   active: {
     main: {
-      borderBottomColor: theme.colors.palette.gray02,
+      borderBottomColor: theme.colors.palette.white02,
       borderBottomWidth: 1,
     }
   }

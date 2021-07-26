@@ -9,26 +9,22 @@ import { get, noOpObj, wordCaps, isStr } from '@keg-hub/jsutils'
 import { useToggleAnimate } from '../../../hooks/useToggleAnimate'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 
-const buildIconProps = (icon, theme) => {
-  return {
-    name: 'chevron-down',
+const buildIconProps = icon => {
+  const theme = useTheme()
+  return useMemo(() => ({
+    name: 'list-header-icon',
     color: theme?.colors?.palette?.gray01,
     size: 20,
     ...(icon ? isStr(icon) ? { name: icon } : icon : null)
-  }
+  }), [ icon, theme ])
 }
 
-const HeaderIcon = ({ Icon, iconProps, styles, theme, toggled }) => {
-
-  const builtProps = useMemo(
-    () => buildIconProps(iconProps, theme),
-    [ iconProps, theme ]
-  )
-
+const HeaderIcon = ({ Icon, iconProps, styles, toggled }) => {
+  const builtProps = buildIconProps(iconProps)
   const { animation } = useToggleAnimate({
     toggled,
-    values: { from: 0, to: 1 },
-    config: { duration: 400 }
+    values: {from: 0, to: 1},
+    config: {duration: 400}
   })
 
   return (
@@ -41,15 +37,14 @@ const HeaderIcon = ({ Icon, iconProps, styles, theme, toggled }) => {
             rotate: animation.interpolate({
               inputRange: [0, 1],
               outputRange: ['0deg', '180deg']
-            }) 
+            })
           }]
         }
       ]}
     >
-      <Icon { ...builtProps } styles={ styles } />
+      <Icon { ...builtProps } styles={styles} />
     </Animated.View>
   )
-
 }
 
 export const ListHeader = props => {
@@ -63,15 +58,13 @@ export const ListHeader = props => {
     toggled
   } = props
 
-  const theme = useTheme()
   const [ rowRef, listStyles ] = useThemeHover(styles.default, styles.hover)
-
   const toggledStyle = toggled ? styles.active : noOpObj
   const rowStyle = useStyle(listStyles.row, toggledStyle?.row)
 
   return (
     <Touchable
-      className="list-header-main"
+      className="keg-list-header-main"
       activeOpacity={ get(styles, 'active.main.opacity') }
       touchRef={ rowRef }
       style={[
@@ -90,15 +83,14 @@ export const ListHeader = props => {
         style={[listStyles.title, toggledStyle?.title]}
         className="list-header-title"
       >
-        { wordCaps(title) }
+        {title}
       </H6>
       { Icon && (
         <HeaderIcon
           Icon={ Icon }
           iconProps={iconProps}
           styles={[listStyles.toggle, toggledStyle?.toggle]}
-          theme={ theme }
-          toggled={ toggled }
+          toggled={toggled}
         />
       )}
     </Row>

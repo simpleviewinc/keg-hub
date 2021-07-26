@@ -7,6 +7,9 @@ import { Animated } from 'react-native'
 import { useClassName } from 'KegClassName'
 import React, { useState, useLayoutEffect, useCallback, useRef } from 'react'
 import { isValidComponent } from '../../utils/validate/isValidComponent'
+import { getPlatform } from 'KegGetPlatform'
+const isWeb = getPlatform() === 'web'
+
 /**
  * Checks if the animation should NOT run
  * @param {boolean} toggled - Current state of the Drawer toggled open
@@ -35,7 +38,7 @@ const noAnimate = (toggled, current, collapsedHeight, contentMaxHeight) =>
  *
  * @returns {Component} - Drawer Component
  */
-export const Drawer = props => {
+export const Drawer = React.forwardRef((props, ref) => {
   const {
     Element,
     styles,
@@ -84,6 +87,7 @@ export const Drawer = props => {
       )
     )
       return
+
     // Define the from and to values for the animation based on toggled flag
     const heightChanges = toggled
       ? { from: collapsedHeight, to: contentMaxHeight.current }
@@ -95,13 +99,16 @@ export const Drawer = props => {
     const animationConfig = config
       ? { ...config, toValue: heightChanges.to }
       : { toValue: heightChanges.to }
+
+    // If on web, then don't use the animated driver
+    animationConfig.useNativeDriver = !isWeb
     Animated[type](animation, animationConfig).start()
 
     // Add toggled as a dep, so anytime it changes, we run the hook code
   }, [ toggled, type, config, collapsedHeight ])
 
   const drawerStyles = useThemePath(`drawer`, styles)
-  const classRef = useClassName('keg-drawer', className)
+  const classRef = useClassName('keg-drawer', className, ref)
 
   return (
     <Animated.View
@@ -124,7 +131,7 @@ export const Drawer = props => {
       </View>
     </Animated.View>
   )
-}
+})
 
 Drawer.propTypes = {
   className: PropTypes.oneOfType([ PropTypes.array, PropTypes.string ]),
