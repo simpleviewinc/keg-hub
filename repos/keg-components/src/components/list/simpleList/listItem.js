@@ -123,9 +123,8 @@ export const ListItem = React.memo(props => {
     uuid,
   } = props
 
-  const mergeStyles = useStyle('list.simple.item', styles)
-  const activeStyle = active ? mergeStyles.active : noOpObj
-  const [ rowRef, itemStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
+  const activeStyle = active ? styles.active : noOpObj
+  const [ rowRef, itemStyles ] = useThemeHover(styles.default, styles.hover)
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
   const onPress = useCallback(
@@ -146,22 +145,22 @@ export const ListItem = React.memo(props => {
         style={rowStyles}
       >
         { children || ([
-          avatar && renderCustomOrDefault(
+          avatar && overrideComponent(
             components.avatar,
             RenderAvatar,
             { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
           ),
-          icon && renderCustomOrDefault(
+          icon && overrideComponent(
             components.icon,
             RenderIcon,
             { key: 'list-item-icon', icon, style: itemStyles.icon }
           ),
-          title && renderCustomOrDefault(
+          title && overrideComponent(
             components.title,
             RenderTitle,
             { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
           ),
-          actions && renderCustomOrDefault(
+          actions && overrideComponent(
             components.actions,
             RenderActions,
             { key: 'list-item-actions', actions, styles: itemStyles.actions }

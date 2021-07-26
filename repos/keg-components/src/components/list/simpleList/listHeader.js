@@ -64,16 +64,15 @@ export const ListHeader = props => {
   } = props
 
   const theme = useTheme()
-  const mergeStyles = useStyle('list.simple.header', styles)
-  const [ rowRef, listStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
+  const [ rowRef, listStyles ] = useThemeHover(styles.default, styles.hover)
 
-  const toggledStyle = toggled ? mergeStyles.active : noOpObj
+  const toggledStyle = toggled ? styles.active : noOpObj
   const rowStyle = useStyle(listStyles.row, toggledStyle?.row)
 
   return (
     <Touchable
       className="list-header-main"
-      activeOpacity={ get(mergeStyles, 'active.main.opacity') }
+      activeOpacity={ get(styles, 'active.main.opacity') }
       touchRef={ rowRef }
       style={[
         listStyles?.main,

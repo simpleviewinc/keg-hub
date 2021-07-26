@@ -1,37 +1,18 @@
-import React,  { useState, useCallback, useMemo } from 'react'
-import { useStylesCallback } from '@keg-hub/re-theme'
-import {
-  checkCall,
-  noPropArr,
-  deepMerge,
-  noOpObj,
-  isFunc
-} from '@keg-hub/jsutils'
-import { RenderList } from './renderList'
-import { GridList } from './simpleList.restyle'
+import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
+import { SimpleList as KegSimpleList } from './simpleList.native'
 
-export const SimpleList = (props) => {
-  const { items, styles, className, } = props
-  const itemsLength = items.length - 1
+/**
+ * SimpleList
+ * @summary Default SimpleList component that wraps the React Native SimpleList. All props are optional
+ *
+ * @param {Object} props - see SimpleList PropTypes
+ * @property {String} props.className - Value to set the className to (web platform only)
+ * @property {String} props.innerClassName - Value to set the innerClassName to (web platform only)
+ *
+ */
+export const SimpleList = StyleInjector(KegSimpleList, {
+  displayName: 'SimpleList',
+  className: `keg-simple-list`,
+})
 
-  return Object.entries(items)
-    .map(([ key, meta ], index) => {
-      return (
-        <GridList
-          className={["keg-simple-list", className ]}
-          key={`${meta.group}-${key}`}
-          style={ styles?.main }
-        >
-          <RenderList
-            { ...props }
-            first={index === 0}
-            last={itemsLength === index}
-            index={index}
-            groupKey={key}
-            meta={meta}
-            styles={styles}
-          />
-        </GridList>
-      )
-    })
-}
+SimpleList.propTypes = KegSimpleList.propTypes
