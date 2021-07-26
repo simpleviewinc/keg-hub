@@ -18,7 +18,7 @@ import { capitalize, noOpObj, exists } from '@keg-hub/jsutils'
  *
  * @returns {Component}
  */
-export const ListItemAction = props => {
+export const NavItemAction = props => {
   const {
     onPress,
     parentStyles=noOpObj,

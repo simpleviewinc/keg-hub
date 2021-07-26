@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React,  { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useStylesCallback } from '@keg-hub/re-theme'
 import {
   checkCall,
@@ -11,11 +11,11 @@ import {
   toStr,
 } from '@keg-hub/jsutils'
 import {
-  SimpleGridList,
-  SimpleItemList,
-  SimpleItem,
-  SimpleHeader
-} from './simpleList.restyle'
+  NavGridList,
+  NavItemList,
+  NavItem,
+  NavHeader
+} from './navList.restyle'
 
 const RenderGroupItems = ({ items, renderItem, group, onItemPress, styles }) => {
   return Object.entries(items)
@@ -31,17 +31,22 @@ const RenderGroupItems = ({ items, renderItem, group, onItemPress, styles }) => 
 
       return isFunc(renderItem)
         ? renderItem(itemProps)
-        : (<SimpleItem {...itemProps} />)
+        : (<NavItem {...itemProps} />)
     })
 }
 
 const RenderGroupHeader = ({ renderHeader, header, ...props }) => {
   return isFunc(renderHeader)
     ? renderHeader(props)
-    : header && (<SimpleHeader {...props}/>)
+    : header && (<NavHeader {...props}/>)
 }
 
-const useToggledValue = (toggled, headerToggle, onHeaderPress, meta) => {
+const useToggledValue = (headerToggle, onHeaderPress, props, drawerProps) => {
+  const { meta } = props
+  const toggled = useMemo(() => {
+    return [meta?.toggled, drawerProps?.toggled, props.toggled].find(toggled => exists(toggled))
+  }, [meta?.toggled, drawerProps?.toggled, props.toggled])
+
   // If toggled exists, then it should be managed externally via onHeaderPress
   // Otherwise manage toggled internally
   const toggleExists = exists(toggled)
@@ -49,9 +54,7 @@ const useToggledValue = (toggled, headerToggle, onHeaderPress, meta) => {
   
   const onTogglePress = useCallback(event => {
     checkCall(onHeaderPress, event, meta)
-    !toggleExists &&
-      headerToggle &&
-      setToggled(!headerToggled)
+    !toggleExists && setToggled(!headerToggled)
   }, [
     meta,
     toggled,
@@ -61,19 +64,9 @@ const useToggledValue = (toggled, headerToggle, onHeaderPress, meta) => {
     headerToggled,
   ])
 
-  const toggleState = useMemo(() => {
-    return toggleExists && (toggled !== headerToggled)
-      ? toggled
-      : headerToggled
-  }, [
-    toggled,
-    headerToggled,
-    toggleExists,
-  ])
-
   return {
     onTogglePress,
-    toggled: toggleState,
+    toggled: toggleExists ? toggled : headerToggled,
   }
 }
 
@@ -104,10 +97,10 @@ const RenderList = props => {
 
   const group = meta.group || groupKey
   const {toggled, onTogglePress} = useToggledValue(
-    meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || null,
     headerToggle,
     onHeaderPress,
-    meta
+    props,
+    drawerProps[groupKey],
   )
 
   const RenderedItems = meta.items && meta.items.length
@@ -141,7 +134,7 @@ const RenderList = props => {
       />
       { header && drawer
         ? (
-            <SimpleItemList
+            <NavItemList
               className='keg-sub-items-drawer'
               {...drawerProps}
               last={last}
@@ -151,7 +144,7 @@ const RenderList = props => {
               drawerStyles={drawerProps?.styles}
             >
               { RenderedItems }
-            </SimpleItemList>
+            </NavItemList>
           )
         : RenderedItems
       }
@@ -160,10 +153,20 @@ const RenderList = props => {
 
 }
 
-export const SimpleList = (props) => {
+/**
+ * NavList
+ * @summary Navigation List Item component
+ *
+ * @param {Object} props - see NavList PropTypes
+ * @property {String} props.className - Value to set the className to (web platform only)
+ *
+ */
+export const NavList = React.forwardRef((props, ref) => {
   const { items=noPropArr, styles=noOpObj, className, } = props
+
   const itemEntries = Object.entries(items)
   const itemsLength = itemEntries.length - 1
+  const ignoreToggle = itemsLength > 0
 
   return itemsLength > -1
     ? itemEntries.map(([ key, meta=noOpObj ], index) => {
@@ -174,28 +177,30 @@ export const SimpleList = (props) => {
         ), ``)
 
         return (
-          <SimpleGridList
-            className={["keg-simple-list", className ]}
+          <NavGridList
+            ref={ref}
             key={groupKey}
             style={ styles?.main }
+            className={["keg-nav-list", className ]}
           >
             <RenderList
               { ...props }
+              meta={meta}
+              index={index}
+              styles={styles}
+              groupKey={groupKey}
               first={index === 0}
               last={itemsLength === index}
-              index={index}
-              groupKey={groupKey}
-              meta={meta}
-              styles={styles}
+              toggled={ignoreToggle ? null : props.toggled}
             />
-          </SimpleGridList>
+          </NavGridList>
         )
       })
     : null 
-}
+})
 
 
-SimpleList.propTypes = {
+NavList.propTypes = {
   className: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   /**
    * List of items to be rendered, with included metadata.

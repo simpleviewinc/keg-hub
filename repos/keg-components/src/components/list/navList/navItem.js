@@ -4,15 +4,15 @@ import { View } from 'KegView'
 import { Row } from '../../layout'
 import { Touchable } from '../../touchable'
 import { Text } from '../../typography/text'
-import { ListItemAction } from './listItemAction'
+import { NavItemAction } from './navItemAction'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { isStr, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { overrideComponent } from '../../../utils/components/overrideComponent'
 
 /**
- * RenderActions - Default component to render the actions of the ListItem
+ * RenderActions - Default component to render the actions of the NavItem
  * @param {Object} props
- * @param {Array} props.actions - Group of action props to be pass on to ListItemAction component
+ * @param {Array} props.actions - Group of action props to be pass on to NavItemAction component
  * @param {Object} props.style - Custom style for the component
  *
  * @returns {Component}
@@ -24,7 +24,7 @@ const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
       style={ styles.main }
       >
       { actions.map(action => action && (
-        <ListItemAction
+        <NavItemAction
           key={ action.name || action.title }
           parentStyles={styles.action}
           { ...props }
@@ -36,7 +36,7 @@ const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
 }
 
 /**
- * RenderAvatar - Default component to render the Avatar of the ListItem
+ * RenderAvatar - Default component to render the Avatar of the NavItem
  * @param {Object} props
  * @param {Object} props.avatar - Custom avatar props to pass to the avatar component
  * @param {Object} props.style - Custom style for the component
@@ -52,7 +52,7 @@ const RenderAvatar = ({ avatar, ...props }) => {
 }
 
 /**
- * RenderIcon - Default component to render the icon of the ListItem
+ * RenderIcon - Default component to render the icon of the NavItem
  * @param {Object} props
  * @param {Object} props.icon - Custom Icon props to pass to the keg-components Icon
  * @param {Object} props.style - Custom style for the component
@@ -72,7 +72,7 @@ const RenderIcon = ({ icon, style, ...props }) => {
 }
 
 /**
- * RenderTitle - Default component to render the title of the ListItem
+ * RenderTitle - Default component to render the title of the NavItem
  * @param {Object} props
  * @param {string} props.title - Text title content
  * @param {Object} [props.style] - Custom style for the component
@@ -92,7 +92,7 @@ const RenderTitle = ({ style, title, ...props }) => {
 }
 
 /**
- * ListItem - Default item component used to display an item in the SimpleList component
+ * NavItem - Default item component used to display an item in the NavList component
  * @param {Object} props
  * @param {boolean} [props.active=false] - State for if the item is currently active within the List
  * @param {Component|Object} props.actions - Component or object defining how the item actions are rendered
@@ -102,13 +102,13 @@ const RenderTitle = ({ style, title, ...props }) => {
  * @param {Component|Object} props.icon - Defines if and how the icon component should be rendered
  * @param {function} props.onItemPress - Called when the item is pressed
  * @param {boolean} [props.showFeedback=true] - Should feedback be shown when the item is pressed 
- * @param {Object} props.styles - Custom styles for the ListItem component
+ * @param {Object} props.styles - Custom styles for the NavItem component
  * @param {string} props.title - Defines if and how the title component should be rendered
  * @param {string} props.uuid - Id of the list item
  *
  * @returns {Component}
  */
-export const ListItem = React.memo(props => {
+export const NavItem = React.memo(props => {
   const {
     active,
     actions,
@@ -172,7 +172,7 @@ export const ListItem = React.memo(props => {
 })
 
 
-ListItem.Avatar = RenderAvatar
-ListItem.Icon = RenderIcon
-ListItem.Title = RenderTitle
-ListItem.Actions = RenderActions
+NavItem.Avatar = RenderAvatar
+NavItem.Icon = RenderIcon
+NavItem.Title = RenderTitle
+NavItem.Actions = RenderActions

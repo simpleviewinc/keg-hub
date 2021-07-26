@@ -12,7 +12,7 @@ import { SectionList as KegSectionList } from './sectionList.native'
  */
 export const SectionList = StyleInjector(KegSectionList, {
   displayName: 'SectionList',
-  className: `keg-sectionlist`,
+  className: `keg-section-list`,
 })
 
 SectionList.propTypes = KegSectionList.propTypes

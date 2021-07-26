@@ -47,7 +47,7 @@ const HeaderIcon = ({ Icon, iconProps, styles, toggled }) => {
   )
 }
 
-export const ListHeader = props => {
+export const NavHeader = props => {
   const {
     first,
     onPress,

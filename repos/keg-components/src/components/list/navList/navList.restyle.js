@@ -1,9 +1,9 @@
 import { Drawer } from '../../drawer'
-import { ListItem } from './listItem'
 import { Grid } from '../../layout/grid'
-import { ListHeader } from './listHeader'
 import { deepMerge } from '@keg-hub/jsutils'
+import { NavItem as ListItem } from './navItem'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { NavHeader as ListHeader } from './navHeader'
 
 const shared = theme => {
   return {
@@ -35,18 +35,18 @@ const shared = theme => {
   }
 }
 
-export const SimpleGridList = reStyle(Grid)(theme => ({
+export const NavGridList = reStyle(Grid)(theme => ({
   ...theme.flex.column
 }))
 
-export const SimpleItemList = reStyle(Drawer, 'styles')((_, { drawerStyles, styles, toggled }) => deepMerge(
+export const NavItemList = reStyle(Drawer, 'styles')((_, { drawerStyles, styles, toggled }) => deepMerge(
   styles?.drawer,
   drawerStyles?.styles,
   toggled && styles?.drawer?.toggled,
   toggled && drawerStyles?.styles?.toggled,
 ))
 
-export const SimpleItem = reStyle(ListItem, 'styles')(theme => {
+export const NavItem = reStyle(ListItem, 'styles')(theme => {
   const sharedStyle = shared(theme)
   return {
     default: {
@@ -74,7 +74,7 @@ export const SimpleItem = reStyle(ListItem, 'styles')(theme => {
   }
 })
 
-export const SimpleHeader = reStyle(ListHeader, 'styles')(theme => deepMerge(shared(theme), {
+export const NavHeader = reStyle(ListHeader, 'styles')(theme => deepMerge(shared(theme), {
   default: {
     main: {
       borderTopWidth: 1,
@@ -98,7 +98,7 @@ export const SimpleHeader = reStyle(ListHeader, 'styles')(theme => deepMerge(sha
   },
   active: {
     main: {
-      borderBottomColor: theme.colors.palette.white02,
+      borderBottomColor: theme.colors.palette.white03,
       borderBottomWidth: 1,
     }
   }

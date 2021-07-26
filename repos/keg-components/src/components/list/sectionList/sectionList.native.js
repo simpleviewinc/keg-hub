@@ -324,7 +324,7 @@ const useKeyExtractor = (keyExtractor) => {
 
 /**
  * SectionList
- * @summary Default view component that wraps the React Native View component. All props are optional
+ * @summary SectionList component to display grouped lists of items
  *
  * @param {Object} props - see SectionList PropTypes
  * @property {String} props.className - Value to set the className to (web platform only)
