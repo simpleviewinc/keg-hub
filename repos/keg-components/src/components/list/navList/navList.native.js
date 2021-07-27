@@ -17,15 +17,31 @@ import {
   NavHeader
 } from './navList.restyle'
 
+/**
+ * RenderGroupItems
+ * @summary Renders the sub-items of each section in the items prop passed to the NavList component
+ * @function
+ * @private
+ * @param {Object} props - see NavList PropTypes
+ * @param {Object|Array} items - Items to be rendered
+ * @param {function} renderItem - Item render prop, Overrides the default render method for items
+ * @param {string} group - Name of the group / section the item belongs to
+ * @param {function} onItemPress - Called when a NavItem is pressed
+ * @param {Object} styles - CSS rules for how the items should be display
+ *
+ */
 const RenderGroupItems = ({ items, renderItem, group, onItemPress, styles }) => {
+  const lastIdx = items.length -1
   return Object.entries(items)
-    .map(([ key, item ]) => {
+    .map(([ key, item ], idx) => {
       const itemProps = {
         group,
         styles,
         title: key,
         onItemPress,
         key: `${group}-${key}`,
+        first: idx === 0,
+        last: idx === lastIdx,
         ...item
       }
 
@@ -35,12 +51,34 @@ const RenderGroupItems = ({ items, renderItem, group, onItemPress, styles }) => 
     })
 }
 
+/**
+ * RenderGroupHeader
+ * @summary Renders the header component for a section from the items passed to NavList component
+ * @function
+ * @private
+ * @param {Object} props - see NavList PropTypes
+ * @param {function} renderHeader - Header render prop, Overrides the default render method the header
+ * @param {boolean} header - True if the header should be rendered
+ *
+ */
 const RenderGroupHeader = ({ renderHeader, header, ...props }) => {
   return isFunc(renderHeader)
     ? renderHeader(props)
     : header && (<NavHeader {...props}/>)
 }
 
+/**
+ * Helper hook to determine the toggled value based on passed in props or internal state
+ * If toggled is passed in as a prop, then use that. Otherwise manage it internally
+ * @function
+ * @private
+ * @param {Object} headerToggle - Switch to set clicking the header will toggle the items drawer
+ * @param {function} onHeaderPress - Called when a Nav header is pressed
+ * @param {Object} props - see NavList PropTypes
+ * @param {Object} drawerProps - Custom props passed to the drawer component
+ *
+ * @returns {Object} - Derived toggled state and on toggle press method
+ */
 const useToggledValue = (headerToggle, onHeaderPress, props, drawerProps) => {
   const { meta } = props
   const toggled = useMemo(() => {
@@ -70,6 +108,14 @@ const useToggledValue = (headerToggle, onHeaderPress, props, drawerProps) => {
   }
 }
 
+/**
+ * RenderList
+ * @summary Renders the sections passed to the NavList component
+ * @function
+ * @private
+ * @param {Object} props - see NavList PropTypes
+ *
+ */
 const RenderList = props => {
   const {
     first,
@@ -91,9 +137,9 @@ const RenderList = props => {
 
   const drawer = exists(props.drawer)
     ? props.drawer
-    : !header 
+    : !header
       ? false
-      : meta.items && meta.items.length
+      : Boolean(meta.items && meta.items.length)
 
   const group = meta.group || groupKey
   const {toggled, onTogglePress} = useToggledValue(
@@ -125,6 +171,7 @@ const RenderList = props => {
         onPress={onTogglePress}
         styles={styles?.header}
         title={meta.title || group}
+        renderHeader={renderHeader}
         Icon={meta.Icon || HeaderIcon}
         {...headerProps}
         last={last}
@@ -156,46 +203,67 @@ const RenderList = props => {
 /**
  * NavList
  * @summary Navigation List Item component
- *
  * @param {Object} props - see NavList PropTypes
- * @property {String} props.className - Value to set the className to (web platform only)
  *
  */
 export const NavList = React.forwardRef((props, ref) => {
-  const { items=noPropArr, styles=noOpObj, className, } = props
+  const {
+    className,
+    header=true,
+    items=noPropArr,
+    renderItem,
+    onItemPress,
+    styles=noOpObj,
+  } = props
 
   const itemEntries = Object.entries(items)
   const itemsLength = itemEntries.length - 1
   const ignoreToggle = itemsLength > 0
 
   return itemsLength > -1
-    ? itemEntries.map(([ key, meta=noOpObj ], index) => {
-        const { key:metaKey, group, title, uuid } = meta
+    ? header !== false 
+      ? itemEntries.map(([ key, meta=noOpObj ], index) => {
+          const { key:metaKey, group, title, uuid, id } = meta
 
-        const groupKey = [metaKey, group, title, uuid].reduce((built, item) => (
-          exists(item && toStr(item).trim()) ? `${built}-${item}`.trim() : built
-        ), ``)
+          const groupKey = [metaKey, group, title, uuid, id].reduce((built, item) => (
+            exists(item && toStr(item).trim()) ? `${built}-${item}`.trim() : built
+          ), ``)
 
-        return (
+          return (
+            <NavGridList
+              ref={ref}
+              key={groupKey}
+              style={ styles?.main }
+              className={[`keg-nav-list`, className ]}
+            >
+              <RenderList
+                { ...props }
+                meta={meta}
+                index={index}
+                styles={styles}
+                groupKey={groupKey}
+                first={index === 0}
+                last={itemsLength === index}
+                toggled={ignoreToggle ? null : props.toggled}
+              />
+            </NavGridList>
+          )
+        })
+      : (
           <NavGridList
             ref={ref}
-            key={groupKey}
             style={ styles?.main }
-            className={["keg-nav-list", className ]}
+            className={[`keg-nav-list`, `keg-nav-no-header`, className ]}
           >
-            <RenderList
-              { ...props }
-              meta={meta}
-              index={index}
-              styles={styles}
-              groupKey={groupKey}
-              first={index === 0}
-              last={itemsLength === index}
-              toggled={ignoreToggle ? null : props.toggled}
+            <RenderGroupItems
+              items={items}
+              styles={styles?.item}
+              renderItem={renderItem}
+              group={`no-header-list`}
+              onItemPress={onItemPress}
             />
           </NavGridList>
         )
-      })
     : null 
 })
 

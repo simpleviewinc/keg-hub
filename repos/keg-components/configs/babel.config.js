@@ -1,6 +1,10 @@
 module.exports = {
+  assumptions: {
+    setPublicClassFields: true,
+    privateFieldsAsProperties: true,
+  },
   presets: [ 
-    ['@babel/preset-env', { loose: false, shippedProposals: true }],
+    ['@babel/preset-env'],
     ['@babel/preset-react']
   ],
   plugins: [

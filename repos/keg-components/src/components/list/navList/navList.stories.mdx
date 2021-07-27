@@ -5,7 +5,7 @@ import { Story, Meta, Preview, Props } from '@storybook/addon-docs'
 import {NavList} from './navList'
 import {NavList as NavListNative} from './navList.native.js'
 import { ChevronDown } from 'KegIcons/chevronDown'
-import {Basic, ExternalToggle, TopLevelOnly} from './navList.examples.js'
+import {Basic, ExternalToggle, HeaderOnly, NoHeader} from './navList.examples.js'
 
 <Meta title="Components/Lists/NavList" component={NavList}/>
 
@@ -33,7 +33,6 @@ Helper component for rendering Navigation and menu item lists.
     <Basic
       items={{
         baiscNav: {
-          type: 'BasicNav',
           group: 'Basic Nav',
           Icon: ChevronDown,
           items: [
@@ -54,7 +53,6 @@ export const BasicNav = () => {
     <NavList
       items={{
         baiscNav: {
-          type: 'BasicNav',
           group: 'Basic Nav',
           Icon: ChevronDown,
           items: [
@@ -68,6 +66,8 @@ export const BasicNav = () => {
   )
 }
 ```
+
+<br/>
 
 ### External Toggle Navigation
 Section toggle is managed external to the NavList component. If using multiple item sections, the root toggled prop will be ignored. In this case, each section should contain its own toggle property.
@@ -87,7 +87,6 @@ export const ExternalToggle = () => {
     <NavList
       items={{
         external: {
-          type: 'ExternalToggle',
           group: 'External Toggle',
           Icon: ChevronDown,
           items: [
@@ -104,20 +103,21 @@ export const ExternalToggle = () => {
 }
 ```
 
+<br/>
 
-### Top Level Only
+### Header Items Only
 If only passing top level items, the items prop accepts an **array** instead of an **object**.
 
 **Example**
 <Preview>
-  <Story name="TopLevelOnly">
-    <TopLevelOnly />
+  <Story name="HeaderOnly">
+    <HeaderOnly />
   </Story>
 </Preview>
 
 **Code**
 ```js
-export const TopLevel = () => {
+export const HeaderOnly = () => {
   return (
     <NavList
       items={[
@@ -129,6 +129,36 @@ export const TopLevel = () => {
   )
 }
 ```
+
+<br/>
+
+### No Header Items
+You can also set the header prop to `false`, which will render the items array as navigation items instead of headers
+
+**Example**
+<Preview>
+  <Story name="NoHeader">
+    <NoHeader />
+  </Story>
+</Preview>
+
+**Code**
+```js
+export const NoHeader = () => {
+  return (
+    <NavList
+      header={false}
+      items={[
+        {title: `Item 1`, uuid: 1},
+        {title: `Item 2`, uuid: 2},
+        {title: `Item 3`, uuid: 3}
+      ]}
+    />
+  )
+}
+```
+
+<br/>
 
 ## Props
 <Props of={NavListNative} />

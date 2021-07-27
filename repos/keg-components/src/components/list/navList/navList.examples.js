@@ -1,24 +1,39 @@
 import React, { useState } from 'react'
 import { NavList } from './navList'
+import { H6 } from '../../typography/h6'
+import { Text } from '../../typography/text'
+import { Caption } from '../../typography/caption'
 import { ChevronDown } from 'KegIcons/chevronDown'
 import { NavList as NavListNative } from './navList.native.js'
 
 const basicItems = {
   basicNav: {
-    type: 'BasicNav',
     group: 'Basic Nav',
     Icon: ChevronDown,
     items: [
       {title: `Item 1`, uuid: 1},
       {title: `Item 2`, uuid: 2},
       {title: `Item 3`, uuid: 3}
-    ]
+    ],
+    title: (
+      <>
+        Basic Nav
+        <Caption
+          style={{
+            marginLeft: 10,
+            textAlign: 'right',
+            color: `#AFAFAF`
+          }}
+        >
+          - ( click to toggle open )
+        </Caption>
+      </>
+    )
   }
 }
 
 const externalToggleItems = {
   navTest: {
-    type: 'ExternalToggle',
     group: 'External Toggle',
     Icon: ChevronDown,
     items: [
@@ -35,11 +50,10 @@ const itemsOnly = [
   {title: `Item 3`, uuid: 3}
 ]
 
-const noHeaderStyles = {
+const splitStyles = {
   header: {
     default: {
       main: { borderTopWidth: 0 },
-      title: { fontSize: 14 }
     },
     active: {
       main: { borderBottomWidth: 0 }
@@ -48,7 +62,7 @@ const noHeaderStyles = {
 }
 
 export const Basic = props => {
-  return (<NavList {...props} />)
+  return (<NavList {...props} items={basicItems} />)
 }
 
 export const ExternalToggle = () => {
@@ -62,11 +76,20 @@ export const ExternalToggle = () => {
   )
 }
 
-export const TopLevelOnly = () => {
+export const HeaderOnly = () => {
   return (
     <NavList
       items={itemsOnly}
-      styles={noHeaderStyles}
+      styles={splitStyles}
+    />
+  )
+}
+
+export const NoHeader = () => {
+  return (
+    <NavList
+      header={false}
+      items={itemsOnly}
     />
   )
 }
@@ -76,18 +99,13 @@ NavListNative.defaultProps = {
   className: 'keg-nav-list',
   items: [],
   styles: {},
-  drawer: false,
   header: true,
   headerToggle: true,
   headerProps: {},
   iconProps: {},
   onHeaderPress: () => {},
   onItemPress: () => {},
-  renderHeader: () => {},
-  renderItem: () => {},
   drawerProps: {},
 }
-
-console.log(NavListNative)
 
 export { NavListNative }

@@ -104,7 +104,8 @@ const RenderTitle = ({ style, title, ...props }) => {
  * @param {boolean} [props.showFeedback=true] - Should feedback be shown when the item is pressed 
  * @param {Object} props.styles - Custom styles for the NavItem component
  * @param {string} props.title - Defines if and how the title component should be rendered
- * @param {string} props.uuid - Id of the list item
+ * @param {string} props.uuid - UuId of the list item
+ * @param {string} props.id - Id of the list item
  *
  * @returns {Component}
  */
@@ -116,6 +117,7 @@ export const NavItem = React.memo(props => {
     children,
     components=noOpObj,
     icon,
+    id,
     onItemPress,
     showFeedback,
     styles=noOpObj,
@@ -128,8 +130,8 @@ export const NavItem = React.memo(props => {
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
   const onPress = useCallback(
-    event => checkCall(onItemPress, event, { title, active, uuid }),
-    [title, active, uuid, onItemPress]
+    event => checkCall(onItemPress, event, { title, active, uuid, id }),
+    [title, active, uuid, id, onItemPress]
   )
 
   return (

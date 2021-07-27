@@ -13,11 +13,95 @@ Sidebar navigtation drawer that is fixed to the side of the screen. It should pl
 <br/>
 
 ### Basic
+
+**Example**
 <Preview>
   <Story name="Basic">
     <Basic />
   </Story>
 </Preview>
+
+**Code**
+```js
+export const Basic = props => {
+  
+  const [toggled, setToggled] = useState(false)
+
+  return (
+    <Sidebar
+      to={0}
+      initial={-200}
+      type={'spring'}
+      toggled={toggled}
+      onToggled={setToggled}
+      config={{
+        speed: 1,
+        bounciness: 1,
+      }}
+      styles={{
+        main: {
+          paddingTop: 0,
+        },
+        container: {
+          paddingTop: 20,
+          alignItems: 'center',
+        }
+      }}
+    >
+      <SectionList
+        activeSection={0}
+        sections={[{
+          title: `Sections`,
+          data: [
+            'Goat of Olde',
+            'Goat Bio',
+            'Goat Grub'
+          ],
+        }]}
+        styles={{
+          main: {
+            width: '100%',
+            padding: 10,
+          },
+          content: {
+            divider: {},
+            container: {
+              width: '100%',
+            },
+            list: {},
+            hidden: {},
+          },
+        }}
+        keyExtractor={item => item}
+        renderSectionHeader={({ section }) => {
+          return (
+            <Label
+              key={section.title}
+              style={{
+                marginBottom: 10,
+                paddingLeft: 0,
+                paddingBottom: 5,
+                borderBottom: `1px solid #edf2f9`,
+              }}
+            >
+              { section.title }
+            </Label>
+          )
+        }}
+        renderItem={({ item }) => {
+          return (
+            <Subtitle style={{ marginBottom: 10, paddingLeft: 10 }}>
+              <Link style={{ fontSize: 14, textDecorationLine: 'none' }} >
+                { item }
+              </Link>
+            </Subtitle>
+          )
+        }}
+      />
+    </Sidebar>
+  )
+}
+```
 
 <br/>
 
