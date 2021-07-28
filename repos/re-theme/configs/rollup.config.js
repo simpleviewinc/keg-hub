@@ -45,12 +45,44 @@ const buildConfig = (type, ext, platform, config) => {
   }
 }
 
+/**
+ * Builds the config for the rollup replace plugin
+ * Maps native module imports to web module imports when platform is web 
+ * @param {string} platform - current platform (web | native)
+ * 
+ * @returns {Object} - rollup replace plugin config
+ */
+const getReplaceConfig = platform => {
+  const replaceConfig = {
+    preventAssignment: true,
+    values: {
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "import 'prop-types';": "",
+    }
+  }
+
+  return platform !== 'web'
+    ? replaceConfig
+    : {
+        ...replaceConfig,
+        delimiters: [ '', '' ],
+        values: {
+          ...replaceConfig.values,
+          "from 'react-native';": "from 'react-native-web';",
+          "require('react-native')": "require('react-native-web')",
+        }
+      }
+}
+
 
 const shared = (platform, ext) => ({
   external: [
     'react',
+    'react-is',
     'react-dom',
     'react-native',
+    'react-native-web',
+    'prop-types',
     'jsutils',
     '@keg-hub/jsutils',
     'react-native-web/dist/modules/prefixStyles',
@@ -63,12 +95,6 @@ const shared = (platform, ext) => ({
     clearScreen: false
   },
   plugins: [
-    replace({
-      preventAssignment: true,
-      values: {
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-      }
-    }),
     alias({
       entries: getAliases(ext),
     }),
@@ -82,6 +108,7 @@ const shared = (platform, ext) => ({
       ...babelConfig,
     }),
     commonjs(),
+    replace(getReplaceConfig(platform)),
     cleanup(),
     isProd && terser({
       mangle: {

@@ -7,6 +7,7 @@ module.exports = {
     [
       "@babel/plugin-proposal-class-properties",
       { loose: true } 
-    ]
+    ],
+    ['transform-react-remove-prop-types', { removeImport: 'true' }],
   ]
 }
