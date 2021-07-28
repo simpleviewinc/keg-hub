@@ -15,7 +15,7 @@ import {
   NavItemList,
   NavItem,
   NavHeader
-} from './navList.restyle'
+} from './restyle.navList'
 
 /**
  * RenderGroupItems

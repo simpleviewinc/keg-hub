@@ -8,7 +8,7 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useWindowClick } from 'KegUseWindowClick'
 import { useStyle, useThemeHover, useTheme } from '@keg-hub/re-theme'
 import { useToggledStyles } from '../../hooks/useToggledStyles'
-import { ToggleMain, ToggleAction, ToggleIcon } from './sidebar.restyle'
+import { ToggleMain, ToggleAction, ToggleIcon } from './restyle.sidebar'
 
 /**
  * Helper to listen for click events

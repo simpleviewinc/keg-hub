@@ -3,7 +3,7 @@ import { Animated } from 'react-native'
 import { isValidComponent } from 'KegUtils'
 import { useStyle, useDimensions } from '@keg-hub/re-theme'
 import { SidebarToggle } from './sidebarToggle'
-import { SidebarContainer, getSidebarWidth } from './sidebar.restyle'
+import { SidebarContainer, getSidebarWidth } from './restyle.sidebar'
 import { checkCall, noOpObj, noOp, isNum } from '@keg-hub/jsutils'
 import React, { 
   useMemo,
