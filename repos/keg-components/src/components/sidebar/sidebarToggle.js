@@ -3,12 +3,12 @@ import { View } from 'KegView'
 import PropTypes from 'prop-types'
 import { Touchable } from '../touchable'
 import { Text } from '../typography/text'
-import { ChevronDown } from 'KegIcons/chevronDown'
+import { ChevronDown } from 'KegIcons'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useWindowClick } from 'KegUseWindowClick'
 import { useStyle, useThemeHover, useTheme } from '@keg-hub/re-theme'
 import { useToggledStyles } from '../../hooks/useToggledStyles'
-import { ToggleMain, ToggleAction, ToggleContent, ToggleIcon } from './sidebar.restyle'
+import { ToggleMain, ToggleAction, ToggleIcon } from './sidebar.restyle'
 
 /**
  * Helper to listen for click events

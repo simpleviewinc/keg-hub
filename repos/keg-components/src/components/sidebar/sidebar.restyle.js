@@ -2,7 +2,7 @@ import { View } from 'KegView'
 import { Touchable } from '../touchable'
 import { Text } from '../typography/text'
 import { noOpObj, isNum } from '@keg-hub/jsutils'
-import { ChevronDown } from 'KegIcons/chevronDown'
+import { ChevronDown } from 'KegIcons'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 /**

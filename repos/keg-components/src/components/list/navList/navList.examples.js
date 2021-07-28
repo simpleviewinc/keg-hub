@@ -3,7 +3,7 @@ import { NavList } from './navList'
 import { H6 } from '../../typography/h6'
 import { Text } from '../../typography/text'
 import { Caption } from '../../typography/caption'
-import { ChevronDown } from 'KegIcons/chevronDown'
+import { ChevronDown } from 'KegIcons'
 import { NavList as NavListNative } from './navList.native.js'
 
 const basicItems = {

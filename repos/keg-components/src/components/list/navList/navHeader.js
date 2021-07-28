@@ -9,7 +9,7 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useToggleAnimate } from '../../../hooks/useToggleAnimate'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { overrideComponent } from '../../../utils/components/overrideComponent'
-import { get, noOpObj, wordCaps, isStr, isArr, deepMerge} from '@keg-hub/jsutils'
+import { get, noOpObj, isStr, isArr, deepMerge} from '@keg-hub/jsutils'
 
 export const NavHeaderRoot = reStyle(Touchable)((_, { first, listStyles, toggledStyle }) => {
   return [
