@@ -51,6 +51,37 @@ const getIgnoreList = (isNative) => [
 ]
 
 /**
+ * Builds the config for the rollup replace plugin
+ * Maps native module imports to web module imports when platform is web 
+ * @param {string} platform - current platform (web | native)
+ * 
+ * @returns {Object} - rollup replace plugin config
+ */
+const getReplaceConfig = platform => {
+  const replaceConfig = {
+    preventAssignment: true,
+    values: {
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.RE_PLATFORM": JSON.stringify(platform),
+      "process.env.PLATFORM": JSON.stringify(platform),
+      "import 'prop-types';": "",
+    }
+  }
+
+  return platform !== 'web'
+    ? replaceConfig
+    : {
+        ...replaceConfig,
+        delimiters: [ '', '' ],
+        values: {
+          ...replaceConfig.values,
+          "from 'react-native';": "from 'react-native-web';",
+          "from 'react-native-svg';": "from 'react-native-svg-web';",
+        }
+      }
+}
+
+/**
  * returns the .native counterpart if it exists
  * @param {string} current - current filename
  * @param {Array<string>} list - array containing the files available
@@ -145,31 +176,24 @@ const shared = {
     'react',
     'react-dom',
     'react-native',
+    'react-native-web',
     '@keg-hub/jsutils',
     '@keg-hub/re-theme',
     '@keg-hub/re-theme/colors',
+    `@keg-hub/re-theme/reStyle`,
     '@keg-hub/re-theme/styleInjector',
     '@keg-hub/re-theme/styleParser',
     'prop-types',
     'expo-fonts',
     'expo-linear-gradient',
-    'react-native-svg-web',
     'react-native-svg',
+    'react-native-svg-web',
   ],
   watch: {
     clearScreen: false
   },
   plugins: platform => ([
-   BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
-    replace({
-      preventAssignment: true,
-      values: {
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-        "process.env.RE_PLATFORM": JSON.stringify(platform),
-        "process.env.PLATFORM": JSON.stringify(platform),
-        "import 'prop-types';": "",
-      }
-    }),
+    BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
     resolve(),
     json(),
     commonjs({
@@ -182,6 +206,7 @@ const shared = {
       ...babelConfig
     }),
     sourcemaps(),
+    replace(getReplaceConfig(platform)),
     cleanup(),
   ])
 }
