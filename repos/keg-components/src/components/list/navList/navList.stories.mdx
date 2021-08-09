@@ -1,0 +1,164 @@
+<!--- NavList.stories.mdx -->
+
+import { Story, Meta, Preview, Props } from '@storybook/addon-docs'
+
+import {NavList} from './navList'
+import {NavList as NavListNative} from './navList.native.js'
+import { ChevronDown } from 'KegIcons'
+import {Basic, ExternalToggle, HeaderOnly, NoHeader} from './navList.examples.js'
+
+<Meta title="Components/Lists/NavList" component={NavList}/>
+
+# NavList
+Helper component for rendering Navigation and menu item lists.
+
+<br/>
+
+## Use
+```js
+  import { NavList } from '@keg-hub/keg-components'
+```
+
+<br/>
+
+## Examples
+
+<br/>
+
+### Basic Navigation
+
+**Example**
+<Preview>
+  <Story name="Basic">
+    <Basic
+      items={{
+        baiscNav: {
+          group: 'Basic Nav',
+          Icon: ChevronDown,
+          items: [
+            {title: `Item 1`, uuid: 1},
+            {title: `Item 2`, uuid: 2},
+            {title: `Item 3`, uuid: 3}
+          ]
+        }
+      }}
+    />
+  </Story>
+</Preview>
+
+**Code**
+```js
+export const BasicNav = () => {
+  return (
+    <NavList
+      items={{
+        baiscNav: {
+          group: 'Basic Nav',
+          Icon: ChevronDown,
+          items: [
+            {title: `Item 1`, uuid: 1},
+            {title: `Item 2`, uuid: 2},
+            {title: `Item 3`, uuid: 3}
+          ]
+        }
+      }}
+    />
+  )
+}
+```
+
+<br/>
+
+### External Toggle Navigation
+Section toggle is managed external to the NavList component. If using multiple item sections, the root toggled prop will be ignored. In this case, each section should contain its own toggle property.
+
+**Example**
+<Preview>
+  <Story name="ExternalToggle">
+    <ExternalToggle />
+  </Story>
+</Preview>
+
+**Code**
+```js
+export const ExternalToggle = () => {
+  const [toggled, setToggled] = useState(true)
+  return (
+    <NavList
+      items={{
+        external: {
+          group: 'External Toggle',
+          Icon: ChevronDown,
+          items: [
+            {title: `Nav Item 1`, uuid: 1},
+            {title: `Nav Item 2`, uuid: 2},
+            {title: `Nav Item 3`, uuid: 3}
+          ]
+        }
+      }}
+      toggled={toggled}
+      onHeaderPress={() => setToggled(!toggled)}
+    />
+  )
+}
+```
+
+<br/>
+
+### Header Items Only
+If only passing top level items, the items prop accepts an **array** instead of an **object**.
+
+**Example**
+<Preview>
+  <Story name="HeaderOnly">
+    <HeaderOnly />
+  </Story>
+</Preview>
+
+**Code**
+```js
+export const HeaderOnly = () => {
+  return (
+    <NavList
+      items={[
+        {title: `Item 1`, uuid: 1},
+        {title: `Item 2`, uuid: 2},
+        {title: `Item 3`, uuid: 3}
+      ]}
+    />
+  )
+}
+```
+
+<br/>
+
+### No Header Items
+You can also set the header prop to `false`, which will render the items array as navigation items instead of headers
+
+**Example**
+<Preview>
+  <Story name="NoHeader">
+    <NoHeader />
+  </Story>
+</Preview>
+
+**Code**
+```js
+export const NoHeader = () => {
+  return (
+    <NavList
+      header={false}
+      items={[
+        {title: `Item 1`, uuid: 1},
+        {title: `Item 2`, uuid: 2},
+        {title: `Item 3`, uuid: 3}
+      ]}
+    />
+  )
+}
+```
+
+<br/>
+
+## Props
+<Props of={NavListNative} />

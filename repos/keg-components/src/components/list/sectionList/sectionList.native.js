@@ -1,11 +1,11 @@
 import { View } from 'KegView'
 import PropTypes from 'prop-types'
-import { Text } from '../typography/text'
+import { Text } from '../../typography/text'
 import { useScroll } from 'KegUseScroll'
 import { useClassName } from 'KegClassName'
-import { useThemePath } from '../../hooks/useThemePath'
+import { useThemePath } from '../../../hooks/useThemePath'
 import { useScrollClassName } from 'KegScrollClassName'
-import { checkCall, noPropObj, noPropArr, get, isFunc } from '@keg-hub/jsutils'
+import { checkCall, noPropObj, noPropArr, get, isFunc, isObj, isStr } from '@keg-hub/jsutils'
 import React, {
   useCallback,
   useRef,
@@ -19,7 +19,7 @@ import {
   renderFromType,
   getElementLayout,
   scrollList,
-} from '../../utils/components'
+} from '../../../utils/components'
 
 /**
  * Helper hook to add __kegIndex to the sections
@@ -31,10 +31,12 @@ import {
  */
 const useIndexedSections = (sections, indexBy) => {
   return useMemo(() => {
-    return sections.map((section, index) => ({
-      ...section,
-      __kegIndex: get(section, indexBy, index),
-    }))
+    return sections.map((section, index) => {
+      return {
+        ...section,
+        __kegIndex: get(section, indexBy) || section.key || section.index || index,
+      }
+    })
   }, [sections])
 }
 
@@ -290,6 +292,13 @@ const useRenderSectionHeader = (
   )
 }
 
+/**
+ * Helper hook to memoize the renderItem function
+ * @param {function} renderItem - method to render a single item
+ * @param {function} onSectionChange - method called when a section is changed
+ *
+ * @returns {React.Component} - response from the renderItem function
+ */
 const useRenderItem = (renderItem, onSectionChange) => {
   return useCallback(
     ({ item }) => {
@@ -300,8 +309,22 @@ const useRenderItem = (renderItem, onSectionChange) => {
 }
 
 /**
+ * Helper hook to memoize the keyExtractor function for the SectionList
+ * @param {function} keyExtractor - method to extract the key for the item
+ *
+ * @returns {function} - Memoized keyExtractor function
+ */
+const useKeyExtractor = (keyExtractor) => {
+  return useCallback((item, index) => {
+    return isFunc(keyExtractor)
+      ? keyExtractor(item, index)
+      : isObj(item) ? item.key || item.index || index : isStr(item) ? item : index
+  }, [ keyExtractor ])
+}
+
+/**
  * SectionList
- * @summary Default view component that wraps the React Native View component. All props are optional
+ * @summary SectionList component to display grouped lists of items
  *
  * @param {Object} props - see SectionList PropTypes
  * @property {String} props.className - Value to set the className to (web platform only)
@@ -314,6 +337,7 @@ export const SectionList = React.forwardRef((props, ref) => {
     className,
     innerClassName,
     indexSectionHeaderBy,
+    keyExtractor,
     noSectionHeaderScroll,
     scrollCooldown = 2000,
     onScrollSectionChange,
@@ -329,6 +353,7 @@ export const SectionList = React.forwardRef((props, ref) => {
     ...args
   } = props
 
+  const itemKeyExtractor = useKeyExtractor(keyExtractor)
   const sectionRefs = useRef({})
   const isScrollingRef = useRef(false)
   const listRef = ref || createRef()
@@ -423,6 +448,7 @@ export const SectionList = React.forwardRef((props, ref) => {
         style={listStyles?.content.container}
       >
         <RNSectionList
+          keyExtractor={itemKeyExtractor}
           {...args}
           ref={classRef}
           renderItem={onRenderItem}
