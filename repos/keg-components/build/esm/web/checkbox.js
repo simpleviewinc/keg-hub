@@ -1,6 +1,6 @@
 import { d as _objectWithoutProperties, _ as _objectSpread2, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
 import { V as View } from './view-2274aefb.js';
-import { C as CheckboxWrapper, a as Check } from './checkbox.wrapper-7adc3d63.js';
+import { C as CheckboxWrapper, a as Check } from './checkbox.wrapper-8d69b5ad.js';
 import React, { useMemo, forwardRef } from 'react';
 import { noPropObj } from '@keg-hub/jsutils';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
@@ -11,7 +11,9 @@ import './useClassName-682bc33b.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
-import './svgIcon-51ab090d.js';
+import './svgIcon-ac9e14ca.js';
+import 'prop-types';
+import './svgIcon.native-9be49668.js';
 import 'react-native-svg';
 import '@keg-hub/re-theme';
 import './caption.js';

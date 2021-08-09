@@ -8,10 +8,8 @@ var text = require('./text.js');
 var jsutils = require('@keg-hub/jsutils');
 require('./icon-5bf6ad84.js');
 var touchableIcon = require('./touchableIcon.js');
-require('react-native-svg');
-require('@keg-hub/re-theme');
+var svgIcon = require('./svgIcon-47ea55a8.js');
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var svgIcon = require('./svgIcon-ce94c39f.js');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
@@ -27,11 +25,15 @@ require('./kegText-f2cfdfd4.js');
 require('./kegText.native-1994a0b7.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
+require('@keg-hub/re-theme');
 require('./renderFromType.js');
 require('./isValidComponent.js');
 require('./useClassList-89a8dbd4.js');
 require('./withTouch.js');
 require('./touchable.js');
+require('prop-types');
+require('./svgIcon.native-b20a6eea.js');
+require('react-native-svg');
 require('./colors-da502c66.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }

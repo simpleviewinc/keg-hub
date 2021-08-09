@@ -1,7 +1,7 @@
 # Path of the tap within the docker container
 ARG DOC_APP_PATH
 
-# Setup the taps image FROM in the global state
+# Setup re-theme image FROM in the global state
 # Must come before the FROM directive to is can be accessed
 ARG KEG_NODE_VERSION
 ARG NODE_IMAGE_FROM=node:$KEG_NODE_VERSION
@@ -10,29 +10,35 @@ ARG NODE_IMAGE_FROM=node:$KEG_NODE_VERSION
 ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:develop
 FROM $KEG_BASE_IMAGE as tap-base
 
-# Get the git keg-hub url and branch to pull down
-ARG GIT_HUB_URL=https://github.com/simpleviewinc/keg-hub.git
-ARG GIT_HUB_BRANCH=develop
+# Create a new image from the node image
+FROM $NODE_IMAGE_FROM as re-theme
 
+# Ensure the app path is set within the FROM scope
+ARG DOC_APP_PATH
 ENV DOC_APP_PATH=$DOC_APP_PATH
 
 # Set the current directory to tap repo
 WORKDIR $DOC_APP_PATH
 
-# Pull down the keg-hub repo from github
-# Because retheme is inside keg-hub, clone keg-hub
-# Then copy over retheme to the correct directory
-# Install all deps, and copy jsutils from keg-core to get the up-to-date verison
-# Finally remove the keg-hub repos
-RUN git clone --single-branch --branch $GIT_HUB_BRANCH $GIT_HUB_URL /keg-hub-clone; \
-    cp -R /keg-hub-clone/repos/re-theme/. $DOC_APP_PATH/; \
-    rm -rf /keg-hub-clone; \
+# Copy over the re-theme code from the tap image into this image
+COPY --from=tap-base $DOC_APP_PATH/repos/re-theme $DOC_APP_PATH
+
+# Set the max-listenrs, and install the dependecies with yarn install
+RUN apk add git bash; \
+    echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
+    sysctl -p; \
+    rm -rf /var/cache/apk/*; \
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
     cd $DOC_APP_PATH; \
     yarn install --pure-lockfile; \
     yarn cache clean; \
-    cp -R /keg-hub/repos/keg-core/node_modules/@keg-hub/jsutils/build/. $DOC_APP_PATH/node_modules/@keg-hub/jsutils/build/; \
-    rm -rf /keg-hub
+    rm -rf $DOC_APP_PATH/node_modules/@keg-hub/jsutils/build
 
+# Copy jsutils/retheme from keg-core to get the up-to-date verison
+# Copy over the re-theme code from the tap image into this image
+COPY --from=tap-base /keg-hub/repos/keg-core/node_modules/@keg-hub/jsutils/build $DOC_APP_PATH/node_modules/@keg-hub/jsutils/build
+
+ARG KEG_PROXY_PORT=60710
 EXPOSE $KEG_PROXY_PORT
 
 # Run the start script

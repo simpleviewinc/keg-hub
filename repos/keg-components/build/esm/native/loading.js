@@ -61,6 +61,7 @@ var Progress = function Progress(props) {
     style: styles.progress,
     className: "keg-progress"
   }, isValidComponent(LoadingIndicator) ? React.createElement(LoadingIndicator, {
+    className: 'keg-loading-indicator',
     size: size,
     styles: styles.indicator,
     type: type

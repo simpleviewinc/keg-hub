@@ -20,7 +20,7 @@ var p = require('./p.js');
 var subtitle = require('./subtitle.js');
 var text = require('./text.js');
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var checkbox = require('./checkbox-e0ed2dc2.js');
+var checkbox = require('./checkbox-75d936b1.js');
 var reTheme = require('@keg-hub/re-theme');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
@@ -30,12 +30,12 @@ var useThemePath = require('./useThemePath.js');
 var useThemeWithHeight = require('./useThemeWithHeight.js');
 var reactNative = require('react-native');
 var input = require('./input-c9ca8123.js');
-var select = require('./select-6c1c4d19.js');
+var select = require('./select-8e13f804.js');
 var getInputValue = require('./getInputValue.js');
 var useSelectHandlers = require('./useSelectHandlers.js');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
-require('react-native-svg');
+require('./svgIcon.native-cb21e69d.js');
 var icon = require('./icon-b13a8e3e.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var renderFromType = require('./renderFromType.js');
@@ -43,7 +43,7 @@ var getOnChangeHandler = require('./getOnChangeHandler.js');
 var getChecked = require('./getChecked.js');
 var _switch = require('./switch-f3265f16.js');
 var touchableIcon = require('./touchableIcon.js');
-var cardMedia = require('./cardMedia-b193c829.js');
+var cardMedia = require('./cardMedia-75dabfe1.js');
 var grid = require('./grid.js');
 var row = require('./row.js');
 var column = require('./column.js');
@@ -60,6 +60,7 @@ var scrollView = require('./scrollView.js');
 var sectionList = require('./sectionList.native-b996388b.js');
 var drawer = require('./drawer.js');
 var textToggle = require('./textToggle.js');
+var PropTypes = require('prop-types');
 var svgIcon = require('./svgIcon.js');
 var withTouch = require('./withTouch.js');
 var withScrollIntoView = require('./withScrollIntoView.js');
@@ -92,13 +93,13 @@ var platformFlatten = require('./platformFlatten.js');
 var buildTheme = require('./buildTheme.js');
 var validateFunctions = require('./validateFunctions.js');
 var isValidComponent = require('./isValidComponent.js');
-require('./svgIcon-ce94c39f.js');
 require('./cardContent.js');
 require('./cardCallout.js');
 require('./cardContainer.js');
 require('./cardSection.js');
 require('./checkbox.wrapper-13494af9.js');
 require('./input-9694bb7a.js');
+require('react-native-svg');
 require('./image-53cac4f2.js');
 require('./container.js');
 require('./kegText.js');
@@ -111,6 +112,7 @@ require('./themeDefaults-f48ffcaf.js');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var PropTypes__default = /*#__PURE__*/_interopDefaultLegacy(PropTypes);
 
 var useKeyPress = function useKeyPress() {
   return false;
@@ -475,6 +477,14 @@ var SectionList = styleInjector.StyleInjector(sectionList.SectionList, {
 });
 SectionList.propTypes = sectionList.SectionList.propTypes;
 
+var SvgIcon = styleInjector.StyleInjector(svgIcon.SvgIcon, {
+  displayName: 'SvgIcon',
+  className: 'keg-svg-icon'
+});
+SvgIcon.propTypes = _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, svgIcon.SvgIcon.propTypes), {}, {
+  className: PropTypes__default['default'].string
+});
+
 exports.TextBox = textBox.TextBox;
 exports.Button = button.Button;
 exports.Card = card.Card;
@@ -523,7 +533,6 @@ exports.scrollList = sectionList.scrollList;
 exports.useScroll = sectionList.useScroll;
 exports.Drawer = drawer.Drawer;
 exports.TextToggle = textToggle.TextToggle;
-exports.SvgIcon = svgIcon.SvgIcon;
 exports.withTouch = withTouch.withTouch;
 exports.withScrollIntoView = withScrollIntoView.withScrollIntoView;
 exports.useOutsideDetect = withOutsideDetect.useOutsideDetect;
@@ -570,6 +579,7 @@ exports.ScrollView = ScrollView;
 exports.SectionList = SectionList;
 exports.Select = Select;
 exports.Slider = Slider;
+exports.SvgIcon = SvgIcon;
 exports.Switch = Switch;
 exports.useKeyPress = useKeyPress;
 exports.useScrollIntoView = useScrollIntoView;

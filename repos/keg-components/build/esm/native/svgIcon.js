@@ -1,8 +1,8 @@
 import { d as _objectWithoutProperties, c as _toConsumableArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
 import React, { useMemo } from 'react';
-import { isArr, deepMerge, get, noPropObj } from '@keg-hub/jsutils';
 import Svg, { Path } from 'react-native-svg';
-import { useTheme } from '@keg-hub/re-theme';
+import { useTheme, useStyle } from '@keg-hub/re-theme';
+import { isArr, deepMerge, get, noPropObj } from '@keg-hub/jsutils';
 
 var useIconStyle = function useIconStyle(style) {
   return useMemo(function () {
@@ -28,9 +28,13 @@ var useColor = function useColor(fill, stroke, color, border, style, theme) {
     };
   }, [fill, stroke, color, border, style]);
 };
-var SvgIcon = function SvgIcon(props) {
-  var border = props.border,
-      color = props.color,
+var useClassName = function useClassName(className) {
+  return noPropObj;
+};
+var SvgIcon = React.forwardRef(function (props, ref) {
+  var border = props.border;
+      props.className;
+      var color = props.color,
       clipRule = props.clipRule,
       delta = props.delta,
       fill = props.fill,
@@ -46,15 +50,17 @@ var SvgIcon = function SvgIcon(props) {
       svgFill = props.svgFill,
       viewBox = props.viewBox,
       width = props.width,
-      attrs = _objectWithoutProperties(props, ["border", "color", "clipRule", "delta", "fill", "fillRule", "height", "size", "stroke", "strokeWidth", "strokeLinecap", "strokeLinejoin", "style", "svgFill", "viewBox", "width"]);
-  var iconStyle = useIconStyle(style);
+      attrs = _objectWithoutProperties(props, ["border", "className", "color", "clipRule", "delta", "fill", "fillRule", "height", "size", "stroke", "strokeWidth", "strokeLinecap", "strokeLinejoin", "style", "svgFill", "viewBox", "width"]);
   var theme = useTheme();
+  var iconStyle = useIconStyle(style);
   var sizeStyle = useSize(size, width, height, iconStyle, theme);
+  var svgStyles = useStyle(iconStyle, sizeStyle);
   var colorStyle = useColor(fill, stroke, color, border, iconStyle, theme);
-  return React.createElement(Svg, _extends({}, attrs, {
+  var classProps = useClassName();
+  return React.createElement(Svg, _extends({}, attrs, classProps, {
     fill: svgFill,
     viewBox: viewBox,
-    style: [iconStyle, sizeStyle]
+    style: svgStyles
   }), React.createElement(Path, {
     clipRule: clipRule,
     d: delta,
@@ -65,7 +71,7 @@ var SvgIcon = function SvgIcon(props) {
     strokeLinecap: strokeLinecap,
     strokeLinejoin: strokeLinejoin
   }));
-};
+});
 
 export { SvgIcon };
 //# sourceMappingURL=svgIcon.js.map

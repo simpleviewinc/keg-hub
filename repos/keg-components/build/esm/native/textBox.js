@@ -4,10 +4,8 @@ import { Text } from './text.js';
 import { get } from '@keg-hub/jsutils';
 import './icon-1b76b631.js';
 import { TouchableIcon } from './touchableIcon.js';
-import 'react-native-svg';
-import '@keg-hub/re-theme';
+import { S as SvgIcon } from './svgIcon.native-8765b7af.js';
 import { e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import { S as SvgIcon } from './svgIcon-51ab090d.js';
 import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
@@ -19,12 +17,14 @@ import './kegText.js';
 import './useTextAccessibility.js';
 import '@keg-hub/re-theme/styleInjector';
 import './useTextStyles.js';
+import '@keg-hub/re-theme';
 import './renderFromType.js';
 import './isValidComponent.js';
 import './useClassList.native-70068878.js';
 import './withTouch.js';
 import './touchable-9cc6e181.js';
 import './touchable.js';
+import 'react-native-svg';
 
 var Copy = function Copy(props) {
   return createElement(SvgIcon, _extends({}, props, {
