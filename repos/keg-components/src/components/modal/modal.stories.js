@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
-import { Button, Section, H6, Divider, P, View, Text, Image } from '../../'
+import { Button, Section, H4, Divider, P, View, Text, Image } from '../../'
 import { Modal } from './modal'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
@@ -8,40 +8,6 @@ import { Animated } from 'react-native'
 import { AppHeader } from '../'
 import { useFromToAnimation } from 'KegHooks'
 
-const DemoContent = () => {
-  return (
-    <View>
-      <Section>
-        <H6>This is a Section!</H6>
-
-        <P style={{ paddingTop: 30 }}>
-          This is some text content that is displayed inside of the section.
-        </P>
-      </Section>
-      <Section>
-        <H6>This is a Section!</H6>
-        <Divider />
-        <P style={{ paddingTop: 30 }}>
-          This is some text content that is displayed inside of the section.
-        </P>
-      </Section>
-      <Section>
-        <H6>This is a Section!</H6>
-        <Divider />
-        <P style={{ paddingTop: 30 }}>
-          This is some text content that is displayed inside of the section.
-        </P>
-      </Section>
-      <Section>
-        <H6>This is a Section!</H6>
-        <Divider />
-        <P style={{ paddingTop: 30 }}>
-          This is some text content that is displayed inside of the section.
-        </P>
-      </Section>
-    </View>
-  )
-}
 const storyStyles = { textAlign: 'center' }
 const modalOverrideStyle = {
   content: {
@@ -71,9 +37,12 @@ const modal2Style = {
     justifyContent: 'center',
   },
 }
+const demoViewStyle = { flexDirection: 'row', justifyContent: 'center' }
+const modalBtnStyle = { main: { margin: 10, paddingLeft: 15, paddingRight: 15 }}
 
-const TestComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
+const AnimatedComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
   const [animValue] = useFromToAnimation({
+    useNativeDriver: false,
     from: visible ? 1200 : 0,
     to: visible ? 0 : 1200,
     duration: 1000,
@@ -81,6 +50,7 @@ const TestComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
   })
 
   const rotate = animValue.interpolate({
+    useNativeDriver: false,
     inputRange: [ 0, 1200 ],
     outputRange: [ '0deg', '360deg' ],
   })
@@ -97,186 +67,262 @@ const TestComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
   )
 }
 
-let isVisible1 = false
-let isVisible2 = false
-storiesOf('Components/Display/Modal', module)
-  // .addDecorator(withKnobs)
-  .add('One at a time', () => {
-    // allow only 1 modal on the screen at a time
-    const toggleModal = index => {
-      switch (index) {
-      case 1:
-        isVisible1 = !isVisible1
-        if (isVisible2 && isVisible1) isVisible2 = false
-        return
-      case 2:
-        isVisible2 = !isVisible2
-        if (isVisible2 && isVisible1) isVisible1 = false
-        return
-      }
-    }
-    // button('toggle modal 1', () => toggleModal(1))
-    // button('toggle modal 2', () => toggleModal(2))
+const DemoContent = ({ title, children }) => {
+  return (
+    <View>
+      <Section style={{ borderWidth: 0 }} >
+        <H4 style={{ marginBottom: 10 }} >{title}</H4>
+        <Divider />
+        <Text style={{ marginTop: 20 }}>
+          Click the buttons below to toggle the modal
+        </Text>
+        {children}
+      </Section>
+    </View>
+  )
+}
 
-    return (
-      <StoryWrap style={storyStyles}>
-        <DemoContent />
-        <Modal
-          visible={isVisible1}
-          onBackdropTouch={action('Touched outside of modal 1')}
-          styles={modal2Style}
-        >
-          <View style={{ flex: 1 }}>
-            <AppHeader
-              title={'Modal 1'}
-              styles={appHeaderStyles}
-            />
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text>Modal 1 content</Text>
-            </View>
-            <Button
-              themePath='button.contained.secondary'
-              styles={{
-                main: { alignSelf: 'start', width: '100%', borderRadius: 0 },
-              }}
-              onClick={action('OK Clicked!')}
-              content={'GOT IT'}
-            />
-          </View>
-        </Modal>
-        <Modal
-          visible={isVisible2}
-          onBackdropTouch={action('Touched outside of modal 2')}
-          styles={modal2Style}
-        >
-          <View style={{ flex: 1 }}>
-            <AppHeader
-              title={'Modal 2'}
-              styles={appHeaderStyles}
-            />
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text>Modal 2 content</Text>
-            </View>
-            <Button
-              themePath='button.contained.secondary'
-              styles={{
-                main: { alignSelf: 'start', width: '100%', borderRadius: 0 },
-              }}
-              onClick={action('OK Clicked!')}
-              content={'OK'}
-            />
-          </View>
-        </Modal>
-      </StoryWrap>
-    )
-  })
-  .add('multiple modals', () => {
-    const [ modal1, setModal1 ] = useState(false)
-    const [ modal2, setModal2 ] = useState(false)
+export const SingleModal = props => {
+  const [modalIndex, setModalIndex] = useState(0)
 
-    // button('toggle modal 1', () => setModal1(!modal1))
-    // button('toggle modal 2', () => setModal2(!modal2))
-    return (
-      <StoryWrap style={storyStyles}>
-        <DemoContent />
-        <Modal
-          visible={modal1}
-          onBackdropTouch={action('Touched outside of modal 2')}
-          styles={{
-            content: {
-              width: '600px',
-              height: 300,
-              justifyContent: 'center',
-            },
-          }}
-        >
-          <P> This modal goes behind modal 2 </P>
-        </Modal>
-
-        <Modal
-          visible={modal2}
-          onBackdropTouch={action('Touched outside of modal 2')}
-          styles={{
-            content: {
-              width: '400px',
-              height: 200,
-              flex: 1,
-              borderRadius: 4,
-              overflow: 'hidden',
-            },
-          }}
-        >
-          <View style={{ flex: 1 }}>
-            <AppHeader
-              title={'Modal 2'}
-              styles={appHeaderStyles}
-            />
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text>Hey this modal goes above modal 1</Text>
-            </View>
-            <Button
-              themePath='button.contained.secondary'
-              styles={{
-                main: { alignSelf: 'start', width: '100%', borderRadius: 0 },
-              }}
-              onClick={action('OK Clicked!')}
-              content={'OK'}
-            />
+  return (
+    <StoryWrap style={storyStyles}>
+      <DemoContent
+        title={`Modal Toggle`}
+      >
+        <View style={demoViewStyle} >
+          <Button
+            themePath='button.contained.primary'
+            styles={modalBtnStyle}
+            onClick={() => setModalIndex(1)}
+            content={'Toggle Modal 1'}
+          />
+          <Button
+            themePath='button.contained.secondary'
+            styles={modalBtnStyle}
+            onClick={() => setModalIndex(2)}
+            content={'Toggle Modal 2'}
+          />
+        </View>
+      </DemoContent>
+      <Modal
+        visible={modalIndex === 1}
+        onBackdropTouch={() => {
+          setModalIndex(0)
+          action('Touched outside of modal 1')
+        }}
+        styles={modal2Style}
+      >
+        <View style={{ flex: 1 }}>
+          <AppHeader
+            title={'Modal 1'}
+            styles={appHeaderStyles}
+          />
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text>Modal 1 content</Text>
           </View>
-        </Modal>
-      </StoryWrap>
-    )
-  })
-  .add('Style Override', () => {
-    const [ modal1, setModal1 ] = useState(true)
-    // button('toggle modal', () => setModal1(!modal1))
-    return (
-      <StoryWrap style={storyStyles}>
-        <DemoContent />
-        <Modal
-          styles={modalOverrideStyle}
-          visible={modal1}
-          onBackdropTouch={action('Touched outside of modal')}
-        >
-          <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-            <Image
-              styles={{
-                resizeMode: 'contain',
-                padding: 10,
-                height: 80,
-                width: 230,
-                alignSelf: 'center',
-              }}
-              src='https://www.trilogyed.com/blog/wp-content/uploads/2020/07/simpleview_primary-696x110.png'
-              alt='A Goat'
-            />
-            <Divider />
-            <P style={{ paddingLeft: 25, textAlign: 'left' }}>
-              This modal has a custom backdrop color and custom container
-              styling
-            </P>
+          <Button
+            themePath='button.contained.secondary'
+            styles={{
+              main: { alignSelf: 'start', width: '100%', borderRadius: 0 },
+            }}
+            onClick={() => {
+              setModalIndex(0)
+              action('GOT IT Clicked!')
+            }}
+            content={'GOT IT'}
+          />
+        </View>
+      </Modal>
+      <Modal
+        visible={modalIndex === 2}
+        onBackdropTouch={() => {
+          setModalIndex(0)
+          action('Touched outside of modal 2')
+        }}
+        styles={modal2Style}
+      >
+        <View style={{ flex: 1 }}>
+          <AppHeader
+            title={'Modal 2'}
+            styles={appHeaderStyles}
+          />
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text>Modal 2 content</Text>
           </View>
-        </Modal>
-      </StoryWrap>
-    )
-  })
-  .add('Custom Animated Component', () => {
-    const [ modalVisible, setModalVisible ] = useState(true)
-    // button('toggle modal', () => setModalVisible(!modalVisible))
+          <Button
+            themePath='button.contained.secondary'
+            styles={{
+              main: { alignSelf: 'start', width: '100%', borderRadius: 0 },
+            }}
+            onClick={() => {
+              setModalIndex(0)
+              action('OK Clicked!')
+            }}
+            content={'OK'}
+          />
+        </View>
+      </Modal>
+    </StoryWrap>
+  )
+}
 
-    return (
-      <StoryWrap style={storyStyles}>
-        <DemoContent />
-        <Modal
-          styles={modal2Style}
-          AnimatedComponent={TestComp}
-          visible={modalVisible}
-          onBackdropTouch={action('Touched outside of modal')}
-          onAnimateIn={action('Animated In callback')}
-          onAnimateOut={action('Animated out callback')}
-        >
-          <P>Override with custom animation!</P>
-        </Modal>
-      </StoryWrap>
-    )
-  })
+export const ModalInception = props => {
+  const [ modal1, setModal1 ] = useState(false)
+  const [ modal2, setModal2 ] = useState(false)
+
+  return (
+    <StoryWrap style={storyStyles}>
+      <DemoContent title={`Modal Inception`}>
+        <View style={demoViewStyle} >
+          <Button
+            themePath='button.contained.primary'
+            styles={modalBtnStyle}
+            onClick={() => setModal1(true)}
+            content={'Toggle First Modal'}
+          />
+        </View>
+      </DemoContent>
+      <Modal
+        visible={modal1}
+        onBackdropTouch={() => {
+          setModal1(false)
+          action('Touched outside of modal 1')
+        }}
+        styles={{
+          content: {
+            width: '600px',
+            height: 300,
+            justifyContent: 'center',
+          },
+        }}
+      >
+        <Text>This modal opens another modal</Text>
+        <View style={demoViewStyle} >
+          <Button
+            themePath='button.contained.secondary'
+            styles={modalBtnStyle}
+            onClick={() => setModal2(true)}
+            content={'Open Another Modal'}
+          />
+        </View>
+      </Modal>
+
+      <Modal
+        visible={modal2}
+        onBackdropTouch={() => {
+          setModal2(false)
+          action('Touched outside of modal 2')
+        }}
+        styles={{
+          content: {
+            width: '400px',
+            height: 200,
+            flex: 1,
+            borderRadius: 4,
+            overflow: 'hidden',
+          },
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <AppHeader
+            title={'Modal 2'}
+            styles={appHeaderStyles}
+          />
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text>Hey this modal goes above modal 1</Text>
+          </View>
+          <Button
+            themePath='button.contained.secondary'
+            styles={{
+              main: { alignSelf: 'start', width: '100%', borderRadius: 0 },
+            }}
+            onClick={() => {
+              action('OK Clicked!')
+              setModal2(false)
+            }}
+            content={'OK'}
+          />
+        </View>
+      </Modal>
+    </StoryWrap>
+  )
+}
+
+export const StyleOverride = props => {
+  const [ modal1, setModal1 ] = useState(false)
+
+  return (
+    <StoryWrap style={storyStyles}>
+      <DemoContent title={`Style Override`}>
+        <View style={demoViewStyle} >
+          <Button
+            themePath='button.contained.primary'
+            styles={modalBtnStyle}
+            onClick={() => setModal1(true)}
+            content={'Toggle Modal'}
+          />
+        </View>
+      </DemoContent>
+      <Modal
+        styles={modalOverrideStyle}
+        visible={modal1}
+        onBackdropTouch={() => {
+          action('Touched outside of modal')
+          setModal1(false)
+        }}
+      >
+        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+          <Image
+            styles={{
+              resizeMode: 'contain',
+              padding: 10,
+              height: 80,
+              width: 230,
+              alignSelf: 'center',
+            }}
+            src='https://www.trilogyed.com/blog/wp-content/uploads/2020/07/simpleview_primary-696x110.png'
+            alt='A Goat'
+          />
+          <Divider />
+          <Text style={{ paddingLeft: 25, textAlign: 'left' }}>
+            This modal has a custom backdrop color and custom container
+            styling
+          </Text>
+        </View>
+      </Modal>
+    </StoryWrap>
+  )
+}
+
+export const CustomAnimation = props => {
+  const [ modalVisible, setModalVisible ] = useState(false)
+
+  return (
+    <StoryWrap style={storyStyles}>
+      <DemoContent title={`Custom Animation`} >
+        <View style={demoViewStyle} >
+          <Button
+            themePath='button.contained.primary'
+            styles={modalBtnStyle}
+            onClick={() => setModalVisible(true)}
+            content={'Toggle Modal'}
+          />
+        </View>
+      </DemoContent>
+      <Modal
+        styles={modal2Style}
+        AnimatedComponent={AnimatedComp}
+        visible={modalVisible}
+        onBackdropTouch={() => {
+          action('Touched outside of modal')
+          setModalVisible(false)
+        }}
+        onAnimateIn={action('Animated In callback')}
+        onAnimateOut={action('Animated out callback')}
+      >
+        <Text>Override with custom animation!</Text>
+      </Modal>
+    </StoryWrap>
+  )
+}

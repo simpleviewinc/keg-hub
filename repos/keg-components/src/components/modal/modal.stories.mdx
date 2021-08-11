@@ -1,11 +1,71 @@
 <!--- Touchable.stories.mdx -->
 
-import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs'
+import { Story, Meta, Canvas, Props, Description } from '@storybook/addon-docs'
 
 import { Modal } from './modal'
-import {CustomAnimation, SingleModal, MultipleModals, StyleOverride} from './modal.examples.js'
+import {CustomAnimation, SingleModal, ModalInception, StyleOverride} from './modal.stories.js'
 
-<Meta title="Components/Modal" component={Modal}/>
+<Meta title="Components/Display/Modal" component={Modal}/>
 
 # Modal
+Base component for displaying content in a modal. Does **NOT** use the `react-naive` modal component.
 
+## Examples
+
+### Code
+```js
+  export const MyModal = (props) => {
+    const [isOpen, setIsOpen] = useState(false)
+    return (
+      <View>
+        <Modal
+          visible={isOpen}
+          onBackdropTouch={() => setIsOpen(false)}
+        >
+          {props.children}
+          <Button
+            onClick={() => setIsOpen(false)}
+            content={'Close Modal'}
+          />
+        </Modal>
+        <Button
+          onClick={() => setIsOpen(true)}
+          content={'Close Modal'}
+        />
+      <View>
+    )
+  }
+```
+
+### Basic Modal
+<Canvas>
+  <Story name="Basic">
+    <SingleModal />
+  </Story>
+</Canvas>
+
+### Modal Inception
+Modals can open other modals. When opened it will be displayed over the parent modal.
+
+<Canvas>
+  <Story name="Inception">
+    <ModalInception />
+  </Story>
+</Canvas>
+
+### Modal Style Override
+<Canvas>
+  <Story name="Style Override">
+    <StyleOverride />
+  </Story>
+</Canvas>
+
+### Modal Custom Animation
+<Canvas>
+  <Story name="Custom Animation">
+    <CustomAnimation />
+  </Story>
+</Canvas>
+
+## Props
+<Props of={Modal} />

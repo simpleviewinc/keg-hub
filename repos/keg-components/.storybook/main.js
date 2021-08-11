@@ -31,8 +31,9 @@ module.exports = {
         },
       },
     },
-    '@storybook/addon-actions/register',
     '@storybook/addon-links/register',
     '@storybook/addon-storysource/register',
+    '@storybook/addon-controls',
+    '@storybook/addon-actions',
   ],
 }
