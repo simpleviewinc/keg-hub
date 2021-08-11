@@ -5,7 +5,6 @@ import { Modal } from './modal'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
 import { Animated } from 'react-native'
-import { button, withKnobs } from '@storybook/addon-knobs'
 import { AppHeader } from '../'
 import { useFromToAnimation } from 'KegHooks'
 
@@ -101,7 +100,7 @@ const TestComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
 let isVisible1 = false
 let isVisible2 = false
 storiesOf('Components/Display/Modal', module)
-  .addDecorator(withKnobs)
+  // .addDecorator(withKnobs)
   .add('One at a time', () => {
     // allow only 1 modal on the screen at a time
     const toggleModal = index => {
@@ -116,8 +115,8 @@ storiesOf('Components/Display/Modal', module)
         return
       }
     }
-    button('toggle modal 1', () => toggleModal(1))
-    button('toggle modal 2', () => toggleModal(2))
+    // button('toggle modal 1', () => toggleModal(1))
+    // button('toggle modal 2', () => toggleModal(2))
 
     return (
       <StoryWrap style={storyStyles}>
@@ -175,8 +174,8 @@ storiesOf('Components/Display/Modal', module)
     const [ modal1, setModal1 ] = useState(false)
     const [ modal2, setModal2 ] = useState(false)
 
-    button('toggle modal 1', () => setModal1(!modal1))
-    button('toggle modal 2', () => setModal2(!modal2))
+    // button('toggle modal 1', () => setModal1(!modal1))
+    // button('toggle modal 2', () => setModal2(!modal2))
     return (
       <StoryWrap style={storyStyles}>
         <DemoContent />
@@ -230,7 +229,7 @@ storiesOf('Components/Display/Modal', module)
   })
   .add('Style Override', () => {
     const [ modal1, setModal1 ] = useState(true)
-    button('toggle modal', () => setModal1(!modal1))
+    // button('toggle modal', () => setModal1(!modal1))
     return (
       <StoryWrap style={storyStyles}>
         <DemoContent />
@@ -263,7 +262,7 @@ storiesOf('Components/Display/Modal', module)
   })
   .add('Custom Animated Component', () => {
     const [ modalVisible, setModalVisible ] = useState(true)
-    button('toggle modal', () => setModalVisible(!modalVisible))
+    // button('toggle modal', () => setModalVisible(!modalVisible))
 
     return (
       <StoryWrap style={storyStyles}>

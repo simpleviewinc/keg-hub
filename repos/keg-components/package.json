@@ -22,18 +22,18 @@
     "docker:build": "bash ./scripts/dockerBuild.sh",
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
     "clean": "yarn clean:nm",
-    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn copy:indexes",
+    "clean:build": "rimraf build; mkdir build; mkdir build/cjs; mkdir build/esm; yarn gen:indexes",
     "clean:cache": "yarn cache clean",
     "clean:docs": "rimraf docs",
     "clean:full": "yarn clean:nm; yarn clean:cache; yarn clean:build; yarn clean:docs",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
     "clean:install": "yarn clean:full; yarn install --force",
-    "copy:indexes": "cp ./index.cjs.js build/cjs/index.js; cp ./index.native.cjs.js build/cjs/index.native.js; cp ./index.esm.js build/esm/index.js; cp ./index.native.esm.js build/esm/index.native.js",
     "dev": "nodemon --watch ./configs --exec 'NODE_ENV=production rollup -c ./configs/rollup.config.js -w'",
     "eslint:watch": "onchange '**/*.{js,jsx}' -- eslint --config ./configs/eslint.config.js {{changed}} --fix",
     "format:eslint": "eslint --config ./configs/eslintrc.config.js . --fix --quiet",
     "format:prettier": "prettier --config ./configs/prettier.config.js --ignore-path .eslintignore --write '**/*.{js,jsx}'",
     "format": "yarn format:prettier && yarn format:eslint",
+    "gen:indexes": "node ./scripts/generateIndexFiles.js",
     "jsconfig": "cd scripts && node jsconfig.js web",
     "postinstall": "node -e 'if(require(`fs`).existsSync(`${__dirname}/scripts/postinstall.js`)) require(`${__dirname}/scripts/postinstall.js`)'",
     "start": "yarn dev",
@@ -52,13 +52,12 @@
     "test:web": "PLATFORM=web RE_PLATFORM=web NODE_ENV=test jest --no-cache --config=./configs/jest.config.js --maxWorkers=50%",
     "view:reports": "open reports/coverage/lcov-report/index.html"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "7.14.8",
     "@babel/eslint-parser": "7.14.7",
-    "@babel/plugin-proposal-private-methods": "7.14.5",
     "@babel/plugin-proposal-class-properties": "7.14.5",
     "@babel/plugin-proposal-optional-chaining": "7.14.5",
+    "@babel/plugin-proposal-private-methods": "7.14.5",
     "@babel/plugin-transform-object-assign": "7.14.5",
     "@babel/preset-env": "7.14.8",
     "@babel/preset-react": "7.14.5",
@@ -73,7 +72,6 @@
     "@storybook/addon-actions": "6.3.5",
     "@storybook/addon-docs": "6.3.5",
     "@storybook/addon-essentials": "6.3.5",
-    "@storybook/addon-knobs": "6.3.0",
     "@storybook/addon-links": "6.3.5",
     "@storybook/addon-storysource": "6.3.5",
     "@storybook/addons": "6.3.5",
@@ -81,7 +79,6 @@
     "@storybook/react": "6.3.5",
     "@svgr/cli": "5.4.0",
     "app-root-path": "3.0.0",
-    "babel-eslint": "10.1.0",
     "babel-loader": "8.2.2",
     "babel-plugin-module-resolver": "4.1.0",
     "babel-plugin-react-native-web": "0.17.1",
@@ -99,6 +96,7 @@
     "jest": "26.6.3",
     "jest-expo": "42.0.1",
     "lint-staged": "10.5.4",
+    "metro-react-native-babel-transformer": "0.66.2",
     "nodemon": "2.0.12",
     "onchange": "7.1.0",
     "prettier": "2.3.2",
@@ -126,43 +124,17 @@
     "ast-types": "0.14.2"
   },
   "peerDependencies": {
-    "@keg-hub/jsutils": ">=8.4.0",
-    "@keg-hub/re-theme": "9.x",
-    "expo": ">=42.0.0",
+    "@keg-hub/jsutils": "8.6.0",
+    "@keg-hub/re-theme": "9.0.2",
+    "expo": "42.0.x",
     "expo-font": "9.2.x",
     "expo-linear-gradient": "9.2.x",
-    "react": "17.x",
-    "react-dom": "17.x",
-    "react-native": "0.64.x",
-    "react-native-web": "0.17.x",
-    "react-native-svg": ">=12.0.0",
-    "react-native-svg-web": "~1.0.9"
-  },
-  "peerDependenciesMeta": {
-    "expo": {
-      "optional": true
-    },
-    "expo-font": {
-      "optional": true
-    },
-    "expo-linear-gradient": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    },
-    "react-native": {
-      "optional": true
-    },
-    "react-native-web": {
-      "optional": true
-    },
-    "react-native-svg": {
-      "optional": true
-    },
-    "react-native-svg-web": {
-      "optional": true
-    }
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-native": "0.64.2",
+    "react-native-svg": "12.0.0",
+    "react-native-svg-web": "1.0.9",
+    "react-native-web": "0.17.1"
   },
   "browserslist": {
     "production": [
