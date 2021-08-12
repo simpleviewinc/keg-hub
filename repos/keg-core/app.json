@@ -82,6 +82,7 @@
       },
       "aliases": {
         "nameSpace": "SV",
+        "baseNameSpace": "SV",
         "root": {
           "AppConfig": "app.json",
           "Base": "core/base",

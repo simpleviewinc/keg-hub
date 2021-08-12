@@ -19,6 +19,7 @@
       "extensions": [],
       "aliases": {
         "nameSpace": "",
+        "baseNameSpace": "",
         "root": {},
         "base": {},
         "dynamic": {},

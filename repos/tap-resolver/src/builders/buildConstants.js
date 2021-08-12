@@ -6,11 +6,14 @@ const { setupTap, tapConstants } = require('../tap')
 const freezeObj = Object.freeze
 
 /**
- * Adds the Namespace to all keys of the passed in object
+ * Adds the Namespace and BaseNameSpace to all keys of the passed in object
+ * The BaseNameSpace allows the base to use alias that are not impacted by the taps namespace alias
+ * Technically they both resolve to the same location, but the BaseNameSpace is constant
+ * Where the a taps namespace can be different per tap
  * @param {Object} appConfig - app.json config file
  * @param {Object} addTo - Object to have it's keys name spaced
  *
- * @returns {Object} - new addTo object with it's keys updated
+ * @returns {Object} - new addTo object with it's keys updated to include the namespaces 
  */
 const addNameSpace = (appConfig, addTo) => {
   const nameSpace = get(
@@ -18,12 +21,30 @@ const addNameSpace = (appConfig, addTo) => {
     [ 'keg', 'tapResolver', 'aliases', 'nameSpace' ],
     ''
   )
-  if (!nameSpace || !isObj(addTo)) return addTo
+  const baseNameSpace = get(
+    appConfig,
+    [ 'keg', 'tapResolver', 'aliases', 'baseNameSpace' ],
+    ''
+  )
+
+  if ((!nameSpace && !baseNameSpace) || !isObj(addTo)) return addTo
+
+  const sameNameSpace = baseNameSpace && baseNameSpace === nameSpace
 
   return reduceObj(
     addTo,
     (key, value, updated) => {
-      updated[`${nameSpace}${key}`] = value
+      nameSpace && (updated[`${nameSpace}${key}`] = value)
+
+      // TODO: Investigate getting the base value and using that
+      // Instead of using the current value
+
+      // Only add the baseNamespace if it's not the same as namespace
+      // Otherwise we're just duplicating the alias
+      !sameNameSpace &&
+        baseNameSpace &&
+        (updated[`${baseNameSpace}${key}`] = value)
+
       return updated
     },
     {}

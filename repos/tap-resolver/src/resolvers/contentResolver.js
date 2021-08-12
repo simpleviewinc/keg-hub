@@ -39,9 +39,12 @@ const checkAddIndex = (aliasPath, toLoad, folderRootFile) => {
 /**
  * Dynamically load tap files from the taps folder
  * If no file exists, then load from the base tap
- * @param  { string } type - folder to search for file i.e. components/assets
+ * @param {Object} appConfig - (tap|| app).json config file
+ * @param {Object} aliasMap - object that holds all path alias
+ * @param {string} content - 
+ * @param  {string} type - folder to search for file i.e. components/assets
  *
- * @return { string } - path to file
+ * @return {string} - path to file
  */
 module.exports = (appConfig, aliasMap, content, type) => {
   // Ensure the required app data exists
@@ -52,6 +55,12 @@ module.exports = (appConfig, aliasMap, content, type) => {
     [ 'keg', 'tapResolver', 'aliases', 'nameSpace' ],
     ''
   )
+  const baseNameSpace = get(
+    appConfig,
+    [ 'keg', 'tapResolver', 'aliases', 'baseNameSpace' ],
+    ''
+  )
+  
   const tapName = get(appConfig, ['name'], '').toLowerCase()
     .replace(/ /g, '_')
   const folderRootFile = get(
@@ -81,6 +90,10 @@ module.exports = (appConfig, aliasMap, content, type) => {
       LOG && logData(`Loading cached file from ${FULL_PATH_CACHE[cacheKey]}`)
       return FULL_PATH_CACHE[cacheKey]
     }
+
+    // TODO: Add check here if file to load (type) contains the baseNameSpace
+    // IF it does, and the baseNameSpace is different from the nameSpace
+    // We can skip to just loading directly from the base, instead of the checking in the tap 
 
     // Check if path is a folder, and if folderRootFile should be added to the file path
     // This allows loading the folderRootFile ( index.js ) of a folder, defaults to index.js

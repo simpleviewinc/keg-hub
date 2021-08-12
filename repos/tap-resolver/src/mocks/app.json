@@ -27,6 +27,7 @@
       },
       "aliases": {
         "nameSpace": "Test",
+        "baseNameSpace": "TestBase",
         "root": {
           "AppConfig": "src/mocks/app.json",
           "Base": "src/mocks/base",
