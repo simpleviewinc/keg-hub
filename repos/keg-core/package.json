@@ -79,7 +79,6 @@
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-native": "3.11.0",
     "expo": "42.0.3",
-    "expo-cli": "4.10.0",
     "expo-secure-store": "10.2.0",
     "expo-linear-gradient": "9.2.0",
     "fs-extra": "10.0.0",
@@ -107,6 +106,17 @@
     "redux-devtools-extension": "2.13.9",
     "rimraf": "3.0.2",
     "rollup": "2.56.2"
+  },
+  "resolutions": {
+    "@keg-hub/jsutils": "8.6.0",
+    "@keg-hub/keg-components": "9.0.1",
+    "@keg-hub/re-theme": "9.2.0",
+    "@keg-hub/tap-resolver": "8.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-is": "17.0.2",
+    "react-test-renderer": "17.0.2",
+    "ast-types": "0.14.2"
   },
   "nodemonConfig": {
     "ext": "js",
