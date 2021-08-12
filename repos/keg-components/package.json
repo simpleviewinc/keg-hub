@@ -125,17 +125,43 @@
     "ast-types": "0.14.2"
   },
   "peerDependencies": {
-    "@keg-hub/jsutils": "8.6.0",
-    "@keg-hub/re-theme": "9.0.2",
+    "@keg-hub/jsutils": "8.x",
+    "@keg-hub/re-theme": "9.x",
     "expo": "42.0.x",
     "expo-font": "9.2.x",
     "expo-linear-gradient": "9.2.x",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-native": "0.64.2",
-    "react-native-svg": "12.0.0",
-    "react-native-svg-web": "1.0.9",
-    "react-native-web": "0.17.1"
+    "react": "17.0.x",
+    "react-dom": "17.0.x",
+    "react-native": "0.64.x",
+    "react-native-svg": "12.0.x",
+    "react-native-svg-web": "1.0.x",
+    "react-native-web": "0.17.x"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    },
+    "expo-font": {
+      "optional": true
+    },
+    "expo-linear-gradient": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-web": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    },
+    "react-native-svg-web": {
+      "optional": true
+    }
   },
   "browserslist": {
     "production": [

@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { template } = require('@keg-hub/jsutils')
-const { buildExports } = require('../configs/buildExports')
+const { generateBuildInputs } = require('./generateBuildInputs')
 const buildOutputPath = path.join(__dirname, `../build`)
 
 /**
@@ -9,8 +9,8 @@ const buildOutputPath = path.join(__dirname, `../build`)
  * @Object
  */
 const platforms = {
-  web: '.js',
-  native: '.native.js',
+  web: '',
+  native: '.native',
 }
 
 /**
@@ -18,8 +18,8 @@ const platforms = {
  * @Object
  */
 const exportTypes = {
-  cjs: "module.exports = require('./${exportPath}')",
-  esm: "export * from './${exportPath}'",
+  cjs: "module.exports = require('./${exportPath}')\n",
+  esm: "export * from './${exportPath}'\n",
 }
 
 /**
@@ -32,30 +32,37 @@ const exportTypes = {
  *
  * @return {void}
  */
-const saveToFile = (exportPath, content, folder) => {
+const saveToFile = (exportPath, content, folder='') => {
   const savePath = path.join(buildOutputPath, folder, exportPath)
   fs.writeFileSync(savePath, content, 'utf8')
 }
 
 /**
- * Loops over the platforms and buildExports and export types
+ * Loops over the platforms and generateBuildInputs and export types
  * Then generates an export template to be save into the build folder
  * @function
  * @return {void}
  */
 const generateIndexFiles = async () => {
+  const buildInputs = generateBuildInputs()
   Object.keys(platforms).map(platform => {
-    Object.keys(buildExports).map(name => {
+    Object.keys(buildInputs).map(name => {
       // For now only generate the index exports
       // We may want to generate exports for all files
       // at some point, so leaving this as is for now
       if (name !== 'index') return
 
       Object.keys(exportTypes).map(type => {
-        const exportName = `${name}${platforms[platform]}`
-        const exportPath = `${platform}/${name}.js`
-        const content = template(exportTypes[type], { exportPath })
-        saveToFile(exportName, content, type)
+        const ext = type === 'esm' ? 'mjs' : 'js'
+        const exportName = `${name}${platforms[platform]}.${ext}`
+        const exportPlatformPath = `${platform}/${name}.${ext}`
+        const exportTypePath = `${type}/${name}`
+        // Save the platform index file ( web || native )
+        saveToFile(exportName, template(exportTypes[type], { exportPath: exportPlatformPath }), type)
+
+        // Save the js type index file ( cjs || mjs )
+        platform !== 'native' &&
+          saveToFile(exportName, template(exportTypes[type],  { exportPath: exportTypePath }))
       })
     })
   })

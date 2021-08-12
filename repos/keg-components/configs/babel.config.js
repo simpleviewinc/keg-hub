@@ -1,8 +1,5 @@
 module.exports = {
-  presets: [ 
-    ['@babel/preset-env'],
-    ['@babel/preset-react']
-  ],
+  presets: [ '@babel/preset-env', '@babel/preset-react' ],
   plugins: [
     ['@babel/plugin-proposal-optional-chaining'],
     ['@babel/plugin-proposal-class-properties'],
@@ -11,5 +8,3 @@ module.exports = {
     ['transform-react-remove-prop-types', { removeImport: 'true' }],
   ],
 }
-
-// ['@babel/preset-env', { loose: true, shippedProposals: true }],
