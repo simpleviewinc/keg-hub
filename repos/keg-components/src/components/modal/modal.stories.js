@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { storiesOf } from '@storybook/react'
-import { Button, Section, H4, Divider, P, View, Text, Image } from '../../'
+import { Button, Section, H4, Divider, View, Text, Image } from '../../'
 import { Modal } from './modal'
 import { StoryWrap } from 'StoryWrap'
 import { action } from '@storybook/addon-actions'
@@ -38,9 +37,16 @@ const modal2Style = {
   },
 }
 const demoViewStyle = { flexDirection: 'row', justifyContent: 'center' }
-const modalBtnStyle = { main: { margin: 10, paddingLeft: 15, paddingRight: 15 }}
+const modalBtnStyle = {
+  main: { margin: 10, paddingLeft: 15, paddingRight: 15 },
+}
 
-const AnimatedComp = ({ defaultStyle, visible, children, onAnimationFinish }) => {
+const AnimatedComp = ({
+  defaultStyle,
+  visible,
+  children,
+  onAnimationFinish,
+}) => {
   const [animValue] = useFromToAnimation({
     useNativeDriver: false,
     from: visible ? 1200 : 0,
@@ -70,27 +76,25 @@ const AnimatedComp = ({ defaultStyle, visible, children, onAnimationFinish }) =>
 const DemoContent = ({ title, children }) => {
   return (
     <View>
-      <Section style={{ borderWidth: 0 }} >
-        <H4 style={{ marginBottom: 10 }} >{title}</H4>
+      <Section style={{ borderWidth: 0 }}>
+        <H4 style={{ marginBottom: 10 }}>{ title }</H4>
         <Divider />
         <Text style={{ marginTop: 20 }}>
           Click the buttons below to toggle the modal
         </Text>
-        {children}
+        { children }
       </Section>
     </View>
   )
 }
 
 export const SingleModal = props => {
-  const [modalIndex, setModalIndex] = useState(0)
+  const [ modalIndex, setModalIndex ] = useState(0)
 
   return (
     <StoryWrap style={storyStyles}>
-      <DemoContent
-        title={`Modal Toggle`}
-      >
-        <View style={demoViewStyle} >
+      <DemoContent title={`Modal Toggle`}>
+        <View style={demoViewStyle}>
           <Button
             themePath='button.contained.primary'
             styles={modalBtnStyle}
@@ -174,7 +178,7 @@ export const ModalInception = props => {
   return (
     <StoryWrap style={storyStyles}>
       <DemoContent title={`Modal Inception`}>
-        <View style={demoViewStyle} >
+        <View style={demoViewStyle}>
           <Button
             themePath='button.contained.primary'
             styles={modalBtnStyle}
@@ -198,7 +202,7 @@ export const ModalInception = props => {
         }}
       >
         <Text>This modal opens another modal</Text>
-        <View style={demoViewStyle} >
+        <View style={demoViewStyle}>
           <Button
             themePath='button.contained.secondary'
             styles={modalBtnStyle}
@@ -255,7 +259,7 @@ export const StyleOverride = props => {
   return (
     <StoryWrap style={storyStyles}>
       <DemoContent title={`Style Override`}>
-        <View style={demoViewStyle} >
+        <View style={demoViewStyle}>
           <Button
             themePath='button.contained.primary'
             styles={modalBtnStyle}
@@ -286,8 +290,7 @@ export const StyleOverride = props => {
           />
           <Divider />
           <Text style={{ paddingLeft: 25, textAlign: 'left' }}>
-            This modal has a custom backdrop color and custom container
-            styling
+            This modal has a custom backdrop color and custom container styling
           </Text>
         </View>
       </Modal>
@@ -300,8 +303,8 @@ export const CustomAnimation = props => {
 
   return (
     <StoryWrap style={storyStyles}>
-      <DemoContent title={`Custom Animation`} >
-        <View style={demoViewStyle} >
+      <DemoContent title={`Custom Animation`}>
+        <View style={demoViewStyle}>
           <Button
             themePath='button.contained.primary'
             styles={modalBtnStyle}
