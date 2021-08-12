@@ -28,7 +28,7 @@ export const useFromToAnimation = params => {
   const fromVal = useMemo(() => new Animated.Value(from), animDependencies)
 
   const config = { toValue: to, duration, easing }
-  !isWeb && (config.useNativeDriver = true)
+   config.useNativeDriver = !isWeb
 
   const animatedTiming = Animated.timing(fromVal, config)
 

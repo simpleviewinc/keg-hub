@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { getAliases } = require('./aliases.config')
 const babelConfig = require('./babel.config.js')
-const { get } = require('@keg-hub/jsutils')
+const { get, eitherArr } = require('@keg-hub/jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
 const ENV = process.env.NODE_ENV || process.env.ENV || 'development'
 
@@ -106,7 +106,7 @@ const customWatchOptions = options => {
   return {
     ...options,
     ignored: [
-      ...(options.ignored || []),
+      ...(options.ignored ? eitherArr(options.ignored, [options.ignored]) : []),
       /node_modules([\\]+|\/)+(?!\@keg-hub\/re-theme\/build\/esm\/web)/,
     ]
   }
