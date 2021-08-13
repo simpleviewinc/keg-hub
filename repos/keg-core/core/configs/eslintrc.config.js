@@ -8,14 +8,10 @@ module.exports = {
     React: true,
   },
   parserOptions: {
-    requireConfigFile: false,
     ecmaVersion: 6,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
-    },
-    babelOptions: {
-      configFile: './configs/babel.config.js'
     },
   },
   env: {
