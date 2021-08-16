@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { getAliases } = require('./aliases.config')
 const babelConfig = require('../babel.config.js')
-const { get } = require('@keg-hub/jsutils')
+const { get, eitherArr } = require('@keg-hub/jsutils')
 const platform = process.env.RE_PLATFORM || 'web'
 const ENV = process.env.NODE_ENV || process.env.ENV || 'development'
 
@@ -100,11 +100,11 @@ const customRules = rules => {
 
 // Set custom watch options for webpack re-load
 // Add re-theme build folder so we re-load webpack anytime re-theme re-builds
-const customWatchOptions = options => {
+const customWatchOptions = (options={}) => {
   return {
     ...options,
     ignored: [
-      ...(options.ignored || []),
+      ...(options.ignored ? eitherArr(options.ignored, [options.ignored]) : []),
       /node_modules([\\]+|\/)/,
     ]
   }
