@@ -3,9 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
-var reactNative = require('react-native');
+var reactNativeWeb = require('react-native-web');
 var jsutils = require('@keg-hub/jsutils');
+var getPlatform = require('./getPlatform-ec53cd5e.js');
 
+var isWeb = getPlatform.getPlatform() === 'web';
 var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},
       from = _ref.from,
@@ -19,16 +21,17 @@ var useFromToAnimation = function useFromToAnimation(params) {
       easing = _ref.easing;
   var animDependencies = [from, to, duration, loop, easing, onFinish];
   var fromVal = React.useMemo(function () {
-    return new reactNative.Animated.Value(from);
+    return new reactNativeWeb.Animated.Value(from);
   }, animDependencies);
   var config = {
     toValue: to,
     duration: duration,
     easing: easing
   };
-  var animatedTiming = reactNative.Animated.timing(fromVal, config);
+  config.useNativeDriver = !isWeb;
+  var animatedTiming = reactNativeWeb.Animated.timing(fromVal, config);
   React.useEffect(function () {
-    loop ? reactNative.Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);
+    loop ? reactNativeWeb.Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);
   }, animDependencies);
   return [fromVal];
 };

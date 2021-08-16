@@ -2,16 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 var jsutils = require('@keg-hub/jsutils');
 var getPlatform = require('./getPlatform-ec53cd5e.js');
 var getPressHandler = require('./getPressHandler.js');
 require('@keg-hub/re-theme/colors');
-require('./view.native-99366b4b.js');
-require('react-native');
-require('./useClassName-51ea3221.js');
+require('./view.native-895f9104.js');
+require('react-native-web');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -21,6 +21,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["onPress", "onClick", "children", "flexDir", "size", "style"];
 var useHasWidth = function useHasWidth(styles) {
   return React.useMemo(function () {
     return styles.map(function (style) {
@@ -36,7 +37,7 @@ var Container = function Container(_ref) {
       size = _ref.size,
       _ref$style = _ref.style,
       style = _ref$style === void 0 ? jsutils.noPropObj : _ref$style,
-      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
+      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, _excluded);
   var containerStyles = jsutils.isArr(style) ? style : [style];
   var hasWidth = useHasWidth(containerStyles);
   var flexStyle = flexDir === 'row' ? {

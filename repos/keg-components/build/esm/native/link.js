@@ -1,8 +1,8 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React from 'react';
-import { L as LinkWrapper } from './link.wrapper-3ac32a3b.js';
-import { K as KegText } from './kegText-f9567f63.js';
-import { T as Touchable } from './touchable-9cc6e181.js';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default from 'react';
+import { L as LinkWrapper } from './link.wrapper-a64a3ba8.js';
+import { K as KegText } from './kegText-97d3d571.js';
+import { T as Touchable } from './touchable-ec804bf8.js';
 import { g as getPlatform } from './getPlatform-e625f46a.js';
 import { u as useClassList } from './useClassList.native-70068878.js';
 import '@keg-hub/re-theme';
@@ -18,9 +18,10 @@ import '@keg-hub/re-theme/styleInjector';
 import './useTextStyles.js';
 import './touchable.js';
 
+var _excluded = ["children", "className", "elProps", "href", "onPress", "style", "target"];
 var isWeb = getPlatform() === 'web';
 var Text = KegText('link');
-var Element = React.forwardRef(function (props, ref) {
+var Element = React__default.forwardRef(function (props, ref) {
   var children = props.children;
       props.className;
       var elProps = props.elProps,
@@ -28,12 +29,12 @@ var Element = React.forwardRef(function (props, ref) {
       props.onPress;
       var style = props.style,
       target = props.target,
-      attrs = _objectWithoutProperties(props, ["children", "className", "elProps", "href", "onPress", "style", "target"]);
-  return React.createElement(Touchable, _extends({
+      attrs = _objectWithoutProperties(props, _excluded);
+  return React__default.createElement(Touchable, _extends({
     className: useClassList()
   }, elProps, attrs, {
     touchRef: ref
-  }), React.createElement(Text, {
+  }), React__default.createElement(Text, {
     accessibilityRole: "link",
     className: "keg-link-text",
     style: style,
@@ -42,7 +43,7 @@ var Element = React.forwardRef(function (props, ref) {
   }, children));
 });
 var Link = function Link(props) {
-  return React.createElement(LinkWrapper, _extends({}, props, {
+  return React__default.createElement(LinkWrapper, _extends({}, props, {
     Element: Element,
     isWeb: isWeb
   }));

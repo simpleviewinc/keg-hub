@@ -2,9 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var jsutils = require('@keg-hub/jsutils');
 var getPressHandler = require('./getPressHandler.js');
 var getPlatform = require('./getPlatform-24228c6c.js');
@@ -16,6 +16,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["onPress", "onClick", "children", "flexDir", "size", "style"];
 var useHasWidth = function useHasWidth(styles) {
   return React.useMemo(function () {
     return styles.map(function (style) {
@@ -31,7 +32,7 @@ var Container = function Container(_ref) {
       size = _ref.size,
       _ref$style = _ref.style,
       style = _ref$style === void 0 ? jsutils.noPropObj : _ref$style,
-      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, ["onPress", "onClick", "children", "flexDir", "size", "style"]);
+      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, _excluded);
   var containerStyles = jsutils.isArr(style) ? style : [style];
   var hasWidth = useHasWidth(containerStyles);
   var flexStyle = flexDir === 'row' ? {

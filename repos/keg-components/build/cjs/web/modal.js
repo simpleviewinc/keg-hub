@@ -2,24 +2,25 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var reactNative = require('react-native');
+var reactNativeWeb = require('react-native-web');
 var touchable = require('./touchable.js');
 var jsutils = require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 var useFromToAnimation = require('./useFromToAnimation.js');
-var useClassName = require('./useClassName-51ea3221.js');
+var useClassName = require('./useClassName-eec4a5f1.js');
 var useClassList = require('./useClassList-89a8dbd4.js');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 require('@keg-hub/re-theme/styleInjector');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('@keg-hub/re-theme');
-require('./view.native-99366b4b.js');
+require('./getPlatform-ec53cd5e.js');
+require('./view.native-895f9104.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -31,7 +32,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
       visible = _ref.visible,
       children = _ref.children,
       onAnimationFinish = _ref.onAnimationFinish;
-  var windowHeight = reactNative.Dimensions.get('window').height;
+  var windowHeight = reactNativeWeb.Dimensions.get('window').height;
   var bottomOfScreen = windowHeight;
   var origin = 0;
   var _useFromToAnimation = useFromToAnimation.useFromToAnimation({
@@ -42,7 +43,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
       _useFromToAnimation2 = _rollupPluginBabelHelpers._slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
   var classRef = useClassName.useClassName('keg-modal-content', className);
-  return React__default['default'].createElement(reactNative.Animated.View, {
+  return React__default['default'].createElement(reactNativeWeb.Animated.View, {
     ref: classRef,
     style: _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, defaultStyle), {}, {
       transform: [{

@@ -1,23 +1,24 @@
-import { d as _objectWithoutProperties, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React from 'react';
+import { d as _objectWithoutProperties, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default from 'react';
 import { useTheme } from '@keg-hub/re-theme';
 import { get } from '@keg-hub/jsutils';
-import { V as View } from './view-2274aefb.js';
+import { V as View } from './view-9c41ec1e.js';
 import { renderFromType } from './renderFromType.js';
 import '@keg-hub/re-theme/colors';
 import { isValidComponent } from './isValidComponent.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import 'react-native';
+import 'react-native-web';
 import { u as useClassList } from './useClassList-1d418045.js';
-import './view.native-a7f08b5b.js';
-import './useClassName-682bc33b.js';
+import './view.native-2491eb60.js';
+import './useClassName-ed83df40.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
 import '@keg-hub/re-theme/styleInjector';
 
-var Icon = React.forwardRef(function (props, ref) {
+var _excluded = ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"];
+var Icon = React__default.forwardRef(function (props, ref) {
   var theme = useTheme();
   var className = props.className,
       color = props.color,
@@ -30,7 +31,7 @@ var Icon = React.forwardRef(function (props, ref) {
       themePath = props.themePath,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
-      attrs = _objectWithoutProperties(props, ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"]);
+      attrs = _objectWithoutProperties(props, _excluded);
   if (!isValidComponent(Element)) return console.error("Invalid Element passed to Icon component!", Element) || null;
   var iconStyles = useThemePath(themePath || "icon.".concat(type), styles);
   var iconProps = {
@@ -40,7 +41,7 @@ var Icon = React.forwardRef(function (props, ref) {
     color: color || iconStyles.color || get(iconStyles, 'icon.color') || get(theme, 'typography.default.color'),
     size: parseInt(size || get(iconStyles, 'icon.fontSize') || get(theme, 'typography.default.fontSize', 15) * 2, 10)
   };
-  return React.createElement(View, {
+  return React__default.createElement(View, {
     className: useClassList("keg-icon", className),
     style: iconStyles.container
   }, renderFromType(Element, _objectSpread2(_objectSpread2({}, attrs), iconProps)));

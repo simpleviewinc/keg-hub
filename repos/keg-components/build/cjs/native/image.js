@@ -2,11 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var view_native = require('./view.native-b34604af.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var loading = require('./loading.js');
 var jsutils = require('@keg-hub/jsutils');
-var image = require('./image-53cac4f2.js');
+var image = require('./image-2041d5dc.js');
 var reTheme = require('@keg-hub/re-theme');
 var React = require('react');
 var getPressHandler = require('./getPressHandler.js');
@@ -18,10 +18,10 @@ require('react-native');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./useClassName.native-3d1a229b.js');
-require('./indicator.wrapper-6a5623e9.js');
+require('./indicator.wrapper-969fd2de.js');
 require('./getPlatform-24228c6c.js');
 require('./text.js');
-require('./kegText-965ef4d3.js');
+require('./kegText-e1842e1b.js');
 require('./kegText.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
@@ -31,6 +31,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"];
 var KegImage = styleInjector.StyleInjector(image.Image, {
   displayName: 'Image',
   className: 'keg-image'
@@ -55,7 +56,7 @@ var Image = React.forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "image.".concat(type) : _props$themePath,
       _props$useLoading = props.useLoading,
       useLoading = _props$useLoading === void 0 ? true : _props$useLoading,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var builtStyles = useThemePath.useThemePath(themePath, styles);
   var loadingStyles = reTheme.useStyle(builtStyles.loading, builtStyles.image);
   var loadedStyles = reTheme.useStyle(loadingStyles, builtStyles.loaded);

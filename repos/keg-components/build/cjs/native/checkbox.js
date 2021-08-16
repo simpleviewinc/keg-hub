@@ -2,12 +2,12 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var reTheme = require('@keg-hub/re-theme');
 var text = require('./text.js');
-var checkbox_wrapper = require('./checkbox.wrapper-13494af9.js');
-require('./kegText-965ef4d3.js');
+var checkbox_wrapper = require('./checkbox.wrapper-5a3b3816.js');
+require('./kegText-e1842e1b.js');
 require('@keg-hub/jsutils');
 require('./kegText.js');
 require('./useClassName.native-3d1a229b.js');
@@ -15,7 +15,7 @@ require('react-native');
 require('./useTextAccessibility.js');
 require('@keg-hub/re-theme/styleInjector');
 require('./useTextStyles.js');
-require('./view.native-b34604af.js');
+require('./view.native-5d72f4dd.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -40,6 +40,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["theme", "style", "wrapper", "children", "onClick", "onPress", "text"];
 var Element = reTheme.withTheme(function (props) {
   props.theme;
       props.style;
@@ -48,7 +49,7 @@ var Element = reTheme.withTheme(function (props) {
       props.onClick;
       props.onPress;
       var text$1 = props.text,
-      args = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["theme", "style", "wrapper", "children", "onClick", "onPress", "text"]);
+      args = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   return React__default['default'].createElement(text.Text, _rollupPluginBabelHelpers._extends({}, args, {
     style: {}
   }), text$1);

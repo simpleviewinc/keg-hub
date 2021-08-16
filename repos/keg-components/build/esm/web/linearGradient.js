@@ -1,16 +1,17 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React, { useState, useCallback } from 'react';
-import { V as View } from './view-2274aefb.js';
+import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default, { useState, useCallback } from 'react';
+import { V as View } from './view-9c41ec1e.js';
 import { u as useClassList } from './useClassList-1d418045.js';
 import { noPropArr } from '@keg-hub/jsutils';
-import './view.native-a7f08b5b.js';
-import 'react-native';
-import './useClassName-682bc33b.js';
+import './view.native-2491eb60.js';
+import 'react-native-web';
+import './useClassName-ed83df40.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
 import '@keg-hub/re-theme/styleInjector';
 
+var _excluded = ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"];
 var LinearGradient = function LinearGradient(props) {
   var _props$start = props.start,
       start = _props$start === void 0 ? {
@@ -34,7 +35,7 @@ var LinearGradient = function LinearGradient(props) {
       style = props.style,
       children = props.children,
       className = props.className,
-      otherProps = _objectWithoutProperties(props, ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"]);
+      otherProps = _objectWithoutProperties(props, _excluded);
   var _useState = useState(1),
       _useState2 = _slicedToArray(_useState, 2),
       width = _useState2[0],
@@ -49,7 +50,7 @@ var LinearGradient = function LinearGradient(props) {
     setHeight(nativeEvent.layout.height);
   }, [setWidth, setHeight]);
   var newAngle = useAngle && angle ? "".concat(angle, "deg") : calculateAngle(width, height, start, end);
-  return React.createElement(View, _extends({
+  return React__default.createElement(View, _extends({
     className: useClassList("keg-linear-gradient", className)
   }, otherProps, {
     style: [style, {

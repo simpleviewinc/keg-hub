@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 require('@keg-hub/jsutils');
 var getInputValue = require('./getInputValue.js');
@@ -12,12 +12,12 @@ var useInputHandlers = require('./useInputHandlers.js');
 var usePressHandlers = require('./usePressHandlers.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('react-native');
-var input = require('./input-f586181b.js');
+require('react-native-web');
+var input = require('./input-9de20726.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./validateFunctions.js');
 require('@keg-hub/re-theme');
-require('./useClassName-51ea3221.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -26,6 +26,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"];
 var KegInput = styleInjector.StyleInjector(input.Input, {
   displayName: 'Input',
   className: 'keg-input'
@@ -59,7 +60,7 @@ var Input = React__default['default'].forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
       style = props.style;
       props.value;
-      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var inputStyles = useThemePath.useThemePath(themePath);
   return React__default['default'].createElement(KegInput, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "textbox",

@@ -1,8 +1,8 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React from 'react';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default from 'react';
 import { ActivityIndicator } from 'react-native';
-import { I as IndicatorWrapper } from './indicator.wrapper-83c062e4.js';
-import { V as View } from './view.native-b0b1ddd4.js';
+import { I as IndicatorWrapper } from './indicator.wrapper-a8ba0314.js';
+import { V as View } from './view.native-f7a27d15.js';
 import { g as getPlatform } from './getPlatform-e625f46a.js';
 import { u as useClassList } from './useClassList.native-70068878.js';
 import '@keg-hub/jsutils';
@@ -12,6 +12,8 @@ import '@keg-hub/re-theme';
 import './useThemeWithHeight.js';
 import './useClassName.native-32e8827d.js';
 
+var _excluded = ["className", "style", "size", "color"],
+    _excluded2 = ["alt", "size", "color", "styles"];
 var isWeb = getPlatform() === 'web';
 var Element = function Element(_ref) {
   _ref.className;
@@ -19,10 +21,10 @@ var Element = function Element(_ref) {
       style = _ref$style === void 0 ? {} : _ref$style,
       size = _ref.size,
       color = _ref.color;
-      _objectWithoutProperties(_ref, ["className", "style", "size", "color"]);
-  return React.createElement(View, {
+      _objectWithoutProperties(_ref, _excluded);
+  return React__default.createElement(View, {
     className: useClassList()
-  }, React.createElement(ActivityIndicator, {
+  }, React__default.createElement(ActivityIndicator, {
     size: size,
     color: style.color || color
   }));
@@ -32,8 +34,8 @@ var Indicator = function Indicator(_ref2) {
       size = _ref2.size,
       color = _ref2.color,
       styles = _ref2.styles,
-      props = _objectWithoutProperties(_ref2, ["alt", "size", "color", "styles"]);
-  return React.createElement(IndicatorWrapper, _extends({}, props, {
+      props = _objectWithoutProperties(_ref2, _excluded2);
+  return React__default.createElement(IndicatorWrapper, _extends({}, props, {
     alt: alt || 'Loading',
     size: ['large', 'small'].includes(size) ? size : 'large',
     color: color,

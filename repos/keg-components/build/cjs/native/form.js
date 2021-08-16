@@ -2,9 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var jsutils = require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
@@ -18,6 +18,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["children", "className", "elType", "style", "type", "themePath"];
 var Form = React__default['default'].forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
   var children = props.children;
@@ -27,7 +28,7 @@ var Form = React__default['default'].forwardRef(function (props, ref) {
       type = props.type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.form.".concat(type || 'default') : _props$themePath,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["children", "className", "elType", "style", "type", "themePath"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var formTheme = useThemePath.useThemePath(themePath);
   return React__default['default'].createElement(view_native.View, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "form",

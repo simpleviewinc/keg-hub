@@ -1,7 +1,9 @@
 import { useMemo, useEffect } from 'react';
 import { Animated } from 'react-native';
 import { noOp } from '@keg-hub/jsutils';
+import { g as getPlatform } from './getPlatform-e625f46a.js';
 
+var isWeb = getPlatform() === 'web';
 var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},
       from = _ref.from,
@@ -22,7 +24,7 @@ var useFromToAnimation = function useFromToAnimation(params) {
     duration: duration,
     easing: easing
   };
-  (config.useNativeDriver = true);
+  config.useNativeDriver = !isWeb;
   var animatedTiming = Animated.timing(fromVal, config);
   useEffect(function () {
     loop ? Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);

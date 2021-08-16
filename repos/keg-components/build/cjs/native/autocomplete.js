@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
 var getTextFromChangeEvent = require('./getTextFromChangeEvent.js');
@@ -13,14 +13,15 @@ require('./useThemeWithHeight.js');
 require('react-native');
 var reStyle = require('@keg-hub/re-theme/reStyle');
 var scrollableSelect = require('./scrollableSelect.js');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var autocompleteInput = require('./autocompleteInput.js');
-require('./touchable-3f00e0ff.js');
-var withOutsideDetect = require('./withOutsideDetect-58a390ac.js');
+require('./touchable-548d2782.js');
+var withOutsideDetect = require('./withOutsideDetect-2ef63285.js');
+require('./getPlatform-24228c6c.js');
 require('./useThemePath.js');
 require('./item.js');
 require('./text.js');
-require('./kegText-965ef4d3.js');
+require('./kegText-e1842e1b.js');
 require('./kegText.js');
 require('./useClassName.native-3d1a229b.js');
 require('./useTextAccessibility.js');
@@ -33,19 +34,20 @@ require('./getActiveOpacity.js');
 require('./useThemeTypeAsClass.native-90f04031.js');
 require('./selectView.js');
 require('./withScrollIntoView.js');
-require('./input-c9ca8123.js');
+require('./input-a5dc65b1.js');
 require('./getInputValue.js');
 require('./getReadOnly.js');
 require('./useInputHandlers.js');
 require('./validateFunctions.js');
 require('./usePressHandlers.js');
-require('./input-9694bb7a.js');
+require('./input-064b67c5.js');
 require('./touchable.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["onChange", "onSelect", "placeholder", "text", "styles", "inputRef", "values", "menuHeight"];
 var FloatingScrollableSelect = reStyle.reStyle(scrollableSelect.ScrollableSelect, 'styles')(function () {
   return {
     main: {
@@ -70,7 +72,7 @@ var Autocomplete = function Autocomplete(props) {
       _props$values = props.values,
       values = _props$values === void 0 ? jsutils.noPropArr : _props$values,
       menuHeight = props.menuHeight,
-      inputProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["onChange", "onSelect", "placeholder", "text", "styles", "inputRef", "values", "menuHeight"]);
+      inputProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var _useState = React.useState(text || ''),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
       inputText = _useState2[0],

@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var reactNative = require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
@@ -12,6 +12,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "showFeedback", "touchRef", "onPress", "onPressIn", "onPressOut", "activeOpacity", "style"];
 var Touchable = React__default['default'].forwardRef(function (props, ref) {
   var className = props.className,
       _props$showFeedback = props.showFeedback,
@@ -24,7 +25,7 @@ var Touchable = React__default['default'].forwardRef(function (props, ref) {
       activeOpacity = _props$activeOpacity === void 0 ? 0.4 : _props$activeOpacity,
       _props$style = props.style,
       style = _props$style === void 0 ? jsutils.noOpObj : _props$style,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "showFeedback", "touchRef", "onPress", "onPressIn", "onPressOut", "activeOpacity", "style"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var classRef = useClassName_native.useClassName('keg-touchable', className, touchRef || ref);
   var _useState = React.useState(style),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),

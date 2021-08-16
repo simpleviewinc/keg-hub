@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var reactNative = require('react-native');
-var useClassName = require('./useClassName-51ea3221.js');
+var reactNativeWeb = require('react-native-web');
+var useClassName = require('./useClassName-eec4a5f1.js');
 var jsutils = require('@keg-hub/jsutils');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./updateClassNames.js');
@@ -16,6 +16,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "showFeedback", "touchRef", "onPress", "onPressIn", "onPressOut", "activeOpacity", "style"];
 var Touchable$1 = React__default['default'].forwardRef(function (props, ref) {
   var className = props.className,
       _props$showFeedback = props.showFeedback,
@@ -28,7 +29,7 @@ var Touchable$1 = React__default['default'].forwardRef(function (props, ref) {
       activeOpacity = _props$activeOpacity === void 0 ? 0.4 : _props$activeOpacity,
       _props$style = props.style,
       style = _props$style === void 0 ? jsutils.noOpObj : _props$style,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "showFeedback", "touchRef", "onPress", "onPressIn", "onPressOut", "activeOpacity", "style"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var classRef = useClassName.useClassName('keg-touchable', className, touchRef || ref);
   var _useState = React.useState(style),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
@@ -44,7 +45,7 @@ var Touchable$1 = React__default['default'].forwardRef(function (props, ref) {
     jsutils.checkCall(onPressOut, event);
     setTouchStyles(style);
   }, [onPressOut, style, setTouchStyles]);
-  return React__default['default'].createElement(reactNative.Pressable, _rollupPluginBabelHelpers._extends({
+  return React__default['default'].createElement(reactNativeWeb.Pressable, _rollupPluginBabelHelpers._extends({
     accessible: true
   }, attrs, {
     style: touchStyles,

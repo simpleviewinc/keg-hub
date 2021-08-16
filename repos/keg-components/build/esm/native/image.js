@@ -1,10 +1,10 @@
-import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import { V as View } from './view.native-b0b1ddd4.js';
+import { b as _slicedToArray, d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import { V as View } from './view.native-f7a27d15.js';
 import { Loading } from './loading.js';
 import { checkCall, isFunc } from '@keg-hub/jsutils';
-import { I as Image$1 } from './image-d610d905.js';
+import { I as Image$1 } from './image-eb160914.js';
 import { useStyle, useThemeHover } from '@keg-hub/re-theme';
-import React, { forwardRef, useState, useRef, useCallback } from 'react';
+import React__default, { forwardRef, useState, useRef, useCallback } from 'react';
 import { getPressHandler } from './getPressHandler.js';
 import { getImgSrc } from './getImgSrc.js';
 import '@keg-hub/re-theme/colors';
@@ -14,15 +14,16 @@ import 'react-native';
 import { u as useClassList } from './useClassList.native-70068878.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import './useClassName.native-32e8827d.js';
-import './indicator.wrapper-83c062e4.js';
+import './indicator.wrapper-a8ba0314.js';
 import './getPlatform-e625f46a.js';
 import './text.js';
-import './kegText-f9567f63.js';
+import './kegText-97d3d571.js';
 import './kegText.js';
 import './useTextAccessibility.js';
 import './useTextStyles.js';
 import './isValidComponent.js';
 
+var _excluded = ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"];
 var KegImage = StyleInjector(Image$1, {
   displayName: 'Image',
   className: 'keg-image'
@@ -47,7 +48,7 @@ var Image = forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "image.".concat(type) : _props$themePath,
       _props$useLoading = props.useLoading,
       useLoading = _props$useLoading === void 0 ? true : _props$useLoading,
-      attrs = _objectWithoutProperties(props, ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"]);
+      attrs = _objectWithoutProperties(props, _excluded);
   var builtStyles = useThemePath(themePath, styles);
   var loadingStyles = useStyle(builtStyles.loading, builtStyles.image);
   var loadedStyles = useStyle(loadingStyles, builtStyles.loaded);
@@ -64,13 +65,13 @@ var Image = forwardRef(function (props, ref) {
     checkCall(props.onLoad, props);
     isFunc(imgRef) ? imgRef(internalRef.current) : imgRef && (imgRef.current = internalRef.current);
   }, [src, source, internalRef.current]);
-  return React.createElement(View, {
+  return React__default.createElement(View, {
     className: useClassList(),
     style: builtStyles.container
-  }, loading && useLoading && React.createElement(Loading, {
+  }, loading && useLoading && React__default.createElement(Loading, {
     className: "keg-image-loading",
     styles: builtStyles.loadingComp
-  }), React.createElement(KegImage, _extends({}, attrs, {
+  }), React__default.createElement(KegImage, _extends({}, attrs, {
     style: loading ? loadingStyles : builtStyles.image
   }, getPressHandler(false, onClick, onPress), getImgSrc(false, src, source), {
     onLoadEnd: onLoad,

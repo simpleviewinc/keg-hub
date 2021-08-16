@@ -6,7 +6,7 @@ var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
 var handleRefUpdate = require('./handleRefUpdate.js');
 var updateClassNames = require('./updateClassNames.js');
-require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+require('./_rollupPluginBabelHelpers-95f0bff4.js');
 require('./ensureClassArray.js');
 
 var useScrollClassName = function useScrollClassName(defClass, className, innerClassName, ref) {

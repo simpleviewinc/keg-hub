@@ -2,23 +2,23 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view = require('./view-276572bd.js');
-var select = require('./select-c5faa3d5.js');
+var view = require('./view-3fcb25db.js');
+var select = require('./select-1b2dfefe.js');
 require('@keg-hub/jsutils');
 var getInputValue = require('./getInputValue.js');
 require('@keg-hub/re-theme/colors');
 var useSelectHandlers = require('./useSelectHandlers.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('react-native');
-var useClassName = require('./useClassName-51ea3221.js');
-var useThemeTypeAsClass = require('./useThemeTypeAsClass-a9284938.js');
-require('./svgIcon-47ea55a8.js');
-var icon = require('./icon-5bf6ad84.js');
+require('react-native-web');
+var useClassName = require('./useClassName-eec4a5f1.js');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-9fb8a8ab.js');
+require('./svgIcon-bca364ff.js');
+var icon = require('./icon-c7ba25ca.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-require('./view.native-99366b4b.js');
+require('./view.native-895f9104.js');
 require('./validateFunctions.js');
 require('@keg-hub/re-theme');
 require('./updateClassNames.js');
@@ -26,9 +26,8 @@ require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('./colors-da502c66.js');
 require('./useClassList-89a8dbd4.js');
-require('prop-types');
-require('./svgIcon.native-b20a6eea.js');
-require('react-native-svg');
+require('./svgIcon.native-82b9d93c.js');
+require('react-native-svg-web');
 require('./renderFromType.js');
 require('./isValidComponent.js');
 
@@ -36,6 +35,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"];
 var KegSelect = styleInjector.StyleInjector(select.Select, {
   displayName: 'Select',
   className: 'keg-select'
@@ -65,7 +65,7 @@ var Select = React__default['default'].forwardRef(function (props, ref) {
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath;
       props.value;
-      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
+      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var selectStyles = useThemePath.useThemePath(themePath, styles);
   var selectClasses = useThemeTypeAsClass.useThemeTypeAsClass(themePath || type, 'keg-select', className);
   var classRef = useClassName.useClassName('keg-select', selectClasses, ref);

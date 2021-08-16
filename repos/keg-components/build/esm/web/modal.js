@@ -1,21 +1,22 @@
-import { b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React, { useState, useEffect, useCallback } from 'react';
-import { Dimensions, Animated } from 'react-native';
+import { b as _slicedToArray, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default, { useState, useEffect, useCallback } from 'react';
+import { Dimensions, Animated } from 'react-native-web';
 import { Touchable } from './touchable.js';
 import { isFunc, noOp } from '@keg-hub/jsutils';
 import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
 import { useFromToAnimation } from './useFromToAnimation.js';
-import { u as useClassName } from './useClassName-682bc33b.js';
+import { u as useClassName } from './useClassName-ed83df40.js';
 import { u as useClassList } from './useClassList-1d418045.js';
-import { V as View } from './view-2274aefb.js';
+import { V as View } from './view-9c41ec1e.js';
 import '@keg-hub/re-theme/styleInjector';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
 import '@keg-hub/re-theme';
-import './view.native-a7f08b5b.js';
+import './getPlatform-95568099.js';
+import './view.native-2491eb60.js';
 
 var SlideAnimatedView = function SlideAnimatedView(_ref) {
   var className = _ref.className,
@@ -34,7 +35,7 @@ var SlideAnimatedView = function SlideAnimatedView(_ref) {
       _useFromToAnimation2 = _slicedToArray(_useFromToAnimation, 1),
       slide = _useFromToAnimation2[0];
   var classRef = useClassName('keg-modal-content', className);
-  return React.createElement(Animated.View, {
+  return React__default.createElement(Animated.View, {
     ref: classRef,
     style: _objectSpread2(_objectSpread2({}, defaultStyle), {}, {
       transform: [{
@@ -85,15 +86,15 @@ var Modal = function Modal(props) {
     } else if (isFunc(onAnimateIn)) onAnimateIn();
   }, [onAnimateOut, onAnimateIn, visible]);
   return (
-    React.createElement(View, {
+    React__default.createElement(View, {
       className: useClassList('keg-modal', className),
       style: renderModal ? modalStyles.main : hideModalStyle
-    }, React.createElement(Touchable, {
+    }, React__default.createElement(Touchable, {
       className: 'keg-modal-backdrop',
       style: modalStyles.backdrop,
       onPress: onBackdropTouch,
       activeOpacity: activeOpacity
-    }), React.createElement(AnimatedComponent, {
+    }), React__default.createElement(AnimatedComponent, {
       onAnimationFinish: cb,
       visible: visible,
       defaultStyle: modalStyles.content

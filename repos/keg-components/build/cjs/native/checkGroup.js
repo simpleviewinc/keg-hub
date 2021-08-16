@@ -2,25 +2,25 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var text = require('./text.js');
-var checkbox = require('./checkbox-75d936b1.js');
+var checkbox = require('./checkbox-b6e9a116.js');
 var reTheme = require('@keg-hub/re-theme');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
 var jsutils = require('@keg-hub/jsutils');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
-require('./kegText-965ef4d3.js');
+require('./kegText-e1842e1b.js');
 require('./kegText.js');
 require('./useTextAccessibility.js');
 require('@keg-hub/re-theme/styleInjector');
 require('./useTextStyles.js');
-require('./svgIcon.native-cb21e69d.js');
+require('./svgIcon.native-f6027179.js');
 require('react-native-svg');
-require('./checkbox.wrapper-13494af9.js');
+require('./checkbox.wrapper-5a3b3816.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -45,11 +45,12 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["title", "className", "style"];
 var SimpleHeader = React__default['default'].forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
-      rest = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["title", "className", "style"]);
+      rest = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   React.useImperativeHandle(ref, function () {
     return {
       isChecked: undefined,

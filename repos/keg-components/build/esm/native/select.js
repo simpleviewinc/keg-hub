@@ -1,7 +1,7 @@
-import { d as _objectWithoutProperties, e as _extends, a as _defineProperty } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React from 'react';
-import { V as View } from './view.native-b0b1ddd4.js';
-import { S as Select$1, C as ChevronDown } from './select-cb1b9fdc.js';
+import { d as _objectWithoutProperties, e as _extends, a as _defineProperty } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default from 'react';
+import { V as View } from './view.native-f7a27d15.js';
+import { S as Select$1, C as ChevronDown } from './select-e34ee5ae.js';
 import '@keg-hub/jsutils';
 import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
 import '@keg-hub/re-theme/colors';
@@ -11,8 +11,8 @@ import './useThemeWithHeight.js';
 import 'react-native';
 import { u as useClassName } from './useClassName.native-32e8827d.js';
 import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
-import './svgIcon.native-8765b7af.js';
-import { I as Icon } from './icon-1b76b631.js';
+import './svgIcon.native-7f70e46f.js';
+import { I as Icon } from './icon-d03aaeac.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import './validateFunctions.js';
 import '@keg-hub/re-theme';
@@ -21,6 +21,7 @@ import './renderFromType.js';
 import './isValidComponent.js';
 import './useClassList.native-70068878.js';
 
+var _excluded = ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"];
 var KegSelect = StyleInjector(Select$1, {
   displayName: 'Select',
   className: 'keg-select'
@@ -35,7 +36,7 @@ var getValue = function getValue(props) {
   var valKey = getInputValueKey(false, onChange, onValueChange, readOnly);
   return _defineProperty({}, valKey, setValue);
 };
-var Select = React.forwardRef(function (props, ref) {
+var Select = React__default.forwardRef(function (props, ref) {
   var _selectStyles$icon, _selectStyles$icon$di;
   props.className;
       var children = props.children,
@@ -50,13 +51,13 @@ var Select = React.forwardRef(function (props, ref) {
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath;
       props.value;
-      var elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
+      var elProps = _objectWithoutProperties(props, _excluded);
   var selectStyles = useThemePath(themePath, styles);
   var selectClasses = useThemeTypeAsClass();
   var classRef = useClassName('keg-select', selectClasses, ref);
-  return React.createElement(View, {
+  return React__default.createElement(View, {
     style: [selectStyles.main, style]
-  }, React.createElement(KegSelect, _extends({
+  }, React__default.createElement(KegSelect, _extends({
     ref: classRef
   }, elProps, {
     enabled: !disabled,
@@ -64,7 +65,7 @@ var Select = React.forwardRef(function (props, ref) {
   }, getValue(props), useSelectHandlers({
     onChange: onChange,
     onValueChange: onValueChange
-  })), children), React.createElement(Icon, {
+  })), children), React__default.createElement(Icon, {
     styles: selectStyles.icon,
     Component: ChevronDown,
     color: disabled && ((_selectStyles$icon = selectStyles.icon) === null || _selectStyles$icon === void 0 ? void 0 : (_selectStyles$icon$di = _selectStyles$icon.disabled) === null || _selectStyles$icon$di === void 0 ? void 0 : _selectStyles$icon$di.color)

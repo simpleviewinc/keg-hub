@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
-var touchable = require('./touchable-3f00e0ff.js');
+var touchable = require('./touchable-548d2782.js');
 var text = require('./text.js');
 var renderFromType = require('./renderFromType.js');
 var getPressHandler = require('./getPressHandler.js');
@@ -20,7 +20,7 @@ var reStyle = require('@keg-hub/re-theme/reStyle');
 require('./touchable.js');
 require('./useClassName.native-3d1a229b.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-965ef4d3.js');
+require('./kegText-e1842e1b.js');
 require('./kegText.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
@@ -30,6 +30,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "children", "content", "onClick", "onPress", "styles", "showFeedback", "type", "themePath", "activeOpacity", "disabled", "selectable"];
 var getChildren = function getChildren(Children, _ref) {
   var styles = _ref.styles,
       selectable = _ref.selectable;
@@ -58,7 +59,7 @@ var Button = React__default['default'].forwardRef(function (props, ref) {
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$selectable = props.selectable,
       selectable = _props$selectable === void 0 ? false : _props$selectable,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "content", "onClick", "onPress", "styles", "showFeedback", "type", "themePath", "activeOpacity", "disabled", "selectable"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var btnStyles = useThemePath.useThemePath(themePath || "button.contained.".concat(type), styles);
   var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
     ref: ref

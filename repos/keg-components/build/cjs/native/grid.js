@@ -2,14 +2,14 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var container = require('./container.js');
 var row = require('./row.js');
 var reTheme = require('@keg-hub/re-theme');
 var jsutils = require('@keg-hub/jsutils');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
-require('./view.native-b34604af.js');
+require('./view.native-5d72f4dd.js');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
 require('./getPressHandler.js');
@@ -20,6 +20,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "children", "style"];
 var buildCenterStyles = function buildCenterStyles(isCenter) {
   return isCenter === 'x' || isCenter === 'xaxis' || isCenter === 'x-axis' ? {
     justifyContent: 'center'
@@ -46,7 +47,7 @@ var Grid = function Grid(_ref) {
   _ref.className;
       var children = _ref.children,
       style = _ref.style,
-      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, ["className", "children", "style"]);
+      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref, _excluded);
   var theme = reTheme.useTheme();
   var _getChildAttrs = getChildAttrs(children),
       isRow = _getChildAttrs.isRow,

@@ -2,14 +2,14 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var reTheme = require('@keg-hub/re-theme');
 var React = require('react');
 var useThemePath = require('./useThemePath.js');
 var jsutils = require('@keg-hub/jsutils');
-var reactNative = require('react-native');
+var reactNativeWeb = require('react-native-web');
 
-var windowHeight = reactNative.Dimensions.get('window').height;
+var windowHeight = reactNativeWeb.Dimensions.get('window').height;
 var heightStyles = {
   height: windowHeight
 };

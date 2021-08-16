@@ -8,7 +8,7 @@ require('@keg-hub/re-theme/colors');
 require('@keg-hub/re-theme');
 require('./useThemeWithHeight.js');
 require('react-native');
-require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+require('./_rollupPluginBabelHelpers-95f0bff4.js');
 require('./useThemePath.js');
 
 var withScrollIntoView = function withScrollIntoView(Component) {

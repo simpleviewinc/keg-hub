@@ -1,22 +1,22 @@
-import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React, { useImperativeHandle, useMemo, useCallback } from 'react';
-import { V as View } from './view.native-b0b1ddd4.js';
+import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default, { useImperativeHandle, useMemo, useCallback } from 'react';
+import { V as View } from './view.native-f7a27d15.js';
 import { Text } from './text.js';
-import { C as Checkbox } from './checkbox-a5fdae13.js';
+import { C as Checkbox } from './checkbox-72f0a2b0.js';
 import { useStyle } from '@keg-hub/re-theme';
 import { u as useClassList } from './useClassList.native-70068878.js';
 import { useChildrenWithRefs } from './useChildrenWithRefs.js';
 import { noOp, mapObj } from '@keg-hub/jsutils';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
-import './kegText-f9567f63.js';
+import './kegText-97d3d571.js';
 import './kegText.js';
 import './useTextAccessibility.js';
 import '@keg-hub/re-theme/styleInjector';
 import './useTextStyles.js';
-import './svgIcon.native-8765b7af.js';
+import './svgIcon.native-7f70e46f.js';
 import 'react-native-svg';
-import './checkbox.wrapper-1850b63a.js';
+import './checkbox.wrapper-a606288b.js';
 import './caption.js';
 import './h1.js';
 import './h2.js';
@@ -37,11 +37,12 @@ import './useThemeWithHeight.js';
 import './useThemeTypeAsClass.native-a05b9a50.js';
 import './handleRefUpdate.js';
 
-var SimpleHeader = React.forwardRef(function (props, ref) {
+var _excluded = ["title", "className", "style"];
+var SimpleHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
-      rest = _objectWithoutProperties(props, ["title", "className", "style"]);
+      rest = _objectWithoutProperties(props, _excluded);
   useImperativeHandle(ref, function () {
     return {
       isChecked: undefined,
@@ -49,12 +50,12 @@ var SimpleHeader = React.forwardRef(function (props, ref) {
     };
   });
   var textStyle = useStyle('form.checkGroup.simpleHeader.main', style);
-  return React.createElement(Text, _extends({
+  return React__default.createElement(Text, _extends({
     className: className,
     style: textStyle
   }, rest), title);
 });
-var CheckboxHeader = React.forwardRef(function (props, ref) {
+var CheckboxHeader = React__default.forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
@@ -71,7 +72,7 @@ var CheckboxHeader = React.forwardRef(function (props, ref) {
   var onChangeHandler = useCallback(function (_, val) {
     return onPress === null || onPress === void 0 ? void 0 : onPress(val);
   }, [onPress]);
-  return React.createElement(Checkbox, {
+  return React__default.createElement(Checkbox, {
     RightComponent: title,
     rightClassName: className,
     styles: headerStyles,
@@ -81,7 +82,7 @@ var CheckboxHeader = React.forwardRef(function (props, ref) {
     close: true
   });
 });
-var CheckGroup = React.forwardRef(function (props, ref) {
+var CheckGroup = React__default.forwardRef(function (props, ref) {
   props.className;
       var headerClassName = props.headerClassName,
       title = props.title,
@@ -107,24 +108,24 @@ var CheckGroup = React.forwardRef(function (props, ref) {
     });
   }, [childRefs]);
   var Header = function Header() {
-    return showHeaderCheckbox ? React.createElement(CheckboxHeader, {
+    return showHeaderCheckbox ? React__default.createElement(CheckboxHeader, {
       className: headerClassName,
       style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
       title: title,
       onPress: showHeaderCheckbox && headerCheckHandler,
       checked: showHeaderCheckbox ? initChecked : undefined,
       ref: ref
-    }) : React.createElement(SimpleHeader, {
+    }) : React__default.createElement(SimpleHeader, {
       className: headerClassName,
       style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.header,
       title: title,
       ref: ref
     });
   };
-  return React.createElement(View, {
+  return React__default.createElement(View, {
     className: useClassList(),
     style: groupStyles === null || groupStyles === void 0 ? void 0 : groupStyles.main
-  }, showHeader && React.createElement(Header, null), childrenWithProps);
+  }, showHeader && React__default.createElement(Header, null), childrenWithProps);
 });
 CheckGroup.Item = Checkbox;
 
