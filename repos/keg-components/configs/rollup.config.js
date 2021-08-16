@@ -8,168 +8,67 @@ import sourcemaps from 'rollup-plugin-sourcemaps'
 import alias from '@rollup/plugin-alias'
 import buildHook from './buildHook'
 
+const babelConfig = require('./babel.config.js')
 const { getAliases } = require('./aliases.config')
+const { generateBuildInputs } = require('../scripts/generateBuildInputs')
 
 const { DEV_MODE, BUILD_HOOK } = process.env
-const babelConfig = require('./babel.config.js')
-
-const path = require('path')
-const fs = require('fs')
 
 /**
- * gets the files at a given directory
- * @param {string} dir 
- * @param {Array<string>} exclude - used to filter out the files 
+ * Builds the config for the rollup replace plugin
+ * Maps native module imports to web module imports when platform is web 
+ * @param {string} platform - current platform (web | native)
  * 
- * @returns {Array<string>} - a list of the file names with extension
+ * @returns {Object} - rollup replace plugin config
  */
-const getFilesFromDir = (dir, exclude=[]) => {
-  const files = fs.readdirSync(dir)
-  return exclude.length 
-    ? files.filter(file => !exclude.some(excludeItem => file.includes(excludeItem))) 
-    : files
-}
-
-const parentFolders = [
-  'components',
-  'hocs',
-  'hooks',
-  'utils'
-]
-
-const getIgnoreList = (isNative) => [
-  // folders
-  'internal',
-  '__tests__',
-
-  // files
-  '.stories.',
-  '.examples.',
-  '.wrapper.',
-  'index.js',
-  !isNative && '.native.'
-]
-
-/**
- * returns the .native counterpart if it exists
- * @param {string} current - current filename
- * @param {Array<string>} list - array containing the files available
- * 
- * @returns {string|null}
- */
-const getNativeFile = (current='', list=[]) => {
-  return list.find(element => 
-    element === current.replace('.js', '.native.js')
-  ) || null
-}
-
-/**
- * Creates the mapping per directory
- * @param {string} dir
- * @param {boolean} isNative - if we're building for native or not
- * @param {Array<string>} items - array containing filenames and/or folder names
- * @param {Array<string>} ignoreList - which file/folders to ignore
- * 
- * @returns {object}
- */
-const createExportMappings = (dir, isNative, items=[], ignoreList=[]) => {
-
-  return items.reduce((obj, item) => {
-    const newPath = path.join(dir, item)
-    const isDir = fs.lstatSync(newPath).isDirectory()
-
-    // if item is a folder, go iterate over it
-    if (isDir) {
-      const newItems = getFilesFromDir(newPath, ignoreList)
-      const newObj = createExportMappings(newPath, isNative, newItems, ignoreList)
-      // append to the original object
-      Object.assign(obj, newObj)
+const getReplaceConfig = platform => {
+  const replaceConfig = {
+    preventAssignment: true,
+    values: {
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.RE_PLATFORM": JSON.stringify(platform),
+      "process.env.PLATFORM": JSON.stringify(platform),
+      "import 'prop-types';": "",
     }
-    else {
-      const nativeFile = isNative && getNativeFile(item, items)
-      const file = nativeFile || item
-      const nameWithoutExtension = file.split('.')[0] || file
-      Object.assign(obj, {
-        // ex: button: 'dir/button.js'
-        [nameWithoutExtension]: path.join(dir, file)
-      })      
-    }
-    return obj
-
-  }, {})
-}
-
-/**
- * dynamically generates the export mapping per file
- * @param {string} rootDir 
- * @param {string} platform - web or native
- * 
- * @returns {object} - something like 
- *   native: { linearGradient: src/components/linearGradient/linearGradient.native.js,... }
- *   web: { linearGradient: 'src/components/linearGradient/linearGradient.js', ... }
- */
-const getMappings = (rootDir, platform) => {
-  
-  const isNative = platform === 'native'
-  const ignoreList = getIgnoreList(isNative)
-  
-  const rootArr = getFilesFromDir(rootDir, ignoreList)
-  const inputs = {}
-  rootArr.forEach((val) => {
-    if (!parentFolders.includes(val)) return
-
-    const newPath = path.join(rootDir, val)
-    const newList = getFilesFromDir(newPath, ignoreList)
-    Object.assign(inputs, createExportMappings(newPath, isNative, newList, ignoreList))
-  })
-
-  return inputs
-}
-
- /**
-  * setup the input files for specific exports
-  * @param {string} platform - web or native
-  * 
-  * @returns {object} - object containing specific exports
-  */
-const getInputs = (platform) => {
-  return {
-    theme: 'src/theme',
-    index: 'src/index.js',
-    ...getMappings('./src', platform)
   }
+
+  return platform !== 'web'
+    ? replaceConfig
+    : {
+        ...replaceConfig,
+        delimiters: [ '', '' ],
+        values: {
+          ...replaceConfig.values,
+          "from 'react-native';": "from 'react-native-web';",
+          "from 'react-native-svg';": "from 'react-native-svg-web';",
+        }
+      }
 }
+
 
 const shared = {
   external: [
     'react',
     'react-dom',
     'react-native',
+    'react-native-web',
     '@keg-hub/jsutils',
     '@keg-hub/re-theme',
     '@keg-hub/re-theme/colors',
+    `@keg-hub/re-theme/reStyle`,
     '@keg-hub/re-theme/styleInjector',
     '@keg-hub/re-theme/styleParser',
     'prop-types',
     'expo-fonts',
     'expo-linear-gradient',
-    'react-native-svg-web',
     'react-native-svg',
+    'react-native-svg-web',
   ],
   watch: {
     clearScreen: false
   },
   plugins: platform => ([
-   BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
-    replace({
-      preventAssignment: true,
-      values: {
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-        "process.env.RE_PLATFORM": JSON.stringify(platform),
-        "process.env.PLATFORM": JSON.stringify(platform),
-        "import 'prop-types';": "",
-      }
-    }),
+    BUILD_HOOK === platform && DEV_MODE && buildHook(DEV_MODE),
     resolve(),
     json(),
     commonjs({
@@ -182,6 +81,7 @@ const shared = {
       ...babelConfig
     }),
     sourcemaps(),
+    replace(getReplaceConfig(platform)),
     cleanup(),
   ])
 }
@@ -193,7 +93,7 @@ export default Array
 
     return {
       ...shared,
-      input: getInputs(platform),
+      input: generateBuildInputs(platform),
       output: [
         {
           dir: `./build/cjs/${platform}`,

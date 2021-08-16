@@ -31,6 +31,7 @@ const assetStubs = [
  */
 const transpileForTests = [
   'react-native',
+  '@react-native',
   '@unimodules/.*',
   'expo-font',
 ].join('|')
@@ -65,6 +66,7 @@ module.exports = {
     "js",
     "json",
     "jsx",
+    "mjs",
     "es6"
   ],
   globals: {

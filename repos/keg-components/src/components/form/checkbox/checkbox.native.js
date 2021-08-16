@@ -4,16 +4,8 @@ import { Text } from '../../typography/text'
 import { CheckboxWrapper } from './checkbox.wrapper'
 
 const Element = withTheme(props => {
-  const {
-    theme,
-    style,
-    wrapper,
-    children,
-    onClick,
-    onPress,
-    text,
-    ...args
-  } = props
+  const { theme, style, wrapper, children, onClick, onPress, text, ...args } =
+    props
 
   return (
     <Text

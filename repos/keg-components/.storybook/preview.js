@@ -7,7 +7,6 @@ import { configureActions } from '@storybook/addon-actions'
 import { addDecorator, addParameters } from '@storybook/react'
 import { ReThemeProvider, setRNDimensions, setRNPlatform } from '@keg-hub/re-theme'
 import customTheme from './theme.custom.json'
-
 const componentsTheme = theme({})
 
 const parsePart = (full, part) => {
@@ -36,7 +35,6 @@ addParameters({
     },
   },
   options: {
-    enableShortcuts: false,
     storySort: (a, b) => {
       const sectionA = a[1].id.split('-')[0]
       const sectionB = b[1].id.split('-')[0]
@@ -55,13 +53,23 @@ configureActions({
   limit: 30,
 })
 
-addDecorator(storyFn =>
-  <ReThemeProvider theme={ componentsTheme } >
-    <View style={{ maxWidth: '80vw', margin: 'auto', marginTop: 30 }}>
-      { storyFn() }
-    </View>
-  </ReThemeProvider>
-)
+const storyWrapStyles = { maxWidth: '80vw', margin: 'auto', marginTop: 30 }
+addDecorator(storyFn => {
+  const storyComp = storyFn()
+
+  return (
+    <ReThemeProvider theme={ componentsTheme } >
+      { storyComp.type.noStoreWrap 
+          ? storyComp
+          : (
+              <View style={storyWrapStyles}>
+                { storyComp }
+              </View>
+            )
+      }
+    </ReThemeProvider>
+  )
+})
 
 setRNPlatform(Platform)
 setRNDimensions(Dimensions)

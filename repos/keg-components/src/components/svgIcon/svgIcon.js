@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { SvgIcon as KegSvgIcon } from './svgIcon.native'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
@@ -17,5 +16,4 @@ export const SvgIcon = StyleInjector(KegSvgIcon, {
 
 SvgIcon.propTypes = {
   ...KegSvgIcon.propTypes,
-  className: PropTypes.string,
 }
