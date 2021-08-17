@@ -51,6 +51,7 @@ const transpileForTests = [
   '@keg-hub/re-theme',
   'react-clone-referenced-element',
   'react-native',
+  '@react-native',
   'react-navigation',
   'react-router-native',
   'react-router',
