@@ -95,12 +95,8 @@ const RouteDropdown = ({ routes }) => {
 const AppContent = ({ routes }) => {
   const isInit = useSelector(store => get(store.app, 'initialized', false))
   const initialized = useAppInit(isInit)
-  const {
-    rootView,
-    activeTheme,
-    safeAreaStyle,
-    statusBarColor,
-  } = useThemeStyles(initialized)
+  const { rootView, activeTheme, safeAreaStyle, statusBarColor } =
+    useThemeStyles(initialized)
 
   return !initialized ? (
     <Loading />

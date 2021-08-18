@@ -90,7 +90,7 @@ module.exports = {
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
     /* React-Native */
-    
+
     // --------- ESLint Issue --------- //
     // This is a bug in ESLint. Disabling until it's resolved. See issue here
     // https://github.com/Intellicode/eslint-plugin-react-native/issues/270
