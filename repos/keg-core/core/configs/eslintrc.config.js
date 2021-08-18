@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   root: true,
   globals: {
     jest: true,
@@ -90,7 +90,19 @@ module.exports = {
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
     /* React-Native */
-    'react-native/no-raw-text': 1,
+    
+    // --------- ESLint Issue --------- //
+    // This is a bug in ESLint. Disabling until it's resolved. See issue here
+    // https://github.com/Intellicode/eslint-plugin-react-native/issues/270
+    //
+    // --------- Uncomment once issue is resolved --------- //
+    // 'react-native/no-raw-text': 1,
+    //
+    // --------- Remove once issue is resolved --------- //
+    'react-native/no-raw-text': 'off',
+    //
+    // --------- ESLint Issue --------- //
+
     'react-native/no-unused-styles': 2,
     'react-native/split-platform-components': 2,
     /* React: https://github.com/yannickcr/eslint-plugin-react */
