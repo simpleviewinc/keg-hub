@@ -1,10 +1,10 @@
-import { ActionTypes } from 'SVConstants'
+import { ActionTypes } from 'KegConstants'
 import { removeItem } from './removeItem'
 import { upsertItem } from './upsertItem'
 import { upsertItems } from './upsertItems'
 import { setItem } from './setItem'
 import { setItems } from './setItems'
-import { itemsState } from 'SVReducers/initialStates/__kegItems'
+import { itemsState } from 'KegReducers/initialStates/__kegItems'
 import '../typedefs'
 
 export const initialState = { ...itemsState }

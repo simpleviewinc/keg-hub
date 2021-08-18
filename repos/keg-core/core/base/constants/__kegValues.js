@@ -1,5 +1,5 @@
 import { keyMap, deepMerge } from '@keg-hub/jsutils'
-import { Values as TapValues } from 'SVConstants/values'
+import { Values as TapValues } from 'KegConstants/values'
 import { PluginValues } from './__kegPluginValues'
 
 export const Values = deepMerge(

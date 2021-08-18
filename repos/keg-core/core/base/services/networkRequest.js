@@ -1,9 +1,9 @@
 /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
 
 import axios from 'axios'
-import { Values } from 'SVConstants'
+import { Values } from 'KegConstants'
 import { logData, isStr } from '@keg-hub/jsutils'
-import { networkResponseModel, networkRequestModel } from 'SVModels'
+import { networkResponseModel, networkRequestModel } from 'KegModels'
 const { HttpMethods } = Values
 const { GET, ...HttpMethodsWithBody } = HttpMethods
 

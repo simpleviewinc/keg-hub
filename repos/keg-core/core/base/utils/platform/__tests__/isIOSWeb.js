@@ -1,4 +1,4 @@
-import { Mocks, Utils } from 'SVMocks'
+import { Mocks, Utils } from 'KegMocks'
 
 const mockValidNavigator = {
   userAgent: 'iPhone',

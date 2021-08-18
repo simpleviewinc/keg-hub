@@ -1,4 +1,4 @@
-import { isValidUrl } from 'SVUtils/helpers/string'
+import { isValidUrl } from 'KegUtils/helpers/string'
 
 export const Axios = jest.fn(request => {
   return new Promise((resolve, reject) => {

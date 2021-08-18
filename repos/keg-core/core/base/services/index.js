@@ -1,3 +1,3 @@
 // App services
-export * from 'SVServices/networkRequest'
-export * from 'SVServices/tapIndex'
+export * from 'KegServices/networkRequest'
+export * from 'KegServices/tapIndex'

@@ -1,4 +1,4 @@
-import { getHistory } from 'SVNavigation/history'
+import { getHistory } from 'KegNavigation/history'
 /**
  * Checks whether we are on the root of the navigation stack
  * NOTE: (only works on PWA and Native) because of how the History obj works

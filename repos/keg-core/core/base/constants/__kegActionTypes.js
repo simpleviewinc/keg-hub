@@ -1,5 +1,5 @@
 import { keyMap, deepMerge } from '@keg-hub/jsutils'
-import { ActionTypes as TapActionTypes } from 'SVConstants/actionTypes'
+import { ActionTypes as TapActionTypes } from 'KegConstants/actionTypes'
 
 /**
  * ActionTypes

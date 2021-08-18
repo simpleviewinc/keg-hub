@@ -1,1 +1,1 @@
-export * from 'SVComponents/hocs/withRedux'
+export * from 'KegComponents/hocs/withRedux'

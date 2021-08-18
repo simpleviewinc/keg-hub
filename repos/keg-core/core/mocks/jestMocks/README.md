@@ -6,7 +6,7 @@
 
 ### Usage
 
-* Import into your test file => `import { Mocks } from 'SVMocks'`
+* Import into your test file => `import { Mocks } from 'KegMocks'`
   * To mock a path => `Mocks.setMocks({ 'path/to/mock': { ...mock object } })`
 
 ### API

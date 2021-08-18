@@ -1,6 +1,6 @@
-import { navigateToPath } from 'SVNavigation/navigateToPath'
+import { navigateToPath } from 'KegNavigation/navigateToPath'
 import { logData } from '@keg-hub/jsutils'
-import { getHistory } from 'SVNavigation/history'
+import { getHistory } from 'KegNavigation/history'
 
 /**
  * Called when you want to navigate to another route path

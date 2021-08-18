@@ -7,7 +7,7 @@ import {
   get,
 } from '@keg-hub/jsutils'
 import { MakeRequestIssue } from './error'
-import { Values } from 'SVConstants'
+import { Values } from 'KegConstants'
 
 const { IssueTypes } = Values
 

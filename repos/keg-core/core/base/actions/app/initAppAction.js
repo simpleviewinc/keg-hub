@@ -1,8 +1,8 @@
 import { kegComponentsTheme } from '../../theme/kegComponentsTheme'
-import { dispatch } from 'SVStore'
-import { ActionTypes } from 'SVConstants'
-import { fontLoader } from 'SVNative'
-import { fonts } from 'SVAssets/fonts'
+import { dispatch } from 'KegStore'
+import { ActionTypes } from 'KegConstants'
+import { fontLoader } from 'KegNative'
+import { fonts } from 'KegAssets/fonts'
 import { setDefaultTheme } from '@keg-hub/re-theme'
 import { noOpObj, isFunc, isEmptyColl, isObj, limbo } from '@keg-hub/jsutils'
 

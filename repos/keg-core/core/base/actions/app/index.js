@@ -1,2 +1,2 @@
-export * from 'SVActions/app/initAppAction'
-export * from 'SVActions/app/tapIndex'
+export * from 'KegActions/app/initAppAction'
+export * from 'KegActions/app/tapIndex'

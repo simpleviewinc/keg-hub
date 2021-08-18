@@ -1,5 +1,5 @@
-import { dispatch } from 'SVStore'
-import { ActionTypes } from 'SVConstants'
+import { dispatch } from 'KegStore'
+import { ActionTypes } from 'KegConstants'
 
 /**
  * Sets the items in the items store under the category, overwriting existing items if the category already exists

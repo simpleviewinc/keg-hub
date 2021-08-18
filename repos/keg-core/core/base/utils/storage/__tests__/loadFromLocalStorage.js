@@ -1,5 +1,5 @@
-import { Mocks } from 'SVMocks'
-import { ActionTypes } from 'SVConstants'
+import { Mocks } from 'KegMocks'
+import { ActionTypes } from 'KegConstants'
 
 const mockStore = {
   dispatch: null,
@@ -17,7 +17,7 @@ const {
       LocalStorage: { LOADED_FROM_STORAGE },
     },
   },
-} = require('SVConstants')
+} = require('KegConstants')
 
 describe('loadFromLocalStorage', () => {
   const path = 'users'

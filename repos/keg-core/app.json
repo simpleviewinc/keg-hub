@@ -41,6 +41,12 @@
         "tapResolver",
         "paths",
         "kegSrc"
+      ],
+      "baseNameSpace": [
+        "keg",
+        "tapResolver",
+        "aliases",
+        "baseNameSpace"
       ]
     },
     "envs": {
@@ -82,7 +88,7 @@
       },
       "aliases": {
         "nameSpace": "SV",
-        "baseNameSpace": "SV",
+        "baseNameSpace": "Keg",
         "root": {
           "AppConfig": "app.json",
           "Base": "core/base",

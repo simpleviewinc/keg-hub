@@ -1,8 +1,8 @@
-import { Mocks, Axios } from 'SVMocks'
-import { Values } from 'SVConstants'
+import { Mocks, Axios } from 'KegMocks'
+import { Values } from 'KegConstants'
 
 Mocks.setMocks({ axios: Axios })
-const { networkRequest } = require('SVServices')
+const { networkRequest } = require('KegServices')
 const { HttpMethods } = Values
 
 /**

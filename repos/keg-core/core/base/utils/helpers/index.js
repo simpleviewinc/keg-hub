@@ -1,3 +1,3 @@
-export * from 'SVUtils/helpers/method'
-export * from 'SVUtils/helpers/string'
-export * from 'SVUtils/helpers/hasDomAccess'
+export * from 'KegUtils/helpers/method'
+export * from 'KegUtils/helpers/string'
+export * from 'KegUtils/helpers/hasDomAccess'

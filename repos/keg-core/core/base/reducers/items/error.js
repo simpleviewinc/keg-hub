@@ -1,4 +1,4 @@
-import { Values } from 'SVConstants'
+import { Values } from 'KegConstants'
 import { deepFreeze } from '@keg-hub/jsutils'
 const { IssueTypes } = Values
 

@@ -1,5 +1,5 @@
-import { dispatch } from 'SVStore'
-import { ActionTypes } from 'SVConstants'
+import { dispatch } from 'KegStore'
+import { ActionTypes } from 'KegConstants'
 
 /**
  * Upserts the items into the items store,  merging them with any existing items

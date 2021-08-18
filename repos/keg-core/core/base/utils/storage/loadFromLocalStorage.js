@@ -1,8 +1,8 @@
-import { KeyStore } from 'SVNative/keyStore'
+import { KeyStore } from 'KegNative/keyStore'
 import { validate, get, set } from '@keg-hub/jsutils'
 import { isValidStoragePath, isValidKeyStore } from './validators'
-import { upsert } from 'SVActions/items'
-import { Values } from 'SVConstants'
+import { upsert } from 'KegActions/items'
+import { Values } from 'KegConstants'
 
 const { LOADED_FROM_STORAGE } = Values.Plugins?.LocalStorage
 
