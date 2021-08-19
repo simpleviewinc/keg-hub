@@ -1,5 +1,5 @@
 import { deepMerge } from '@keg-hub/jsutils'
-import { tapState as state } from 'SVReducers/initialStates/tap'
+import { tapState as state } from 'KegReducers/initialStates/tap'
 
 export const tapState = deepMerge(
   {

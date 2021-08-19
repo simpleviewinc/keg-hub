@@ -1,2 +1,2 @@
-export * from 'SVActions/navigation/navigateBack'
-export * from 'SVActions/navigation/navigateTo'
+export * from 'KegActions/navigation/navigateBack'
+export * from 'KegActions/navigation/navigateTo'

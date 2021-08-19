@@ -4,7 +4,8 @@
   "keg": {
     "tapResolver": {
       "aliases": {
-        "nameSpace": "MyTestTap"
+        "nameSpace": "MyTestTap",
+        "baseNameSpace": "TestTapBase"
       },
       "paths": {
         "tapAssets": "assets",

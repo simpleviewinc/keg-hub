@@ -1,5 +1,5 @@
-import { ActionTypes } from 'SVConstants'
-import { appState } from 'SVReducers/initialStates/__kegApp'
+import { ActionTypes } from 'KegConstants'
+import { appState } from 'KegReducers/initialStates/__kegApp'
 
 const initialState = { ...appState }
 

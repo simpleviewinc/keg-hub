@@ -1,4 +1,4 @@
-import { Mocks, mockLocation } from 'SVMocks'
+import { Mocks, mockLocation } from 'KegMocks'
 
 // const { useQuery } = require('../useQuery')
 const useQuery = (...args) => require('../useQuery').useQuery(...args)

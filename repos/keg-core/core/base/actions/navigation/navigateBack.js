@@ -1,4 +1,4 @@
-import { getHistory } from 'SVNavigation/history'
+import { getHistory } from 'KegNavigation/history'
 
 /**
  * Called when you want to navigate back from the route stack

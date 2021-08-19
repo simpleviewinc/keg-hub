@@ -1,7 +1,7 @@
-import { Mocks, Redux } from 'SVMocks'
-import { ActionTypes } from 'SVConstants'
+import { Mocks, Redux } from 'KegMocks'
+import { ActionTypes } from 'KegConstants'
 
-jest.mock('SVAssets/fonts', () => ({ default: {}, fonts: {} }), {
+jest.mock('KegAssets/fonts', () => ({ default: {}, fonts: {} }), {
   virtual: true,
 })
 

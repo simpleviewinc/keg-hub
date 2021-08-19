@@ -1,7 +1,7 @@
-import { ActionTypes } from 'SVConstants'
+import { ActionTypes } from 'KegConstants'
 import { items as itemsReducer } from '../reducer'
 import { ItemsRequestError } from '../error'
-import { Values } from 'SVConstants'
+import { Values } from 'KegConstants'
 
 const { IssueTypes } = Values
 

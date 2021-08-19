@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, H5, Text, Row } from 'SVComponents'
+import { View, H5, Text, Row } from 'KegComponents'
 import { useStylesCallback } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
-import { isNative, isStandalonePWA, isIOSWeb } from 'SVUtils'
+import { isNative, isStandalonePWA, isIOSWeb } from 'KegUtils'
 
 const buildStyles = (theme, styles) => {
   const margin = get(theme, 'margin.size')

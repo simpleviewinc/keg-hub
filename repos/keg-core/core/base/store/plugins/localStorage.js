@@ -1,5 +1,5 @@
-import { KeyStore } from 'SVNative/keyStore'
-import { ActionTypes, Values } from 'SVConstants'
+import { KeyStore } from 'KegNative/keyStore'
+import { ActionTypes, Values } from 'KegConstants'
 import { get, exists, eitherArr, isStr } from '@keg-hub/jsutils'
 
 const {

@@ -1,5 +1,5 @@
 import { deepFreeze } from '@keg-hub/jsutils'
-import { Values } from 'SVConstants'
+import { Values } from 'KegConstants'
 
 const { HttpMethods } = Values
 

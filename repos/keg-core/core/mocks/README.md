@@ -23,4 +23,4 @@
 
 ## Mocks
   * Helpers to mock node_modules or other files
-  * Add to the test file => `import { ...Mocks to import } from 'SVMocks'`
+  * Add to the test file => `import { ...Mocks to import } from 'KegMocks'`

@@ -1,3 +1,3 @@
-export * from 'SVConstants/__kegActionTypes'
-export * from 'SVConstants/__kegValues'
-export * from 'SVConstants/tapIndex'
+export * from 'KegConstants/__kegActionTypes'
+export * from 'KegConstants/__kegValues'
+export * from 'KegConstants/tapIndex'

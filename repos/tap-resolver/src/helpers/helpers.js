@@ -114,22 +114,34 @@ const ensureDirSync = dirPath => {
  * @returns {Object} - Content of the required file
  */
 const requireFile = (folder, file, logError) => {
+  let location
+  let exists
   try {
     // Build the path to the file
-    const location = path.join(folder, file)
+    location = path.join(folder, file)
+    // Check if the file exists
+    exists = pathExistsSync(location)
+
     // load the data
-    const data = require(location)
+    const data = exists ? require(location) : false
+
 
     return { data, location }
   }
-  catch (e) {
+  catch (err) {
+    // If the config file exists, and it's not the package.json, then throw
+    // This way we can get the error for why it could not be loaded
+    if(exists && !location.includes('package.json'))
+      throw new Error(
+        `\n[ TAP-RESOLVER ] Found keg-config at ${location}, but it could not be loaded.\n\n${err.stack.trim()}\n`,
+      )
+
     if (!logError) return {}
     logData(
       `Could not require file from path => ${path.join(folder, file)}`,
       `error`
     )
-    logData(e.message, `error`)
-    logData(e.stack, `error`)
+    logData(err.stack, `error`)
   }
 }
 

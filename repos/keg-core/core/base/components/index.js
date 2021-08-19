@@ -1,3 +1,3 @@
-export * from 'SVComponents/hocs'
-export * from 'SVComponents/router'
-export * from 'SVComponents/tapIndex'
+export * from 'KegComponents/hocs'
+export * from 'KegComponents/router'
+export * from 'KegComponents/tapIndex'
