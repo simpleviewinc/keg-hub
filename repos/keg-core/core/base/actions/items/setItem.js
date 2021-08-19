@@ -1,5 +1,5 @@
-import { dispatch } from 'SVStore'
-import { ActionTypes } from 'SVConstants'
+import { dispatch } from 'KegStore'
+import { ActionTypes } from 'KegConstants'
 
 /**
  * Sets the item in the items store, overwriting an existing value if one already exists with the key

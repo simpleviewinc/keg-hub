@@ -1,4 +1,4 @@
-import { Mocks } from 'SVMocks'
+import { Mocks } from 'KegMocks'
 const { KeyStore } = require('../keyStore.native')
 
 const cleanUp = () => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'SVComponents'
+import { View, Text } from 'KegComponents'
 
 const stylesCenter = {
   justifyContent: 'center',

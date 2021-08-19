@@ -1,5 +1,5 @@
-import { dispatch } from 'SVStore'
-import { ActionTypes } from 'SVConstants'
+import { dispatch } from 'KegStore'
+import { ActionTypes } from 'KegConstants'
 
 /**
  * Dispatches the action to remove an item from the store

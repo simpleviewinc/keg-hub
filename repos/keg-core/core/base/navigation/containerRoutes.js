@@ -1,6 +1,6 @@
 import React from 'react'
-import { RouterSwitch, Route } from 'SVComponents'
-import * as containers from 'SVContainers'
+import { RouterSwitch, Route } from 'KegComponents'
+import * as containers from 'KegContainers'
 import { PageNotFoundContainer } from '../containers/pageNotFound'
 import { get } from '@keg-hub/jsutils'
 

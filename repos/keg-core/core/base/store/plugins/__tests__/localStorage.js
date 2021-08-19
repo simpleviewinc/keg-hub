@@ -1,4 +1,4 @@
-import { Mocks } from 'SVMocks'
+import { Mocks } from 'KegMocks'
 import { set } from '@keg-hub/jsutils'
 
 const mockKeyStore = {
@@ -22,7 +22,7 @@ const {
       LocalStorage: { LOADED_FROM_STORAGE },
     },
   },
-} = require('SVConstants')
+} = require('KegConstants')
 
 describe('Plugins: LocalStorage', () => {
   const orig = console.error

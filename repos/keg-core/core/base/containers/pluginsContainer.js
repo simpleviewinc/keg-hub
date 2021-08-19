@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { View, Button, Text } from 'SVComponents'
+import { View, Button, Text } from 'KegComponents'
 import { useTheme } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
-import { loadFromLocalStorage } from 'SVUtils'
+import { loadFromLocalStorage } from 'KegUtils'
 import { useSelector } from 'react-redux'
-import { dispatch } from 'SVStore'
-import { ActionTypes } from 'SVConstants'
+import { dispatch } from 'KegStore'
+import { ActionTypes } from 'KegConstants'
 
 // item paths to persist to local storage - this can be an array or a single string path
 const persistKeys = [ 'click.test.count', 'click.test.halfCount' ]

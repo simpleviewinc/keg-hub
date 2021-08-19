@@ -1,5 +1,5 @@
 import { deepMerge } from '@keg-hub/jsutils'
-import { itemsState as state } from 'SVReducers/initialStates/items'
+import { itemsState as state } from 'KegReducers/initialStates/items'
 
 export const itemsState = deepMerge(
   {

@@ -1,1 +1,1 @@
-export * from 'SVUtils/events/event_emitter'
+export * from 'KegUtils/events/event_emitter'

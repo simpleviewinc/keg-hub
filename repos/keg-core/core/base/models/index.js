@@ -1,2 +1,2 @@
-export * from 'SVModels/services'
-export * from 'SVModels/tapIndex'
+export * from 'KegModels/services'
+export * from 'KegModels/tapIndex'

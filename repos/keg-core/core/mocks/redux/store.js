@@ -4,7 +4,7 @@
  * Also load all reducers, and create the defState
  */
 
-import * as reducers from 'SVReducers'
+import * as reducers from 'KegReducers'
 import { combineReducers, createStore } from 'redux'
 const appReducers = combineReducers(reducers)
 // Build the store and get the default

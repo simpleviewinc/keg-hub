@@ -1,4 +1,4 @@
-import * as reducers from 'SVReducers'
+import * as reducers from 'KegReducers'
 import { combineReducers, createStore } from 'redux'
 import * as Plugins from './plugins'
 

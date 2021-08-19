@@ -16,8 +16,8 @@ networkResponse = {
 ## Usage
 * Imports
   ```Javascript
-  import { networkRequest } from 'SVServices/network'
-  import { Values } from 'SVConstants'
+  import { networkRequest } from 'KegServices/network'
+  import { Values } from 'KegConstants'
   ```
 * Desconstruct the 'HTTPMethod'
   ```Javascript
