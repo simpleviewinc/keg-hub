@@ -55,12 +55,6 @@ module.exports = (appConfig, aliasMap, content, type) => {
     [ 'keg', 'tapResolver', 'aliases', 'nameSpace' ],
     ''
   )
-  const baseNameSpace = get(
-    appConfig,
-    [ 'keg', 'tapResolver', 'aliases', 'baseNameSpace' ],
-    ''
-  )
-  
   const tapName = get(appConfig, ['name'], '').toLowerCase()
     .replace(/ /g, '_')
   const folderRootFile = get(
@@ -90,10 +84,6 @@ module.exports = (appConfig, aliasMap, content, type) => {
       LOG && logData(`Loading cached file from ${FULL_PATH_CACHE[cacheKey]}`)
       return FULL_PATH_CACHE[cacheKey]
     }
-
-    // TODO: Add check here if file to load (type) contains the baseNameSpace
-    // IF it does, and the baseNameSpace is different from the nameSpace
-    // We can skip to just loading directly from the base, instead of the checking in the tap 
 
     // Check if path is a folder, and if folderRootFile should be added to the file path
     // This allows loading the folderRootFile ( index.js ) of a folder, defaults to index.js
