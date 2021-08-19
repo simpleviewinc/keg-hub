@@ -33,10 +33,10 @@ export const useKeyPress = targetKey => {
     [ setKeyPressed, targetKey ]
   )
 
-  useEffect(() => manageListeners(upHandler, downHandler), [
-    downHandler,
-    upHandler,
-  ])
+  useEffect(
+    () => manageListeners(upHandler, downHandler),
+    [ downHandler, upHandler ]
+  )
 
   return keyPressed
 }

@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
-var input = require('./input-e99fee30.js');
+var input = require('./input-e65999e6.js');
 require('./getInputValue.js');
 require('./getReadOnly.js');
 require('@keg-hub/re-theme/colors');
@@ -15,9 +15,9 @@ require('./usePressHandlers.js');
 require('./useThemePath.js');
 require('@keg-hub/re-theme');
 require('./useThemeWithHeight.js');
-require('react-native');
-require('./input-f586181b.js');
-require('./useClassName-51ea3221.js');
+require('react-native-web');
+require('./input-9de20726.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -27,6 +27,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["highlightedIndex", "highlightItem", "selectItem", "items"];
 var useKeyPressHandler = function useKeyPressHandler(currentIndex, setSelectedItem, items) {
   var up = 'ArrowUp';
   var down = 'ArrowDown';
@@ -43,7 +44,7 @@ var AutocompleteInput = function AutocompleteInput(_ref2) {
       highlightItem = _ref2.highlightItem,
       selectItem = _ref2.selectItem,
       items = _ref2.items,
-      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref2, ["highlightedIndex", "highlightItem", "selectItem", "items"]);
+      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref2, _excluded);
   var onKeyPress = useKeyPressHandler(highlightedIndex, highlightItem, items);
   var onEnterPress = React.useCallback(function () {
     return selectItem === null || selectItem === void 0 ? void 0 : selectItem(items[highlightedIndex]);

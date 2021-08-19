@@ -2,35 +2,37 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var text = require('./text.js');
 var touchable = require('./touchable.js');
 var drawer = require('./drawer.js');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 var useClassList = require('./useClassList-89a8dbd4.js');
 var jsutils = require('@keg-hub/jsutils');
 var isValidComponent = require('./isValidComponent.js');
 require('@keg-hub/re-theme/colors');
 var reTheme = require('@keg-hub/re-theme');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
-require('./useClassName-51ea3221.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('react-native');
+require('react-native-web');
 require('./useTextAccessibility.js');
 require('@keg-hub/re-theme/styleInjector');
 require('./useTextStyles.js');
+require('./getPlatform-ec53cd5e.js');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./view.native-99366b4b.js');
+require('./view.native-895f9104.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"];
 var LinearGradient = function LinearGradient(props) {
   var _props$start = props.start,
       start = _props$start === void 0 ? {
@@ -54,7 +56,7 @@ var LinearGradient = function LinearGradient(props) {
       style = props.style,
       children = props.children,
       className = props.className,
-      otherProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"]);
+      otherProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var _useState = React.useState(1),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
       width = _useState2[0],

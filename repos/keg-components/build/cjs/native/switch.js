@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var view_native = require('./view.native-b34604af.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
+var view_native = require('./view.native-5d72f4dd.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -26,10 +26,10 @@ require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('react-native');
-var _switch = require('./switch-f3265f16.js');
+var _switch = require('./switch-b6b2941a.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./useClassName.native-3d1a229b.js');
-require('./kegText-965ef4d3.js');
+require('./kegText-e1842e1b.js');
 require('./kegText.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
@@ -39,6 +39,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "RightComponent", "styles", "SwitchComponent", "setCheckedSetter", "type", "themePath", "thumbColor", "trackColor", "value"];
 var KegSwitch = styleInjector.StyleInjector(_switch.Switch, {
   displayName: 'Switch',
   className: 'keg-switch'
@@ -115,7 +116,7 @@ var Switch = React.forwardRef(function (props, ref) {
       thumbColor = props.thumbColor,
       trackColor = props.trackColor,
       value = props.value,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "RightComponent", "styles", "SwitchComponent", "setCheckedSetter", "type", "themePath", "thumbColor", "trackColor", "value"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var _useState = React.useState(jsutils.toBool(checked || value)),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
       isChecked = _useState2[0],

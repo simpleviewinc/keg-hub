@@ -29,10 +29,11 @@ const getMediaType = (mediaTypes, styles) => {
 
 export const useMediaProps = ({ Media, image, video, styles }) => {
   return useMemo(() => {
-    const { type, media, styles: mediaStyles } = getMediaType(
-      { Media, image, video },
-      styles
-    )
+    const {
+      type,
+      media,
+      styles: mediaStyles,
+    } = getMediaType({ Media, image, video }, styles)
 
     // If no media, or media is a component, don't return any props
     return !Boolean(media) || isValidComponent(media)

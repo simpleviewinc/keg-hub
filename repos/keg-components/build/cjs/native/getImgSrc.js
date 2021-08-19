@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var jsutils = require('@keg-hub/jsutils');
 
 var getImgSrc = function getImgSrc(isWeb, src, source, uri) {

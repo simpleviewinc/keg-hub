@@ -2,7 +2,7 @@ import { useRef, useCallback } from 'react';
 import { updateClassNames } from './updateClassNames.js';
 import { ensureClassArray } from './ensureClassArray.js';
 import { handleRefUpdate } from './handleRefUpdate.js';
-import './_rollupPluginBabelHelpers-b6f65682.js';
+import './_rollupPluginBabelHelpers-b49fe34a.js';
 import '@keg-hub/jsutils';
 
 var useClassName = function useClassName(defClass, className, ref) {

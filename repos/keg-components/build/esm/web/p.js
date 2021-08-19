@@ -1,13 +1,13 @@
-import React from 'react';
-import { K as KegText } from './kegText-5c4aeb4b.js';
-import './_rollupPluginBabelHelpers-b6f65682.js';
+import React__default from 'react';
+import { K as KegText } from './kegText-9f80996b.js';
+import './_rollupPluginBabelHelpers-b49fe34a.js';
 import '@keg-hub/jsutils';
-import './kegText.native-be460636.js';
-import './useClassName-682bc33b.js';
+import './kegText.native-6bbad9e4.js';
+import './useClassName-ed83df40.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
-import 'react-native';
+import 'react-native-web';
 import './useTextAccessibility.js';
 import '@keg-hub/re-theme/styleInjector';
 import './useTextStyles.js';
@@ -15,7 +15,7 @@ import '@keg-hub/re-theme';
 
 var Paragraph = KegText('paragraph');
 var P = function P(props) {
-  return React.createElement(React.Fragment, null, React.createElement(Paragraph, props), '\n');
+  return React__default.createElement(React__default.Fragment, null, React__default.createElement(Paragraph, props), '\n');
 };
 
 export { P };

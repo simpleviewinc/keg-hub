@@ -2,16 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var itemHeader = require('./itemHeader.js');
 var useClassList = require('./useClassList-89a8dbd4.js');
 require('@keg-hub/re-theme');
 require('@keg-hub/jsutils');
-require('./view-276572bd.js');
-require('./view.native-99366b4b.js');
-require('react-native');
-require('./useClassName-51ea3221.js');
+require('./view-3fcb25db.js');
+require('./view.native-895f9104.js');
+require('react-native-web');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -19,8 +19,8 @@ require('@keg-hub/re-theme/styleInjector');
 require('./button.js');
 require('./touchable.js');
 require('./text.js');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
 require('./renderFromType.js');
@@ -30,9 +30,9 @@ require('./getActiveOpacity.js');
 require('@keg-hub/re-theme/colors');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useThemeTypeAsClass-a9284938.js');
+require('./useThemeTypeAsClass-9fb8a8ab.js');
 require('./colors-da502c66.js');
-require('./icon-5bf6ad84.js');
+require('./icon-c7ba25ca.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -50,9 +50,10 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className"];
 var AppHeader = function AppHeader(props) {
   var className = props.className,
-      otherProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className"]);
+      otherProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   return React__default['default'].createElement(itemHeader.ItemHeader, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "banner",
     className: useClassList.useClassList('keg-app-header', className),

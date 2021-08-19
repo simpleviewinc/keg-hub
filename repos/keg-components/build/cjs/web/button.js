@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
 var touchable = require('./touchable.js');
@@ -13,16 +13,16 @@ var getActiveOpacity = require('./getActiveOpacity.js');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('react-native');
-var useThemeTypeAsClass = require('./useThemeTypeAsClass-a9284938.js');
+require('react-native-web');
+var useThemeTypeAsClass = require('./useThemeTypeAsClass-9fb8a8ab.js');
 var reTheme = require('@keg-hub/re-theme');
-require('./useClassName-51ea3221.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
 require('./isValidComponent.js');
@@ -33,6 +33,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "children", "content", "onClick", "onPress", "styles", "showFeedback", "type", "themePath", "activeOpacity", "disabled", "selectable"];
 var getChildren = function getChildren(Children, _ref) {
   var styles = _ref.styles,
       selectable = _ref.selectable;
@@ -61,7 +62,7 @@ var Button = React__default['default'].forwardRef(function (props, ref) {
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$selectable = props.selectable,
       selectable = _props$selectable === void 0 ? false : _props$selectable,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "content", "onClick", "onPress", "styles", "showFeedback", "type", "themePath", "activeOpacity", "disabled", "selectable"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var btnStyles = useThemePath.useThemePath(themePath || "button.contained.".concat(type), styles);
   var _useThemeHover = reTheme.useThemeHover(jsutils.get(btnStyles, 'default', {}), jsutils.get(btnStyles, 'hover'), {
     ref: ref

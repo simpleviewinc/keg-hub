@@ -19,8 +19,8 @@ import { noPropObj } from '@keg-hub/jsutils'
  */
 export const useStyle = (...styleArgs) => {
   const theme = useTheme()
-  return useMemo(() => theme.get(...styleArgs) || noPropObj, [
-    theme,
-    ...styleArgs,
-  ])
+  return useMemo(
+    () => theme.get(...styleArgs) || noPropObj,
+    [ theme, ...styleArgs ]
+  )
 }

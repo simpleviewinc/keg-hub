@@ -2,31 +2,30 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 var text = require('./text.js');
-var checkbox = require('./checkbox-0566cbc8.js');
+var checkbox = require('./checkbox-01652c7e.js');
 var reTheme = require('@keg-hub/re-theme');
 var useClassList = require('./useClassList-89a8dbd4.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
 var jsutils = require('@keg-hub/jsutils');
-require('./view.native-99366b4b.js');
-require('react-native');
-require('./useClassName-51ea3221.js');
+require('./view.native-895f9104.js');
+require('react-native-web');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
 require('@keg-hub/re-theme/styleInjector');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
-require('./checkbox.wrapper-923b4d44.js');
-require('./svgIcon-47ea55a8.js');
-require('prop-types');
-require('./svgIcon.native-b20a6eea.js');
-require('react-native-svg');
+require('./checkbox.wrapper-17ad4895.js');
+require('./svgIcon-bca364ff.js');
+require('./svgIcon.native-82b9d93c.js');
+require('react-native-svg-web');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -44,19 +43,20 @@ require('./getChecked.js');
 require('@keg-hub/re-theme/colors');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('./useThemeTypeAsClass-a9284938.js');
+require('./useThemeTypeAsClass-9fb8a8ab.js');
 require('./colors-da502c66.js');
-require('./input.web-adf7ad46.js');
+require('./input.web-369be1b2.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["title", "className", "style"];
 var SimpleHeader = React__default['default'].forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
-      rest = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["title", "className", "style"]);
+      rest = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   React.useImperativeHandle(ref, function () {
     return {
       isChecked: undefined,

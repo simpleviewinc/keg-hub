@@ -2,11 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var view = require('./view-276572bd.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
+var view = require('./view-3fcb25db.js');
 var loading = require('./loading.js');
 var jsutils = require('@keg-hub/jsutils');
-var image = require('./image-e98c839c.js');
+var image = require('./image-5ba5f8b8.js');
 var reTheme = require('@keg-hub/re-theme');
 var React = require('react');
 var getPressHandler = require('./getPressHandler.js');
@@ -14,19 +14,19 @@ var getImgSrc = require('./getImgSrc.js');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('react-native');
+require('react-native-web');
 var useClassList = require('./useClassList-89a8dbd4.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-require('./view.native-99366b4b.js');
-require('./useClassName-51ea3221.js');
+require('./view.native-895f9104.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./indicator.wrapper-5ad2a9f5.js');
+require('./indicator.wrapper-b537ce8c.js');
 require('./getPlatform-ec53cd5e.js');
 require('./text.js');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
 require('./isValidComponent.js');
@@ -35,6 +35,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"];
 var KegImage = styleInjector.StyleInjector(image.Image, {
   displayName: 'Image',
   className: 'keg-image'
@@ -59,7 +60,7 @@ var Image = React.forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "image.".concat(type) : _props$themePath,
       _props$useLoading = props.useLoading,
       useLoading = _props$useLoading === void 0 ? true : _props$useLoading,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["alt", "className", "children", "onClick", "onPress", "src", "source", "styles", "type", "themePath", "useLoading"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var builtStyles = useThemePath.useThemePath(themePath, styles);
   var loadingStyles = reTheme.useStyle(builtStyles.loading, builtStyles.image);
   var loadedStyles = reTheme.useStyle(loadingStyles, builtStyles.loaded);

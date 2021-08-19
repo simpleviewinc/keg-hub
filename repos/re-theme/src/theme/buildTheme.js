@@ -94,14 +94,8 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
   const mergedTheme = mergeWithDefault(theme, defaultTheme, usrPlatform)
 
   // Extract the sizes from the theme
-  const {
-    $xsmall,
-    $small,
-    $medium,
-    $large,
-    $xlarge,
-    ...extraTheme
-  } = mergedTheme
+  const { $xsmall, $small, $medium, $large, $xlarge, ...extraTheme } =
+    mergedTheme
 
   themeSizeCache = { extraTheme, mergedTheme, theme, key }
 

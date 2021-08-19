@@ -1,4 +1,4 @@
-import { _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b6f65682.js';
+import { _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b49fe34a.js';
 import { useMemo } from 'react';
 import { reduceObj, isObj, noOpObj, isStr, deepMerge, get } from '@keg-hub/jsutils';
 import { isValidComponent } from './isValidComponent.js';

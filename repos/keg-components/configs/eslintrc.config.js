@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   root: true,
   globals: {
     jest: true,
@@ -8,10 +8,14 @@ module.exports = {
     React: true,
   },
   parserOptions: {
+    requireConfigFile: false,
     ecmaVersion: 6,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
+    },
+    babelOptions: {
+      configFile: './configs/babel.config.js'
     },
   },
   env: {

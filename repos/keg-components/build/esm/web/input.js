@@ -1,5 +1,5 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React from 'react';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default from 'react';
 import '@keg-hub/jsutils';
 import { getValueFromChildren } from './getInputValue.js';
 import { getReadOnly } from './getReadOnly.js';
@@ -8,16 +8,17 @@ import { useInputHandlers } from './useInputHandlers.js';
 import { usePressHandlers } from './usePressHandlers.js';
 import { useThemePath } from './useThemePath.js';
 import './useThemeWithHeight.js';
-import 'react-native';
-import { I as Input$1 } from './input-0746c9bb.js';
+import 'react-native-web';
+import { I as Input$1 } from './input-7f14c7e3.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
 import './validateFunctions.js';
 import '@keg-hub/re-theme';
-import './useClassName-682bc33b.js';
+import './useClassName-ed83df40.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
 
+var _excluded = ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"];
 var KegInput = StyleInjector(Input$1, {
   displayName: 'Input',
   className: 'keg-input'
@@ -30,7 +31,7 @@ var getValue = function getValue(_ref) {
     value: setValue
   } : {};
 };
-var Input = React.forwardRef(function (props, ref) {
+var Input = React__default.forwardRef(function (props, ref) {
   props.className;
       props.children;
       var _props$disabled = props.disabled,
@@ -51,9 +52,9 @@ var Input = React.forwardRef(function (props, ref) {
       themePath = _props$themePath === void 0 ? "form.input.".concat(type) : _props$themePath,
       style = props.style;
       props.value;
-      var elProps = _objectWithoutProperties(props, ["className", "children", "disabled", "editable", "Element", "onChange", "onValueChange", "onChangeText", "onClick", "onPress", "readOnly", "type", "themePath", "style", "value"]);
+      var elProps = _objectWithoutProperties(props, _excluded);
   var inputStyles = useThemePath(themePath);
-  return React.createElement(KegInput, _extends({
+  return React__default.createElement(KegInput, _extends({
     accessibilityRole: "textbox",
     onPress: onPress
   }, getReadOnly(false, readOnly, disabled, editable), getValue(props), useInputHandlers({

@@ -1,5 +1,5 @@
-import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b6f65682.js';
-import { unstable_createElement } from 'react-native';
+import { c as _toConsumableArray } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import { unstable_createElement } from 'react-native-web';
 
 var createElement = function createElement(Element, props) {
   for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {

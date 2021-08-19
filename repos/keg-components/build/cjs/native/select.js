@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view_native = require('./view.native-b34604af.js');
-var select = require('./select-8e13f804.js');
+var view_native = require('./view.native-5d72f4dd.js');
+var select = require('./select-86099f38.js');
 require('@keg-hub/jsutils');
 var getInputValue = require('./getInputValue.js');
 require('@keg-hub/re-theme/colors');
@@ -15,8 +15,8 @@ require('./useThemeWithHeight.js');
 require('react-native');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
-require('./svgIcon.native-cb21e69d.js');
-var icon = require('./icon-b13a8e3e.js');
+require('./svgIcon.native-f6027179.js');
+var icon = require('./icon-9317be7c.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 require('./validateFunctions.js');
 require('@keg-hub/re-theme');
@@ -29,6 +29,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"];
 var KegSelect = styleInjector.StyleInjector(select.Select, {
   displayName: 'Select',
   className: 'keg-select'
@@ -58,7 +59,7 @@ var Select = React__default['default'].forwardRef(function (props, ref) {
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath;
       props.value;
-      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
+      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var selectStyles = useThemePath.useThemePath(themePath, styles);
   var selectClasses = useThemeTypeAsClass_native.useThemeTypeAsClass();
   var classRef = useClassName_native.useClassName('keg-select', selectClasses, ref);

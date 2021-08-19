@@ -2,11 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var reTheme = require('@keg-hub/re-theme');
 var jsutils = require('@keg-hub/jsutils');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var renderFromType = require('./renderFromType.js');
 require('@keg-hub/re-theme/colors');
 var isValidComponent = require('./isValidComponent.js');
@@ -20,6 +20,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"];
 var Icon = React__default['default'].forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
   props.className;
@@ -33,7 +34,7 @@ var Icon = React__default['default'].forwardRef(function (props, ref) {
       themePath = props.themePath,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   if (!isValidComponent.isValidComponent(Element)) return console.error("Invalid Element passed to Icon component!", Element) || null;
   var iconStyles = useThemePath.useThemePath(themePath || "icon.".concat(type), styles);
   var iconProps = {

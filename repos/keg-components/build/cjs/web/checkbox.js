@@ -2,27 +2,26 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var view = require('./view-276572bd.js');
-var checkbox_wrapper = require('./checkbox.wrapper-923b4d44.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
+var view = require('./view-3fcb25db.js');
+var checkbox_wrapper = require('./checkbox.wrapper-17ad4895.js');
 var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
-var input_web = require('./input.web-adf7ad46.js');
-require('./view.native-99366b4b.js');
-require('react-native');
-require('./useClassName-51ea3221.js');
+var input_web = require('./input.web-369be1b2.js');
+require('./view.native-895f9104.js');
+require('react-native-web');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
-require('./svgIcon-47ea55a8.js');
-require('prop-types');
-require('./svgIcon.native-b20a6eea.js');
-require('react-native-svg');
+require('./svgIcon-bca364ff.js');
+require('./svgIcon.native-82b9d93c.js');
+require('react-native-svg-web');
 require('@keg-hub/re-theme');
 require('./caption.js');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
 require('./h1.js');
@@ -43,13 +42,14 @@ require('@keg-hub/re-theme/colors');
 require('./useThemePath.js');
 require('./useThemeWithHeight.js');
 require('./useClassList-89a8dbd4.js');
-require('./useThemeTypeAsClass-a9284938.js');
+require('./useThemeTypeAsClass-9fb8a8ab.js');
 require('./colors-da502c66.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "elProps", "styles", "CheckIcon", "checked"];
 var checkBoxStyles = {
   icon: {
     position: 'relative',
@@ -87,7 +87,7 @@ var Element = React__default['default'].forwardRef(function (props, ref) {
       _props$CheckIcon = props.CheckIcon,
       CheckIcon = _props$CheckIcon === void 0 ? checkbox_wrapper.Check : _props$CheckIcon,
       checked = props.checked,
-      attributes = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "elProps", "styles", "CheckIcon", "checked"]);
+      attributes = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var checkStyle = React.useMemo(function () {
     return _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, checkBoxStyles.icon), styles.indicator);
   }, [checkBoxStyles, styles]);

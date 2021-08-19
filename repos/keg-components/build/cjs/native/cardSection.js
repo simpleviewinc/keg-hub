@@ -2,16 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var text = require('./text.js');
 var renderFromType = require('./renderFromType.js');
 var jsutils = require('@keg-hub/jsutils');
 require('@keg-hub/re-theme/colors');
 require('react-native');
 require('./useClassName.native-3d1a229b.js');
-require('./kegText-965ef4d3.js');
+require('./kegText-e1842e1b.js');
 require('./kegText.js');
 require('./useTextAccessibility.js');
 require('@keg-hub/re-theme/styleInjector');
@@ -23,6 +23,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["Section"];
 var SectionWrap = function SectionWrap(_ref) {
   var children = _ref.children,
       numberOfLines = _ref.numberOfLines,
@@ -38,7 +39,7 @@ var SectionWrap = function SectionWrap(_ref) {
 };
 var CardSection = function CardSection(_ref2) {
   var Section = _ref2.Section,
-      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref2, ["Section"]);
+      props = _rollupPluginBabelHelpers._objectWithoutProperties(_ref2, _excluded);
   var type = props.type || 'section';
   return Section && React__default['default'].createElement(view_native.View, {
     className: "keg-card-".concat(type),

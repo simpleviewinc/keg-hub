@@ -6,7 +6,7 @@ var React = require('react');
 var updateClassNames = require('./updateClassNames.js');
 var ensureClassArray = require('./ensureClassArray.js');
 var handleRefUpdate = require('./handleRefUpdate.js');
-require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+require('./_rollupPluginBabelHelpers-95f0bff4.js');
 require('@keg-hub/jsutils');
 
 var useClassName = function useClassName(defClass, className, ref) {

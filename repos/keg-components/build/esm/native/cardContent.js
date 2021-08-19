@@ -1,12 +1,12 @@
-import React from 'react';
-import { V as View } from './view.native-b0b1ddd4.js';
+import React__default from 'react';
+import { V as View } from './view.native-f7a27d15.js';
 import { noPropObj } from '@keg-hub/jsutils';
 import { CardCallout } from './cardCallout.js';
-import './_rollupPluginBabelHelpers-b6f65682.js';
+import './_rollupPluginBabelHelpers-b49fe34a.js';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
 import './text.js';
-import './kegText-f9567f63.js';
+import './kegText-97d3d571.js';
 import './kegText.js';
 import './useTextAccessibility.js';
 import '@keg-hub/re-theme/styleInjector';
@@ -20,10 +20,10 @@ var CardContent = function CardContent(_ref) {
       styles = _ref$styles === void 0 ? noPropObj : _ref$styles,
       subtitle = _ref.subtitle,
       title = _ref.title;
-  return React.createElement(View, {
+  return React__default.createElement(View, {
     className: "keg-card-content",
     style: styles.main
-  }, (title || subtitle) && React.createElement(CardCallout, {
+  }, (title || subtitle) && React__default.createElement(CardCallout, {
     className: "keg-card-content-callout",
     styles: styles,
     subtitle: subtitle,

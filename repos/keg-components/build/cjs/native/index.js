@@ -7,7 +7,7 @@ var button = require('./button.js');
 var card = require('./card.js');
 var divider = require('./divider.js');
 var React = require('react');
-var view_native = require('./view.native-b34604af.js');
+var view_native = require('./view.native-5d72f4dd.js');
 var caption = require('./caption.js');
 var h1 = require('./h1.js');
 var h2 = require('./h2.js');
@@ -19,8 +19,8 @@ var label = require('./label.js');
 var p = require('./p.js');
 var subtitle = require('./subtitle.js');
 var text = require('./text.js');
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
-var checkbox = require('./checkbox-75d936b1.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
+var checkbox = require('./checkbox-b6e9a116.js');
 var reTheme = require('@keg-hub/re-theme');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
@@ -29,27 +29,27 @@ require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
 var useThemeWithHeight = require('./useThemeWithHeight.js');
 var reactNative = require('react-native');
-var input = require('./input-c9ca8123.js');
-var select = require('./select-8e13f804.js');
+var input = require('./input-a5dc65b1.js');
+var select = require('./select-86099f38.js');
 var getInputValue = require('./getInputValue.js');
 var useSelectHandlers = require('./useSelectHandlers.js');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
-require('./svgIcon.native-cb21e69d.js');
-var icon = require('./icon-b13a8e3e.js');
+require('./svgIcon.native-f6027179.js');
+var icon = require('./icon-9317be7c.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var renderFromType = require('./renderFromType.js');
 var getOnChangeHandler = require('./getOnChangeHandler.js');
 var getChecked = require('./getChecked.js');
-var _switch = require('./switch-f3265f16.js');
+var _switch = require('./switch-b6b2941a.js');
 var touchableIcon = require('./touchableIcon.js');
-var cardMedia = require('./cardMedia-75dabfe1.js');
+var cardMedia = require('./cardMedia-dd863125.js');
 var grid = require('./grid.js');
 var row = require('./row.js');
 var column = require('./column.js');
-var link_wrapper = require('./link.wrapper-17089db4.js');
-var kegText = require('./kegText-965ef4d3.js');
-var touchable = require('./touchable-3f00e0ff.js');
+var link_wrapper = require('./link.wrapper-958b0c3b.js');
+var kegText = require('./kegText-e1842e1b.js');
+var touchable = require('./touchable-548d2782.js');
 var getPlatform = require('./getPlatform-24228c6c.js');
 var loading = require('./loading.js');
 var section = require('./section.js');
@@ -57,14 +57,13 @@ var modal = require('./modal.js');
 var itemHeader = require('./itemHeader.js');
 var appHeader = require('./appHeader.js');
 var scrollView = require('./scrollView.js');
-var sectionList = require('./sectionList.native-b996388b.js');
+var sectionList = require('./sectionList.native-78f3a177.js');
 var drawer = require('./drawer.js');
 var textToggle = require('./textToggle.js');
-var PropTypes = require('prop-types');
 var svgIcon = require('./svgIcon.js');
 var withTouch = require('./withTouch.js');
 var withScrollIntoView = require('./withScrollIntoView.js');
-var withOutsideDetect = require('./withOutsideDetect-58a390ac.js');
+var withOutsideDetect = require('./withOutsideDetect-2ef63285.js');
 var theme = require('./theme.js');
 var useAccessibilityRole = require('./useAccessibilityRole.js');
 var useSpin = require('./useSpin-a9050071.js');
@@ -86,7 +85,7 @@ var getReadOnly = require('./getReadOnly.js');
 var getTarget = require('./getTarget.js');
 var handleRefUpdate = require('./handleRefUpdate.js');
 var updateClassNames = require('./updateClassNames.js');
-var buildColorStyles = require('./buildColorStyles-ec43df30.js');
+var buildColorStyles = require('./buildColorStyles-32b9ba1d.js');
 var getStyles = require('./getStyles.js');
 var inheritFrom = require('./inheritFrom.js');
 var platformFlatten = require('./platformFlatten.js');
@@ -97,22 +96,21 @@ require('./cardContent.js');
 require('./cardCallout.js');
 require('./cardContainer.js');
 require('./cardSection.js');
-require('./checkbox.wrapper-13494af9.js');
-require('./input-9694bb7a.js');
+require('./checkbox.wrapper-5a3b3816.js');
+require('./input-064b67c5.js');
 require('react-native-svg');
-require('./image-53cac4f2.js');
+require('./image-2041d5dc.js');
 require('./container.js');
 require('./kegText.js');
 require('./useTextStyles.js');
 require('./touchable.js');
-require('./indicator.wrapper-6a5623e9.js');
+require('./indicator.wrapper-969fd2de.js');
 require('expo-linear-gradient');
 require('./themeDefaults-f48ffcaf.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-var PropTypes__default = /*#__PURE__*/_interopDefaultLegacy(PropTypes);
 
 var useKeyPress = function useKeyPress() {
   return false;
@@ -127,11 +125,12 @@ var FilePicker = function FilePicker(props) {
   return React__default['default'].createElement(view_native.View, null, React__default['default'].createElement(p.P, null, "FilePicker Not yet implemented for native."));
 };
 
+var _excluded$5 = ["title", "className", "style"];
 var SimpleHeader = React__default['default'].forwardRef(function (props, ref) {
   var title = props.title,
       className = props.className,
       style = props.style,
-      rest = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["title", "className", "style"]);
+      rest = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded$5);
   React.useImperativeHandle(ref, function () {
     return {
       isChecked: undefined,
@@ -218,6 +217,7 @@ var CheckGroup = React__default['default'].forwardRef(function (props, ref) {
 });
 CheckGroup.Item = checkbox.Checkbox;
 
+var _excluded$4 = ["children", "className", "elType", "style", "type", "themePath"];
 var Form = React__default['default'].forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
   var children = props.children;
@@ -227,7 +227,7 @@ var Form = React__default['default'].forwardRef(function (props, ref) {
       type = props.type,
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.form.".concat(type || 'default') : _props$themePath,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["children", "className", "elType", "style", "type", "themePath"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded$4);
   var formTheme = useThemePath.useThemePath(themePath);
   return React__default['default'].createElement(view_native.View, _rollupPluginBabelHelpers._extends({
     accessibilityRole: "form",
@@ -256,6 +256,7 @@ var Option = function Option(props) {
   });
 };
 
+var _excluded$3 = ["theme", "children", "style", "onClick", "onPress", "text"];
 var Radio = reTheme.withTheme(function (props) {
   var theme = props.theme;
       props.children;
@@ -263,12 +264,13 @@ var Radio = reTheme.withTheme(function (props) {
       props.onClick;
       props.onPress;
       var text$1 = props.text,
-      args = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["theme", "children", "style", "onClick", "onPress", "text"]);
+      args = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded$3);
   return React__default['default'].createElement(text.Text, _rollupPluginBabelHelpers._extends({}, args, {
     style: [jsutils.get(theme, ['form', 'radio']), style]
   }), text$1);
 });
 
+var _excluded$2 = ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"];
 var KegSelect = styleInjector.StyleInjector(select.Select, {
   displayName: 'Select',
   className: 'keg-select'
@@ -298,7 +300,7 @@ var Select = React__default['default'].forwardRef(function (props, ref) {
       _props$themePath = props.themePath,
       themePath = _props$themePath === void 0 ? "form.select.".concat(type) : _props$themePath;
       props.value;
-      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "children", "disabled", "readOnly", "onChange", "onValueChange", "style", "styles", "type", "themePath", "value"]);
+      var elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded$2);
   var selectStyles = useThemePath.useThemePath(themePath, styles);
   var selectClasses = useThemeTypeAsClass_native.useThemeTypeAsClass();
   var classRef = useClassName_native.useClassName('keg-select', selectClasses, ref);
@@ -323,6 +325,7 @@ var Slider = function Slider() {
   return null;
 };
 
+var _excluded$1 = ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "RightComponent", "styles", "SwitchComponent", "setCheckedSetter", "type", "themePath", "thumbColor", "trackColor", "value"];
 var KegSwitch = styleInjector.StyleInjector(_switch.Switch, {
   displayName: 'Switch',
   className: 'keg-switch'
@@ -399,7 +402,7 @@ var Switch = React.forwardRef(function (props, ref) {
       thumbColor = props.thumbColor,
       trackColor = props.trackColor,
       value = props.value,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "checked", "children", "elType", "disabled", "LeftComponent", "close", "onChange", "onValueChange", "RightComponent", "styles", "SwitchComponent", "setCheckedSetter", "type", "themePath", "thumbColor", "trackColor", "value"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded$1);
   var _useState = React.useState(jsutils.toBool(checked || value)),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
       isChecked = _useState2[0],
@@ -435,6 +438,7 @@ var Switch = React.forwardRef(function (props, ref) {
   }));
 });
 
+var _excluded = ["children", "className", "elProps", "href", "onPress", "style", "target"];
 var isWeb = getPlatform.getPlatform() === 'web';
 var Text = kegText.KegText('link');
 var Element = React__default['default'].forwardRef(function (props, ref) {
@@ -445,7 +449,7 @@ var Element = React__default['default'].forwardRef(function (props, ref) {
       props.onPress;
       var style = props.style,
       target = props.target,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["children", "className", "elProps", "href", "onPress", "style", "target"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   return React__default['default'].createElement(touchable.Touchable, _rollupPluginBabelHelpers._extends({
     className: useClassList_native.useClassList()
   }, elProps, attrs, {
@@ -481,9 +485,7 @@ var SvgIcon = styleInjector.StyleInjector(svgIcon.SvgIcon, {
   displayName: 'SvgIcon',
   className: 'keg-svg-icon'
 });
-SvgIcon.propTypes = _rollupPluginBabelHelpers._objectSpread2(_rollupPluginBabelHelpers._objectSpread2({}, svgIcon.SvgIcon.propTypes), {}, {
-  className: PropTypes__default['default'].string
-});
+SvgIcon.propTypes = _rollupPluginBabelHelpers._objectSpread2({}, svgIcon.SvgIcon.propTypes);
 
 exports.TextBox = textBox.TextBox;
 exports.Button = button.Button;

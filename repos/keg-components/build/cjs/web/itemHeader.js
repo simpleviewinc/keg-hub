@@ -2,13 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var reTheme = require('@keg-hub/re-theme');
 var jsutils = require('@keg-hub/jsutils');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 var button = require('./button.js');
-var icon = require('./icon-5bf6ad84.js');
+var icon = require('./icon-c7ba25ca.js');
 require('./caption.js');
 require('./h1.js');
 require('./h2.js');
@@ -28,9 +28,9 @@ var useClassList = require('./useClassList-89a8dbd4.js');
 var useAccessibilityRole = require('./useAccessibilityRole.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('react-native');
-require('./view.native-99366b4b.js');
-require('./useClassName-51ea3221.js');
+require('react-native-web');
+require('./view.native-895f9104.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -38,10 +38,10 @@ require('@keg-hub/re-theme/styleInjector');
 require('./touchable.js');
 require('./getPressHandler.js');
 require('./getActiveOpacity.js');
-require('./useThemeTypeAsClass-a9284938.js');
+require('./useThemeTypeAsClass-9fb8a8ab.js');
 require('./colors-da502c66.js');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
 require('./useTextAccessibility.js');
 require('./useTextStyles.js');
 
@@ -49,6 +49,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["accessibilityRole", "appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"];
 var isWeb = getPlatform.getPlatform() === 'web';
 var ItemHeader = function ItemHeader(props) {
   var _headerStyles$content;
@@ -72,7 +73,7 @@ var ItemHeader = function ItemHeader(props) {
       ellipsis = props.ellipsis,
       themePath = props.themePath,
       children = props.children,
-      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["accessibilityRole", "appHeader", "className", "title", "styles", "RightComponent", "CenterComponent", "LeftComponent", "onLeftClick", "leftIcon", "LeftIconComponent", "rightIcon", "RightIconComponent", "IconComponent", "onRightClick", "shadow", "ellipsis", "themePath", "children"]);
+      elProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var headerStyles = useThemePath.useThemePath(themePath || "header.itemHeader", styles);
   var accessibilityRoleObj = useAccessibilityRole.useAccessibilityRole(accessibilityRole, 'header');
   return React__default['default'].createElement(view.View, _rollupPluginBabelHelpers._extends({

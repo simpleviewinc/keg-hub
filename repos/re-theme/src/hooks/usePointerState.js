@@ -96,27 +96,33 @@ const useEventCallBacks = ({
  * @return {Object} - Contains mouse states, and event listeners functions
  */
 const useElementEvents = (options = noOpObj, pointerState) => {
-  const { hover = false, onPointerIn, onPointerOut } =
-    pointerState === 'hover'
-      ? useEventCallBacks({
-        pointerState,
-        onName: 'onPointerIn',
-        offName: 'onPointerOut',
-        onEvent: options.onPointerIn,
-        offEvent: options.onPointerOut,
-      })
-      : noOpObj
+  const {
+    hover = false,
+    onPointerIn,
+    onPointerOut,
+  } = pointerState === 'hover'
+    ? useEventCallBacks({
+      pointerState,
+      onName: 'onPointerIn',
+      offName: 'onPointerOut',
+      onEvent: options.onPointerIn,
+      offEvent: options.onPointerOut,
+    })
+    : noOpObj
 
-  const { focus = false, onFocus, onBlur } =
-    pointerState === 'focus'
-      ? useEventCallBacks({
-        pointerState,
-        onName: 'onFocus',
-        offName: 'onBlur',
-        onEvent: options.onFocus,
-        offEvent: options.onBlur,
-      })
-      : noOpObj
+  const {
+    focus = false,
+    onFocus,
+    onBlur,
+  } = pointerState === 'focus'
+    ? useEventCallBacks({
+      pointerState,
+      onName: 'onFocus',
+      offName: 'onBlur',
+      onEvent: options.onFocus,
+      offEvent: options.onBlur,
+    })
+    : noOpObj
 
   const { active = false, onPointerDown } =
     pointerState === 'active'

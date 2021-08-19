@@ -1,24 +1,25 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React, { useState, useCallback } from 'react';
+import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default, { useState, useCallback } from 'react';
 import { noOpObj, noPropArr } from '@keg-hub/jsutils';
 import { getTextFromChangeEvent } from './getTextFromChangeEvent.js';
 import '@keg-hub/re-theme/colors';
 import { useAutocompleteItems } from './useAutocompleteItems.js';
 import '@keg-hub/re-theme';
 import './useThemeWithHeight.js';
-import 'react-native';
+import 'react-native-web';
 import { reStyle } from '@keg-hub/re-theme/reStyle';
 import { ScrollableSelect } from './scrollableSelect.js';
-import { V as View } from './view-2274aefb.js';
+import { V as View } from './view-9c41ec1e.js';
 import { AutocompleteInput } from './autocompleteInput.js';
 import './touchable.js';
-import { w as withOutsideDetect } from './withOutsideDetect-c4848693.js';
+import { w as withOutsideDetect } from './withOutsideDetect-76e76551.js';
+import './getPlatform-95568099.js';
 import './useThemePath.js';
 import './item.js';
 import './text.js';
-import './kegText-5c4aeb4b.js';
-import './kegText.native-be460636.js';
-import './useClassName-682bc33b.js';
+import './kegText-9f80996b.js';
+import './kegText.native-6bbad9e4.js';
+import './useClassName-ed83df40.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
@@ -29,20 +30,21 @@ import './renderFromType.js';
 import './isValidComponent.js';
 import './getPressHandler.js';
 import './getActiveOpacity.js';
-import './useThemeTypeAsClass-fec5ff6f.js';
+import './useThemeTypeAsClass-fb17085e.js';
 import './colors-6402d3b3.js';
 import './useClassList-1d418045.js';
 import './selectView.js';
-import './withScrollIntoView-5f891320.js';
-import './view.native-a7f08b5b.js';
-import './input-92fdaee4.js';
+import './withScrollIntoView-bd1a8185.js';
+import './view.native-2491eb60.js';
+import './input-d8824a77.js';
 import './getInputValue.js';
 import './getReadOnly.js';
 import './useInputHandlers.js';
 import './validateFunctions.js';
 import './usePressHandlers.js';
-import './input-0746c9bb.js';
+import './input-7f14c7e3.js';
 
+var _excluded = ["onChange", "onSelect", "placeholder", "text", "styles", "inputRef", "values", "menuHeight"];
 var FloatingScrollableSelect = reStyle(ScrollableSelect, 'styles')(function () {
   return {
     main: {
@@ -67,7 +69,7 @@ var Autocomplete = function Autocomplete(props) {
       _props$values = props.values,
       values = _props$values === void 0 ? noPropArr : _props$values,
       menuHeight = props.menuHeight,
-      inputProps = _objectWithoutProperties(props, ["onChange", "onSelect", "placeholder", "text", "styles", "inputRef", "values", "menuHeight"]);
+      inputProps = _objectWithoutProperties(props, _excluded);
   var _useState = useState(text || ''),
       _useState2 = _slicedToArray(_useState, 2),
       inputText = _useState2[0],
@@ -90,10 +92,10 @@ var Autocomplete = function Autocomplete(props) {
   var onOutsideClick = useCallback(function () {
     autocompleteItems.length && updateText(selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.text);
   }, [onSelectItem, autocompleteItems]);
-  return React.createElement(AutocompleteView, {
+  return React__default.createElement(AutocompleteView, {
     style: styles === null || styles === void 0 ? void 0 : styles.main,
     onOutsideClick: onOutsideClick
-  }, React.createElement(AutocompleteInput, _extends({
+  }, React__default.createElement(AutocompleteInput, _extends({
     highlightedIndex: selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.index,
     highlightItem: setSelectedItem,
     selectItem: onSelectItem,
@@ -103,7 +105,7 @@ var Autocomplete = function Autocomplete(props) {
     value: inputText,
     ref: inputRef,
     style: styles === null || styles === void 0 ? void 0 : (_styles$content = styles.content) === null || _styles$content === void 0 ? void 0 : _styles$content.input
-  }, inputProps)), React.createElement(View, null, React.createElement(FloatingScrollableSelect, {
+  }, inputProps)), React__default.createElement(View, null, React__default.createElement(FloatingScrollableSelect, {
     height: menuHeight,
     styles: styles === null || styles === void 0 ? void 0 : (_styles$content2 = styles.content) === null || _styles$content2 === void 0 ? void 0 : _styles$content2.menu,
     visible: autocompleteItems.length > 0,

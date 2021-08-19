@@ -1,16 +1,17 @@
-import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React from 'react';
+import { d as _objectWithoutProperties, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default from 'react';
 import { useTheme } from '@keg-hub/re-theme';
 import { get } from '@keg-hub/jsutils';
 import { Container } from './container.js';
 import { u as useClassList } from './useClassList.native-70068878.js';
-import './view.native-b0b1ddd4.js';
+import './view.native-f7a27d15.js';
 import 'react-native';
 import './useClassName.native-32e8827d.js';
 import './getPressHandler.js';
 import './getPlatform-e625f46a.js';
 import '@keg-hub/re-theme/colors';
 
+var _excluded = ["className", "children", "size", "center"];
 var widthFromSize = function widthFromSize(size, theme) {
   var total = get(theme, ['layout', 'columns'], 12);
   size = size > total ? total : size;
@@ -30,9 +31,9 @@ var Column = function Column(_ref) {
       var children = _ref.children,
       size = _ref.size;
       _ref.center;
-      var props = _objectWithoutProperties(_ref, ["className", "children", "size", "center"]);
+      var props = _objectWithoutProperties(_ref, _excluded);
   var theme = useTheme();
-  return React.createElement(Container, _extends({}, props, {
+  return React__default.createElement(Container, _extends({}, props, {
     className: useClassList(),
     size: size,
     flexDir: "column",

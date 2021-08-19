@@ -2,20 +2,20 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var reTheme = require('@keg-hub/re-theme');
 var jsutils = require('@keg-hub/jsutils');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 var renderFromType = require('./renderFromType.js');
 require('@keg-hub/re-theme/colors');
 var isValidComponent = require('./isValidComponent.js');
 var useThemePath = require('./useThemePath.js');
 require('./useThemeWithHeight.js');
-require('react-native');
+require('react-native-web');
 var useClassList = require('./useClassList-89a8dbd4.js');
-require('./view.native-99366b4b.js');
-require('./useClassName-51ea3221.js');
+require('./view.native-895f9104.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -25,6 +25,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"];
 var Icon = React__default['default'].forwardRef(function (props, ref) {
   var theme = reTheme.useTheme();
   var className = props.className,
@@ -38,7 +39,7 @@ var Icon = React__default['default'].forwardRef(function (props, ref) {
       themePath = props.themePath,
       _props$type = props.type,
       type = _props$type === void 0 ? 'default' : _props$type,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["className", "color", "Component", "Element", "name", "size", "styles", "themePath", "type"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   if (!isValidComponent.isValidComponent(Element)) return console.error("Invalid Element passed to Icon component!", Element) || null;
   var iconStyles = useThemePath.useThemePath(themePath || "icon.".concat(type), styles);
   var iconProps = {

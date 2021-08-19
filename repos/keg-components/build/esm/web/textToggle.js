@@ -1,28 +1,30 @@
-import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b6f65682.js';
-import React, { useState, useCallback, useMemo } from 'react';
+import { d as _objectWithoutProperties, b as _slicedToArray, e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
+import React__default, { useState, useCallback, useMemo } from 'react';
 import { Text } from './text.js';
 import { Touchable } from './touchable.js';
 import { Drawer } from './drawer.js';
-import { V as View } from './view-2274aefb.js';
+import { V as View } from './view-9c41ec1e.js';
 import { u as useClassList } from './useClassList-1d418045.js';
 import { noPropArr, isFunc } from '@keg-hub/jsutils';
 import { isValidComponent } from './isValidComponent.js';
 import '@keg-hub/re-theme/colors';
 import { useStylesCallback } from '@keg-hub/re-theme';
-import './kegText-5c4aeb4b.js';
-import './kegText.native-be460636.js';
-import './useClassName-682bc33b.js';
+import './kegText-9f80996b.js';
+import './kegText.native-6bbad9e4.js';
+import './useClassName-ed83df40.js';
 import './updateClassNames.js';
 import './ensureClassArray.js';
 import './handleRefUpdate.js';
-import 'react-native';
+import 'react-native-web';
 import './useTextAccessibility.js';
 import '@keg-hub/re-theme/styleInjector';
 import './useTextStyles.js';
+import './getPlatform-95568099.js';
 import './useThemePath.js';
 import './useThemeWithHeight.js';
-import './view.native-a7f08b5b.js';
+import './view.native-2491eb60.js';
 
+var _excluded = ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"];
 var LinearGradient = function LinearGradient(props) {
   var _props$start = props.start,
       start = _props$start === void 0 ? {
@@ -46,7 +48,7 @@ var LinearGradient = function LinearGradient(props) {
       style = props.style,
       children = props.children,
       className = props.className,
-      otherProps = _objectWithoutProperties(props, ["start", "end", "colors", "locations", "useAngle", "angleCenter", "angle", "style", "children", "className"]);
+      otherProps = _objectWithoutProperties(props, _excluded);
   var _useState = useState(1),
       _useState2 = _slicedToArray(_useState, 2),
       width = _useState2[0],
@@ -61,7 +63,7 @@ var LinearGradient = function LinearGradient(props) {
     setHeight(nativeEvent.layout.height);
   }, [setWidth, setHeight]);
   var newAngle = useAngle && angle ? "".concat(angle, "deg") : calculateAngle(width, height, start, end);
-  return React.createElement(View, _extends({
+  return React__default.createElement(View, _extends({
     className: useClassList("keg-linear-gradient", className)
   }, otherProps, {
     style: [style, {
@@ -148,19 +150,19 @@ var TextToggle = function TextToggle(props) {
     if (textMaxHeight === height) return;
     setTextMaxHeight(height);
   }, [textMaxHeight, setTextMaxHeight]);
-  return React.createElement(View, {
+  return React__default.createElement(View, {
     style: [mainStyle.main],
     className: useClassList('keg-text-toggle', className)
-  }, React.createElement(Drawer, {
+  }, React__default.createElement(Drawer, {
     collapsedHeight: collapsedHeight,
     toggled: expanded
-  }, React.createElement(Text, {
+  }, React__default.createElement(Text, {
     style: mainStyle.text,
     onLayout: onTextLayout
-  }, text)), showToggle && !expanded && React.createElement(LinearGradient, {
+  }, text)), showToggle && !expanded && React__default.createElement(LinearGradient, {
     colors: ['rgba(255,255,255,0)', fadeColor],
     style: mainStyle.linearGradient
-  }), showToggle && React.createElement(ToggleComponent, {
+  }), showToggle && React__default.createElement(ToggleComponent, {
     onPress: onToggleCb,
     isExpanded: expanded,
     styles: mainStyle.toggleComponent,
@@ -180,12 +182,12 @@ var ToggleComponent = function ToggleComponent(_ref) {
       expandedToggleText = _ref.expandedToggleText,
       collapsedToggleText = _ref.collapsedToggleText;
   var defaultText = isExpanded ? expandedToggleText : collapsedToggleText;
-  return React.createElement(Touchable, {
+  return React__default.createElement(Touchable, {
     style: styles === null || styles === void 0 ? void 0 : styles.main,
     onPress: onPress
-  }, isValidComponent(CustomComponent) ? React.createElement(CustomComponent, {
+  }, isValidComponent(CustomComponent) ? React__default.createElement(CustomComponent, {
     isExpanded: isExpanded
-  }) : React.createElement(Text, {
+  }) : React__default.createElement(Text, {
     style: styles === null || styles === void 0 ? void 0 : styles.text
   }, defaultText));
 };

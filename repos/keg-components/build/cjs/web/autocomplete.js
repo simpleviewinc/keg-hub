@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var jsutils = require('@keg-hub/jsutils');
 var getTextFromChangeEvent = require('./getTextFromChangeEvent.js');
@@ -10,19 +10,20 @@ require('@keg-hub/re-theme/colors');
 var useAutocompleteItems = require('./useAutocompleteItems.js');
 require('@keg-hub/re-theme');
 require('./useThemeWithHeight.js');
-require('react-native');
+require('react-native-web');
 var reStyle = require('@keg-hub/re-theme/reStyle');
 var scrollableSelect = require('./scrollableSelect.js');
-var view = require('./view-276572bd.js');
+var view = require('./view-3fcb25db.js');
 var autocompleteInput = require('./autocompleteInput.js');
 require('./touchable.js');
-var withOutsideDetect = require('./withOutsideDetect-7305c734.js');
+var withOutsideDetect = require('./withOutsideDetect-a1fdd1de.js');
+require('./getPlatform-ec53cd5e.js');
 require('./useThemePath.js');
 require('./item.js');
 require('./text.js');
-require('./kegText-f2cfdfd4.js');
-require('./kegText.native-1994a0b7.js');
-require('./useClassName-51ea3221.js');
+require('./kegText-b0f1b442.js');
+require('./kegText.native-100193df.js');
+require('./useClassName-eec4a5f1.js');
 require('./updateClassNames.js');
 require('./ensureClassArray.js');
 require('./handleRefUpdate.js');
@@ -33,24 +34,25 @@ require('./renderFromType.js');
 require('./isValidComponent.js');
 require('./getPressHandler.js');
 require('./getActiveOpacity.js');
-require('./useThemeTypeAsClass-a9284938.js');
+require('./useThemeTypeAsClass-9fb8a8ab.js');
 require('./colors-da502c66.js');
 require('./useClassList-89a8dbd4.js');
 require('./selectView.js');
-require('./withScrollIntoView-91d98602.js');
-require('./view.native-99366b4b.js');
-require('./input-e99fee30.js');
+require('./withScrollIntoView-0faf5e7e.js');
+require('./view.native-895f9104.js');
+require('./input-e65999e6.js');
 require('./getInputValue.js');
 require('./getReadOnly.js');
 require('./useInputHandlers.js');
 require('./validateFunctions.js');
 require('./usePressHandlers.js');
-require('./input-f586181b.js');
+require('./input-9de20726.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
+var _excluded = ["onChange", "onSelect", "placeholder", "text", "styles", "inputRef", "values", "menuHeight"];
 var FloatingScrollableSelect = reStyle.reStyle(scrollableSelect.ScrollableSelect, 'styles')(function () {
   return {
     main: {
@@ -75,7 +77,7 @@ var Autocomplete = function Autocomplete(props) {
       _props$values = props.values,
       values = _props$values === void 0 ? jsutils.noPropArr : _props$values,
       menuHeight = props.menuHeight,
-      inputProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["onChange", "onSelect", "placeholder", "text", "styles", "inputRef", "values", "menuHeight"]);
+      inputProps = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var _useState = React.useState(text || ''),
       _useState2 = _rollupPluginBabelHelpers._slicedToArray(_useState, 2),
       inputText = _useState2[0],

@@ -55,11 +55,8 @@ export const Autocomplete = props => {
   } = props
 
   const [ inputText, updateText ] = useState(text || '')
-  const [
-    autocompleteItems,
-    setSelectedItem,
-    selectedItem,
-  ] = useAutocompleteItems(inputText, values)
+  const [ autocompleteItems, setSelectedItem, selectedItem ] =
+    useAutocompleteItems(inputText, values)
 
   const onSelectItem = useCallback(
     item => {

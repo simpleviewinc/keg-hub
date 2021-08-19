@@ -5,7 +5,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var React = require('react');
 var reactNative = require('react-native');
 var jsutils = require('@keg-hub/jsutils');
+var getPlatform = require('./getPlatform-24228c6c.js');
 
+var isWeb = getPlatform.getPlatform() === 'web';
 var useFromToAnimation = function useFromToAnimation(params) {
   var _ref = params || {},
       from = _ref.from,
@@ -26,7 +28,7 @@ var useFromToAnimation = function useFromToAnimation(params) {
     duration: duration,
     easing: easing
   };
-  (config.useNativeDriver = true);
+  config.useNativeDriver = !isWeb;
   var animatedTiming = reactNative.Animated.timing(fromVal, config);
   React.useEffect(function () {
     loop ? reactNative.Animated.loop(animatedTiming).start() : animatedTiming.start(onFinish);

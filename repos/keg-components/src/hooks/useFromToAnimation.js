@@ -17,8 +17,14 @@ const isWeb = getPlatform() === 'web'
  *  - Animated.Value: pass this value to your Animated.View to begin the animation
  */
 export const useFromToAnimation = params => {
-  const { from, to, duration = 500, onFinish = noOp, loop = false, easing } =
-    params || {}
+  const {
+    from,
+    to,
+    duration = 500,
+    onFinish = noOp,
+    loop = false,
+    easing,
+  } = params || {}
   // determines when the animation should run
   const animDependencies = [ from, to, duration, loop, easing, onFinish ]
 
@@ -28,7 +34,7 @@ export const useFromToAnimation = params => {
   const fromVal = useMemo(() => new Animated.Value(from), animDependencies)
 
   const config = { toValue: to, duration, easing }
-  !isWeb && (config.useNativeDriver = true)
+  config.useNativeDriver = !isWeb
 
   const animatedTiming = Animated.timing(fromVal, config)
 

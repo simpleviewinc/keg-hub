@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-bb55ccbe.js');
+var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 var React = require('react');
 var Svg = require('react-native-svg');
 var reTheme = require('@keg-hub/re-theme');
@@ -13,6 +13,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 var Svg__default = /*#__PURE__*/_interopDefaultLegacy(Svg);
 
+var _excluded = ["border", "className", "color", "clipRule", "delta", "fill", "fillRule", "height", "size", "stroke", "strokeWidth", "strokeLinecap", "strokeLinejoin", "style", "svgFill", "viewBox", "width"];
 var useIconStyle = function useIconStyle(style) {
   return React.useMemo(function () {
     return jsutils.isArr(style) ? jsutils.deepMerge.apply(void 0, _rollupPluginBabelHelpers._toConsumableArray(style)) : style;
@@ -59,7 +60,7 @@ var SvgIcon = React__default['default'].forwardRef(function (props, ref) {
       svgFill = props.svgFill,
       viewBox = props.viewBox,
       width = props.width,
-      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, ["border", "className", "color", "clipRule", "delta", "fill", "fillRule", "height", "size", "stroke", "strokeWidth", "strokeLinecap", "strokeLinejoin", "style", "svgFill", "viewBox", "width"]);
+      attrs = _rollupPluginBabelHelpers._objectWithoutProperties(props, _excluded);
   var theme = reTheme.useTheme();
   var iconStyle = useIconStyle(style);
   var sizeStyle = useSize(size, width, height, iconStyle, theme);
