@@ -104,6 +104,8 @@ describe('Build Constants', () => {
 
   it('should return an object with the correct base and dynamic aliases', () => {
     const nameSpace = get(options, 'config.keg.tapResolver.aliases.nameSpace')
+    const baseNameSpace = get(options, 'config.keg.tapResolver.aliases.baseNameSpace')
+
     const baseAliases = get(options, 'config.keg.tapResolver.aliases.base')
     const dynamicAliases = get(
       options,
@@ -114,17 +116,37 @@ describe('Build Constants', () => {
     const dynamicKeys = Object.keys(DYNAMIC_CONTENT)
 
     baseKeys.map(key => {
-      const orgKey = key.substring(nameSpace.length)
+      let orgKey
+      let hasNameSpace
+      
+      if(key.indexOf(nameSpace) === 0){
+        hasNameSpace = true
+        orgKey = key.substring(nameSpace.length)
+      }
+      else if(key.indexOf(baseNameSpace) === 0){
+        hasNameSpace = true
+        orgKey = key.substring(baseNameSpace.length)
+      }
 
-      expect(key.indexOf(nameSpace)).not.toBe(-1)
+      expect(hasNameSpace).toBe(true)
       expect(baseAliases[orgKey]).not.toBe(undefined)
       expect(BASE_CONTENT[key]).toBe(baseAliases[orgKey])
     })
 
     dynamicKeys.map(key => {
-      const orgKey = key.substring(nameSpace.length)
+      let orgKey
+      let hasNameSpace
+      
+      if(key.indexOf(nameSpace) === 0){
+        hasNameSpace = true
+        orgKey = key.substring(nameSpace.length)
+      }
+      else if(key.indexOf(baseNameSpace) === 0){
+        hasNameSpace = true
+        orgKey = key.substring(baseNameSpace.length)
+      }
 
-      expect(key.indexOf(nameSpace)).not.toBe(-1)
+      expect(hasNameSpace).toBe(true)
       expect(dynamicAliases[orgKey]).not.toBe(undefined)
       expect(DYNAMIC_CONTENT[key]).toBe(dynamicAliases[orgKey])
     })
