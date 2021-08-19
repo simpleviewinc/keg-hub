@@ -13,7 +13,7 @@ const freezeObj = Object.freeze
  * @param {Object} appConfig - app.json config file
  * @param {Object} addTo - Object to have it's keys name spaced
  *
- * @returns {Object} - new addTo object with it's keys updated to include the namespaces 
+ * @returns {Object} - new addTo object with it's keys updated to include the namespaces
  */
 const addNameSpace = (appConfig, addTo) => {
   const nameSpace = get(

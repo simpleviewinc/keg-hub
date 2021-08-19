@@ -125,15 +125,14 @@ const requireFile = (folder, file, logError) => {
     // load the data
     const data = exists ? require(location) : false
 
-
     return { data, location }
   }
   catch (err) {
     // If the config file exists, and it's not the package.json, then throw
     // This way we can get the error for why it could not be loaded
-    if(exists && !location.includes('package.json'))
+    if (exists && !location.includes('package.json'))
       throw new Error(
-        `\n[ TAP-RESOLVER ] Found keg-config at ${location}, but it could not be loaded.\n\n${err.stack.trim()}\n`,
+        `\n[ TAP-RESOLVER ] Found keg-config at ${location}, but it could not be loaded.\n\n${err.stack.trim()}\n`
       )
 
     if (!logError) return {}

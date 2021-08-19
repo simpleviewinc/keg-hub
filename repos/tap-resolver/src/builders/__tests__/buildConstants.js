@@ -89,12 +89,8 @@ describe('Build Constants', () => {
   })
 
   it('should return an object with the correct paths', () => {
-    const {
-      APP_CONFIG_PATH,
-      ASSETS_PATH,
-      BASE_PATH,
-      TAP_PATH,
-    } = buildConstants(options)
+    const { APP_CONFIG_PATH, ASSETS_PATH, BASE_PATH, TAP_PATH } =
+      buildConstants(options)
 
     expect(tapConfigPath).toBe(APP_CONFIG_PATH)
     expect(tapAssetsPath).toBe(ASSETS_PATH)
@@ -104,7 +100,10 @@ describe('Build Constants', () => {
 
   it('should return an object with the correct base and dynamic aliases', () => {
     const nameSpace = get(options, 'config.keg.tapResolver.aliases.nameSpace')
-    const baseNameSpace = get(options, 'config.keg.tapResolver.aliases.baseNameSpace')
+    const baseNameSpace = get(
+      options,
+      'config.keg.tapResolver.aliases.baseNameSpace'
+    )
 
     const baseAliases = get(options, 'config.keg.tapResolver.aliases.base')
     const dynamicAliases = get(
@@ -118,12 +117,12 @@ describe('Build Constants', () => {
     baseKeys.map(key => {
       let orgKey
       let hasNameSpace
-      
-      if(key.indexOf(nameSpace) === 0){
+
+      if (key.indexOf(nameSpace) === 0) {
         hasNameSpace = true
         orgKey = key.substring(nameSpace.length)
       }
-      else if(key.indexOf(baseNameSpace) === 0){
+      else if (key.indexOf(baseNameSpace) === 0) {
         hasNameSpace = true
         orgKey = key.substring(baseNameSpace.length)
       }
@@ -136,12 +135,12 @@ describe('Build Constants', () => {
     dynamicKeys.map(key => {
       let orgKey
       let hasNameSpace
-      
-      if(key.indexOf(nameSpace) === 0){
+
+      if (key.indexOf(nameSpace) === 0) {
         hasNameSpace = true
         orgKey = key.substring(nameSpace.length)
       }
-      else if(key.indexOf(baseNameSpace) === 0){
+      else if (key.indexOf(baseNameSpace) === 0) {
         hasNameSpace = true
         orgKey = key.substring(baseNameSpace.length)
       }

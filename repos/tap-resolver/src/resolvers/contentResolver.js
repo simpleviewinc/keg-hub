@@ -41,7 +41,7 @@ const checkAddIndex = (aliasPath, toLoad, folderRootFile) => {
  * If no file exists, then load from the base tap
  * @param {Object} appConfig - (tap|| app).json config file
  * @param {Object} aliasMap - object that holds all path alias
- * @param {string} content - 
+ * @param {string} content -
  * @param  {string} type - folder to search for file i.e. components/assets
  *
  * @return {string} - path to file
