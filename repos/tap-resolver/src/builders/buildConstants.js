@@ -35,10 +35,6 @@ const addNameSpace = (appConfig, addTo) => {
     addTo,
     (key, value, updated) => {
       nameSpace && (updated[`${nameSpace}${key}`] = value)
-
-      // TODO: Investigate getting the base value and using that
-      // Instead of using the current value
-
       // Only add the baseNamespace if it's not the same as namespace
       // Otherwise we're just duplicating the alias
       !sameNameSpace &&
