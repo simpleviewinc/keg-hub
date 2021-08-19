@@ -15,10 +15,8 @@ module.exports = deepFreeze({
     'tap.config.json',
     'tap.json',
     'app.config.js',
-    'app.js',
     'app.config.json',
     'app.json',
-    'package.json',
   ],
   /**
    * Constants added to temp config files for reference
