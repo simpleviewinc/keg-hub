@@ -62,7 +62,7 @@
     "@keg-hub/jsutils": "8.6.0",
     "@keg-hub/keg-components": "9.3.0",
     "@keg-hub/re-theme": "9.3.0",
-    "@keg-hub/tap-resolver": "8.2.0",
+    "@keg-hub/tap-resolver": "9.0.0",
     "@testing-library/react-hooks": "7.0.1",
     "app-root-path": "3.0.0",
     "axios": "0.21.1",
