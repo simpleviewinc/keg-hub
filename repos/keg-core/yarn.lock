@@ -1811,10 +1811,10 @@
   resolved "https://registry.npmjs.org/@keg-hub/tap-resolver/-/tap-resolver-8.0.0.tgz#eddff76505260885642db7bfb0c80b45fffe8bf3"
   integrity sha512-UsO2alkbtHFEQBdDPdXtsd+L77zc8JXdRoZqYNKnfKRxqC0IvamNmjkDOfv4dyEN3ije2iIEuPymqhU4Musd/Q==
 
-"@keg-hub/tap-resolver@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.npmjs.org/@keg-hub/tap-resolver/-/tap-resolver-8.2.0.tgz#85b7ed69d91cffcc3d0c75350efb1bb2fa4650aa"
-  integrity sha512-dgHE6bmjjgKgEn73vTIznrTr5vosJm8kJOrXW2fw0Np4CtPcflIoYlRH+Vsqw+HzY5gJl8o6x/w1FIhl9rRpFg==
+"@keg-hub/tap-resolver@9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/tap-resolver/-/tap-resolver-9.0.0.tgz#51dfdabdb2dd0eb0abee9936f5a319b119413681"
+  integrity sha512-BEHkvjxrMrFtgjFcDvI+fjIjfh3w2TnTRVzVBvFkhdma/iFNUD8TYFqEX9CcDHE8wgwG0XPALH9NeoNOmG/k7w==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
