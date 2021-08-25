@@ -4,5 +4,5 @@
 // ********************************* WARNING *********************************
 
 export const assets = {
-  ['clientLogo']: require('/home/runner/work/keg-hub/keg-hub/repos/keg-core/core/base/assets/clientLogo.jpg')
+  ['clientLogo']: require('/Users/lancetipton/keg-hub/repos/keg-core/core/base/assets/clientLogo.jpg')
 }
