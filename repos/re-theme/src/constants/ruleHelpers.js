@@ -59,6 +59,7 @@ export const ruleHelpers = {
   flD: `flexDirection`,
   flWr: `flexWrap`,
   flB: `flexBasis`,
+  flG: `flexGrow`,
   flS: `flexShrink`,
   jtC: `justifyContent`,
   alC: `alignContent`,
