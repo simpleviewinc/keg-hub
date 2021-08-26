@@ -149,9 +149,9 @@ const Center = props => {
       className='keg-header-center'
       style={styles.main}
     >
-      { (children && renderFromType(children, {}, null)) || 
+      { (children && renderFromType(children, {}, null)) ||
         //Don't render header element if title is empty since it causes issues with Accessibility standards
-        ( title && (
+        (title && (
           <H5
             className='keg-header-center-title'
             ellipsis={ellipsis}
