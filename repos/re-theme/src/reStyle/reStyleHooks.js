@@ -18,6 +18,17 @@ import { Constants } from '../constants'
 
 const { PLATFORM } = Constants
 
+/**
+ * *(useCompiledStyles helper)*
+ * Builds a tuple containing the structured styles (styles w/ platforms and size keys), and the unstructured
+ * styles (styles defined at the root of dynamicStyles with no platforms or size keys)
+ * @param {Object} dynamicStyles 
+ * @param {String?} rootKey 
+ * @returns {Array} [
+ *   structuredStyles,
+ *   unstructuredStyles
+ * ]
+ */
 const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() => {
   return [
     // use a root key identifying the theme object (a restructureTheme requirement only)
@@ -27,16 +38,36 @@ const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() =
   ]
 }, [ dynamicStyles ])
 
-const useSizedStyles = (structuredStyles, activeSizeKey) => useMemo(() => {
+/**
+ * *(useCompiledStyles helper)*
+ * Builds a tuple containing the sized styles (styles w/ size keys), and the unsized
+ * styles (styles defined at the root of dynamicStyles with no platforms or size keys) 
+ * @param {Object} structuredStyles - styles processed by restructureTheme
+ * @returns {Array} [
+ *   sizedStyles,
+ *   unsizedStyles,
+ *   keys, - sizedStyles keys
+ *   unused - size keys that were unused
+ * ]
+ */
+const useSizedStyles = structuredStyles => useMemo(() => {
+  // get the size key for the current screen width
+  const activeSizeKey = useCurrentSize()
+
   const [ keys, unused ] = getMergeSizes(activeSizeKey) || noPropArr
   const allKeys = [ ...keys, ...unused ]
   return [
     pickKeys(structuredStyles, allKeys),
     omitKeys(structuredStyles, allKeys)?.component,
-    keys
+    keys,
+    unused
   ]
-}, [ structuredStyles, activeSizeKey ])
+}, [ structuredStyles ])
 
+/**
+ * *(useCompiledStyles helper)*
+ * @returns {string} size key for current screen width
+ */
 const useCurrentSize = () => {
   const { width } = useDimensions()
   const [ activeSizeKey ] = useMemo(() => getSize(width), [ width ])
@@ -50,16 +81,13 @@ const useCurrentSize = () => {
  * @returns {Object} the compiled styles object to be passed to a react or DOM element 
  */
  export const useCompiledStyles = dynamicStyles => {
-  // restructure the theme by size keys and platform, 
+  // restructure the theme by size keys and platform
   const [ structuredStyles, platformlessStyles ] = useStructuredStyles(dynamicStyles)
 
-  // get the size key for the current screen width
-  const activeSizeKey = useCurrentSize()
-
   // get the size keys for the current screen width (e.g. '480px' => [ '$small', '$medium', '$large' ])
-  const [ sizedStyles, staticStyles, keys ] = useSizedStyles(structuredStyles, activeSizeKey)
+  const [ sizedStyles, unsizedStyles, keys ] = useSizedStyles(structuredStyles)
 
-  // compile the final styles
+  // compile the sized styles
   const compiled = useMemo(
     () => keys?.reduce(
       (acc, key) => sizedStyles[key]
@@ -70,14 +98,12 @@ const useCurrentSize = () => {
     [ sizedStyles, keys ]
   )
 
-  console.log({ dynamicStyles, structuredStyles, staticStyles, sizedStyles, compiled })
-
   // merge compiled styles with unsized and platformless styles
   return useMemo(() => ({
     ...compiled?.component,
-    ...staticStyles,
+    ...unsizedStyles,
     ...platformlessStyles
-  }), [ compiled, staticStyles, platformlessStyles ])
+  }), [ compiled, unsizedStyles, platformlessStyles ])
 }
 
 /**

@@ -152,27 +152,12 @@ export const getSize = width => {
  * console.log(unused) -> [ '$xsmall' ]
  */
 export const getMergeSizes = key => {
-  // Add 1 because slice does not include the last item of the range
-  // const sizes = sizeMap.entries
-  //   .slice(0, sizeMap.indexes[key] + 1)
-  //   .map(([ name, size ]) => name)
-
-  const result = sizeMap.entries.reduce(
-    (data, [ name ]) => {
-      if (name === key) (data.found = true)
-      if (data.found) data.matching.push(name)
-      else (data.omitted.push(name))
-
-      return data
-    }, 
-    {
-      matching: [],
-      omitted: [],
-      found: false
-    }
-  )
-
-  return [ result.matching, result.omitted ]
+  const keys = sizeMap.entries.map(([ name ]) => name)
+  const keyIndex = keys.indexOf(key)
+  return [
+    keys.slice(0, keyIndex + 1),
+    keys.slice(keyIndex + 1),
+  ]
 }
 
 // Build the default sizeMap parts
