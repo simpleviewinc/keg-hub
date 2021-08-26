@@ -163,6 +163,7 @@ reports
 repos/keg-cli
 !repos/**/build
 repos/keg-core/core/base/assets/**/**
+repos/keg-core/core/base/assets/index.js
 !repos/keg-core/core/base/assets/.gitkeep
 !repos/keg-core/core/base/assets/fonts/.gitkeep
 repos/**/kc-touch.js
