@@ -149,15 +149,17 @@ const Center = props => {
       className='keg-header-center'
       style={styles.main}
     >
-      { (children && renderFromType(children, {}, null)) || (
-        <H5
-          className='keg-header-center-title'
-          ellipsis={ellipsis}
-          style={styles.content.title}
-        >
-          { title }
-        </H5>
-      ) }
+      { (children && renderFromType(children, {}, null)) || 
+        //Don't render header element if title is empty since it causes issues with Accessibility standards
+        ( title && (
+          <H5
+            className='keg-header-center-title'
+            ellipsis={ellipsis}
+            style={styles.content.title}
+          >
+            { title }
+          </H5>
+        )) }
     </View>
   )
 }
