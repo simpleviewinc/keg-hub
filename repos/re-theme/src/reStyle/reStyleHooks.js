@@ -2,13 +2,83 @@ import { useTheme } from '../hooks/useTheme'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import {
   ensureArr,
+  pickKeys,
+  omitKeys,
   uuid,
   isObj,
   deepMerge,
   noOpObj,
   isFunc,
   shallowEqual,
+  noPropArr
 } from '@keg-hub/jsutils'
+import { restructureTheme } from '../theme/restructureTheme'
+import { useDimensions, getMergeSizes, getSize } from '../dimensions'
+import { Constants } from '../constants'
+
+const { PLATFORM } = Constants
+
+const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() => {
+  return [
+    // use a root key identifying the theme object (a restructureTheme requirement only)
+    restructureTheme({ [rootKey]: { ...dynamicStyles }}),
+    omitKeys(dynamicStyles, Object.keys(PLATFORM)),
+    rootKey
+  ]
+}, [ dynamicStyles ])
+
+const useSizedStyles = (structuredStyles, activeSizeKey) => useMemo(() => {
+  const [ keys, unused ] = getMergeSizes(activeSizeKey) || noPropArr
+  const allKeys = [ ...keys, ...unused ]
+  return [
+    pickKeys(structuredStyles, allKeys),
+    omitKeys(structuredStyles, allKeys)?.component,
+    keys
+  ]
+}, [ structuredStyles, activeSizeKey ])
+
+const useCurrentSize = () => {
+  const { width } = useDimensions()
+  const [ activeSizeKey ] = useMemo(() => getSize(width), [ width ])
+  return activeSizeKey
+}
+
+/**
+ * Takes in dynamic styles and outputs the compiled styles. Used by `reStyle`
+ * @param {Object} dynamicStyles - styles object that can contains size and platform keys, 
+ *  in addition to style rule shortcuts
+ * @returns {Object} the compiled styles object to be passed to a react or DOM element 
+ */
+ export const useCompiledStyles = dynamicStyles => {
+  // restructure the theme by size keys and platform, 
+  const [ structuredStyles, platformlessStyles ] = useStructuredStyles(dynamicStyles)
+
+  // get the size key for the current screen width
+  const activeSizeKey = useCurrentSize()
+
+  // get the size keys for the current screen width (e.g. '480px' => [ '$small', '$medium', '$large' ])
+  const [ sizedStyles, staticStyles, keys ] = useSizedStyles(structuredStyles, activeSizeKey)
+
+  // compile the final styles
+  const compiled = useMemo(
+    () => keys?.reduce(
+      (acc, key) => sizedStyles[key]
+        ? Object.assign(acc, sizedStyles[key])
+        : acc,
+      {}
+    ),
+    [ sizedStyles, keys ]
+  )
+
+  console.log({ dynamicStyles, structuredStyles, staticStyles, sizedStyles, compiled })
+
+  // merge compiled styles with unsized and platformless styles
+  return useMemo(() => ({
+    ...compiled?.component,
+    ...staticStyles,
+    ...platformlessStyles
+  }), [ compiled, staticStyles, platformlessStyles ])
+}
 
 /**
  * Helper to get the name of a component, or an ID for reference

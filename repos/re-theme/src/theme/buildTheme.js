@@ -29,7 +29,7 @@ let themeSizeCache = {}
  * @returns {Object} - Merged theme
  */
 const joinThemeSizes = (theme, sizeKey, extraTheme = {}) => {
-  const sizesToMerge = getMergeSizes(sizeKey)
+  const [ sizesToMerge ] = getMergeSizes(sizeKey)
   return deepMerge(
     // Add the extra theme first, so it has lowest priority
     extraTheme,

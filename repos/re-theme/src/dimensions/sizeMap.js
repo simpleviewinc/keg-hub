@@ -112,7 +112,7 @@ export const setSizes = dims => {
  * @function
  * @param {string|number} width - number to find the size from
  *
- * @returns
+ * @returns {Array} [ currentSizeKey, hashForKey ]
  */
 export const getSize = width => {
   // Ensure width is a number that can be compared
@@ -141,13 +141,38 @@ export const getSize = width => {
  * @function
  * @param {string} key - Name of the size
  *
- * @returns {Array} - Array of size key names
+ * @returns {Array} - [
+ *   Array of size key names,
+ *   Array of unused size key names
+ * ]
+ * 
+ * @example
+ * const [ keys, unused ] = getMergeSizes('$small')
+ * console.log(keys) -> [ '$small', '$medium', '$large' ]
+ * console.log(unused) -> [ '$xsmall' ]
  */
 export const getMergeSizes = key => {
   // Add 1 because slice does not include the last item of the range
-  return sizeMap.entries
-    .slice(0, sizeMap.indexes[key] + 1)
-    .map(([ name, size ]) => name)
+  // const sizes = sizeMap.entries
+  //   .slice(0, sizeMap.indexes[key] + 1)
+  //   .map(([ name, size ]) => name)
+
+  const result = sizeMap.entries.reduce(
+    (data, [ name ]) => {
+      if (name === key) (data.found = true)
+      if (data.found) data.matching.push(name)
+      else (data.omitted.push(name))
+
+      return data
+    }, 
+    {
+      matching: [],
+      omitted: [],
+      found: false
+    }
+  )
+
+  return [ result.matching, result.omitted ]
 }
 
 // Build the default sizeMap parts

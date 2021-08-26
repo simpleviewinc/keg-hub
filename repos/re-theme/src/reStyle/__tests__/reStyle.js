@@ -77,34 +77,65 @@ describe('reStyle', () => {
     expect(TestComp.props.style.margin).toBe(12)
   })
 
-  it('should handle size keys and platforms', () => {
+  it('should compile size keys', () => {
     const style = {
-      test: {
-        $web: { 
-          $xsmall: {
-            p: 20 
-          },
-          $small: {
-            p: 15
-          },
-          $large: {
-            p: 10
-          }
+      $xsmall: {
+        padding: 20, 
+      },
+      $small: {
+        padding: 15
+      },
+      $large: {
+        padding: 10
+      },
+    }
+
+    const propsStyle = { margin: 12 }
+    const TestComp = reStyle(Component)(style).render({ style: propsStyle })
+    expect(TestComp.props.style).toEqual(expect.objectContaining({
+      padding: style['$large'].padding,
+      ...propsStyle
+    }))
+  })
+
+  it('should compile platform keys', () => {
+    const style = {
+      $web: {
+        $xsmall: {
+          padding: 20, 
         },
-        $native: {
-          $xsmall: {
-            p: 0
-          }
+        $small: {
+          padding: 15
+        },
+        $large: {
+          padding: 10
+        },
+      },
+      $native: {
+        $large: {
+          padding: 0
         }
       }
     }
     const propsStyle = { margin: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
     expect(TestComp.props.style).toEqual(expect.objectContaining({
-      test: {
-        padding: style.test['$web']['$large'].p
-      },
+      padding: style['$web']['$large'].padding,
       ...propsStyle
+    }))
+  })
+
+  it('should compile shortcuts', () => {
+    const style = {
+      p: 20,
+      mT: 10,
+    }
+    const propsStyle = { mB: 12 }
+    const TestComp = reStyle(Component)(style).render({ style: propsStyle })
+    expect(TestComp.props.style).toEqual(expect.objectContaining({
+      padding: style.p,
+      marginTop: style.mT,
+      marginBottom: propsStyle.mB
     }))
   })
 })
