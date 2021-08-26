@@ -147,9 +147,9 @@ export const getSize = width => {
  * ]
  * 
  * @example
- * const [ keys, unused ] = getMergeSizes('$small')
- * console.log(keys) -> [ '$small', '$medium', '$large' ]
- * console.log(unused) -> [ '$xsmall' ]
+ * const [ keys, unused ] = getMergeSizes('$medium')
+ * console.log(keys) -> [ '$medium', '$small', '$xsmall' ]
+ * console.log(unused) -> [ '$large' ]
  */
 export const getMergeSizes = key => {
   const keys = sizeMap.entries.map(([ name ]) => name)

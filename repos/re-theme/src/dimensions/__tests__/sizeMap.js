@@ -167,7 +167,6 @@ describe('sizeMap', () => {
   describe('getMergeSizes', () => {
     it('should return an array with the passed in size and all sizes below it', () => {
       const [ xsmallDown, others ] = sizeMap.getMergeSizes('$xsmall')
-      console.log({ xsmallDown, others })
       expect(xsmallDown.length).toBe(1)
       expect(xsmallDown[0]).toBe('$xsmall')
 
