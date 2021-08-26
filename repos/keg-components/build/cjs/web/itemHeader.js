@@ -107,7 +107,7 @@ var Center = function Center(props) {
   return React__default['default'].createElement(view.View, {
     className: "keg-header-center",
     style: styles.main
-  }, children && renderFromType.renderFromType(children, {}, null) || React__default['default'].createElement(h5.H5, {
+  }, children && renderFromType.renderFromType(children, {}, null) || title && React__default['default'].createElement(h5.H5, {
     className: "keg-header-center-title",
     ellipsis: ellipsis,
     style: styles.content.title
