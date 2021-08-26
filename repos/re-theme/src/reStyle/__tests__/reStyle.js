@@ -76,4 +76,35 @@ describe('reStyle', () => {
     expect(TestComp.props.style.padding).toBe(20)
     expect(TestComp.props.style.margin).toBe(12)
   })
+
+  it('should handle size keys and platforms', () => {
+    const style = {
+      test: {
+        $web: { 
+          $xsmall: {
+            p: 20 
+          },
+          $small: {
+            p: 15
+          },
+          $large: {
+            p: 10
+          }
+        },
+        $native: {
+          $xsmall: {
+            p: 0
+          }
+        }
+      }
+    }
+    const propsStyle = { margin: 12 }
+    const TestComp = reStyle(Component)(style).render({ style: propsStyle })
+    expect(TestComp.props.style).toEqual(expect.objectContaining({
+      test: {
+        padding: style.test['$web']['$large'].p
+      },
+      ...propsStyle
+    }))
+  })
 })

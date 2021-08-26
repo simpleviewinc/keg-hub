@@ -1,6 +1,25 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { exists } from '@keg-hub/jsutils'
 import { StyleInjector } from 'StyleInjector'
+import { restructureTheme } from '../theme/restructureTheme'
+import { useDimensions, getMergeSizes, getSize } from '../dimensions'
+
+const useCompiledStyles = dynamicStyles => {
+  const { width } = useDimensions()
+  const structuredStyles = useMemo(() => restructureTheme({...dynamicStyles}), [ dynamicStyles ])
+  const [ activeSizeKey ] = useMemo(() => getSize(width), [ width ])
+  const keys = getMergeSizes(activeSizeKey) || []
+  return useMemo(
+    () => keys.reduce(
+      (acc, key) => structuredStyles[key]
+        ? Object.assign(acc, structuredStyles[key])
+        : acc,
+      {}
+    ),
+    [ structuredStyles, keys ]
+  )
+}
+
 import {
   getComponentName,
   useShallowMemoMerge,
@@ -26,10 +45,11 @@ export const reStyle = (Component, styleProp = 'style') => {
   return styleData => {
     const StyledFun = React.forwardRef((props, ref) => {
       const reStyles = useReStyles(styleData, props)
+      const compiledStyles = useCompiledStyles(reStyles)
       const classArr = usePropClassName(props.className, compName)
       const styleFromProps = exists(props[styleProp]) ? props[styleProp] : null
 
-      const styles = useShallowMemoMerge(reStyles, styleFromProps)
+      const styles = useShallowMemoMerge(compiledStyles, styleFromProps)
 
       return (
         <InjectedComp
