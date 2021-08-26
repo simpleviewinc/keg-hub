@@ -51,8 +51,10 @@ const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() =
  * ]
  */
 const useSizedStyles = (structuredStyles, activeSizeKey) => useMemo(() => {
+  // get the size keys for the current screen width (e.g. '480px' => [ '$small', '$medium', '$large' ])
   const [ keys, unused ] = getMergeSizes(activeSizeKey) || noPropArr
   const allKeys = [ ...keys, ...unused ]
+
   return [
     pickKeys(structuredStyles, allKeys),
     omitKeys(structuredStyles, allKeys)?.component,
@@ -84,7 +86,7 @@ const useCurrentSize = () => {
   // get the size key for the current screen width
   const activeSizeKey = useCurrentSize()
 
-  // get the size keys for the current screen width (e.g. '480px' => [ '$small', '$medium', '$large' ])
+  // get the sized and unsized styles
   const [ sizedStyles, unsizedStyles, keys ] = useSizedStyles(structuredStyles, activeSizeKey)
 
   // compile the sized styles
