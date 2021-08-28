@@ -26,6 +26,18 @@ jest.setMock('../../styleInjector/styleInjector', {
 
 const { reStyle } = require('../reStyle')
 
+const assertNoDynamicKeys = styles => {
+  const styleKeys = Object.keys(styles)
+  expect(styleKeys).not.toContain('$xsmall')
+  expect(styleKeys).not.toContain('$small')
+  expect(styleKeys).not.toContain('$medium')
+  expect(styleKeys).not.toContain('$large')
+  expect(styleKeys).not.toContain('$web')
+  expect(styleKeys).not.toContain('$native')
+  expect(styleKeys).not.toContain('$ios')
+  expect(styleKeys).not.toContain('$android')
+}
+
 describe('reStyle', () => {
   afterEach(() => {
     clearMockedHooks(mockedHooks)
@@ -92,10 +104,12 @@ describe('reStyle', () => {
 
     const propsStyle = { margin: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
-    expect(TestComp.props.style).toEqual(expect.objectContaining({
+    const compiledStyles = TestComp.props.style 
+    expect(compiledStyles).toEqual(expect.objectContaining({
       padding: style['$large'].padding,
       ...propsStyle
     }))
+    assertNoDynamicKeys(compiledStyles)
   })
 
   it('should compile platform keys', () => {
@@ -119,10 +133,12 @@ describe('reStyle', () => {
     }
     const propsStyle = { margin: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
-    expect(TestComp.props.style).toEqual(expect.objectContaining({
+    const compiledStyles = TestComp.props.style
+    expect(compiledStyles).toEqual(expect.objectContaining({
       padding: style['$web']['$large'].padding,
       ...propsStyle
     }))
+    assertNoDynamicKeys(compiledStyles)
   })
 
   it('should compile shortcuts', () => {
@@ -132,10 +148,12 @@ describe('reStyle', () => {
     }
     const propsStyle = { mB: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
-    expect(TestComp.props.style).toEqual(expect.objectContaining({
+    const compiledStyles = TestComp.props.style
+    expect(compiledStyles).toEqual(expect.objectContaining({
       padding: style.p,
       marginTop: style.mT,
       marginBottom: propsStyle.mB
     }))
+    assertNoDynamicKeys(compiledStyles)
   })
 })

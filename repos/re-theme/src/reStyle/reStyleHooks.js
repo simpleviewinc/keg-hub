@@ -13,7 +13,7 @@ import {
   noPropArr
 } from '@keg-hub/jsutils'
 import { restructureTheme } from '../theme/restructureTheme'
-import { useDimensions, getMergeSizes, getSize } from '../dimensions'
+import { useDimensions, getMergeSizes, getSize, getSizeMap } from '../dimensions'
 import { Constants } from '../constants'
 
 const { PLATFORM } = Constants
@@ -30,10 +30,11 @@ const { PLATFORM } = Constants
  * ]
  */
 const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() => {
+  const sizeKeys = Object.keys(getSizeMap().hash)
   return [
     // use a root key identifying the theme object (a restructureTheme requirement only)
     restructureTheme({ [rootKey]: { ...dynamicStyles }}),
-    omitKeys(dynamicStyles, Object.keys(PLATFORM)),
+    omitKeys(dynamicStyles, [ ...Object.values(PLATFORM), ...sizeKeys ]),
     rootKey
   ]
 }, [ dynamicStyles ])
@@ -53,11 +54,10 @@ const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() =
 const useSizedStyles = (structuredStyles, activeSizeKey) => useMemo(() => {
   // get the size keys for the current screen width (e.g. '480px' => [ '$small', '$medium', '$large' ])
   const [ keys, unused ] = getMergeSizes(activeSizeKey) || noPropArr
-  const allKeys = [ ...keys, ...unused ]
 
   return [
-    pickKeys(structuredStyles, allKeys),
-    omitKeys(structuredStyles, allKeys)?.component,
+    pickKeys(structuredStyles, keys),
+    omitKeys(structuredStyles, unused)?.component,
     keys,
     unused
   ]
@@ -100,11 +100,13 @@ const useCurrentSize = () => {
     [ sizedStyles, keys ]
   )
 
+  // console.log({ compiled, sizedStyles, unsizedStyles, platformlessStyles })
+
   // merge compiled styles with unsized and platformless styles
   return useMemo(() => ({
     ...compiled?.component,
     ...unsizedStyles,
-    ...platformlessStyles
+    ...platformlessStyles,
   }), [ compiled, unsizedStyles, platformlessStyles ])
 }
 
