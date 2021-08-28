@@ -95,7 +95,7 @@ const compileStyles = (styles, platforms, sizes, omit) => {
     {}
   )
 
-  const foldUp = (obj, key) => {
+  const extract = (obj, key) => {
     obj[key] && Object.assign(obj, obj[key])
     delete obj[key]
     return obj
@@ -105,8 +105,8 @@ const compileStyles = (styles, platforms, sizes, omit) => {
   // the order of keys in `platforms` and `sizes` (from least-specific to most). 
   // So remove the dynamic keys, in precedence order, and merge their values
   // with the final styles object in that order
-  const fromPlatforms = platforms.reduce(foldUp, structured)
-  return sizes.reduce(foldUp, fromPlatforms)
+  const fromPlatforms = platforms.reduce(extract, structured)
+  return sizes.reduce(extract, fromPlatforms)
 }
 
 /**
