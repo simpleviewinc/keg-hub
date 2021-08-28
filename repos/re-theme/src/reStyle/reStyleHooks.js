@@ -12,56 +12,15 @@ import {
   shallowEqual,
   noPropArr
 } from '@keg-hub/jsutils'
-import { restructureTheme } from '../theme/restructureTheme'
-import { useDimensions, getMergeSizes, getSize, getSizeMap } from '../dimensions'
-import { Constants } from '../constants'
+import { getDefaultPlatforms } from '../theme/restructureTheme'
+import { Constants, ruleHelpers } from '../constants'
+import { 
+  useDimensions, 
+  getMergeSizes, 
+  getSize 
+} from '../dimensions'
 
-const { PLATFORM } = Constants
-
-/**
- * *(useCompiledStyles helper)*
- * Builds a tuple containing the structured styles (styles w/ platforms and size keys), and the unstructured
- * styles (styles defined at the root of dynamicStyles with no platforms or size keys)
- * @param {Object} dynamicStyles 
- * @param {String?} rootKey 
- * @returns {Array} [
- *   structuredStyles,
- *   unstructuredStyles
- * ]
- */
-const useStructuredStyles = (dynamicStyles, rootKey='component') => useMemo(() => {
-  const sizeKeys = Object.keys(getSizeMap().hash)
-  return [
-    // use a root key identifying the theme object (a restructureTheme requirement only)
-    restructureTheme({ [rootKey]: { ...dynamicStyles }}),
-    omitKeys(dynamicStyles, [ ...Object.values(PLATFORM), ...sizeKeys ]),
-    rootKey
-  ]
-}, [ dynamicStyles ])
-
-/**
- * *(useCompiledStyles helper)*
- * Builds a tuple containing the sized styles (styles w/ size keys), and the unsized
- * styles (styles defined at the root of dynamicStyles with no platforms or size keys) 
- * @param {Object} structuredStyles - styles processed by restructureTheme
- * @returns {Array} [
- *   sizedStyles,
- *   unsizedStyles,
- *   keys, - sizedStyles keys
- *   unused - size keys that were unused
- * ]
- */
-const useSizedStyles = (structuredStyles, activeSizeKey) => useMemo(() => {
-  // get the size keys for the current screen width (e.g. '480px' => [ '$small', '$medium', '$large' ])
-  const [ keys, unused ] = getMergeSizes(activeSizeKey) || noPropArr
-
-  return [
-    pickKeys(structuredStyles, keys),
-    omitKeys(structuredStyles, unused)?.component,
-    keys,
-    unused
-  ]
-}, [ structuredStyles, activeSizeKey ])
+const PLATFORM = Constants.PLATFORM
 
 /**
  * *(useCompiledStyles helper)*
@@ -73,6 +32,18 @@ const useCurrentSize = () => {
   return activeSizeKey
 }
 
+const usePlatforms = () => {
+ return useMemo(() => {
+    const active = getDefaultPlatforms()
+    return [ 
+      active, 
+      Object
+        .values(PLATFORM)
+        .filter(key => !active.includes(key))
+    ]
+  }, [])
+}
+
 /**
  * Takes in dynamic styles and outputs the compiled styles. Used by `reStyle`
  * @param {Object} dynamicStyles - styles object that can contains size and platform keys, 
@@ -80,34 +51,62 @@ const useCurrentSize = () => {
  * @returns {Object} the compiled styles object to be passed to a react or DOM element 
  */
  export const useCompiledStyles = dynamicStyles => {
-  // restructure the theme by size keys and platform
-  const [ structuredStyles, platformlessStyles ] = useStructuredStyles(dynamicStyles)
+  const [ platforms, unusedPlatforms ] = usePlatforms()
 
-  // get the size key for the current screen width
   const activeSizeKey = useCurrentSize()
-
-  // get the sized and unsized styles
-  const [ sizedStyles, unsizedStyles, keys ] = useSizedStyles(structuredStyles, activeSizeKey)
-
-  // compile the sized styles
-  const compiled = useMemo(
-    () => keys?.reduce(
-      (acc, key) => sizedStyles[key]
-        ? Object.assign(acc, sizedStyles[key])
-        : acc,
-      {}
-    ),
-    [ sizedStyles, keys ]
+  const [ activeSizes, inactiveSizes ] = useMemo(
+    () => getMergeSizes(activeSizeKey) || noPropArr,
+    [ activeSizeKey ]
   )
 
-  // console.log({ compiled, sizedStyles, unsizedStyles, platformlessStyles })
+  const invalidKeys = useMemo(
+    () => unusedPlatforms.concat(inactiveSizes),
+    [ unusedPlatforms, inactiveSizes ]
+  )
 
-  // merge compiled styles with unsized and platformless styles
-  return useMemo(() => ({
-    ...compiled?.component,
-    ...unsizedStyles,
-    ...platformlessStyles,
-  }), [ compiled, unsizedStyles, platformlessStyles ])
+  return useMemo(
+    () => compileStyles(dynamicStyles, platforms, activeSizes, invalidKeys),
+    [ dynamicStyles, platforms, activeSizeKey, invalidKeys ]
+  )
+}
+
+const compileStyles = (styles, platforms, sizes, omit) => {
+  if (!isObj(styles)) return styles
+
+  const structured = Object.entries(styles).reduce(
+    (acc, [ key, value ]) => {
+      if (platforms.includes(key) || sizes.includes(key)) {
+        // compile the styles defined by `key`, then merge them with
+        // all previous compiled styles identified by the same key
+        acc[key] = {
+          ...acc[key],
+          ...compileStyles(value, platforms, sizes, omit)
+        }
+      }
+      else if (!omit.includes(key)) {
+        // convert shortcut keys, if used (e.g. m => margin)
+        // then add the entry to the compiled styles object
+        const trueKey = ruleHelpers[key] || key
+        acc[trueKey] = value
+      }
+
+      return acc
+    },
+    {}
+  )
+
+  const foldUp = (obj, key) => {
+    obj[key] && Object.assign(obj, obj[key])
+    delete obj[key]
+    return obj
+  }
+
+  // sizes and platforms have an order of precedence, indicated by
+  // the order of keys in `platforms` and `sizes` (from least-specific to most). 
+  // So remove the dynamic keys, in precedence order, and merge their values
+  // with the final styles object in that order
+  const fromPlatforms = platforms.reduce(foldUp, structured)
+  return sizes.reduce(foldUp, fromPlatforms)
 }
 
 /**

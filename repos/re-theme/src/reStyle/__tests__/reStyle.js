@@ -94,11 +94,11 @@ describe('reStyle', () => {
       $xsmall: {
         padding: 20, 
       },
-      $small: {
-        padding: 15
-      },
       $large: {
         padding: 10
+      },
+      $small: {
+        padding: 15
       },
     }
 
@@ -110,39 +110,47 @@ describe('reStyle', () => {
       ...propsStyle
     }))
     assertNoDynamicKeys(compiledStyles)
-    expect(Object.keys(compiledStyles)).not.toContain('margin')
-    expect(Object.keys(compiledStyles)).not.toContain('padding')
   })
 
   it('should compile platform keys', () => {
     const style = {
+      $all: {
+        $large: {
+          borderTop: 10,
+          c: 'red',
+        },
+        $small: {
+          padding: 10
+        }
+      },
       $web: {
         $xsmall: {
           padding: 20, 
         },
+        $large: {
+          padding: 10,
+          c: 'blue'
+        },
         $small: {
           padding: 15
-        },
-        $large: {
-          padding: 10
         },
       },
       $native: {
         $large: {
           padding: 0
         }
-      }
+      },
     }
     const propsStyle = { margin: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
     const compiledStyles = TestComp.props.style
     expect(compiledStyles).toEqual(expect.objectContaining({
-      padding: style['$web']['$large'].padding,
+      padding: style.$web.$large.padding,
+      color: style.$web.$large.c,
+      borderTop: style.$all.$large.borderTop,
       ...propsStyle
     }))
     assertNoDynamicKeys(compiledStyles)
-    expect(Object.keys(compiledStyles)).not.toContain('margin')
-    expect(Object.keys(compiledStyles)).not.toContain('padding')
   })
 
   it('should compile shortcuts', () => {
@@ -159,8 +167,8 @@ describe('reStyle', () => {
       marginBottom: propsStyle.mB
     }))
     assertNoDynamicKeys(compiledStyles)
-    expect(Object.keys(compiledStyles)).not.toContain('marginTop')
-    expect(Object.keys(compiledStyles)).not.toContain('marginBottom')
-    expect(Object.keys(compiledStyles)).not.toContain('padding')
+    expect(Object.keys(compiledStyles)).not.toContain('mT')
+    expect(Object.keys(compiledStyles)).not.toContain('mB')
+    expect(Object.keys(compiledStyles)).not.toContain('p')
   })
 })

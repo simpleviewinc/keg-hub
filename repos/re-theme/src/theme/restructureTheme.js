@@ -16,16 +16,19 @@ import {
 
 // Default platforms to use when restructuring the theme
 // Use array, so we don't lose the order
-const getDefaultPlatforms = () => {
+export const getDefaultPlatforms = () => {
   const Platform = getRNPlatform()
   // Rules for the OS platform ( web || ios || android )
-  const stylePlatforms = ['$' + get(Platform, 'OS')]
+  const stylePlatforms = []
 
   // If it's not a web platform, then add the $native platform
   if (get(Platform, 'OS') !== 'web') stylePlatforms.push('$native')
 
+  // push current platform
+  stylePlatforms.push('$' + get(Platform, 'OS'))
+
   // Rules for all platforms and os's
-  return stylePlatforms.concat([Constants.PLATFORM.ALL])
+  return [Constants.PLATFORM.ALL].concat(stylePlatforms)
 }
 
 /**
