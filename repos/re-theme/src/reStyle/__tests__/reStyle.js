@@ -110,6 +110,8 @@ describe('reStyle', () => {
       ...propsStyle
     }))
     assertNoDynamicKeys(compiledStyles)
+    expect(Object.keys(compiledStyles)).not.toContain('margin')
+    expect(Object.keys(compiledStyles)).not.toContain('padding')
   })
 
   it('should compile platform keys', () => {
@@ -139,6 +141,8 @@ describe('reStyle', () => {
       ...propsStyle
     }))
     assertNoDynamicKeys(compiledStyles)
+    expect(Object.keys(compiledStyles)).not.toContain('margin')
+    expect(Object.keys(compiledStyles)).not.toContain('padding')
   })
 
   it('should compile shortcuts', () => {
@@ -155,5 +159,8 @@ describe('reStyle', () => {
       marginBottom: propsStyle.mB
     }))
     assertNoDynamicKeys(compiledStyles)
+    expect(Object.keys(compiledStyles)).not.toContain('marginTop')
+    expect(Object.keys(compiledStyles)).not.toContain('marginBottom')
+    expect(Object.keys(compiledStyles)).not.toContain('padding')
   })
 })
