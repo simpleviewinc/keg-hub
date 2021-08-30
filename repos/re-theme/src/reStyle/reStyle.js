@@ -4,11 +4,12 @@ import { StyleInjector } from 'StyleInjector'
 
 import {
   getComponentName,
-  useCompiledStyles,
   useShallowMemoMerge,
   usePropClassName,
   useReStyles,
 } from './reStyleHooks'
+
+import { useCompiledStyles } from '../hooks'
 
 /**
  * Builds a HOC, with custom styles injected into it

@@ -2,112 +2,13 @@ import { useTheme } from '../hooks/useTheme'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import {
   ensureArr,
-  pickKeys,
-  omitKeys,
   uuid,
   isObj,
   deepMerge,
   noOpObj,
   isFunc,
   shallowEqual,
-  noPropArr
 } from '@keg-hub/jsutils'
-import { getDefaultPlatforms } from '../theme/restructureTheme'
-import { Constants, ruleHelpers } from '../constants'
-import { 
-  useDimensions, 
-  getMergeSizes, 
-  getSize 
-} from '../dimensions'
-
-const PLATFORM = Constants.PLATFORM
-
-/**
- * *(useCompiledStyles helper)*
- * @returns {string} size key for current screen width
- */
-const useCurrentSize = () => {
-  const { width } = useDimensions()
-  const [ activeSizeKey ] = useMemo(() => getSize(width), [ width ])
-  return activeSizeKey
-}
-
-const usePlatforms = () => {
- return useMemo(() => {
-    const active = getDefaultPlatforms()
-    return [ 
-      active, 
-      Object
-        .values(PLATFORM)
-        .filter(key => !active.includes(key))
-    ]
-  }, [])
-}
-
-/**
- * Takes in dynamic styles and outputs the compiled styles. Used by `reStyle`
- * @param {Object} dynamicStyles - styles object that can contains size and platform keys, 
- *  in addition to style rule shortcuts
- * @returns {Object} the compiled styles object to be passed to a react or DOM element 
- */
- export const useCompiledStyles = dynamicStyles => {
-  const [ platforms, unusedPlatforms ] = usePlatforms()
-
-  const activeSizeKey = useCurrentSize()
-  const [ activeSizes, inactiveSizes ] = useMemo(
-    () => getMergeSizes(activeSizeKey) || noPropArr,
-    [ activeSizeKey ]
-  )
-
-  const invalidKeys = useMemo(
-    () => unusedPlatforms.concat(inactiveSizes),
-    [ unusedPlatforms, inactiveSizes ]
-  )
-
-  return useMemo(
-    () => compileStyles(dynamicStyles, platforms, activeSizes, invalidKeys),
-    [ dynamicStyles, platforms, activeSizeKey, invalidKeys ]
-  )
-}
-
-const compileStyles = (styles, platforms, sizes, omit) => {
-  if (!isObj(styles)) return styles
-
-  const structured = Object.entries(styles).reduce(
-    (acc, [ key, value ]) => {
-      if (platforms.includes(key) || sizes.includes(key)) {
-        // compile the styles defined by `key`, then merge them with
-        // all previous compiled styles identified by the same key
-        acc[key] = {
-          ...acc[key],
-          ...compileStyles(value, platforms, sizes, omit)
-        }
-      }
-      else if (!omit.includes(key)) {
-        // convert shortcut keys, if used (e.g. m => margin)
-        // then add the entry to the compiled styles object
-        const trueKey = ruleHelpers[key] || key
-        acc[trueKey] = value
-      }
-
-      return acc
-    },
-    {}
-  )
-
-  const extract = (obj, key) => {
-    obj[key] && Object.assign(obj, obj[key])
-    delete obj[key]
-    return obj
-  }
-
-  // sizes and platforms have an order of precedence, indicated by
-  // the order of keys in `platforms` and `sizes` (from least-specific to most). 
-  // So remove the dynamic keys, in precedence order, and merge their values
-  // with the final styles object in that order
-  const fromPlatforms = platforms.reduce(extract, structured)
-  return sizes.reduce(extract, fromPlatforms)
-}
 
 /**
  * Helper to get the name of a component, or an ID for reference

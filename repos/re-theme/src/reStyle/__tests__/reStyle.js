@@ -26,6 +26,7 @@ jest.setMock('../../styleInjector/styleInjector', {
 
 const { reStyle } = require('../reStyle')
 
+// tests helper that verifies dynamic keys aren't present in final styles object
 const assertNoDynamicKeys = styles => {
   const styleKeys = Object.keys(styles)
   expect(styleKeys).not.toContain('$xsmall')
@@ -170,5 +171,24 @@ describe('reStyle', () => {
     expect(Object.keys(compiledStyles)).not.toContain('mT')
     expect(Object.keys(compiledStyles)).not.toContain('mB')
     expect(Object.keys(compiledStyles)).not.toContain('p')
+  })
+
+  it('should maintain object structure', () => {
+    const style = {
+      component: {
+        p: 20,
+        mT: 10,
+      }
+    }
+    const propsStyle = { mB: 12 }
+    const TestComp = reStyle(Component)(style).render({ style: propsStyle })
+    const compiledStyles = TestComp.props.style
+    expect(compiledStyles).toEqual(expect.objectContaining({
+      component: {
+        padding: style.component.p,
+        marginTop: style.component.mT,
+      },
+      marginBottom: propsStyle.mB
+    }))
   })
 })
