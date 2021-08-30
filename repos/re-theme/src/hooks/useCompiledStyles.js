@@ -1,54 +1,42 @@
 import { useMemo } from 'react'
 import { noPropArr } from '@keg-hub/jsutils'
-import { getDefaultPlatforms } from '../theme/restructureTheme'
-import { Constants } from '../constants'
-import { 
-  useDimensions, 
-  getMergeSizes, 
-  getSize 
-} from '../dimensions'
+import { useDimensions, getMergeSizes, getSize } from '../dimensions'
 import { compileStyles } from '../helpers/compileStyles'
-
-const PLATFORM = Constants.PLATFORM
+import { getTheme } from '../helpers/getTheme'
+import { getPlatforms } from '../helpers/getPlatforms'
 
 /**
  * *(useCompiledStyles helper)*
  * @returns {string} size key for current screen width
  */
 const useCurrentSize = () => {
-  const { width } = useDimensions()
-  const [ activeSizeKey ] = useMemo(() => getSize(width), [ width ])
-  return activeSizeKey
+  const dimensions = useDimensions()
+  const [ activeSizeKey, widthForSize ] = useMemo(
+    () => getSize(dimensions.width),
+    [dimensions.width]
+  )
+  return [ activeSizeKey, widthForSize, dimensions ]
 }
 
 /**
  * Returns arrays of the active and inactive platforms
  * @returns {Array} [ activePlatforms, inactivePlatforms ]
  */
-const usePlatforms = () => {
- return useMemo(() => {
-    const active = getDefaultPlatforms()
-    const inactive = Object
-      .values(PLATFORM)
-      .filter(key => !active.includes(key))
-
-    return [ active, inactive ]
-  }, [])
-}
+const usePlatforms = () => useMemo(() => getPlatforms(), [])
 
 /**
  * Takes in dynamic styles and outputs the compiled styles. Used by `reStyle`
- * @param {Object} dynamicStyles - styles object that can contains size and platform keys, 
+ * @param {Object} dynamicStyles - styles object that can contains size and platform keys,
  *  in addition to style rule shortcuts
- * @returns {Object} the compiled styles object to be passed to a react or DOM element 
+ * @returns {Object} the compiled styles object to be passed to a react or DOM element
  */
- export const useCompiledStyles = dynamicStyles => {
+export const useCompiledStyles = dynamicStyles => {
   const [ platforms, unusedPlatforms ] = usePlatforms()
 
-  const activeSizeKey = useCurrentSize()
+  const [ activeSizeKey, keyWidth, { width, height }] = useCurrentSize()
   const [ activeSizes, inactiveSizes ] = useMemo(
     () => getMergeSizes(activeSizeKey) || noPropArr,
-    [ activeSizeKey ]
+    [activeSizeKey]
   )
 
   const keysToIgnore = useMemo(
@@ -56,13 +44,27 @@ const usePlatforms = () => {
     [ unusedPlatforms, inactiveSizes ]
   )
 
-  return useMemo(
-    () => compileStyles(dynamicStyles, { 
-      platforms, 
-      sizes: activeSizes, 
-      omit: keysToIgnore
+  const RTMeta = useMemo(
+    () => ({
+      key: activeSizeKey,
+      size: keyWidth,
+      width,
+      height,
     }),
-    [ dynamicStyles, platforms, activeSizeKey, keysToIgnore ]
+    [ activeSizeKey, keyWidth, width, height ]
   )
-}
 
+  const compiled = useMemo(
+    () =>
+      compileStyles(dynamicStyles, {
+        platforms,
+        sizes: activeSizes,
+        omit: keysToIgnore,
+      }),
+    [ dynamicStyles, platforms, activeSizeKey ]
+  )
+
+  compiled.get = getTheme
+  compiled.RTMeta = RTMeta
+  return compiled
+}

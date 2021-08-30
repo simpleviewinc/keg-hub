@@ -145,19 +145,16 @@ export const getSize = width => {
  *   Array of size key names,
  *   Array of unused size key names
  * ]
- * 
+ *
  * @example
  * const [ keys, unused ] = getMergeSizes('$medium')
  * console.log(keys) -> [ '$medium', '$small', '$xsmall' ]
  * console.log(unused) -> [ '$large' ]
  */
 export const getMergeSizes = key => {
-  const keys = sizeMap.entries.map(([ name ]) => name)
+  const keys = sizeMap.entries.map(([name]) => name)
   const keyIndex = keys.indexOf(key)
-  return [
-    keys.slice(0, keyIndex + 1),
-    keys.slice(keyIndex + 1),
-  ]
+  return [ keys.slice(0, keyIndex + 1), keys.slice(keyIndex + 1) ]
 }
 
 // Build the default sizeMap parts

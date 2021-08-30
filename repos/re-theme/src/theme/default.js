@@ -2,8 +2,7 @@
 'use strict'
 
 import { deepMerge, isObj } from '@keg-hub/jsutils'
-import { Dimensions } from 'ReDimensions'
-import { buildTheme } from './buildTheme'
+import { compileStylesForViewport } from '../helpers/compileStyles'
 
 /**
  * Holds the default theme which can be set with the setDefaultTheme helper
@@ -30,12 +29,10 @@ export const setDefaultTheme = (theme, merge = false) => {
   // Check if the default theme should be merged, or overwritten
   defaultTheme = merge ? deepMerge(defaultTheme, theme) : theme
 
-  // Get subset theme that matches current dimensions is useDimensions is true
-  const dims = Dimensions.get('window')
-  const useTheme = buildTheme(defaultTheme, dims.width, dims.height)
-
+  // Get subset theme that matches current dimensions and platform(s)
   // Return the newly set default theme
-  return useTheme
+  // TODO: is it necessary to build the theme and return it here?
+  return compileStylesForViewport(defaultTheme)
 }
 
 /**

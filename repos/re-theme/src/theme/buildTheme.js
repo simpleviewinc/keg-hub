@@ -29,7 +29,7 @@ let themeSizeCache = {}
  * @returns {Object} - Merged theme
  */
 const joinThemeSizes = (theme, sizeKey, extraTheme = {}) => {
-  const [ sizesToMerge ] = getMergeSizes(sizeKey)
+  const [sizesToMerge] = getMergeSizes(sizeKey)
   return deepMerge(
     // Add the extra theme first, so it has lowest priority
     extraTheme,
@@ -88,6 +88,7 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
 
   // Check if the theme has changed since the last time it was built
   // If not, then short-circuit, and call useCachedTheme with cache data
+  console.log('shortcircuit?', themeSizeCache && theme === themeSizeCache.theme)
   if (themeSizeCache && theme === themeSizeCache.theme)
     return useCachedTheme(themeSizeCache, RTMeta)
 

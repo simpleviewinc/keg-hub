@@ -1,3 +1,6 @@
+const { ruleHelpers } = require('../src/constants/ruleHelpers')
+const aliasKeys = Object.keys(ruleHelpers)
+
 module.exports = {
   parser: 'babel-eslint',
   root: true,
@@ -46,7 +49,10 @@ module.exports = {
       'error',
       {
         min: 2,
-        exceptions: [ 'y', 'x', 'i', 'e', '_', 'k', 'p', 'P', 'I', 'r', 'g', 'b', 'a' ],
+        exceptions: Array.from(new Set([ 
+          'y', 'x', 'i', 'e', '_', 'k', 'P', 'I', 'r', 'g', 'b', 'a', 
+          ...aliasKeys 
+        ])),
       },
     ],
     'one-var': [ 'error', 'never' ],

@@ -93,23 +93,25 @@ describe('reStyle', () => {
   it('should compile size keys', () => {
     const style = {
       $xsmall: {
-        padding: 20, 
+        padding: 20,
       },
       $large: {
-        padding: 10
+        padding: 10,
       },
       $small: {
-        padding: 15
+        padding: 15,
       },
     }
 
     const propsStyle = { margin: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
-    const compiledStyles = TestComp.props.style 
-    expect(compiledStyles).toEqual(expect.objectContaining({
-      padding: style['$large'].padding,
-      ...propsStyle
-    }))
+    const compiledStyles = TestComp.props.style
+    expect(compiledStyles).toEqual(
+      expect.objectContaining({
+        padding: style['$large'].padding,
+        ...propsStyle,
+      })
+    )
     assertNoDynamicKeys(compiledStyles)
   })
 
@@ -121,36 +123,38 @@ describe('reStyle', () => {
           c: 'red',
         },
         $small: {
-          padding: 10
-        }
+          padding: 10,
+        },
       },
       $web: {
         $xsmall: {
-          padding: 20, 
+          padding: 20,
         },
         $large: {
           padding: 10,
-          c: 'blue'
+          c: 'blue',
         },
         $small: {
-          padding: 15
+          padding: 15,
         },
       },
       $native: {
         $large: {
-          padding: 0
-        }
+          padding: 0,
+        },
       },
     }
     const propsStyle = { margin: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
     const compiledStyles = TestComp.props.style
-    expect(compiledStyles).toEqual(expect.objectContaining({
-      padding: style.$web.$large.padding,
-      color: style.$web.$large.c,
-      borderTop: style.$all.$large.borderTop,
-      ...propsStyle
-    }))
+    expect(compiledStyles).toEqual(
+      expect.objectContaining({
+        padding: style.$web.$large.padding,
+        color: style.$web.$large.c,
+        borderTop: style.$all.$large.borderTop,
+        ...propsStyle,
+      })
+    )
     assertNoDynamicKeys(compiledStyles)
   })
 
@@ -162,33 +166,37 @@ describe('reStyle', () => {
     const propsStyle = { mB: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
     const compiledStyles = TestComp.props.style
-    expect(compiledStyles).toEqual(expect.objectContaining({
-      padding: style.p,
-      marginTop: style.mT,
-      marginBottom: propsStyle.mB
-    }))
+    expect(compiledStyles).toEqual(
+      expect.objectContaining({
+        padding: style.p,
+        marginTop: style.mT,
+        marginBottom: propsStyle.mB,
+      })
+    )
     assertNoDynamicKeys(compiledStyles)
     expect(Object.keys(compiledStyles)).not.toContain('mT')
     expect(Object.keys(compiledStyles)).not.toContain('mB')
     expect(Object.keys(compiledStyles)).not.toContain('p')
   })
 
-  it.only('should maintain object structure', () => {
+  it('should maintain existing object structure', () => {
     const style = {
       component: {
         p: 20,
         mT: 10,
-      }
+      },
     }
     const propsStyle = { mB: 12 }
     const TestComp = reStyle(Component)(style).render({ style: propsStyle })
     const compiledStyles = TestComp.props.style
-    expect(compiledStyles).toEqual(expect.objectContaining({
-      component: {
-        padding: style.component.p,
-        marginTop: style.component.mT,
-      },
-      marginBottom: propsStyle.mB
-    }))
+    expect(compiledStyles).toEqual(
+      expect.objectContaining({
+        component: {
+          padding: style.component.p,
+          marginTop: style.component.mT,
+        },
+        marginBottom: propsStyle.mB,
+      })
+    )
   })
 })
