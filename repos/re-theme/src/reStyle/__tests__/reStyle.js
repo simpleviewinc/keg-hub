@@ -173,7 +173,7 @@ describe('reStyle', () => {
     expect(Object.keys(compiledStyles)).not.toContain('p')
   })
 
-  it('should maintain object structure', () => {
+  it.only('should maintain object structure', () => {
     const style = {
       component: {
         p: 20,

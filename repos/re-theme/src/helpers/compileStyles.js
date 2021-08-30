@@ -46,7 +46,9 @@ export const compileStyles = (styles, options = {}) => {
         // convert shortcut keys, if used (e.g. m => margin)
         // then add the entry to the compiled styles object
         const trueKey = aliases[key] || key
-        acc[trueKey] = value
+        acc[trueKey] = isObj(value)
+          ? compileStyles(value, options)
+          : value
       }
 
       return acc
