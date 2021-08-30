@@ -40,7 +40,7 @@ export const ReThemeProvider = props => {
   const merge = Boolean(doMerge || (!doMerge && doMerge !== false)) || false
 
   const themeToBuild = useDefaultThemeMerge(theme, merge)
-  const builtTheme = useCompiledStyles(themeToBuild)
+  const builtTheme = useCompiledStyles(themeToBuild, true)
 
   updateCurrentTheme(builtTheme)
 

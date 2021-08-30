@@ -28,9 +28,10 @@ const usePlatforms = () => useMemo(() => getPlatforms(), [])
  * Takes in dynamic styles and outputs the compiled styles. Used by `reStyle`
  * @param {Object} dynamicStyles - styles object that can contains size and platform keys,
  *  in addition to style rule shortcuts
+ * @param {Boolean} withMeta - if true, adds a theme `get()` method and the `RTMeta` property to the returned styles object
  * @returns {Object} the compiled styles object to be passed to a react or DOM element
  */
-export const useCompiledStyles = dynamicStyles => {
+export const useCompiledStyles = (dynamicStyles, withMeta = false) => {
   const [ platforms, unusedPlatforms ] = usePlatforms()
 
   const [ activeSizeKey, keyWidth, { width, height }] = useCurrentSize()
@@ -45,12 +46,13 @@ export const useCompiledStyles = dynamicStyles => {
   )
 
   const RTMeta = useMemo(
-    () => ({
-      key: activeSizeKey,
-      size: keyWidth,
-      width,
-      height,
-    }),
+    () =>
+      withMeta && {
+        key: activeSizeKey,
+        size: keyWidth,
+        width,
+        height,
+      },
     [ activeSizeKey, keyWidth, width, height ]
   )
 
@@ -64,7 +66,10 @@ export const useCompiledStyles = dynamicStyles => {
     [ dynamicStyles, platforms, activeSizeKey ]
   )
 
-  compiled.get = getTheme
-  compiled.RTMeta = RTMeta
+  if (withMeta) {
+    compiled.get = getTheme
+    compiled.RTMeta = RTMeta
+  }
+
   return compiled
 }

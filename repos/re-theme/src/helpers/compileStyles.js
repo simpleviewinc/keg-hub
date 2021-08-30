@@ -69,7 +69,7 @@ export const compileStyles = (styles, params = {}) => {
  * @param {Object} styles
  * @returns {Object}
  */
-export const compileStylesForViewport = styles => {
+export const compileStylesForViewport = (styles, withMeta = true) => {
   const [ platforms, inactivePlatforms ] = getPlatforms()
   const dimensions = Dimensions.get('window')
   const [ sizeKey, widthForSizeKey ] = getSize(dimensions.width)
@@ -82,13 +82,15 @@ export const compileStylesForViewport = styles => {
     omit: keysToIgnore,
   })
 
-  compiled.RTMeta = {
-    key: sizeKey,
-    size: widthForSizeKey,
-    width: dimensions.width,
-    height: dimensions.height,
+  if (withMeta) {
+    compiled.RTMeta = {
+      key: sizeKey,
+      size: widthForSizeKey,
+      width: dimensions.width,
+      height: dimensions.height,
+    }
+    compiled.get = getTheme
   }
-  compiled.get = getTheme
 
   return compiled
 }
