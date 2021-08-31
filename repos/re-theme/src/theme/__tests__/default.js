@@ -10,10 +10,8 @@ const Dims = {
   setSizes: jest.fn(Dimensions.getSizes),
   getSizeMap: jest.fn(Dimensions.getSizeMap),
 }
-const buildTheme = jest.fn(theme => theme)
 
 jest.setMock('../../dimensions', Dims)
-jest.setMock('../buildTheme', { buildTheme })
 jest.setMock('../../dimensions/dimensions', { Dimensions: TestDimensions })
 
 let themeClone = deepClone(testTheme)
