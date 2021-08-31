@@ -88,7 +88,6 @@ export const buildTheme = (theme, width, height, defaultTheme, usrPlatform) => {
 
   // Check if the theme has changed since the last time it was built
   // If not, then short-circuit, and call useCachedTheme with cache data
-  console.log('shortcircuit?', themeSizeCache && theme === themeSizeCache.theme)
   if (themeSizeCache && theme === themeSizeCache.theme)
     return useCachedTheme(themeSizeCache, RTMeta)
 

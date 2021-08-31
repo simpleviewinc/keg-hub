@@ -36,10 +36,14 @@ const useMemo = jest.fn(cb => {
   return cb()
 })
 
+const useCompiledStyles = jest.fn(styles => {
+  return styles
+})
+
 jest.setMock('react', { ...React, useState, useEffect, useMemo })
+jest.setMock('../../hooks/useCompiledStyles', { useCompiledStyles })
 
 // Mock Dimensions api for the add and remove Event listener, to test adding and removing an event
-let addEventCB = null
 const addEventListener = jest.fn((type, addCB) => {
   addEventCB = addCB
 })
@@ -66,13 +70,13 @@ describe('ReThemeProvider', () => {
     // Reset helper values
     effectCB = null
     stateValue = null
-    addEventCB = null
     mergeTheme = false
 
     // Clean up all mock functions
     updateStateValue.mockClear()
     useState.mockClear()
     useEffect.mockClear()
+    useCompiledStyles.mockClear()
     addEventListener.mockClear()
     removeEventListener.mockClear()
     getDefaultTheme.mockClear()
@@ -81,12 +85,6 @@ describe('ReThemeProvider', () => {
 
   it('should render ReThemeProvider properly and return a React context component', () => {
     isReactComp(renderReThemeProvider(), true)
-  })
-
-  it('should call buildTheme', () => {
-    renderReThemeProvider()
-
-    expect(buildTheme).toHaveBeenCalled()
   })
 
   it('should call getDefaultTheme when merge prop is true', () => {
@@ -110,38 +108,9 @@ describe('ReThemeProvider', () => {
     expect(typeof effectCB).toBe('function')
   })
 
-  it('should register a useEffect callback to register an event listener with Dimensions', () => {
-    expect(effectCB).toBe(null)
-    expect(addEventListener).not.toHaveBeenCalled()
-
+  it('should compile styles', () => {
     renderReThemeProvider()
-    effectCB()
-
-    expect(addEventListener).toHaveBeenCalled()
-  })
-
-  it('should pass a function to the dimensions listener that updates the component state', () => {
-    expect(effectCB).toBe(null)
-    expect(addEventCB).toBe(null)
-
-    renderReThemeProvider()
-    effectCB()
-    addEventCB(dimensionData)
-
-    expect(updateStateValue).toHaveBeenCalled()
-  })
-
-  it('should return removeEvent function from the registered useEffect callback', () => {
-    expect(effectCB).toBe(null)
-    expect(removeEventListener).not.toHaveBeenCalled()
-
-    renderReThemeProvider()
-    const removeEventFunction = effectCB()
-
-    expect(typeof removeEventFunction).toBe('function')
-    removeEventFunction()
-
-    expect(removeEventListener).toHaveBeenCalled()
+    expect(useCompiledStyles).toHaveBeenCalledWith(testTheme, true)
   })
 
   it('should set the state value to be the current dimensions', () => {

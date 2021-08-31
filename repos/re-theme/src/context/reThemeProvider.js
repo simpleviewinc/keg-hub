@@ -20,9 +20,11 @@ import { useCompiledStyles } from '../hooks/useCompiledStyles'
  */
 const useDefaultThemeMerge = (theme, merge) =>
   useMemo(() => {
+    if (!merge) return theme
     const defaultTheme = getDefaultTheme()
-    const shouldMerge = merge && defaultTheme && defaultTheme !== theme
-    return shouldMerge ? deepMerge(defaultTheme, theme) : theme
+    return defaultTheme && defaultTheme !== theme
+      ? deepMerge(defaultTheme, theme)
+      : theme
   }, [ theme, merge ])
 
 /**

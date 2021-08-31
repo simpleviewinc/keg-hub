@@ -1,4 +1,4 @@
-import { isObj } from '@keg-hub/jsutils'
+import { isObj, deepMerge } from '@keg-hub/jsutils'
 import { ruleHelpers } from '../constants'
 import { getPlatforms } from './getPlatforms'
 import { Dimensions } from 'ReDimensions'
@@ -15,9 +15,10 @@ import { getTheme } from './getTheme'
  * extract(a, 'b') => { a: 0, c: 10, d: 11 }
  */
 const extract = (obj, key) => {
-  obj[key] && Object.assign(obj, obj[key])
+  if (!obj[key]) return obj
+  const props = obj[key]
   delete obj[key]
-  return obj
+  return deepMerge(obj, props)
 }
 
 /**
@@ -49,7 +50,9 @@ export const compileStyles = (styles, params = {}) => {
       // convert shortcut keys, if used (e.g. m => margin)
       // then add the entry to the compiled styles object
       const trueKey = aliases[key] || key
-      acc[trueKey] = isObj(value) ? compileStyles(value, params) : value
+      acc[trueKey] = isObj(value)
+        ? { ...acc[trueKey], ...compileStyles(value, params) }
+        : value
     }
 
     return acc
@@ -60,19 +63,21 @@ export const compileStyles = (styles, params = {}) => {
   // So remove the dynamic keys, in precedence order, and merge their values
   // with the final styles object in that order
   const fromPlatforms = platforms.reduce(extract, structured)
-  return sizes.reduce(extract, fromPlatforms)
+  const fromSizes = sizes.reduce(extract, fromPlatforms)
+  return fromSizes
 }
 
 /**
- * Calls `compileStyles` with all of the parameters matching the current state of your app's viewport
- * (the currently active platforms & sizes)
+ * Compiles styles for current platform and the specified width + height
  * @param {Object} styles
- * @returns {Object}
+ * @param {Number} width
+ * @param {Number} height
+ * @param {Boolean} withMeta
+ * @returns {Object} compiled styles
  */
-export const compileStylesForViewport = (styles, withMeta = true) => {
+export const compileStylesForState = (styles, width, height, withMeta) => {
   const [ platforms, inactivePlatforms ] = getPlatforms()
-  const dimensions = Dimensions.get('window')
-  const [ sizeKey, widthForSizeKey ] = getSize(dimensions.width)
+  const [ sizeKey, widthForKey ] = getSize(width)
   const [ activeSizes, inactiveSizes ] = getMergeSizes(sizeKey) || []
   const keysToIgnore = inactivePlatforms.concat(inactiveSizes)
 
@@ -85,12 +90,28 @@ export const compileStylesForViewport = (styles, withMeta = true) => {
   if (withMeta) {
     compiled.RTMeta = {
       key: sizeKey,
-      size: widthForSizeKey,
-      width: dimensions.width,
-      height: dimensions.height,
+      size: widthForKey,
+      width: width,
+      height: height,
     }
     compiled.get = getTheme
   }
-
   return compiled
+}
+
+/**
+ * Calls `compileStyles` with all of the parameters matching the current state of your app's viewport
+ * (the currently active platforms & sizes)
+ * @param {Object} styles
+ * @param {Boolean} withMeta
+ * @returns {Object}
+ */
+export const compileStylesForViewport = (styles, withMeta) => {
+  const dimensions = Dimensions.get('window')
+  return compileStylesForState(
+    styles,
+    dimensions.width,
+    dimensions.height,
+    withMeta
+  )
 }

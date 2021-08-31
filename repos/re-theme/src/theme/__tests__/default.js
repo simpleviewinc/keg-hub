@@ -46,12 +46,6 @@ describe('Theme', () => {
       expect(Theme.setDefaultTheme(themeClone)).toEqual(themeClone)
     })
 
-    it('should call buildTheme', () => {
-      Theme.setDefaultTheme(themeClone)
-
-      expect(buildTheme).toHaveBeenCalled()
-    })
-
     it('should log a warning if an object is not passed as the first argument', () => {
       const oldErr = console.warn
       console.warn = jest.fn()

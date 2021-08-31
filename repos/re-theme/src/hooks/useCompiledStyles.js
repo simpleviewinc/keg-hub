@@ -47,12 +47,14 @@ export const useCompiledStyles = (dynamicStyles, withMeta = false) => {
 
   const RTMeta = useMemo(
     () =>
-      withMeta && {
-        key: activeSizeKey,
-        size: keyWidth,
-        width,
-        height,
-      },
+      withMeta
+        ? {
+            key: activeSizeKey,
+            size: keyWidth,
+            width,
+            height,
+          }
+        : null,
     [ activeSizeKey, keyWidth, width, height ]
   )
 
