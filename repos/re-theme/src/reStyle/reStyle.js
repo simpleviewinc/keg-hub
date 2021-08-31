@@ -32,8 +32,6 @@ export const reStyle = (Component, styleProp = 'style') => {
 
       const styles = useShallowMemoMerge(reStyles, styleFromProps)
 
-      // const styles = useCompiledStyles(merged)
-
       return (
         <InjectedComp
           {...props}
