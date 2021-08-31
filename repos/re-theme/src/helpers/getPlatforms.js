@@ -1,4 +1,4 @@
-import { getDefaultPlatforms } from '../theme/restructureTheme'
+import { getDefaultPlatforms } from '../theme/getDefaultPlatforms'
 import { Constants } from '../constants'
 const PLATFORM = Constants.PLATFORM
 

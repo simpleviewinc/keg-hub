@@ -1,6 +1,5 @@
 import { isObj, deepMerge } from '@keg-hub/jsutils'
 import { getPlatforms } from './getPlatforms'
-import { Dimensions } from 'ReDimensions'
 import { getSize, getMergeSizes } from '../dimensions'
 import { getTheme } from './getTheme'
 import { ruleHelpers } from '../constants/ruleHelpers'
@@ -69,6 +68,7 @@ export const compileStyles = (styles, params = {}) => {
 
 /**
  * Compiles styles for current platform and the specified width + height
+ * - Mainly a helper for unit tests
  * @param {Object} styles
  * @param {Number} width
  * @param {Number} height
@@ -97,21 +97,4 @@ export const compileStylesForState = (styles, width, height, withMeta) => {
     compiled.get = getTheme
   }
   return compiled
-}
-
-/**
- * Calls `compileStyles` with all of the parameters matching the current state of your app's viewport
- * (the currently active platforms & sizes)
- * @param {Object} styles
- * @param {Boolean} withMeta
- * @returns {Object}
- */
-export const compileStylesForViewport = (styles, withMeta) => {
-  const dimensions = Dimensions.get('window')
-  return compileStylesForState(
-    styles,
-    dimensions.width,
-    dimensions.height,
-    withMeta
-  )
 }

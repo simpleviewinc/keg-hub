@@ -10,8 +10,7 @@ jest.clearAllMocks()
 
 // Mock theme functions so we can test when it's called
 const getDefaultTheme = jest.fn(() => Theme.getDefaultTheme())
-const buildTheme = jest.fn((...args) => Theme.buildTheme(...args))
-jest.setMock('../../theme', { ...Theme, getDefaultTheme, buildTheme })
+jest.setMock('../../theme', { ...Theme, getDefaultTheme })
 
 // Mocked updateState function returned from useState
 let stateValue = null
@@ -80,7 +79,6 @@ describe('ReThemeProvider', () => {
     addEventListener.mockClear()
     removeEventListener.mockClear()
     getDefaultTheme.mockClear()
-    buildTheme.mockClear()
   })
 
   it('should render ReThemeProvider properly and return a React context component', () => {
