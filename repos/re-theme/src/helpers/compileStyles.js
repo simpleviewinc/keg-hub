@@ -1,9 +1,9 @@
 import { isObj, deepMerge } from '@keg-hub/jsutils'
-import { ruleHelpers } from '../constants'
 import { getPlatforms } from './getPlatforms'
 import { Dimensions } from 'ReDimensions'
 import { getSize, getMergeSizes } from '../dimensions'
 import { getTheme } from './getTheme'
+import { ruleHelpers } from '../constants/ruleHelpers'
 
 /**
  * Helper for compileStyles

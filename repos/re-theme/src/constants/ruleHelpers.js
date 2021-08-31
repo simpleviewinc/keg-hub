@@ -1,5 +1,5 @@
 /* eslint id-length: 0 */
-const ruleHelpers = {
+export const ruleHelpers = {
   // Margin helpers
   m: `margin`,
   mT: `marginTop`,
@@ -89,5 +89,3 @@ const ruleHelpers = {
   txDc: `textDecoration`,
   txDL: 'textDecorationLine',
 }
-
-module.exports = { ruleHelpers }
