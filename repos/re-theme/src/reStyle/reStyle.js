@@ -9,8 +9,6 @@ import {
   useReStyles,
 } from './reStyleHooks'
 
-import { useCompiledStyles } from '../hooks/useCompiledStyles'
-
 /**
  * Builds a HOC, with custom styles injected into it
  * @function
