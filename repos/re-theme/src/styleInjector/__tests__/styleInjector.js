@@ -8,6 +8,9 @@ const mockUseStyleTag = jest.fn(() => {
 })
 
 jest.setMock('../useStyleTag', { useStyleTag: mockUseStyleTag })
+jest.setMock('../../hooks/useCompiledStyles', {
+  useCompiledStyles: styles => styles
+})
 
 const mockConfig = {
   displayName: 'MockComponent',

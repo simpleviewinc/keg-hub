@@ -9,7 +9,7 @@ import {
   useReStyles,
 } from './reStyleHooks'
 
-import { useCompiledStyles } from '../hooks'
+import { useCompiledStyles } from '../hooks/useCompiledStyles'
 
 /**
  * Builds a HOC, with custom styles injected into it
@@ -32,9 +32,9 @@ export const reStyle = (Component, styleProp = 'style') => {
       const classArr = usePropClassName(props.className, compName)
       const styleFromProps = exists(props[styleProp]) ? props[styleProp] : null
 
-      const merged = useShallowMemoMerge(reStyles, styleFromProps)
+      const styles = useShallowMemoMerge(reStyles, styleFromProps)
 
-      const styles = useCompiledStyles(merged)
+      // const styles = useCompiledStyles(merged)
 
       return (
         <InjectedComp

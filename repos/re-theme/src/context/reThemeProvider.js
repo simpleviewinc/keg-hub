@@ -40,10 +40,12 @@ const useDefaultThemeMerge = (theme, merge) =>
 export const ReThemeProvider = props => {
   const { children, theme, merge: doMerge } = props
   const merge = Boolean(doMerge || (!doMerge && doMerge !== false)) || false
+  const start = performance.now()
 
   const themeToBuild = useDefaultThemeMerge(theme, merge)
   const builtTheme = useCompiledStyles(themeToBuild, true)
-
+  console.log('compileTime', performance.now() - start)
+ 
   updateCurrentTheme(builtTheme)
 
   useEffect(
