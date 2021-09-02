@@ -27,7 +27,7 @@ export const reStyle = (Component, styleProp = 'style') => {
 
   /**
    * @param {Object | Function} styleData - theme or theme function (theme, props) => styles
-   * @param {Object | Function} defaultProps - default props or function that returns default props (theme, props) => defaultProps
+   * @param {Object | Function} defaultProps - default props or function that returns default props (theme) => defaultProps
    */
   return (styleData, defaultProps) => {
     const StyledFun = React.forwardRef((props, ref) => {

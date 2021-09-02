@@ -113,7 +113,7 @@ export const useMergedProps = (props, defaultProps) => {
 
   const finalDefProps = useMemo(() =>
     isFunc(defaultProps)
-      ? defaultProps(theme, props)
+      ? defaultProps(theme)
       : defaultProps,
     [ theme, props, defaultProps ]
   )

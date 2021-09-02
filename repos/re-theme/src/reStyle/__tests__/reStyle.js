@@ -79,4 +79,17 @@ describe('reStyle', () => {
     expect(TestComp.props.style.margin).toBe(12)
   })
 
+  it('should accept default props', () => {
+    const defProps = { biz: 4, foo: 2, bar: 3 }
+    const passedProps = { baz: 1, biz: 0, }
+    const TestComp = reStyle(Component)(
+      {},
+      () => defProps 
+    ).render(passedProps)
+
+    expect(TestComp.props.foo).toBe(defProps.foo)
+    expect(TestComp.props.baz).toBe(passedProps.baz)
+    expect(TestComp.props.biz).toBe(passedProps.biz)
+    expect(TestComp.props.bar).toBe(defProps.bar)
+  })
 })
