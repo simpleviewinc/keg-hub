@@ -7,6 +7,7 @@ import {
   useShallowMemoMerge,
   usePropClassName,
   useReStyles,
+  useMergedProps
 } from './reStyleHooks'
 
 /**
@@ -24,7 +25,11 @@ export const reStyle = (Component, styleProp = 'style') => {
     className: compName,
   })
 
-  return styleData => {
+  /**
+   * @param {Object | Function} styleData - theme or theme function (theme, props) => styles
+   * @param {Object | Function} defaultProps - default props or function that returns default props (theme, props) => defaultProps
+   */
+  return (styleData, defaultProps) => {
     const StyledFun = React.forwardRef((props, ref) => {
       const reStyles = useReStyles(styleData, props)
       const classArr = usePropClassName(props.className, compName)
@@ -32,9 +37,11 @@ export const reStyle = (Component, styleProp = 'style') => {
 
       const styles = useShallowMemoMerge(reStyles, styleFromProps)
 
+      const mergedProps = useMergedProps(props, defaultProps)
+
       return (
         <InjectedComp
-          {...props}
+          {...mergedProps}
           {...{ [styleProp]: styles }}
           style={styles}
           className={classArr}
