@@ -1,6 +1,5 @@
 import React from 'react'
 import { useStyleTag } from './useStyleTag'
-import { isStr, isArr } from '@keg-hub/jsutils'
 import { useCompiledStyles } from '../hooks/useCompiledStyles'
 
 /**
