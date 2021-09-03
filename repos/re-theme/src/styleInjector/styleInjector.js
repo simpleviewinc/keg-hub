@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStyleTag } from './useStyleTag'
-import { isStr } from '@keg-hub/jsutils'
+import { isStr, isArr } from '@keg-hub/jsutils'
 import { useCompiledStyles } from '../hooks/useCompiledStyles'
 
 /**
@@ -28,7 +28,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
     <Component
       {...buildProps}
       style={filteredStyle}
-      className={isStr(Component) ? classList.join(' ') : classList}
+      className={classList.join(' ')}
       ref={ref}
     >
       { children }

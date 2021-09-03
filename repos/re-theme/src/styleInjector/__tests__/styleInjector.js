@@ -73,7 +73,7 @@ describe('styleInjector', () => {
 
     expect(OrgComponent.type).toBe(MockComponent)
     expect(OrgComponent.props.style).not.toBe(mockProps.style)
-    expect(OrgComponent.props.className[0]).toBe(mockConfig.className)
+    expect(OrgComponent.props.className).toBe(mockConfig.className)
   })
 
   test('should pass all other props onto the original component', () => {
