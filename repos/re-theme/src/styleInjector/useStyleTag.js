@@ -77,7 +77,11 @@ export const convertToCss = (style, config) => {
  * @param {Object} style - Styles rules to be converted and added to the Dom
  * @param {string|Array<string>} className - Css selector(s) of the style fules
  *
- * @returns {Object} - className Css selector of the added style rules
+ * @returns {Object} - {
+ *    classNames: a string of classes to pass to a component
+ *    css: css rules applied to the dom,
+ *    filteredStyle: style object to pass to a component
+ * }
  */
 export const useStyleTag = (style, className = '', config) => {
   // Ensure config is an object
@@ -110,10 +114,13 @@ export const useStyleTag = (style, className = '', config) => {
     )
 
     addStylesToDom(selector, css, themeKey)
+
     return {
       css,
       filteredStyle: filtered,
-      classList: eitherArr(className, [className]).concat([hashClass]),
+      classNames: eitherArr(className, [className])
+        .concat([hashClass])
+        .join(' '),
     }
   }, [ style, className, themeSize, themeKey, config ])
 }

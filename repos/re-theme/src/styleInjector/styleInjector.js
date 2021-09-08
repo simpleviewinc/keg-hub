@@ -17,7 +17,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
   const { Component, children, config, className, style, ...buildProps } = props
   const { className: KegDefClass } = config
   const compiled = useCompiledStyles(style)
-  const { classList, filteredStyle } = useStyleTag(
+  const { classNames, filteredStyle } = useStyleTag(
     compiled,
     className || KegDefClass,
     config
@@ -27,7 +27,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
     <Component
       {...buildProps}
       style={filteredStyle}
-      className={classList.join(' ')}
+      className={classNames}
       ref={ref}
     >
       { children }

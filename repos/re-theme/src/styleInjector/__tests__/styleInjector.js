@@ -4,12 +4,12 @@ jest.resetModules()
 jest.resetAllMocks()
 
 const mockUseStyleTag = jest.fn(() => {
-  return { classList: ['test-mock-component'], filteredStyle: {} }
+  return { classNames: 'test-mock-component', filteredStyle: {} }
 })
 
 jest.setMock('../useStyleTag', { useStyleTag: mockUseStyleTag })
 jest.setMock('../../hooks/useCompiledStyles', {
-  useCompiledStyles: styles => styles
+  useCompiledStyles: styles => styles,
 })
 
 const mockConfig = {

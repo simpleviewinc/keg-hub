@@ -37,8 +37,8 @@ describe('styleInjector', () => {
     })
 
     it('should return the passed in className', () => {
-      const { classList } = useStyleTag('', 'test-class')
-      expect(classList.includes('test-class')).toBe(true)
+      const { classNames } = useStyleTag('', 'test-class')
+      expect(classNames.includes('test-class')).toBe(true)
     })
   })
 })

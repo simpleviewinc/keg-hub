@@ -152,7 +152,7 @@ export const getSize = width => {
  * console.log(unused) -> [ '$large' ]
  */
 export const getMergeSizes = key => {
-  const keys = sizeMap.entries.map(([name]) => name)
+  const keys = Object.keys(sizeMap.hash)
   const keyIndex = keys.indexOf(key)
   return [ keys.slice(0, keyIndex + 1), keys.slice(keyIndex + 1) ]
 }
