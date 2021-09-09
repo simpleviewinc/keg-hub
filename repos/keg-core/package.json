@@ -1,7 +1,7 @@
 {
   "name": "@keg-hub/keg-core",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "9.3.1",
+  "version": "9.4.0",
   "publishConfig": {
     "access": "public"
   },
@@ -60,8 +60,8 @@
     "@babel/runtime": "7.15.3",
     "@expo/webpack-config": "0.14.0",
     "@keg-hub/jsutils": "8.6.0",
-    "@keg-hub/keg-components": "9.3.0",
-    "@keg-hub/re-theme": "9.3.0",
+    "@keg-hub/keg-components": "9.4.0",
+    "@keg-hub/re-theme": "9.4.0",
     "@keg-hub/tap-resolver": "9.0.0",
     "@testing-library/react-hooks": "7.0.1",
     "app-root-path": "3.0.0",
@@ -110,8 +110,8 @@
   },
   "resolutions": {
     "@keg-hub/jsutils": "8.6.0",
-    "@keg-hub/keg-components": "9.0.1",
-    "@keg-hub/re-theme": "9.2.0",
+    "@keg-hub/keg-components": "9.4.0",
+    "@keg-hub/re-theme": "9.4.0",
     "@keg-hub/tap-resolver": "8.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
