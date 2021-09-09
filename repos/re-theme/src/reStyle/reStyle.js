@@ -7,7 +7,7 @@ import {
   useShallowMemoMerge,
   usePropClassName,
   useReStyles,
-  useMergedProps
+  useMergedProps,
 } from './reStyleHooks'
 
 /**

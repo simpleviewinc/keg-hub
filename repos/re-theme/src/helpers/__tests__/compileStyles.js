@@ -123,7 +123,11 @@ describe('Helpers', () => {
       }
 
       const propsStyle = { margin: 12 }
-      const compiledStyles = compileStylesForState({ ...style, ...propsStyle}, sizeMap.hash.$large, 1000)
+      const compiledStyles = compileStylesForState(
+        { ...style, ...propsStyle },
+        sizeMap.hash.$large,
+        1000
+      )
       expect(compiledStyles).toEqual(
         expect.objectContaining({
           padding: style['$large'].padding,
@@ -163,7 +167,11 @@ describe('Helpers', () => {
         },
       }
       const propsStyle = { margin: 12 }
-      const compiledStyles = compileStylesForState({ ...style, ...propsStyle}, sizeMap.hash.$large, 1000)
+      const compiledStyles = compileStylesForState(
+        { ...style, ...propsStyle },
+        sizeMap.hash.$large,
+        1000
+      )
       expect(compiledStyles).toEqual(
         expect.objectContaining({
           padding: style.$web.$large.padding,
@@ -181,7 +189,11 @@ describe('Helpers', () => {
         mT: 10,
       }
       const propsStyle = { mB: 12 }
-      const compiledStyles = compileStylesForState({ ...style, ...propsStyle}, sizeMap.hash.$large, 1000)
+      const compiledStyles = compileStylesForState(
+        { ...style, ...propsStyle },
+        sizeMap.hash.$large,
+        1000
+      )
       expect(compiledStyles).toEqual(
         expect.objectContaining({
           padding: style.p,
@@ -203,7 +215,11 @@ describe('Helpers', () => {
         },
       }
       const propsStyle = { mB: 12 }
-      const compiledStyles = compileStylesForState({ ...style, ...propsStyle}, sizeMap.hash.$large, 1000)
+      const compiledStyles = compileStylesForState(
+        { ...style, ...propsStyle },
+        sizeMap.hash.$large,
+        1000
+      )
       expect(compiledStyles).toEqual(
         expect.objectContaining({
           component: {

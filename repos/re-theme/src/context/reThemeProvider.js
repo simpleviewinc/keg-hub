@@ -43,7 +43,7 @@ export const ReThemeProvider = props => {
 
   const themeToBuild = useDefaultThemeMerge(theme, merge)
   const builtTheme = useCompiledStyles(themeToBuild, true)
- 
+
   updateCurrentTheme(builtTheme)
 
   useEffect(
