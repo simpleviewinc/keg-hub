@@ -1786,25 +1786,15 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.6.0.tgz#c6a4511b5439ffe73ff50aa9319f17d1d7701e2a"
   integrity sha512-J6o5lOL4p3idqxJkh+VHmppNFuQhC2IbwUrJiMFjXJbKLsylPQVOKZvRJ7ICHidc9fLw9Qvyd7BIgwo0Nn4iAg==
 
-"@keg-hub/keg-components@9.0.1":
-  version "9.0.1"
-  resolved "https://registry.npmjs.org/@keg-hub/keg-components/-/keg-components-9.0.1.tgz#a2af7795313352ea6a828ce2e2349c7a495acb4c"
-  integrity sha512-Fj3fC9Id9MXE1tgIXlq/s0JWcLKsJ7wt4UK3nkiyg4RhEwaeLR5AVZNgXOElyUE1FmhdR7EEaHj/HXwANzqbLw==
+"@keg-hub/keg-components@9.4.0":
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/keg-components/-/keg-components-9.4.0.tgz#1de207d588c08922f175e5111f1d20923afa6822"
+  integrity sha512-YzWyL9Kuy9KSkiTlVQEM62TYbjlv2OdzM9gA4tmTInEouWgiW/wclNb7dOGhhg23vUhmQ/wKG11/ateVjctNcA==
 
-"@keg-hub/keg-components@9.3.0":
-  version "9.3.0"
-  resolved "https://registry.npmjs.org/@keg-hub/keg-components/-/keg-components-9.3.0.tgz#537e06a5f553fb2b98b0e214d1df26be800df4b8"
-  integrity sha512-XetDDCCXgywChWDr7KpnFJaO/gtXmHcMVK44a7mBaACDX6IogoxSPs7+Q9gHDMzlR0mOkrh1mCDIoFC5b5WcnQ==
-
-"@keg-hub/re-theme@9.2.0":
-  version "9.2.0"
-  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-9.2.0.tgz#f92fa9e0c7b9e93001aeaea6c9c4068099c6617b"
-  integrity sha512-mLVtTJCJ7yb9VwiFJpGRejM3ZbTQT/h+wbVzbassct3nOUTQO1nvd/Q3JD4Vp4HnMcGJqkdXufEEjq50H+BF+A==
-
-"@keg-hub/re-theme@9.3.0":
-  version "9.3.0"
-  resolved "https://registry.npmjs.org/@keg-hub/re-theme/-/re-theme-9.3.0.tgz#8c4dc91336858f546607c18ea6c80b1b08b02b8b"
-  integrity sha512-H2i4ygDx3ohu5j/kwKtJ24Qar02Zd4zOgC20ZKkPWJzZxrGyD8sy8YW+Uz5ppdEgiKgGHfkiJCl77cBbqSebzA==
+"@keg-hub/re-theme@9.4.0":
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-9.4.0.tgz#444e04e73419ddae2d4a184ed3631fe5537dc042"
+  integrity sha512-Td0o5L7vgf62wpIGzkol8Oaho4cZrwuxmPalSNEjZ06/9gig4+sIuS4UKhMaw8WKoRzOHVyuksdv9fyC06G2pQ==
 
 "@keg-hub/tap-resolver@8.0.0":
   version "8.0.0"
