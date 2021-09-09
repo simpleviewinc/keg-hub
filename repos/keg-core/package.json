@@ -65,7 +65,7 @@
     "@keg-hub/tap-resolver": "9.0.0",
     "@testing-library/react-hooks": "7.0.1",
     "app-root-path": "3.0.0",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "@babel/eslint-parser": "7.14.7",
     "babel-jest": "27.0.6",
     "babel-loader": "8.2.2",
