@@ -43,8 +43,8 @@ var _excluded = ["onChange", "onSelect", "placeholder", "text", "styles", "input
 var FloatingScrollableSelect = reStyle(ScrollableSelect, 'styles')(function () {
   return {
     main: {
-      position: 'absolute',
-      zIndex: 9999
+      pos: 'absolute',
+      z: 9999
     }
   };
 });

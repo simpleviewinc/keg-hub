@@ -2279,10 +2279,10 @@
   resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.6.0.tgz#c6a4511b5439ffe73ff50aa9319f17d1d7701e2a"
   integrity sha512-J6o5lOL4p3idqxJkh+VHmppNFuQhC2IbwUrJiMFjXJbKLsylPQVOKZvRJ7ICHidc9fLw9Qvyd7BIgwo0Nn4iAg==
 
-"@keg-hub/re-theme@9.3.0":
-  version "9.3.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-9.3.0.tgz#8c4dc91336858f546607c18ea6c80b1b08b02b8b"
-  integrity sha512-H2i4ygDx3ohu5j/kwKtJ24Qar02Zd4zOgC20ZKkPWJzZxrGyD8sy8YW+Uz5ppdEgiKgGHfkiJCl77cBbqSebzA==
+"@keg-hub/re-theme@9.4.0":
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-9.4.0.tgz#444e04e73419ddae2d4a184ed3631fe5537dc042"
+  integrity sha512-Td0o5L7vgf62wpIGzkol8Oaho4cZrwuxmPalSNEjZ06/9gig4+sIuS4UKhMaw8WKoRzOHVyuksdv9fyC06G2pQ==
 
 "@mdx-js/loader@^1.6.22":
   version "1.6.22"

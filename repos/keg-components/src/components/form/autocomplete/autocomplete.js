@@ -10,13 +10,13 @@ import { AutocompleteInput } from './autocompleteInput'
 import { withOutsideDetect } from 'KegHocs'
 
 /**
- * An absolutely-positioned scrollabale select
+ * An absolutely-positioned scrollable select
  */
 const FloatingScrollableSelect = reStyle(
   ScrollableSelect,
   'styles'
 )(() => ({
-  main: { position: 'absolute', zIndex: 9999 },
+  main: { pos: 'absolute', z: 9999 },
 }))
 
 /**

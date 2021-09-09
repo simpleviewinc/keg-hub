@@ -49,7 +49,7 @@ module.exports = {
       'error',
       {
         min: 2,
-        exceptions: [ 'y', 'x', 'i', 'e', '_', 'k', 'p', 'P', 'I' ],
+        exceptions: [ 'c', 'm', 'z', 'y', 'x', 'i', 'e', '_', 'k', 'p', 'P', 'I' ],
       },
     ],
     'one-var': [ 'error', 'never' ],
