@@ -20,14 +20,18 @@ export const ruleHelpers = {
 
   // Border helpers
   bC: `borderColor`,
-  bCT: `borderTopColor`,
-  bCB: `borderBottomColor`,
-  bCR: `borderRightColor`,
-  bCL: `borderLeftColor`,
   bW: `borderWidth`,
   bS: `borderStyle`,
   bC: `borderColor`,
   bRad: `borderRadius`,
+  bTC: `borderTopColor`,
+  bTW: `borderTopWidth`,
+  bBC: `borderBottomColor`,
+  bBW: `borderBottomWidth`,
+  bRC: `borderRightColor`,
+  bRW: `borderRightWidth`,
+  bLC: `borderLeftColor`,
+  bLW: `borderLeftWidth`,
 
   // Color helpers
   c: `color`,
@@ -59,6 +63,7 @@ export const ruleHelpers = {
   flD: `flexDirection`,
   flWr: `flexWrap`,
   flB: `flexBasis`,
+  flG: `flexGrow`,
   flS: `flexShrink`,
   jtC: `justifyContent`,
   alC: `alignContent`,

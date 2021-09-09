@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStyleTag } from './useStyleTag'
-import { isStr } from '@keg-hub/jsutils'
+import { useCompiledStyles } from '../hooks/useCompiledStyles'
 
 /**
  * Helper component that actually calls the useStyleTag hook
@@ -16,8 +16,9 @@ import { isStr } from '@keg-hub/jsutils'
 const BuildWithStyles = React.forwardRef((props, ref) => {
   const { Component, children, config, className, style, ...buildProps } = props
   const { className: KegDefClass } = config
-  const { classList, filteredStyle } = useStyleTag(
-    style,
+  const compiled = useCompiledStyles(style)
+  const { classNames, filteredStyle } = useStyleTag(
+    compiled,
     className || KegDefClass,
     config
   )
@@ -26,7 +27,7 @@ const BuildWithStyles = React.forwardRef((props, ref) => {
     <Component
       {...buildProps}
       style={filteredStyle}
-      className={isStr(Component) ? classList.join(' ') : classList}
+      className={classNames}
       ref={ref}
     >
       { children }

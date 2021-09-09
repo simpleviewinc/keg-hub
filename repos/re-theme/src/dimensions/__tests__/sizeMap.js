@@ -166,29 +166,29 @@ describe('sizeMap', () => {
 
   describe('getMergeSizes', () => {
     it('should return an array with the passed in size and all sizes below it', () => {
-      const xsmallDown = sizeMap.getMergeSizes('$xsmall')
+      const [xsmallDown] = sizeMap.getMergeSizes('$xsmall')
       expect(xsmallDown.length).toBe(1)
       expect(xsmallDown[0]).toBe('$xsmall')
 
-      const smallDown = sizeMap.getMergeSizes('$small')
+      const [smallDown] = sizeMap.getMergeSizes('$small')
       expect(smallDown.length).toBe(2)
       expect(smallDown[0]).toBe('$xsmall')
       expect(smallDown[1]).toBe('$small')
 
-      const mediumDown = sizeMap.getMergeSizes('$medium')
+      const [mediumDown] = sizeMap.getMergeSizes('$medium')
       expect(mediumDown.length).toBe(3)
       expect(mediumDown[0]).toBe('$xsmall')
       expect(mediumDown[1]).toBe('$small')
       expect(mediumDown[2]).toBe('$medium')
 
-      const largeDown = sizeMap.getMergeSizes('$large')
+      const [largeDown] = sizeMap.getMergeSizes('$large')
       expect(largeDown.length).toBe(4)
       expect(largeDown[0]).toBe('$xsmall')
       expect(largeDown[1]).toBe('$small')
       expect(largeDown[2]).toBe('$medium')
       expect(largeDown[3]).toBe('$large')
 
-      const xlargeDown = sizeMap.getMergeSizes('$xlarge')
+      const [xlargeDown] = sizeMap.getMergeSizes('$xlarge')
       expect(xlargeDown.length).toBe(5)
       expect(xlargeDown[0]).toBe('$xsmall')
       expect(xlargeDown[1]).toBe('$small')

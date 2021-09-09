@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { eitherArr, noPropArr } from '@keg-hub/jsutils'
+import { noPropArr } from '@keg-hub/jsutils'
 
 /**
  * Stub for Native StyleInjector calls, just renders the component
@@ -15,7 +15,7 @@ export const useStyleTag = (style, className = '') =>
     () => ({
       filteredStyle: style,
       css: { all: '', rules: noPropArr },
-      classList: eitherArr(className, [className]),
+      classNames: className,
     }),
     [ style, className ]
   )

@@ -97,3 +97,26 @@ export const useReStyles = (styleData, props) => {
         : noOpObj
   }, [ theme, styleData, propsEqual ])
 }
+
+/**
+ * Merges props
+ * @param {Object} props - component props
+ * @param {*} defaultProps - optional default props defined at reStyle site
+ * @returns {Object} - merged props and defaultProps
+ */
+export const useMergedProps = (props, defaultProps) => {
+  // defaultProps will never change, so we can safely short circuit
+  // if it's undefined
+  if (!defaultProps) return props
+
+  const theme = useTheme()
+
+  const finalDefProps = useMemo(() =>
+    isFunc(defaultProps)
+      ? defaultProps(theme)
+      : defaultProps,
+    [ theme, props, defaultProps ]
+  )
+
+  return useMemo(() => ({ ...finalDefProps, ...props }), [ finalDefProps, props ])
+}

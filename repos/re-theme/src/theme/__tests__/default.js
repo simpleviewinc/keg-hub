@@ -10,10 +10,8 @@ const Dims = {
   setSizes: jest.fn(Dimensions.getSizes),
   getSizeMap: jest.fn(Dimensions.getSizeMap),
 }
-const buildTheme = jest.fn(theme => theme)
 
 jest.setMock('../../dimensions', Dims)
-jest.setMock('../buildTheme', { buildTheme })
 jest.setMock('../../dimensions/dimensions', { Dimensions: TestDimensions })
 
 let themeClone = deepClone(testTheme)
@@ -44,12 +42,6 @@ describe('Theme', () => {
 
     it('should return the updated default theme object', () => {
       expect(Theme.setDefaultTheme(themeClone)).toEqual(themeClone)
-    })
-
-    it('should call buildTheme', () => {
-      Theme.setDefaultTheme(themeClone)
-
-      expect(buildTheme).toHaveBeenCalled()
     })
 
     it('should log a warning if an object is not passed as the first argument', () => {

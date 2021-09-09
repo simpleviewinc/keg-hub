@@ -4,10 +4,13 @@ jest.resetModules()
 jest.resetAllMocks()
 
 const mockUseStyleTag = jest.fn(() => {
-  return { classList: ['test-mock-component'], filteredStyle: {} }
+  return { classNames: 'test-mock-component', filteredStyle: {} }
 })
 
 jest.setMock('../useStyleTag', { useStyleTag: mockUseStyleTag })
+jest.setMock('../../hooks/useCompiledStyles', {
+  useCompiledStyles: styles => styles,
+})
 
 const mockConfig = {
   displayName: 'MockComponent',
@@ -70,7 +73,7 @@ describe('styleInjector', () => {
 
     expect(OrgComponent.type).toBe(MockComponent)
     expect(OrgComponent.props.style).not.toBe(mockProps.style)
-    expect(OrgComponent.props.className[0]).toBe(mockConfig.className)
+    expect(OrgComponent.props.className).toBe(mockConfig.className)
   })
 
   test('should pass all other props onto the original component', () => {
