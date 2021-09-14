@@ -1,4 +1,3 @@
-// import { SvgIcon as KegSvgIcon } from './svgIcon.native'
 import * as NativeSvg from './svgIcon.native'
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector'
 
