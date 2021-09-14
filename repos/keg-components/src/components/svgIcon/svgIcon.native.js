@@ -100,7 +100,7 @@ const useClassName = className => {
  *                              - Used as the stroke color when no stroke prop is passed
  *                              - Used as the fill color when no fill prop is passed
  * @param {string=} props.clipRule - Svg rule for clipping
- * @param {string=} props.delta - Path definition for the Svg Component
+ * @param {string=} props.delta - Path definition for the Svg Component. If omitted, no Path element is rendered.
  * @param {string=} props.fill - Fill color of the path element
  * @param {string=} props.fillRule - Svg rule for the fill attribute
  * @param {string=} props.size - Size of the Svg Component
