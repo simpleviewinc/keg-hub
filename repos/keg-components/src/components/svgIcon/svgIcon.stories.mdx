@@ -4,7 +4,7 @@ import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs'
 
 import { SvgIcon } from './svgIcon'
 import { SvgIcon as SvgIconNative } from './svgIcon.native'
-import {Basic, Loading} from './svgIcon.examples.js'
+import {Basic, Loading, WithChildren } from './svgIcon.examples.js'
 
 <Meta title="Components/Display/SvgIcon" component={SvgIcon}/>
 
@@ -28,6 +28,15 @@ Utilizes [react-native-svg](https://github.com/react-native-svg/react-native-svg
 <Preview>
   <Story name="Loading">
     <Loading />
+  </Story>
+</Preview>
+
+<br/>
+
+### With Children
+<Preview>
+  <Story name="With Children">
+    <WithChildren />
   </Story>
 </Preview>
 
