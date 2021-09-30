@@ -19,8 +19,8 @@ export { Subtitle } from './subtitle.js';
 import { Text as Text$1 } from './text.js';
 export { Text } from './text.js';
 import { d as _objectWithoutProperties, e as _extends, b as _slicedToArray, a as _defineProperty, _ as _objectSpread2 } from './_rollupPluginBabelHelpers-b49fe34a.js';
-import { C as Checkbox } from './checkbox-72f0a2b0.js';
-export { C as Checkbox } from './checkbox-72f0a2b0.js';
+import { C as Checkbox } from './checkbox-c0bb7fcc.js';
+export { C as Checkbox } from './checkbox-c0bb7fcc.js';
 import { useStyle, useTheme, withTheme } from '@keg-hub/re-theme';
 import { u as useClassList } from './useClassList.native-70068878.js';
 export { u as useClassList } from './useClassList.native-70068878.js';
@@ -33,7 +33,7 @@ export { useThemePath } from './useThemePath.js';
 export { useThemeWithHeight } from './useThemeWithHeight.js';
 import { Picker } from 'react-native';
 export { I as Input } from './input-7be053e2.js';
-import { S as Select$1, C as ChevronDown } from './select-e34ee5ae.js';
+import { S as Select$1, C as ChevronDown } from './select-bf184c3b.js';
 import { getValueFromChildren, getInputValueKey } from './getInputValue.js';
 export { getInputValueKey, getValueFromChildren } from './getInputValue.js';
 import { useSelectHandlers } from './useSelectHandlers.js';
@@ -42,7 +42,7 @@ import { u as useClassName } from './useClassName.native-32e8827d.js';
 export { u as useClassName } from './useClassName.native-32e8827d.js';
 import { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
 export { u as useThemeTypeAsClass } from './useThemeTypeAsClass.native-a05b9a50.js';
-import './svgIcon.native-7f70e46f.js';
+import './svgIcon.native-4f87bca3.js';
 import { I as Icon } from './icon-d03aaeac.js';
 export { I as Icon } from './icon-d03aaeac.js';
 import { StyleInjector } from '@keg-hub/re-theme/styleInjector';
@@ -74,7 +74,7 @@ import { S as SectionList$1 } from './sectionList.native-ee12bc0d.js';
 export { g as getElementLayout, s as scrollList, u as useScroll } from './sectionList.native-ee12bc0d.js';
 export { Drawer } from './drawer.js';
 export { TextToggle } from './textToggle.js';
-import { SvgIcon as SvgIcon$1 } from './svgIcon.js';
+import { S as SvgIcon$1, N as NativeSvg } from './svgIcon.native-4295db6c.js';
 export { withTouch } from './withTouch.js';
 export { withScrollIntoView } from './withScrollIntoView.js';
 export { u as useOutsideDetect, w as withOutsideDetect } from './withOutsideDetect-d13f1631.js';
@@ -491,11 +491,14 @@ var SectionList = StyleInjector(SectionList$1, {
 });
 SectionList.propTypes = SectionList$1.propTypes;
 
-var SvgIcon = StyleInjector(SvgIcon$1, {
+var KegSvgIcon = SvgIcon$1,
+    svgElements = _objectWithoutProperties(NativeSvg, ["SvgIcon"]);
+var SvgIcon = StyleInjector(KegSvgIcon, {
   displayName: 'SvgIcon',
   className: 'keg-svg-icon'
 });
-SvgIcon.propTypes = _objectSpread2({}, SvgIcon$1.propTypes);
+Object.assign(SvgIcon, svgElements);
+SvgIcon.propTypes = _objectSpread2({}, KegSvgIcon.propTypes);
 
 export { Link as A, CheckGroup, FilePicker, Form, Link, Option, Radio, ScrollView, SectionList, Select, Slider, SvgIcon, Switch, useKeyPress, useScrollIntoView };
 //# sourceMappingURL=index.js.map

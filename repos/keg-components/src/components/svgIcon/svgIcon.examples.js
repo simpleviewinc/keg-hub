@@ -84,7 +84,7 @@ export const WithChildren = () => {
         size={20}
         className='keg-svg-children'
       >
-        <SvgIcon.Circle 
+        <SvgIcon.Circle
           cx='10'
           cy='10'
           r='10'

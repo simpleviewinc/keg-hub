@@ -150,18 +150,18 @@ export const SvgIcon = React.forwardRef((props, ref) => {
       viewBox={viewBox}
       style={svgStyles}
     >
-      { delta && 
-          <Path
-            clipRule={clipRule}
-            d={delta}
-            fill={colorStyle.fill}
-            fillRule={fillRule}
-            stroke={colorStyle.stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap={strokeLinecap}
-            strokeLinejoin={strokeLinejoin}
-          />
-      }
+      { delta && (
+        <Path
+          clipRule={clipRule}
+          d={delta}
+          fill={colorStyle.fill}
+          fillRule={fillRule}
+          stroke={colorStyle.stroke}
+          strokeWidth={strokeWidth}
+          strokeLinecap={strokeLinecap}
+          strokeLinejoin={strokeLinejoin}
+        />
+      ) }
       { children }
     </Svg>
   )

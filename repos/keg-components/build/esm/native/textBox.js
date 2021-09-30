@@ -5,7 +5,7 @@ import { Text } from './text.js';
 import { get } from '@keg-hub/jsutils';
 import './icon-d03aaeac.js';
 import { TouchableIcon } from './touchableIcon.js';
-import { S as SvgIcon } from './svgIcon.native-7f70e46f.js';
+import { S as SvgIcon } from './svgIcon.native-4f87bca3.js';
 import { e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
 import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';

@@ -5,7 +5,7 @@ import { Text } from './text.js';
 import { get } from '@keg-hub/jsutils';
 import './icon-ad5d7324.js';
 import { TouchableIcon } from './touchableIcon.js';
-import { S as SvgIcon } from './svgIcon-f0fbf677.js';
+import { S as SvgIcon } from './svgIcon-ff7cc73a.js';
 import { e as _extends } from './_rollupPluginBabelHelpers-b49fe34a.js';
 import '@keg-hub/re-theme/colors';
 import { useThemePath } from './useThemePath.js';
@@ -28,7 +28,7 @@ import './isValidComponent.js';
 import './useClassList-1d418045.js';
 import './withTouch.js';
 import './touchable.js';
-import './svgIcon.native-2a1115ae.js';
+import './svgIcon.native-19802c84.js';
 import 'react-native-svg-web';
 import './colors-6402d3b3.js';
 

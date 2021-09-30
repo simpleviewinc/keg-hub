@@ -8,7 +8,7 @@ var text = require('./text.js');
 var jsutils = require('@keg-hub/jsutils');
 require('./icon-9317be7c.js');
 var touchableIcon = require('./touchableIcon.js');
-var svgIcon_native = require('./svgIcon.native-f6027179.js');
+var svgIcon_native = require('./svgIcon.native-1a38a3f7.js');
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');

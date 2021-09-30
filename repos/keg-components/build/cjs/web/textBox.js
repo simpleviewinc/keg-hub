@@ -8,7 +8,7 @@ var text = require('./text.js');
 var jsutils = require('@keg-hub/jsutils');
 require('./icon-c7ba25ca.js');
 var touchableIcon = require('./touchableIcon.js');
-var svgIcon = require('./svgIcon-bca364ff.js');
+var svgIcon = require('./svgIcon-bb2d3711.js');
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
 require('@keg-hub/re-theme/colors');
 var useThemePath = require('./useThemePath.js');
@@ -31,7 +31,7 @@ require('./isValidComponent.js');
 require('./useClassList-89a8dbd4.js');
 require('./withTouch.js');
 require('./touchable.js');
-require('./svgIcon.native-82b9d93c.js');
+require('./svgIcon.native-d0de8203.js');
 require('react-native-svg-web');
 require('./colors-da502c66.js');
 

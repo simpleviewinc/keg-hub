@@ -20,7 +20,7 @@ var p = require('./p.js');
 var subtitle = require('./subtitle.js');
 var text = require('./text.js');
 var _rollupPluginBabelHelpers = require('./_rollupPluginBabelHelpers-95f0bff4.js');
-var checkbox = require('./checkbox-b6e9a116.js');
+var checkbox = require('./checkbox-af9e9ec1.js');
 var reTheme = require('@keg-hub/re-theme');
 var useClassList_native = require('./useClassList.native-9e7810c9.js');
 var useChildrenWithRefs = require('./useChildrenWithRefs.js');
@@ -30,12 +30,12 @@ var useThemePath = require('./useThemePath.js');
 var useThemeWithHeight = require('./useThemeWithHeight.js');
 var reactNative = require('react-native');
 var input = require('./input-a5dc65b1.js');
-var select = require('./select-86099f38.js');
+var select = require('./select-18c3ae0a.js');
 var getInputValue = require('./getInputValue.js');
 var useSelectHandlers = require('./useSelectHandlers.js');
 var useClassName_native = require('./useClassName.native-3d1a229b.js');
 var useThemeTypeAsClass_native = require('./useThemeTypeAsClass.native-90f04031.js');
-require('./svgIcon.native-f6027179.js');
+require('./svgIcon.native-1a38a3f7.js');
 var icon = require('./icon-9317be7c.js');
 var styleInjector = require('@keg-hub/re-theme/styleInjector');
 var renderFromType = require('./renderFromType.js');
@@ -60,7 +60,7 @@ var scrollView = require('./scrollView.js');
 var sectionList = require('./sectionList.native-78f3a177.js');
 var drawer = require('./drawer.js');
 var textToggle = require('./textToggle.js');
-var svgIcon = require('./svgIcon.js');
+var svgIcon = require('./svgIcon.native-fa69c271.js');
 var withTouch = require('./withTouch.js');
 var withScrollIntoView = require('./withScrollIntoView.js');
 var withOutsideDetect = require('./withOutsideDetect-2ef63285.js');
@@ -481,11 +481,14 @@ var SectionList = styleInjector.StyleInjector(sectionList.SectionList, {
 });
 SectionList.propTypes = sectionList.SectionList.propTypes;
 
-var SvgIcon = styleInjector.StyleInjector(svgIcon.SvgIcon, {
+var KegSvgIcon = svgIcon.SvgIcon,
+    svgElements = _rollupPluginBabelHelpers._objectWithoutProperties(svgIcon.NativeSvg, ["SvgIcon"]);
+var SvgIcon = styleInjector.StyleInjector(KegSvgIcon, {
   displayName: 'SvgIcon',
   className: 'keg-svg-icon'
 });
-SvgIcon.propTypes = _rollupPluginBabelHelpers._objectSpread2({}, svgIcon.SvgIcon.propTypes);
+Object.assign(SvgIcon, svgElements);
+SvgIcon.propTypes = _rollupPluginBabelHelpers._objectSpread2({}, KegSvgIcon.propTypes);
 
 exports.TextBox = textBox.TextBox;
 exports.Button = button.Button;
