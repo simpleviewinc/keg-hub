@@ -75,3 +75,22 @@ export const Loading = props => {
     </StoryWrap>
   )
 }
+
+export const WithChildren = () => {
+  return (
+    <StoryWrap style={wrapStyles}>
+      <SvgIcon
+        viewBox='0 0 20 20'
+        size={20}
+        className='keg-svg-children'
+      >
+        <SvgIcon.Circle 
+          cx='10'
+          cy='10'
+          r='10'
+          fill='#356C99'
+        />
+      </SvgIcon>
+    </StoryWrap>
+  )
+}
