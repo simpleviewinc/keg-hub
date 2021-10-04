@@ -5,7 +5,6 @@ import { getWindow } from './getWindow'
  */
 export const isIframe = () => {
   const win = getWindow()
-  console.log({ win })
   return win
     ? win.location !== win.parent.location
     : false

@@ -23,7 +23,7 @@ describe('Platform | isIframe', () => {
         location: 'bar'
       }
     }
-    expect(require('../isIframe').isIframe()).toBe(true)
+    expect(require('../').isIframe()).toBe(true)
   })
 
   it('should return false if not inside an iframe', () => {
@@ -33,6 +33,6 @@ describe('Platform | isIframe', () => {
         location: 'foo'
       }
     }
-    expect(require('../isIframe').isIframe()).toBe(false)
+    expect(require('../').isIframe()).toBe(false)
   })
 })
