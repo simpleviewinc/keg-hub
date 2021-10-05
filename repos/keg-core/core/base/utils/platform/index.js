@@ -1,5 +1,6 @@
 export * from './isIOSWeb'
 export * from './isStandalonePWA'
+export * from './isIframe'
 export * from './isNative'
 export * from './getWindow'
 export * from './getNavigator'
