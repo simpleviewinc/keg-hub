@@ -1,7 +1,11 @@
 /** @module object */
 
 import { isObj } from './isObj'
+import { exists } from '../ext/exists'
+import { toStr } from '../string/toStr'
 import { reduceObj } from './reduceObj'
+import { ensureArr } from '../array/ensureArr'
+
 
 /**
  * Creates an intersection of the passed in object, based on the passed in keys
@@ -16,14 +20,17 @@ import { reduceObj } from './reduceObj'
  * @return {Array<Object>} - First object contains keys matching keys of the keys argument
 *                          - Second object contains keys not matching keys of the keys argument
  */
-export const intersectKeys = (obj = {}, keys = []) => {
+export const intersectKeys = (obj = {}, keys) => {
+  if(!keys) return [{}, {...obj}]
+
   const intersect = [{}, {}]
+  const compareKeys = ensureArr(keys)
 
   return isObj(obj)
     ? reduceObj(obj, (key, _, updated) => {
-        keys.includes(key)
-          ? (updated[0] = obj[key])
-          : (updated[1] = obj[key])
+        exists(compareKeys.find(k => exists(k) && (toStr(k) === key)))
+          ? (updated[0][key] = obj[key])
+          : (updated[1][key] = obj[key])
 
         return updated
       }, intersect)
