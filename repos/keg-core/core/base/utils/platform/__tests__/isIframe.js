@@ -17,22 +17,13 @@ describe('Platform | isIframe', () => {
   })
 
   it('should return true if inside an iFrame', () => {
-    global.mockWindow = {
-      location: 'foo',
-      parent: {
-        location: 'bar'
-      }
-    }
+    global.mockWindow = { parent: {} }
     expect(require('../').isIframe()).toBe(true)
   })
 
   it('should return false if not inside an iframe', () => {
-    global.mockWindow = {
-      location: 'foo',
-      parent: {
-        location: 'foo'
-      }
-    }
+    global.mockWindow = {}
+    global.mockWindow.parent = global.mockWindow
     expect(require('../').isIframe()).toBe(false)
   })
 })
