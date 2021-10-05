@@ -1,9 +1,6 @@
-const loadModule = require('./loadModule')
-const universalMethods = require('../../build/cjs/index')
-const tryRequire = require('./tryRequire')
-
 module.exports = {
-  ...universalMethods,
-  ...tryRequire,
-  loadModule,
+  ...require('../../build/cjs/index'),
+  ...require('./findProc'),
+  ...require('./tryRequire'),
+  ...require('./loadModule'),
 }
