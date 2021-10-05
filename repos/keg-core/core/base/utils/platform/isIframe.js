@@ -5,7 +5,5 @@ import { getWindow } from './getWindow'
  */
 export const isIframe = () => {
   const win = getWindow()
-  return win
-    ? win !== win.parent
-    : false
+  return win ? win !== win.parent : false
 }
