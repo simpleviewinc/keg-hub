@@ -13,14 +13,14 @@ import { ensureArr } from '../array/ensureArr'
  * @param {Object} target - object to pull keys from
  * @param {Array} keys - keys to not add to new object
  * @example
- * const [matching, nonMatching] = intersectKeys({ 1: 'match', 2: 'non-matching' }, [ 1 ])
+ * const [matching, nonMatching] = splitByKeys({ 1: 'match', 2: 'non-matching' }, [ 1 ])
  * matching === { 1: 'match' } === true
  * nonMatching === { 2: 'non-matching' }  === true
  *
  * @return {Array<Object>} - First object contains keys matching keys of the keys argument
 *                          - Second object contains keys not matching keys of the keys argument
  */
-export const intersectKeys = (obj = {}, keys) => {
+export const splitByKeys = (obj = {}, keys) => {
   if(!keys) return [{}, {...obj}]
 
   const intersect = [{}, {}]
