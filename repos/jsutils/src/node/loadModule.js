@@ -142,4 +142,6 @@ const loadModule = (pathsToModule, config={}, ...params) => {
 }
 
 
-module.exports = loadModule
+module.exports = {
+  loadModule
+}

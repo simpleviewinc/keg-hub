@@ -1,4 +1,4 @@
-const loadModule = require('../loadModule')
+const { loadModule } = require('../loadModule')
 const testFunc = require('../__mocks__/test_load_func')
 const path = require('path')
 
