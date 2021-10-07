@@ -14,6 +14,9 @@ var reduceObj = require('./reduceObj-f41cbf8d.js');
 var sanitize = require('./sanitize-0a18302d.js');
 var strToType = require('./strToType-00c4481f.js');
 var hasOwn = require('./hasOwn-7999ca65.js');
+var exists = require('./exists-c79204b1.js');
+var toStr = require('./toStr-8e499966.js');
+var ensureArr = require('./ensureArr-ae68c041.js');
 
 const cloneJson = obj => {
   try {
@@ -194,6 +197,17 @@ const filterObj = (obj, predicate) => {
   }, {});
 };
 
+const splitByKeys = (obj = {}, keys) => {
+  if (!keys) return [{}, { ...obj
+  }];
+  const intersect = [{}, {}];
+  const compareKeys = ensureArr.ensureArr(keys);
+  return isObj.isObj(obj) ? reduceObj.reduceObj(obj, (key, _, updated) => {
+    exists.exists(compareKeys.find(k => exists.exists(k) && toStr.toStr(k) === key)) ? updated[0][key] = obj[key] : updated[1][key] = obj[key];
+    return updated;
+  }, intersect) : intersect;
+};
+
 exports.applyToCloneOf = applyToCloneOf;
 exports.clearObj = clearObj;
 exports.cloneJson = cloneJson;
@@ -212,6 +226,7 @@ exports.omitKeys = omitKeys;
 exports.pickKeys = pickKeys;
 exports.sanitizeCopy = sanitizeCopy;
 exports.someEntry = someEntry;
+exports.splitByKeys = splitByKeys;
 exports.toObj = toObj;
 exports.trimStringFields = trimStringFields;
-//# sourceMappingURL=filterObj-cd01c445.js.map
+//# sourceMappingURL=splitByKeys-f1cb3808.js.map

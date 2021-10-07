@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var filterObj = require('./filterObj-cd01c445.js');
+var splitByKeys = require('./splitByKeys-f1cb3808.js');
 var deepFreeze = require('./deepFreeze-d73ccc57.js');
 var hasOwn = require('./hasOwn-7999ca65.js');
 var isObj = require('./isObj-6b3aa807.js');
@@ -22,29 +22,32 @@ require('./isBool-aa6af74e.js');
 require('./sanitize-0a18302d.js');
 require('./strToType-00c4481f.js');
 require('./toNum-eeb2e51e.js');
+require('./exists-c79204b1.js');
+require('./ensureArr-ae68c041.js');
 
 
 
-exports.applyToCloneOf = filterObj.applyToCloneOf;
-exports.clearObj = filterObj.clearObj;
-exports.cloneJson = filterObj.cloneJson;
-exports.deepMerge = filterObj.deepMerge;
-exports.eitherObj = filterObj.eitherObj;
-exports.everyEntry = filterObj.everyEntry;
-exports.filterObj = filterObj.filterObj;
-exports.isArrMap = filterObj.isArrMap;
-exports.isEntry = filterObj.isEntry;
-exports.jsonEqual = filterObj.jsonEqual;
-exports.keyMap = filterObj.keyMap;
-exports.mapEntries = filterObj.mapEntries;
-exports.mapKeys = filterObj.mapKeys;
-exports.mapObj = filterObj.mapObj;
-exports.omitKeys = filterObj.omitKeys;
-exports.pickKeys = filterObj.pickKeys;
-exports.sanitizeCopy = filterObj.sanitizeCopy;
-exports.someEntry = filterObj.someEntry;
-exports.toObj = filterObj.toObj;
-exports.trimStringFields = filterObj.trimStringFields;
+exports.applyToCloneOf = splitByKeys.applyToCloneOf;
+exports.clearObj = splitByKeys.clearObj;
+exports.cloneJson = splitByKeys.cloneJson;
+exports.deepMerge = splitByKeys.deepMerge;
+exports.eitherObj = splitByKeys.eitherObj;
+exports.everyEntry = splitByKeys.everyEntry;
+exports.filterObj = splitByKeys.filterObj;
+exports.isArrMap = splitByKeys.isArrMap;
+exports.isEntry = splitByKeys.isEntry;
+exports.jsonEqual = splitByKeys.jsonEqual;
+exports.keyMap = splitByKeys.keyMap;
+exports.mapEntries = splitByKeys.mapEntries;
+exports.mapKeys = splitByKeys.mapKeys;
+exports.mapObj = splitByKeys.mapObj;
+exports.omitKeys = splitByKeys.omitKeys;
+exports.pickKeys = splitByKeys.pickKeys;
+exports.sanitizeCopy = splitByKeys.sanitizeCopy;
+exports.someEntry = splitByKeys.someEntry;
+exports.splitByKeys = splitByKeys.splitByKeys;
+exports.toObj = splitByKeys.toObj;
+exports.trimStringFields = splitByKeys.trimStringFields;
 exports.deepFreeze = deepFreeze.deepFreeze;
 exports.hasOwn = hasOwn.hasOwn;
 exports.isObj = isObj.isObj;

@@ -12,6 +12,9 @@ import { r as reduceObj } from './reduceObj-efaed709.js';
 import { s as sanitize } from './sanitize-2f5be6f2.js';
 import { s as strToType } from './strToType-a1482d08.js';
 import { p as pipeline } from './hasOwn-deb5bbb8.js';
+import { e as exists } from './exists-bf542cb8.js';
+import { t as toStr } from './toStr-0e5fe94c.js';
+import { e as ensureArr } from './ensureArr-d2e17773.js';
 
 const cloneJson = obj => {
   try {
@@ -192,5 +195,16 @@ const filterObj = (obj, predicate) => {
   }, {});
 };
 
-export { clearObj as a, applyToCloneOf as b, cloneJson as c, deepMerge as d, eitherObj as e, mapKeys as f, mapObj as g, isArrMap as h, isEntry as i, jsonEqual as j, toObj as k, keyMap as l, mapEntries as m, everyEntry as n, omitKeys as o, pickKeys as p, someEntry as q, filterObj as r, sanitizeCopy as s, trimStringFields as t };
-//# sourceMappingURL=filterObj-8dc93be5.js.map
+const splitByKeys = (obj = {}, keys) => {
+  if (!keys) return [{}, { ...obj
+  }];
+  const intersect = [{}, {}];
+  const compareKeys = ensureArr(keys);
+  return isObj(obj) ? reduceObj(obj, (key, _, updated) => {
+    exists(compareKeys.find(k => exists(k) && toStr(k) === key)) ? updated[0][key] = obj[key] : updated[1][key] = obj[key];
+    return updated;
+  }, intersect) : intersect;
+};
+
+export { clearObj as a, applyToCloneOf as b, cloneJson as c, deepMerge as d, eitherObj as e, mapKeys as f, mapObj as g, isArrMap as h, isEntry as i, jsonEqual as j, toObj as k, keyMap as l, mapEntries as m, everyEntry as n, omitKeys as o, pickKeys as p, someEntry as q, filterObj as r, sanitizeCopy as s, trimStringFields as t, splitByKeys as u };
+//# sourceMappingURL=splitByKeys-a737443d.js.map
