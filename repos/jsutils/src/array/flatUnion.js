@@ -19,7 +19,7 @@ import { isFunc } from '../method/isFunc'
  *
  * @return {array} - Flattened copy of passed in array arguments, with duplicates removed
  */
-const flatUnion = (...args) => {
+export const flatUnion = (...args) => {
   const last = args.pop()
   const opts = { exists: true }
   const compare = isFunc(last) ? last : args.push(last) && undefined
@@ -29,8 +29,4 @@ const flatUnion = (...args) => {
 
     return uniqArr(flatArr([...merged, ...arr], opts), compare)
   }, [])
-}
-
-module.exports = {
-  flatUnion
 }
