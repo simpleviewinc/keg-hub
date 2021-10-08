@@ -2149,10 +2149,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@keg-hub/jsutils@8.4.0":
-  version "8.4.0"
-  resolved "https://registry.npmjs.org/@keg-hub/jsutils/-/jsutils-8.4.0.tgz#e2dd2794ccc60f8c2e5ee1aa12ec6f8d9217c209"
-  integrity sha512-dKduqKAHh2AqKymyHR0boje7x8kPkTK8vkFI46OUS+Ar9tZjjMgX8CoQuOoCzvpc/pbCaINgbSQCfrcOPidQQg==
+"@keg-hub/jsutils@8.7.0":
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.7.0.tgz#ee05638b2b6df0c251cdf28634694ac198f9211f"
+  integrity sha512-ipbvP/yDZIYnneG8bAFjBGwR7QOGT3U5Dp5Y6Y1kPHbe6LFEoKhBVt6x9f5MavluGgofjulNpmwDcomCl+zbeA==
 
 "@mdx-js/loader@^1.6.22":
   version "1.6.22"
