@@ -1,6 +1,6 @@
 {
-  "name": "@keg-hub/keg-components",
-  "version": "9.5.0",
+  "name": "@old-keg-hub/keg-components",
+  "version": "9.5.1",
   "main": "build/cjs",
   "module": "build/esm",
   "publishConfig": {

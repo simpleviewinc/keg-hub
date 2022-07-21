@@ -154,12 +154,12 @@ keg_build_core(){
     fi
 
     # Remove, and copy keg-components latest build into keg-core
-    if [[ -d "$KEG_CORE_PATH/node_modules/@keg-hub/keg-components/build" ]]; then
+    if [[ -d "$KEG_CORE_PATH/node_modules/@old-keg-hub/keg-components/build" ]]; then
 
       echo "::debug::Repo keg-components was changed, copying into keg-core..."
 
-      rm -rf $KEG_CORE_PATH/node_modules/@keg-hub/keg-components/build
-      cp -R $KEG_COMPS_PATH/build $KEG_CORE_PATH/node_modules/@keg-hub/keg-components/build
+      rm -rf $KEG_CORE_PATH/node_modules/@old-keg-hub/keg-components/build
+      cp -R $KEG_COMPS_PATH/build $KEG_CORE_PATH/node_modules/@old-keg-hub/keg-components/build
     fi
 
     # Remove, and copy tap-resolver latest build into keg-core

@@ -23,7 +23,7 @@ const resolveCoreAlias = {
     '@keg-hub/re-theme/build/esm/web/styleParser.js',
   '@keg-hub/re-theme/styleInjector':
     '@keg-hub/re-theme/build/esm/web/styleInjector.js',
-  '@keg-hub/keg-components': '@keg-hub/keg-components/build/esm/web',
+  '@old-keg-hub/keg-components': '@old-keg-hub/keg-components/build/esm/web',
 }
 
 /**

@@ -1,1 +1,1 @@
-export * from './native/index.mjs'
+export * from './native/index.js'
