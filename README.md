@@ -5,6 +5,8 @@
 
 # Keg-Hub
 
+> NOTE: This repository is deprecated and unmaintained. Please use [@keg-hub/keg-hub](https://github.com/keg-hub/keg-hub) instead.
+
 ## Overview
 
 The keg is a platform for developing cross-platform react apps.
