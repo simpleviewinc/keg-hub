@@ -59,17 +59,17 @@ actions:
         - yarn dev
   components:
     install:
-      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      location: /keg/tap/node_modules/keg-core/node_modules/@old-keg-hub/keg-components
       privileged: true
       cmds:
         - yarn install
     build:
-      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      location: /keg/tap/node_modules/keg-core/node_modules/@old-keg-hub/keg-components
       privileged: true
       cmds:
         - yarn build
     start:
-      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      location: /keg/tap/node_modules/keg-core/node_modules/@old-keg-hub/keg-components
       privileged: true
       detach: true
       cmds:
