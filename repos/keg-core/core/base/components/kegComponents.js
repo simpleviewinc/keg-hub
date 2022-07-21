@@ -1,1 +1,1 @@
-export * from '@keg-hub/keg-components'
+export * from '@old-keg-hub/keg-components'

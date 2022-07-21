@@ -1786,11 +1786,6 @@
   resolved "https://registry.yarnpkg.com/@keg-hub/jsutils/-/jsutils-8.7.0.tgz#ee05638b2b6df0c251cdf28634694ac198f9211f"
   integrity sha512-ipbvP/yDZIYnneG8bAFjBGwR7QOGT3U5Dp5Y6Y1kPHbe6LFEoKhBVt6x9f5MavluGgofjulNpmwDcomCl+zbeA==
 
-"@keg-hub/keg-components@9.5.0":
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/@keg-hub/keg-components/-/keg-components-9.5.0.tgz#c3678bdbc5bbb26844989c6fb2fb95a3492e45f0"
-  integrity sha512-BzL6iYnPnTDGojRpb3kqDeZY7yVmvb0Mnm//vNCTbyrgDf9/SA4kTi87q21mmRvwLqhdJh0STRgfbjFISZDpng==
-
 "@keg-hub/re-theme@9.5.0":
   version "9.5.0"
   resolved "https://registry.yarnpkg.com/@keg-hub/re-theme/-/re-theme-9.5.0.tgz#864742469caeacd9f4e8f35d4534db68a7411f3d"
@@ -1834,6 +1829,11 @@
   dependencies:
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
+
+"@old-keg-hub/keg-components@9.5.1":
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/@old-keg-hub/keg-components/-/keg-components-9.5.1.tgz#39901ad4456ca90a632aa710c438c7497e63c8c5"
+  integrity sha512-ObBgzkfRFL87riUYdfLDr7RvB/L08FgU3puA5dLJp39+pw6VNnmBwNOCcm5pIaFqVMz2shhuoDdzeUZzyIrwHQ==
 
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"

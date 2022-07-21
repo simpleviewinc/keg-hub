@@ -1,1 +1,1 @@
-export { theme as kegComponentsTheme } from '@keg-hub/keg-components'
+export { theme as kegComponentsTheme } from '@old-keg-hub/keg-components'

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, Link } from '@keg-hub/keg-components'
+import { View, Link } from '@old-keg-hub/keg-components'
 
 /**
  * @param {string} homepage
